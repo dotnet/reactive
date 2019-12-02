@@ -1,10 +1,10 @@
-﻿[assembly: System.CLSCompliantAttribute(true)]
-[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
-[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
+﻿[assembly: System.CLSCompliant(true)]
+[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.InteropServices.ComVisible(false)]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
 namespace System.Reactive.Linq
 {
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class static QbservableAliases
     {
         public static System.Reactive.Linq.IQbservable<TSource> Filter<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, bool>> predicate) { }

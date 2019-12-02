@@ -1,9 +1,9 @@
-﻿[assembly: System.CLSCompliantAttribute(true)]
-[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute(@"Tests.System.Reactive, PublicKey=00240000048000009400000006020000002400005253413100040000010001008f5cff058631087031f8350f30a36fa078027e5df2316b564352dc9eb7af7ce856016d3c5e9d058036fe73bb5c83987bd3fc0793fbe25d633cc4f37c2bd5f1d717cd2a81661bec08f0971dc6078e17bde372b89005e7738a0ebd501b896ca3e8315270ff64df7809dd912c372df61785a5085b3553b7872e39b1b1cc0ff5a6bc")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute(@"Tests.System.Reactive.Uwp.DeviceRunner, PublicKey=00240000048000009400000006020000002400005253413100040000010001008f5cff058631087031f8350f30a36fa078027e5df2316b564352dc9eb7af7ce856016d3c5e9d058036fe73bb5c83987bd3fc0793fbe25d633cc4f37c2bd5f1d717cd2a81661bec08f0971dc6078e17bde372b89005e7738a0ebd501b896ca3e8315270ff64df7809dd912c372df61785a5085b3553b7872e39b1b1cc0ff5a6bc")]
-[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
+﻿[assembly: System.CLSCompliant(true)]
+[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo(@"Tests.System.Reactive, PublicKey=00240000048000009400000006020000002400005253413100040000010001008f5cff058631087031f8350f30a36fa078027e5df2316b564352dc9eb7af7ce856016d3c5e9d058036fe73bb5c83987bd3fc0793fbe25d633cc4f37c2bd5f1d717cd2a81661bec08f0971dc6078e17bde372b89005e7738a0ebd501b896ca3e8315270ff64df7809dd912c372df61785a5085b3553b7872e39b1b1cc0ff5a6bc")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo(@"Tests.System.Reactive.Uwp.DeviceRunner, PublicKey=00240000048000009400000006020000002400005253413100040000010001008f5cff058631087031f8350f30a36fa078027e5df2316b564352dc9eb7af7ce856016d3c5e9d058036fe73bb5c83987bd3fc0793fbe25d633cc4f37c2bd5f1d717cd2a81661bec08f0971dc6078e17bde372b89005e7738a0ebd501b896ca3e8315270ff64df7809dd912c372df61785a5085b3553b7872e39b1b1cc0ff5a6bc")]
+[assembly: System.Runtime.InteropServices.ComVisible(false)]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
 namespace System
 {
     public class static ObservableExtensions
@@ -60,11 +60,11 @@ namespace System.Reactive
         public static bool ==(System.Reactive.EventPattern<TSender, TEventArgs> first, System.Reactive.EventPattern<TSender, TEventArgs> second) { }
         public static bool !=(System.Reactive.EventPattern<TSender, TEventArgs> first, System.Reactive.EventPattern<TSender, TEventArgs> second) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Assembly | System.AttributeTargets.Module | System.AttributeTargets.Class | System.AttributeTargets.Struct | System.AttributeTargets.Enum | System.AttributeTargets.Constructor | System.AttributeTargets.Method | System.AttributeTargets.Property | System.AttributeTargets.Field | System.AttributeTargets.Event | System.AttributeTargets.Interface | System.AttributeTargets.Parameter | System.AttributeTargets.Delegate | System.AttributeTargets.ReturnValue | System.AttributeTargets.GenericParameter | System.AttributeTargets.All)]
-    [System.Reactive.ExperimentalAttribute()]
+    [System.AttributeUsage(System.AttributeTargets.Assembly | System.AttributeTargets.Module | System.AttributeTargets.Class | System.AttributeTargets.Struct | System.AttributeTargets.Enum | System.AttributeTargets.Constructor | System.AttributeTargets.Method | System.AttributeTargets.Property | System.AttributeTargets.Field | System.AttributeTargets.Event | System.AttributeTargets.Interface | System.AttributeTargets.Parameter | System.AttributeTargets.Delegate | System.AttributeTargets.ReturnValue | System.AttributeTargets.GenericParameter | System.AttributeTargets.All)]
+    [System.Reactive.Experimental]
     public sealed class ExperimentalAttribute : System.Attribute
     {
-        public ExperimentalAttribute() { }
+        public Experimental { }
     }
     public interface IEventPatternSource<TEventArgs>
     {
@@ -90,12 +90,12 @@ namespace System.Reactive
         bool IsCompleted { get; }
         T GetResult();
     }
-    [System.Runtime.CompilerServices.AsyncMethodBuilderAttribute(typeof(System.Runtime.CompilerServices.TaskObservableMethodBuilder<T>))]
+    [System.Runtime.CompilerServices.AsyncMethodBuilder(typeof(System.Runtime.CompilerServices.TaskObservableMethodBuilder<T>))]
     public interface ITaskObservable<out T> : System.IObservable<T>
     {
         System.Reactive.ITaskObservableAwaiter<T> GetAwaiter();
     }
-    [System.Reactive.ExperimentalAttribute()]
+    [System.Reactive.Experimental]
     public class ListObservable<T> : System.Collections.Generic.ICollection<T>, System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IList<T>, System.Collections.IEnumerable, System.IObservable<object>
     {
         public ListObservable(System.IObservable<T> source) { }
@@ -241,7 +241,7 @@ namespace System.Reactive.Concurrency
     {
         public static System.Reactive.Concurrency.CurrentThreadScheduler Instance { get; }
         public static bool IsScheduleRequired { get; }
-        [System.ObsoleteAttribute("This instance property is no longer supported. Use CurrentThreadScheduler.IsSched" +
+        [System.Obsolete("This instance property is no longer supported. Use CurrentThreadScheduler.IsSched" +
             "uleRequired instead.")]
         public bool ScheduleRequired { get; }
         public override System.IDisposable Schedule<TState>(TState state, System.TimeSpan dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
@@ -260,7 +260,7 @@ namespace System.Reactive.Concurrency
         public DispatcherScheduler(System.Windows.Threading.Dispatcher dispatcher, System.Windows.Threading.DispatcherPriority priority) { }
         public static System.Reactive.Concurrency.DispatcherScheduler Current { get; }
         public System.Windows.Threading.Dispatcher Dispatcher { get; }
-        [System.ObsoleteAttribute("Use the Current property to retrieve the DispatcherScheduler instance for the cur" +
+        [System.Obsolete("Use the Current property to retrieve the DispatcherScheduler instance for the cur" +
             "rent thread\'s Dispatcher object.")]
         public static System.Reactive.Concurrency.DispatcherScheduler Instance { get; }
         public System.Windows.Threading.DispatcherPriority Priority { get; }
@@ -277,7 +277,7 @@ namespace System.Reactive.Concurrency
         public System.IDisposable SchedulePeriodic<TState>(TState state, System.TimeSpan period, System.Func<TState, TState> action) { }
         public override System.Reactive.Concurrency.IStopwatch StartStopwatch() { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("\\{ Clock = {Clock} Now = {Now.ToString(\"O\")} \\}")]
+    [System.Diagnostics.DebuggerDisplay("\\{ Clock = {Clock} Now = {Now.ToString(\"O\")} \\}")]
     public class HistoricalScheduler : System.Reactive.Concurrency.HistoricalSchedulerBase
     {
         public HistoricalScheduler() { }
@@ -390,16 +390,16 @@ namespace System.Reactive.Concurrency
         public static System.Reactive.Concurrency.CurrentThreadScheduler CurrentThread { get; }
         public static System.Reactive.Concurrency.DefaultScheduler Default { get; }
         public static System.Reactive.Concurrency.ImmediateScheduler Immediate { get; }
-        [System.ObsoleteAttribute("This property is no longer supported due to refactoring of the API surface and el" +
+        [System.Obsolete("This property is no longer supported due to refactoring of the API surface and el" +
             "imination of platform-specific dependencies. Please use NewThreadScheduler.Defau" +
             "lt to obtain an instance of this scheduler type.")]
         public static System.Reactive.Concurrency.IScheduler NewThread { get; }
         public static System.DateTimeOffset Now { get; }
-        [System.ObsoleteAttribute("This property is no longer supported due to refactoring of the API surface and el" +
+        [System.Obsolete("This property is no longer supported due to refactoring of the API surface and el" +
             "imination of platform-specific dependencies. Please use TaskPoolScheduler.Defaul" +
             "t to obtain an instance of this scheduler type.")]
         public static System.Reactive.Concurrency.IScheduler TaskPool { get; }
-        [System.ObsoleteAttribute(@"This property is no longer supported due to refactoring of the API surface and elimination of platform-specific dependencies. Consider using Scheduler.Default to obtain the platform's most appropriate pool-based scheduler. In order to access a specific pool-based scheduler, please add a reference to the System.Reactive.PlatformServices assembly for your target platform and use the appropriate scheduler in the System.Reactive.Concurrency namespace.")]
+        [System.Obsolete(@"This property is no longer supported due to refactoring of the API surface and elimination of platform-specific dependencies. Consider using Scheduler.Default to obtain the platform's most appropriate pool-based scheduler. In order to access a specific pool-based scheduler, please add a reference to the System.Reactive.PlatformServices assembly for your target platform and use the appropriate scheduler in the System.Reactive.Concurrency namespace.")]
         public static System.Reactive.Concurrency.IScheduler ThreadPool { get; }
         public static System.Reactive.Concurrency.ISchedulerLongRunning AsLongRunning(this System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Reactive.Concurrency.ISchedulerPeriodic AsPeriodic(this System.Reactive.Concurrency.IScheduler scheduler) { }
@@ -843,10 +843,10 @@ namespace System.Reactive.Linq
         System.Reactive.Linq.IQbservable<TResult> CreateQuery<TResult>(System.Linq.Expressions.Expression expression);
     }
     public interface IQbservable<out T> : System.IObservable<T>, System.Reactive.Linq.IQbservable { }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Class | System.AttributeTargets.All, Inherited=false)]
+    [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.All, Inherited=false)]
     public sealed class LocalQueryMethodImplementationTypeAttribute : System.Attribute
     {
-        public LocalQueryMethodImplementationTypeAttribute(System.Type targetType) { }
+        public LocalQueryMethodImplementationType(System.Type targetType) { }
         public System.Type TargetType { get; }
     }
     public class static Observable
@@ -922,39 +922,39 @@ namespace System.Reactive.Linq
         public static System.IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(this System.IObservable<TSource1> source1, System.IObservable<TSource2> source2, System.IObservable<TSource3> source3, System.IObservable<TSource4> source4, System.IObservable<TSource5> source5, System.IObservable<TSource6> source6, System.IObservable<TSource7> source7, System.IObservable<TSource8> source8, System.IObservable<TSource9> source9, System.IObservable<TSource10> source10, System.IObservable<TSource11> source11, System.IObservable<TSource12> source12, System.IObservable<TSource13> source13, System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> resultSelector) { }
         public static System.IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(this System.IObservable<TSource1> source1, System.IObservable<TSource2> source2, System.IObservable<TSource3> source3, System.IObservable<TSource4> source4, System.IObservable<TSource5> source5, System.IObservable<TSource6> source6, System.IObservable<TSource7> source7, System.IObservable<TSource8> source8, System.IObservable<TSource9> source9, System.IObservable<TSource10> source10, System.IObservable<TSource11> source11, System.IObservable<TSource12> source12, System.IObservable<TSource13> source13, System.IObservable<TSource14> source14, System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> resultSelector) { }
         public static System.IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(
-                    this System.IObservable<TSource1> source1, 
-                    System.IObservable<TSource2> source2, 
-                    System.IObservable<TSource3> source3, 
-                    System.IObservable<TSource4> source4, 
-                    System.IObservable<TSource5> source5, 
-                    System.IObservable<TSource6> source6, 
-                    System.IObservable<TSource7> source7, 
-                    System.IObservable<TSource8> source8, 
-                    System.IObservable<TSource9> source9, 
-                    System.IObservable<TSource10> source10, 
-                    System.IObservable<TSource11> source11, 
-                    System.IObservable<TSource12> source12, 
-                    System.IObservable<TSource13> source13, 
-                    System.IObservable<TSource14> source14, 
-                    System.IObservable<TSource15> source15, 
+                    this System.IObservable<TSource1> source1,
+                    System.IObservable<TSource2> source2,
+                    System.IObservable<TSource3> source3,
+                    System.IObservable<TSource4> source4,
+                    System.IObservable<TSource5> source5,
+                    System.IObservable<TSource6> source6,
+                    System.IObservable<TSource7> source7,
+                    System.IObservable<TSource8> source8,
+                    System.IObservable<TSource9> source9,
+                    System.IObservable<TSource10> source10,
+                    System.IObservable<TSource11> source11,
+                    System.IObservable<TSource12> source12,
+                    System.IObservable<TSource13> source13,
+                    System.IObservable<TSource14> source14,
+                    System.IObservable<TSource15> source15,
                     System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> resultSelector) { }
         public static System.IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(
-                    this System.IObservable<TSource1> source1, 
-                    System.IObservable<TSource2> source2, 
-                    System.IObservable<TSource3> source3, 
-                    System.IObservable<TSource4> source4, 
-                    System.IObservable<TSource5> source5, 
-                    System.IObservable<TSource6> source6, 
-                    System.IObservable<TSource7> source7, 
-                    System.IObservable<TSource8> source8, 
-                    System.IObservable<TSource9> source9, 
-                    System.IObservable<TSource10> source10, 
-                    System.IObservable<TSource11> source11, 
-                    System.IObservable<TSource12> source12, 
-                    System.IObservable<TSource13> source13, 
-                    System.IObservable<TSource14> source14, 
-                    System.IObservable<TSource15> source15, 
-                    System.IObservable<TSource16> source16, 
+                    this System.IObservable<TSource1> source1,
+                    System.IObservable<TSource2> source2,
+                    System.IObservable<TSource3> source3,
+                    System.IObservable<TSource4> source4,
+                    System.IObservable<TSource5> source5,
+                    System.IObservable<TSource6> source6,
+                    System.IObservable<TSource7> source7,
+                    System.IObservable<TSource8> source8,
+                    System.IObservable<TSource9> source9,
+                    System.IObservable<TSource10> source10,
+                    System.IObservable<TSource11> source11,
+                    System.IObservable<TSource12> source12,
+                    System.IObservable<TSource13> source13,
+                    System.IObservable<TSource14> source14,
+                    System.IObservable<TSource15> source15,
+                    System.IObservable<TSource16> source16,
                     System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> resultSelector) { }
         public static System.IObservable<TResult> CombineLatest<TSource, TResult>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources, System.Func<System.Collections.Generic.IList<TSource>, TResult> resultSelector) { }
         public static System.IObservable<System.Collections.Generic.IList<TSource>> CombineLatest<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
@@ -1013,22 +1013,22 @@ namespace System.Reactive.Linq
         public static System.IObservable<TResult> Empty<TResult>(System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<TResult> Empty<TResult>(System.Reactive.Concurrency.IScheduler scheduler, TResult witness) { }
         public static System.IObservable<TSource> Finally<TSource>(this System.IObservable<TSource> source, System.Action finallyAction) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static TSource First<TSource>(this System.IObservable<TSource> source) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static TSource First<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.IObservable<TSource> FirstAsync<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> FirstAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static TSource FirstOrDefault<TSource>(this System.IObservable<TSource> source) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static TSource FirstOrDefault<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.IObservable<TSource> FirstOrDefaultAsync<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> FirstOrDefaultAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.IObservable<TResult> For<TSource, TResult>(System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, System.IObservable<TResult>> resultSelector) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static void ForEach<TSource>(this System.IObservable<TSource> source, System.Action<TSource> onNext) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static void ForEach<TSource>(this System.IObservable<TSource> source, System.Action<TSource, int> onNext) { }
         public static System.Threading.Tasks.Task ForEachAsync<TSource>(this System.IObservable<TSource> source, System.Action<TSource> onNext) { }
         public static System.Threading.Tasks.Task ForEachAsync<TSource>(this System.IObservable<TSource> source, System.Action<TSource> onNext, System.Threading.CancellationToken cancellationToken) { }
@@ -1042,65 +1042,65 @@ namespace System.Reactive.Linq
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<System.IObservable<TResult>> FromAsyncPattern<TResult>(System.Func<System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, System.IObservable<TResult>> FromAsyncPattern<TArg1, TResult>(System.Func<TArg1, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TResult>(System.Func<TArg1, TArg2, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TResult>(System.Func<TArg1, TArg2, TArg3, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TResult>(System.Func<TArg1, TArg2, TArg3, TArg4, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, System.IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, System.AsyncCallback, object, System.IAsyncResult> begin, System.Func<System.IAsyncResult, TResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<System.IObservable<System.Reactive.Unit>> FromAsyncPattern(System.Func<System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1>(System.Func<TArg1, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2>(System.Func<TArg1, TArg2, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2, TArg3>(System.Func<TArg1, TArg2, TArg3, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4>(System.Func<TArg1, TArg2, TArg3, TArg4, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
-        [System.ObsoleteAttribute(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
+        [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, System.IObservable<System.Reactive.Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(System.Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, System.AsyncCallback, object, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
         public static System.IObservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(System.Func<System.Action<TEventArgs>, TDelegate> conversion, System.Action<TDelegate> addHandler, System.Action<TDelegate> removeHandler) { }
         public static System.IObservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(System.Func<System.Action<TEventArgs>, TDelegate> conversion, System.Action<TDelegate> addHandler, System.Action<TDelegate> removeHandler, System.Reactive.Concurrency.IScheduler scheduler) { }
@@ -1166,15 +1166,15 @@ namespace System.Reactive.Linq
         public static System.IObservable<long> Interval(System.TimeSpan period, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<bool> IsEmpty<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TResult> Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(this System.IObservable<TLeft> left, System.IObservable<TRight> right, System.Func<TLeft, System.IObservable<TLeftDuration>> leftDurationSelector, System.Func<TRight, System.IObservable<TRightDuration>> rightDurationSelector, System.Func<TLeft, TRight, TResult> resultSelector) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static TSource Last<TSource>(this System.IObservable<TSource> source) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static TSource Last<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.IObservable<TSource> LastAsync<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> LastAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static TSource LastOrDefault<TSource>(this System.IObservable<TSource> source) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static TSource LastOrDefault<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.IObservable<TSource> LastOrDefaultAsync<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> LastOrDefaultAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
@@ -1330,15 +1330,15 @@ namespace System.Reactive.Linq
         public static System.IObservable<bool> SequenceEqual<TSource>(this System.IObservable<TSource> first, System.IObservable<TSource> second, System.Collections.Generic.IEqualityComparer<TSource> comparer) { }
         public static System.IObservable<bool> SequenceEqual<TSource>(this System.IObservable<TSource> first, System.Collections.Generic.IEnumerable<TSource> second) { }
         public static System.IObservable<bool> SequenceEqual<TSource>(this System.IObservable<TSource> first, System.Collections.Generic.IEnumerable<TSource> second, System.Collections.Generic.IEqualityComparer<TSource> comparer) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static TSource Single<TSource>(this System.IObservable<TSource> source) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static TSource Single<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.IObservable<TSource> SingleAsync<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> SingleAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static TSource SingleOrDefault<TSource>(this System.IObservable<TSource> source) { }
-        [System.ObsoleteAttribute(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         public static TSource SingleOrDefault<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.IObservable<TSource> SingleOrDefaultAsync<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> SingleOrDefaultAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
@@ -1567,39 +1567,39 @@ namespace System.Reactive.Linq
         public static System.IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(this System.IObservable<TSource1> source1, System.IObservable<TSource2> source2, System.IObservable<TSource3> source3, System.IObservable<TSource4> source4, System.IObservable<TSource5> source5, System.IObservable<TSource6> source6, System.IObservable<TSource7> source7, System.IObservable<TSource8> source8, System.IObservable<TSource9> source9, System.IObservable<TSource10> source10, System.IObservable<TSource11> source11, System.IObservable<TSource12> source12, System.IObservable<TSource13> source13, System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> resultSelector) { }
         public static System.IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(this System.IObservable<TSource1> source1, System.IObservable<TSource2> source2, System.IObservable<TSource3> source3, System.IObservable<TSource4> source4, System.IObservable<TSource5> source5, System.IObservable<TSource6> source6, System.IObservable<TSource7> source7, System.IObservable<TSource8> source8, System.IObservable<TSource9> source9, System.IObservable<TSource10> source10, System.IObservable<TSource11> source11, System.IObservable<TSource12> source12, System.IObservable<TSource13> source13, System.IObservable<TSource14> source14, System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> resultSelector) { }
         public static System.IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(
-                    this System.IObservable<TSource1> source1, 
-                    System.IObservable<TSource2> source2, 
-                    System.IObservable<TSource3> source3, 
-                    System.IObservable<TSource4> source4, 
-                    System.IObservable<TSource5> source5, 
-                    System.IObservable<TSource6> source6, 
-                    System.IObservable<TSource7> source7, 
-                    System.IObservable<TSource8> source8, 
-                    System.IObservable<TSource9> source9, 
-                    System.IObservable<TSource10> source10, 
-                    System.IObservable<TSource11> source11, 
-                    System.IObservable<TSource12> source12, 
-                    System.IObservable<TSource13> source13, 
-                    System.IObservable<TSource14> source14, 
-                    System.IObservable<TSource15> source15, 
+                    this System.IObservable<TSource1> source1,
+                    System.IObservable<TSource2> source2,
+                    System.IObservable<TSource3> source3,
+                    System.IObservable<TSource4> source4,
+                    System.IObservable<TSource5> source5,
+                    System.IObservable<TSource6> source6,
+                    System.IObservable<TSource7> source7,
+                    System.IObservable<TSource8> source8,
+                    System.IObservable<TSource9> source9,
+                    System.IObservable<TSource10> source10,
+                    System.IObservable<TSource11> source11,
+                    System.IObservable<TSource12> source12,
+                    System.IObservable<TSource13> source13,
+                    System.IObservable<TSource14> source14,
+                    System.IObservable<TSource15> source15,
                     System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> resultSelector) { }
         public static System.IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(
-                    this System.IObservable<TSource1> source1, 
-                    System.IObservable<TSource2> source2, 
-                    System.IObservable<TSource3> source3, 
-                    System.IObservable<TSource4> source4, 
-                    System.IObservable<TSource5> source5, 
-                    System.IObservable<TSource6> source6, 
-                    System.IObservable<TSource7> source7, 
-                    System.IObservable<TSource8> source8, 
-                    System.IObservable<TSource9> source9, 
-                    System.IObservable<TSource10> source10, 
-                    System.IObservable<TSource11> source11, 
-                    System.IObservable<TSource12> source12, 
-                    System.IObservable<TSource13> source13, 
-                    System.IObservable<TSource14> source14, 
-                    System.IObservable<TSource15> source15, 
-                    System.IObservable<TSource16> source16, 
+                    this System.IObservable<TSource1> source1,
+                    System.IObservable<TSource2> source2,
+                    System.IObservable<TSource3> source3,
+                    System.IObservable<TSource4> source4,
+                    System.IObservable<TSource5> source5,
+                    System.IObservable<TSource6> source6,
+                    System.IObservable<TSource7> source7,
+                    System.IObservable<TSource8> source8,
+                    System.IObservable<TSource9> source9,
+                    System.IObservable<TSource10> source10,
+                    System.IObservable<TSource11> source11,
+                    System.IObservable<TSource12> source12,
+                    System.IObservable<TSource13> source13,
+                    System.IObservable<TSource14> source14,
+                    System.IObservable<TSource15> source15,
+                    System.IObservable<TSource16> source16,
                     System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> resultSelector) { }
         public static System.IObservable<TResult> Zip<TSource, TResult>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources, System.Func<System.Collections.Generic.IList<TSource>, TResult> resultSelector) { }
         public static System.IObservable<System.Collections.Generic.IList<TSource>> Zip<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
@@ -1608,30 +1608,30 @@ namespace System.Reactive.Linq
     }
     public class static ObservableEx
     {
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.IObservable<TResult> Create<TResult>(System.Func<System.IObserver<TResult>, System.Collections.Generic.IEnumerable<System.IObservable<object>>> iteratorMethod) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.IObservable<System.Reactive.Unit> Create(System.Func<System.Collections.Generic.IEnumerable<System.IObservable<object>>> iteratorMethod) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.IObservable<TSource> Expand<TSource>(this System.IObservable<TSource> source, System.Func<TSource, System.IObservable<TSource>> selector, System.Reactive.Concurrency.IScheduler scheduler) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.IObservable<TSource> Expand<TSource>(this System.IObservable<TSource> source, System.Func<TSource, System.IObservable<TSource>> selector) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.IObservable<TResult> ForkJoin<TSource1, TSource2, TResult>(this System.IObservable<TSource1> first, System.IObservable<TSource2> second, System.Func<TSource1, TSource2, TResult> resultSelector) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.IObservable<TSource[]> ForkJoin<TSource>(params System.IObservable<>[] sources) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.IObservable<TSource[]> ForkJoin<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.IObservable<TResult> Let<TSource, TResult>(this System.IObservable<TSource> source, System.Func<System.IObservable<TSource>, System.IObservable<TResult>> selector) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.IObservable<TResult> ManySelect<TSource, TResult>(this System.IObservable<TSource> source, System.Func<System.IObservable<TSource>, TResult> selector, System.Reactive.Concurrency.IScheduler scheduler) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.IObservable<TResult> ManySelect<TSource, TResult>(this System.IObservable<TSource> source, System.Func<System.IObservable<TSource>, TResult> selector) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.Reactive.ListObservable<TSource> ToListObservable<TSource>(this System.IObservable<TSource> source) { }
     }
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class static Qbservable
     {
         public static System.Reactive.Linq.IQbservableProvider Provider { get; }
@@ -1710,39 +1710,39 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(this System.Reactive.Linq.IQbservable<TSource1> source1, System.IObservable<TSource2> source2, System.IObservable<TSource3> source3, System.IObservable<TSource4> source4, System.IObservable<TSource5> source5, System.IObservable<TSource6> source6, System.IObservable<TSource7> source7, System.IObservable<TSource8> source8, System.IObservable<TSource9> source9, System.IObservable<TSource10> source10, System.IObservable<TSource11> source11, System.IObservable<TSource12> source12, System.IObservable<TSource13> source13, System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(this System.Reactive.Linq.IQbservable<TSource1> source1, System.IObservable<TSource2> source2, System.IObservable<TSource3> source3, System.IObservable<TSource4> source4, System.IObservable<TSource5> source5, System.IObservable<TSource6> source6, System.IObservable<TSource7> source7, System.IObservable<TSource8> source8, System.IObservable<TSource9> source9, System.IObservable<TSource10> source10, System.IObservable<TSource11> source11, System.IObservable<TSource12> source12, System.IObservable<TSource13> source13, System.IObservable<TSource14> source14, System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(
-                    this System.Reactive.Linq.IQbservable<TSource1> source1, 
-                    System.IObservable<TSource2> source2, 
-                    System.IObservable<TSource3> source3, 
-                    System.IObservable<TSource4> source4, 
-                    System.IObservable<TSource5> source5, 
-                    System.IObservable<TSource6> source6, 
-                    System.IObservable<TSource7> source7, 
-                    System.IObservable<TSource8> source8, 
-                    System.IObservable<TSource9> source9, 
-                    System.IObservable<TSource10> source10, 
-                    System.IObservable<TSource11> source11, 
-                    System.IObservable<TSource12> source12, 
-                    System.IObservable<TSource13> source13, 
-                    System.IObservable<TSource14> source14, 
-                    System.IObservable<TSource15> source15, 
+                    this System.Reactive.Linq.IQbservable<TSource1> source1,
+                    System.IObservable<TSource2> source2,
+                    System.IObservable<TSource3> source3,
+                    System.IObservable<TSource4> source4,
+                    System.IObservable<TSource5> source5,
+                    System.IObservable<TSource6> source6,
+                    System.IObservable<TSource7> source7,
+                    System.IObservable<TSource8> source8,
+                    System.IObservable<TSource9> source9,
+                    System.IObservable<TSource10> source10,
+                    System.IObservable<TSource11> source11,
+                    System.IObservable<TSource12> source12,
+                    System.IObservable<TSource13> source13,
+                    System.IObservable<TSource14> source14,
+                    System.IObservable<TSource15> source15,
                     System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(
-                    this System.Reactive.Linq.IQbservable<TSource1> source1, 
-                    System.IObservable<TSource2> source2, 
-                    System.IObservable<TSource3> source3, 
-                    System.IObservable<TSource4> source4, 
-                    System.IObservable<TSource5> source5, 
-                    System.IObservable<TSource6> source6, 
-                    System.IObservable<TSource7> source7, 
-                    System.IObservable<TSource8> source8, 
-                    System.IObservable<TSource9> source9, 
-                    System.IObservable<TSource10> source10, 
-                    System.IObservable<TSource11> source11, 
-                    System.IObservable<TSource12> source12, 
-                    System.IObservable<TSource13> source13, 
-                    System.IObservable<TSource14> source14, 
-                    System.IObservable<TSource15> source15, 
-                    System.IObservable<TSource16> source16, 
+                    this System.Reactive.Linq.IQbservable<TSource1> source1,
+                    System.IObservable<TSource2> source2,
+                    System.IObservable<TSource3> source3,
+                    System.IObservable<TSource4> source4,
+                    System.IObservable<TSource5> source5,
+                    System.IObservable<TSource6> source6,
+                    System.IObservable<TSource7> source7,
+                    System.IObservable<TSource8> source8,
+                    System.IObservable<TSource9> source9,
+                    System.IObservable<TSource10> source10,
+                    System.IObservable<TSource11> source11,
+                    System.IObservable<TSource12> source12,
+                    System.IObservable<TSource13> source13,
+                    System.IObservable<TSource14> source14,
+                    System.IObservable<TSource15> source15,
+                    System.IObservable<TSource16> source16,
                     System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<TSource> Concat<TSource>(this System.Reactive.Linq.IQbservable<TSource> first, System.IObservable<TSource> second) { }
         public static System.Reactive.Linq.IQbservable<TSource> Concat<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<>[] sources) { }
@@ -2273,63 +2273,63 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(this System.Reactive.Linq.IQbservable<TSource1> source1, System.IObservable<TSource2> source2, System.IObservable<TSource3> source3, System.IObservable<TSource4> source4, System.IObservable<TSource5> source5, System.IObservable<TSource6> source6, System.IObservable<TSource7> source7, System.IObservable<TSource8> source8, System.IObservable<TSource9> source9, System.IObservable<TSource10> source10, System.IObservable<TSource11> source11, System.IObservable<TSource12> source12, System.IObservable<TSource13> source13, System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(this System.Reactive.Linq.IQbservable<TSource1> source1, System.IObservable<TSource2> source2, System.IObservable<TSource3> source3, System.IObservable<TSource4> source4, System.IObservable<TSource5> source5, System.IObservable<TSource6> source6, System.IObservable<TSource7> source7, System.IObservable<TSource8> source8, System.IObservable<TSource9> source9, System.IObservable<TSource10> source10, System.IObservable<TSource11> source11, System.IObservable<TSource12> source12, System.IObservable<TSource13> source13, System.IObservable<TSource14> source14, System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(
-                    this System.Reactive.Linq.IQbservable<TSource1> source1, 
-                    System.IObservable<TSource2> source2, 
-                    System.IObservable<TSource3> source3, 
-                    System.IObservable<TSource4> source4, 
-                    System.IObservable<TSource5> source5, 
-                    System.IObservable<TSource6> source6, 
-                    System.IObservable<TSource7> source7, 
-                    System.IObservable<TSource8> source8, 
-                    System.IObservable<TSource9> source9, 
-                    System.IObservable<TSource10> source10, 
-                    System.IObservable<TSource11> source11, 
-                    System.IObservable<TSource12> source12, 
-                    System.IObservable<TSource13> source13, 
-                    System.IObservable<TSource14> source14, 
-                    System.IObservable<TSource15> source15, 
+                    this System.Reactive.Linq.IQbservable<TSource1> source1,
+                    System.IObservable<TSource2> source2,
+                    System.IObservable<TSource3> source3,
+                    System.IObservable<TSource4> source4,
+                    System.IObservable<TSource5> source5,
+                    System.IObservable<TSource6> source6,
+                    System.IObservable<TSource7> source7,
+                    System.IObservable<TSource8> source8,
+                    System.IObservable<TSource9> source9,
+                    System.IObservable<TSource10> source10,
+                    System.IObservable<TSource11> source11,
+                    System.IObservable<TSource12> source12,
+                    System.IObservable<TSource13> source13,
+                    System.IObservable<TSource14> source14,
+                    System.IObservable<TSource15> source15,
                     System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(
-                    this System.Reactive.Linq.IQbservable<TSource1> source1, 
-                    System.IObservable<TSource2> source2, 
-                    System.IObservable<TSource3> source3, 
-                    System.IObservable<TSource4> source4, 
-                    System.IObservable<TSource5> source5, 
-                    System.IObservable<TSource6> source6, 
-                    System.IObservable<TSource7> source7, 
-                    System.IObservable<TSource8> source8, 
-                    System.IObservable<TSource9> source9, 
-                    System.IObservable<TSource10> source10, 
-                    System.IObservable<TSource11> source11, 
-                    System.IObservable<TSource12> source12, 
-                    System.IObservable<TSource13> source13, 
-                    System.IObservable<TSource14> source14, 
-                    System.IObservable<TSource15> source15, 
-                    System.IObservable<TSource16> source16, 
+                    this System.Reactive.Linq.IQbservable<TSource1> source1,
+                    System.IObservable<TSource2> source2,
+                    System.IObservable<TSource3> source3,
+                    System.IObservable<TSource4> source4,
+                    System.IObservable<TSource5> source5,
+                    System.IObservable<TSource6> source6,
+                    System.IObservable<TSource7> source7,
+                    System.IObservable<TSource8> source8,
+                    System.IObservable<TSource9> source9,
+                    System.IObservable<TSource10> source10,
+                    System.IObservable<TSource11> source11,
+                    System.IObservable<TSource12> source12,
+                    System.IObservable<TSource13> source13,
+                    System.IObservable<TSource14> source14,
+                    System.IObservable<TSource15> source15,
+                    System.IObservable<TSource16> source16,
                     System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>> resultSelector) { }
     }
-    [System.Reactive.Linq.LocalQueryMethodImplementationTypeAttribute(typeof(System.Reactive.Linq.ObservableEx))]
+    [System.Reactive.Linq.LocalQueryMethodImplementationType(typeof(System.Reactive.Linq.ObservableEx))]
     public class static QbservableEx
     {
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> Create(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Collections.Generic.IEnumerable<System.IObservable<object>>>> iteratorMethod) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<TResult> Create<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.IObserver<TResult>, System.Collections.Generic.IEnumerable<System.IObservable<object>>>> iteratorMethod) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<TSource> Expand<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, System.IObservable<TSource>>> selector) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<TSource> Expand<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, System.IObservable<TSource>>> selector, System.Reactive.Concurrency.IScheduler scheduler) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<TSource[]> ForkJoin<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<>[] sources) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<TSource[]> ForkJoin<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<TResult> ForkJoin<TSource1, TSource2, TResult>(this System.Reactive.Linq.IQbservable<TSource1> first, System.IObservable<TSource2> second, System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TResult>> resultSelector) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<TResult> Let<TSource, TResult>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<System.IObservable<TSource>, System.IObservable<TResult>>> selector) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<TResult> ManySelect<TSource, TResult>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<System.IObservable<TSource>, TResult>> selector) { }
-        [System.Reactive.ExperimentalAttribute()]
+        [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<TResult> ManySelect<TSource, TResult>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<System.IObservable<TSource>, TResult>> selector, System.Reactive.Concurrency.IScheduler scheduler) { }
     }
     public class QueryDebugger
@@ -2405,7 +2405,7 @@ namespace System.Reactive.PlatformServices
     }
     public class static PlatformEnlightenmentProvider
     {
-        [System.ObsoleteAttribute("This mechanism will be removed in the next major version", false)]
+        [System.Obsolete("This mechanism will be removed in the next major version", false)]
         public static System.Reactive.PlatformServices.IPlatformEnlightenmentProvider Current { get; set; }
     }
     public class static SystemClock
@@ -2530,7 +2530,7 @@ namespace System.Runtime.CompilerServices
         public void AwaitOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
             where TAwaiter : System.Runtime.CompilerServices.INotifyCompletion
             where TStateMachine : System.Runtime.CompilerServices.IAsyncStateMachine { }
-        [System.Security.SecuritySafeCriticalAttribute()]
+        [System.Security.SecuritySafeCritical]
         public void AwaitUnsafeOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
             where TAwaiter : System.Runtime.CompilerServices.ICriticalNotifyCompletion
             where TStateMachine : System.Runtime.CompilerServices.IAsyncStateMachine { }
