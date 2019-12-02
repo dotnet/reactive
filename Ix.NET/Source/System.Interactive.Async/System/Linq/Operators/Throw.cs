@@ -10,6 +10,13 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
+        /// <summary>
+        /// Returns an async-enumerable sequence that terminates with an exception.
+        /// </summary>
+        /// <typeparam name="TValue">The type used for the <see cref="IAsyncEnumerable{T}"/> type parameter of the resulting sequence.</typeparam>
+        /// <param name="exception">Exception object used for the sequence's termination.</param>
+        /// <returns>The async-enumerable sequence that terminates exceptionally with the specified exception object.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="exception"/> is null.</exception>
         public static IAsyncEnumerable<TValue> Throw<TValue>(Exception exception)
         {
             if (exception == null)

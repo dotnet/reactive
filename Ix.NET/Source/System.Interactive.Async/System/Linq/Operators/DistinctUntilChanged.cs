@@ -10,6 +10,13 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct contiguous elements.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct contiguous elements for.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct contiguous elements from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
@@ -18,6 +25,14 @@ namespace System.Linq
             return DistinctUntilChangedCore(source, comparer: null);
         }
 
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct contiguous elements according to the comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct contiguous elements for.</param>
+        /// <param name="comparer">Equality comparer for source elements.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct contiguous elements from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="comparer"/> is null.</exception>
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource>? comparer)
         {
             if (source == null)
@@ -26,6 +41,15 @@ namespace System.Linq
             return DistinctUntilChangedCore(source, comparer);
         }
 
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct contiguous elements according to the keySelector.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the discriminator key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct contiguous elements for, based on a computed key value.</param>
+        /// <param name="keySelector">A function to compute the comparison key for each element.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct contiguous elements, based on a computed key value, from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
@@ -36,6 +60,16 @@ namespace System.Linq
             return DistinctUntilChangedCore(source, keySelector, comparer: null);
         }
 
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct contiguous elements according to the keySelector and the comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the discriminator key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct contiguous elements for, based on a computed key value.</param>
+        /// <param name="keySelector">A function to compute the comparison key for each element.</param>
+        /// <param name="comparer">Equality comparer for computed key values.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct contiguous elements, based on a computed key value, from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is null.</exception>
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
@@ -46,6 +80,15 @@ namespace System.Linq
             return DistinctUntilChangedCore(source, keySelector, comparer);
         }
 
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct contiguous elements according to the asynchronous keySelector.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the discriminator key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct contiguous elements for, based on a computed key value.</param>
+        /// <param name="keySelector">A function to compute the comparison key for each element asynchronously.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct contiguous elements, based on a computed key value, from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (source == null)
@@ -57,6 +100,15 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct contiguous elements according to the asynchronous and cancellable keySelector.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the discriminator key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct contiguous elements for, based on a computed key value.</param>
+        /// <param name="keySelector">A function to compute the comparison key for each element asynchronously while supporting cancellation.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct contiguous elements, based on a computed key value, from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector)
         {
             if (source == null)
@@ -68,6 +120,16 @@ namespace System.Linq
         }
 #endif
 
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct contiguous elements according to the asynchronous keySelector and the comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the discriminator key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct contiguous elements for, based on a computed key value.</param>
+        /// <param name="keySelector">A function to compute the comparison key for each element asynchronously.</param>
+        /// <param name="comparer">Equality comparer for computed key values.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct contiguous elements, based on a computed key value, from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is null.</exception>
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
@@ -79,6 +141,16 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct contiguous elements according to the asynchronous and cancellable keySelector and the comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the discriminator key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct contiguous elements for, based on a computed key value.</param>
+        /// <param name="keySelector">A function to compute the comparison key for each element asynchronously while supporting cancellation.</param>
+        /// <param name="comparer">Equality comparer for computed key values.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct contiguous elements, based on a computed key value, from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is null.</exception>
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
