@@ -1,3 +1,10 @@
+---
+name: Pull request for Rx
+about: Creates a Pull request regarding a bug, enhancement of feature request for Rx.NET
+title: ''
+labels: '[area] Rx'
+assignees: ''
+---
 Hello and thank you for contributing to dotnet/reactive. Before you proceed by creating a pull request (PR):
 
 > Please make sure your contribution is in line with the project's [licensing model](https://github.com/dotnet/reactive/blob/master/LICENSE) and

@@ -1,11 +1,16 @@
+---
+name: Issue report for Rx
+about: Creates an issue report regarding a bug, question of feature request for Rx.NET
+title: ''
+labels: '[area] Rx'
+assignees: ''
+---
 Hello and thank you for using dotnet/reactive. Please select a category and detail your issue by answering the questions there:
 
 #### Bug
 
 Despite our best efforts, bugs can slip into releases or corner cases forgotten about. We will try our best to remedy the situation
 and/or provide workarounds. Note that certain (odd) behaviors are by design and as such are not considered bugs.
-
-> Which component library (Rx, Ix, Async.Ix)?
 
 > Which library version?
 
@@ -26,9 +31,7 @@ and/or provide workarounds. Note that certain (odd) behaviors are by design and 
 Before you ask us a question, please note that dotnet/reactive is maintained by a handful of dedicated people voluntarily and in their free time.
 You could help us tremendously by first searching for some keywords related to your question with your favorite search engine,
 our [issue list](https://github.com/dotnet/reactive/issues) or the related [stackoverflow.com](https://stackoverflow.com) keywords (such as
-[system.reactive](https://stackoverflow.com/questions/tagged/system.reactive),
-[ienumerable](https://stackoverflow.com/questions/tagged/ienumerable) and
-[iasyncenumerable](https://stackoverflow.com/questions/tagged/iasyncenumerable)
+[system.reactive](https://stackoverflow.com/questions/tagged/system.reactive)
 ). Please also consider asking questions, such as **"How do I do X?"** or **"Where can I find Y?"**, under one of these tags on *StackOverflow* instead.
 
 In case you have not found an answer or your question is not really suited for *StackOverflow*, you are welcome to ask it here.
@@ -64,8 +67,6 @@ e) **Behavior change on an existing operator.** Such changes involve a lot of ri
 a completely new component or operator, for which see points a)..d) again.
 
 Considering the points above, please describe the feature or behavior you would like dotnet/reactive included:
-
-> Which component library (Rx, Ix, Async.Ix)?
 
 > Which next library version (i.e., patch, minor or major)?
 
