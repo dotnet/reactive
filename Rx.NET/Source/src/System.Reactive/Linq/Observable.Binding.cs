@@ -296,7 +296,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Connectable observable sequence.</param>
-        /// <param name="minObservers">The minimum number of observers subscribing to establish the connection to the source.</param>
+        /// <param name="minObservers">The minimum number of observers required to subscribe before establishing the connection to the source.</param>
         /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="minObservers"/> is non-positive.</exception>
@@ -319,7 +319,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Connectable observable sequence.</param>
-        /// <param name="minObservers">The minimum number of observers subscribing to establish the connection to the source.</param>
+        /// <param name="minObservers">The minimum number of observers required to subscribe before establishing the connection to the source.</param>
         /// <param name="disconnectDelay">The time span that should be waited before possibly unsubscribing from the connectable observable.</param>
         /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
@@ -348,7 +348,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Connectable observable sequence.</param>
-        /// <param name="minObservers">The minimum number of observers subscribing to establish the connection to the source.</param>
+        /// <param name="minObservers">The minimum number of observers required to subscribe before establishing the connection to the source.</param>
         /// <param name="disconnectDelay">The time span that should be waited before possibly unsubscribing from the connectable observable.</param>
         /// <param name="scheduler">The scheduler to use for delayed unsubscription.</param>
         /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
