@@ -10855,6 +10855,119 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
+        /// Returns an observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Connectable observable sequence.</param>
+        /// <param name="minObservers">The minimum number of observers subscribing to establish the connection to the source.</param>
+        /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minObservers"/> is non-positive.</exception>
+        public static IQbservable<TSource> RefCount<TSource>(this IQbservableProvider provider, IConnectableObservable<TSource> source, int minObservers)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (minObservers <= 0)
+                throw new ArgumentOutOfRangeException(nameof(minObservers));
+
+            return provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.RefCount<TSource>(default(IQbservableProvider), default(IConnectableObservable<TSource>), default(int))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
+                    Expression.Constant(minObservers, typeof(int))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Returns an observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Connectable observable sequence.</param>
+        /// <param name="minObservers">The minimum number of observers subscribing to establish the connection to the source.</param>
+        /// <param name="disconnectDelay">The time span that should be waited before possibly unsubscribing from the connectable observable.</param>
+        /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minObservers"/> is non-positive.</exception>
+        public static IQbservable<TSource> RefCount<TSource>(this IQbservableProvider provider, IConnectableObservable<TSource> source, int minObservers, TimeSpan disconnectDelay)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (minObservers <= 0)
+                throw new ArgumentOutOfRangeException(nameof(minObservers));
+
+            return provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.RefCount<TSource>(default(IQbservableProvider), default(IConnectableObservable<TSource>), default(int), default(TimeSpan))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
+                    Expression.Constant(minObservers, typeof(int)),
+                    Expression.Constant(disconnectDelay, typeof(TimeSpan))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Returns an observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Connectable observable sequence.</param>
+        /// <param name="minObservers">The minimum number of observers subscribing to establish the connection to the source.</param>
+        /// <param name="disconnectDelay">The time span that should be waited before possibly unsubscribing from the connectable observable.</param>
+        /// <param name="scheduler">The scheduler to use for delayed unsubscription.</param>
+        /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minObservers"/> is non-positive.</exception>
+        public static IQbservable<TSource> RefCount<TSource>(this IQbservableProvider provider, IConnectableObservable<TSource> source, int minObservers, TimeSpan disconnectDelay, IScheduler scheduler)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+            if (minObservers <= 0)
+                throw new ArgumentOutOfRangeException(nameof(minObservers));
+
+            return provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.RefCount<TSource>(default(IQbservableProvider), default(IConnectableObservable<TSource>), default(int), default(TimeSpan), default(IScheduler))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
+                    Expression.Constant(minObservers, typeof(int)),
+                    Expression.Constant(disconnectDelay, typeof(TimeSpan)),
+                    Expression.Constant(scheduler, typeof(IScheduler))
+                )
+            );
+        }
+
+        /// <summary>
         /// Generates an observable sequence that repeats the given element infinitely.
         /// </summary>
         /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
