@@ -1,6 +1,6 @@
 ---
 name: Pull request for Rx
-about: Creates a Pull request regarding a bug, enhancement of feature request for Rx.NET
+about: Creates a Pull request regarding a bug, enhancement or feature request for Rx.NET
 title: ''
 labels: '[area] Rx'
 assignees: ''
@@ -8,7 +8,7 @@ assignees: ''
 Hello and thank you for contributing to dotnet/reactive. Before you proceed by creating a pull request (PR):
 
 > Please make sure your contribution is in line with the project's [licensing model](https://github.com/dotnet/reactive/blob/master/LICENSE) and
-your empoyment allows you to contribute to open source.
+your employment allows you to contribute to open source.
 
 > Please sign the [Contributor License Agreement](https://cla.dotnetfoundation.org/dotnet/reactive?pullRequest=1101) in case the CLA bot asks you
 for being a new contributor.
@@ -32,7 +32,7 @@ What is the nature of your contribution?
 #### Enhancement
 
 > Please consider opening an [issue](https://github.com/dotnet/reactive/issues) first to discuss the kind and impact of the enhancement first,
-> if such issue doesn't exist yet.  Also please check if there was a consensus about accepting such an enhancement.
+> if such an issue doesn't exist yet.  Also please check if there was a consensus about accepting such an enhancement.
 
 > Please describe how, what and why the enhancement is implemented.
 > Practically, you are writing these descriptions for the search engines so others can find the change details easier.
@@ -44,7 +44,7 @@ What is the nature of your contribution?
 #### Feature request
 
 > We strongly recommend opening an [issue](https://github.com/dotnet/reactive/issues) first to discuss the nature and impact of the request first.
-> If such issue already exist, please check if there was a consensus and approval for accepting a contribution.
+> If such an issue already exists, please check if there was a consensus and approval for accepting a contribution.
 
 > Please describe what request is about, how it works in general and what possible corner cases it or the user should consider.
 > Please include some basic usage examples of the important components and/or overloads.
@@ -52,6 +52,6 @@ What is the nature of your contribution?
 
 > Please reference the related issue(s) to the original issue report (example: `Resolves #X`).
 
-> Please include unit tests that verifiy the behavior of the new feature. Please make sure the code coverage is reasonably high with the new code.
+> Please include unit tests that verify the behavior of the new feature. Please make sure the code coverage is reasonably high with the new code.
 > Depending on the feature, you may want to include actual multi-threaded test cases to verify the correct async behavior, however,
 > please be mindful of the time such tests take and try to stay under a few seconds.

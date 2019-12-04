@@ -1,6 +1,6 @@
 ---
 name: Issue report for Rx
-about: Creates an issue report regarding a bug, question of feature request for Rx.NET
+about: Creates an issue report regarding a bug, question or feature request for Rx.NET
 title: ''
 labels: '[area] Rx'
 assignees: ''
@@ -22,7 +22,7 @@ and/or provide workarounds. Note that certain (odd) behaviors are by design and 
 
 > What is the actual outcome?
 
-> What is the stacktrace of the exeption(s) if any?
+> What is the stacktrace of the exception(s) if any?
 
 > Do you have a code snippet or project that reproduces the problem?
 
@@ -56,14 +56,14 @@ without too much inconvenience. Please consider hosting such factory methods out
 b) **New instance method/operator.** The .NET world features extension methods which gives the flexibility to have fluent API expansions in
 your local project or any third party library. Please consider hosting such methods outside dotnet/reactive too.
 
-c) **Support for or bridge to other 1st or 3rd party components.** These are generally considered on a specific case-by-case basis but generally,
+c) **Support for or bridge to other 1st or 3rd party components.** These are considered on a specific case-by-case basis but generally,
 please consider hosting such support/bridge code outside dotnet/reactive.
 
 d) **New reactive/interactive base type or concept.** Components requiring changes or introduction of new protocols (for example, flow control,
 item lifecycle, async) are generally better suited for their own 3rd party library hosting and interoperation should be provided, via the standard
 types mentioned above, there.
 
-e) **Behavior change on an existing operator.** Such changes involve a lot of risks for existing users, therefore, usually it is better to introduce
+e) **Behavior change on an existing operator.** Such changes involve a lot of risks for existing users, therefore, usually, it is better to introduce
 a completely new component or operator, for which see points a)..d) again.
 
 Considering the points above, please describe the feature or behavior you would like dotnet/reactive included:
