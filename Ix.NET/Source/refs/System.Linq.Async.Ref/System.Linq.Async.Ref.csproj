@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0' and '$(TargetFramework)' != 'netstandard2.1' " 
-                      Include="Microsoft.Bcl.AsyncInterfaces" Version="1.0.0" />
+                      Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
