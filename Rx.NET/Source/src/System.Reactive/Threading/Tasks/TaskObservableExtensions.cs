@@ -327,6 +327,20 @@ namespace System.Reactive.Threading.Tasks
             return observable.ToTask(new CancellationToken(), state: null);
         }
 
+
+        /// <summary>
+        /// Returns a task that will receive the last value or the exception produced by the observable sequence.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the elements in the source sequence.</typeparam>
+        /// <param name="observable">Observable sequence to convert to a task.</param>
+        /// <param name="scheduler">The scheduler used for overriding where the task completion signals will be issued.</param>
+        /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="observable"/> or <paramref name="scheduler"/> is <c>null</c>.</exception>
+        public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, IScheduler scheduler)
+        {
+            return observable.ToTask().ContinueOnScheduler(scheduler);
+        }
+
         /// <summary>
         /// Returns a task that will receive the last value or the exception produced by the observable sequence.
         /// </summary>
@@ -350,6 +364,20 @@ namespace System.Reactive.Threading.Tasks
         /// </summary>
         /// <typeparam name="TResult">The type of the elements in the source sequence.</typeparam>
         /// <param name="observable">Observable sequence to convert to a task.</param>
+        /// <param name="state">The state to use as the underlying task's AsyncState.</param>
+        /// <param name="scheduler">The scheduler used for overriding where the task completion signals will be issued.</param>
+        /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="observable"/> or <paramref name="scheduler"/> is <c>null</c>.</exception>
+        public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, object state, IScheduler scheduler)
+        {
+            return observable.ToTask(new CancellationToken(), state).ContinueOnScheduler(scheduler);
+        }
+
+        /// <summary>
+        /// Returns a task that will receive the last value or the exception produced by the observable sequence.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the elements in the source sequence.</typeparam>
+        /// <param name="observable">Observable sequence to convert to a task.</param>
         /// <param name="cancellationToken">Cancellation token that can be used to cancel the task, causing unsubscription from the observable sequence.</param>
         /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="observable"/> is <c>null</c>.</exception>
@@ -361,6 +389,48 @@ namespace System.Reactive.Threading.Tasks
             }
 
             return observable.ToTask(cancellationToken, state: null);
+        }
+
+        /// <summary>
+        /// Returns a task that will receive the last value or the exception produced by the observable sequence.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the elements in the source sequence.</typeparam>
+        /// <param name="observable">Observable sequence to convert to a task.</param>
+        /// <param name="cancellationToken">Cancellation token that can be used to cancel the task, causing unsubscription from the observable sequence.</param>
+        /// <param name="scheduler">The scheduler used for overriding where the task completion signals will be issued.</param>
+        /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="observable"/> or <paramref name="scheduler"/> is <c>null</c>.</exception>
+        public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken, IScheduler scheduler)
+        {
+            return observable.ToTask(cancellationToken, state: null).ContinueOnScheduler(scheduler);
+        }
+
+        internal static Task<TResult> ContinueOnScheduler<TResult>(this Task<TResult> task, IScheduler scheduler)
+        {
+            if (scheduler == null)
+            {
+                throw new ArgumentNullException(nameof(scheduler));
+            }
+            var tcs = new TaskCompletionSource<TResult>(task.AsyncState);
+            task.ContinueWith(t =>
+            {
+                scheduler.Schedule(() =>
+                {
+                    if (t.IsCanceled)
+                    {
+                        tcs.TrySetCanceled(new TaskCanceledException(t).CancellationToken);
+                    }
+                    else if (t.IsFaulted)
+                    {
+                        tcs.TrySetException(t.Exception.InnerExceptions);
+                    }
+                    else
+                    {
+                        tcs.TrySetResult(t.Result);
+                    }
+                });
+            }, TaskContinuationOptions.ExecuteSynchronously);
+            return tcs.Task;
         }
 
         private sealed class ToTaskObserver<TResult> : SafeObserver<TResult>
@@ -465,6 +535,21 @@ namespace System.Reactive.Threading.Tasks
             }
 
             return tcs.Task;
+        }
+
+        /// <summary>
+        /// Returns a task that will receive the last value or the exception produced by the observable sequence.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the elements in the source sequence.</typeparam>
+        /// <param name="observable">Observable sequence to convert to a task.</param>
+        /// <param name="cancellationToken">Cancellation token that can be used to cancel the task, causing unsubscription from the observable sequence.</param>
+        /// <param name="state">The state to use as the underlying task's <see cref="Task.AsyncState"/>.</param>
+        /// <param name="scheduler">The scheduler used for overriding where the task completion signals will be issued.</param>
+        /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="observable"/> or <paramref name="scheduler"/> is <c>null</c>.</exception>
+        public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken, object state, IScheduler scheduler)
+        {
+            return observable.ToTask(cancellationToken, state).ContinueOnScheduler(scheduler);
         }
     }
 }
