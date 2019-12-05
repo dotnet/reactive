@@ -256,6 +256,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever either of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of both sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TResult>(this IObservable<TSource1> first, IObservable<TSource2> second, Func<TSource1, TSource2, TResult> resultSelector)
         {
             if (first == null)
@@ -293,6 +294,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, Func<TSource1, TSource2, TSource3, TResult> resultSelector)
         {
             if (source1 == null)
@@ -333,6 +335,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, Func<TSource1, TSource2, TSource3, TSource4, TResult> resultSelector)
         {
             if (source1 == null)
@@ -380,6 +383,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="source5"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> resultSelector)
         {
             if (source1 == null)
@@ -434,6 +438,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="source5"/> or <paramref name="source6"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> resultSelector)
         {
             if (source1 == null)
@@ -495,6 +500,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="source5"/> or <paramref name="source6"/> or <paramref name="source7"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> resultSelector)
         {
             if (source1 == null)
@@ -563,6 +569,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="source5"/> or <paramref name="source6"/> or <paramref name="source7"/> or <paramref name="source8"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> resultSelector)
         {
             if (source1 == null)
@@ -638,6 +645,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="source5"/> or <paramref name="source6"/> or <paramref name="source7"/> or <paramref name="source8"/> or <paramref name="source9"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> resultSelector)
         {
             if (source1 == null)
@@ -720,6 +728,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="source5"/> or <paramref name="source6"/> or <paramref name="source7"/> or <paramref name="source8"/> or <paramref name="source9"/> or <paramref name="source10"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> resultSelector)
         {
             if (source1 == null)
@@ -809,6 +818,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="source5"/> or <paramref name="source6"/> or <paramref name="source7"/> or <paramref name="source8"/> or <paramref name="source9"/> or <paramref name="source10"/> or <paramref name="source11"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> resultSelector)
         {
             if (source1 == null)
@@ -905,6 +915,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="source5"/> or <paramref name="source6"/> or <paramref name="source7"/> or <paramref name="source8"/> or <paramref name="source9"/> or <paramref name="source10"/> or <paramref name="source11"/> or <paramref name="source12"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> resultSelector)
         {
             if (source1 == null)
@@ -1008,6 +1019,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="source5"/> or <paramref name="source6"/> or <paramref name="source7"/> or <paramref name="source8"/> or <paramref name="source9"/> or <paramref name="source10"/> or <paramref name="source11"/> or <paramref name="source12"/> or <paramref name="source13"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> resultSelector)
         {
             if (source1 == null)
@@ -1118,6 +1130,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="source5"/> or <paramref name="source6"/> or <paramref name="source7"/> or <paramref name="source8"/> or <paramref name="source9"/> or <paramref name="source10"/> or <paramref name="source11"/> or <paramref name="source12"/> or <paramref name="source13"/> or <paramref name="source14"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> resultSelector)
         {
             if (source1 == null)
@@ -1235,6 +1248,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="source5"/> or <paramref name="source6"/> or <paramref name="source7"/> or <paramref name="source8"/> or <paramref name="source9"/> or <paramref name="source10"/> or <paramref name="source11"/> or <paramref name="source12"/> or <paramref name="source13"/> or <paramref name="source14"/> or <paramref name="source15"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> resultSelector)
         {
             if (source1 == null)
@@ -1359,6 +1373,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source1"/> or <paramref name="source2"/> or <paramref name="source3"/> or <paramref name="source4"/> or <paramref name="source5"/> or <paramref name="source6"/> or <paramref name="source7"/> or <paramref name="source8"/> or <paramref name="source9"/> or <paramref name="source10"/> or <paramref name="source11"/> or <paramref name="source12"/> or <paramref name="source13"/> or <paramref name="source14"/> or <paramref name="source15"/> or <paramref name="source16"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, IObservable<TSource16> source16, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> resultSelector)
         {
             if (source1 == null)
@@ -1460,6 +1475,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element. For efficiency, the input list is reused after the selector returns. Either aggregate or copy the values during the function call.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> or <paramref name="resultSelector"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<TResult> CombineLatest<TSource, TResult>(this IEnumerable<IObservable<TSource>> sources, Func<IList<TSource>, TResult> resultSelector)
         {
             if (sources == null)
@@ -1482,6 +1498,7 @@ namespace System.Reactive.Linq
         /// <param name="sources">Observable sources.</param>
         /// <returns>An observable sequence containing lists of the latest elements of the sources.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<IList<TSource>> CombineLatest<TSource>(this IEnumerable<IObservable<TSource>> sources)
         {
             if (sources == null)
@@ -1499,6 +1516,7 @@ namespace System.Reactive.Linq
         /// <param name="sources">Observable sources.</param>
         /// <returns>An observable sequence containing lists of the latest elements of the sources.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
+        /// <remarks>If a non-empty source completes, its very last value will be used for creating subsequent combinations until all sources terminate.</remarks>
         public static IObservable<IList<TSource>> CombineLatest<TSource>(params IObservable<TSource>[] sources)
         {
             if (sources == null)
