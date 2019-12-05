@@ -1271,8 +1271,11 @@ namespace System.Reactive.Linq
         public static System.IObservable<int> Range(int start, int count) { }
         public static System.IObservable<int> Range(int start, int count, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<TSource> RefCount<TSource>(this System.Reactive.Subjects.IConnectableObservable<TSource> source) { }
+        public static System.IObservable<TSource> RefCount<TSource>(this System.Reactive.Subjects.IConnectableObservable<TSource> source, int minObservers) { }
         public static System.IObservable<TSource> RefCount<TSource>(this System.Reactive.Subjects.IConnectableObservable<TSource> source, System.TimeSpan disconnectDelay) { }
+        public static System.IObservable<TSource> RefCount<TSource>(this System.Reactive.Subjects.IConnectableObservable<TSource> source, int minObservers, System.TimeSpan disconnectDelay) { }
         public static System.IObservable<TSource> RefCount<TSource>(this System.Reactive.Subjects.IConnectableObservable<TSource> source, System.TimeSpan disconnectDelay, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TSource> RefCount<TSource>(this System.Reactive.Subjects.IConnectableObservable<TSource> source, int minObservers, System.TimeSpan disconnectDelay, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<TResult> Repeat<TResult>(TResult value) { }
         public static System.IObservable<TSource> Repeat<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TResult> Repeat<TResult>(TResult value, int repeatCount) { }
@@ -1995,8 +1998,11 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<int> Range(this System.Reactive.Linq.IQbservableProvider provider, int start, int count) { }
         public static System.Reactive.Linq.IQbservable<int> Range(this System.Reactive.Linq.IQbservableProvider provider, int start, int count, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Reactive.Linq.IQbservable<TSource> RefCount<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Reactive.Subjects.IConnectableObservable<TSource> source) { }
+        public static System.Reactive.Linq.IQbservable<TSource> RefCount<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Reactive.Subjects.IConnectableObservable<TSource> source, int minObservers) { }
         public static System.Reactive.Linq.IQbservable<TSource> RefCount<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Reactive.Subjects.IConnectableObservable<TSource> source, System.TimeSpan disconnectDelay) { }
+        public static System.Reactive.Linq.IQbservable<TSource> RefCount<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Reactive.Subjects.IConnectableObservable<TSource> source, int minObservers, System.TimeSpan disconnectDelay) { }
         public static System.Reactive.Linq.IQbservable<TSource> RefCount<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Reactive.Subjects.IConnectableObservable<TSource> source, System.TimeSpan disconnectDelay, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<TSource> RefCount<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Reactive.Subjects.IConnectableObservable<TSource> source, int minObservers, System.TimeSpan disconnectDelay, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Reactive.Linq.IQbservable<TSource> Repeat<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
         public static System.Reactive.Linq.IQbservable<TResult> Repeat<TResult>(this System.Reactive.Linq.IQbservableProvider provider, TResult value) { }
         public static System.Reactive.Linq.IQbservable<TSource> Repeat<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, int repeatCount) { }

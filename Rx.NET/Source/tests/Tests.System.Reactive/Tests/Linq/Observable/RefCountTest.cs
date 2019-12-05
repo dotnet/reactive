@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -39,6 +40,10 @@ namespace ReactiveTests.Tests
         public void RefCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RefCount<int>(null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RefCount<int>(null, 2));
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.RefCount(Observable.Never<int>().Publish(), 0));
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.RefCount(Observable.Never<int>().Publish(), -1));
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.RefCount(Observable.Never<int>().Publish(), -2));
         }
 
         [Fact]
@@ -241,6 +246,15 @@ namespace ReactiveTests.Tests
         public void LazyRefCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RefCount<int>(null, TimeSpan.FromSeconds(2)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RefCount<int>(null, TimeSpan.FromSeconds(2), Scheduler.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RefCount<int>(null, 2, TimeSpan.FromSeconds(2)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RefCount<int>(null, 2, TimeSpan.FromSeconds(2)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RefCount(Observable.Never<int>().Publish(), TimeSpan.FromSeconds(2), null));
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.RefCount(Observable.Never<int>().Publish(), 0, TimeSpan.FromSeconds(2)));
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.RefCount(Observable.Never<int>().Publish(), -1, TimeSpan.FromSeconds(2)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RefCount(Observable.Never<int>().Publish(), 2, TimeSpan.FromSeconds(2), null));
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.RefCount(Observable.Never<int>().Publish(), 0, TimeSpan.FromSeconds(2), Scheduler.Default));
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.RefCount(Observable.Never<int>().Publish(), -1, TimeSpan.FromSeconds(2), Scheduler.Default));
         }
 
         [Fact]
@@ -435,6 +449,106 @@ namespace ReactiveTests.Tests
             var s2 = o2.Subscribe();
             Assert.Equal(1, subscribed);
             Assert.Equal(1, unsubscribed);
+        }
+
+        [Fact]
+        public void RefCount_minObservers_not_connected_Eager()
+        {
+            int connected = 0;
+            var source = Observable.Defer(() =>
+            {
+                connected++;
+                return Observable.Never<int>();
+            })
+            .Publish()
+            .RefCount(2);
+
+            Assert.Equal(0, connected);
+
+            source.Subscribe();
+
+            Assert.Equal(0, connected);
+        }
+
+        [Fact]
+        public void RefCount_minObservers_connected_Eager()
+        {
+            var connected = 0;
+            var source = Observable.Defer(() =>
+            {
+                connected++;
+                return Observable.Range(1, 5);
+            })
+            .Publish()
+            .RefCount(2);
+
+            Assert.Equal(0, connected);
+
+            var list1 = new List<int>();
+            source.Subscribe(list1.Add);
+
+            Assert.Equal(0, connected);
+            Assert.Empty(list1);
+
+            var list2 = new List<int>();
+            source.Subscribe(list2.Add);
+
+            Assert.Equal(1, connected);
+
+            var expected = new List<int>(new[] { 1, 2, 3, 4, 5 });
+
+            Assert.Equal(expected, list1);
+            Assert.Equal(expected, list2);
+        }
+
+        [Fact]
+        public void RefCount_minObservers_not_connected_Lazy()
+        {
+            int connected = 0;
+            var source = Observable.Defer(() =>
+            {
+                connected++;
+                return Observable.Never<int>();
+            })
+            .Publish()
+            .RefCount(2, TimeSpan.FromMinutes(1));
+
+            Assert.Equal(0, connected);
+
+            source.Subscribe();
+
+            Assert.Equal(0, connected);
+        }
+
+        [Fact]
+        public void RefCount_minObservers_connected_Lazy()
+        {
+            var connected = 0;
+            var source = Observable.Defer(() =>
+            {
+                connected++;
+                return Observable.Range(1, 5);
+            })
+            .Publish()
+            .RefCount(2, TimeSpan.FromMinutes(1));
+
+            Assert.Equal(0, connected);
+
+            var list1 = new List<int>();
+            source.Subscribe(list1.Add);
+
+            Assert.Equal(0, connected);
+            Assert.Empty(list1);
+
+            var list2 = new List<int>();
+            source.Subscribe(list2.Add);
+
+            Assert.Equal(1, connected);
+
+            var expected = new List<int>(new[] { 1, 2, 3, 4, 5 });
+
+            Assert.Equal(expected, list1);
+            Assert.Equal(expected, list2);
         }
     }
 }

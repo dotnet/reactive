@@ -67,7 +67,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source)
         {
-            return new RefCount<TSource>.Eager(source);
+            return RefCount(source, 1);
         }
 
         public virtual IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source, TimeSpan disconnectTime)
@@ -77,7 +77,22 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source, TimeSpan disconnectTime, IScheduler scheduler)
         {
-            return new RefCount<TSource>.Lazy(source, disconnectTime, scheduler);
+            return RefCount(source, 1, disconnectTime, scheduler);
+        }
+
+        public virtual IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source, int minObservers)
+        {
+            return new RefCount<TSource>.Eager(source, minObservers);
+        }
+
+        public virtual IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source, int minObservers, TimeSpan disconnectTime)
+        {
+            return RefCount(source, minObservers, disconnectTime, Scheduler.Default);
+        }
+
+        public virtual IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source, int minObservers, TimeSpan disconnectTime, IScheduler scheduler)
+        {
+            return new RefCount<TSource>.Lazy(source, disconnectTime, scheduler, minObservers);
         }
 
         #endregion
