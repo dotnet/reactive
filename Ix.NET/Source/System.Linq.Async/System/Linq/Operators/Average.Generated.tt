@@ -131,7 +131,7 @@ else
         }
 
         /// <summary>
-        /// Computes the average of an async-enumerable sequence of nullable <see cref="<#=typeStr#>" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an async-enumerable sequence of <see cref="<#=typeStr#>" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>

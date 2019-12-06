@@ -51,7 +51,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Computes the average of an async-enumerable sequence of nullable <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an async-enumerable sequence of <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -206,7 +206,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Computes the average of an async-enumerable sequence of nullable <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an async-enumerable sequence of <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -361,7 +361,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Computes the average of an async-enumerable sequence of nullable <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an async-enumerable sequence of <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -516,7 +516,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Computes the average of an async-enumerable sequence of nullable <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an async-enumerable sequence of <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -671,7 +671,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Computes the average of an async-enumerable sequence of nullable <see cref="decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an async-enumerable sequence of <see cref="decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -834,7 +834,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Computes the average of an async-enumerable sequence of nullable <see cref="Nullable{Int}" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Int}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -1021,7 +1021,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Computes the average of an async-enumerable sequence of nullable <see cref="Nullable{Long}" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Long}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -1208,7 +1208,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Computes the average of an async-enumerable sequence of nullable <see cref="Nullable{Float}" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Float}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -1395,7 +1395,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Computes the average of an async-enumerable sequence of nullable <see cref="Nullable{Double}" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Double}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -1582,7 +1582,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Computes the average of an async-enumerable sequence of nullable <see cref="Nullable{Decimal}" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Decimal}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
