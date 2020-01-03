@@ -76,15 +76,17 @@ namespace System.Reactive.Concurrency
 
             public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
             {
+                // Note that avoiding closure allocation here would introduce infinite generic recursion over the TState argument
+                
                 return _scheduler.ScheduleLongRunning(
-                    (scheduler: this, action, state),
-                    (tuple, cancel) =>
+                    state,
+                    (state1, cancel) =>
                     {
                         try
                         {
-                            tuple.action(tuple.state, cancel);
+                            action(state1, cancel);
                         }
-                        catch (TException exception) when (tuple.scheduler._handler(exception))
+                        catch (TException exception) when (_handler(exception))
                         {
                         }
                     });
