@@ -361,8 +361,11 @@ namespace System.Reactive.Linq.ObservableImpl
                         //
                         if (isSpan)
                         {
-                            var s = _q.Dequeue();
-                            ForwardOnNext(s);
+                            if (_q.Count > 0)
+                            {
+                                var s = _q.Dequeue();
+                                ForwardOnNext(s);
+                            }
                         }
 
                         if (isShift)
