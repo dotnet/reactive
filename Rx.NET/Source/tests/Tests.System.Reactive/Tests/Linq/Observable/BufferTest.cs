@@ -1305,6 +1305,19 @@ namespace ReactiveTests.Tests
             Observable.Range(1, 10, DefaultScheduler.Instance).Buffer(TimeSpan.FromDays(1), 3).Skip(1).First().AssertEqual(4, 5, 6);
         }
 
+        [Fact]
+        public void BufferWithTime_TickWhileOnCompleted()
+        {
+            var scheduler = new TestScheduler();
+
+            Observable.Return(1)
+                .Buffer(TimeSpan.FromMilliseconds(1), TimeSpan.FromMilliseconds(2), scheduler)
+                .Subscribe(v =>
+                {
+                    scheduler.AdvanceBy(TimeSpan.FromMilliseconds(1).Ticks);
+                });
+        }
+
         #endregion
 
     }
