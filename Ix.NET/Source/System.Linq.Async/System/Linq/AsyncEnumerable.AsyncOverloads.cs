@@ -272,11 +272,76 @@ namespace System.Linq
         public static IOrderedAsyncEnumerable<TSource> OrderByAwait<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => OrderByAwaitCore<TSource, TKey>(source, keySelector, comparer);
         public static IOrderedAsyncEnumerable<TSource> OrderByDescendingAwait<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => OrderByDescendingAwaitCore<TSource, TKey>(source, keySelector);
         public static IOrderedAsyncEnumerable<TSource> OrderByDescendingAwait<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => OrderByDescendingAwaitCore<TSource, TKey>(source, keySelector, comparer);
+
+        /// <summary>
+        /// Projects each element of an async-enumerable sequence into a new form by applying an asynchronous selector function to each member of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by running the selector function for each element in the source sequence and awaiting the result.</typeparam>
+        /// <param name="source">A sequence of elements to invoke a transform function on.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each source element.</param>
+        /// <returns>An async-enumerable sequence whose elements are the result of invoking the transform function on each element of the source sequence and awaiting the result.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static IAsyncEnumerable<TResult> SelectAwait<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector) => SelectAwaitCore<TSource, TResult>(source, selector);
+
+        /// <summary>
+        /// Projects each element of an async-enumerable sequence into a new form by applying an asynchronous selector function that incorporates each element's index to each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <typeparam name="TResult">The type of elements in the result sequence, obtained by running the selector function for each element and its index, and awaiting the result.</typeparam>
+        /// <param name="source">A sequence of elements to invoke a transform function on.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each source element; the second parameter represents the index of the element.</param>
+        /// <returns>An async-enumerable sequence whose elements are the result of invoking the transform function on each element and its index of the source sequence and awaiting the result.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static IAsyncEnumerable<TResult> SelectAwait<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector) => SelectAwaitCore<TSource, TResult>(source, selector);
+
+        /// <summary>
+        /// Projects each element of an async-enumerable sequence into an async-enumerable sequence and merges the resulting async-enumerable sequences into one async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <typeparam name="TResult">The type of elements in the projected inner sequences and the merged result sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of elements to project.</param>
+        /// <param name="selector">An asynchronous selector function to apply to each element of the source sequence.</param>
+        /// <returns>An async-enumerable sequence whose elements are the result of invoking the one-to-many transform function on each element of the source sequence and awaiting the result.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static IAsyncEnumerable<TResult> SelectManyAwait<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitCore<TSource, TResult>(source, selector);
+
+        /// <summary>
+        /// Projects each element of an async-enumerable sequence into an async-enumerable sequence by incorporating the element's index and merges the resulting async-enumerable sequences into an async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <typeparam name="TResult">The type of elements in the projected inner sequences and the merged result sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of elements to project.</param>
+        /// <param name="selector">An asynchronous selector function to apply to each element; the second parameter represents the index of the element.</param>
+        /// <returns>An async-enumerable sequence who's elements are the result of invoking the one-to-many transform function on each element of the source sequence and awaiting the result.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static IAsyncEnumerable<TResult> SelectManyAwait<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitCore<TSource, TResult>(source, selector);
+
+        /// <summary>
+        /// Projects each element of an async-enumerable sequence to an async-enumerable sequence by awaiting the result of a transform function, invokes the result selector for each of the source elements and each of the corrasponding inner-sequence's elements and awaits the result, and merges the results into one async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <typeparam name="TCollection">The type of elements in the projected intermediate sequences.</typeparam>
+        /// <typeparam name="TResult">The type of elements in the result sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of elements to project.</param>
+        /// <param name="collectionSelector">An asynchronous transform function to apply to each source element.</param>
+        /// <param name="resultSelector">An asynchronous transform function to apply to each element of the intermediate sequence.</param>
+        /// <returns>An async-enumerable sequence whose elements are the result of invoking the one-to-many transform function <paramref name="collectionSelector"/> on each element of the input sequence, awaiting the result, applying <paramref name="resultSelector"/> to each element of the intermediate sequences along with their corrasponding source element and awaiting the result.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="collectionSelector"/>, or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<TResult> SelectManyAwait<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector) => SelectManyAwaitCore<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+
+        /// <summary>
+        /// Projects each element of an async-enumerable sequence to an async-enumerable sequence by awaiting the result of a transform function that incorporates each element's index,
+        /// invokes the result selector for the source element and each of the corrasponding inner-sequence's elements and awaits the result, and merges the results into one async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <typeparam name="TCollection">The type of elements in the projected intermediate sequences.</typeparam>
+        /// <typeparam name="TResult">The type of elements in the result sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of elements to project.</param>
+        /// <param name="collectionSelector">An asynchronous transform function to apply to each source element; the second parameter represents the index of the element.</param>
+        /// <param name="resultSelector">An asynchronous transform function to apply to each element of the intermediate sequence.</param>
+        /// <returns>An async-enumerable sequence whose elements are the result of invoking the one-to-many transform function <paramref name="collectionSelector"/> on each element of the input sequence, awaiting the result, applying <paramref name="resultSelector"/> to each element of the intermediate sequences olong with their corrasponding source element and awaiting the result.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="collectionSelector"/>, or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<TResult> SelectManyAwait<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector) => SelectManyAwaitCore<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         public static ValueTask<TSource> SingleAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => SingleAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<TSource> SingleOrDefaultAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => SingleOrDefaultAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
