@@ -211,63 +211,660 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, CancellationToken, ValueTask<TResult>> selector) => ZipAwaitWithCancellationCore<TFirst, TSecond, TResult>(first, second, selector);
 #endif
 #else
+        /// <summary>
+        /// Applies an accumulator function over an async-enumerable sequence, returning the result of the aggregation as a single element in the result sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to aggregate over.</param>
+        /// <param name="accumulator">An asynchronous accumulator function to be invoked and awaited on each element.</param>
+        /// <param name="cancellationToken">An optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the final accumulator value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="accumulator"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<TSource> AggregateAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator, CancellationToken cancellationToken = default) => AggregateAwaitAsyncCore<TSource>(source, accumulator, cancellationToken);
+
+        /// <summary>
+        /// Applies an accumulator function over an async-enumerable sequence, returning the result of the aggregation as a single element in the result sequence. The specified seed value is used as the initial accumulator value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <typeparam name="TAccumulate">The type of the result of aggregation.</typeparam>
+        /// <param name="source">An async-enumerable sequence to aggregate over.</param>
+        /// <param name="seed">The initial accumulator value.</param>
+        /// <param name="accumulator">An asynchronous accumulator function to be invoked and awaited on each element.</param>
+        /// <param name="cancellationToken">An optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the final accumulator value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="accumulator"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<TAccumulate> AggregateAwaitAsync<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, CancellationToken cancellationToken = default) => AggregateAwaitAsyncCore<TSource, TAccumulate>(source, seed, accumulator, cancellationToken);
+
+        /// <summary>
+        /// Applies an accumulator function over an async-enumerable sequence, returning the result of the aggregation as a single element in the result sequence. The specified seed value is used as the initial accumulator value,
+        /// and the specified result selector is used to select the result value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <typeparam name="TAccumulate">The type of the accumulator value.</typeparam>
+        /// <typeparam name="TResult">The type of the resulting value.</typeparam>
+        /// <param name="source">An async-enumerable sequence to aggregate over.</param>
+        /// <param name="seed">The initial accumulator value.</param>
+        /// <param name="accumulator">An asynchronous accumulator function to be invoked and awaited on each element.</param>
+        /// <param name="resultSelector">An asynchronous transform function to transform the final accumulator value into the result value.</param>
+        /// <param name="cancellationToken">An optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the value obtained by applying the result selector to the final accumulator value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="accumulator"/> or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
         public static ValueTask<TResult> AggregateAwaitAsync<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, Func<TAccumulate, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken = default) => AggregateAwaitAsyncCore<TSource, TAccumulate, TResult>(source, seed, accumulator, resultSelector, cancellationToken);
+
+        /// <summary>
+        /// Determines whether all elements in an async-enumerable sequence satisfy a condition.
+        /// </summary>
+        /// <typeparam name="TSource">The type of element in the sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to apply the predicate to.</param>
+        /// <param name="predicate">An asynchronous predicate to apply to each element of the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a value indicating whether all elements in the sequence pass the test in the specified predicate.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<bool> AllAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => AllAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
+
+        /// <summary>
+        /// Determines whether any element in an async-enumerable sequence satisfies a condition.
+        /// </summary>
+        /// <typeparam name="TSource">The type of element in the sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to apply the predicate to.</param>
+        /// <param name="predicate">An asynchronous predicate to apply to each element of the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a value indicating whether any elements in the source sequence pass the test in the specified predicate.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<bool> AnyAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => AnyAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
+
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="int"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of values to compute the average of.</param>
+        /// <param name="selector">A transform function to invoke and await on each element of the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the average of the sequence of values.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<double> AverageAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="long"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of values to compute the average of.</param>
+        /// <param name="selector">A transform function to invoke and await on each element of the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the average of the sequence of values.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<double> AverageAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="float"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of values to compute the average of.</param>
+        /// <param name="selector">A transform function to invoke and await on each element of the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the average of the sequence of values.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<float> AverageAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="double"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of values to compute the average of.</param>
+        /// <param name="selector">A transform function to invoke and await on each element of the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the average of the sequence of values.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<double> AverageAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="decimal"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of values to compute the average of.</param>
+        /// <param name="selector">A transform function to invoke and await on each element of the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the average of the sequence of values.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<decimal> AverageAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Int}"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of values to compute the average of.</param>
+        /// <param name="selector">A transform function to invoke and await on each element of the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the average of the sequence of values, or <see langword="null"/> if the source sequence is empty.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<double?> AverageAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Long}"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of values to compute the average of.</param>
+        /// <param name="selector">A transform function to invoke and await on each element of the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the average of the sequence of values, or <see langword="null"/> if the source sequence is empty.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<double?> AverageAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Float}"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of values to compute the average of.</param>
+        /// <param name="selector">A transform function to invoke and await on each element of the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the average of the sequence of values, or <see langword="null"/> if the source sequence is empty.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<float?> AverageAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Double}"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of values to compute the average of.</param>
+        /// <param name="selector">A transform function to invoke and await on each element of the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the average of the sequence of values, or <see langword="null"/> if the source sequence is empty.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<double?> AverageAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Decimal}"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence of values to compute the average of.</param>
+        /// <param name="selector">A transform function to invoke and await on each element of the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the average of the sequence of values, or <see langword="null"/> if the source sequence is empty.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<decimal?> AverageAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Counts the elements in an async-enumerable sequence that satisfy a condition.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of elements to count.</param>
+        /// <param name="predicate">An asynchronous predicate to apply to each element in the source sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the number of elements in the sequence that satisfy the predicate.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         public static ValueTask<int> CountAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => CountAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
+
+        /// <summary>
+        /// Returns the first element of an async-enumerable sequence that satisfies the condition in the predicate.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the sequence.</typeparam>
+        /// <param name="source">Source async-enumerable sequence.</param>
+        /// <param name="predicate">An asynchronous predicate that will be invoked and awaited for each element in the sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the first element in the sequence that satisfies the predicate.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">No element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
         public static ValueTask<TSource> FirstAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => FirstAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
+
+        /// <summary>
+        /// Returns the first element of an async-enumerable sequence that satisfies the condition in the predicate, or a default value if no element satisfies the condition in the predicate.
+        /// </summary>
+        /// <typeparam name="TSource">The type of element in the sequence.</typeparam>
+        /// <param name="source">Source async-enumerable sequence.</param>
+        /// <param name="predicate">An asynchronous predicate to invoke and await on each element of the sequence.</param>
+        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the first element in the sequence that satisfies the predicate, or a default value if no element satisfies the predicate.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         public static ValueTask<TSource> FirstOrDefaultAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => FirstOrDefaultAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits an asynchronous action on each element in the source sequence, and returns a task that is signaled when the sequence terminates.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the sequence.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="action">Asynchronous action to invoke and await for each element in the source sequence.</param>
+        /// <param name="cancellationToken">Optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>Task that signals the termination of the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
         public static Task ForEachAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> action, CancellationToken cancellationToken = default) => ForEachAwaitAsyncCore<TSource>(source, action, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits an asynchronous action on each element in the source sequence, incorporating the element's index, and returns a task that is signaled when the sequence terminates.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the sequence.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="action">Asynchronous action to invoke and await for each element in the source sequence; the second parameter represents the index of the element.</param>
+        /// <param name="cancellationToken">Optional cancellation token for cancelling the sequence at any time.</param>
+        /// <returns>Task that signals the termination of the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
         public static Task ForEachAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task> action, CancellationToken cancellationToken = default) => ForEachAwaitAsyncCore<TSource>(source, action, cancellationToken);
+
+        /// <summary>
+        /// Groups the elements of an async-enumerable sequence according to a specified key selector function.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the grouping key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to group.</param>
+        /// <param name="keySelector">An asynchronous function to extract the key for each element.</param>
+        /// <returns>A sequence of async-enumerable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupByAwait<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => GroupByAwaitCore<TSource, TKey>(source, keySelector);
+
+        /// <summary>
+        /// Groups the elements of an async-enumerable sequence according to a specified key selector function and comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the grouping key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to group.</param>
+        /// <param name="keySelector">An asynchronous function to extract the key for each element.</param>
+        /// <param name="comparer">An equality comparer to compare keys with.</param>
+        /// <returns>A sequence of async-enumerable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupByAwait<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer) => GroupByAwaitCore<TSource, TKey>(source, keySelector, comparer);
+
+        /// <summary>
+        /// Groups the elements of an async-enumerable sequence and selects the resulting elements by using a specified function.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the grouping key computed for each element in the source sequence.</typeparam>
+        /// <typeparam name="TElement">The type of the elements within the groups computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to group.</param>
+        /// <param name="keySelector">An asynchronous function to extract the key for each element.</param>
+        /// <param name="elementSelector">An asynchronous function to map each source element to an element in an async-enumerable group.</param>
+        /// <returns>A sequence of async-enumerable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupByAwait<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector) => GroupByAwaitCore<TSource, TKey, TElement>(source, keySelector, elementSelector);
+
+        /// <summary>
+        /// Groups the elements of an async-enumerable sequence according to a specified key selector function, and then applies a result selector function to each group.
+        /// </summary>
+        /// <typeparam name="TSource">Type of element in the source sequence.</typeparam>
+        /// <typeparam name="TKey">Type of the grouping key computed for each element in the source sequence.</typeparam>
+        /// <typeparam name="TResult">The result type returned by the result selector function.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to group.</param>
+        /// <param name="keySelector">An asynchronous function to extract the key for each element.</param>
+        /// <param name="resultSelector">An asynchronous function to transform each group into the result type.</param>
+        /// <returns>An async-enumerable sequence of results obtained by invoking and awaiting the result-selector function on each group.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<TResult> GroupByAwait<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, ValueTask<TResult>> resultSelector) => GroupByAwaitCore<TSource, TKey, TResult>(source, keySelector, resultSelector);
+
+        /// <summary>
+        /// Groups the elements of an async-enumerable sequence according to a specified key-selector function, applies an element selector to each element of each group, then applies a result selector to each transformed group.
+        /// </summary>
+        /// <typeparam name="TSource">The type of element in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the grouping key computed for each element in the source sequence.</typeparam>
+        /// <typeparam name="TElement">The type of element computed by the element selector.</typeparam>
+        /// <typeparam name="TResult">The type of the final result, computed by applying the result selector to each transformed group of elements.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to group.</param>
+        /// <param name="keySelector">An asynchronous function to extract the key for each element.</param>
+        /// <param name="elementSelector">An asynchronous function to apply to each element of each group. </param>
+        /// <param name="resultSelector">An asynchronous function to transform each group into the result type.</param>
+        /// <returns>An async-enumerable sequence of results obtained by invoking the result selector function on each group and awaiting the result.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<TResult> GroupByAwait<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, ValueTask<TResult>> resultSelector) => GroupByAwaitCore<TSource, TKey, TElement, TResult>(source, keySelector, elementSelector, resultSelector);
+
+        /// <summary>
+        /// Groups the elements of an async-enumerable sequence and selects the resulting elements by using a specified function.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the grouping key computed for each element in the source sequence.</typeparam>
+        /// <typeparam name="TElement">The type of the elements within the groups computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to group.</param>
+        /// <param name="keySelector">An asynchronous function to extract the key for each element.</param>
+        /// <param name="elementSelector">An asynchronous function to map each source element to an element in an async-enumerable group.</param>
+        /// <param name="comparer">An equality comparer to use to compare keys.</param>
+        /// <returns>A sequence of async-enumerable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> or <paramref name="comparer"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupByAwait<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer) => GroupByAwaitCore<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
+
+        /// <summary>
+        /// Groups the elements of an async-enumerable sequence according to a specified key selector function, and then applies a result selector function to each group.
+        /// </summary>
+        /// <typeparam name="TSource">Type of element in the source sequence.</typeparam>
+        /// <typeparam name="TKey">Type of the grouping key computed for each element in the source sequence.</typeparam>
+        /// <typeparam name="TResult">The result type returned by the result selector function.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to group.</param>
+        /// <param name="keySelector">An asynchronous function to extract the key for each element.</param>
+        /// <param name="resultSelector">An asynchronous function to transform each group into the result type.</param>
+        /// <param name="comparer">An equality comparer to use to compare keys.</param>
+        /// <returns>An async-enumerable sequence of results obtained by invoking and awaiting the result-selector function on each group.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="resultSelector"/> or <paramref name="comparer"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<TResult> GroupByAwait<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey> comparer) => GroupByAwaitCore<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer);
+
+        /// <summary>
+        /// Groups the elements of an async-enumerable sequence according to a specified key-selector function, applies an element selector to each element of each group, then applies a result selector to each transformed group.
+        /// </summary>
+        /// <typeparam name="TSource">The type of element in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the grouping key computed for each element in the source sequence.</typeparam>
+        /// <typeparam name="TElement">The type of element computed by the element selector.</typeparam>
+        /// <typeparam name="TResult">The type of the final result, computed by applying the result selector to each transformed group of elements.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to group.</param>
+        /// <param name="keySelector">An asynchronous function to extract the key for each element.</param>
+        /// <param name="elementSelector">An asynchronous function to apply to each element of each group. </param>
+        /// <param name="resultSelector">An asynchronous function to transform each group into the result type.</param>
+        /// <param name="comparer">An equality comparer to use to compare keys.</param>
+        /// <returns>An async-enumerable sequence of results obtained by invoking the result selector function on each group and awaiting the result.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> or <paramref name="resultSelector"/> or <paramref name="comparer"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<TResult> GroupByAwait<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey> comparer) => GroupByAwaitCore<TSource, TKey, TElement, TResult>(source, keySelector, elementSelector, resultSelector, comparer);
+
+
         public static IAsyncEnumerable<TResult> GroupJoinAwait<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector) => GroupJoinAwaitCore<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector);
         public static IAsyncEnumerable<TResult> GroupJoinAwait<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey> comparer) => GroupJoinAwaitCore<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
         public static IAsyncEnumerable<TResult> JoinAwait<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, ValueTask<TResult>> resultSelector) => JoinAwaitCore<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector);
         public static IAsyncEnumerable<TResult> JoinAwait<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey> comparer) => JoinAwaitCore<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
+
+        /// <summary>
+        /// Returns the last element of an async-enumerable sequence that satisfies the condition in the predicate.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source async-enumerable sequence.</param>
+        /// <param name="predicate">An asynchronous predicate function to evaluate for elements in the source sequence.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>ValueTask containing the last element in the async-enumerable sequence that satisfies the condition in the predicate.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) No element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
         public static ValueTask<TSource> LastAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => LastAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
+
+        /// <summary>
+        /// Returns the last element of an async-enumerable sequence that satisfies the condition in the predicate, or a default value if no such element exists.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source async-enumerable sequence.</param>
+        /// <param name="predicate">An asynchronous predicate function to evaluate for elements in the source sequence.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>ValueTask containing the last element in the async-enumerable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         public static ValueTask<TSource> LastOrDefaultAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => LastOrDefaultAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
+
+        /// <summary>
+        /// Returns an async-enumerable sequence containing a <see cref="long" /> that represents the number of elements in the specified async-enumerable sequence that satisfy a condition.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence that contains elements to be counted.</param>
+        /// <param name="predicate">An asynchronous predicate to test each element for a condition.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>An async-enumerable sequence containing a single element with a number that represents how many elements in the input sequence satisfy the condition in the predicate function.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<long> LongCountAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => LongCountAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="long"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public static ValueTask<long> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Long}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public static ValueTask<long?> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="float"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public static ValueTask<float> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Float}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public static ValueTask<float?> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="double"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public static ValueTask<double> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Double}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public static ValueTask<double?> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="decimal"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public static ValueTask<decimal> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Decimal}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public static ValueTask<decimal?> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the objects derived from the elements in the source sequence to determine the maximum of.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the value that corresponds to the maximum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<TResult> MaxAwaitAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource, TResult>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Returns the maximum <see cref="int"/> value in an async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public static ValueTask<int> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Returns the maximum <see cref="Nullable{Int}"/> value in an async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public static ValueTask<int?> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="double"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<double> MinAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Double}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<double?> MinAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="decimal"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<decimal> MinAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Decimal}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<decimal?> MinAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="int"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<int> MinAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Int}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<int?> MinAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="long"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<long> MinAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Long}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<long?> MinAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="float"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<float> MinAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Float}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<float?> MinAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the objects derived from the elements in the source sequence to determine the minimum of.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<TResult> MinAwaitAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource, TResult>(source, selector, cancellationToken);
+
+
         public static IOrderedAsyncEnumerable<TSource> OrderByAwait<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => OrderByAwaitCore<TSource, TKey>(source, keySelector);
         public static IOrderedAsyncEnumerable<TSource> OrderByAwait<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => OrderByAwaitCore<TSource, TKey>(source, keySelector, comparer);
         public static IOrderedAsyncEnumerable<TSource> OrderByDescendingAwait<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => OrderByDescendingAwaitCore<TSource, TKey>(source, keySelector);
@@ -343,20 +940,173 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence whose elements are the result of invoking the one-to-many transform function <paramref name="collectionSelector"/> on each element of the input sequence, awaiting the result, applying <paramref name="resultSelector"/> to each element of the intermediate sequences olong with their corrasponding source element and awaiting the result.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="collectionSelector"/>, or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<TResult> SelectManyAwait<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector) => SelectManyAwaitCore<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+
+        /// <summary>
+        /// Returns the only element of an async-enumerable sequence that satisfies the condition in the asynchronous predicate, and reports an exception if there is not exactly one element in the async-enumerable sequence that matches the predicate.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">Source async-enumerable sequence.</param>
+        /// <param name="predicate">An asynchronous predicate that will be applied to each element of the source sequence.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>ValueTask containing the only element in the async-enumerable sequence that satisfies the condition in the asynchronous predicate.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) No element satisfies the condition in the predicate. -or- More than one element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
         public static ValueTask<TSource> SingleAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => SingleAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
+
+        /// <summary>
+        /// Returns the only element of an async-enumerable sequence that satisfies the condition in the asynchronous predicate, or a default value if no such element exists, and reports an exception if there is more than one element in the async-enumerable sequence that matches the predicate.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">Source async-enumerable sequence.</param>
+        /// <param name="predicate">An asynchronous predicate that will be applied to each element of the source sequence. </param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>ValueTask containing the only element in the async-enumerable sequence that satisfies the condition in the asynchronous predicate, or a default value if no such element exists.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) More than one element satisfies the condition in the predicate.</exception>
         public static ValueTask<TSource> SingleOrDefaultAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => SingleOrDefaultAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
+
+        /// <summary>
+        /// Bypasses elements in an async-enumerable sequence as long as a condition is true, and then returns the remaining elements.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to return elements from.</param>
+        /// <param name="predicate">An asynchronous function to test each element for a condition.</param>
+        /// <returns>An async-enumerable sequence containing the elements in the source sequence starting at the first element that does not pass the test specified by the predicate.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<TSource> SkipWhileAwait<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate) => SkipWhileAwaitCore<TSource>(source, predicate);
+
+        /// <summary>
+        /// Bypasses elements in an async-enumerable sequence as long as a condition is true, and then returns the remaining elements.
+        /// The index of the element is used by the predicate.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to return elements from.</param>
+        /// <param name="predicate">An asynchronous function to test each element for a condition; the second parameter of the function represents the index of the element.</param>
+        /// <returns>An async-enumerable sequence containing the elements in the source sequence starting at the first element that does not pass the test specified by the predicate.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<TSource> SkipWhileAwait<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate) => SkipWhileAwaitCore<TSource>(source, predicate);
+        
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="Nullable{Long}"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<long?> SumAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default) => SumAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="Nullable{Float}"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<float?> SumAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default) => SumAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="Nullable{Double}"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<double?> SumAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default) => SumAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="Nullable{Decimal}"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<decimal?> SumAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default) => SumAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="int"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<int> SumAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default) => SumAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="long"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<long> SumAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default) => SumAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="float"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<float> SumAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default) => SumAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="double"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<double> SumAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default) => SumAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="decimal"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<decimal> SumAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => SumAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="Nullable{Int}"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<int?> SumAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default) => SumAwaitAsyncCore<TSource>(source, selector, cancellationToken);
+
+
         public static IAsyncEnumerable<TSource> TakeWhileAwait<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate) => TakeWhileAwaitCore<TSource>(source, predicate);
         public static IAsyncEnumerable<TSource> TakeWhileAwait<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate) => TakeWhileAwaitCore<TSource>(source, predicate);
         public static IOrderedAsyncEnumerable<TSource> ThenByAwait<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => ThenByAwaitCore<TSource, TKey>(source, keySelector);
