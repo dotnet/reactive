@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
-{ 
+{
     public static partial class AsyncEnumerable
     {
         /// <summary>
