@@ -169,7 +169,32 @@ namespace System.Linq
 
             private void DisposeSubscription() => Interlocked.Exchange(ref _subscription, null)?.Dispose();
 
-            private void OnCanceled(object? state) => Dispose();
+            private void OnCanceled(object? state)
+            {
+                var cancelledTcs = default(TaskCompletionSource<bool>);
+
+                Dispose();
+
+                while (true)
+                {
+                    var signal = Volatile.Read(ref _signal);
+
+                    if (signal != null)
+                    {
+                        if (signal.TrySetCanceled(_cancellationToken))
+                            return;
+                    }
+
+                    if (cancelledTcs == null)
+                    {
+                        cancelledTcs = new TaskCompletionSource<bool>();
+                        cancelledTcs.TrySetCanceled(_cancellationToken);
+                    }
+
+                    if (Interlocked.CompareExchange(ref _signal, cancelledTcs, signal) == signal)
+                        return;
+                }
+            }
 
             private Task Resume()
             {

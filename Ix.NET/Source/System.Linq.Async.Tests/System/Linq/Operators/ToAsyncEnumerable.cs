@@ -394,6 +394,35 @@ namespace Tests
         }
 
         [Fact]
+        public async Task ToAsyncEnumerable_Observable_Cancel_InFlight()
+        {
+            var xs = new MyObservable<int>(obs =>
+            {
+                var cts = new CancellationTokenSource();
+
+                Task.Run(async () =>
+                {
+                    for (var i = 0; !cts.IsCancellationRequested; i++)
+                    {
+                        await Task.Delay(10);
+                        obs.OnNext(i);
+                    }
+                });
+
+                return new MyDisposable(cts.Cancel);
+            }).ToAsyncEnumerable();
+
+            using var c = new CancellationTokenSource();
+
+            await using var e = xs.GetAsyncEnumerator(c.Token);
+
+            var task = e.MoveNextAsync();
+            c.Cancel();
+
+            await AssertThrowsAsync<TaskCanceledException>(task.AsTask());
+        }
+
+        [Fact]
         public async Task ToAsyncEnumerable_Observable6_Async()
         {
             using var stop = new ManualResetEvent(false);
