@@ -2,26 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using ApprovalTests.Core;
+using System;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
-using System.IO;
-using Xunit.Abstractions;
 
 namespace ReactiveTests.Tests
 {
-    public class DiffPlexReporter : IApprovalFailureReporter
+    public class DiffPlexReporter
     {
-        public static DiffPlexReporter INSTANCE = new DiffPlexReporter();
-
-        public ITestOutputHelper Output { get; set; }
-
-        public void Report(string approved, string received)
+        public void Report(string approvedText, string receivedText)
         {
-            var approvedText = File.Exists(approved) ? File.ReadAllText(approved) : string.Empty;
-            var receivedText = File.ReadAllText(received);
-
+            #if(!DEBUG)
             var diffBuilder = new InlineDiffBuilder(new Differ());
             var diff = diffBuilder.BuildDiffModel(approvedText, receivedText);
 
@@ -40,8 +32,9 @@ namespace ReactiveTests.Tests
                         break;
                 }
 
-                Output.WriteLine("{0}{1}", prefix, line.Text);
+                Console.WriteLine("{0}{1}", prefix, line.Text);
             }
+            #endif
         }
     }
 }
