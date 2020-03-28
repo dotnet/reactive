@@ -37,6 +37,7 @@ stages:
       inputs:
         version: '3.1.x'
         performMultiLevelLookup: true
+        includePreviewVersions: true
 
     - task: DotNetCoreCLI@2
       inputs:
