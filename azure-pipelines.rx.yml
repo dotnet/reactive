@@ -33,10 +33,11 @@ stages:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
     steps:
-    - task: UseDotNet@2
+    - task: DotNetCoreInstaller@0
       inputs:
-        version: '3.1.x'
+        version: '3.1.300-preview-015048'
         performMultiLevelLookup: true
+        includePreviewVersions: true
 
     - task: DotNetCoreCLI@2
       inputs:
