@@ -101,7 +101,7 @@ stages:
       displayName: Publish artifacts
       artifact: BuildPackages
     
-    - publish: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Api/*.received.cs
+    - publish: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Api
       displayName: Publish test artifiacts
       artifact: ApprovalsTests
       condition: always()
