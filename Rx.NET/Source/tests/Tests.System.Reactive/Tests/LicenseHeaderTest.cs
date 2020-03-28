@@ -53,7 +53,7 @@ namespace Tests.System.Reactive.Tests
                     || file.Contains("AssemblyInfo.cs")
                     || file.Contains(".Designer.cs")
                     || file.Contains(".Generated.cs")
-                    || file.Contains(".approved.cs")
+                    || file.Contains(".verified.cs")
                     || file.Contains("Uwp.DeviceRunner")
                 )
                 {
