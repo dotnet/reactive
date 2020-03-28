@@ -35,7 +35,7 @@ stages:
     steps:
     - task: UseDotNet@2
       inputs:
-        version: '3.1.300-preview'
+        version: '3.1.300'
         performMultiLevelLookup: true
         includePreviewVersions: true
 
