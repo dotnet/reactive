@@ -6,7 +6,7 @@
     <Authors>.NET Foundation and Contributors</Authors>
     <PackageIconUrl>https://raw.githubusercontent.com/dotnet/reactive/0f837d11385cfaf575861ccc5a5fbcafb22d888f/Rx.NET/Resources/Artwork/Logo.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/dotnet/reactive</PackageProjectUrl>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <DebugType Condition="'$(Configuration)' != 'Debug'">embedded</DebugType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)ReactiveX.snk</AssemblyOriginatorKeyFile>
