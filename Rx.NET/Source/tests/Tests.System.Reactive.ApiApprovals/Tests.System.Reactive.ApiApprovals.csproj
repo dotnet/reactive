@@ -33,7 +33,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
     <PackageReference Include="ApprovalTests" Version="4.5.1" />
     <PackageReference Include="DiffPlex" Version="1.5.0" />
-    <PackageReference Include="PublicApiGenerator" Version="10.0.0" />
+    <PackageReference Include="PublicApiGenerator" Version="10.0.2" />
   </ItemGroup>
 
 </Project>
