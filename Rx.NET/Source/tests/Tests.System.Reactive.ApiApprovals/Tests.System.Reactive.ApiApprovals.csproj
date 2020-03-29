@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFrameworks>net48</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
-    <ContinuousIntegrationBuild>false</ContinuousIntegrationBuild>
     <Deterministic>false</Deterministic>
   </PropertyGroup>
 
