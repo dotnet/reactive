@@ -17,7 +17,7 @@ namespace ReactiveTests.Tests.Api
     public class ApiApprovalTests :
         VerifyBase
     {
-        private VerifySettings verifySettings;
+        VerifySettings verifySettings;
 
         public ApiApprovalTests(ITestOutputHelper output) :
             base(output)
