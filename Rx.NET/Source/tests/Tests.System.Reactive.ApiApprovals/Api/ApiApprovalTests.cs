@@ -24,6 +24,7 @@ namespace ReactiveTests.Tests.Api
         {
             verifySettings = new VerifySettings();
             verifySettings.UseExtension("cs");
+            verifySettings.OnVerifyMismatch(DiffPlexReporter.Report);
         }
 
         [Fact]
