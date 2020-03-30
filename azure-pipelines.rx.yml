@@ -74,7 +74,7 @@ stages:
       displayName: Build System.Reactive.sln
       inputs:
         solution: Rx.NET/Source/System.Reactive.sln
-        msbuildArguments: /t:build /p:ContinuousIntegrationBuild=false
+        msbuildArguments: /t:rebuild /p:ContinuousIntegrationBuild=false
         configuration: $(BuildConfiguration)
         maximumCpuCount: false
 
