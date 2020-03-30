@@ -70,6 +70,14 @@ stages:
         arguments: install --tool-path . dotnet-reportgenerator-globaltool
       displayName: Install ReportGenerator tool
 
+    - task: MSBuild@1
+      displayName: Build System.Reactive.sln
+      inputs:
+        solution: Rx.NET/Source/System.Reactive.sln
+        msbuildArguments: /t:build /p:ContinuousIntegrationBuild=false
+        configuration: $(BuildConfiguration)
+        maximumCpuCount: false
+
     - task: DotNetCoreCLI@2
       inputs:
         command: test
