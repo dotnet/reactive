@@ -138,9 +138,9 @@ System.Reactive is part of the [.NET Foundation](https://www.dotnetfoundation.or
         <p>Sydney, Australia</p>
       </td>
       <td align="center" valign="top">
-        <img width="150" height="150" src="https://github.com/onovotny.png?s=150">
+        <img width="150" height="150" src="https://github.com/clairernovotny.png?s=150">
         <br>
-        <a href="https://github.com/onovotny">Oren Novotny</a>
+        <a href="https://github.com/clairernovotny">Claire Novotny</a>
         <p>New York, USA</p>
       </td>
       <td align="center" valign="top">
