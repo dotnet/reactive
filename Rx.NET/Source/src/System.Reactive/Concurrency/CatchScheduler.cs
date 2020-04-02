@@ -108,7 +108,8 @@ namespace System.Reactive.Concurrency
                     _catchScheduler = scheduler;
                     _action = action;
 
-                    Disposable.SetSingle(ref _cancel, scheduler._scheduler.SchedulePeriodic((@this: this, state), period, tuple => tuple.@this?.Tick(tuple.state) ?? default));
+                    // Note that avoiding closure allocation here would introduce infinite generic recursion over the TState argument
+                    Disposable.SetSingle(ref _cancel, scheduler._scheduler.SchedulePeriodic(state, period, state1 => this.Tick(state1).state ?? default));
                 }
 
                 public void Dispose()
