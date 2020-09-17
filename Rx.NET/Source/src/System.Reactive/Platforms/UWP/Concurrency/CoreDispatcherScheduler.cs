@@ -51,7 +51,7 @@ namespace System.Reactive.Concurrency
         {
             get
             {
-                var window = Window.Current;
+                var window = CoreWindow.GetForCurrentThread();
                 if (window == null)
                 {
                     throw new InvalidOperationException(Strings_WindowsThreading.NO_WINDOW_CURRENT);
