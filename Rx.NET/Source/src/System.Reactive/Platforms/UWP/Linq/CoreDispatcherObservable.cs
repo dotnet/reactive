@@ -5,7 +5,10 @@
 #if WINDOWS
 using System.Reactive.Concurrency;
 using Windows.UI.Core;
+
+#if !NET5_0_WINDOWS10_0_19041
 using Windows.UI.Xaml;
+#endif
 
 namespace System.Reactive.Linq
 {
@@ -64,6 +67,7 @@ namespace System.Reactive.Linq
             return Synchronization.ObserveOn(source, new CoreDispatcherScheduler(dispatcher, priority));
         }
 
+        #if !NET5_0_WINDOWS10_0_19041
         /// <summary>
         /// Wraps the source sequence in order to run its observer callbacks on the dispatcher associated with the specified object.
         /// </summary>
@@ -110,7 +114,7 @@ namespace System.Reactive.Linq
 
             return Synchronization.ObserveOn(source, new CoreDispatcherScheduler(dependencyObject.Dispatcher, priority));
         }
-
+#endif
         /// <summary>
         /// Wraps the source sequence in order to run its observer callbacks on the dispatcher associated with the current window.
         /// </summary>
@@ -146,9 +150,9 @@ namespace System.Reactive.Linq
             return Synchronization.ObserveOn(source, new CoreDispatcherScheduler(CoreDispatcherScheduler.Current.Dispatcher, priority));
         }
 
-        #endregion
+#endregion
 
-        #region SubscribeOn[Dispatcher]
+#region SubscribeOn[Dispatcher]
 
         /// <summary>
         /// Wraps the source sequence in order to run its subscription and unsubscription logic on the specified dispatcher.
@@ -205,6 +209,7 @@ namespace System.Reactive.Linq
             return Synchronization.SubscribeOn(source, new CoreDispatcherScheduler(dispatcher, priority));
         }
 
+#if !NET5_0_WINDOWS10_0_19041
         /// <summary>
         /// Wraps the source sequence in order to run its subscription and unsubscription logic on the dispatcher associated with the specified object.
         /// </summary>
@@ -259,6 +264,7 @@ namespace System.Reactive.Linq
 
             return Synchronization.SubscribeOn(source, new CoreDispatcherScheduler(dependencyObject.Dispatcher, priority));
         }
+#endif
 
         /// <summary>
         /// Wraps the source sequence in order to run its subscription and unsubscription logic on the dispatcher associated with the current window.
@@ -303,7 +309,7 @@ namespace System.Reactive.Linq
             return Synchronization.SubscribeOn(source, new CoreDispatcherScheduler(CoreDispatcherScheduler.Current.Dispatcher, priority));
         }
 
-        #endregion
+#endregion
     }
 }
 #endif

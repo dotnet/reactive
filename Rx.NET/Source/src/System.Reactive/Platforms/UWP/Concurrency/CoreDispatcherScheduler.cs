@@ -7,8 +7,9 @@ using System.Reactive.Disposables;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using Windows.UI.Core;
+#if !NET5_0_WINDOWS10_0_19041
 using Windows.UI.Xaml;
-
+#endif
 namespace System.Reactive.Concurrency
 {
     /// <summary>

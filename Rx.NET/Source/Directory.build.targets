@@ -15,32 +15,34 @@
   <PropertyGroup>  
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
   </PropertyGroup>
-
-  <PropertyGroup>
-    <DefineConstants>$(DefineConstants);HAS_WINRT</DefineConstants>
-  </PropertyGroup>
     
   <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
-    <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_DISPATCHER;HAS_REMOTING;DESKTOPCLR</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_WINRT;HAS_DISPATCHER;HAS_REMOTING;DESKTOPCLR</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
     <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.15063.0</TargetPlatformMinVersion>
-    <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;NO_TRACE;WINDOWS</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_WINRT;NO_CODE_COVERAGE_ATTRIBUTE;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;NO_TRACE;WINDOWS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
-    <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
-    <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
+    <DefineConstants>$(DefineConstants);HAS_WINRT;WINDOWS</DefineConstants>
+    <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netcoreapp2.1'">
-    <DefineConstants>$(DefineConstants)</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_WINRT</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_DISPATCHER;DESKTOPCLR</DefineConstants>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_DISPATCHER;DESKTOPCLR</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net5.0-windows'))">
+    <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;HAS_WINFORMS;HAS_DISPATCHER;DESKTOPCLR;WINDOWS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net5.0'">
+    <DefineConstants>$(DefineConstants);HAS_TRACE;PREFER_ASYNC;HAS_TPL46;NO_REMOTING</DefineConstants>
   </PropertyGroup>
 
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'netcoreapp3.0'">
+  <ItemGroup Condition="'$(TargetFramework)' != 'netcoreapp3.1'">
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
   </ItemGroup>
 

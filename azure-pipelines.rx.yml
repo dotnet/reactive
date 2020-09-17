@@ -25,7 +25,7 @@ stages:
   jobs:
   - job: Build
     pool:
-      vmImage: windows-2019
+      vmImage: windows-latest
 
     variables:
       BuildConfiguration: Release
@@ -34,9 +34,10 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 3.1.x SDK
+      displayName: Use .NET Core 5.0.x SDK
       inputs:
-        version: 3.1.x
+        version: 5.0.x
+        includePreviewVersions: true
         performMultiLevelLookup: true
 
     - task: DotNetCoreCLI@2
@@ -127,7 +128,13 @@ stages:
     steps:
     - task: UseDotNet@2
       inputs:
-        version: '3.0.x'
+        version: 5.0.x
+        includePreviewVersions: true
+
+    - task: UseDotNet@2
+      inputs:
+        version: '3.1.x'
+        packageType: runtime
 
     - task: UseDotNet@2
       inputs:
@@ -178,8 +185,8 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f netcoreapp3.0
-      displayName: Run 3.0 Tests on Linux
+        arguments: -c $(BuildConfiguration) -f netcoreapp3.1
+      displayName: Run 3.1 Tests on Linux
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -191,7 +198,7 @@ stages:
   - job: Integration_WindowsDesktop_Tests
     dependsOn: Build
     pool:
-      vmImage: windows-2019
+      vmImage: windows-latest
 
     variables:
       BuildConfiguration: Release
@@ -201,7 +208,8 @@ stages:
     steps:
     - task: UseDotNet@2
       inputs:
-        version: '3.0.x'
+        version: 5.0.x
+        includePreviewVersions: true
         performMultiLevelLookup: true
 
     - task: DotNetCoreCLI@2
@@ -249,7 +257,7 @@ stages:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/WindowsDesktopTests/WindowsDesktopTests.csproj
         arguments: -c $(BuildConfiguration) --filter "SkipCI!=true"
-      displayName: Run 3.0 Tests on WindowDesktop
+      displayName: Run 3.1 Tests on WindowDesktop
 
 - stage: CodeSign
   condition: and(succeeded('Build'), not(eq(variables['build.reason'], 'PullRequest')))

@@ -71,7 +71,7 @@ namespace System.Reactive
 
             isWinRT = false;
 
-#if HAS_WINRT
+#if HAS_WINRT && !NET5_0_WINDOWS10_0_19041
             if (addMethod.ReturnType == typeof(EventRegistrationToken))
             {
                 isWinRT = true;
