@@ -8,7 +8,7 @@ namespace System.Reactive
 
     internal static class Constants_WindowsThreading
     {
-#if !WINDOWS
+#if HAS_WPF
         public const string OBSOLETE_INSTANCE_PROPERTY = "Use the Current property to retrieve the DispatcherScheduler instance for the current thread's Dispatcher object.";
 #endif
     }

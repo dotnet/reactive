@@ -17,7 +17,7 @@
   </PropertyGroup>
     
   <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
-    <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_WINRT;HAS_DISPATCHER;HAS_REMOTING;DESKTOPCLR</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_WPF;HAS_WINRT;HAS_DISPATCHER;HAS_REMOTING;DESKTOPCLR</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
     <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
@@ -25,17 +25,17 @@
     <DefineConstants>$(DefineConstants);HAS_WINRT;NO_CODE_COVERAGE_ATTRIBUTE;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;NO_TRACE;WINDOWS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
-    <DefineConstants>$(DefineConstants);HAS_WINRT;WINDOWS;HAS_OS_XAML</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_WINRT;WINDOWS;HAS_OS_XAML;LEGACY_WINRT</DefineConstants>
     <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netcoreapp2.1'">
     <DefineConstants>$(DefineConstants);HAS_WINRT</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_DISPATCHER;DESKTOPCLR</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net5.0-windows'))">
-    <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;HAS_WINFORMS;HAS_DISPATCHER;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net5.0'">
     <DefineConstants>$(DefineConstants);HAS_TRACE;PREFER_ASYNC;HAS_TPL46;NO_REMOTING</DefineConstants>
