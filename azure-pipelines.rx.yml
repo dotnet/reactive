@@ -50,13 +50,13 @@ stages:
     - script: nbgv cloud -a -p Rx.NET/Source
       displayName: Set Version
 
-    - task: MSBuild@1
+    - task: DotNetCoreCLI@2
       displayName: Build System.Reactive.sln
       inputs:
-        solution: Rx.NET/Source/System.Reactive.sln
-        msbuildArguments: /restore /t:build /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
-        configuration: $(BuildConfiguration)
-        maximumCpuCount: false
+        command: build
+        projects: Rx.NET/Source/System.Reactive.sln
+        arguments: -c $(BuildConfiguration) /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
+        
 
     - task: NuGetCommand@2
       displayName: Pack compatibility package
@@ -71,26 +71,18 @@ stages:
         arguments: install --tool-path . dotnet-reportgenerator-globaltool
       displayName: Install ReportGenerator tool
 
-    - task: MSBuild@1
-      displayName: Build System.Reactive.sln
-      inputs:
-        solution: Rx.NET/Source/System.Reactive.sln
-        msbuildArguments: /t:rebuild /p:ContinuousIntegrationBuild=false
-        configuration: $(BuildConfiguration)
-        maximumCpuCount: false
-
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: Rx.NET/Source/tests/Tests.System.Reactive/*.csproj
-        arguments: -c $(BuildConfiguration) --no-build --no-restore --filter "SkipCI!=true" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
+        arguments: -c $(BuildConfiguration) --filter "SkipCI!=true" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
       displayName: Run Unit Tests
 
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj
-        arguments: -c $(BuildConfiguration) --no-build --no-restore
+        arguments: -c $(BuildConfiguration) 
       displayName: Run Api Approvals Tests
 
     - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Rx.NET/Source/coverlet/reports -reporttypes:"Cobertura"
@@ -185,6 +177,13 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
+        arguments: -c $(BuildConfiguration) -f net5.0
+      displayName: Run 5.0 Tests on Linux
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: test
+        projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
         arguments: -c $(BuildConfiguration) -f netcoreapp3.1
       displayName: Run 3.1 Tests on Linux
 
@@ -257,7 +256,7 @@ stages:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/WindowsDesktopTests/WindowsDesktopTests.csproj
         arguments: -c $(BuildConfiguration) --filter "SkipCI!=true"
-      displayName: Run 3.1 Tests on WindowDesktop
+      displayName: Run Tests on Window Desktop
 
 - stage: CodeSign
   condition: and(succeeded('Build'), not(eq(variables['build.reason'], 'PullRequest')))
