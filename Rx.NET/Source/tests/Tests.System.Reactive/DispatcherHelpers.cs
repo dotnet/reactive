@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#if NETCOREAPP2_1 || NET46 || NETCOREAPP3_1 || NET5_0_WINDOWS10_0_19041
+#if NETCOREAPP2_1 || NET46 || NETCOREAPP3_1 || CSWINRT
 using System.Threading;
 #endif
 #if HAS_DISPATCHER

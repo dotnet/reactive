@@ -95,7 +95,7 @@ namespace System.Reactive.Concurrency
             {
                 var d = new MultipleAssignmentDisposable();
 
-                var timer = new Windows.Forms.Timer();
+                var timer = new System.Windows.Forms.Timer();
 
                 timer.Tick += (s, e) =>
                 {
@@ -174,7 +174,7 @@ namespace System.Reactive.Concurrency
 
             var createTimer = new Func<IScheduler, TState, IDisposable>((scheduler1, state1) =>
             {
-                var timer = new Windows.Forms.Timer();
+                var timer = new System.Windows.Forms.Timer();
 
                 timer.Tick += (s, e) =>
                 {
