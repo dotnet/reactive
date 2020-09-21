@@ -113,13 +113,11 @@ namespace ReactiveTests.Tests
             var id = Thread.CurrentThread.ManagedThreadId;
             var disp = DispatcherHelpers.EnsureDispatcher();
             var evt = new ManualResetEvent(false);
+
+            Exception thrownEx = null;
             disp.UnhandledException += (o, e) =>
             {
-#if NET45 || NET46
-                Assert.Same(ex, e.Exception); // CHECK
-#else
-                Assert.Same(ex, e.Exception.InnerException); // CHECK
-#endif
+                thrownEx = e.Exception;
                 evt.Set();
                 e.Handled = true;
             };
@@ -127,6 +125,8 @@ namespace ReactiveTests.Tests
             sch.Schedule(() => { throw ex; });
             evt.WaitOne();
             disp.InvokeShutdown();
+
+            Assert.Same(ex, thrownEx);
         }
 
         [Fact]
