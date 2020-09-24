@@ -16,11 +16,17 @@ namespace Microsoft.Reactive.Testing
     {
         public static void AreElementsEqual<T>(System.Collections.Generic.IEnumerable<T> expected, System.Collections.Generic.IEnumerable<T> actual) { }
         public static void AreElementsEqual<T>(System.IObservable<T> expected, System.IObservable<T> actual) { }
+        public static void AreElementsEqual<T>(System.Collections.Generic.IEnumerable<T> expected, System.Collections.Generic.IEnumerable<T> actual, System.Collections.Generic.IEqualityComparer<T> comparer) { }
         public static void AreElementsEqual<T>(System.Collections.Generic.IEnumerable<T> expected, System.Collections.Generic.IEnumerable<T> actual, string message) { }
+        public static void AreElementsEqual<T>(System.IObservable<T> expected, System.IObservable<T> actual, System.Collections.Generic.IEqualityComparer<T> comparer) { }
         public static void AreElementsEqual<T>(System.IObservable<T> expected, System.IObservable<T> actual, string message) { }
+        public static void AreElementsEqual<T>(System.Collections.Generic.IEnumerable<T> expected, System.Collections.Generic.IEnumerable<T> actual, System.Collections.Generic.IEqualityComparer<T> comparer, string message) { }
+        public static void AreElementsEqual<T>(System.IObservable<T> expected, System.IObservable<T> actual, System.Collections.Generic.IEqualityComparer<T> comparer, string message) { }
         public static void AssertEqual<T>(this System.Collections.Generic.IEnumerable<T> actual, System.Collections.Generic.IEnumerable<T> expected) { }
         public static void AssertEqual<T>(this System.Collections.Generic.IEnumerable<T> actual, params T[] expected) { }
         public static void AssertEqual<T>(this System.IObservable<T> actual, System.IObservable<T> expected) { }
+        public static void AssertEqual<T>(this System.Collections.Generic.IEnumerable<T> actual, System.Collections.Generic.IEnumerable<T> expected, System.Collections.Generic.IEqualityComparer<T> comparer) { }
+        public static void AssertEqual<T>(this System.IObservable<T> actual, System.IObservable<T> expected, System.Collections.Generic.IEqualityComparer<T> comparer) { }
         public static void Throws<TException>(System.Action action)
             where TException : System.Exception { }
         public static void Throws<TException>(System.Action action, string message)
