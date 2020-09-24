@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
 using Xunit;
@@ -39,7 +40,17 @@ namespace Microsoft.Reactive.Testing
         /// <param name="expected">Expected sequence.</param>
         /// <param name="actual">Actual sequence to compare against the expected one.</param>
         /// <exception cref="ArgumentNullException"><paramref name="expected"/> or <paramref name="actual"/> is null.</exception>
-        public static void AreElementsEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual)
+        public static void AreElementsEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual) => AreElementsEqual(expected, actual, EqualityComparer<T>.Default);
+
+        /// <summary>
+        /// Asserts that both enumerable sequences have equal length and equal elements.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="expected">Expected sequence.</param>
+        /// <param name="actual">Actual sequence to compare against the expected one.</param>
+        /// <param name="comparer">Comparer used to check for equality.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="expected"/> or <paramref name="actual"/> is null.</exception>
+        public static void AreElementsEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual, IEqualityComparer<T> comparer)
         {
             if (expected == null)
             {
@@ -51,7 +62,7 @@ namespace Microsoft.Reactive.Testing
                 throw new ArgumentNullException(nameof(actual));
             }
 
-            if (!expected.SequenceEqual(actual))
+            if (!expected.SequenceEqual(actual, comparer ?? EqualityComparer<T>.Default))
             {
                 Assert.True(false, Message(actual, expected));
             }
@@ -65,7 +76,18 @@ namespace Microsoft.Reactive.Testing
         /// <param name="actual">Actual sequence to compare against the expected one.</param>
         /// <param name="message">Error message for assert failure.</param>
         /// <exception cref="ArgumentNullException"><paramref name="expected"/> or <paramref name="actual"/> is null.</exception>
-        public static void AreElementsEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual, string message)
+        public static void AreElementsEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual, string message) => AreElementsEqual(expected, actual, EqualityComparer<T>.Default, message);
+
+        /// <summary>
+        /// Asserts that both enumerable sequences have equal length and equal elements.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="expected">Expected sequence.</param>
+        /// <param name="actual">Actual sequence to compare against the expected one.</param>
+        /// <param name="comparer">Comparer used to check for equality.</param>
+        /// <param name="message">Error message for assert failure.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="expected"/> or <paramref name="actual"/> is null.</exception>
+        public static void AreElementsEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual, IEqualityComparer<T> comparer, string message)
         {
             if (expected == null)
             {
@@ -77,7 +99,7 @@ namespace Microsoft.Reactive.Testing
                 throw new ArgumentNullException(nameof(actual));
             }
 
-            if (!expected.SequenceEqual(actual))
+            if (!expected.SequenceEqual(actual, comparer ?? EqualityComparer<T>.Default))
             {
                 Assert.True(false, message);
             }
@@ -106,6 +128,29 @@ namespace Microsoft.Reactive.Testing
         }
 
         /// <summary>
+        /// Asserts that both observable sequences have equal length and equal notifications.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="expected">Expected sequence.</param>
+        /// <param name="actual">Actual sequence to compare against the expected one.</param>
+        /// <param name="comparer">Comparer used to check for equality.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="expected"/> or <paramref name="actual"/> is null.</exception>
+        public static void AreElementsEqual<T>(IObservable<T> expected, IObservable<T> actual, IEqualityComparer<T> comparer)
+        {
+            if (expected == null)
+            {
+                throw new ArgumentNullException(nameof(expected));
+            }
+
+            if (actual == null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            AreElementsEqual(expected.Materialize().ToEnumerable(), actual.Materialize().ToEnumerable(), new NotificationComparer<T>(comparer));
+        }
+
+        /// <summary>
         /// Asserts that both observable sequences have equal length and equal elements.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
@@ -126,6 +171,30 @@ namespace Microsoft.Reactive.Testing
             }
 
             AreElementsEqual(expected.Materialize().ToEnumerable(), actual.Materialize().ToEnumerable(), message);
+        }
+
+        /// <summary>
+        /// Asserts that both observable sequences have equal length and equal elements.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="expected">Expected sequence.</param>
+        /// <param name="actual">Actual sequence to compare against the expected one.</param>
+        /// <param name="comparer">Comparer used to check for equality.</param>
+        /// <param name="message">Error message for assert failure.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="expected"/> or <paramref name="actual"/> is null.</exception>
+        public static void AreElementsEqual<T>(IObservable<T> expected, IObservable<T> actual, IEqualityComparer<T> comparer, string message)
+        {
+            if (expected == null)
+            {
+                throw new ArgumentNullException(nameof(expected));
+            }
+
+            if (actual == null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            AreElementsEqual(expected.Materialize().ToEnumerable(), actual.Materialize().ToEnumerable(), new NotificationComparer<T>(comparer), message);
         }
 
         /// <summary>
@@ -289,6 +358,29 @@ namespace Microsoft.Reactive.Testing
         }
 
         /// <summary>
+        /// Asserts that both enumerable sequences have equal length and equal elements.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="actual">Actual sequence to compare against the expected one.</param>
+        /// <param name="expected">Expected sequence.</param>
+        /// <param name="comparer">Comparer used to check for equality.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="expected"/> or <paramref name="actual"/> is null.</exception>
+        public static void AssertEqual<T>(this IEnumerable<T> actual, IEnumerable<T> expected, IEqualityComparer<T> comparer)
+        {
+            if (actual == null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            if (expected == null)
+            {
+                throw new ArgumentNullException(nameof(expected));
+            }
+
+            AreElementsEqual(expected, actual, comparer);
+        }
+
+        /// <summary>
         /// Asserts the enumerable sequence has the expected elements.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
@@ -307,7 +399,7 @@ namespace Microsoft.Reactive.Testing
                 throw new ArgumentNullException(nameof(expected));
             }
 
-            ReactiveAssert.AreElementsEqual(expected, actual);
+            AreElementsEqual(expected, actual);
         }
 
         /// <summary>
@@ -330,6 +422,62 @@ namespace Microsoft.Reactive.Testing
             }
 
             AreElementsEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Asserts that both observable sequences have equal length and equal notifications.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="actual">Actual sequence to compare against the expected one.</param>
+        /// <param name="expected">Expected sequence.</param>
+        /// <param name="comparer">Comparer used to check for equality.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="expected"/> or <paramref name="actual"/> is null.</exception>
+        public static void AssertEqual<T>(this IObservable<T> actual, IObservable<T> expected, IEqualityComparer<T> comparer)
+        {
+            if (actual == null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            if (expected == null)
+            {
+                throw new ArgumentNullException(nameof(expected));
+            }
+
+            AreElementsEqual(expected, actual, comparer);
+        }
+
+        private sealed class NotificationComparer<T> : IEqualityComparer<Notification<T>>
+        {
+            private readonly IEqualityComparer<T> _comparer;
+
+            public NotificationComparer(IEqualityComparer<T> comparer)
+            {
+                _comparer = comparer;
+            }
+
+            public bool Equals(Notification<T> x, Notification<T> y)
+            {
+                if (x != null && y != null)
+                {
+                    if (x.HasValue && y.HasValue)
+                    {
+                        return _comparer.Equals(x.Value, y.Value);
+                    }
+                }
+
+                return EqualityComparer<Notification<T>>.Default.Equals(x, y);
+            }
+
+            public int GetHashCode(Notification<T> obj)
+            {
+                if (obj != null && obj.HasValue)
+                {
+                    return _comparer.GetHashCode(obj.Value);
+                }
+
+                return EqualityComparer<Notification<T>>.Default.GetHashCode(obj);
+            }
         }
     }
 }
