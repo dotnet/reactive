@@ -54,6 +54,7 @@ namespace Microsoft.Reactive.Testing
         public static Microsoft.Reactive.Testing.Subscription Subscribe(long start, long end) { }
     }
     [System.Diagnostics.DebuggerDisplay("{Value}@{Time}")]
+    [System.Serializable]
     public struct Recorded<T> : System.IEquatable<Microsoft.Reactive.Testing.Recorded<T>>
     {
         public Recorded(long time, T value) { }
@@ -63,10 +64,11 @@ namespace Microsoft.Reactive.Testing
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
-        public static bool !=(Microsoft.Reactive.Testing.Recorded<T> left, Microsoft.Reactive.Testing.Recorded<T> right) { }
-        public static bool ==(Microsoft.Reactive.Testing.Recorded<T> left, Microsoft.Reactive.Testing.Recorded<T> right) { }
+        public static bool operator !=(Microsoft.Reactive.Testing.Recorded<T> left, Microsoft.Reactive.Testing.Recorded<T> right) { }
+        public static bool operator ==(Microsoft.Reactive.Testing.Recorded<T> left, Microsoft.Reactive.Testing.Recorded<T> right) { }
     }
     [System.Diagnostics.DebuggerDisplay("({Subscribe}, {Unsubscribe})")]
+    [System.Serializable]
     public struct Subscription : System.IEquatable<Microsoft.Reactive.Testing.Subscription>
     {
         public const long Infinite = 9223372036854775807;
@@ -78,8 +80,8 @@ namespace Microsoft.Reactive.Testing
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
-        public static bool !=(Microsoft.Reactive.Testing.Subscription left, Microsoft.Reactive.Testing.Subscription right) { }
-        public static bool ==(Microsoft.Reactive.Testing.Subscription left, Microsoft.Reactive.Testing.Subscription right) { }
+        public static bool operator !=(Microsoft.Reactive.Testing.Subscription left, Microsoft.Reactive.Testing.Subscription right) { }
+        public static bool operator ==(Microsoft.Reactive.Testing.Subscription left, Microsoft.Reactive.Testing.Subscription right) { }
     }
     [System.Diagnostics.DebuggerDisplay("\\{ Clock = {Clock} Now = {Now.ToString(\"O\")} \\}")]
     public class TestScheduler : System.Reactive.Concurrency.VirtualTimeScheduler<long, long>
