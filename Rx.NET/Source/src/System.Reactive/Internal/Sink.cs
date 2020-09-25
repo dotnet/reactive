@@ -91,15 +91,9 @@ namespace System.Reactive
 
         public abstract void OnNext(TSource value);
 
-        public virtual void OnError(Exception error)
-        {
-            ForwardOnError(error);
-        }
+        public virtual void OnError(Exception error) => ForwardOnError(error);
 
-        public virtual void OnCompleted()
-        {
-            ForwardOnCompleted();
-        }
+        public virtual void OnCompleted() => ForwardOnCompleted();
 
         public IObserver<TTarget> GetForwarder() => new _(this);
 
@@ -112,20 +106,11 @@ namespace System.Reactive
                 _forward = forward;
             }
 
-            public void OnNext(TTarget value)
-            {
-                _forward.ForwardOnNext(value);
-            }
+            public void OnNext(TTarget value) => _forward.ForwardOnNext(value);
 
-            public void OnError(Exception error)
-            {
-                _forward.ForwardOnError(error);
-            }
+            public void OnError(Exception error) => _forward.ForwardOnError(error);
 
-            public void OnCompleted()
-            {
-                _forward.ForwardOnCompleted();
-            }
+            public void OnCompleted() => _forward.ForwardOnCompleted();
         }
     }
 }

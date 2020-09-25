@@ -15,10 +15,7 @@ namespace System.Reactive.Concurrency
     {
         private readonly Stopwatch _sw;
 
-        public StopwatchImpl()
-        {
-            _sw = Stopwatch.StartNew();
-        }
+        public StopwatchImpl() => _sw = Stopwatch.StartNew();
 
         public TimeSpan Elapsed => _sw.Elapsed;
     }

@@ -19,7 +19,6 @@ namespace System.Reactive
 
         public void Add(K key, E element)
         {
-
             if (!_dictionary.TryGetValue(key, out var list))
             {
                 _dictionary[key] = list = new List<E>();
@@ -36,7 +35,6 @@ namespace System.Reactive
         {
             get
             {
-
                 if (!_dictionary.TryGetValue(key, out var list))
                 {
                     return Enumerable.Empty<E>();
