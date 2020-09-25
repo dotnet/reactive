@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#nullable enable
+
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -13,9 +15,9 @@ namespace ReactiveTests.Tests
 {
     public static class DiffPlexReporter
     {
-        public static async Task Report(string receivedFile, string verifiedFile)
+        public static Task Report(string receivedFile, string verifiedFile, string? message)
         {
-            #if(!DEBUG)
+#if (!DEBUG)
             var receivedText = File.ReadAllText(receivedFile);
             var verifiedText = File.ReadAllText(verifiedFile);
             var diffBuilder = new InlineDiffBuilder(new Differ());
@@ -38,7 +40,9 @@ namespace ReactiveTests.Tests
 
                 Console.WriteLine("{0}{1}", prefix, line.Text);
             }
-            #endif
+#endif
+
+            return Task.CompletedTask;
         }
     }
 }

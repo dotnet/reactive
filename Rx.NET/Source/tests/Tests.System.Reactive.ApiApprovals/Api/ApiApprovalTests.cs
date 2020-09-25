@@ -7,20 +7,19 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Verify;
+using VerifyTests;
 using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace ReactiveTests.Tests.Api
 {
     public class ApiApprovalTests :
         VerifyBase
     {
-        VerifySettings verifySettings;
+        private readonly VerifySettings verifySettings;
 
-        public ApiApprovalTests(ITestOutputHelper output) :
-            base(output)
+        public ApiApprovalTests()
+            : base()
         {
             verifySettings = new VerifySettings();
             verifySettings.UseExtension("cs");
@@ -64,6 +63,7 @@ namespace ReactiveTests.Tests.Api
                                                         .Where(l => !l.StartsWith("[assembly: AssemblyFileVersion("))
                                                         .Where(l => !l.StartsWith("[assembly: AssemblyInformationalVersion("))
                                                         .Where(l => !l.StartsWith("[assembly: System.Reflection.AssemblyMetadata(\"CommitHash\""))
+                                                        .Where(l => !l.StartsWith("[assembly: System.Reflection.AssemblyMetadata(\"RepositoryUrl\""))
                                                         .Where(l => !string.IsNullOrWhiteSpace(l))
             );
         }
