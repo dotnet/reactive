@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#pragma warning disable 1591
-
 using System.Linq.Expressions;
 
 namespace System.Reactive.Joins
@@ -25,5 +23,3 @@ namespace System.Reactive.Joins
         public Expression Expression { get; }
     }
 }
-
-#pragma warning restore 1591
