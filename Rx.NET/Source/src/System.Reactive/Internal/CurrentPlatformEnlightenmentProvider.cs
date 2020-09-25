@@ -77,16 +77,13 @@ namespace System.Reactive.PlatformServices
                 //
                 if (Debugger.IsAttached)
                 {
-
-#if (CRIPPLED_REFLECTION && HAS_WINRT)
                     var ifType = t.GetTypeInfo();
-#else
-                    var ifType = t;
-#endif
+
                     var asm = new AssemblyName(ifType.Assembly.FullName)
                     {
                         Name = "System.Reactive"
                     };
+
                     var name = "System.Reactive.Linq.QueryDebugger, " + asm.FullName;
 
                     var dbg = Type.GetType(name, false);
