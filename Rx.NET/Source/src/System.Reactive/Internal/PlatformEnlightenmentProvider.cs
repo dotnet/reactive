@@ -45,15 +45,8 @@ namespace System.Reactive.PlatformServices
         [Obsolete("This mechanism will be removed in the next major version", false)]
         public static IPlatformEnlightenmentProvider Current
         {
-            get
-            {
-                return _current;
-            }
-
-            set
-            {
-                _current = value ?? throw new ArgumentNullException(nameof(value));
-            }
+            get => _current;
+            set => _current = value ?? throw new ArgumentNullException(nameof(value));
 
         }
 
