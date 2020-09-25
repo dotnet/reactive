@@ -6,7 +6,6 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Linq.ObservableImpl;
-using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -77,7 +76,9 @@ namespace System.Reactive.Threading.Tasks
                 var options = GetTaskContinuationOptions(_scheduler);
 
                 if (_scheduler == null)
+                {
                     _task.ContinueWith((t, subjectObject) => t.EmitTaskResult((IObserver<TResult>)subjectObject), observer, cts.Token, options, TaskScheduler.Current);
+                }
                 else
                 {
                     _task.ContinueWithState(
@@ -136,17 +137,14 @@ namespace System.Reactive.Threading.Tasks
         {
             if (task.IsCompleted)
             {
-                scheduler = scheduler ?? ImmediateScheduler.Instance;
+                scheduler ??= ImmediateScheduler.Instance;
 
-                switch (task.Status)
+                return task.Status switch
                 {
-                    case TaskStatus.Faulted:
-                        return new Throw<Unit>(task.Exception.InnerException, scheduler);
-                    case TaskStatus.Canceled:
-                        return new Throw<Unit>(new TaskCanceledException(task), scheduler);
-                }
-
-                return new Return<Unit>(Unit.Default, scheduler);
+                    TaskStatus.Faulted => new Throw<Unit>(task.Exception.InnerException, scheduler),
+                    TaskStatus.Canceled => new Throw<Unit>(new TaskCanceledException(task), scheduler),
+                    _ => new Return<Unit>(Unit.Default, scheduler)
+                };
             }
 
             return new SlowTaskObservable(task, scheduler);
@@ -235,17 +233,14 @@ namespace System.Reactive.Threading.Tasks
         {
             if (task.IsCompleted)
             {
-                scheduler = scheduler ?? ImmediateScheduler.Instance;
+                scheduler ??= ImmediateScheduler.Instance;
 
-                switch (task.Status)
+                return task.Status switch
                 {
-                    case TaskStatus.Faulted:
-                        return new Throw<TResult>(task.Exception.InnerException, scheduler);
-                    case TaskStatus.Canceled:
-                        return new Throw<TResult>(new TaskCanceledException(task), scheduler);
-                }
-
-                return new Return<TResult>(task.Result, scheduler);
+                    TaskStatus.Faulted => new Throw<TResult>(task.Exception.InnerException, scheduler),
+                    TaskStatus.Canceled => new Throw<TResult>(new TaskCanceledException(task), scheduler),
+                    _ => new Return<TResult>(task.Result, scheduler)
+                };
             }
 
             return new SlowTaskObservable<TResult>(task, scheduler);

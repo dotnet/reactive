@@ -67,7 +67,6 @@ namespace System.Reactive
                         var currentEnumerator = _stack.Peek();
 
                         var currentObservable = default(IObservable<TSource>);
-                        var next = default(IObservable<TSource>);
 
                         try
                         {
@@ -84,14 +83,14 @@ namespace System.Reactive
                             continue;
                         }
 
+                        IObservable<TSource> next;
+
                         try
                         {
                             next = Helpers.Unpack(currentObservable);
-
                         }
                         catch (Exception ex)
                         {
-                            next = null;
                             if (!Fail(ex))
                             {
                                 Volatile.Write(ref _isDisposed, true);
