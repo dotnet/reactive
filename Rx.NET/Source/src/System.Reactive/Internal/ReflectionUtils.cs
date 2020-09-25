@@ -29,7 +29,7 @@ namespace System.Reactive
 
             if (target == null)
             {
-                e = targetType.GetEventEx(eventName, isStatic: true);
+                e = targetType.GetEvent(eventName, BindingFlags.Public | BindingFlags.Static);
                 if (e == null)
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.COULD_NOT_FIND_STATIC_EVENT, eventName, targetType.FullName));
@@ -37,7 +37,7 @@ namespace System.Reactive
             }
             else
             {
-                e = targetType.GetEventEx(eventName, isStatic: false);
+                e = targetType.GetEvent(eventName, BindingFlags.Public | BindingFlags.Instance);
                 if (e == null)
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.COULD_NOT_FIND_INSTANCE_EVENT, eventName, targetType.FullName));
@@ -109,11 +109,6 @@ namespace System.Reactive
             {
                 throw new InvalidOperationException(Strings_Linq.EVENT_MUST_RETURN_VOID);
             }
-        }
-
-        public static EventInfo GetEventEx(this Type type, string name, bool isStatic)
-        {
-            return type.GetEvent(name, isStatic ? BindingFlags.Public | BindingFlags.Static : BindingFlags.Public | BindingFlags.Instance);
         }
 
 #if (CRIPPLED_REFLECTION && HAS_WINRT)
