@@ -57,8 +57,8 @@ namespace System.Reactive
         public override bool Equals(object obj) { }
         public bool Equals(System.Reactive.EventPattern<TSender, TEventArgs> other) { }
         public override int GetHashCode() { }
-        public static bool !=(System.Reactive.EventPattern<TSender, TEventArgs> first, System.Reactive.EventPattern<TSender, TEventArgs> second) { }
-        public static bool ==(System.Reactive.EventPattern<TSender, TEventArgs> first, System.Reactive.EventPattern<TSender, TEventArgs> second) { }
+        public static bool operator !=(System.Reactive.EventPattern<TSender, TEventArgs> first, System.Reactive.EventPattern<TSender, TEventArgs> second) { }
+        public static bool operator ==(System.Reactive.EventPattern<TSender, TEventArgs> first, System.Reactive.EventPattern<TSender, TEventArgs> second) { }
     }
     [System.AttributeUsage(System.AttributeTargets.Assembly | System.AttributeTargets.Module | System.AttributeTargets.Class | System.AttributeTargets.Struct | System.AttributeTargets.Enum | System.AttributeTargets.Constructor | System.AttributeTargets.Method | System.AttributeTargets.Property | System.AttributeTargets.Field | System.AttributeTargets.Event | System.AttributeTargets.Interface | System.AttributeTargets.Parameter | System.AttributeTargets.Delegate | System.AttributeTargets.ReturnValue | System.AttributeTargets.GenericParameter | System.AttributeTargets.All)]
     [System.Reactive.Experimental]
@@ -126,6 +126,7 @@ namespace System.Reactive
         OnError = 1,
         OnCompleted = 2,
     }
+    [System.Serializable]
     public abstract class Notification<T> : System.IEquatable<System.Reactive.Notification<T>>
     {
         protected Notification() { }
@@ -141,8 +142,8 @@ namespace System.Reactive
         public abstract bool Equals(System.Reactive.Notification<T> other);
         public System.IObservable<T> ToObservable() { }
         public System.IObservable<T> ToObservable(System.Reactive.Concurrency.IScheduler scheduler) { }
-        public static bool !=(System.Reactive.Notification<T> left, System.Reactive.Notification<T> right) { }
-        public static bool ==(System.Reactive.Notification<T> left, System.Reactive.Notification<T> right) { }
+        public static bool operator !=(System.Reactive.Notification<T> left, System.Reactive.Notification<T> right) { }
+        public static bool operator ==(System.Reactive.Notification<T> left, System.Reactive.Notification<T> right) { }
     }
     public abstract class ObservableBase<T> : System.IObservable<T>
     {
@@ -182,6 +183,7 @@ namespace System.Reactive
         public void OnNext(T value) { }
         protected abstract void OnNextCore(T value);
     }
+    [System.Serializable]
     public struct TimeInterval<T> : System.IEquatable<System.Reactive.TimeInterval<T>>
     {
         public TimeInterval(T value, System.TimeSpan interval) { }
@@ -191,13 +193,14 @@ namespace System.Reactive
         public bool Equals(System.Reactive.TimeInterval<T> other) { }
         public override int GetHashCode() { }
         public override string ToString() { }
-        public static bool !=(System.Reactive.TimeInterval<T> first, System.Reactive.TimeInterval<T> second) { }
-        public static bool ==(System.Reactive.TimeInterval<T> first, System.Reactive.TimeInterval<T> second) { }
+        public static bool operator !=(System.Reactive.TimeInterval<T> first, System.Reactive.TimeInterval<T> second) { }
+        public static bool operator ==(System.Reactive.TimeInterval<T> first, System.Reactive.TimeInterval<T> second) { }
     }
     public static class Timestamped
     {
         public static System.Reactive.Timestamped<T> Create<T>(T value, System.DateTimeOffset timestamp) { }
     }
+    [System.Serializable]
     public struct Timestamped<T> : System.IEquatable<System.Reactive.Timestamped<T>>
     {
         public Timestamped(T value, System.DateTimeOffset timestamp) { }
@@ -207,9 +210,10 @@ namespace System.Reactive
         public bool Equals(System.Reactive.Timestamped<T> other) { }
         public override int GetHashCode() { }
         public override string ToString() { }
-        public static bool !=(System.Reactive.Timestamped<T> first, System.Reactive.Timestamped<T> second) { }
-        public static bool ==(System.Reactive.Timestamped<T> first, System.Reactive.Timestamped<T> second) { }
+        public static bool operator !=(System.Reactive.Timestamped<T> first, System.Reactive.Timestamped<T> second) { }
+        public static bool operator ==(System.Reactive.Timestamped<T> first, System.Reactive.Timestamped<T> second) { }
     }
+    [System.Serializable]
     public struct Unit : System.IEquatable<System.Reactive.Unit>
     {
         public static System.Reactive.Unit Default { get; }
@@ -217,8 +221,8 @@ namespace System.Reactive
         public bool Equals(System.Reactive.Unit other) { }
         public override int GetHashCode() { }
         public override string ToString() { }
-        public static bool !=(System.Reactive.Unit first, System.Reactive.Unit second) { }
-        public static bool ==(System.Reactive.Unit first, System.Reactive.Unit second) { }
+        public static bool operator !=(System.Reactive.Unit first, System.Reactive.Unit second) { }
+        public static bool operator ==(System.Reactive.Unit first, System.Reactive.Unit second) { }
     }
 }
 namespace System.Reactive.Concurrency
@@ -371,12 +375,12 @@ namespace System.Reactive.Concurrency
         public override int GetHashCode() { }
         public void Invoke() { }
         protected abstract System.IDisposable InvokeCore();
-        public static bool !=(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
-        public static bool <(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
-        public static bool <=(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
-        public static bool ==(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
-        public static bool >(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
-        public static bool >=(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool operator !=(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool operator <(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool operator <=(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool operator ==(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool operator >(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool operator >=(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
     }
     public sealed class ScheduledItem<TAbsolute, TValue> : System.Reactive.Concurrency.ScheduledItem<TAbsolute>
         where TAbsolute : System.IComparable<TAbsolute>
