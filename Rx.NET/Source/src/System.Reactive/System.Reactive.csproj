@@ -63,6 +63,11 @@
 
   <!-- Designer support -->
   <ItemGroup>
+    <Compile Update="Linq\IQueryLanguage.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IQueryLanguage.tt</DependentUpon>
+    </Compile>
     <Compile Update="Joins\Pattern.Generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -104,6 +109,10 @@
       <DependentUpon>QueryLanguage.Multiple.Zip.tt</DependentUpon>
     </Compile>
 
+    <None Update="Linq\IQueryLanguage.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IQueryLanguage.Generated.cs</LastGenOutput>
+    </None>
     <None Update="Joins\Pattern.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Pattern.Generated.cs</LastGenOutput>
