@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Disposables;
@@ -76,15 +76,17 @@ namespace System.Reactive.Concurrency
 
             public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
             {
+                // Note that avoiding closure allocation here would introduce infinite generic recursion over the TState argument
+                
                 return _scheduler.ScheduleLongRunning(
-                    (scheduler: this, action, state),
-                    (tuple, cancel) =>
+                    state,
+                    (state1, cancel) =>
                     {
                         try
                         {
-                            tuple.action(tuple.state, cancel);
+                            action(state1, cancel);
                         }
-                        catch (TException exception) when (tuple.scheduler._handler(exception))
+                        catch (TException exception) when (_handler(exception))
                         {
                         }
                     });
@@ -106,7 +108,8 @@ namespace System.Reactive.Concurrency
                     _catchScheduler = scheduler;
                     _action = action;
 
-                    Disposable.SetSingle(ref _cancel, scheduler._scheduler.SchedulePeriodic((@this: this, state), period, tuple => tuple.@this?.Tick(tuple.state) ?? default));
+                    // Note that avoiding closure allocation here would introduce infinite generic recursion over the TState argument
+                    Disposable.SetSingle(ref _cancel, scheduler._scheduler.SchedulePeriodic(state, period, state1 => this.Tick(state1).state ?? default));
                 }
 
                 public void Dispose()

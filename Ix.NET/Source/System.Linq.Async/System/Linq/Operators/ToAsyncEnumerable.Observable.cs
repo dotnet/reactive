@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Concurrent;
@@ -11,6 +11,13 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Converts an observable sequence to an async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Observable sequence to convert to an async-enumerable sequence.</param>
+        /// <returns>The async-enumerable sequence whose elements are pulled from the given observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -162,7 +169,32 @@ namespace System.Linq
 
             private void DisposeSubscription() => Interlocked.Exchange(ref _subscription, null)?.Dispose();
 
-            private void OnCanceled(object state) => Dispose();
+            private void OnCanceled(object? state)
+            {
+                var cancelledTcs = default(TaskCompletionSource<bool>);
+
+                Dispose();
+
+                while (true)
+                {
+                    var signal = Volatile.Read(ref _signal);
+
+                    if (signal != null)
+                    {
+                        if (signal.TrySetCanceled(_cancellationToken))
+                            return;
+                    }
+
+                    if (cancelledTcs == null)
+                    {
+                        cancelledTcs = new TaskCompletionSource<bool>();
+                        cancelledTcs.TrySetCanceled(_cancellationToken);
+                    }
+
+                    if (Interlocked.CompareExchange(ref _signal, cancelledTcs, signal) == signal)
+                        return;
+                }
+            }
 
             private Task Resume()
             {

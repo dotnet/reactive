@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System;
@@ -79,11 +79,22 @@ namespace Microsoft.Reactive.Testing
         /// <param name="disposed">Virtual time at which to dispose the subscription.</param>
         /// <returns>Observer with timestamped recordings of notification messages that were received during the virtual time window when the subscription to the source sequence was active.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="create"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="subscribed"/> is less than <paramref name="created"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="disposed"/> is less than <paramref name="created"/> or <paramref name="subscribed"/>.</exception>
         public ITestableObserver<T> Start<T>(Func<IObservable<T>> create, long created, long subscribed, long disposed)
         {
             if (create == null)
             {
                 throw new ArgumentNullException(nameof(create));
+            }
+
+            if (subscribed < created)
+            {
+                throw new ArgumentOutOfRangeException(nameof(subscribed));
+            }
+            if (disposed < created || disposed < subscribed)
+            {
+                throw new ArgumentOutOfRangeException(nameof(disposed));
             }
 
             var source = default(IObservable<T>);
@@ -108,6 +119,7 @@ namespace Microsoft.Reactive.Testing
         /// <param name="disposed">Virtual time at which to dispose the subscription.</param>
         /// <returns>Observer with timestamped recordings of notification messages that were received during the virtual time window when the subscription to the source sequence was active.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="create"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="disposed"/> is less than <see cref="ReactiveTest.Subscribed"/>.</exception>
         public ITestableObserver<T> Start<T>(Func<IObservable<T>> create, long disposed)
         {
             if (create == null)

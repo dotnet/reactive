@@ -5,7 +5,6 @@
     <AssemblyTitle>Interactive Extensions - Async Providers Library</AssemblyTitle>
     <TargetFrameworks>net461;netstandard2.0;netstandard2.1;netcoreapp3.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
-    <NullableContextOptions>enable</NullableContextOptions>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,10 +19,6 @@
   <ItemGroup>
     <None Update="System\Linq\AsyncQueryableEx.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="AsyncQueryableEx.Generated.cs" />
     <Compile Update="System\Linq\AsyncQueryableEx.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="AsyncQueryableEx.Generated.tt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
 </Project>

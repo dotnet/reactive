@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 // Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
@@ -34,7 +34,20 @@ var os = new[]
 foreach (var o in os)
 {
     var n = o.type.EndsWith("?") ? ".GetValueOrDefault()" : "";
+
+    var typeStr = o.type;
+    if (o.type.EndsWith("?")) {
+        typeStr = "Nullable{" + o.type.Substring(0, 1).ToUpper() + o.type.Substring(1, o.type.Length - 2) + "}";
+    }
 #>
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="<#=typeStr#>" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="<#=typeStr#>" /> values to calculate the sum of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<<#=o.type#>> SumAsync(this IAsyncEnumerable<<#=o.type#>> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -71,6 +84,16 @@ else
             }
         }
 
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="<#=typeStr#>" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">A transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<<#=o.type#>> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=o.type#>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)

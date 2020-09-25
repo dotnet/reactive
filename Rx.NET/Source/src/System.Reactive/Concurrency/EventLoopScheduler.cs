@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
@@ -153,7 +153,7 @@ namespace System.Reactive.Concurrency
             {
                 if (_disposed)
                 {
-                    throw new ObjectDisposedException("");
+                    throw new ObjectDisposedException(nameof(EventLoopScheduler));
                 }
 
                 if (dueTime <= TimeSpan.Zero)
@@ -351,7 +351,15 @@ namespace System.Reactive.Concurrency
                     {
                         if (!item.IsCanceled)
                         {
-                            item.Invoke();
+                            try
+                            {
+                                item.Invoke();
+                            }
+                            catch (ObjectDisposedException ex) when (nameof(EventLoopScheduler).Equals(ex.ObjectName))
+                            {
+                                // Since we are not inside the lock at this point
+                                // the scheduler can be disposed before the item had a chance to run
+                            }
                         }
                     }
                 }

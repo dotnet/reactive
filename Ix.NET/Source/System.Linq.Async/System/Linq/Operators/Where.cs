@@ -1,9 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,6 +10,14 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Filters the elements of an async-enumerable sequence based on a predicate.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to filter.</param>
+        /// <param name="predicate">A function to test each source element for a condition.</param>
+        /// <returns>An async-enumerable sequence that contains elements from the input sequence that satisfy the condition.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
@@ -27,6 +34,14 @@ namespace System.Linq
             return new WhereEnumerableAsyncIterator<TSource>(source, predicate);
         }
 
+        /// <summary>
+        /// Filters the elements of an async-enumerable sequence based on a predicate by incorporating the element's index.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to filter.</param>
+        /// <param name="predicate">A function to test each source element for a condition; the second parameter of the function represents the index of the source element.</param>
+        /// <returns>An async-enumerable sequence that contains elements from the input sequence that satisfy the condition.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (source == null)
@@ -155,9 +170,6 @@ namespace System.Linq
 
             public WhereEnumerableAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(predicate != null);
-
                 _source = source;
                 _predicate = predicate;
             }
@@ -224,9 +236,6 @@ namespace System.Linq
 
             public WhereEnumerableAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(predicate != null);
-
                 _source = source;
                 _predicate = predicate;
             }
@@ -289,9 +298,6 @@ namespace System.Linq
 
             public WhereEnumerableAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(predicate != null);
-
                 _source = source;
                 _predicate = predicate;
             }
@@ -356,10 +362,6 @@ namespace System.Linq
 
             public WhereSelectEnumerableAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, Func<TSource, TResult> selector)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(predicate != null);
-                Debug.Assert(selector != null);
-
                 _source = source;
                 _predicate = predicate;
                 _selector = selector;

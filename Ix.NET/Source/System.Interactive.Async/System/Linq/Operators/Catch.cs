@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
@@ -16,6 +16,15 @@ namespace System.Linq
         //
         //         catch (TException ex) when(!(ex is OperationCanceledException oce && oce.CancellationToken == cancellationToken))
 
+        /// <summary>
+        /// Continues an async-enumerable sequence that is terminated by an exception of the specified type with the async-enumerable sequence produced by the handler.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence and sequences returned by the exception handler function.</typeparam>
+        /// <typeparam name="TException">The type of the exception to catch and handle. Needs to derive from <see cref="Exception"/>.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="handler">Exception handler function, producing another async-enumerable sequence.</param>
+        /// <returns>An async-enumerable sequence containing the source sequence's elements, followed by the elements produced by the handler's resulting async-enumerable sequence in case an exception occurred.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="handler"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Catch<TSource, TException>(this IAsyncEnumerable<TSource> source, Func<TException, IAsyncEnumerable<TSource>> handler)
             where TException : Exception
         {
@@ -70,6 +79,15 @@ namespace System.Linq
             }
         }
 
+        /// <summary>
+        /// Continues an async-enumerable sequence that is terminated by an exception of the specified type with the async-enumerable sequence produced asynchronously by the handler.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence and sequences returned by the exception handler function.</typeparam>
+        /// <typeparam name="TException">The type of the exception to catch and handle. Needs to derive from <see cref="Exception"/>.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="handler">Exception handler function, producing another async-enumerable sequence asynchronously.</param>
+        /// <returns>An async-enumerable sequence containing the source sequence's elements, followed by the elements produced by the handler's resulting async-enumerable sequence in case an exception occurred.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="handler"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Catch<TSource, TException>(this IAsyncEnumerable<TSource> source, Func<TException, ValueTask<IAsyncEnumerable<TSource>>> handler)
             where TException : Exception
         {
@@ -125,6 +143,15 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
+        /// <summary>
+        /// Continues an async-enumerable sequence that is terminated by an exception of the specified type with the async-enumerable sequence produced asynchronously (cancellable) by the handler.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence and sequences returned by the exception handler function.</typeparam>
+        /// <typeparam name="TException">The type of the exception to catch and handle. Needs to derive from <see cref="Exception"/>.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="handler">Exception handler function, producing another async-enumerable sequence asynchronously while supporting cancellation.</param>
+        /// <returns>An async-enumerable sequence containing the source sequence's elements, followed by the elements produced by the handler's resulting async-enumerable sequence in case an exception occurred.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="handler"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Catch<TSource, TException>(this IAsyncEnumerable<TSource> source, Func<TException, CancellationToken, ValueTask<IAsyncEnumerable<TSource>>> handler)
             where TException : Exception
         {
@@ -180,6 +207,13 @@ namespace System.Linq
         }
 #endif
 
+        /// <summary>
+        /// Continues an async-enumerable sequence that is terminated by an exception with the next async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source and handler sequences.</typeparam>
+        /// <param name="sources">Observable sequences to catch exceptions for.</param>
+        /// <returns>An async-enumerable sequence containing elements from consecutive source sequences until a source sequence terminates successfully.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Catch<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
@@ -188,6 +222,13 @@ namespace System.Linq
             return CatchCore(sources);
         }
 
+        /// <summary>
+        /// Continues an async-enumerable sequence that is terminated by an exception with the next async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source and handler sequences.</typeparam>
+        /// <param name="sources">Observable sequences to catch exceptions for.</param>
+        /// <returns>An async-enumerable sequence containing elements from consecutive source sequences until a source sequence terminates successfully.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Catch<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
             if (sources == null)
@@ -196,6 +237,14 @@ namespace System.Linq
             return CatchCore(sources);
         }
 
+        /// <summary>
+        /// Continues an async-enumerable sequence that is terminated by an exception with the next async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence and handler sequence.</typeparam>
+        /// <param name="first">First async-enumerable sequence whose exception (if any) is caught.</param>
+        /// <param name="second">Second async-enumerable sequence used to produce results when an error occurred in the first sequence.</param>
+        /// <returns>An async-enumerable sequence containing the first sequence's elements, followed by the elements of the second sequence in case an exception occurred.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Catch<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)

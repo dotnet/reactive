@@ -1,10 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,20 +11,24 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Converts an enumerable sequence to an async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Enumerable sequence to convert to an async-enumerable sequence.</param>
+        /// <returns>The async-enumerable sequence whose elements are pulled from the given enumerable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            switch (source)
+            return source switch
             {
-                case IList<TSource> list:
-                    return new AsyncIListEnumerableAdapter<TSource>(list);
-                case ICollection<TSource> collection:
-                    return new AsyncICollectionEnumerableAdapter<TSource>(collection);
-            }
-
-            return new AsyncEnumerableAdapter<TSource>(source);
+                IList<TSource> list => new AsyncIListEnumerableAdapter<TSource>(list),
+                ICollection<TSource> collection => new AsyncICollectionEnumerableAdapter<TSource>(collection),
+                _ => new AsyncEnumerableAdapter<TSource>(source),
+            };
         }
 
         private sealed class AsyncEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>
@@ -36,8 +39,6 @@ namespace System.Linq
  
             public AsyncEnumerableAdapter(IEnumerable<T> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 
@@ -111,8 +112,6 @@ namespace System.Linq
 
             public AsyncIListEnumerableAdapter(IList<T> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 
@@ -218,8 +217,6 @@ namespace System.Linq
 
             public AsyncICollectionEnumerableAdapter(ICollection<T> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 

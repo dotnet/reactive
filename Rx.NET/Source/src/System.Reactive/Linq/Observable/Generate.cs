@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
@@ -195,9 +195,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _hasResult;
                 private TResult _result;
 
+                private IDisposable _timerDisposable;
+
                 public void Run(IScheduler outerScheduler, TState initialState)
                 {
-                    SetUpstream(outerScheduler.Schedule((@this: this, initialState), (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.initialState)));
+                    var timer = new SingleAssignmentDisposable();
+                    Disposable.TrySetMultiple(ref _timerDisposable, timer);
+                    timer.Disposable = outerScheduler.Schedule((@this: this, initialState), (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.initialState));
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    Disposable.TryDispose(ref _timerDisposable);
+                    base.Dispose(disposing);
                 }
 
                 private IDisposable InvokeRec(IScheduler self, TState state)
@@ -240,7 +250,11 @@ namespace System.Reactive.Linq.ObservableImpl
                         return Disposable.Empty;
                     }
 
-                    return self.Schedule((@this: this, state), time, (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.state));
+                    var timer = new SingleAssignmentDisposable();
+                    Disposable.TrySetMultiple(ref _timerDisposable, timer);
+                    timer.Disposable = self.Schedule((@this: this, state), time, (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.state));
+
+                    return Disposable.Empty;
                 }
             }
         }
@@ -275,6 +289,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Func<TState, TResult> _resultSelector;
                 private readonly Func<TState, TimeSpan> _timeSelector;
 
+
                 public _(Relative parent, IObserver<TResult> observer)
                     : base(observer)
                 {
@@ -290,9 +305,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _hasResult;
                 private TResult _result;
 
+                private IDisposable _timerDisposable;
+
                 public void Run(IScheduler outerScheduler, TState initialState)
                 {
-                    SetUpstream(outerScheduler.Schedule((@this: this, initialState), (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.initialState)));
+                    var timer = new SingleAssignmentDisposable();
+                    Disposable.TrySetMultiple(ref _timerDisposable, timer);
+                    timer.Disposable = outerScheduler.Schedule((@this: this, initialState), (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.initialState));
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    Disposable.TryDispose(ref _timerDisposable);
+                    base.Dispose(disposing);
                 }
 
                 private IDisposable InvokeRec(IScheduler self, TState state)
@@ -335,10 +360,13 @@ namespace System.Reactive.Linq.ObservableImpl
                         return Disposable.Empty;
                     }
 
-                    return self.Schedule((@this: this, state), time, (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.state));
+                    var timer = new SingleAssignmentDisposable();
+                    Disposable.TrySetMultiple(ref _timerDisposable, timer);
+                    timer.Disposable = self.Schedule((@this: this, state), time, (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.state));
+
+                    return Disposable.Empty;
                 }
             }
         }
     }
 }
-

@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
@@ -309,6 +309,9 @@ namespace System.Reactive.Linq
         IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source);
         IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source, TimeSpan disconnectDelay);
         IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source, TimeSpan disconnectDelay, IScheduler schedulder);
+        IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source, int minObservers);
+        IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source, int minObservers, TimeSpan disconnectDelay);
+        IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source, int minObservers, TimeSpan disconnectDelay, IScheduler schedulder);
         IConnectableObservable<TSource> Replay<TSource>(IObservable<TSource> source);
         IConnectableObservable<TSource> Replay<TSource>(IObservable<TSource> source, IScheduler scheduler);
         IObservable<TResult> Replay<TSource, TResult>(IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector);

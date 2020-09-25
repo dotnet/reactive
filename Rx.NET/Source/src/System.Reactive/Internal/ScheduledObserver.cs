@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
@@ -91,8 +91,7 @@ namespace System.Reactive
                     return;
                 }
 
-                var next = default(T);
-                while (_queue.TryDequeue(out next))
+                while (_queue.TryDequeue(out var next))
                 {
                     try
                     {
@@ -205,7 +204,8 @@ namespace System.Reactive
 
         private void Run(object state, Action<object> recurse)
         {
-            var next = default(T);
+            T next;
+
             while (!_queue.TryDequeue(out next))
             {
                 if (_failed)

@@ -1,12 +1,15 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
@@ -4052,6 +4055,113 @@ namespace ReactiveTests.Tests
             o2.Subscriptions.AssertEqual(
                 Subscribe(200, 225)
             );
+        }
+
+        [Fact]
+        public void ZipWithEnumerable_NoAsyncDisposeOnMoveNext()
+        {
+            var source = new Subject<int>();
+
+            var disposable = new SingleAssignmentDisposable();
+
+            var other = new MoveNextDisposeDetectEnumerable(disposable, true);
+
+            disposable.Disposable = source.Zip(other, (a, b) => a + b).Subscribe();
+
+            source.OnNext(1);
+
+            Assert.True(other.IsDisposed);
+            Assert.False(other.DisposedWhileMoveNext);
+            Assert.False(other.DisposedWhileCurrent);
+        }
+
+        [Fact]
+        public void ZipWithEnumerable_NoAsyncDisposeOnCurrent()
+        {
+            var source = new Subject<int>();
+
+            var disposable = new SingleAssignmentDisposable();
+
+            var other = new MoveNextDisposeDetectEnumerable(disposable, false);
+
+            disposable.Disposable = source.Zip(other, (a, b) => a + b).Subscribe();
+
+            source.OnNext(1);
+
+            Assert.True(other.IsDisposed);
+            Assert.False(other.DisposedWhileMoveNext);
+            Assert.False(other.DisposedWhileCurrent);
+        }
+
+        private class MoveNextDisposeDetectEnumerable : IEnumerable<int>, IEnumerator<int>
+        {
+            readonly IDisposable _disposable;
+
+            readonly bool _disposeOnMoveNext;
+
+            private bool _moveNextRunning;
+
+            private bool _currentRunning;
+
+            internal bool DisposedWhileMoveNext;
+
+            internal bool DisposedWhileCurrent;
+
+            internal bool IsDisposed;
+
+            internal MoveNextDisposeDetectEnumerable(IDisposable disposable, bool disposeOnMoveNext)
+            {
+                _disposable = disposable;
+                _disposeOnMoveNext = disposeOnMoveNext;
+            }
+            public int Current
+            {
+                get
+                {
+                    _currentRunning = true;
+                    if (!_disposeOnMoveNext)
+                    {
+                        _disposable.Dispose();
+                    }
+                    _currentRunning = false;
+                    return 0;
+                }
+            }
+
+            object IEnumerator.Current => Current;
+
+            public void Dispose()
+            {
+                DisposedWhileMoveNext = _moveNextRunning;
+                DisposedWhileCurrent = _currentRunning;
+                IsDisposed = true;
+            }
+
+            public IEnumerator<int> GetEnumerator()
+            {
+                return this;
+            }
+
+            public bool MoveNext()
+            {
+                _moveNextRunning = true;
+                if (_disposeOnMoveNext)
+                {
+                    _disposable.Dispose();
+                }
+                _moveNextRunning = false;
+                return true;
+            }
+
+            public void Reset()
+            {
+                throw new NotSupportedException();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this;
+            }
         }
 
         private IEnumerable<int> EnumerableNever(ManualResetEvent evt)

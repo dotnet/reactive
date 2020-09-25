@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System;
@@ -136,8 +136,11 @@ namespace Tests
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
             var res = await xs.ToLookupAsync(x => x % 2);
 #pragma warning disable IDE0007 // Use implicit type
-            foreach (IGrouping<int, int> g in (IEnumerable)res)
-                Assert.True(g.Key == 0 || g.Key == 1);
+            foreach (IGrouping<int, int>? g in (IEnumerable)res)
+            {
+                Assert.NotNull(g);
+                Assert.True(g!.Key == 0 || g!.Key == 1);
+            }
 #pragma warning restore IDE0007 // Use implicit type
         }
 

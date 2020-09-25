@@ -1,50 +1,50 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
-// See the LICENSE file in the project root for more information. 
+// The .NET Foundation licenses this file to you under the MIT License.
+// See the LICENSE file in the project root for more information.
 
-using ApprovalTests;
-using ApprovalTests.Reporters;
 using PublicApiGenerator;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using VerifyTests;
+using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace ReactiveTests.Tests.Api
 {
-#if DEBUG
-    [UseReporter(typeof(DiffReporter))]
-#else
-    [UseReporter(typeof(DiffPlexReporter))]
-#endif
-    [IgnoreLineEndings(true)]
-    public class ApiApprovalTests
+    public class ApiApprovalTests :
+        VerifyBase
     {
-        public ApiApprovalTests(ITestOutputHelper output)
+        private readonly VerifySettings verifySettings;
+
+        public ApiApprovalTests()
+            : base()
         {
-            DiffPlexReporter.INSTANCE.Output = output;
+            verifySettings = new VerifySettings();
+            verifySettings.UseExtension("cs");
+            verifySettings.OnVerifyMismatch(DiffPlexReporter.Report);
         }
 
         [Fact]
-        public void Core()
+        public Task Core()
         {
             var publicApi = GeneratePublicApi(typeof(System.Reactive.Unit).Assembly);
-            Approvals.Verify(new ApprovalTextWriter(publicApi, "cs"));
+            return Verify(publicApi, verifySettings);
         }
 
         [Fact]
-        public void Aliases()
+        public Task Aliases()
         {
             var publicApi = GeneratePublicApi(typeof(System.Reactive.Observable.Aliases.QueryLanguage).Assembly);
-            Approvals.Verify(new ApprovalTextWriter(publicApi, "cs"));
+            return Verify(publicApi, verifySettings);
         }
 
         [Fact]
-        public void Testing()
+        public Task Testing()
         {
             var publicApi = GeneratePublicApi(typeof(Microsoft.Reactive.Testing.TestScheduler).Assembly);
-            Approvals.Verify(new ApprovalTextWriter(publicApi, "cs"));
+            return Verify(publicApi, verifySettings);
         }
 
         private string GeneratePublicApi(Assembly assembly)
@@ -62,7 +62,8 @@ namespace ReactiveTests.Tests.Api
                                                         .Where(l => !l.StartsWith("[assembly: AssemblyVersion("))
                                                         .Where(l => !l.StartsWith("[assembly: AssemblyFileVersion("))
                                                         .Where(l => !l.StartsWith("[assembly: AssemblyInformationalVersion("))
-                                                        .Where(l => !l.StartsWith("[assembly: System.Reflection.AssemblyMetadataAttribute(\"CommitHash\""))
+                                                        .Where(l => !l.StartsWith("[assembly: System.Reflection.AssemblyMetadata(\"CommitHash\""))
+                                                        .Where(l => !l.StartsWith("[assembly: System.Reflection.AssemblyMetadata(\"RepositoryUrl\""))
                                                         .Where(l => !string.IsNullOrWhiteSpace(l))
             );
         }

@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
 using System.IO;
@@ -17,7 +17,7 @@ namespace Tests.System.Reactive.Tests
         private static readonly bool FixHeaders = true;
         private static readonly string[] Lines = {
             "// Licensed to the .NET Foundation under one or more agreements.",
-            "// The .NET Foundation licenses this file to you under the Apache 2.0 License.",
+            "// The .NET Foundation licenses this file to you under the MIT License.",
             "// See the LICENSE file in the project root for more information.",
             ""
         };
@@ -53,7 +53,7 @@ namespace Tests.System.Reactive.Tests
                     || file.Contains("AssemblyInfo.cs")
                     || file.Contains(".Designer.cs")
                     || file.Contains(".Generated.cs")
-                    || file.Contains(".approved.cs")
+                    || file.Contains(".verified.cs")
                     || file.Contains("Uwp.DeviceRunner")
                 )
                 {

@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
@@ -11,6 +11,13 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Generates an async-enumerable sequence of integral numbers within a specified range.
+        /// </summary>
+        /// <param name="start">The value of the first integer in the sequence.</param>
+        /// <param name="count">The number of sequential integers to generate.</param>
+        /// <returns>An async-enumerable sequence that contains a range of sequential integral numbers.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="int.MaxValue"/>.</exception>
         public static IAsyncEnumerable<int> Range(int start, int count)
         {
             if (count < 0)

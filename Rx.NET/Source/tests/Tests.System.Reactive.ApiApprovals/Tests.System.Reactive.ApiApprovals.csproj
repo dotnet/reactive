@@ -1,25 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net46</TargetFrameworks>
+    <TargetFrameworks>net48</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Api\ApiApprovalTests.Aliases.approved.cs" />
-    <Compile Remove="Api\ApiApprovalTests.Core.approved.cs" />
-    <Compile Remove="Api\ApiApprovalTests.Testing.approved.cs" />
-    
-    <None Include="Api\ApiApprovalTests.Aliases.approved.cs" />
-    <None Include="Api\ApiApprovalTests.Core.approved.cs" />
-    <None Include="Api\ApiApprovalTests.Testing.approved.cs" />
-    
-    <None Include="Api\ApiApprovalTests.Aliases.approved.cs" />
-    <None Include="Api\ApiApprovalTests.Core.approved.cs" />
-    <None Include="Api\ApiApprovalTests.Testing.approved.cs" />
+    <Compile Remove="Api\*.verified.cs" />
+    <Compile Remove="Api\*.received.cs" />
+    <None Include="Api\*.verified.cs" />
+    <None Include="Api\*.received.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,12 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0-preview-20180610-02" />
-    <PackageReference Include="xunit" Version="2.4.0-beta.2.build4010" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0-beta.2.build4010" />
-    <PackageReference Include="ApprovalTests" Version="3.0.14" />
-    <PackageReference Include="DiffPlex" Version="1.4.1" />
-    <PackageReference Include="PublicApiGenerator" Version="7.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="Verify.Xunit" Version="6.22.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
+    <PackageReference Include="DiffPlex" Version="1.6.3" />
+    <PackageReference Include="PublicApiGenerator" Version="10.2.0" />
   </ItemGroup>
 
 </Project>

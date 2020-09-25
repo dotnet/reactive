@@ -1,6 +1,6 @@
-﻿[assembly: System.CLSCompliantAttribute(true)]
-[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
+[assembly: System.CLSCompliant(true)]
+[assembly: System.Runtime.InteropServices.ComVisible(false)]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
 namespace Microsoft.Reactive.Testing
 {
     public interface ITestableObservable<T> : System.IObservable<T>
@@ -12,15 +12,21 @@ namespace Microsoft.Reactive.Testing
     {
         System.Collections.Generic.IList<Microsoft.Reactive.Testing.Recorded<System.Reactive.Notification<T>>> Messages { get; }
     }
-    public class static ReactiveAssert
+    public static class ReactiveAssert
     {
         public static void AreElementsEqual<T>(System.Collections.Generic.IEnumerable<T> expected, System.Collections.Generic.IEnumerable<T> actual) { }
-        public static void AreElementsEqual<T>(System.Collections.Generic.IEnumerable<T> expected, System.Collections.Generic.IEnumerable<T> actual, string message) { }
         public static void AreElementsEqual<T>(System.IObservable<T> expected, System.IObservable<T> actual) { }
+        public static void AreElementsEqual<T>(System.Collections.Generic.IEnumerable<T> expected, System.Collections.Generic.IEnumerable<T> actual, System.Collections.Generic.IEqualityComparer<T> comparer) { }
+        public static void AreElementsEqual<T>(System.Collections.Generic.IEnumerable<T> expected, System.Collections.Generic.IEnumerable<T> actual, string message) { }
+        public static void AreElementsEqual<T>(System.IObservable<T> expected, System.IObservable<T> actual, System.Collections.Generic.IEqualityComparer<T> comparer) { }
         public static void AreElementsEqual<T>(System.IObservable<T> expected, System.IObservable<T> actual, string message) { }
+        public static void AreElementsEqual<T>(System.Collections.Generic.IEnumerable<T> expected, System.Collections.Generic.IEnumerable<T> actual, System.Collections.Generic.IEqualityComparer<T> comparer, string message) { }
+        public static void AreElementsEqual<T>(System.IObservable<T> expected, System.IObservable<T> actual, System.Collections.Generic.IEqualityComparer<T> comparer, string message) { }
         public static void AssertEqual<T>(this System.Collections.Generic.IEnumerable<T> actual, System.Collections.Generic.IEnumerable<T> expected) { }
         public static void AssertEqual<T>(this System.Collections.Generic.IEnumerable<T> actual, params T[] expected) { }
         public static void AssertEqual<T>(this System.IObservable<T> actual, System.IObservable<T> expected) { }
+        public static void AssertEqual<T>(this System.Collections.Generic.IEnumerable<T> actual, System.Collections.Generic.IEnumerable<T> expected, System.Collections.Generic.IEqualityComparer<T> comparer) { }
+        public static void AssertEqual<T>(this System.IObservable<T> actual, System.IObservable<T> expected, System.Collections.Generic.IEqualityComparer<T> comparer) { }
         public static void Throws<TException>(System.Action action)
             where TException : System.Exception { }
         public static void Throws<TException>(System.Action action, string message)
@@ -42,12 +48,13 @@ namespace Microsoft.Reactive.Testing
         public static Microsoft.Reactive.Testing.Recorded<System.Reactive.Notification<T>> OnError<T>(long ticks, System.Func<System.Exception, bool> predicate) { }
         public static Microsoft.Reactive.Testing.Recorded<System.Reactive.Notification<T>> OnError<T>(long ticks, System.Exception exception, T witness) { }
         public static Microsoft.Reactive.Testing.Recorded<System.Reactive.Notification<T>> OnError<T>(long ticks, System.Func<System.Exception, bool> predicate, T witness) { }
-        public static Microsoft.Reactive.Testing.Recorded<System.Reactive.Notification<T>> OnNext<T>(long ticks, T value) { }
         public static Microsoft.Reactive.Testing.Recorded<System.Reactive.Notification<T>> OnNext<T>(long ticks, System.Func<T, bool> predicate) { }
-        public static Microsoft.Reactive.Testing.Subscription Subscribe(long start, long end) { }
+        public static Microsoft.Reactive.Testing.Recorded<System.Reactive.Notification<T>> OnNext<T>(long ticks, T value) { }
         public static Microsoft.Reactive.Testing.Subscription Subscribe(long start) { }
+        public static Microsoft.Reactive.Testing.Subscription Subscribe(long start, long end) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("{Value}@{Time}")]
+    [System.Diagnostics.DebuggerDisplay("{Value}@{Time}")]
+    [System.Serializable]
     public struct Recorded<T> : System.IEquatable<Microsoft.Reactive.Testing.Recorded<T>>
     {
         public Recorded(long time, T value) { }
@@ -57,8 +64,11 @@ namespace Microsoft.Reactive.Testing
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
+        public static bool operator !=(Microsoft.Reactive.Testing.Recorded<T> left, Microsoft.Reactive.Testing.Recorded<T> right) { }
+        public static bool operator ==(Microsoft.Reactive.Testing.Recorded<T> left, Microsoft.Reactive.Testing.Recorded<T> right) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("({Subscribe}, {Unsubscribe})")]
+    [System.Diagnostics.DebuggerDisplay("({Subscribe}, {Unsubscribe})")]
+    [System.Serializable]
     public struct Subscription : System.IEquatable<Microsoft.Reactive.Testing.Subscription>
     {
         public const long Infinite = 9223372036854775807;
@@ -70,8 +80,10 @@ namespace Microsoft.Reactive.Testing
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
+        public static bool operator !=(Microsoft.Reactive.Testing.Subscription left, Microsoft.Reactive.Testing.Subscription right) { }
+        public static bool operator ==(Microsoft.Reactive.Testing.Subscription left, Microsoft.Reactive.Testing.Subscription right) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("\\{ Clock = {Clock} Now = {Now.ToString(\"O\")} \\}")]
+    [System.Diagnostics.DebuggerDisplay("\\{ Clock = {Clock} Now = {Now.ToString(\"O\")} \\}")]
     public class TestScheduler : System.Reactive.Concurrency.VirtualTimeScheduler<long, long>
     {
         public TestScheduler() { }
@@ -80,9 +92,9 @@ namespace Microsoft.Reactive.Testing
         public Microsoft.Reactive.Testing.ITestableObservable<T> CreateHotObservable<T>(params Microsoft.Reactive.Testing.Recorded<>[] messages) { }
         public Microsoft.Reactive.Testing.ITestableObserver<T> CreateObserver<T>() { }
         public override System.IDisposable ScheduleAbsolute<TState>(TState state, long dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
-        public Microsoft.Reactive.Testing.ITestableObserver<T> Start<T>(System.Func<System.IObservable<T>> create, long created, long subscribed, long disposed) { }
-        public Microsoft.Reactive.Testing.ITestableObserver<T> Start<T>(System.Func<System.IObservable<T>> create, long disposed) { }
         public Microsoft.Reactive.Testing.ITestableObserver<T> Start<T>(System.Func<System.IObservable<T>> create) { }
+        public Microsoft.Reactive.Testing.ITestableObserver<T> Start<T>(System.Func<System.IObservable<T>> create, long disposed) { }
+        public Microsoft.Reactive.Testing.ITestableObserver<T> Start<T>(System.Func<System.IObservable<T>> create, long created, long subscribed, long disposed) { }
         protected override System.DateTimeOffset ToDateTimeOffset(long absolute) { }
         protected override long ToRelative(System.TimeSpan timeSpan) { }
     }

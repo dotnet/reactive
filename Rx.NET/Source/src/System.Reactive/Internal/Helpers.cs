@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
@@ -10,22 +10,17 @@ namespace System.Reactive
     {
         public static int? GetLength<T>(IEnumerable<T> source)
         {
-            if (source is T[] array)
+            return source switch
             {
-                return array.Length;
-            }
-
-            if (source is IList<T> list)
-            {
-                return list.Count;
-            }
-
-            return null;
+                T[] array => array.Length,
+                IList<T> list => list.Count,
+                _ => null
+            };
         }
 
         public static IObservable<T> Unpack<T>(IObservable<T> source)
         {
-            var hasOpt = default(bool);
+            bool hasOpt;
 
             do
             {

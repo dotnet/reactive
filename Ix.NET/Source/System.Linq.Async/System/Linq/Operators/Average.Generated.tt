@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 // Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
@@ -44,7 +44,20 @@ foreach (var o in os)
         res = "sum / count";
     else if (t == "float")
         res = "(float)(sum / count)";
+
+    var typeStr = o.type;
+    if (isNullable) {
+        typeStr = "Nullable{" + o.type.Substring(0, 1).ToUpper() + o.type.Substring(1, o.type.Length - 2) + "}";
+    }
 #>
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="<#=typeStr#>" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="<#=typeStr#>" /> values to calculate the average of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>An async-enumerable sequence containing a single element with the average of the sequence of values.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         public static ValueTask<<#=o.res#>> AverageAsync(this IAsyncEnumerable<<#=o.type#>> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -117,6 +130,17 @@ else
             }
         }
 
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="<#=typeStr#>" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values to calculate the average of.</param>
+        /// <param name="selector">A transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>An async-enumerable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<<#=o.res#>> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=o.type#>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)

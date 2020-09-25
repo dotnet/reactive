@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections;
@@ -11,22 +11,28 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Returns an async-enumerable sequence containing an <see cref="int" /> that represents the total number of elements in an async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence that contains elements to be counted.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>An async-enumerable sequence containing a single element with the number of elements in the input sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The number of elements in the source sequence is larger than <see cref="long.MaxValue"/>.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            switch (source)
+            return source switch
             {
-                case ICollection<TSource> collection:
-                    return new ValueTask<int>(collection.Count);
-                case IAsyncIListProvider<TSource> listProv:
-                    return listProv.GetCountAsync(onlyIfCheap: false, cancellationToken);
-                case ICollection collection:
-                    return new ValueTask<int>(collection.Count);
-            }
-
-            return Core(source, cancellationToken);
+                ICollection<TSource> collection => new ValueTask<int>(collection.Count),
+                IAsyncIListProvider<TSource> listProv => listProv.GetCountAsync(onlyIfCheap: false, cancellationToken),
+                ICollection collection => new ValueTask<int>(collection.Count),
+                _ => Core(source, cancellationToken),
+            };
 
             static async ValueTask<int> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
             {
@@ -44,6 +50,16 @@ namespace System.Linq
             }
         }
 
+        /// <summary>
+        /// Returns an async-enumerable sequence containing an <see cref="int" /> that represents how many elements in the specified async-enumerable sequence satisfy a condition.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence that contains elements to be counted.</param>
+        /// <param name="predicate">A function to test each element for a condition.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>An async-enumerable sequence containing a single element with a number that represents how many elements in the input sequence satisfy the condition in the predicate function.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)

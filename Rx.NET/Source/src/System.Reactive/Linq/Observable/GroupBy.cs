@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
@@ -65,7 +65,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                var key = default(TKey);
+                TKey key;
                 try
                 {
                     key = _keySelector(value);
@@ -77,7 +77,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 var fireNewMapEntry = false;
-                var writer = default(Subject<TElement>);
+                Subject<TElement> writer;
                 try
                 {
                     //
@@ -130,7 +130,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     ForwardOnNext(group);
                 }
 
-                var element = default(TElement);
+                TElement element;
                 try
                 {
                     element = _elementSelector(value);

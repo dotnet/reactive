@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 // Copied from https://github.com/dotnet/corefx/blob/5f1dd8298e4355b63bb760d88d437a91b3ca808c/src/System.Linq/src/System/Linq/Partition.cs
@@ -24,9 +24,9 @@ namespace System.Linq
 
         public AsyncListPartition(IList<TSource> source, int minIndexInclusive, int maxIndexInclusive)
         {
-            Debug.Assert(source != null);
             Debug.Assert(minIndexInclusive >= 0);
             Debug.Assert(minIndexInclusive <= maxIndexInclusive);
+
             _source = source;
             _minIndexInclusive = minIndexInclusive;
             _maxIndexInclusive = maxIndexInclusive;

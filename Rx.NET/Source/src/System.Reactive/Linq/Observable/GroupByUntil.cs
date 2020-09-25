@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Concurrent;
@@ -74,7 +74,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                var key = default(TKey);
+                TKey key;
                 try
                 {
                     key = _keySelector(value);
@@ -148,7 +148,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     durationObserver.SetResource(duration.SubscribeSafe(durationObserver));
                 }
 
-                var element = default(TElement);
+                TElement element;
                 try
                 {
                     element = _elementSelector(value);
@@ -319,7 +319,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             added = false;
 
-            var value = default(TValue);
+            TValue value;
             var newValue = default(TValue);
             var hasNewValue = false;
             while (true)

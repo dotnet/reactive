@@ -1,9 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,6 +10,16 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct elements according to the keySelector.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the discriminator key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct elements for.</param>
+        /// <param name="keySelector">A function to compute the comparison key for each element.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
+        /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
@@ -21,6 +30,17 @@ namespace System.Linq
             return DistinctCore(source, keySelector, comparer: null);
         }
 
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct elements according to the keySelector and the comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the discriminator key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct elements for.</param>
+        /// <param name="keySelector">A function to compute the comparison key for each element.</param>
+        /// <param name="comparer">Equality comparer for source elements.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is null.</exception>
+        /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
@@ -31,6 +51,16 @@ namespace System.Linq
             return DistinctCore(source, keySelector, comparer);
         }
 
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct elements according to the asynchronous keySelector.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the discriminator key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct elements for.</param>
+        /// <param name="keySelector">An asynchronous function to compute the comparison key for each element.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
+        /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (source == null)
@@ -42,6 +72,16 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct elements according to the asynchronous (cancellable) keySelector.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the discriminator key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct elements for.</param>
+        /// <param name="keySelector">An asynchronous (cancellable) function to compute the comparison key for each element.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
+        /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector)
         {
             if (source == null)
@@ -53,6 +93,17 @@ namespace System.Linq
         }
 #endif
 
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct elements according to the asynchronous keySelector and the comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the discriminator key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct elements for.</param>
+        /// <param name="keySelector">An asynchronous function to compute the comparison key for each element.</param>
+        /// <param name="comparer">Equality comparer for source elements.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is null.</exception>
+        /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
@@ -64,6 +115,17 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
+        /// <summary>
+        /// Returns an async-enumerable sequence that contains only distinct elements according to the asynchronous (cancellable) keySelector and the comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the discriminator key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to retain distinct elements for.</param>
+        /// <param name="keySelector">An asynchronous (cancellable) function to compute the comparison key for each element.</param>
+        /// <param name="comparer">Equality comparer for source elements.</param>
+        /// <returns>An async-enumerable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is null.</exception>
+        /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
@@ -103,9 +165,6 @@ namespace System.Linq
 
             public DistinctAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(keySelector != null);
-
                 _source = source;
                 _keySelector = keySelector;
                 _comparer = comparer;
@@ -251,9 +310,6 @@ namespace System.Linq
 
             public DistinctAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(keySelector != null);
-
                 _source = source;
                 _keySelector = keySelector;
                 _comparer = comparer;
@@ -400,9 +456,6 @@ namespace System.Linq
 
             public DistinctAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(keySelector != null);
-
                 _source = source;
                 _keySelector = keySelector;
                 _comparer = comparer;

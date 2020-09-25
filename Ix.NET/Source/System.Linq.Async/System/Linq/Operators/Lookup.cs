@@ -1,10 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -85,10 +84,6 @@ namespace System.Linq.Internal
 
         internal static async Task<Lookup<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
         {
-            Debug.Assert(source != null);
-            Debug.Assert(keySelector != null);
-            Debug.Assert(elementSelector != null);
-
             var lookup = new Lookup<TKey, TElement>(comparer);
 
             await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
@@ -105,9 +100,6 @@ namespace System.Linq.Internal
 
         internal static async Task<Lookup<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
         {
-            Debug.Assert(source != null);
-            Debug.Assert(keySelector != null);
-
             var lookup = new Lookup<TKey, TElement>(comparer);
 
             await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
@@ -358,10 +350,6 @@ namespace System.Linq.Internal
 
         internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
         {
-            Debug.Assert(source != null);
-            Debug.Assert(keySelector != null);
-            Debug.Assert(elementSelector != null);
-
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
             await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
@@ -379,10 +367,6 @@ namespace System.Linq.Internal
 #if !NO_DEEP_CANCELLATION
         internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
         {
-            Debug.Assert(source != null);
-            Debug.Assert(keySelector != null);
-            Debug.Assert(elementSelector != null);
-
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
             await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
@@ -400,9 +384,6 @@ namespace System.Linq.Internal
 
         internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
         {
-            Debug.Assert(source != null);
-            Debug.Assert(keySelector != null);
-
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
             await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
@@ -417,9 +398,6 @@ namespace System.Linq.Internal
 #if !NO_DEEP_CANCELLATION
         internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
         {
-            Debug.Assert(source != null);
-            Debug.Assert(keySelector != null);
-
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
             await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))

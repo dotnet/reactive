@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 // Copied from https://github.com/dotnet/corefx/blob/f17f1e847aeab830de77f8a46656339d7b0f1b43/src/System.Linq/src/System/Linq/SingleLinkedNode.cs
@@ -86,14 +86,14 @@ namespace System.Linq
         {
             Debug.Assert(index >= 0 && index < GetCount());
 
-            SingleLinkedNode<TSource>? node = this;
+            SingleLinkedNode<TSource> node = this;
             for (; index > 0; index--)
             {
-                node = node!.Linked;
+                node = node.Linked!;
+                Debug.Assert(node != null);
             }
 
-            Debug.Assert(node != null);
-            return node;
+            return node!;
         }
 
         /// <summary>

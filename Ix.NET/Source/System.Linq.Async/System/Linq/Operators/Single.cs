@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
@@ -10,6 +10,15 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Returns the only element of an async-enumerable sequence, and reports an exception if there is not exactly one element in the async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source async-enumerable sequence.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>ValueTask containing the single element in the async-enumerable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence contains more than one element. -or- The source sequence is empty.</exception>
         public static ValueTask<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -21,13 +30,12 @@ namespace System.Linq
             {
                 if (source is IList<TSource> list)
                 {
-                    switch (list.Count)
+                    return list.Count switch
                     {
-                        case 0: throw Error.NoElements();
-                        case 1: return list[0];
-                    }
-
-                    throw Error.MoreThanOneElement();
+                        0 => throw Error.NoElements(),
+                        1 => list[0],
+                        _ => throw Error.MoreThanOneElement(),
+                    };
                 }
 
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
@@ -48,6 +56,16 @@ namespace System.Linq
             }
         }
 
+        /// <summary>
+        /// Returns the only element of an async-enumerable sequence that satisfies the condition in the predicate, and reports an exception if there is not exactly one element in the async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source async-enumerable sequence.</param>
+        /// <param name="predicate">A predicate function to evaluate for elements in the source sequence.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>ValueTask containing the single element in the async-enumerable sequence that satisfies the condition in the predicate.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) No element satisfies the condition in the predicate. -or- More than one element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
         public static ValueTask<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)

@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
@@ -23,10 +23,13 @@ namespace System.Reactive.Linq.ObservableImpl
             /// </summary>
             private RefConnection _connection;
 
-            public Eager(IConnectableObservable<TSource> source)
+            private readonly int _minObservers;
+
+            public Eager(IConnectableObservable<TSource> source, int minObservers)
             {
                 _source = source;
                 _gate = new object();
+                _minObservers = minObservers;
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(observer, this);
@@ -68,7 +71,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
 
                         // this is the first observer, then connect
-                        doConnect = conn._count++ == 0;
+                        doConnect = ++conn._count == _parent._minObservers;
                         // save the current connection for this observer
                         _targetConnection = conn;
                     }
@@ -132,16 +135,19 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly IScheduler _scheduler;
             private readonly TimeSpan _disconnectTime;
             private readonly IConnectableObservable<TSource> _source;
+            private readonly int _minObservers;
+
             private IDisposable _serial;
             private int _count;
             private IDisposable _connectableSubscription;
 
-            public Lazy(IConnectableObservable<TSource> source, TimeSpan disconnectTime, IScheduler scheduler)
+            public Lazy(IConnectableObservable<TSource> source, TimeSpan disconnectTime, IScheduler scheduler, int minObservers)
             {
                 _source = source;
                 _gate = new object();
                 _disconnectTime = disconnectTime;
                 _scheduler = scheduler;
+                _minObservers = minObservers;
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
@@ -161,7 +167,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     lock (parent._gate)
                     {
-                        if (++parent._count == 1)
+                        if (++parent._count == parent._minObservers)
                         {
                             if (parent._connectableSubscription == null)
                             {

@@ -5,7 +5,6 @@
     <NoWarn>$(NoWarn);CS0618</NoWarn>
   </PropertyGroup>
 
-
   <ItemGroup>
     <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -18,13 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="FluentAssertions" Version="5.6.0" />
-
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="xunit" Version="2.4.1" />
   </ItemGroup>
 

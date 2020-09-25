@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System;
@@ -22,8 +22,9 @@ namespace Tests
         [Fact]
         public void ToObservable1()
         {
+            using var evt = new ManualResetEvent(false);
+
             var fail = false;
-            var evt = new ManualResetEvent(false);
 
             var xs = AsyncEnumerable.Empty<int>().ToObservable();
             xs.Subscribe(new MyObserver<int>(
@@ -49,9 +50,10 @@ namespace Tests
         [Fact]
         public void ToObservable2()
         {
+            using var evt = new ManualResetEvent(false);
+
             var lst = new List<int>();
             var fail = false;
-            var evt = new ManualResetEvent(false);
 
             var xs = Return42.ToObservable();
             xs.Subscribe(new MyObserver<int>(
@@ -78,9 +80,10 @@ namespace Tests
         [Fact]
         public void ToObservable3()
         {
+            using var evt = new ManualResetEvent(false);
+
             var lst = new List<int>();
             var fail = false;
-            var evt = new ManualResetEvent(false);
 
             var xs = AsyncEnumerable.Range(0, 10).ToObservable();
             xs.Subscribe(new MyObserver<int>(
@@ -105,12 +108,13 @@ namespace Tests
         }
 
         [Fact]
-        public void ToObservable4()
+        public void ToObservable_ThrowOnMoveNext()
         {
+            using var evt = new ManualResetEvent(false);
+
             var ex1 = new Exception("Bang!");
             var ex_ = default(Exception);
             var fail = false;
-            var evt = new ManualResetEvent(false);
 
             var xs = Throw<int>(ex1).ToObservable();
             xs.Subscribe(new MyObserver<int>(
@@ -136,10 +140,42 @@ namespace Tests
         }
 
         [Fact]
+        public void ToObservable_ThrowOnCurrent()
+        {
+            var ex1 = new Exception("Bang!");
+            var ex_ = default(Exception);
+            var fail = false;
+
+            var ae = AsyncEnumerable.Create(
+                _ => new ThrowOnCurrentAsyncEnumerator(ex1)
+            );
+
+            ae.ToObservable()
+                .Subscribe(new MyObserver<int>(
+                x =>
+                {
+                    fail = true;
+                },
+                ex =>
+                {
+                    ex_ = ex;
+                },
+                () =>
+                {
+                    fail = true;
+                }
+            ));
+
+            Assert.False(fail);
+            Assert.Equal(ex1, ex_);
+        }
+
+        [Fact]
         public void ToObservable_DisposesEnumeratorOnCompletion()
         {
+            using var evt = new ManualResetEvent(false);
+
             var fail = false;
-            var evt = new ManualResetEvent(false);
 
             var ae = AsyncEnumerable.Create(
                 _ => AsyncEnumerator.Create<int>(
@@ -170,8 +206,9 @@ namespace Tests
         [Fact]
         public void ToObservable_DisposesEnumeratorWhenSubscriptionIsDisposed()
         {
+            using var evt = new ManualResetEvent(false);
+
             var fail = false;
-            var evt = new ManualResetEvent(false);
             var subscription = default(IDisposable);
             var subscriptionAssignedTcs = new TaskCompletionSource<object>();
 
@@ -194,7 +231,8 @@ namespace Tests
                 .Subscribe(new MyObserver<int>(
                     x =>
                     {
-                        subscription.Dispose();
+                        Assert.NotNull(subscription);
+                        subscription!.Dispose();
                     },
                     ex =>
                     {
@@ -215,9 +253,10 @@ namespace Tests
         [Fact]
         public void ToObservable_DesNotCallMoveNextAgainWhenSubscriptionIsDisposed()
         {
+            using var evt = new ManualResetEvent(false);
+
             var fail = false;
             var moveNextCount = 0;
-            var evt = new ManualResetEvent(false);
             var subscription = default(IDisposable);
             var subscriptionAssignedTcs = new TaskCompletionSource<object>();
 
@@ -242,7 +281,8 @@ namespace Tests
                 .Subscribe(new MyObserver<int>(
                     x =>
                     {
-                        subscription.Dispose();
+                        Assert.NotNull(subscription);
+                        subscription!.Dispose();
                     },
                     ex =>
                     {
@@ -258,6 +298,34 @@ namespace Tests
             evt.WaitOne();
 
             Assert.Equal(1, moveNextCount);
+            Assert.False(fail);
+        }
+        
+        [Fact]
+        public void ToObservable_SupportsLargeEnumerable()
+        {
+            using var evt = new ManualResetEvent(false);
+
+            var fail = false;
+
+            var xs = AsyncEnumerable.Range(0, 10000).ToObservable();
+            xs.Subscribe(new MyObserver<int>(
+                x =>
+                {
+                    // ok
+                },
+                ex =>
+                {
+                    fail = true;
+                    evt.Set();
+                },
+                () =>
+                {
+                    evt.Set();
+                }
+            ));
+
+            evt.WaitOne();
             Assert.False(fail);
         }
 
@@ -279,6 +347,19 @@ namespace Tests
             public void OnError(Exception error) => _onError(error);
 
             public void OnNext(T value) => _onNext(value);
+        }
+
+        private sealed class ThrowOnCurrentAsyncEnumerator : IAsyncEnumerator<int>
+        {
+            readonly private Exception _exception;
+            public ThrowOnCurrentAsyncEnumerator(Exception ex)
+            {
+                _exception = ex;
+            }
+
+            public int Current => throw _exception;
+            public ValueTask DisposeAsync() => default;
+            public ValueTask<bool> MoveNextAsync() => new ValueTask<bool>(true);
         }
     }
 }

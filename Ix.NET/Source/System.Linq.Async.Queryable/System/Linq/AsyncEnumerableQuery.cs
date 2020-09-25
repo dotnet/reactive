@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
@@ -133,7 +133,7 @@ namespace System.Linq
         /// Gets a string representation of the enumerable sequence.
         /// </summary>
         /// <returns>String representation of the enumerable sequence.</returns>
-        public override string ToString()
+        public override string? ToString()
         {
             if (!(_expression is ConstantExpression ce) || ce.Value != this)
             {

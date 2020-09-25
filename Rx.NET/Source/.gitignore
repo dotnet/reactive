@@ -28,6 +28,9 @@ local.properties
 # PDT-specific
 .buildpath
 
+# ApiApprovals
+*.received.cs
+
 
 #################
 ## Visual Studio

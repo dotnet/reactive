@@ -10,6 +10,13 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Returns the maximum value in an async-enumerable sequence of <see cref="int" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="int" /> values to determine the maximum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<int> MaxAsync(this IAsyncEnumerable<int> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -154,6 +161,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Int}" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="Nullable{Int}" /> values to determine the maximum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<int?> MaxAsync(this IAsyncEnumerable<int?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -454,6 +468,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the maximum value in an async-enumerable sequence of <see cref="long" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="long" /> values to determine the maximum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<long> MaxAsync(this IAsyncEnumerable<long> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -598,6 +619,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Long}" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="Nullable{Long}" /> values to determine the maximum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<long?> MaxAsync(this IAsyncEnumerable<long?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -898,6 +926,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the maximum value in an async-enumerable sequence of <see cref="float" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="float" /> values to determine the maximum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<float> MaxAsync(this IAsyncEnumerable<float> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1102,6 +1137,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Float}" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="Nullable{Float}" /> values to determine the maximum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<float?> MaxAsync(this IAsyncEnumerable<float?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1386,6 +1428,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the maximum value in an async-enumerable sequence of <see cref="double" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="double" /> values to determine the maximum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<double> MaxAsync(this IAsyncEnumerable<double> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1590,6 +1639,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Double}" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="Nullable{Double}" /> values to determine the maximum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<double?> MaxAsync(this IAsyncEnumerable<double?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1874,6 +1930,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the maximum value in an async-enumerable sequence of <see cref="decimal" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="decimal" /> values to determine the maximum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<decimal> MaxAsync(this IAsyncEnumerable<decimal> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2018,6 +2081,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Decimal}" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="Nullable{Decimal}" /> values to determine the maximum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<decimal?> MaxAsync(this IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2214,6 +2284,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the minimum value in an async-enumerable sequence of <see cref="int" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="int" /> values to determine the minimum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<int> MinAsync(this IAsyncEnumerable<int> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2358,6 +2435,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Int}" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="Nullable{Int}" /> values to determine the minimum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<int?> MinAsync(this IAsyncEnumerable<int?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2562,6 +2646,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the minimum value in an async-enumerable sequence of <see cref="long" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="long" /> values to determine the minimum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<long> MinAsync(this IAsyncEnumerable<long> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2706,6 +2797,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Long}" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="Nullable{Long}" /> values to determine the minimum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<long?> MinAsync(this IAsyncEnumerable<long?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2910,6 +3008,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the minimum value in an async-enumerable sequence of <see cref="float" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="float" /> values to determine the minimum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<float> MinAsync(this IAsyncEnumerable<float> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3118,6 +3223,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Float}" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="Nullable{Float}" /> values to determine the minimum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<float?> MinAsync(this IAsyncEnumerable<float?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3386,6 +3498,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the minimum value in an async-enumerable sequence of <see cref="double" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="double" /> values to determine the minimum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<double> MinAsync(this IAsyncEnumerable<double> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3594,6 +3713,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Double}" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="Nullable{Double}" /> values to determine the minimum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<double?> MinAsync(this IAsyncEnumerable<double?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3862,6 +3988,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the minimum value in an async-enumerable sequence of <see cref="decimal" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="decimal" /> values to determine the minimum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<decimal> MinAsync(this IAsyncEnumerable<decimal> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4006,6 +4139,13 @@ namespace System.Linq
         }
 
 #endif
+        /// <summary>
+        /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Decimal}" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="Nullable{Decimal}" /> values to determine the minimum value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<decimal?> MinAsync(this IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)

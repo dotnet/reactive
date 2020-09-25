@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
@@ -11,6 +11,14 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Concatenates the second async-enumerable sequence to the first async-enumerable sequence upon successful termination of the first.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
+        /// <param name="first">First async-enumerable sequence.</param>
+        /// <param name="second">Second async-enumerable sequence.</param>
+        /// <returns>An async-enumerable sequence that contains the elements of the first sequence, followed by those of the second the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
@@ -30,9 +38,6 @@ namespace System.Linq
 
             internal Concat2AsyncIterator(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
             {
-                Debug.Assert(first != null);
-                Debug.Assert(second != null);
-
                 _first = first;
                 _second = second;
             }
@@ -49,15 +54,12 @@ namespace System.Linq
 
             internal override IAsyncEnumerable<TSource>? GetAsyncEnumerable(int index)
             {
-                switch (index)
+                return index switch
                 {
-                    case 0:
-                        return _first;
-                    case 1:
-                        return _second;
-                    default:
-                        return null;
-                }
+                    0 => _first,
+                    1 => _second,
+                    _ => null,
+                };
             }
         }
 
@@ -195,8 +197,6 @@ namespace System.Linq
 
             internal ConcatNAsyncIterator(ConcatAsyncIterator<TSource> previousConcat, IAsyncEnumerable<TSource> next, int nextIndex)
             {
-                Debug.Assert(previousConcat != null);
-                Debug.Assert(next != null);
                 Debug.Assert(nextIndex >= 2);
 
                 _previousConcat = previousConcat;

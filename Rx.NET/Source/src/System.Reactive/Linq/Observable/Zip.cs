@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections;
@@ -106,7 +106,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 var r = _other.Queue.Dequeue();
 
-                                var res = default(TResult);
+                                TResult res;
                                 try
                                 {
                                     res = _parent._resultSelector(value, r);
@@ -188,7 +188,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 var l = _other.Queue.Dequeue();
 
-                                var res = default(TResult);
+                                TResult res;
                                 try
                                 {
                                     res = _parent._resultSelector(l, value);
@@ -274,6 +274,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     _resultSelector = resultSelector;
                 }
 
+                int _enumerationInProgress;
+
                 private IEnumerator<TSecond> _rightEnumerator;
 
                 private static readonly IEnumerator<TSecond> DisposedEnumerator = MakeDisposedEnumerator();
@@ -315,17 +317,46 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Interlocked.Exchange(ref _rightEnumerator, DisposedEnumerator)?.Dispose();
+                        if (Interlocked.Increment(ref _enumerationInProgress) == 1)
+                        {
+                            Interlocked.Exchange(ref _rightEnumerator, DisposedEnumerator)?.Dispose();
+                        }
                     }
                     base.Dispose(disposing);
                 }
 
                 public override void OnNext(TFirst value)
                 {
-                    var hasNext = false;
+                    var currentEnumerator = Volatile.Read(ref _rightEnumerator);
+                    if (currentEnumerator == DisposedEnumerator)
+                    {
+                        return;
+                    }
+                    if (Interlocked.Increment(ref _enumerationInProgress) != 1)
+                    {
+                        return;
+                    }
+                    bool hasNext;
+                    TSecond right = default;
+                    var wasDisposed = false;
                     try
                     {
-                        hasNext = _rightEnumerator.MoveNext();
+                        try
+                        {
+                            hasNext = currentEnumerator.MoveNext();
+                            if (hasNext)
+                            {
+                                right = currentEnumerator.Current;
+                            }
+                        }
+                        finally
+                        {
+                            if (Interlocked.Decrement(ref _enumerationInProgress) != 0)
+                            {
+                                Interlocked.Exchange(ref _rightEnumerator, DisposedEnumerator)?.Dispose();
+                                wasDisposed = true;
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -333,19 +364,13 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
+                    if (wasDisposed)
+                    {
+                        return;
+                    }
+
                     if (hasNext)
                     {
-                        var right = default(TSecond);
-                        try
-                        {
-                            right = _rightEnumerator.Current;
-                        }
-                        catch (Exception ex)
-                        {
-                            ForwardOnError(ex);
-                            return;
-                        }
-
                         TResult result;
                         try
                         {
@@ -413,7 +438,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             if (hasValueAll)
             {
-                var res = default(TResult);
+                TResult res;
                 try
                 {
                     res = GetResult();

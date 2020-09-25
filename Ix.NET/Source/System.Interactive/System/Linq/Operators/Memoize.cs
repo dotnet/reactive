@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections;
@@ -113,10 +113,12 @@ namespace System.Linq
 
         private sealed class MemoizedBuffer<T> : IBuffer<T>
         {
-            private IRefCountList<T> _buffer;
+            private readonly object _gate = new object();
+            private readonly IRefCountList<T> _buffer;
+            private readonly IEnumerator<T> _source;
+
             private bool _disposed;
-            private Exception _error;
-            private IEnumerator<T> _source;
+            private Exception? _error;
             private bool _stopped;
 
             public MemoizedBuffer(IEnumerator<T> source)
@@ -153,15 +155,12 @@ namespace System.Linq
 
             public void Dispose()
             {
-                lock (_source)
+                lock (_gate)
                 {
                     if (!_disposed)
                     {
                         _source.Dispose();
-                        _source = null;
-
                         _buffer.Clear();
-                        _buffer = null;
                     }
 
                     _disposed = true;
@@ -180,9 +179,9 @@ namespace System.Linq
                             throw new ObjectDisposedException("");
 
                         var hasValue = default(bool);
-                        var current = default(T);
+                        var current = default(T)!;
 
-                        lock (_source)
+                        lock (_gate)
                         {
                             if (i >= _buffer.Count)
                             {

@@ -1,29 +1,27 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using ApprovalTests.Core;
+#nullable enable
+
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
-using System.IO;
-using Xunit.Abstractions;
 
 namespace ReactiveTests.Tests
 {
-    public class DiffPlexReporter : IApprovalFailureReporter
+    public static class DiffPlexReporter
     {
-        public static DiffPlexReporter INSTANCE = new DiffPlexReporter();
-
-        public ITestOutputHelper Output { get; set; }
-
-        public void Report(string approved, string received)
+        public static Task Report(string receivedFile, string verifiedFile, string? message)
         {
-            var approvedText = File.Exists(approved) ? File.ReadAllText(approved) : string.Empty;
-            var receivedText = File.ReadAllText(received);
-
+#if (!DEBUG)
+            var receivedText = File.ReadAllText(receivedFile);
+            var verifiedText = File.ReadAllText(verifiedFile);
             var diffBuilder = new InlineDiffBuilder(new Differ());
-            var diff = diffBuilder.BuildDiffModel(approvedText, receivedText);
+            var diff = diffBuilder.BuildDiffModel(verifiedText, receivedText);
 
             foreach (var line in diff.Lines)
             {
@@ -40,8 +38,11 @@ namespace ReactiveTests.Tests
                         break;
                 }
 
-                Output.WriteLine("{0}{1}", prefix, line.Text);
+                Console.WriteLine("{0}{1}", prefix, line.Text);
             }
+#endif
+
+            return Task.CompletedTask;
         }
     }
 }

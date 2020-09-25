@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
@@ -10,9 +10,28 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Groups the elements of an async-enumerable sequence according to a specified key selector function.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the grouping key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to group.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <returns>A sequence of async-enumerable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector) =>
             new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer: null);
 
+        /// <summary>
+        /// Groups the elements of an async-enumerable sequence according to a specified key selector function and comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the grouping key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to group.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <param name="comparer">An equality comparer to compare keys with.</param>
+        /// <returns>A sequence of async-enumerable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is null.</exception>
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer) =>
             new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer);
 
@@ -30,9 +49,32 @@ namespace System.Linq
             new GroupedAsyncEnumerableWithTaskAndCancellation<TSource, TKey>(source, keySelector, comparer);
 #endif
 
+        /// <summary>
+        /// Groups the elements of an async-enumerable sequence and selects the resulting elements by using a specified function.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the grouping key computed for each element in the source sequence.</typeparam>
+        /// <typeparam name="TElement">The type of the elements within the groups computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to group.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <param name="elementSelector">A function to map each source element to an element in an async-enumerable group.</param>
+        /// <returns>A sequence of async-enumerable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> is null.</exception>
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector) =>
             new GroupedAsyncEnumerable<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null);
 
+        /// <summary>
+        /// Groups the elements of an async-enumerable sequence according to a specified key selector function and comparer and selects the resulting elements by using a specified function.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the grouping key computed for each element in the source sequence.</typeparam>
+        /// <typeparam name="TElement">The type of the elements within the groups computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to group.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <param name="elementSelector">A function to map each source element to an element in an async-enumerable group.</param>
+        /// <param name="comparer">An equality comparer to compare keys with.</param>
+        /// <returns>A sequence of async-enumerable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> or <paramref name="comparer"/> is null.</exception>
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer) =>
             new GroupedAsyncEnumerable<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
 
