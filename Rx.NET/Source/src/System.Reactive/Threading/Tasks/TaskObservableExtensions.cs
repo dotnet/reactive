@@ -485,11 +485,7 @@ namespace System.Reactive.Threading.Tasks
             private void Cancel()
             {
                 Dispose();
-#if HAS_TPL46
                 _tcs.TrySetCanceled(_ct);
-#else
-                _tcs.TrySetCanceled();
-#endif
             }
         }
 

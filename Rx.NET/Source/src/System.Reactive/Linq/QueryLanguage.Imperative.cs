@@ -49,11 +49,7 @@ namespace System.Reactive.Linq
             {
                 ctr = cancellationToken.Register(() =>
                 {
-#if HAS_TPL46
                     tcs.TrySetCanceled(cancellationToken);
-#else
-                    tcs.TrySetCanceled();
-#endif
                     subscription.Dispose();
                 });
             }
