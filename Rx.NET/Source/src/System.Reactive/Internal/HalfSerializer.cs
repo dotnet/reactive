@@ -48,7 +48,7 @@ namespace System.Reactive
                     }
                 }
             }
-#if (HAS_TRACE)
+#if !NO_TRACE
             else if (error == null)
                 Trace.TraceWarning("OnNext called while another OnNext call was in progress on the same Observer.");
 #endif
