@@ -106,7 +106,7 @@ stages:
       artifact: ApprovalsTests
       condition: always()
 
-- stage: Test
+- stage: IntegrationTests
   jobs:
   - job: Integration_Linux_Tests
     pool:
@@ -258,7 +258,7 @@ stages:
       displayName: Run Tests on Window Desktop
 
 - stage: CodeSign
-  condition: and(succeeded('Test'), not(eq(variables['build.reason'], 'PullRequest')))
+  condition: and(succeeded('IntegrationTests'), not(eq(variables['build.reason'], 'PullRequest')))
   jobs:
   - deployment: CodeSign
     displayName: Code Signing
