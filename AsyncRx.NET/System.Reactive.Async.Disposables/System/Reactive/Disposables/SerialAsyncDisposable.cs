@@ -46,7 +46,7 @@ namespace System.Reactive.Disposables
             }
         }
 
-        public async Task DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             var old = default(IAsyncDisposable);
 

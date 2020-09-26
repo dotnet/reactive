@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
                     var disposeTask = AsyncDisposable.Create(() => disposeScheduler.ExecuteAsync(_ =>
                     {
                         disposable.Dispose();
-                        return Task.CompletedTask;
+                        return default;
                     }));
 
                     await d.AddAsync(disposeTask).RendezVous(subscribeScheduler);

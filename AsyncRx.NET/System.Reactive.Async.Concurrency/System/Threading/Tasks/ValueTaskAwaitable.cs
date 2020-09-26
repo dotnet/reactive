@@ -7,13 +7,13 @@ using System.Runtime.CompilerServices;
 
 namespace System.Threading.Tasks
 {
-    public sealed class TaskAwaitable : IAwaitable, IAwaiter
+    public sealed class ValueTaskAwaitable : IAwaitable, IAwaiter
     {
-        private readonly ConfiguredTaskAwaitable.ConfiguredTaskAwaiter _task;
+        private readonly ConfiguredValueTaskAwaitable.ConfiguredValueTaskAwaiter _task;
         private readonly IAsyncScheduler _scheduler;
         private readonly CancellationToken _token;
 
-        public TaskAwaitable(Task task, bool continueOnCapturedContext, IAsyncScheduler scheduler, CancellationToken token)
+        public ValueTaskAwaitable(ValueTask task, bool continueOnCapturedContext, IAsyncScheduler scheduler, CancellationToken token)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
@@ -80,13 +80,13 @@ namespace System.Threading.Tasks
         }
     }
 
-    public sealed class TaskAwaitable<T> : IAwaitable<T>, IAwaiter<T>
+    public sealed class ValueTaskAwaitable<T> : IAwaitable<T>, IAwaiter<T>
     {
-        private readonly ConfiguredTaskAwaitable<T>.ConfiguredTaskAwaiter _task;
+        private readonly ConfiguredValueTaskAwaitable<T>.ConfiguredValueTaskAwaiter _task;
         private readonly IAsyncScheduler _scheduler;
         private readonly CancellationToken _token;
 
-        public TaskAwaitable(Task<T> task, bool continueOnCapturedContext, IAsyncScheduler scheduler, CancellationToken token)
+        public ValueTaskAwaitable(ValueTask<T> task, bool continueOnCapturedContext, IAsyncScheduler scheduler, CancellationToken token)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));

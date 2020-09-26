@@ -291,7 +291,7 @@ namespace System.Reactive.Subjects
 
             protected abstract void Trim();
 
-            private async Task UnsubscribeAsync(IScheduledAsyncObserver<T> observer)
+            private async ValueTask UnsubscribeAsync(IScheduledAsyncObserver<T> observer)
             {
                 using (await _lock.LockAsync().ConfigureAwait(false))
                 {
@@ -310,7 +310,7 @@ namespace System.Reactive.Subjects
                     _scheduled = scheduled;
                 }
 
-                public Task DisposeAsync() => _parent.UnsubscribeAsync(_scheduled);
+                public ValueTask DisposeAsync() => _parent.UnsubscribeAsync(_scheduled);
             }
         }
 

@@ -212,7 +212,7 @@ namespace System.Reactive.Linq
                 {
                     if (i != index)
                     {
-                        dispose.Add(subscriptions[i].DisposeAsync());
+                        dispose.Add(subscriptions[i].DisposeAsync().AsTask());
                     }
                 }
 

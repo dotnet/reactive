@@ -60,7 +60,7 @@ namespace System.Reactive
                 }
             }
 
-            public async Task DisposeAsync()
+            public async ValueTask DisposeAsync()
             {
                 var task = default(Task);
                 var subscription = default(IAsyncDisposable);

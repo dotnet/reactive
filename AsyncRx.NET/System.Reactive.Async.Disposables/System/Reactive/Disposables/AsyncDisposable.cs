@@ -11,7 +11,7 @@ namespace System.Reactive.Disposables
     {
         public static IAsyncDisposable Nop { get; } = new NopAsyncDisposable();
 
-        public static IAsyncDisposable Create(Func<Task> dispose)
+        public static IAsyncDisposable Create(Func<ValueTask> dispose)
         {
             if (dispose == null)
                 throw new ArgumentNullException(nameof(dispose));
@@ -21,19 +21,19 @@ namespace System.Reactive.Disposables
 
         private sealed class AnonymousAsyncDisposable : IAsyncDisposable
         {
-            private Func<Task> _dispose;
+            private Func<ValueTask> _dispose;
 
-            public AnonymousAsyncDisposable(Func<Task> dispose)
+            public AnonymousAsyncDisposable(Func<ValueTask> dispose)
             {
                 _dispose = dispose;
             }
 
-            public Task DisposeAsync() => Interlocked.Exchange(ref _dispose, null)?.Invoke() ?? Task.CompletedTask;
+            public ValueTask DisposeAsync() => Interlocked.Exchange(ref _dispose, null)?.Invoke() ?? default;
         }
 
         private sealed class NopAsyncDisposable : IAsyncDisposable
         {
-            public Task DisposeAsync() => Task.CompletedTask;
+            public ValueTask DisposeAsync() => default;
         }
     }
 }

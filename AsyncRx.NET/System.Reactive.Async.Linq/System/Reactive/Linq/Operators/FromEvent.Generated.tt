@@ -90,7 +90,7 @@ for (var i = 2; i <= 16; i++)
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler

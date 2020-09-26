@@ -17,7 +17,7 @@ namespace System.Reactive
         {
         }
 
-        public override Task DisposeAsync() => _disposable.DisposeAsync();
+        public override ValueTask DisposeAsync() => _disposable.DisposeAsync();
 
         protected override IAwaitable RendezVous(Task task) => new TaskAwaitable(task, false, null, CancellationToken.None);
 

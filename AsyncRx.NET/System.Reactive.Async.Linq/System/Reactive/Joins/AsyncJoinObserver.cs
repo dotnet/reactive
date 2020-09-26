@@ -46,7 +46,7 @@ namespace System.Reactive.Joins
             }
         }
 
-        public async Task DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             if (!_isDisposed)
             {

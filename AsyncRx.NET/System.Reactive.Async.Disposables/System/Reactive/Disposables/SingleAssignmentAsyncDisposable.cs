@@ -9,7 +9,7 @@ namespace System.Reactive.Disposables
 {
     public sealed class SingleAssignmentAsyncDisposable : IAsyncDisposable
     {
-        private static readonly IAsyncDisposable Disposed = AsyncDisposable.Create(() => Task.CompletedTask);
+        private static readonly IAsyncDisposable Disposed = AsyncDisposable.Create(() => default);
 
         private IAsyncDisposable _disposable;
 
@@ -29,9 +29,9 @@ namespace System.Reactive.Disposables
             await disposable.DisposeAsync().ConfigureAwait(false);
         }
 
-        public Task DisposeAsync()
+        public ValueTask DisposeAsync()
         {
-            return Interlocked.Exchange(ref _disposable, Disposed)?.DisposeAsync() ?? Task.CompletedTask;
+            return Interlocked.Exchange(ref _disposable, Disposed)?.DisposeAsync() ?? default;
         }
     }
 }

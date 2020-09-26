@@ -47,7 +47,7 @@ namespace System.Reactive.Subjects
                 this.subscription = subscription;
             }
 
-            public async Task DisposeAsync()
+            public async ValueTask DisposeAsync()
             {
                 using (await parent.gate.LockAsync().ConfigureAwait(false))
                 {
