@@ -164,7 +164,7 @@ namespace System.Reactive.Subjects
                     }
                 }
 
-                return Task.CompletedTask;
+                return default;
             });
         }
     }

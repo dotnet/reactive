@@ -26,11 +26,11 @@ namespace System.Reactive.Disposables
 
         public CancellationToken Token => _cts.Token;
 
-        public Task DisposeAsync()
+        public ValueTask DisposeAsync()
         {
             _cts.Cancel();
 
-            return Task.CompletedTask;
+            return default;
         }
     }
 }

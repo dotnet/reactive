@@ -152,6 +152,6 @@ namespace System.Reactive
 
         protected abstract IAwaitable<R> RendezVous<R>(Task<R> task);
 
-        public abstract Task DisposeAsync();
+        public abstract ValueTask DisposeAsync();
     }
 }

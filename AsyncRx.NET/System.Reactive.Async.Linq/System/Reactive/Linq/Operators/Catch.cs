@@ -216,7 +216,7 @@ namespace System.Reactive.Linq
             var disposeEnumerator = AsyncDisposable.Create(() =>
             {
                 handlers.Dispose();
-                return Task.CompletedTask;
+                return default;
             });
 
             var subscription = StableCompositeAsyncDisposable.Create(innerSubscription, disposeEnumerator);

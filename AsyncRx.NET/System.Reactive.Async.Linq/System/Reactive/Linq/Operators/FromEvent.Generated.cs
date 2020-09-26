@@ -77,7 +77,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -151,7 +151,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -225,7 +225,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -299,7 +299,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -373,7 +373,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -447,7 +447,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -521,7 +521,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -595,7 +595,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -669,7 +669,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -743,7 +743,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -817,7 +817,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -891,7 +891,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -965,7 +965,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -1039,7 +1039,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler
@@ -1113,7 +1113,7 @@ namespace System.Reactive.Linq
                         {
                             removeHandler(converted);
 
-                            return Task.CompletedTask;
+                            return default;
                         }));
                     }),
                     scheduler

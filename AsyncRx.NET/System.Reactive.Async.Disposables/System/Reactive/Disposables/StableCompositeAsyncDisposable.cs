@@ -36,7 +36,7 @@ namespace System.Reactive.Disposables
             return new NAry(disposables);
         }
 
-        public abstract Task DisposeAsync();
+        public abstract ValueTask DisposeAsync();
 
         private sealed class Binary : StableCompositeAsyncDisposable
         {
@@ -49,7 +49,7 @@ namespace System.Reactive.Disposables
                 _disposable2 = disposable2;
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 var d1 = Interlocked.Exchange(ref _disposable1, null);
                 if (d1 != null)
@@ -79,7 +79,7 @@ namespace System.Reactive.Disposables
                 _disposables = new List<IAsyncDisposable>(disposables);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 var old = Interlocked.Exchange(ref _disposables, null);
                 if (old != null)

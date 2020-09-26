@@ -21,7 +21,7 @@ namespace System.Reactive
             _scheduler = scheduler;
         }
 
-        public override Task DisposeAsync() => _disposable.DisposeAsync();
+        public override ValueTask DisposeAsync() => _disposable.DisposeAsync();
 
         protected override IAwaitable RendezVous(Task task) => new TaskAwaitable(task, false, _scheduler, CancellationToken.None);
 

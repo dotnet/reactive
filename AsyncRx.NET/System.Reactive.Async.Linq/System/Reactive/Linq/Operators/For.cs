@@ -83,7 +83,7 @@ namespace System.Reactive.Linq
                 var disposeEnumerator = AsyncDisposable.Create(() =>
                 {
                     enumerator.Dispose();
-                    return Task.CompletedTask;
+                    return default;
                 });
 
                 return StableCompositeAsyncDisposable.Create(disposeEnumerator, subscription);

@@ -62,7 +62,7 @@ namespace System.Reactive.Linq
             {
                 tcs.TrySetCanceled(token);
 
-                subscription.DisposeAsync().ContinueWith(t =>
+                subscription.DisposeAsync().AsTask().ContinueWith(t =>
                 {
                     if (t.Exception != null)
                     {

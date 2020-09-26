@@ -208,7 +208,7 @@ namespace System.Reactive.Linq
                             ExceptionDispatchInfo.Capture(tie.InnerException).Throw();
                         }
 
-                        return Task.CompletedTask;
+                        return default;
                     });
 
                     return Task.FromResult(dispose);
@@ -245,7 +245,7 @@ namespace System.Reactive.Linq
                             ExceptionDispatchInfo.Capture(tie.InnerException).Throw();
                         }
 
-                        return Task.CompletedTask;
+                        return default;
                     });
 
                     return Task.FromResult(dispose);

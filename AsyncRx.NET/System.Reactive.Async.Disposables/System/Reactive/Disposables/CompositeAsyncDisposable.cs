@@ -84,7 +84,7 @@ namespace System.Reactive.Disposables
             return shouldDispose;
         }
 
-        public async Task DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             var disposables = default(IAsyncDisposable[]);
 
@@ -101,7 +101,7 @@ namespace System.Reactive.Disposables
 
             if (disposables != null)
             {
-                var tasks = disposables.Select(disposable => disposable.DisposeAsync());
+                var tasks = disposables.Select(disposable => disposable.DisposeAsync().AsTask());
 
                 await Task.WhenAll(tasks);
             }

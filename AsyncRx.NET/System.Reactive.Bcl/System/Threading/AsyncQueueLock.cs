@@ -67,7 +67,7 @@ namespace System.Threading
             }
         }
 
-        public async Task DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             var queue = _queue;
 

@@ -52,7 +52,27 @@ namespace System.Reactive.Concurrency
             return new TaskAwaitable<T>(task, false, scheduler, token);
         }
 
-        public static async Task Delay(this IAsyncScheduler scheduler, TimeSpan dueTime, CancellationToken token = default(CancellationToken))
+        public static IAwaitable RendezVous(this ValueTask task, IAsyncScheduler scheduler) => RendezVous(task, scheduler, CancellationToken.None);
+
+        public static IAwaitable RendezVous(this ValueTask task, IAsyncScheduler scheduler, CancellationToken token)
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return new ValueTaskAwaitable(task, false, scheduler, token);
+        }
+
+        public static IAwaitable<T> RendezVous<T>(this ValueTask<T> task, IAsyncScheduler scheduler) => RendezVous(task, scheduler, CancellationToken.None);
+
+        public static IAwaitable<T> RendezVous<T>(this ValueTask<T> task, IAsyncScheduler scheduler, CancellationToken token)
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return new ValueTaskAwaitable<T>(task, false, scheduler, token);
+        }
+
+        public static async ValueTask Delay(this IAsyncScheduler scheduler, TimeSpan dueTime, CancellationToken token = default)
         {
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
@@ -79,7 +99,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        public static async Task Delay(this IAsyncScheduler scheduler, DateTimeOffset dueTime, CancellationToken token = default(CancellationToken))
+        public static async ValueTask Delay(this IAsyncScheduler scheduler, DateTimeOffset dueTime, CancellationToken token = default)
         {
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
@@ -106,7 +126,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        public static async Task ExecuteAsync(this IAsyncScheduler scheduler, Func<CancellationToken, Task> action, CancellationToken token = default(CancellationToken))
+        public static async ValueTask ExecuteAsync(this IAsyncScheduler scheduler, Func<CancellationToken, ValueTask> action, CancellationToken token = default)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -148,7 +168,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        public static async Task<TResult> ExecuteAsync<TResult>(this IAsyncScheduler scheduler, Func<CancellationToken, Task<TResult>> action, CancellationToken token = default(CancellationToken))
+        public static async ValueTask<TResult> ExecuteAsync<TResult>(this IAsyncScheduler scheduler, Func<CancellationToken, ValueTask<TResult>> action, CancellationToken token = default)
         {
             var tcs = new TaskCompletionSource<TResult>();
 
@@ -240,7 +260,7 @@ namespace System.Reactive.Concurrency
                         _done = true;
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 }, _token);
             }
         }

@@ -40,7 +40,7 @@ namespace System.Reactive.Disposables
             }
         }
 
-        public async Task DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             var disposable = default(IAsyncDisposable);
 
@@ -64,7 +64,7 @@ namespace System.Reactive.Disposables
             }
         }
 
-        private async Task ReleaseAsync()
+        private async ValueTask ReleaseAsync()
         {
             var disposable = default(IAsyncDisposable);
 
@@ -97,7 +97,7 @@ namespace System.Reactive.Disposables
                 _parent = parent;
             }
 
-            public Task DisposeAsync() => Interlocked.Exchange(ref _parent, null)?.ReleaseAsync() ?? Task.CompletedTask;
+            public ValueTask DisposeAsync() => Interlocked.Exchange(ref _parent, null)?.ReleaseAsync() ?? default;
         }
     }
 }
