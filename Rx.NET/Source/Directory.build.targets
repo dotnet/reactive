@@ -1,46 +1,34 @@
 <Project>
 
-  <!-- Workaround. Remove once we're on 3.1.300+
-  https://github.com/dotnet/sourcelink/issues/572 -->
-  <PropertyGroup>
-    <TargetFrameworkMonikerAssemblyAttributesPath>$([System.IO.Path]::Combine('$(IntermediateOutputPath)','$(TargetFrameworkMoniker).AssemblyAttributes$(DefaultLanguageSourceExtension)'))</TargetFrameworkMonikerAssemblyAttributesPath>
-  </PropertyGroup>
-  <ItemGroup>
-    <EmbeddedFiles Include="$(GeneratedAssemblyInfoFile)"/>
-  </ItemGroup>
-
-
   <!-- This props all need to be set in targets as they depend on the values set earlier -->
   
   <PropertyGroup>  
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
   </PropertyGroup>
-
-  <PropertyGroup>
-    <DefineConstants>$(DefineConstants);HAS_WINRT</DefineConstants>
-  </PropertyGroup>
     
   <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
-    <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_DISPATCHER;HAS_REMOTING;DESKTOPCLR</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_WPF;HAS_WINRT;HAS_DISPATCHER;HAS_REMOTING;DESKTOPCLR</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
-    <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
+    <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.15063.0</TargetPlatformMinVersion>
-    <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;NO_TRACE;WINDOWS</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_WINRT;NO_CODE_COVERAGE_ATTRIBUTE;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;NO_TRACE;WINDOWS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
-    <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
-    <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
+    <DefineConstants>$(DefineConstants);HAS_WINRT;WINDOWS;HAS_OS_XAML;LEGACY_WINRT</DefineConstants>
+    <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netcoreapp2.1'">
-    <DefineConstants>$(DefineConstants)</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_WINRT</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_DISPATCHER;DESKTOPCLR</DefineConstants>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net5.0-windows'))">
+    <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
   </PropertyGroup>
 
-
-  <ItemGroup Condition="'$(TargetFramework)' != 'netcoreapp3.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net46' or '$(TargetFramework)' == 'uap10.0' or '$(TargetFramework)' == 'uap10.0.16299' or '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netcoreapp2.1'">
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
   </ItemGroup>
 
@@ -52,5 +40,16 @@
       </AssemblyAttribute>
     </ItemGroup>
   </Target>
-  
+
+
+  <!-- Remove once coverlet supports this built-in -->
+  <Target Name="CoverletGetPathMap"
+          DependsOnTargets="InitializeSourceRootMappedPaths"
+          Returns="@(_LocalTopLevelSourceRoot)"
+          Condition="'$(DeterministicSourcePaths)' == 'true'">
+    <ItemGroup>
+      <_LocalTopLevelSourceRoot Include="@(SourceRoot)" Condition="'%(SourceRoot.NestedRoot)' == ''"/>
+    </ItemGroup>
+  </Target>
+
 </Project>

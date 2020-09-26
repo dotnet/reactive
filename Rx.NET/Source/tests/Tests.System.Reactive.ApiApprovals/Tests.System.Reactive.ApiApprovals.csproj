@@ -8,8 +8,8 @@
   <ItemGroup>
     <Compile Remove="Api\*.verified.cs" />
     <Compile Remove="Api\*.received.cs" />
-    <None Include="Api\*.verified.cs" />
-    <None Include="Api\*.received.cs" />
+    <None Include="Api\*.verified.cs" Visible="true" />
+    <None Include="Api\*.received.cs" Visible="true" />
   </ItemGroup>
 
   <ItemGroup>

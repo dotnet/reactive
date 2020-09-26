@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - master
+      - main
       - rel/*
   paths:
     include:
@@ -12,7 +12,7 @@ trigger:
 pr:
   branches:
     include:
-    - master
+    - main
     - rel/*
   paths:
     include:
@@ -24,8 +24,7 @@ stages:
 - stage: Build
   jobs:
   - job: Build
-    pool:
-      vmImage: windows-2019
+    pool: vs2019-preview
 
     variables:
       BuildConfiguration: Release
@@ -34,9 +33,10 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 3.1.x SDK
+      displayName: Use .NET Core 5.0.x SDK
       inputs:
-        version: 3.1.x
+        version: 5.0.x
+        includePreviewVersions: true
         performMultiLevelLookup: true
 
     - task: DotNetCoreCLI@2
@@ -70,26 +70,18 @@ stages:
         arguments: install --tool-path . dotnet-reportgenerator-globaltool
       displayName: Install ReportGenerator tool
 
-    - task: MSBuild@1
-      displayName: Build System.Reactive.sln
-      inputs:
-        solution: Rx.NET/Source/System.Reactive.sln
-        msbuildArguments: /t:rebuild /p:ContinuousIntegrationBuild=false
-        configuration: $(BuildConfiguration)
-        maximumCpuCount: false
-
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: Rx.NET/Source/tests/Tests.System.Reactive/*.csproj
-        arguments: -c $(BuildConfiguration) --no-build --no-restore --filter "SkipCI!=true" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
+        arguments: -c $(BuildConfiguration) --filter "SkipCI!=true" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
       displayName: Run Unit Tests
 
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj
-        arguments: -c $(BuildConfiguration) --no-build --no-restore
+        arguments: -c $(BuildConfiguration) 
       displayName: Run Api Approvals Tests
 
     - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Rx.NET/Source/coverlet/reports -reporttypes:"Cobertura"
@@ -114,10 +106,11 @@ stages:
       artifact: ApprovalsTests
       condition: always()
 
-  - job: Integration_Linux_Tests
-    dependsOn: Build
+- stage: IntegrationTests
+  jobs:
+  - job: Linux
     pool:
-      vmImage: ubuntu-16.04
+      vmImage: ubuntu-latest
 
     variables:
       BuildConfiguration: Release
@@ -127,7 +120,13 @@ stages:
     steps:
     - task: UseDotNet@2
       inputs:
-        version: '3.0.x'
+        version: 5.0.x
+        includePreviewVersions: true
+
+    - task: UseDotNet@2
+      inputs:
+        version: '3.1.x'
+        packageType: runtime
 
     - task: UseDotNet@2
       inputs:
@@ -178,20 +177,26 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f netcoreapp3.0
-      displayName: Run 3.0 Tests on Linux
+        arguments: -c $(BuildConfiguration) -f net5.0 --filter "SkipCI!=true"
+      displayName: Run 5.0 Tests on Linux
 
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) --filter "SkipCI!=true" -f netcoreapp2.1 /p:TargetFrameworks=netcoreapp2.1
+        arguments: -c $(BuildConfiguration) -f netcoreapp3.1 --filter "SkipCI!=true"
+      displayName: Run 3.1 Tests on Linux
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: test
+        projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
+        arguments: -c $(BuildConfiguration) -f netcoreapp2.1 --filter "SkipCI!=true" 
       displayName: Run 2.1 Tests on Linux
 
-  - job: Integration_WindowsDesktop_Tests
-    dependsOn: Build
+  - job: WindowsDesktop    
     pool:
-      vmImage: windows-2019
+      vmImage: windows-latest
 
     variables:
       BuildConfiguration: Release
@@ -201,7 +206,8 @@ stages:
     steps:
     - task: UseDotNet@2
       inputs:
-        version: '3.0.x'
+        version: 5.0.x
+        includePreviewVersions: true
         performMultiLevelLookup: true
 
     - task: DotNetCoreCLI@2
@@ -249,10 +255,10 @@ stages:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/WindowsDesktopTests/WindowsDesktopTests.csproj
         arguments: -c $(BuildConfiguration) --filter "SkipCI!=true"
-      displayName: Run 3.0 Tests on WindowDesktop
+      displayName: Run Tests on Window Desktop
 
 - stage: CodeSign
-  condition: and(succeeded('Build'), not(eq(variables['build.reason'], 'PullRequest')))
+  condition: and(succeeded('IntegrationTests'), not(eq(variables['build.reason'], 'PullRequest')))
   jobs:
   - deployment: CodeSign
     displayName: Code Signing

@@ -34,7 +34,7 @@ namespace System.Reactive.PlatformServices
                 return (T)(object)new ExceptionServicesImpl();
             }
 
-#if !NO_THREAD || WINDOWS
+#if !NO_THREAD || LEGACY_WINRT
             if (t == typeof(IConcurrencyAbstractionLayer))
             {
                 return (T)(object)new ConcurrencyAbstractionLayerImpl();

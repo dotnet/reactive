@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#if !WINDOWS && !NO_THREAD
+#if !LEGACY_WINRT && !NO_THREAD
 using System.Reactive.Disposables;
 using System.Threading;
 

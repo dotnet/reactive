@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;netcoreapp2.1;net5.0</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Tests.System.Reactive</AssemblyName>
@@ -10,10 +10,10 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netcoreapp2.1'">
-    <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING</DefineConstants>
+    <DefineConstants>$(DefineConstants);</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;LINUX</DefineConstants>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net5.0' ">
+    <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.0-preview-20181205-02" />    
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />    
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
     <PackageReference Include="System.Reactive" Version="4.2.0-preview.63" />

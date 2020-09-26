@@ -256,7 +256,7 @@ namespace System.Reactive.Linq
 
             if (disconnectDelay < TimeSpan.Zero)
             {
-                throw new ArgumentException("disconnectDelay");
+                throw new ArgumentException("Delay cannot be less than zero", "disconnectDelay");
             }
 
             return s_impl.RefCount(source, disconnectDelay);
@@ -285,7 +285,7 @@ namespace System.Reactive.Linq
 
             if (disconnectDelay < TimeSpan.Zero)
             {
-                throw new ArgumentException("disconnectDelay");
+                throw new ArgumentException("Delay cannot be less than zero", "disconnectDelay");
             }
 
             return s_impl.RefCount(source, disconnectDelay, scheduler);
@@ -333,7 +333,7 @@ namespace System.Reactive.Linq
 
             if (disconnectDelay < TimeSpan.Zero)
             {
-                throw new ArgumentException("disconnectDelay");
+                throw new ArgumentException("Delay cannot be less than zero", "disconnectDelay");
             }
             if (minObservers <= 0)
             {
@@ -368,7 +368,7 @@ namespace System.Reactive.Linq
 
             if (disconnectDelay < TimeSpan.Zero)
             {
-                throw new ArgumentException("disconnectDelay");
+                throw new ArgumentException("Delay cannot be less than zero", "disconnectDelay");
             }
             if (minObservers <= 0)
             {

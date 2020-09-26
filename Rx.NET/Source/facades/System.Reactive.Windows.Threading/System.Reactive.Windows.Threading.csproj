@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
-    <TargetFrameworks>net46;uap10.0</TargetFrameworks>
+    <TargetFrameworks>net46;uap10.0.16299</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>

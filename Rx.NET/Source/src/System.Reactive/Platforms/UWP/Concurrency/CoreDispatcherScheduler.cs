@@ -6,9 +6,11 @@
 using System.Reactive.Disposables;
 using System.Runtime.ExceptionServices;
 using System.Threading;
+using Windows.System;
 using Windows.UI.Core;
+#if HAS_OS_XAML
 using Windows.UI.Xaml;
-
+#endif
 namespace System.Reactive.Concurrency
 {
     /// <summary>
@@ -28,7 +30,7 @@ namespace System.Reactive.Concurrency
         public CoreDispatcherScheduler(CoreDispatcher dispatcher)
         {
             Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
-            Priority = CoreDispatcherPriority.Normal;
+            Priority = CoreDispatcherPriority.Normal;           
         }
 
         /// <summary>
@@ -50,7 +52,7 @@ namespace System.Reactive.Concurrency
         {
             get
             {
-                var window = Window.Current;
+                var window = CoreWindow.GetForCurrentThread();
                 if (window == null)
                 {
                     throw new InvalidOperationException(Strings_WindowsThreading.NO_WINDOW_CURRENT);
@@ -64,6 +66,8 @@ namespace System.Reactive.Concurrency
         /// Gets the <see cref="CoreDispatcher"/> associated with the <see cref="CoreDispatcherScheduler"/>.
         /// </summary>
         public CoreDispatcher Dispatcher { get; }
+
+        private DispatcherQueue? _dispatcherQueue;
 
         /// <summary>
         /// Gets the priority at which work is scheduled.
@@ -108,10 +112,10 @@ namespace System.Reactive.Concurrency
                         // For scheduler implementation guidance rules, see TaskPoolScheduler.cs
                         // in System.Reactive.PlatformServices\Reactive\Concurrency.
                         //
-                        var timer = new DispatcherTimer
-                        {
-                            Interval = TimeSpan.Zero
-                        };
+                        
+                        var timer = CreateDispatcherQueue().CreateTimer();
+                        timer.Interval = TimeSpan.Zero;
+
                         timer.Tick += (o, e) =>
                         {
                             timer.Stop();
@@ -127,6 +131,28 @@ namespace System.Reactive.Concurrency
                 d,
                 res.AsDisposable()
             );
+        }
+
+        private DispatcherQueue CreateDispatcherQueue()
+        {
+            if(_dispatcherQueue != null)
+            {
+                return _dispatcherQueue;
+            }
+
+            if(Dispatcher.HasThreadAccess)
+            {
+                _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+                return _dispatcherQueue;
+            }
+
+            // We're on a different thread, get it from the right one
+            Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            {
+                _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+            }).GetAwaiter().GetResult(); // This is a synchronous call and we need the result to proceed
+
+            return _dispatcherQueue!;
         }
 
         /// <summary>
@@ -158,7 +184,8 @@ namespace System.Reactive.Concurrency
         {
             var d = new MultipleAssignmentDisposable();
 
-            var timer = new DispatcherTimer();
+
+            var timer = CreateDispatcherQueue().CreateTimer();
 
             timer.Tick += (o, e) =>
             {
@@ -219,7 +246,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            var timer = new DispatcherTimer();
+            var timer = CreateDispatcherQueue().CreateTimer();
 
             var state1 = state;
 

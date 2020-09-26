@@ -1,6 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFrameworks>netcoreapp3.1;net5.0;net5.0-windows10.0.19041</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Tests.System.Reactive</AssemblyName>
@@ -12,8 +12,11 @@
   </PropertyGroup>
   
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;HAS_WINFORMS;HAS_DISPATCHER;DESKTOPCLR</DefineConstants>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net5.0-windows'))">
+    <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.0-preview-20190203-03" />    
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />    
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
     <PackageReference Include="System.Reactive" Version="4.2.0-preview.63" />
