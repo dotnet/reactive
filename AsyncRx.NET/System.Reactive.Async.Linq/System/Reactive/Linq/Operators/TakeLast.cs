@@ -161,7 +161,7 @@ namespace System.Reactive.Linq
                                 queue.Dequeue();
                             }
 
-                            return Task.CompletedTask;
+                            return default;
                         },
                         observer.OnErrorAsync,
                         async () =>
@@ -223,7 +223,7 @@ namespace System.Reactive.Linq
 
                             Trim(now);
 
-                            return Task.CompletedTask;
+                            return default;
                         },
                         observer.OnErrorAsync,
                         async () =>

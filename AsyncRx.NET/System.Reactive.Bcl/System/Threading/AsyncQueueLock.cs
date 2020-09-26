@@ -9,13 +9,13 @@ namespace System.Threading
 {
     public sealed class AsyncQueueLock : IAsyncDisposable
     {
-        private readonly Queue<Func<Task>> _queue = new Queue<Func<Task>>();
+        private readonly Queue<Func<ValueTask>> _queue = new Queue<Func<ValueTask>>();
         private readonly AsyncLock _gate = new AsyncLock();
 
         private bool _isAcquired;
         private bool _hasFaulted;
 
-        public async Task WaitAsync(Func<Task> action)
+        public async ValueTask WaitAsync(Func<ValueTask> action)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
@@ -36,7 +36,7 @@ namespace System.Threading
             {
                 while (true)
                 {
-                    var next = default(Func<Task>);
+                    var next = default(Func<ValueTask>);
 
                     using (await _gate.LockAsync().ConfigureAwait(false))
                     {

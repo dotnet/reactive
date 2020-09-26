@@ -15,7 +15,7 @@ namespace System.Reactive
 
         private int _status = Idle;
 
-        public Task OnCompletedAsync()
+        public ValueTask OnCompletedAsync()
         {
             TryEnter();
 
@@ -29,9 +29,9 @@ namespace System.Reactive
             }
         }
 
-        protected abstract Task OnCompletedAsyncCore();
+        protected abstract ValueTask OnCompletedAsyncCore();
 
-        public Task OnErrorAsync(Exception error)
+        public ValueTask OnErrorAsync(Exception error)
         {
             if (error == null)
                 throw new ArgumentNullException(nameof(error));
@@ -48,9 +48,9 @@ namespace System.Reactive
             }
         }
 
-        protected abstract Task OnErrorAsyncCore(Exception error);
+        protected abstract ValueTask OnErrorAsyncCore(Exception error);
 
-        public Task OnNextAsync(T value)
+        public ValueTask OnNextAsync(T value)
         {
             TryEnter();
 
@@ -64,7 +64,7 @@ namespace System.Reactive
             }
         }
 
-        protected abstract Task OnNextAsyncCore(T value);
+        protected abstract ValueTask OnNextAsyncCore(T value);
 
         private void TryEnter()
         {

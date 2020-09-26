@@ -46,7 +46,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
 
@@ -122,7 +122,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -202,7 +202,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -286,7 +286,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -374,7 +374,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -466,7 +466,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -562,7 +562,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -662,7 +662,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -766,7 +766,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -874,7 +874,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -986,7 +986,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -1102,7 +1102,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -1222,7 +1222,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -1346,7 +1346,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -1474,7 +1474,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
@@ -1606,7 +1606,7 @@ namespace System.Reactive.Joins
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
             var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
             var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);

@@ -120,7 +120,7 @@ namespace System.Reactive.Linq
                                 await observer.OnErrorAsync(ex).ConfigureAwait(false);
                             }
                         },
-                        () => Task.CompletedTask
+                        () => default
                     )
                 );
         }

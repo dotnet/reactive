@@ -114,7 +114,7 @@ namespace System.Reactive
             }
         }
 
-        protected override async Task OnCompletedAsyncCore()
+        protected override async ValueTask OnCompletedAsyncCore()
         {
             using (await _lock.LockAsync().ConfigureAwait(false))
             {
@@ -125,7 +125,7 @@ namespace System.Reactive
             }
         }
 
-        protected override async Task OnErrorAsyncCore(Exception error)
+        protected override async ValueTask OnErrorAsyncCore(Exception error)
         {
             using (await _lock.LockAsync().ConfigureAwait(false))
             {
@@ -137,7 +137,7 @@ namespace System.Reactive
             }
         }
 
-        protected override async Task OnNextAsyncCore(T value)
+        protected override async ValueTask OnNextAsyncCore(T value)
         {
             using (await _lock.LockAsync().ConfigureAwait(false))
             {
@@ -151,6 +151,10 @@ namespace System.Reactive
         protected abstract IAwaitable RendezVous(Task task);
 
         protected abstract IAwaitable<R> RendezVous<R>(Task<R> task);
+
+        protected abstract IAwaitable RendezVous(ValueTask task);
+
+        protected abstract IAwaitable<R> RendezVous<R>(ValueTask<R> task);
 
         public abstract ValueTask DisposeAsync();
     }

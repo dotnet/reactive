@@ -95,7 +95,7 @@ namespace System.Reactive.Linq
 
             var innerSubscription = new SerialAsyncDisposable();
 
-            async Task NextAsync()
+            async ValueTask NextAsync()
             {
                 var next = default(IAsyncObservable<TSource>);
 

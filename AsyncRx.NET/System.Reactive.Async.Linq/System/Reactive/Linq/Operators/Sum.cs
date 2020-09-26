@@ -82,7 +82,7 @@ namespace System.Reactive.Linq
                 {
                     sum += x;
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -120,7 +120,7 @@ namespace System.Reactive.Linq
                 {
                     sum += x;
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -143,7 +143,7 @@ namespace System.Reactive.Linq
                 {
                     sum += x;
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -237,7 +237,7 @@ namespace System.Reactive.Linq
                         sum += x.GetValueOrDefault();
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -278,7 +278,7 @@ namespace System.Reactive.Linq
                         sum += x.GetValueOrDefault();
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -304,7 +304,7 @@ namespace System.Reactive.Linq
                         sum += x.GetValueOrDefault();
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>

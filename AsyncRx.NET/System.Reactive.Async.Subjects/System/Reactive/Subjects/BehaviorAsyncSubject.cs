@@ -52,7 +52,7 @@ namespace System.Reactive.Subjects
             return true;
         }
 
-        public async Task OnCompletedAsync()
+        public async ValueTask OnCompletedAsync()
         {
             IAsyncObserver<T>[] observers;
 
@@ -71,9 +71,9 @@ namespace System.Reactive.Subjects
             await OnCompletedAsyncCore(observers).ConfigureAwait(false);
         }
 
-        protected abstract Task OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers);
+        protected abstract ValueTask OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers);
 
-        public async Task OnErrorAsync(Exception error)
+        public async ValueTask OnErrorAsync(Exception error)
         {
             if (error == null)
                 throw new ArgumentNullException(nameof(error));
@@ -95,9 +95,9 @@ namespace System.Reactive.Subjects
             await OnErrorAsyncCore(observers, error).ConfigureAwait(false);
         }
 
-        protected abstract Task OnErrorAsyncCore(IEnumerable<IAsyncObserver<T>> observers, Exception error);
+        protected abstract ValueTask OnErrorAsyncCore(IEnumerable<IAsyncObserver<T>> observers, Exception error);
 
-        public async Task OnNextAsync(T value)
+        public async ValueTask OnNextAsync(T value)
         {
             IAsyncObserver<T>[] observers;
 
@@ -116,7 +116,7 @@ namespace System.Reactive.Subjects
             await OnNextAsyncCore(observers, value).ConfigureAwait(false);
         }
 
-        protected abstract Task OnNextAsyncCore(IEnumerable<IAsyncObserver<T>> observers, T value);
+        protected abstract ValueTask OnNextAsyncCore(IEnumerable<IAsyncObserver<T>> observers, T value);
 
         public async Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
         {

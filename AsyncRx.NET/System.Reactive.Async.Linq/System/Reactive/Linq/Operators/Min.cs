@@ -116,7 +116,7 @@ namespace System.Reactive.Linq
                         found = true;
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -158,7 +158,7 @@ namespace System.Reactive.Linq
                         found = true;
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -200,7 +200,7 @@ namespace System.Reactive.Linq
                         found = true;
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -242,7 +242,7 @@ namespace System.Reactive.Linq
                         found = true;
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -284,7 +284,7 @@ namespace System.Reactive.Linq
                         found = true;
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -317,7 +317,7 @@ namespace System.Reactive.Linq
                         min = x;
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -343,7 +343,7 @@ namespace System.Reactive.Linq
                         min = x;
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -369,7 +369,7 @@ namespace System.Reactive.Linq
                         min = x;
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -395,7 +395,7 @@ namespace System.Reactive.Linq
                         min = x;
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>
@@ -421,7 +421,7 @@ namespace System.Reactive.Linq
                         min = x;
                     }
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>

@@ -8,11 +8,11 @@ namespace System.Reactive
 {
     public class UnsafeAsyncObserver<T> : IAsyncObserver<T>
     {
-        private readonly Func<T, Task> _onNextAsync;
-        private readonly Func<Exception, Task> _onErrorAsync;
-        private readonly Func<Task> _onCompletedAsync;
+        private readonly Func<T, ValueTask> _onNextAsync;
+        private readonly Func<Exception, ValueTask> _onErrorAsync;
+        private readonly Func<ValueTask> _onCompletedAsync;
 
-        public UnsafeAsyncObserver(Func<T, Task> onNextAsync, Func<Exception, Task> onErrorAsync, Func<Task> onCompletedAsync)
+        public UnsafeAsyncObserver(Func<T, ValueTask> onNextAsync, Func<Exception, ValueTask> onErrorAsync, Func<ValueTask> onCompletedAsync)
         {
             if (onNextAsync == null)
                 throw new ArgumentNullException(nameof(onNextAsync));
@@ -26,10 +26,10 @@ namespace System.Reactive
             _onCompletedAsync = onCompletedAsync;
         }
 
-        public Task OnCompletedAsync() => _onCompletedAsync();
+        public ValueTask OnCompletedAsync() => _onCompletedAsync();
 
-        public Task OnErrorAsync(Exception error) => _onErrorAsync(error ?? throw new ArgumentNullException(nameof(error)));
+        public ValueTask OnErrorAsync(Exception error) => _onErrorAsync(error ?? throw new ArgumentNullException(nameof(error)));
 
-        public Task OnNextAsync(T value) => _onNextAsync(value);
+        public ValueTask OnNextAsync(T value) => _onNextAsync(value);
     }
 }

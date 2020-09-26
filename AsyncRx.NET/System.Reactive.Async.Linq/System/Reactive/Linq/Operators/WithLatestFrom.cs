@@ -96,7 +96,7 @@ namespace System.Reactive.Linq
 
             var gate = new AsyncLock();
 
-            async Task OnErrorAsync(Exception ex)
+            async ValueTask OnErrorAsync(Exception ex)
             {
                 using (await gate.LockAsync().ConfigureAwait(false))
                 {
@@ -151,7 +151,7 @@ namespace System.Reactive.Linq
                             }
                         },
                         OnErrorAsync,
-                        () => Task.CompletedTask
+                        () => default
                     )
                 );
         }
@@ -163,7 +163,7 @@ namespace System.Reactive.Linq
 
             var gate = new AsyncLock();
 
-            async Task OnErrorAsync(Exception ex)
+            async ValueTask OnErrorAsync(Exception ex)
             {
                 using (await gate.LockAsync().ConfigureAwait(false))
                 {
@@ -206,7 +206,7 @@ namespace System.Reactive.Linq
                             }
                         },
                         OnErrorAsync,
-                        () => Task.CompletedTask
+                        () => default
                     )
                 );
         }

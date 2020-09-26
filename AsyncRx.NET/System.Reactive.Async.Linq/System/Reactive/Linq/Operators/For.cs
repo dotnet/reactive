@@ -44,7 +44,7 @@ namespace System.Reactive.Linq
                         MoveNext
                     );
 
-                async Task MoveNext()
+                async ValueTask MoveNext()
                 {
                     var b = default(bool);
                     var next = default(IAsyncObservable<TResult>);

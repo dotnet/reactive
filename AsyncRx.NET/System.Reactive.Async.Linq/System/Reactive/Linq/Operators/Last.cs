@@ -57,7 +57,7 @@ namespace System.Reactive.Linq
                     hasValue = true;
                     lastValue = x;
 
-                    return Task.CompletedTask;
+                    return default;
                 },
                 observer.OnErrorAsync,
                 async () =>

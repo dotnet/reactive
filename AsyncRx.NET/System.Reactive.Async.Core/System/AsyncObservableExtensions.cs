@@ -9,17 +9,17 @@ namespace System
 {
     public static class AsyncObservableExtensions
     {
-        public static Task<IAsyncDisposable> SubscribeAsync<T>(this IAsyncObservable<T> source, Func<T, Task> onNextAsync)
+        public static Task<IAsyncDisposable> SubscribeAsync<T>(this IAsyncObservable<T> source, Func<T, ValueTask> onNextAsync)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (onNextAsync == null)
                 throw new ArgumentNullException(nameof(onNextAsync));
 
-            return source.SubscribeAsync(new AsyncObserver<T>(onNextAsync, ex => Task.FromException(ex), () => Task.CompletedTask));
+            return source.SubscribeAsync(new AsyncObserver<T>(onNextAsync, ex => new ValueTask(Task.FromException(ex)), () => default));
         }
 
-        public static Task<IAsyncDisposable> SubscribeAsync<T>(this IAsyncObservable<T> source, Func<T, Task> onNextAsync, Func<Exception, Task> onErrorAsync)
+        public static Task<IAsyncDisposable> SubscribeAsync<T>(this IAsyncObservable<T> source, Func<T, ValueTask> onNextAsync, Func<Exception, ValueTask> onErrorAsync)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -28,10 +28,10 @@ namespace System
             if (onErrorAsync == null)
                 throw new ArgumentNullException(nameof(onErrorAsync));
 
-            return source.SubscribeAsync(new AsyncObserver<T>(onNextAsync, onErrorAsync, () => Task.CompletedTask));
+            return source.SubscribeAsync(new AsyncObserver<T>(onNextAsync, onErrorAsync, () => default));
         }
 
-        public static Task<IAsyncDisposable> SubscribeAsync<T>(this IAsyncObservable<T> source, Func<T, Task> onNextAsync, Func<Task> onCompletedAsync)
+        public static Task<IAsyncDisposable> SubscribeAsync<T>(this IAsyncObservable<T> source, Func<T, ValueTask> onNextAsync, Func<ValueTask> onCompletedAsync)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -40,10 +40,10 @@ namespace System
             if (onCompletedAsync == null)
                 throw new ArgumentNullException(nameof(onCompletedAsync));
 
-            return source.SubscribeAsync(new AsyncObserver<T>(onNextAsync, ex => Task.FromException(ex), onCompletedAsync));
+            return source.SubscribeAsync(new AsyncObserver<T>(onNextAsync, ex => new ValueTask(Task.FromException(ex)), onCompletedAsync));
         }
 
-        public static Task<IAsyncDisposable> SubscribeAsync<T>(this IAsyncObservable<T> source, Func<T, Task> onNextAsync, Func<Exception, Task> onErrorAsync, Func<Task> onCompletedAsync)
+        public static Task<IAsyncDisposable> SubscribeAsync<T>(this IAsyncObservable<T> source, Func<T, ValueTask> onNextAsync, Func<Exception, ValueTask> onErrorAsync, Func<ValueTask> onCompletedAsync)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -64,7 +64,7 @@ namespace System
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            return source.SubscribeAsync(new AsyncObserver<T>(x => { onNext(x); return Task.CompletedTask; }, ex => Task.FromException(ex), () => Task.CompletedTask));
+            return source.SubscribeAsync(new AsyncObserver<T>(x => { onNext(x); return default; }, ex => new ValueTask(Task.FromException(ex)), () => default));
         }
 
         public static Task<IAsyncDisposable> SubscribeAsync<T>(this IAsyncObservable<T> source, Action<T> onNext, Action<Exception> onError)
@@ -76,7 +76,7 @@ namespace System
             if (onError == null)
                 throw new ArgumentNullException(nameof(onError));
 
-            return source.SubscribeAsync(new AsyncObserver<T>(x => { onNext(x); return Task.CompletedTask; }, ex => { onError(ex); return Task.CompletedTask; }, () => Task.CompletedTask));
+            return source.SubscribeAsync(new AsyncObserver<T>(x => { onNext(x); return default; }, ex => { onError(ex); return default; }, () => default));
         }
 
         public static Task<IAsyncDisposable> SubscribeAsync<T>(this IAsyncObservable<T> source, Action<T> onNext, Action onCompleted)
@@ -88,7 +88,7 @@ namespace System
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return source.SubscribeAsync(new AsyncObserver<T>(x => { onNext(x); return Task.CompletedTask; }, ex => Task.FromException(ex), () => { onCompleted(); return Task.CompletedTask; }));
+            return source.SubscribeAsync(new AsyncObserver<T>(x => { onNext(x); return default; }, ex => new ValueTask(Task.FromException(ex)), () => { onCompleted(); return default; }));
         }
 
         public static Task<IAsyncDisposable> SubscribeAsync<T>(this IAsyncObservable<T> source, Action<T> onNext, Action<Exception> onError, Action onCompleted)
@@ -102,7 +102,7 @@ namespace System
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return source.SubscribeAsync(new AsyncObserver<T>(x => { onNext(x); return Task.CompletedTask; }, ex => { onError(ex); return Task.CompletedTask; }, () => { onCompleted(); return Task.CompletedTask; }));
+            return source.SubscribeAsync(new AsyncObserver<T>(x => { onNext(x); return default; }, ex => { onError(ex); return default; }, () => { onCompleted(); return default; }));
         }
     }
 }

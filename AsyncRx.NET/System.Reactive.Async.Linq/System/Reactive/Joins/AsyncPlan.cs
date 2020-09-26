@@ -15,7 +15,7 @@ namespace System.Reactive.Joins
 
         internal abstract ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate);
 
-        internal static AsyncJoinObserver<TSource> CreateObserver<TSource>(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObservable<TSource> observable, Func<Exception, Task> onError)
+        internal static AsyncJoinObserver<TSource> CreateObserver<TSource>(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObservable<TSource> observable, Func<Exception, ValueTask> onError)
         {
             var res = default(AsyncJoinObserver<TSource>);
 

@@ -635,7 +635,7 @@ namespace System.Reactive.Linq
 
                 var buffer = new List<TSource>();
 
-                async Task CreateBufferCloseAsync()
+                async ValueTask CreateBufferCloseAsync()
                 {
                     var closing = default(IAsyncObservable<TBufferClosing>);
 
@@ -657,7 +657,7 @@ namespace System.Reactive.Linq
                     var closingSubscription = new SingleAssignmentAsyncDisposable();
                     await closeSubscription.AssignAsync(closingSubscription).ConfigureAwait(false);
 
-                    async Task CloseBufferAsync()
+                    async ValueTask CloseBufferAsync()
                     {
                         await closingSubscription.DisposeAsync().ConfigureAwait(false);
 
