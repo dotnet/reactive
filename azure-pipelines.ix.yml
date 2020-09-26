@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - master
+      - main
       - rel/*
   paths:
     include:
@@ -12,7 +12,7 @@ trigger:
 pr:
   branches:
     include:
-      - master
+      - main
       - rel/*
   paths:
     include:
@@ -21,7 +21,7 @@ pr:
       - azure-pipelines.ix.yml
 
 pool:
-  vmImage: windows-2019
+  vmImage: windows-latest
 
 variables:
   BuildConfiguration: Release
