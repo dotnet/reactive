@@ -108,7 +108,7 @@ stages:
 
 - stage: IntegrationTests
   jobs:
-  - job: Integration_Linux_Tests
+  - job: Linux
     pool:
       vmImage: ubuntu-latest
 
@@ -177,24 +177,24 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f net5.0
+        arguments: -c $(BuildConfiguration) -f net5.0 --filter "SkipCI!=true"
       displayName: Run 5.0 Tests on Linux
 
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f netcoreapp3.1
+        arguments: -c $(BuildConfiguration) -f netcoreapp3.1 --filter "SkipCI!=true"
       displayName: Run 3.1 Tests on Linux
 
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) --filter "SkipCI!=true" -f netcoreapp2.1 /p:TargetFrameworks=netcoreapp2.1
+        arguments: -c $(BuildConfiguration) -f netcoreapp2.1 --filter "SkipCI!=true" 
       displayName: Run 2.1 Tests on Linux
 
-  - job: Integration_WindowsDesktop_Tests    
+  - job: WindowsDesktop    
     pool:
       vmImage: windows-latest
 
