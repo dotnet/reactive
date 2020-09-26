@@ -486,7 +486,7 @@ namespace System.Reactive.Linq
 
             var nullGroup = default(SequentialSimpleAsyncSubject<TElement>);
 
-            async Task OnErrorAsync(Exception ex)
+            async ValueTask OnErrorAsync(Exception ex)
             {
                 if (nullGroup != null)
                 {

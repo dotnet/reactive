@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
                     await sad.AssignAsync(d).ConfigureAwait(false);
                 }
 
-                async Task MoveNext()
+                async ValueTask MoveNext()
                 {
                     var b = default(bool);
 
@@ -97,7 +97,7 @@ namespace System.Reactive.Linq
                     await sad.AssignAsync(d).ConfigureAwait(false);
                 }
 
-                async Task MoveNext()
+                async ValueTask MoveNext()
                 {
                     var b = default(bool);
 

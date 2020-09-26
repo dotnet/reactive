@@ -30,7 +30,7 @@ namespace System.Reactive.Linq
                         MoveNext
                     );
 
-                async Task MoveNext()
+                async ValueTask MoveNext()
                 {
                     var b = default(bool);
 
@@ -83,7 +83,7 @@ namespace System.Reactive.Linq
                         MoveNext
                     );
 
-                async Task MoveNext()
+                async ValueTask MoveNext()
                 {
                     var b = default(bool);
 

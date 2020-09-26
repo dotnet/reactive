@@ -152,7 +152,7 @@ namespace System.Reactive
             /// </summary>
             /// <param name="observer">Observer to invoke the notification on.</param>
             /// <returns>Task indicating the completion of invoking the observer method.</returns>
-            public override Task AcceptAsync(IAsyncObserver<T> observer)
+            public override ValueTask AcceptAsync(IAsyncObserver<T> observer)
             {
                 if (observer == null)
                     throw new ArgumentNullException(nameof(observer));
@@ -219,7 +219,7 @@ namespace System.Reactive
             /// <param name="onError">Delegate to invoke for an OnError notification.</param>
             /// <param name="onCompleted">Delegate to invoke for an OnCompleted notification.</param>
             /// <returns>Task indicating the completion of invoking the delegate.</returns>
-            public override Task AcceptAsync(Func<T, Task> onNext, Func<Exception, Task> onError, Func<Task> onCompleted)
+            public override ValueTask AcceptAsync(Func<T, ValueTask> onNext, Func<Exception, ValueTask> onError, Func<ValueTask> onCompleted)
             {
                 if (onNext == null)
                     throw new ArgumentNullException(nameof(onNext));
@@ -239,7 +239,7 @@ namespace System.Reactive
             /// <param name="onError">Delegate to invoke for an OnError notification.</param>
             /// <param name="onCompleted">Delegate to invoke for an OnCompleted notification.</param>
             /// <returns>Task containing the result produced by the observation.</returns>
-            public override Task<TResult> AcceptAsync<TResult>(Func<T, Task<TResult>> onNext, Func<Exception, Task<TResult>> onError, Func<Task<TResult>> onCompleted)
+            public override ValueTask<TResult> AcceptAsync<TResult>(Func<T, ValueTask<TResult>> onNext, Func<Exception, ValueTask<TResult>> onError, Func<ValueTask<TResult>> onCompleted)
             {
                 if (onNext == null)
                     throw new ArgumentNullException(nameof(onNext));
@@ -333,7 +333,7 @@ namespace System.Reactive
             /// </summary>
             /// <param name="observer">Observer to invoke the notification on.</param>
             /// <returns>Task indicating the completion of invoking the observer method.</returns>
-            public override Task AcceptAsync(IAsyncObserver<T> observer)
+            public override ValueTask AcceptAsync(IAsyncObserver<T> observer)
             {
                 if (observer == null)
                     throw new ArgumentNullException(nameof(observer));
@@ -400,7 +400,7 @@ namespace System.Reactive
             /// <param name="onError">Delegate to invoke for an OnError notification.</param>
             /// <param name="onCompleted">Delegate to invoke for an OnCompleted notification.</param>
             /// <returns>Task indicating the completion of invoking the delegate.</returns>
-            public override Task AcceptAsync(Func<T, Task> onNext, Func<Exception, Task> onError, Func<Task> onCompleted)
+            public override ValueTask AcceptAsync(Func<T, ValueTask> onNext, Func<Exception, ValueTask> onError, Func<ValueTask> onCompleted)
             {
                 if (onNext == null)
                     throw new ArgumentNullException(nameof(onNext));
@@ -420,7 +420,7 @@ namespace System.Reactive
             /// <param name="onError">Delegate to invoke for an OnError notification.</param>
             /// <param name="onCompleted">Delegate to invoke for an OnCompleted notification.</param>
             /// <returns>Task containing the result produced by the observation.</returns>
-            public override Task<TResult> AcceptAsync<TResult>(Func<T, Task<TResult>> onNext, Func<Exception, Task<TResult>> onError, Func<Task<TResult>> onCompleted)
+            public override ValueTask<TResult> AcceptAsync<TResult>(Func<T, ValueTask<TResult>> onNext, Func<Exception, ValueTask<TResult>> onError, Func<ValueTask<TResult>> onCompleted)
             {
                 if (onNext == null)
                     throw new ArgumentNullException(nameof(onNext));
@@ -511,7 +511,7 @@ namespace System.Reactive
             /// </summary>
             /// <param name="observer">Observer to invoke the notification on.</param>
             /// <returns>Task indicating the completion of invoking the observer method.</returns>
-            public override Task AcceptAsync(IAsyncObserver<T> observer)
+            public override ValueTask AcceptAsync(IAsyncObserver<T> observer)
             {
                 if (observer == null)
                     throw new ArgumentNullException(nameof(observer));
@@ -578,7 +578,7 @@ namespace System.Reactive
             /// <param name="onError">Delegate to invoke for an OnError notification.</param>
             /// <param name="onCompleted">Delegate to invoke for an OnCompleted notification.</param>
             /// <returns>Task indicating the completion of invoking the delegate.</returns>
-            public override Task AcceptAsync(Func<T, Task> onNext, Func<Exception, Task> onError, Func<Task> onCompleted)
+            public override ValueTask AcceptAsync(Func<T, ValueTask> onNext, Func<Exception, ValueTask> onError, Func<ValueTask> onCompleted)
             {
                 if (onNext == null)
                     throw new ArgumentNullException(nameof(onNext));
@@ -598,7 +598,7 @@ namespace System.Reactive
             /// <param name="onError">Delegate to invoke for an OnError notification.</param>
             /// <param name="onCompleted">Delegate to invoke for an OnCompleted notification.</param>
             /// <returns>Task containing the result produced by the observation.</returns>
-            public override Task<TResult> AcceptAsync<TResult>(Func<T, Task<TResult>> onNext, Func<Exception, Task<TResult>> onError, Func<Task<TResult>> onCompleted)
+            public override ValueTask<TResult> AcceptAsync<TResult>(Func<T, ValueTask<TResult>> onNext, Func<Exception, ValueTask<TResult>> onError, Func<ValueTask<TResult>> onCompleted)
             {
                 if (onNext == null)
                     throw new ArgumentNullException(nameof(onNext));
@@ -681,7 +681,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="observer">Observer to invoke the notification on.</param>
         /// <returns>Task indicating the completion of invoking the observer method.</returns>
-        public abstract Task AcceptAsync(IAsyncObserver<T> observer);
+        public abstract ValueTask AcceptAsync(IAsyncObserver<T> observer);
 
 #if NOTYET
         /// <summary>
@@ -718,7 +718,7 @@ namespace System.Reactive
         /// <param name="onError">Delegate to invoke for an OnError notification.</param>
         /// <param name="onCompleted">Delegate to invoke for an OnCompleted notification.</param>
         /// <returns>Task indicating the completion of invoking the delegate.</returns>
-        public abstract Task AcceptAsync(Func<T, Task> onNext, Func<Exception, Task> onError, Func<Task> onCompleted);
+        public abstract ValueTask AcceptAsync(Func<T, ValueTask> onNext, Func<Exception, ValueTask> onError, Func<ValueTask> onCompleted);
 
         /// <summary>
         /// Invokes the delegate corresponding to the notification and returns the produced result.
@@ -728,7 +728,7 @@ namespace System.Reactive
         /// <param name="onError">Delegate to invoke for an OnError notification.</param>
         /// <param name="onCompleted">Delegate to invoke for an OnCompleted notification.</param>
         /// <returns>Task containing the result produced by the observation.</returns>
-        public abstract Task<TResult> AcceptAsync<TResult>(Func<T, Task<TResult>> onNext, Func<Exception, Task<TResult>> onError, Func<Task<TResult>> onCompleted);
+        public abstract ValueTask<TResult> AcceptAsync<TResult>(Func<T, ValueTask<TResult>> onNext, Func<Exception, ValueTask<TResult>> onError, Func<ValueTask<TResult>> onCompleted);
 
 #if NOTYET
         /// <summary>

@@ -23,6 +23,10 @@ namespace System.Reactive
 
         protected override IAwaitable<R> RendezVous<R>(Task<R> task) => new TaskAwaitable<R>(task, false, null, CancellationToken.None);
 
+        protected override IAwaitable RendezVous(ValueTask task) => new ValueTaskAwaitable(task, false, null, CancellationToken.None);
+
+        protected override IAwaitable<R> RendezVous<R>(ValueTask<R> task) => new ValueTaskAwaitable<R>(task, false, null, CancellationToken.None);
+
         protected override Task ScheduleAsync() => RunAsync(_disposable.Token);
     }
 }

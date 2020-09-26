@@ -17,11 +17,11 @@ namespace System.Reactive.Subjects
             _observable = observable;
         }
 
-        public Task OnCompletedAsync() => _observer.OnCompletedAsync();
+        public ValueTask OnCompletedAsync() => _observer.OnCompletedAsync();
 
-        public Task OnErrorAsync(Exception error) => _observer.OnErrorAsync(error ?? throw new ArgumentNullException(nameof(error)));
+        public ValueTask OnErrorAsync(Exception error) => _observer.OnErrorAsync(error ?? throw new ArgumentNullException(nameof(error)));
 
-        public Task OnNextAsync(T value) => _observer.OnNextAsync(value);
+        public ValueTask OnNextAsync(T value) => _observer.OnNextAsync(value);
 
         public Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer) => _observable.SubscribeAsync(observer ?? throw new ArgumentNullException(nameof(observer)));
     }

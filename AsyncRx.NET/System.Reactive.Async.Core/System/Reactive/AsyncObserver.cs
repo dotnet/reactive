@@ -8,11 +8,11 @@ namespace System.Reactive
 {
     public class AsyncObserver<T> : AsyncObserverBase<T>
     {
-        private readonly Func<T, Task> _onNextAsync;
-        private readonly Func<Exception, Task> _onErrorAsync;
-        private readonly Func<Task> _onCompletedAsync;
+        private readonly Func<T, ValueTask> _onNextAsync;
+        private readonly Func<Exception, ValueTask> _onErrorAsync;
+        private readonly Func<ValueTask> _onCompletedAsync;
 
-        public AsyncObserver(Func<T, Task> onNextAsync, Func<Exception, Task> onErrorAsync, Func<Task> onCompletedAsync)
+        public AsyncObserver(Func<T, ValueTask> onNextAsync, Func<Exception, ValueTask> onErrorAsync, Func<ValueTask> onCompletedAsync)
         {
             if (onNextAsync == null)
                 throw new ArgumentNullException(nameof(onNextAsync));
@@ -26,10 +26,10 @@ namespace System.Reactive
             _onCompletedAsync = onCompletedAsync;
         }
 
-        protected override Task OnCompletedAsyncCore() => _onCompletedAsync();
+        protected override ValueTask OnCompletedAsyncCore() => _onCompletedAsync();
 
-        protected override Task OnErrorAsyncCore(Exception error) => _onErrorAsync(error ?? throw new ArgumentNullException(nameof(error)));
+        protected override ValueTask OnErrorAsyncCore(Exception error) => _onErrorAsync(error ?? throw new ArgumentNullException(nameof(error)));
 
-        protected override Task OnNextAsyncCore(T value) => _onNextAsync(value);
+        protected override ValueTask OnNextAsyncCore(T value) => _onNextAsync(value);
     }
 }

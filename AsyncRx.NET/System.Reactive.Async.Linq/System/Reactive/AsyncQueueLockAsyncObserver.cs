@@ -17,10 +17,10 @@ namespace System.Reactive
             _observer = observer;
         }
 
-        protected override Task OnCompletedAsyncCore() => _gate.WaitAsync(_observer.OnCompletedAsync);
+        protected override ValueTask OnCompletedAsyncCore() => _gate.WaitAsync(_observer.OnCompletedAsync);
 
-        protected override Task OnErrorAsyncCore(Exception error) => _gate.WaitAsync(() => _observer.OnErrorAsync(error));
+        protected override ValueTask OnErrorAsyncCore(Exception error) => _gate.WaitAsync(() => _observer.OnErrorAsync(error));
 
-        protected override Task OnNextAsyncCore(T value) => _gate.WaitAsync(() => _observer.OnNextAsync(value));
+        protected override ValueTask OnNextAsyncCore(T value) => _gate.WaitAsync(() => _observer.OnNextAsync(value));
     }
 }

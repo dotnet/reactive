@@ -68,7 +68,7 @@ namespace System.Reactive.Linq
             var leftId = default(int);
             var rightId = default(int);
 
-            async Task OnErrorAsync(Exception ex)
+            async ValueTask OnErrorAsync(Exception ex)
             {
                 using (await gate.LockAsync().ConfigureAwait(false))
                 {
@@ -114,7 +114,7 @@ namespace System.Reactive.Linq
 
                         var durationObserver =
                             Create<TLeftDuration>(
-                                d => Task.CompletedTask,
+                                d => default,
                                 OnErrorAsync,
                                 async () =>
                                 {
@@ -201,7 +201,7 @@ namespace System.Reactive.Linq
 
                         var durationObserver =
                             Create<TRightDuration>(
-                                d => Task.CompletedTask,
+                                d => default,
                                 OnErrorAsync,
                                 async () =>
                                 {
@@ -230,7 +230,7 @@ namespace System.Reactive.Linq
                         }
                     },
                     OnErrorAsync,
-                    () => Task.CompletedTask
+                    () => default
                 );
 
             return (leftObserver, rightObserver, refCount);

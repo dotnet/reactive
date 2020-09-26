@@ -9,7 +9,7 @@ namespace System.Reactive.Subjects
 {
     public sealed class SequentialAsyncAsyncSubject<T> : AsyncAsyncSubject<T>
     {
-        protected override async Task OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers)
+        protected override async ValueTask OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers)
         {
             foreach (var observer in observers)
             {
@@ -17,7 +17,7 @@ namespace System.Reactive.Subjects
             }
         }
 
-        protected override async Task OnErrorAsyncCore(IEnumerable<IAsyncObserver<T>> observers, Exception error)
+        protected override async ValueTask OnErrorAsyncCore(IEnumerable<IAsyncObserver<T>> observers, Exception error)
         {
             foreach (var observer in observers)
             {
@@ -25,7 +25,7 @@ namespace System.Reactive.Subjects
             }
         }
 
-        protected override async Task OnNextAsyncCore(IEnumerable<IAsyncObserver<T>> observers, T value)
+        protected override async ValueTask OnNextAsyncCore(IEnumerable<IAsyncObserver<T>> observers, T value)
         {
             foreach (var observer in observers)
             {

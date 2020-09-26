@@ -8,19 +8,19 @@ namespace System.Reactive.Linq
 {
     public static partial class AsyncObserver
     {
-        public static IAsyncObserver<T> Create<T>(Func<T, Task> onNextAsync)
+        public static IAsyncObserver<T> Create<T>(Func<T, ValueTask> onNextAsync)
         {
             if (onNextAsync == null)
                 throw new ArgumentNullException(nameof(onNextAsync));
 
             return new AsyncObserver<T>(
                 onNextAsync,
-                ex => Task.FromException(ex),
-                () => Task.CompletedTask
+                ex => new ValueTask(Task.FromException(ex)),
+                () => default
             );
         }
 
-        public static IAsyncObserver<T> Create<T>(Func<T, Task> onNextAsync, Func<Exception, Task> onErrorAsync, Func<Task> onCompletedAsync)
+        public static IAsyncObserver<T> Create<T>(Func<T, ValueTask> onNextAsync, Func<Exception, ValueTask> onErrorAsync, Func<ValueTask> onCompletedAsync)
         {
             if (onNextAsync == null)
                 throw new ArgumentNullException(nameof(onNextAsync));
@@ -32,7 +32,7 @@ namespace System.Reactive.Linq
             return new AsyncObserver<T>(onNextAsync, onErrorAsync, onCompletedAsync);
         }
 
-        internal static IAsyncObserver<T> CreateUnsafe<T>(Func<T, Task> onNextAsync, Func<Exception, Task> onErrorAsync, Func<Task> onCompletedAsync)
+        internal static IAsyncObserver<T> CreateUnsafe<T>(Func<T, ValueTask> onNextAsync, Func<Exception, ValueTask> onErrorAsync, Func<ValueTask> onCompletedAsync)
         {
             if (onNextAsync == null)
                 throw new ArgumentNullException(nameof(onNextAsync));

@@ -75,7 +75,7 @@ namespace System.Reactive.Linq
             var value = default(TSource);
             var atEnd = false;
 
-            async Task OnSampleAsync()
+            async ValueTask OnSampleAsync()
             {
                 using (await gate.LockAsync().ConfigureAwait(false))
                 {

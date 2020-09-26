@@ -60,7 +60,7 @@ for (var i = 1; i <= 16; i++)
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
-            var onError = new Func<Exception, Task>(observer.OnErrorAsync);
+            var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
 <#
 for (var j = 1; j <= i; j++)

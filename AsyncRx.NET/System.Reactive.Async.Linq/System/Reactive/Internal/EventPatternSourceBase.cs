@@ -70,9 +70,9 @@ namespace System.Reactive
             // [OK] Use of unsafe SubscribeAsync: non-pretentious wrapper of an observable in an event; exceptions can occur during +=.
             //
             var d = _source.SubscribeAsync(
-                x => { _invokeHandler(invoke, /*this,*/ x); return Task.CompletedTask; },
-                ex => { remove(); return Task.FromException(ex); },
-                () => { remove(); return Task.CompletedTask; }
+                x => { _invokeHandler(invoke, /*this,*/ x); return default; },
+                ex => { remove(); return new ValueTask(Task.FromException(ex)); },
+                () => { remove(); return default; }
             );
 
             lock (gate)

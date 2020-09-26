@@ -13,7 +13,7 @@ namespace System.Reactive.Joins
     internal sealed class AsyncJoinObserver<T> : AsyncObserverBase<Notification<T>>, IAsyncJoinObserver
     {
         private readonly IAsyncObservable<T> _source;
-        private readonly Func<Exception, Task> _onError;
+        private readonly Func<Exception, ValueTask> _onError;
 
         private readonly List<ActiveAsyncPlan> _activePlans = new List<ActiveAsyncPlan>();
         private readonly SingleAssignmentAsyncDisposable _subscription = new SingleAssignmentAsyncDisposable();
@@ -21,7 +21,7 @@ namespace System.Reactive.Joins
         private AsyncLock _gate;
         private bool _isDisposed;
 
-        public AsyncJoinObserver(IAsyncObservable<T> source, Func<Exception, Task> onError)
+        public AsyncJoinObserver(IAsyncObservable<T> source, Func<Exception, ValueTask> onError)
         {
             _source = source;
             _onError = onError;
@@ -64,11 +64,11 @@ namespace System.Reactive.Joins
             await _subscription.AssignAsync(d).ConfigureAwait(false);
         }
 
-        protected override Task OnCompletedAsyncCore() => Task.CompletedTask;
+        protected override ValueTask OnCompletedAsyncCore() => default;
 
-        protected override Task OnErrorAsyncCore(Exception error) => Task.CompletedTask;
+        protected override ValueTask OnErrorAsyncCore(Exception error) => default;
 
-        protected override async Task OnNextAsyncCore(Notification<T> notification)
+        protected override async ValueTask OnNextAsyncCore(Notification<T> notification)
         {
             using (await _gate.LockAsync().ConfigureAwait(false))
             {

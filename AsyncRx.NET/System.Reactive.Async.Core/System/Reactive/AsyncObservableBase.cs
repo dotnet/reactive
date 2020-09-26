@@ -30,7 +30,7 @@ namespace System.Reactive
             private readonly object _gate = new object();
 
             private IAsyncDisposable _subscription;
-            private Task _task;
+            private ValueTask _task;
             private bool _disposing;
 
             public AutoDetachAsyncObserver(IAsyncObserver<T> observer)
@@ -62,7 +62,7 @@ namespace System.Reactive
 
             public async ValueTask DisposeAsync()
             {
-                var task = default(Task);
+                var task = default(ValueTask);
                 var subscription = default(IAsyncDisposable);
 
                 lock (_gate)
@@ -115,7 +115,7 @@ namespace System.Reactive
                 }
             }
 
-            protected override async Task OnCompletedAsyncCore()
+            protected override async ValueTask OnCompletedAsyncCore()
             {
                 lock (_gate)
                 {
@@ -137,7 +137,7 @@ namespace System.Reactive
                 }
             }
 
-            protected override async Task OnErrorAsyncCore(Exception error)
+            protected override async ValueTask OnErrorAsyncCore(Exception error)
             {
                 lock (_gate)
                 {
@@ -159,7 +159,7 @@ namespace System.Reactive
                 }
             }
 
-            protected override async Task OnNextAsyncCore(T value)
+            protected override async ValueTask OnNextAsyncCore(T value)
             {
                 lock (_gate)
                 {
@@ -179,7 +179,7 @@ namespace System.Reactive
                 {
                     lock (_gate)
                     {
-                        _task = null;
+                        _task = default;
                     }
                 }
             }
@@ -197,7 +197,7 @@ namespace System.Reactive
                         subscription = _subscription;
                     }
 
-                    _task = null;
+                    _task = default;
                 }
 
                 if (subscription != null)

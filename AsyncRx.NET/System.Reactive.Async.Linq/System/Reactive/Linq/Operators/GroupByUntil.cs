@@ -566,7 +566,7 @@ namespace System.Reactive.Linq
                 var nullGate = new object();
                 var nullGroup = default(IAsyncSubject<TElement>);
 
-                async Task OnErrorAsync(Exception ex)
+                async ValueTask OnErrorAsync(Exception ex)
                 {
                     var nullGroupLocal = default(IAsyncSubject<TElement>);
 
@@ -671,7 +671,7 @@ namespace System.Reactive.Linq
 
                                     var durationSubscription = new SingleAssignmentAsyncDisposable();
 
-                                    async Task Expire()
+                                    async ValueTask Expire()
                                     {
                                         if (key == null)
                                         {

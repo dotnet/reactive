@@ -713,14 +713,14 @@ namespace System.Reactive.Linq
 
             var window = default(IAsyncSubject<TSource>);
 
-            async Task CreateWindowAsync()
+            async ValueTask CreateWindowAsync()
             {
                 window = new SequentialSimpleAsyncSubject<TSource>();
                 var wrapper = new WindowAsyncObservable<TSource>(window, refCount);
                 await observer.OnNextAsync(wrapper).ConfigureAwait(false);
             }
 
-            async Task CreateWindowCloseAsync()
+            async ValueTask CreateWindowCloseAsync()
             {
                 var closing = default(IAsyncObservable<TWindowClosing>);
 
@@ -741,7 +741,7 @@ namespace System.Reactive.Linq
                 var closingSubscription = new SingleAssignmentAsyncDisposable();
                 await closeSubscription.AssignAsync(closingSubscription).ConfigureAwait(false);
 
-                async Task CloseWindowAsync()
+                async ValueTask CloseWindowAsync()
                 {
                     await closingSubscription.DisposeAsync().ConfigureAwait(false);
 

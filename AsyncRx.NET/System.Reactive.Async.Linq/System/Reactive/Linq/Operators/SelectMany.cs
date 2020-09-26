@@ -204,7 +204,7 @@ namespace System.Reactive.Linq
 
             var disposable = new CompositeAsyncDisposable();
 
-            async Task OnErrorAsync(Exception ex)
+            async ValueTask OnErrorAsync(Exception ex)
             {
                 using (await gate.LockAsync().ConfigureAwait(false))
                 {
@@ -212,7 +212,7 @@ namespace System.Reactive.Linq
                 }
             };
 
-            async Task OnCompletedAsync()
+            async ValueTask OnCompletedAsync()
             {
                 using (await gate.LockAsync().ConfigureAwait(false))
                 {

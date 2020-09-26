@@ -20,7 +20,7 @@ namespace System.Reactive.Subjects
         private bool _done;
         private Exception _error;
 
-        public async Task OnCompletedAsync()
+        public async ValueTask OnCompletedAsync()
         {
             bool hasValue;
             T value;
@@ -50,9 +50,9 @@ namespace System.Reactive.Subjects
             await OnCompletedAsyncCore(observers).ConfigureAwait(false);
         }
 
-        protected abstract Task OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers);
+        protected abstract ValueTask OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers);
 
-        public Task OnErrorAsync(Exception error)
+        public ValueTask OnErrorAsync(Exception error)
         {
             if (error == null)
                 throw new ArgumentNullException(nameof(error));
@@ -63,7 +63,7 @@ namespace System.Reactive.Subjects
             {
                 if (_done || _error != null)
                 {
-                    return Task.CompletedTask;
+                    return default;
                 }
 
                 _error = error;
@@ -74,9 +74,9 @@ namespace System.Reactive.Subjects
             return OnErrorAsyncCore(observers, error);
         }
 
-        protected abstract Task OnErrorAsyncCore(IEnumerable<IAsyncObserver<T>> observers, Exception error);
+        protected abstract ValueTask OnErrorAsyncCore(IEnumerable<IAsyncObserver<T>> observers, Exception error);
 
-        public Task OnNextAsync(T value)
+        public ValueTask OnNextAsync(T value)
         {
             lock (_gate)
             {
@@ -87,10 +87,10 @@ namespace System.Reactive.Subjects
                 }
             }
 
-            return Task.CompletedTask;
+            return default;
         }
 
-        protected abstract Task OnNextAsyncCore(IEnumerable<IAsyncObserver<T>> observers, T value);
+        protected abstract ValueTask OnNextAsyncCore(IEnumerable<IAsyncObserver<T>> observers, T value);
 
         public async Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
         {
@@ -214,13 +214,13 @@ namespace System.Reactive.Subjects
                 }
             }
 
-            public Task OnCompletedAsync() => InvokeAsync();
+            public ValueTask OnCompletedAsync() => InvokeAsync();
 
-            public Task OnErrorAsync(Exception error) => InvokeAsync();
+            public ValueTask OnErrorAsync(Exception error) => InvokeAsync();
 
-            public Task OnNextAsync(T value) => Task.CompletedTask;
+            public ValueTask OnNextAsync(T value) => default;
 
-            private Task InvokeAsync()
+            private ValueTask InvokeAsync()
             {
                 if (_context != null)
                 {
@@ -231,7 +231,7 @@ namespace System.Reactive.Subjects
                     _continuation();
                 }
 
-                return Task.CompletedTask;
+                return default;
             }
         }
     }

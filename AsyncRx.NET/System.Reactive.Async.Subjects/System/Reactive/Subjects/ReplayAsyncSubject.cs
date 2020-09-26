@@ -109,11 +109,11 @@ namespace System.Reactive.Subjects
 
         private static IScheduledAsyncObserver<T> CreateScheduledObserver(IAsyncObserver<T> observer, IAsyncScheduler scheduler) => new ScheduledAsyncObserver<T>(observer, scheduler);
 
-        public Task OnCompletedAsync() => _impl.OnCompletedAsync();
+        public ValueTask OnCompletedAsync() => _impl.OnCompletedAsync();
 
-        public Task OnErrorAsync(Exception error) => _impl.OnErrorAsync(error ?? throw new ArgumentNullException(nameof(error)));
+        public ValueTask OnErrorAsync(Exception error) => _impl.OnErrorAsync(error ?? throw new ArgumentNullException(nameof(error)));
 
-        public Task OnNextAsync(T value) => _impl.OnNextAsync(value);
+        public ValueTask OnNextAsync(T value) => _impl.OnNextAsync(value);
 
         public Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer) => _impl.SubscribeAsync(observer ?? throw new ArgumentNullException(nameof(observer)));
 
@@ -130,7 +130,7 @@ namespace System.Reactive.Subjects
                 _concurrent = concurrent;
             }
 
-            public async Task OnCompletedAsync()
+            public async ValueTask OnCompletedAsync()
             {
                 var observers = default(IScheduledAsyncObserver<T>[]);
 
@@ -145,7 +145,7 @@ namespace System.Reactive.Subjects
 
                         if (_concurrent)
                         {
-                            await Task.WhenAll(observers.Select(o => o.OnCompletedAsync())).ConfigureAwait(false);
+                            await Task.WhenAll(observers.Select(o => o.OnCompletedAsync().AsTask())).ConfigureAwait(false);
                         }
                         else
                         {
@@ -163,7 +163,7 @@ namespace System.Reactive.Subjects
                 }
             }
 
-            public async Task OnErrorAsync(Exception error)
+            public async ValueTask OnErrorAsync(Exception error)
             {
                 var observers = default(IScheduledAsyncObserver<T>[]);
 
@@ -179,7 +179,7 @@ namespace System.Reactive.Subjects
 
                         if (_concurrent)
                         {
-                            await Task.WhenAll(observers.Select(o => o.OnErrorAsync(error))).ConfigureAwait(false);
+                            await Task.WhenAll(observers.Select(o => o.OnErrorAsync(error).AsTask())).ConfigureAwait(false);
                         }
                         else
                         {
@@ -197,7 +197,7 @@ namespace System.Reactive.Subjects
                 }
             }
 
-            public async Task OnNextAsync(T value)
+            public async ValueTask OnNextAsync(T value)
             {
                 var observers = default(IScheduledAsyncObserver<T>[]);
 
@@ -212,7 +212,7 @@ namespace System.Reactive.Subjects
 
                         if (_concurrent)
                         {
-                            await Task.WhenAll(observers.Select(o => o.OnNextAsync(value))).ConfigureAwait(false);
+                            await Task.WhenAll(observers.Select(o => o.OnNextAsync(value).AsTask())).ConfigureAwait(false);
                         }
                         else
                         {

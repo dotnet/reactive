@@ -261,17 +261,17 @@ namespace Playground
                 x =>
                 {
                     Console.WriteLine(x);
-                    return Task.CompletedTask;
+                    return default;
                 },
                 ex =>
                 {
                     Console.WriteLine("Error: " + ex);
-                    return Task.CompletedTask;
+                    return default;
                 },
                 () =>
                 {
                     Console.WriteLine("Completed");
-                    return Task.CompletedTask;
+                    return default;
                 }
             );
         }

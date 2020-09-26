@@ -8,8 +8,8 @@ namespace System
 {
     public interface IAsyncObserver<in T>
     {
-        Task OnNextAsync(T value);
-        Task OnErrorAsync(Exception error);
-        Task OnCompletedAsync();
+        ValueTask OnNextAsync(T value);
+        ValueTask OnErrorAsync(Exception error);
+        ValueTask OnCompletedAsync();
     }
 }
