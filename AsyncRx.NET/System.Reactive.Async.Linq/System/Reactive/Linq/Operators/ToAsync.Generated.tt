@@ -139,7 +139,7 @@ for (var i = 0; i <= 16; i++)
         invokeArgs += ", ";
     }
 #>
-        public static Task<IAsyncDisposable> ToAsync<<#=genArgs#>>(IAsyncObserver<TResult> observer, <#=type#> function<#=invokePars#>)
+        public static ValueTask<IAsyncDisposable> ToAsync<<#=genArgs#>>(IAsyncObserver<TResult> observer, <#=type#> function<#=invokePars#>)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -149,7 +149,7 @@ for (var i = 0; i <= 16; i++)
             return ToAsync(observer, function, <#=invokeArgs#>TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<<#=genArgs#>>(IAsyncObserver<TResult> observer, <#=type#> function<#=invokePars#>, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<<#=genArgs#>>(IAsyncObserver<TResult> observer, <#=type#> function<#=invokePars#>, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -204,7 +204,7 @@ for (var i = 0; i <= 16; i++)
         invokeArgs += ", ";
     }
 #>
-        public static Task<IAsyncDisposable> ToAsync<#=genArgs#>(IAsyncObserver<Unit> observer, <#=type#> action<#=invokePars#>)
+        public static ValueTask<IAsyncDisposable> ToAsync<#=genArgs#>(IAsyncObserver<Unit> observer, <#=type#> action<#=invokePars#>)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -214,7 +214,7 @@ for (var i = 0; i <= 16; i++)
             return ToAsync(observer, action, <#=invokeArgs#>TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<#=genArgs#>(IAsyncObserver<Unit> observer, <#=type#> action<#=invokePars#>, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<#=genArgs#>(IAsyncObserver<Unit> observer, <#=type#> action<#=invokePars#>, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

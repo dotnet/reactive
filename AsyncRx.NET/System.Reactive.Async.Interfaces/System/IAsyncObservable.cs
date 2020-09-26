@@ -8,6 +8,6 @@ namespace System
 {
     public interface IAsyncObservable<out T>
     {
-        Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer);
+        ValueTask<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer);
     }
 }

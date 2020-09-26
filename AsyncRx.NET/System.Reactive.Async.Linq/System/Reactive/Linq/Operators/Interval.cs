@@ -30,8 +30,8 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static Task<IAsyncDisposable> Interval(IAsyncObserver<long> observer, TimeSpan period) => Timer(observer, period, period);
+        public static ValueTask<IAsyncDisposable> Interval(IAsyncObserver<long> observer, TimeSpan period) => Timer(observer, period, period);
 
-        public static Task<IAsyncDisposable> Interval(IAsyncObserver<long> observer, TimeSpan period, IAsyncScheduler scheduler) => Timer(observer, period, period, scheduler);
+        public static ValueTask<IAsyncDisposable> Interval(IAsyncObserver<long> observer, TimeSpan period, IAsyncScheduler scheduler) => Timer(observer, period, period, scheduler);
     }
 }

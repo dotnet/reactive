@@ -17,7 +17,7 @@ namespace System.Reactive
     internal abstract class EventPatternSourceBase<TSender, TEventArgs>
     {
         private readonly IAsyncObservable<EventPattern<TSender, TEventArgs>> _source;
-        private readonly Dictionary<Delegate, Stack<IDisposable>> _subscriptions;
+        private readonly Dictionary<Delegate, Stack<IAsyncDisposable>> _subscriptions;
         private readonly Action<Action<TSender, TEventArgs>, /*object,*/ EventPattern<TSender, TEventArgs>> _invokeHandler;
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace System.Reactive
 
             _source = source;
             _invokeHandler = invokeHandler;
-            _subscriptions = new Dictionary<Delegate, Stack<IDisposable>>();
+            _subscriptions = new Dictionary<Delegate, Stack<IAsyncDisposable>>();
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace System.Reactive
                 x => { _invokeHandler(invoke, /*this,*/ x); return default; },
                 ex => { remove(); return new ValueTask(Task.FromException(ex)); },
                 () => { remove(); return default; }
-            );
+            ).GetAwaiter().GetResult();
 
             lock (gate)
             {
@@ -85,13 +85,13 @@ namespace System.Reactive
             }
         }
 
-        private void Add(Delegate handler, IDisposable disposable)
+        private void Add(Delegate handler, IAsyncDisposable disposable)
         {
             lock (_subscriptions)
             {
-                var l = new Stack<IDisposable>();
+                var l = new Stack<IAsyncDisposable>();
                 if (!_subscriptions.TryGetValue(handler, out l))
-                    _subscriptions[handler] = l = new Stack<IDisposable>();
+                    _subscriptions[handler] = l = new Stack<IAsyncDisposable>();
 
                 l.Push(disposable);
             }
@@ -107,11 +107,11 @@ namespace System.Reactive
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            var d = default(IDisposable);
+            var d = default(IAsyncDisposable);
 
             lock (_subscriptions)
             {
-                var l = new Stack<IDisposable>();
+                var l = new Stack<IAsyncDisposable>();
                 if (_subscriptions.TryGetValue(handler, out l))
                 {
                     d = l.Pop();
@@ -120,7 +120,10 @@ namespace System.Reactive
                 }
             }
 
-            d?.Dispose();
+            if (d != null)
+            {
+                d.DisposeAsync().GetAwaiter().GetResult();
+            }
         }
     }
 }

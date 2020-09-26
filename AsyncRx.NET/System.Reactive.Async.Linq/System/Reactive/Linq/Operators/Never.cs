@@ -11,7 +11,7 @@ namespace System.Reactive.Linq
     {
         public static IAsyncObservable<TSource> Never<TSource>()
         {
-            return Create<TSource>(observer => Task.FromResult(AsyncDisposable.Nop));
+            return Create<TSource>(observer => new ValueTask<IAsyncDisposable>(AsyncDisposable.Nop));
         }
     }
 }

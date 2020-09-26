@@ -25,9 +25,9 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static Task<IAsyncDisposable> Return<TSource>(IAsyncObserver<TSource> observer, TSource value) => Return(observer, value, ImmediateAsyncScheduler.Instance);
+        public static ValueTask<IAsyncDisposable> Return<TSource>(IAsyncObserver<TSource> observer, TSource value) => Return(observer, value, ImmediateAsyncScheduler.Instance);
 
-        public static Task<IAsyncDisposable> Return<TSource>(IAsyncObserver<TSource> observer, TSource value, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Return<TSource>(IAsyncObserver<TSource> observer, TSource value, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

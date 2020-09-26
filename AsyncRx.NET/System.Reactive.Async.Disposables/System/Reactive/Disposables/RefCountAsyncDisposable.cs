@@ -24,7 +24,7 @@ namespace System.Reactive.Disposables
             _count = 0;
         }
 
-        public async Task<IAsyncDisposable> GetDisposableAsync()
+        public async ValueTask<IAsyncDisposable> GetDisposableAsync()
         {
             using (await _gate.LockAsync().ConfigureAwait(false))
             {

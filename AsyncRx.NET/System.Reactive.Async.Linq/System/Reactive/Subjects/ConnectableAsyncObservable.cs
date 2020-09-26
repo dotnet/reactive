@@ -22,7 +22,7 @@ namespace System.Reactive.Subjects
             this.source = source.AsAsyncObservable();
         }
 
-        public async Task<IAsyncDisposable> ConnectAsync()
+        public async ValueTask<IAsyncDisposable> ConnectAsync()
         {
             using (await gate.LockAsync().ConfigureAwait(false))
             {
@@ -62,7 +62,7 @@ namespace System.Reactive.Subjects
             }
         }
 
-        public Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<TResult> observer)
+        public ValueTask<IAsyncDisposable> SubscribeAsync(IAsyncObserver<TResult> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

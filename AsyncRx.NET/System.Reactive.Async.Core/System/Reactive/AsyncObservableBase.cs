@@ -8,7 +8,7 @@ namespace System.Reactive
 {
     public abstract class AsyncObservableBase<T> : IAsyncObservable<T>
     {
-        public async Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
+        public async ValueTask<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -22,7 +22,7 @@ namespace System.Reactive
             return autoDetach;
         }
 
-        protected abstract Task<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<T> observer);
+        protected abstract ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<T> observer);
 
         private sealed class AutoDetachAsyncObserver : AsyncObserverBase<T>, IAsyncDisposable
         {

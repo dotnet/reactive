@@ -9,7 +9,7 @@ namespace System.Reactive.Linq
 {
     public static partial class AsyncObservable
     {
-        public static IAsyncObservable<T> Create<T>(Func<IAsyncObserver<T>, Task<IAsyncDisposable>> subscribeAsync)
+        public static IAsyncObservable<T> Create<T>(Func<IAsyncObserver<T>, ValueTask<IAsyncDisposable>> subscribeAsync)
         {
             if (subscribeAsync == null)
                 throw new ArgumentNullException(nameof(subscribeAsync));
@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
             return new AsyncObservable<T>(subscribeAsync);
         }
 
-        public static Task<IAsyncDisposable> SubscribeSafeAsync<T>(this IAsyncObservable<T> source, IAsyncObserver<T> observer)
+        public static ValueTask<IAsyncDisposable> SubscribeSafeAsync<T>(this IAsyncObservable<T> source, IAsyncObserver<T> observer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -26,7 +26,7 @@ namespace System.Reactive.Linq
 
             return CoreAsync();
 
-            async Task<IAsyncDisposable> CoreAsync()
+            async ValueTask<IAsyncDisposable> CoreAsync()
             {
                 try
                 {

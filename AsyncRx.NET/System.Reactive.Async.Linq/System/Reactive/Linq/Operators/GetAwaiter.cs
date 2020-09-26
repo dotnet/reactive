@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
 
             var subscribeTask = source.SubscribeSafeAsync(subject);
 
-            subscribeTask.ContinueWith(t =>
+            subscribeTask.AsTask().ContinueWith(t =>
             {
                 if (t.Exception != null)
                 {
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq
 
             var subscribeTask = source.SubscribeSafeAsync(subject);
 
-            subscribeTask.ContinueWith(t =>
+            subscribeTask.AsTask().ContinueWith(t =>
             {
                 if (t.Exception != null)
                 {

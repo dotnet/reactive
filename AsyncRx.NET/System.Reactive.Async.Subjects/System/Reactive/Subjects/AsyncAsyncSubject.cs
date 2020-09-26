@@ -92,7 +92,7 @@ namespace System.Reactive.Subjects
 
         protected abstract ValueTask OnNextAsyncCore(IEnumerable<IAsyncObserver<T>> observers, T value);
 
-        public async Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
+        public async ValueTask<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -190,7 +190,7 @@ namespace System.Reactive.Subjects
         {
             var subscribeTask = SubscribeAsync(new AwaitObserver(continuation, originalContext));
 
-            subscribeTask.ContinueWith(t =>
+            subscribeTask.AsTask().ContinueWith(t =>
             {
                 if (t.Exception != null)
                 {

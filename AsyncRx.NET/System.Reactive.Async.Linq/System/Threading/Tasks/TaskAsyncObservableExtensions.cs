@@ -49,9 +49,9 @@ namespace System.Threading.Tasks
             return AsyncObservable.Create<TResult>(observer => task.AcceptAsync(observer, scheduler));
         }
 
-        public static Task<IAsyncDisposable> AcceptAsync(this Task task, IAsyncObserver<Unit> observer) => AcceptAsync(task, observer, ImmediateAsyncScheduler.Instance);
+        public static ValueTask<IAsyncDisposable> AcceptAsync(this Task task, IAsyncObserver<Unit> observer) => AcceptAsync(task, observer, ImmediateAsyncScheduler.Instance);
 
-        public static Task<IAsyncDisposable> AcceptAsync(this Task task, IAsyncObserver<Unit> observer, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> AcceptAsync(this Task task, IAsyncObserver<Unit> observer, IAsyncScheduler scheduler)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
@@ -60,7 +60,7 @@ namespace System.Threading.Tasks
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            Task<IAsyncDisposable> CompleteAsync()
+            ValueTask<IAsyncDisposable> CompleteAsync()
             {
                 return scheduler.ScheduleAsync(async ct =>
                 {
@@ -85,7 +85,7 @@ namespace System.Threading.Tasks
                 });
             }
 
-            Task<IAsyncDisposable> CoreAsync()
+            ValueTask<IAsyncDisposable> CoreAsync()
             {
                 if (task.IsCompleted)
                 {
@@ -111,9 +111,9 @@ namespace System.Threading.Tasks
             return CoreAsync();
         }
 
-        public static Task<IAsyncDisposable> AcceptAsync<TResult>(this Task<TResult> task, IAsyncObserver<TResult> observer) => AcceptAsync(task, observer, ImmediateAsyncScheduler.Instance);
+        public static ValueTask<IAsyncDisposable> AcceptAsync<TResult>(this Task<TResult> task, IAsyncObserver<TResult> observer) => AcceptAsync(task, observer, ImmediateAsyncScheduler.Instance);
 
-        public static Task<IAsyncDisposable> AcceptAsync<TResult>(this Task<TResult> task, IAsyncObserver<TResult> observer, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> AcceptAsync<TResult>(this Task<TResult> task, IAsyncObserver<TResult> observer, IAsyncScheduler scheduler)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
@@ -122,7 +122,7 @@ namespace System.Threading.Tasks
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            Task<IAsyncDisposable> CompleteAsync()
+            ValueTask<IAsyncDisposable> CompleteAsync()
             {
                 return scheduler.ScheduleAsync(async ct =>
                 {
@@ -147,7 +147,7 @@ namespace System.Threading.Tasks
                 });
             }
 
-            Task<IAsyncDisposable> CoreAsync()
+            ValueTask<IAsyncDisposable> CoreAsync()
             {
                 if (task.IsCompleted)
                 {

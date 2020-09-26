@@ -115,7 +115,7 @@ namespace System.Reactive.Subjects
 
         public ValueTask OnNextAsync(T value) => _impl.OnNextAsync(value);
 
-        public Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer) => _impl.SubscribeAsync(observer ?? throw new ArgumentNullException(nameof(observer)));
+        public ValueTask<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer) => _impl.SubscribeAsync(observer ?? throw new ArgumentNullException(nameof(observer)));
 
         private abstract class ReplayBase : IAsyncSubject<T>
         {
@@ -245,7 +245,7 @@ namespace System.Reactive.Subjects
                 }
             }
 
-            public async Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
+            public async ValueTask<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
             {
                 var res = AsyncDisposable.Nop;
 

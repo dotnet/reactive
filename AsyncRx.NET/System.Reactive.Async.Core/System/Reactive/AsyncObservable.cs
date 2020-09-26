@@ -8,9 +8,9 @@ namespace System.Reactive
 {
     public class AsyncObservable<T> : AsyncObservableBase<T>
     {
-        private readonly Func<IAsyncObserver<T>, Task<IAsyncDisposable>> _subscribeAsync;
+        private readonly Func<IAsyncObserver<T>, ValueTask<IAsyncDisposable>> _subscribeAsync;
 
-        public AsyncObservable(Func<IAsyncObserver<T>, Task<IAsyncDisposable>> subscribeAsync)
+        public AsyncObservable(Func<IAsyncObserver<T>, ValueTask<IAsyncDisposable>> subscribeAsync)
         {
             if (subscribeAsync == null)
                 throw new ArgumentNullException(nameof(subscribeAsync));
@@ -18,7 +18,7 @@ namespace System.Reactive
             _subscribeAsync = subscribeAsync;
         }
 
-        protected override Task<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<T> observer)
+        protected override ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<T> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

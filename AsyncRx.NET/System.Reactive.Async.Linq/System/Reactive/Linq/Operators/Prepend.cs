@@ -98,7 +98,7 @@ namespace System.Reactive.Linq
             }
         }
 
-        public static Task<IAsyncDisposable> Prepend<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source, TSource value, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Prepend<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source, TSource value, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -109,7 +109,7 @@ namespace System.Reactive.Linq
 
             return CoreAsync();
 
-            async Task<IAsyncDisposable> CoreAsync()
+            async ValueTask<IAsyncDisposable> CoreAsync()
             {
                 var subscription = new SingleAssignmentAsyncDisposable();
 
@@ -151,7 +151,7 @@ namespace System.Reactive.Linq
             }
         }
 
-        public static Task<IAsyncDisposable> Prepend<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source, IAsyncScheduler scheduler, params TSource[] values)
+        public static ValueTask<IAsyncDisposable> Prepend<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source, IAsyncScheduler scheduler, params TSource[] values)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -164,7 +164,7 @@ namespace System.Reactive.Linq
 
             return CoreAsync();
 
-            async Task<IAsyncDisposable> CoreAsync()
+            async ValueTask<IAsyncDisposable> CoreAsync()
             {
                 var subscription = new SingleAssignmentAsyncDisposable();
 
@@ -209,7 +209,7 @@ namespace System.Reactive.Linq
             }
         }
 
-        public static Task<IAsyncDisposable> Prepend<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source, IAsyncScheduler scheduler, IEnumerable<TSource> values)
+        public static ValueTask<IAsyncDisposable> Prepend<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source, IAsyncScheduler scheduler, IEnumerable<TSource> values)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -222,7 +222,7 @@ namespace System.Reactive.Linq
 
             return CoreAsync();
 
-            async Task<IAsyncDisposable> CoreAsync()
+            async ValueTask<IAsyncDisposable> CoreAsync()
             {
                 var subscription = new SingleAssignmentAsyncDisposable();
 

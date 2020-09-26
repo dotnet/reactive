@@ -291,14 +291,14 @@ namespace System.Runtime.CompilerServices
             /// <param name="observer">Observer that will receive notifications from the observable sequence.</param>
             /// <returns>Disposable object representing an observer's subscription to the observable sequence.</returns>
             /// <exception cref="ArgumentNullException"><paramref name="observer"/> is null.</exception>
-            public Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
+            public ValueTask<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
             {
                 if (_subject != null)
                 {
                     return _subject.SubscribeAsync(observer);
                 }
 
-                async Task<IAsyncDisposable> CoreAsync()
+                async ValueTask<IAsyncDisposable> CoreAsync()
                 {
                     if (_exception != null)
                     {

@@ -211,7 +211,7 @@ namespace System.Reactive.Linq
                         return default;
                     });
 
-                    return Task.FromResult(dispose);
+                    return new ValueTask<IAsyncDisposable>(dispose);
                 });
             }
             else
@@ -248,7 +248,7 @@ namespace System.Reactive.Linq
                         return default;
                     });
 
-                    return Task.FromResult(dispose);
+                    return new ValueTask<IAsyncDisposable>(dispose);
                 });
             }
 

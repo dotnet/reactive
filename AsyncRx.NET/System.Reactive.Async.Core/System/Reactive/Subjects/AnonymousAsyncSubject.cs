@@ -23,6 +23,6 @@ namespace System.Reactive.Subjects
 
         public ValueTask OnNextAsync(T value) => _observer.OnNextAsync(value);
 
-        public Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer) => _observable.SubscribeAsync(observer ?? throw new ArgumentNullException(nameof(observer)));
+        public ValueTask<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer) => _observable.SubscribeAsync(observer ?? throw new ArgumentNullException(nameof(observer)));
     }
 }

@@ -11,7 +11,7 @@ namespace System.Reactive.Concurrency
     {
         public virtual DateTimeOffset Now => DateTimeOffset.Now;
 
-        public virtual Task<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action)
+        public virtual ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
@@ -19,7 +19,7 @@ namespace System.Reactive.Concurrency
             return ScheduleAsyncCore(action);
         }
 
-        public virtual Task<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action, TimeSpan dueTime)
+        public virtual ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action, TimeSpan dueTime)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
@@ -34,7 +34,7 @@ namespace System.Reactive.Concurrency
             });
         }
 
-        public virtual Task<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action, DateTimeOffset dueTime)
+        public virtual ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action, DateTimeOffset dueTime)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
@@ -49,7 +49,7 @@ namespace System.Reactive.Concurrency
             });
         }
 
-        protected virtual async Task<IAsyncDisposable> ScheduleAsyncCore(Func<CancellationToken, Task> action)
+        protected virtual async ValueTask<IAsyncDisposable> ScheduleAsyncCore(Func<CancellationToken, Task> action)
         {
             var cad = new CancellationAsyncDisposable();
 
