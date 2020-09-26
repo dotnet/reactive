@@ -30,9 +30,9 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static Task<IAsyncDisposable> Throw<TSource>(IAsyncObserver<TSource> observer, Exception error) => Throw(observer, error, ImmediateAsyncScheduler.Instance);
+        public static ValueTask<IAsyncDisposable> Throw<TSource>(IAsyncObserver<TSource> observer, Exception error) => Throw(observer, error, ImmediateAsyncScheduler.Instance);
 
-        public static Task<IAsyncDisposable> Throw<TSource>(IAsyncObserver<TSource> observer, Exception error, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Throw<TSource>(IAsyncObserver<TSource> observer, Exception error, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

@@ -8,6 +8,6 @@ namespace System.Reactive.Subjects
 {
     public interface IConnectableAsyncObservable<out T> : IAsyncObservable<T>
     {
-        Task<IAsyncDisposable> ConnectAsync();
+        ValueTask<IAsyncDisposable> ConnectAsync();
     }
 }

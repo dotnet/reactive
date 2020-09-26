@@ -184,7 +184,7 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static Task<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
+        public static ValueTask<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -198,7 +198,7 @@ namespace System.Reactive.Linq
             return Generate(observer, initialState, s => Task.FromResult(condition(s)), s => Task.FromResult(iterate(s)), s => Task.FromResult(resultSelector(s)), TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -214,7 +214,7 @@ namespace System.Reactive.Linq
             return Generate(observer, initialState, s => Task.FromResult(condition(s)), s => Task.FromResult(iterate(s)), s => Task.FromResult(resultSelector(s)), scheduler);
         }
 
-        public static Task<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, Task<bool>> condition, Func<TState, Task<TState>> iterate, Func<TState, Task<TResult>> resultSelector)
+        public static ValueTask<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, Task<bool>> condition, Func<TState, Task<TState>> iterate, Func<TState, Task<TResult>> resultSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -228,7 +228,7 @@ namespace System.Reactive.Linq
             return Generate(observer, initialState, condition, iterate, resultSelector, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, Task<bool>> condition, Func<TState, Task<TState>> iterate, Func<TState, Task<TResult>> resultSelector, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, Task<bool>> condition, Func<TState, Task<TState>> iterate, Func<TState, Task<TResult>> resultSelector, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -292,7 +292,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector)
+        public static ValueTask<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -308,7 +308,7 @@ namespace System.Reactive.Linq
             return Generate(observer, initialState, s => Task.FromResult(condition(s)), s => Task.FromResult(iterate(s)), s => Task.FromResult(resultSelector(s)), s => Task.FromResult(timeSelector(s)), TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -326,7 +326,7 @@ namespace System.Reactive.Linq
             return Generate(observer, initialState, s => Task.FromResult(condition(s)), s => Task.FromResult(iterate(s)), s => Task.FromResult(resultSelector(s)), s => Task.FromResult(timeSelector(s)), scheduler);
         }
 
-        public static Task<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, Task<bool>> condition, Func<TState, Task<TState>> iterate, Func<TState, Task<TResult>> resultSelector, Func<TState, Task<TimeSpan>> timeSelector)
+        public static ValueTask<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, Task<bool>> condition, Func<TState, Task<TState>> iterate, Func<TState, Task<TResult>> resultSelector, Func<TState, Task<TimeSpan>> timeSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -342,7 +342,7 @@ namespace System.Reactive.Linq
             return Generate(observer, initialState, condition, iterate, resultSelector, timeSelector, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, Task<bool>> condition, Func<TState, Task<TState>> iterate, Func<TState, Task<TResult>> resultSelector, Func<TState, Task<TimeSpan>> timeSelector, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, Task<bool>> condition, Func<TState, Task<TState>> iterate, Func<TState, Task<TResult>> resultSelector, Func<TState, Task<TimeSpan>> timeSelector, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -412,7 +412,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector)
+        public static ValueTask<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -428,7 +428,7 @@ namespace System.Reactive.Linq
             return Generate(observer, initialState, s => Task.FromResult(condition(s)), s => Task.FromResult(iterate(s)), s => Task.FromResult(resultSelector(s)), s => Task.FromResult(timeSelector(s)), TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -446,7 +446,7 @@ namespace System.Reactive.Linq
             return Generate(observer, initialState, s => Task.FromResult(condition(s)), s => Task.FromResult(iterate(s)), s => Task.FromResult(resultSelector(s)), s => Task.FromResult(timeSelector(s)), scheduler);
         }
 
-        public static Task<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, Task<bool>> condition, Func<TState, Task<TState>> iterate, Func<TState, Task<TResult>> resultSelector, Func<TState, Task<DateTimeOffset>> timeSelector)
+        public static ValueTask<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, Task<bool>> condition, Func<TState, Task<TState>> iterate, Func<TState, Task<TResult>> resultSelector, Func<TState, Task<DateTimeOffset>> timeSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -462,7 +462,7 @@ namespace System.Reactive.Linq
             return Generate(observer, initialState, condition, iterate, resultSelector, timeSelector, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, Task<bool>> condition, Func<TState, Task<TState>> iterate, Func<TState, Task<TResult>> resultSelector, Func<TState, Task<DateTimeOffset>> timeSelector, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Generate<TState, TResult>(IAsyncObserver<TResult> observer, TState initialState, Func<TState, Task<bool>> condition, Func<TState, Task<TState>> iterate, Func<TState, Task<TResult>> resultSelector, Func<TState, Task<DateTimeOffset>> timeSelector, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

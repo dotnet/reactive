@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
 
             var subscribeTask = source.SubscribeSafeAsync(subject);
 
-            subscribeTask.ContinueWith(t =>
+            subscribeTask.AsTask().ContinueWith(t =>
             {
                 if (t.Exception != null)
                 {
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
             {
                 var d = new SingleAssignmentAsyncDisposable();
 
-                subscribeTask.ContinueWith(t =>
+                subscribeTask.AsTask().ContinueWith(t =>
                 {
                     if (t.Exception == null)
                     {
@@ -73,7 +73,7 @@ namespace System.Reactive.Linq
 
             var subscribeTask = source.SubscribeSafeAsync(subject);
 
-            subscribeTask.ContinueWith(t =>
+            subscribeTask.AsTask().ContinueWith(t =>
             {
                 if (t.Exception != null)
                 {
@@ -83,7 +83,7 @@ namespace System.Reactive.Linq
                 {
                     var ignored = d.AddAsync(t.Result);
 
-                    source.ConnectAsync().ContinueWith(t2 =>
+                    source.ConnectAsync().AsTask().ContinueWith(t2 =>
                     {
                         if (t2.Exception == null)
                         {

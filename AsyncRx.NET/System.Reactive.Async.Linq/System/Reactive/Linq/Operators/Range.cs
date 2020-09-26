@@ -30,9 +30,9 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static Task<IAsyncDisposable> Range(IAsyncObserver<int> observer, int start, int count) => Range(observer, start, count, TaskPoolAsyncScheduler.Default);
+        public static ValueTask<IAsyncDisposable> Range(IAsyncObserver<int> observer, int start, int count) => Range(observer, start, count, TaskPoolAsyncScheduler.Default);
 
-        public static Task<IAsyncDisposable> Range(IAsyncObserver<int> observer, int start, int count, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Range(IAsyncObserver<int> observer, int start, int count, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

@@ -118,7 +118,7 @@ namespace System.Reactive.Linq
 
                         addHandler(converted);
 
-                        return Task.FromResult(AsyncDisposable.Create(() =>
+                        return new ValueTask<IAsyncDisposable>(AsyncDisposable.Create(() =>
                         {
                             removeHandler(converted);
 

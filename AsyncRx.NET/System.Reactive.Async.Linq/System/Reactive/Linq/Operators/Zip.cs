@@ -31,7 +31,7 @@ namespace System.Reactive.Linq
 
                 for (var i = 0; i < count; i++)
                 {
-                    tasks[i] = sources[i].SubscribeSafeAsync(observers[i]);
+                    tasks[i] = sources[i].SubscribeSafeAsync(observers[i]).AsTask();
                 }
 
                 await Task.WhenAll(tasks).ConfigureAwait(false);

@@ -74,9 +74,9 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static Task<IAsyncDisposable> Timer(IAsyncObserver<long> observer, TimeSpan dueTime) => Timer(observer, dueTime, TaskPoolAsyncScheduler.Default);
+        public static ValueTask<IAsyncDisposable> Timer(IAsyncObserver<long> observer, TimeSpan dueTime) => Timer(observer, dueTime, TaskPoolAsyncScheduler.Default);
 
-        public static Task<IAsyncDisposable> Timer(IAsyncObserver<long> observer, TimeSpan dueTime, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Timer(IAsyncObserver<long> observer, TimeSpan dueTime, IAsyncScheduler scheduler)
         {
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
@@ -96,9 +96,9 @@ namespace System.Reactive.Linq
 
         }
 
-        public static Task<IAsyncDisposable> Timer(IAsyncObserver<long> observer, DateTimeOffset dueTime) => Timer(observer, dueTime, TaskPoolAsyncScheduler.Default);
+        public static ValueTask<IAsyncDisposable> Timer(IAsyncObserver<long> observer, DateTimeOffset dueTime) => Timer(observer, dueTime, TaskPoolAsyncScheduler.Default);
 
-        public static Task<IAsyncDisposable> Timer(IAsyncObserver<long> observer, DateTimeOffset dueTime, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Timer(IAsyncObserver<long> observer, DateTimeOffset dueTime, IAsyncScheduler scheduler)
         {
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
@@ -117,9 +117,9 @@ namespace System.Reactive.Linq
             }, dueTime);
         }
 
-        public static Task<IAsyncDisposable> Timer(IAsyncObserver<long> observer, TimeSpan dueTime, TimeSpan period) => Timer(observer, dueTime, period, TaskPoolAsyncScheduler.Default);
+        public static ValueTask<IAsyncDisposable> Timer(IAsyncObserver<long> observer, TimeSpan dueTime, TimeSpan period) => Timer(observer, dueTime, period, TaskPoolAsyncScheduler.Default);
 
-        public static Task<IAsyncDisposable> Timer(IAsyncObserver<long> observer, TimeSpan dueTime, TimeSpan period, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Timer(IAsyncObserver<long> observer, TimeSpan dueTime, TimeSpan period, IAsyncScheduler scheduler)
         {
             if (period < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(period));
@@ -144,9 +144,9 @@ namespace System.Reactive.Linq
             }, dueTime);
         }
 
-        public static Task<IAsyncDisposable> Timer(IAsyncObserver<long> observer, DateTimeOffset dueTime, TimeSpan period) => Timer(observer, dueTime, period, TaskPoolAsyncScheduler.Default);
+        public static ValueTask<IAsyncDisposable> Timer(IAsyncObserver<long> observer, DateTimeOffset dueTime, TimeSpan period) => Timer(observer, dueTime, period, TaskPoolAsyncScheduler.Default);
 
-        public static Task<IAsyncDisposable> Timer(IAsyncObserver<long> observer, DateTimeOffset dueTime, TimeSpan period, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Timer(IAsyncObserver<long> observer, DateTimeOffset dueTime, TimeSpan period, IAsyncScheduler scheduler)
         {
             if (period < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(period));

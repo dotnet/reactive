@@ -64,7 +64,7 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static Task<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, TSource value)
+        public static ValueTask<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, TSource value)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -72,7 +72,7 @@ namespace System.Reactive.Linq
             return Repeat(observer, value, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, TSource value, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, TSource value, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -88,7 +88,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, TSource value, int repeatCount)
+        public static ValueTask<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, TSource value, int repeatCount)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -98,7 +98,7 @@ namespace System.Reactive.Linq
             return Repeat(observer, value, repeatCount, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, TSource value, int repeatCount, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, TSource value, int repeatCount, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -125,14 +125,14 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source)
+        public static ValueTask<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            async Task<IAsyncDisposable> CoreAsync()
+            async ValueTask<IAsyncDisposable> CoreAsync()
             {
                 var (sink, inner) = Concat(observer, Repeat(source).GetEnumerator());
 
@@ -144,7 +144,7 @@ namespace System.Reactive.Linq
             return CoreAsync();
         }
 
-        public static Task<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source, int repeatCount)
+        public static ValueTask<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source, int repeatCount)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -153,7 +153,7 @@ namespace System.Reactive.Linq
             if (repeatCount < 0)
                 throw new ArgumentNullException(nameof(repeatCount));
 
-            async Task<IAsyncDisposable> CoreAsync()
+            async ValueTask<IAsyncDisposable> CoreAsync()
             {
                 var (sink, inner) = Concat(observer, Enumerable.Repeat(source, repeatCount).GetEnumerator());
 

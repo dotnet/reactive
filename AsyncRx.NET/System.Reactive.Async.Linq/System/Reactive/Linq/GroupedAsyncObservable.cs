@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
 
         public TKey Key { get; }
 
-        protected override async Task<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<TElement> observer)
+        protected override async ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<TElement> observer)
         {
             if (_disposable != null)
             {

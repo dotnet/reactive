@@ -9,8 +9,8 @@ namespace System.Reactive.Concurrency
 {
     public interface IAsyncScheduler : IClock
     {
-        Task<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action);
-        Task<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action, TimeSpan dueTime);
-        Task<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action, DateTimeOffset dueTime);
+        ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action);
+        ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action, TimeSpan dueTime);
+        ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action, DateTimeOffset dueTime);
     }
 }

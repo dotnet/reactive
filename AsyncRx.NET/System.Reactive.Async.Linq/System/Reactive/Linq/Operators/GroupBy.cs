@@ -219,7 +219,7 @@ namespace System.Reactive.Linq
             return Create<IGroupedAsyncObservable<TKey, TElement>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, elementSelector, capacity, comparer)));
         }
 
-        private static async Task<IAsyncDisposable> GroupByCore<TSource, TKey, TElement>(IAsyncObservable<TSource> source, IAsyncObserver<IGroupedAsyncObservable<TKey, TElement>> observer, Func<IAsyncObserver<IGroupedAsyncObservable<TKey, TElement>>, IAsyncDisposable, (IAsyncObserver<TSource>, IAsyncDisposable)> createObserver)
+        private static async ValueTask<IAsyncDisposable> GroupByCore<TSource, TKey, TElement>(IAsyncObservable<TSource> source, IAsyncObserver<IGroupedAsyncObservable<TKey, TElement>> observer, Func<IAsyncObserver<IGroupedAsyncObservable<TKey, TElement>>, IAsyncDisposable, (IAsyncObserver<TSource>, IAsyncDisposable)> createObserver)
         {
             var d = new SingleAssignmentAsyncDisposable();
 

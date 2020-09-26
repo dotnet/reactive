@@ -866,7 +866,7 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static Task<IAsyncDisposable> ToAsync<TResult>(IAsyncObserver<TResult> observer, Func<TResult> function)
+        public static ValueTask<IAsyncDisposable> ToAsync<TResult>(IAsyncObserver<TResult> observer, Func<TResult> function)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -876,7 +876,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<TResult>(IAsyncObserver<TResult> observer, Func<TResult> function, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<TResult>(IAsyncObserver<TResult> observer, Func<TResult> function, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -903,7 +903,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, TResult>(IAsyncObserver<TResult> observer, Func<T1, TResult> function, T1 arg1)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, TResult>(IAsyncObserver<TResult> observer, Func<T1, TResult> function, T1 arg1)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -913,7 +913,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, TResult>(IAsyncObserver<TResult> observer, Func<T1, TResult> function, T1 arg1, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, TResult>(IAsyncObserver<TResult> observer, Func<T1, TResult> function, T1 arg1, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -940,7 +940,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, TResult> function, T1 arg1, T2 arg2)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, TResult> function, T1 arg1, T2 arg2)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -950,7 +950,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, TResult> function, T1 arg1, T2 arg2, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, TResult> function, T1 arg1, T2 arg2, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -977,7 +977,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, TResult> function, T1 arg1, T2 arg2, T3 arg3)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, TResult> function, T1 arg1, T2 arg2, T3 arg3)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -987,7 +987,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, TResult> function, T1 arg1, T2 arg2, T3 arg3, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, TResult> function, T1 arg1, T2 arg2, T3 arg3, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1014,7 +1014,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1024,7 +1024,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1051,7 +1051,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1061,7 +1061,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, arg5, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1088,7 +1088,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1098,7 +1098,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, arg5, arg6, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1125,7 +1125,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1135,7 +1135,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1162,7 +1162,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1172,7 +1172,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1199,7 +1199,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1209,7 +1209,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1236,7 +1236,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1246,7 +1246,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1273,7 +1273,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1283,7 +1283,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1310,7 +1310,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1320,7 +1320,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1347,7 +1347,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1357,7 +1357,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1384,7 +1384,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1394,7 +1394,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1421,7 +1421,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1431,7 +1431,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1458,7 +1458,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1468,7 +1468,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> function, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1495,7 +1495,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync(IAsyncObserver<Unit> observer, Action action)
+        public static ValueTask<IAsyncDisposable> ToAsync(IAsyncObserver<Unit> observer, Action action)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1505,7 +1505,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync(IAsyncObserver<Unit> observer, Action action, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync(IAsyncObserver<Unit> observer, Action action, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1531,7 +1531,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1>(IAsyncObserver<Unit> observer, Action<T1> action, T1 arg1)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1>(IAsyncObserver<Unit> observer, Action<T1> action, T1 arg1)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1541,7 +1541,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1>(IAsyncObserver<Unit> observer, Action<T1> action, T1 arg1, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1>(IAsyncObserver<Unit> observer, Action<T1> action, T1 arg1, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1567,7 +1567,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2>(IAsyncObserver<Unit> observer, Action<T1, T2> action, T1 arg1, T2 arg2)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2>(IAsyncObserver<Unit> observer, Action<T1, T2> action, T1 arg1, T2 arg2)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1577,7 +1577,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2>(IAsyncObserver<Unit> observer, Action<T1, T2> action, T1 arg1, T2 arg2, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2>(IAsyncObserver<Unit> observer, Action<T1, T2> action, T1 arg1, T2 arg2, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1603,7 +1603,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3>(IAsyncObserver<Unit> observer, Action<T1, T2, T3> action, T1 arg1, T2 arg2, T3 arg3)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3>(IAsyncObserver<Unit> observer, Action<T1, T2, T3> action, T1 arg1, T2 arg2, T3 arg3)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1613,7 +1613,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3>(IAsyncObserver<Unit> observer, Action<T1, T2, T3> action, T1 arg1, T2 arg2, T3 arg3, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3>(IAsyncObserver<Unit> observer, Action<T1, T2, T3> action, T1 arg1, T2 arg2, T3 arg3, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1639,7 +1639,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1649,7 +1649,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1675,7 +1675,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1685,7 +1685,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, arg5, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1711,7 +1711,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1721,7 +1721,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, arg5, arg6, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1747,7 +1747,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1757,7 +1757,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1783,7 +1783,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1793,7 +1793,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1819,7 +1819,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1829,7 +1829,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1855,7 +1855,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1865,7 +1865,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1891,7 +1891,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1901,7 +1901,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1927,7 +1927,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1937,7 +1937,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1963,7 +1963,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1973,7 +1973,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -1999,7 +1999,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -2009,7 +2009,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -2035,7 +2035,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -2045,7 +2045,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -2071,7 +2071,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -2081,7 +2081,7 @@ namespace System.Reactive.Linq
             return ToAsync(observer, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, TaskPoolAsyncScheduler.Default);
         }
 
-        public static Task<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, IAsyncScheduler scheduler)
+        public static ValueTask<IAsyncDisposable> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(IAsyncObserver<Unit> observer, Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> action, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

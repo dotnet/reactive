@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
             _disposable = disposable;
         }
 
-        protected override async Task<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<TSource> observer)
+        protected override async ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<TSource> observer)
         {
             if (_disposable != null)
             {
