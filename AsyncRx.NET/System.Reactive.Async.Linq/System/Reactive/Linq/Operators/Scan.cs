@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, func)));
         }
 
-        public static IAsyncObservable<TSource> Scan<TSource>(this IAsyncObservable<TSource> source, Func<TSource, TSource, Task<TSource>> func)
+        public static IAsyncObservable<TSource> Scan<TSource>(this IAsyncObservable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> func)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -38,7 +38,7 @@ namespace System.Reactive.Linq
             return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, seed, func)));
         }
 
-        public static IAsyncObservable<TResult> Scan<TSource, TResult>(this IAsyncObservable<TSource> source, TResult seed, Func<TResult, TSource, Task<TResult>> func)
+        public static IAsyncObservable<TResult> Scan<TSource, TResult>(this IAsyncObservable<TSource> source, TResult seed, Func<TResult, TSource, ValueTask<TResult>> func)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -89,7 +89,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> Scan<TSource>(IAsyncObserver<TSource> observer, Func<TSource, TSource, Task<TSource>> func)
+        public static IAsyncObserver<TSource> Scan<TSource>(IAsyncObserver<TSource> observer, Func<TSource, TSource, ValueTask<TSource>> func)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -156,7 +156,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> Scan<TSource, TResult>(IAsyncObserver<TResult> observer, TResult seed, Func<TResult, TSource, Task<TResult>> func)
+        public static IAsyncObserver<TSource> Scan<TSource, TResult>(IAsyncObserver<TResult> observer, TResult seed, Func<TResult, TSource, ValueTask<TResult>> func)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

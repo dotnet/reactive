@@ -10,7 +10,7 @@ namespace System.Reactive.Linq
     {
         public static IAsyncObservable<TSource> LastOrDefaultAsync<TSource>(this IAsyncObservable<TSource> source) => LastOrDefault(source);
         public static IAsyncObservable<TSource> LastOrDefaultAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate) => LastOrDefault(source, predicate);
-        public static IAsyncObservable<TSource> LastOrDefaultAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate) => LastOrDefault(source, predicate);
+        public static IAsyncObservable<TSource> LastOrDefaultAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate) => LastOrDefault(source, predicate);
 
         public static IAsyncObservable<TSource> LastOrDefault<TSource>(this IAsyncObservable<TSource> source)
         {
@@ -30,7 +30,7 @@ namespace System.Reactive.Linq
             return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.LastOrDefault(observer, predicate)));
         }
 
-        public static IAsyncObservable<TSource> LastOrDefault<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObservable<TSource> LastOrDefault<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -78,7 +78,7 @@ namespace System.Reactive.Linq
             return Where(LastOrDefault(observer), predicate);
         }
 
-        public static IAsyncObserver<TSource> LastOrDefault<TSource>(IAsyncObserver<TSource> observer, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObserver<TSource> LastOrDefault<TSource>(IAsyncObserver<TSource> observer, Func<TSource, ValueTask<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

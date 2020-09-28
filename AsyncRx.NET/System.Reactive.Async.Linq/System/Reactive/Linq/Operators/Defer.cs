@@ -15,12 +15,12 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return Defer(() => Task.FromResult(observableFactory()));
+            return Defer(() => new ValueTask<IAsyncObservable<TSource>>(observableFactory()));
         }
 
-        public static IAsyncObservable<TSource> DeferAsync<TSource>(Func<Task<IAsyncObservable<TSource>>> observableFactory) => Defer(observableFactory);
+        public static IAsyncObservable<TSource> DeferAsync<TSource>(Func<ValueTask<IAsyncObservable<TSource>>> observableFactory) => Defer(observableFactory);
 
-        public static IAsyncObservable<TSource> Defer<TSource>(Func<Task<IAsyncObservable<TSource>>> observableFactory)
+        public static IAsyncObservable<TSource> Defer<TSource>(Func<ValueTask<IAsyncObservable<TSource>>> observableFactory)
         {
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
@@ -43,9 +43,9 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TSource> DeferAsync<TSource>(Func<CancellationToken, Task<IAsyncObservable<TSource>>> observableFactory) => DeferAsync(observableFactory);
+        public static IAsyncObservable<TSource> DeferAsync<TSource>(Func<CancellationToken, ValueTask<IAsyncObservable<TSource>>> observableFactory) => DeferAsync(observableFactory);
 
-        public static IAsyncObservable<TSource> Defer<TSource>(Func<CancellationToken, Task<IAsyncObservable<TSource>>> observableFactory)
+        public static IAsyncObservable<TSource> Defer<TSource>(Func<CancellationToken, ValueTask<IAsyncObservable<TSource>>> observableFactory)
         {
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));

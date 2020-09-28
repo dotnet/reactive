@@ -17,20 +17,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1) => Task.FromResult(_selector(arg1));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1) => new ValueTask<TResult>(_selector(arg1));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TResult> : AsyncPlanBase<TSource1, TResult>
     {
-        private readonly Func<TSource1, Task<TResult>> _selector;
+        private readonly Func<TSource1, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1> expression, Func<TSource1, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1> expression, Func<TSource1, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1) => _selector(arg1);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1) => _selector(arg1);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TResult> : AsyncPlan<TResult>
@@ -42,9 +42,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -93,20 +93,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2) => Task.FromResult(_selector(arg1, arg2));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2) => new ValueTask<TResult>(_selector(arg1, arg2));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TResult> : AsyncPlanBase<TSource1, TSource2, TResult>
     {
-        private readonly Func<TSource1, TSource2, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2> expression, Func<TSource1, TSource2, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2> expression, Func<TSource1, TSource2, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2) => _selector(arg1, arg2);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2) => _selector(arg1, arg2);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TResult> : AsyncPlan<TResult>
@@ -118,9 +118,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -173,20 +173,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3) => Task.FromResult(_selector(arg1, arg2, arg3));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3) => new ValueTask<TResult>(_selector(arg1, arg2, arg3));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3> expression, Func<TSource1, TSource2, TSource3, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3> expression, Func<TSource1, TSource2, TSource3, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3) => _selector(arg1, arg2, arg3);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3) => _selector(arg1, arg2, arg3);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TResult> : AsyncPlan<TResult>
@@ -198,9 +198,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -257,20 +257,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4) => Task.FromResult(_selector(arg1, arg2, arg3, arg4));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4> expression, Func<TSource1, TSource2, TSource3, TSource4, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4> expression, Func<TSource1, TSource2, TSource3, TSource4, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4) => _selector(arg1, arg2, arg3, arg4);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4) => _selector(arg1, arg2, arg3, arg4);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TResult> : AsyncPlan<TResult>
@@ -282,9 +282,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -345,20 +345,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4, arg5));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5) => _selector(arg1, arg2, arg3, arg4, arg5);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5) => _selector(arg1, arg2, arg3, arg4, arg5);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> : AsyncPlan<TResult>
@@ -370,9 +370,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -437,20 +437,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4, arg5, arg6));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6) => _selector(arg1, arg2, arg3, arg4, arg5, arg6);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6) => _selector(arg1, arg2, arg3, arg4, arg5, arg6);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> : AsyncPlan<TResult>
@@ -462,9 +462,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -533,20 +533,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> : AsyncPlan<TResult>
@@ -558,9 +558,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -633,20 +633,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> : AsyncPlan<TResult>
@@ -658,9 +658,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -737,20 +737,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> : AsyncPlan<TResult>
@@ -762,9 +762,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -845,20 +845,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> : AsyncPlan<TResult>
@@ -870,9 +870,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -957,20 +957,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> : AsyncPlan<TResult>
@@ -982,9 +982,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -1073,20 +1073,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> : AsyncPlan<TResult>
@@ -1098,9 +1098,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -1193,20 +1193,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> : AsyncPlan<TResult>
@@ -1218,9 +1218,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -1317,20 +1317,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> : AsyncPlan<TResult>
@@ -1342,9 +1342,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -1445,20 +1445,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> : AsyncPlan<TResult>
@@ -1470,9 +1470,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 
@@ -1577,20 +1577,20 @@ namespace System.Reactive.Joins
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15, TSource16 arg16) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16));
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15, TSource16 arg16) => new ValueTask<TResult>(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16));
     }
 
     internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>
     {
-        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, Task<TResult>> _selector;
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, ValueTask<TResult>> _selector;
 
-        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, Task<TResult>> selector)
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, ValueTask<TResult>> selector)
             : base(expression)
         {
             _selector = selector;
         }
 
-        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15, TSource16 arg16) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+        protected override ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15, TSource16 arg16) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
     }
 
     internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> : AsyncPlan<TResult>
@@ -1602,9 +1602,9 @@ namespace System.Reactive.Joins
             _expression = expression;
         }
 
-        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15, TSource16 arg16); // REVIEW: Consider the use of ValueTask<TResult>.
+        protected abstract ValueTask<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15, TSource16 arg16);
 
-        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
+        internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate)
         {
             var onError = new Func<Exception, ValueTask>(observer.OnErrorAsync);
 

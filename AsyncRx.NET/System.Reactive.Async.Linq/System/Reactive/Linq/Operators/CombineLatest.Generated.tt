@@ -93,7 +93,7 @@ for (var j = 1; j <= i; j++)
             });
         }
 
-        public static IAsyncObservable<TResult> CombineLatest<<#=genPars#>>(this <#=args#>, Func<<#=genArgs#>, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> CombineLatest<<#=genPars#>>(this <#=args#>, Func<<#=genArgs#>, ValueTask<TResult>> selector)
         {
 <#
 for (var j = 1; j <= i; j++)
@@ -225,10 +225,10 @@ for (var j = 1; j <= i; j++)
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return CombineLatest<<#=genPars#>>(observer, (<#=string.Join(", ", Enumerable.Range(1, i).Select(j => "x" + j))#>) => Task.FromResult(selector(<#=string.Join(", ", Enumerable.Range(1, i).Select(j => "x" + j))#>)));
+            return CombineLatest<<#=genPars#>>(observer, (<#=string.Join(", ", Enumerable.Range(1, i).Select(j => "x" + j))#>) => new ValueTask<TResult>(selector(<#=string.Join(", ", Enumerable.Range(1, i).Select(j => "x" + j))#>)));
         }
 
-        public static <#=res#> CombineLatest<<#=genPars#>>(IAsyncObserver<TResult> observer, Func<<#=genArgs#>, Task<TResult>> selector)
+        public static <#=res#> CombineLatest<<#=genPars#>>(IAsyncObserver<TResult> observer, Func<<#=genArgs#>, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

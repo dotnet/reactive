@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, func)));
         }
 
-        public static IAsyncObservable<TSource> Aggregate<TSource>(this IAsyncObservable<TSource> source, Func<TSource, TSource, Task<TSource>> func)
+        public static IAsyncObservable<TSource> Aggregate<TSource>(this IAsyncObservable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> func)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -38,7 +38,7 @@ namespace System.Reactive.Linq
             return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, seed, func)));
         }
 
-        public static IAsyncObservable<TResult> Aggregate<TSource, TResult>(this IAsyncObservable<TSource> source, TResult seed, Func<TResult, TSource, Task<TResult>> func)
+        public static IAsyncObservable<TResult> Aggregate<TSource, TResult>(this IAsyncObservable<TSource> source, TResult seed, Func<TResult, TSource, ValueTask<TResult>> func)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -60,7 +60,7 @@ namespace System.Reactive.Linq
             return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, seed, func, resultSelector)));
         }
 
-        public static IAsyncObservable<TResult> Aggregate<TSource, TAccumulate, TResult>(this IAsyncObservable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, Task<TAccumulate>> func, Func<TAccumulate, Task<TResult>> resultSelector)
+        public static IAsyncObservable<TResult> Aggregate<TSource, TAccumulate, TResult>(this IAsyncObservable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> func, Func<TAccumulate, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -122,7 +122,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> Aggregate<TSource>(IAsyncObserver<TSource> observer, Func<TSource, TSource, Task<TSource>> func)
+        public static IAsyncObserver<TSource> Aggregate<TSource>(IAsyncObserver<TSource> observer, Func<TSource, TSource, ValueTask<TSource>> func)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -179,14 +179,14 @@ namespace System.Reactive.Linq
             return Aggregate(observer, seed, func, a => a);
         }
 
-        public static IAsyncObserver<TSource> Aggregate<TSource, TResult>(IAsyncObserver<TResult> observer, TResult seed, Func<TResult, TSource, Task<TResult>> func)
+        public static IAsyncObserver<TSource> Aggregate<TSource, TResult>(IAsyncObserver<TResult> observer, TResult seed, Func<TResult, TSource, ValueTask<TResult>> func)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Aggregate<TSource, TResult, TResult>(observer, seed, (a, x) => func(a, x), a => Task.FromResult(a));
+            return Aggregate<TSource, TResult, TResult>(observer, seed, (a, x) => func(a, x), a => new ValueTask<TResult>(a));
         }
 
         public static IAsyncObserver<TSource> Aggregate<TSource, TAccumulate, TResult>(IAsyncObserver<TResult> observer, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> func, Func<TAccumulate, TResult> resultSelector)
@@ -234,7 +234,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> Aggregate<TSource, TAccumulate, TResult>(IAsyncObserver<TResult> observer, TAccumulate seed, Func<TAccumulate, TSource, Task<TAccumulate>> func, Func<TAccumulate, Task<TResult>> resultSelector)
+        public static IAsyncObserver<TSource> Aggregate<TSource, TAccumulate, TResult>(IAsyncObserver<TResult> observer, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> func, Func<TAccumulate, ValueTask<TResult>> resultSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

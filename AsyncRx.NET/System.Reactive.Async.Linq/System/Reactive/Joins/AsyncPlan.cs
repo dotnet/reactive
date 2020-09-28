@@ -13,7 +13,7 @@ namespace System.Reactive.Joins
         {
         }
 
-        internal abstract ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate);
+        internal abstract ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, ValueTask> deactivate);
 
         internal static AsyncJoinObserver<TSource> CreateObserver<TSource>(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObservable<TSource> observable, Func<Exception, ValueTask> onError)
         {

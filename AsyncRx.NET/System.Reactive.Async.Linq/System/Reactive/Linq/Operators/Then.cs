@@ -21,7 +21,7 @@ namespace System.Reactive.Linq
             return new AsyncPattern<TSource>(source).Then(selector);
         }
 
-        public static AsyncPlan<TResult> Then<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, Task<TResult>> selector)
+        public static AsyncPlan<TResult> Then<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
-        public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -38,7 +38,7 @@ namespace System.Reactive.Linq
             return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
-        public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, Task<bool>> predicate)
+        public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -86,7 +86,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> SkipWhile<TSource>(IAsyncObserver<TSource> observer, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObserver<TSource> SkipWhile<TSource>(IAsyncObserver<TSource> observer, Func<TSource, ValueTask<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -157,7 +157,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> SkipWhile<TSource>(IAsyncObserver<TSource> observer, Func<TSource, int, Task<bool>> predicate)
+        public static IAsyncObserver<TSource> SkipWhile<TSource>(IAsyncObserver<TSource> observer, Func<TSource, int, ValueTask<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

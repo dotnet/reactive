@@ -10,7 +10,7 @@ namespace System.Reactive.Linq
     {
         public static IAsyncObservable<TSource> FirstOrDefaultAsync<TSource>(this IAsyncObservable<TSource> source) => FirstOrDefault(source);
         public static IAsyncObservable<TSource> FirstOrDefaultAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate) => FirstOrDefault(source, predicate);
-        public static IAsyncObservable<TSource> FirstOrDefaultAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate) => FirstOrDefault(source, predicate);
+        public static IAsyncObservable<TSource> FirstOrDefaultAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate) => FirstOrDefault(source, predicate);
 
         public static IAsyncObservable<TSource> FirstOrDefault<TSource>(this IAsyncObservable<TSource> source)
         {
@@ -30,7 +30,7 @@ namespace System.Reactive.Linq
             return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.FirstOrDefault(observer, predicate)));
         }
 
-        public static IAsyncObservable<TSource> FirstOrDefault<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObservable<TSource> FirstOrDefault<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -73,7 +73,7 @@ namespace System.Reactive.Linq
             return Where(FirstOrDefault(observer), predicate);
         }
 
-        public static IAsyncObserver<TSource> FirstOrDefault<TSource>(IAsyncObserver<TSource> observer, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObserver<TSource> FirstOrDefault<TSource>(IAsyncObserver<TSource> observer, Func<TSource, ValueTask<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

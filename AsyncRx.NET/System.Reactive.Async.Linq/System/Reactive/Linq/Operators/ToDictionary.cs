@@ -35,7 +35,7 @@ namespace System.Reactive.Linq
             return Create<IDictionary<TKey, TValue>>(observer => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, keySelector, valueSelector, comparer)));
         }
 
-        public static IAsyncObservable<IDictionary<TKey, TValue>> ToDictionary<TSource, TKey, TValue>(this IAsyncObservable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TValue>> valueSelector)
+        public static IAsyncObservable<IDictionary<TKey, TValue>> ToDictionary<TSource, TKey, TValue>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TValue>> valueSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -47,7 +47,7 @@ namespace System.Reactive.Linq
             return Create<IDictionary<TKey, TValue>>(observer => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, keySelector, valueSelector)));
         }
 
-        public static IAsyncObservable<IDictionary<TKey, TValue>> ToDictionary<TSource, TKey, TValue>(this IAsyncObservable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TValue>> valueSelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncObservable<IDictionary<TKey, TValue>> ToDictionary<TSource, TKey, TValue>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TValue>> valueSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -103,7 +103,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> ToDictionary<TSource, TKey, TValue>(IAsyncObserver<IDictionary<TKey, TValue>> observer, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TValue>> valueSelector)
+        public static IAsyncObserver<TSource> ToDictionary<TSource, TKey, TValue>(IAsyncObserver<IDictionary<TKey, TValue>> observer, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TValue>> valueSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -115,7 +115,7 @@ namespace System.Reactive.Linq
             return ToDictionary(observer, keySelector, valueSelector, EqualityComparer<TKey>.Default);
         }
 
-        public static IAsyncObserver<TSource> ToDictionary<TSource, TKey, TValue>(IAsyncObserver<IDictionary<TKey, TValue>> observer, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TValue>> valueSelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncObserver<TSource> ToDictionary<TSource, TKey, TValue>(IAsyncObserver<IDictionary<TKey, TValue>> observer, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TValue>> valueSelector, IEqualityComparer<TKey> comparer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -138,7 +138,7 @@ namespace System.Reactive.Linq
 
                     return d;
                 },
-                d => Task.FromResult<IDictionary<TKey, TValue>>(d)
+                d => new ValueTask<IDictionary<TKey, TValue>>(d)
             );
         }
     }

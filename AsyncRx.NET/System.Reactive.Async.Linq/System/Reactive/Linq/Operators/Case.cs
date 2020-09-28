@@ -45,11 +45,11 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Case<TValue, TResult>(Func<Task<TValue>> selector, IDictionary<TValue, IAsyncObservable<TResult>> sources) => Case(selector, sources, Empty<TResult>());
+        public static IAsyncObservable<TResult> Case<TValue, TResult>(Func<ValueTask<TValue>> selector, IDictionary<TValue, IAsyncObservable<TResult>> sources) => Case(selector, sources, Empty<TResult>());
 
-        public static IAsyncObservable<TResult> Case<TValue, TResult>(Func<Task<TValue>> selector, IDictionary<TValue, IAsyncObservable<TResult>> sources, IAsyncScheduler scheduler) => Case(selector, sources, Empty<TResult>(scheduler));
+        public static IAsyncObservable<TResult> Case<TValue, TResult>(Func<ValueTask<TValue>> selector, IDictionary<TValue, IAsyncObservable<TResult>> sources, IAsyncScheduler scheduler) => Case(selector, sources, Empty<TResult>(scheduler));
 
-        public static IAsyncObservable<TResult> Case<TValue, TResult>(Func<Task<TValue>> selector, IDictionary<TValue, IAsyncObservable<TResult>> sources, IAsyncObservable<TResult> defaultSource)
+        public static IAsyncObservable<TResult> Case<TValue, TResult>(Func<ValueTask<TValue>> selector, IDictionary<TValue, IAsyncObservable<TResult>> sources, IAsyncObservable<TResult> defaultSource)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));

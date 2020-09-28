@@ -64,7 +64,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TSource> While<TSource>(Func<Task<bool>> condition, IAsyncObservable<TSource> source)
+        public static IAsyncObservable<TSource> While<TSource>(Func<ValueTask<bool>> condition, IAsyncObservable<TSource> source)
         {
             if (condition == null)
                 throw new ArgumentNullException(nameof(condition));

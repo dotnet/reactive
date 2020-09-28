@@ -39,11 +39,11 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> If<TResult>(Func<Task<bool>> condition, IAsyncObservable<TResult> thenSource) => If(condition, thenSource, Empty<TResult>());
+        public static IAsyncObservable<TResult> If<TResult>(Func<ValueTask<bool>> condition, IAsyncObservable<TResult> thenSource) => If(condition, thenSource, Empty<TResult>());
 
-        public static IAsyncObservable<TResult> If<TResult>(Func<Task<bool>> condition, IAsyncObservable<TResult> thenSource, IAsyncScheduler scheduler) => If(condition, thenSource, Empty<TResult>(scheduler));
+        public static IAsyncObservable<TResult> If<TResult>(Func<ValueTask<bool>> condition, IAsyncObservable<TResult> thenSource, IAsyncScheduler scheduler) => If(condition, thenSource, Empty<TResult>(scheduler));
 
-        public static IAsyncObservable<TResult> If<TResult>(Func<Task<bool>> condition, IAsyncObservable<TResult> thenSource, IAsyncObservable<TResult> elseSource)
+        public static IAsyncObservable<TResult> If<TResult>(Func<ValueTask<bool>> condition, IAsyncObservable<TResult> thenSource, IAsyncObservable<TResult> elseSource)
         {
             if (condition == null)
                 throw new ArgumentNullException(nameof(condition));
