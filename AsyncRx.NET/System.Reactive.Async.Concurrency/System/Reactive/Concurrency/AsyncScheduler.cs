@@ -10,15 +10,7 @@ namespace System.Reactive.Concurrency
 {
     public static class AsyncScheduler
     {
-        public static IAwaitable RendezVous(this IAsyncScheduler scheduler)
-        {
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-
-            return new RendezVousAwaitable(scheduler, CancellationToken.None);
-        }
-
-        public static IAwaitable RendezVous(this IAsyncScheduler scheduler, CancellationToken token)
+        public static IAwaitable RendezVous(this IAsyncScheduler scheduler, CancellationToken token = default)
         {
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
@@ -28,48 +20,40 @@ namespace System.Reactive.Concurrency
             return new RendezVousAwaitable(scheduler, token);
         }
 
-        public static IAwaitable RendezVous(this Task task, IAsyncScheduler scheduler) => RendezVous(task, scheduler, CancellationToken.None);
-
-        public static IAwaitable RendezVous(this Task task, IAsyncScheduler scheduler, CancellationToken token)
+        public static IAwaitable RendezVous(this Task task, IAsyncScheduler scheduler, CancellationToken token = default)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new TaskAwaitable(task, false, scheduler, token);
+            return new TaskAwaitable(task, continueOnCapturedContext: false, scheduler, token);
         }
 
-        public static IAwaitable<T> RendezVous<T>(this Task<T> task, IAsyncScheduler scheduler) => RendezVous(task, scheduler, CancellationToken.None);
-
-        public static IAwaitable<T> RendezVous<T>(this Task<T> task, IAsyncScheduler scheduler, CancellationToken token)
+        public static IAwaitable<T> RendezVous<T>(this Task<T> task, IAsyncScheduler scheduler, CancellationToken token = default)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new TaskAwaitable<T>(task, false, scheduler, token);
+            return new TaskAwaitable<T>(task, continueOnCapturedContext: false, scheduler, token);
         }
 
-        public static IAwaitable RendezVous(this ValueTask task, IAsyncScheduler scheduler) => RendezVous(task, scheduler, CancellationToken.None);
-
-        public static IAwaitable RendezVous(this ValueTask task, IAsyncScheduler scheduler, CancellationToken token)
+        public static IAwaitable RendezVous(this ValueTask task, IAsyncScheduler scheduler, CancellationToken token = default)
         {
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new ValueTaskAwaitable(task, false, scheduler, token);
+            return new ValueTaskAwaitable(task, continueOnCapturedContext: false, scheduler, token);
         }
 
-        public static IAwaitable<T> RendezVous<T>(this ValueTask<T> task, IAsyncScheduler scheduler) => RendezVous(task, scheduler, CancellationToken.None);
-
-        public static IAwaitable<T> RendezVous<T>(this ValueTask<T> task, IAsyncScheduler scheduler, CancellationToken token)
+        public static IAwaitable<T> RendezVous<T>(this ValueTask<T> task, IAsyncScheduler scheduler, CancellationToken token = default)
         {
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new ValueTaskAwaitable<T>(task, false, scheduler, token);
+            return new ValueTaskAwaitable<T>(task, continueOnCapturedContext: false, scheduler, token);
         }
 
         public static async ValueTask Delay(this IAsyncScheduler scheduler, TimeSpan dueTime, CancellationToken token = default)
