@@ -12,10 +12,7 @@ namespace System.Reactive
 
         public AsyncObservable(Func<IAsyncObserver<T>, ValueTask<IAsyncDisposable>> subscribeAsync)
         {
-            if (subscribeAsync == null)
-                throw new ArgumentNullException(nameof(subscribeAsync));
-
-            _subscribeAsync = subscribeAsync;
+            _subscribeAsync = subscribeAsync ?? throw new ArgumentNullException(nameof(subscribeAsync));
         }
 
         protected override ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<T> observer)

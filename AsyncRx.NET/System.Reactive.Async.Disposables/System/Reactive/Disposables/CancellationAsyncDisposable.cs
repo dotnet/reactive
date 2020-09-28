@@ -18,10 +18,7 @@ namespace System.Reactive.Disposables
 
         public CancellationAsyncDisposable(CancellationTokenSource cts)
         {
-            if (cts == null)
-                throw new ArgumentNullException(nameof(cts));
-
-            _cts = cts;
+            _cts = cts ?? throw new ArgumentNullException(nameof(cts));
         }
 
         public CancellationToken Token => _cts.Token;

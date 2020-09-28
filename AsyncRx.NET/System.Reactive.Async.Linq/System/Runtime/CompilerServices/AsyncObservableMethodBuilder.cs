@@ -57,13 +57,10 @@ namespace System.Runtime.CompilerServices
         /// <exception cref="InvalidOperationException">The state machine was previously set.</exception>
         public void SetStateMachine(IAsyncStateMachine stateMachine)
         {
-            if (stateMachine == null)
-                throw new ArgumentNullException(nameof(stateMachine));
-
             if (_stateMachine != null)
                 throw new InvalidOperationException();
 
-            _stateMachine = stateMachine;
+            _stateMachine = stateMachine ?? throw new ArgumentNullException(nameof(stateMachine));
         }
 
         /// <summary>

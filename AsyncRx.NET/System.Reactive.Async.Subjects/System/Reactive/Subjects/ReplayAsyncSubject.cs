@@ -13,7 +13,7 @@ namespace System.Reactive.Subjects
 {
     public abstract class ReplayAsyncSubject<T> : IAsyncSubject<T>
     {
-        protected readonly IAsyncSubject<T> _impl;
+        private readonly IAsyncSubject<T> _impl;
 
         public ReplayAsyncSubject(bool concurrent)
             : this(concurrent, int.MaxValue)
@@ -361,7 +361,7 @@ namespace System.Reactive.Subjects
 
         private abstract class ReplayManyBase : ReplayBufferBase
         {
-            protected readonly Queue<T> _values = new Queue<T>();
+            protected readonly Queue<T> Values = new Queue<T>();
 
             public ReplayManyBase(bool concurrent, Func<IAsyncObserver<T>, IScheduledAsyncObserver<T>> createObserver)
                 : base(concurrent, createObserver)
@@ -370,16 +370,16 @@ namespace System.Reactive.Subjects
 
             protected override Task NextAsync(T value)
             {
-                _values.Enqueue(value);
+                Values.Enqueue(value);
 
                 return Task.CompletedTask;
             }
 
             protected override async Task<int> ReplayAsync(IScheduledAsyncObserver<T> observer)
             {
-                var count = _values.Count;
+                var count = Values.Count;
 
-                foreach (var value in _values)
+                foreach (var value in Values)
                 {
                     await observer.OnNextAsync(value).ConfigureAwait(false);
                 }
@@ -400,9 +400,9 @@ namespace System.Reactive.Subjects
 
             protected override void Trim()
             {
-                while (_values.Count > _bufferSize)
+                while (Values.Count > _bufferSize)
                 {
-                    _values.Dequeue();
+                    Values.Dequeue();
                 }
             }
         }
