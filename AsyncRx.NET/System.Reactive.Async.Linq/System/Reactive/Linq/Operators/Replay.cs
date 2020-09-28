@@ -204,17 +204,17 @@ namespace System.Reactive.Linq
             return Multicast(source, () => new SequentialReplayAsyncSubject<TSource>(bufferSize, window, scheduler), selector);
         }
 
-        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, Task<IAsyncObservable<TResult>>> selector)
+        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, ValueTask<IAsyncObservable<TResult>>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Multicast(source, () => Task.FromResult<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>()), selector);
+            return Multicast(source, () => new ValueTask<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>()), selector);
         }
 
-        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, Task<IAsyncObservable<TResult>>> selector, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, ValueTask<IAsyncObservable<TResult>>> selector, IAsyncScheduler scheduler)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -223,10 +223,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Multicast(source, () => Task.FromResult<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(scheduler)), selector);
+            return Multicast(source, () => new ValueTask<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(scheduler)), selector);
         }
 
-        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, Task<IAsyncObservable<TResult>>> selector, int bufferSize)
+        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, ValueTask<IAsyncObservable<TResult>>> selector, int bufferSize)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -235,10 +235,10 @@ namespace System.Reactive.Linq
             if (bufferSize < 0)
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
 
-            return Multicast(source, () => Task.FromResult<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(bufferSize)), selector);
+            return Multicast(source, () => new ValueTask<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(bufferSize)), selector);
         }
 
-        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, Task<IAsyncObservable<TResult>>> selector, int bufferSize, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, ValueTask<IAsyncObservable<TResult>>> selector, int bufferSize, IAsyncScheduler scheduler)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -249,10 +249,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Multicast(source, () => Task.FromResult<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(bufferSize, scheduler)), selector);
+            return Multicast(source, () => new ValueTask<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(bufferSize, scheduler)), selector);
         }
 
-        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, Task<IAsyncObservable<TResult>>> selector, TimeSpan window)
+        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, ValueTask<IAsyncObservable<TResult>>> selector, TimeSpan window)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -261,10 +261,10 @@ namespace System.Reactive.Linq
             if (window < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(window));
 
-            return Multicast(source, () => Task.FromResult<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(window)), selector);
+            return Multicast(source, () => new ValueTask<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(window)), selector);
         }
 
-        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, Task<IAsyncObservable<TResult>>> selector, TimeSpan window, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, ValueTask<IAsyncObservable<TResult>>> selector, TimeSpan window, IAsyncScheduler scheduler)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -275,24 +275,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Multicast(source, () => Task.FromResult<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(window, scheduler)), selector);
+            return Multicast(source, () => new ValueTask<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(window, scheduler)), selector);
         }
 
-        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, Task<IAsyncObservable<TResult>>> selector, int bufferSize, TimeSpan window)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
-            if (bufferSize < 0)
-                throw new ArgumentOutOfRangeException(nameof(bufferSize));
-            if (window < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException(nameof(window));
-
-            return Multicast(source, () => Task.FromResult<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(bufferSize, window)), selector);
-        }
-
-        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, Task<IAsyncObservable<TResult>>> selector, int bufferSize, TimeSpan window, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, ValueTask<IAsyncObservable<TResult>>> selector, int bufferSize, TimeSpan window)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -302,10 +288,24 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
             if (window < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(window));
+
+            return Multicast(source, () => new ValueTask<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(bufferSize, window)), selector);
+        }
+
+        public static IAsyncObservable<TResult> Replay<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, ValueTask<IAsyncObservable<TResult>>> selector, int bufferSize, TimeSpan window, IAsyncScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+            if (bufferSize < 0)
+                throw new ArgumentOutOfRangeException(nameof(bufferSize));
+            if (window < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(window));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Multicast(source, () => Task.FromResult<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(bufferSize, window, scheduler)), selector);
+            return Multicast(source, () => new ValueTask<IAsyncSubject<TSource, TSource>>(new SequentialReplayAsyncSubject<TSource>(bufferSize, window, scheduler)), selector);
         }
     }
 }

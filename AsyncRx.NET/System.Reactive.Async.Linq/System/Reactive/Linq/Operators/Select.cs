@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
         }
 
-        public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -38,7 +38,7 @@ namespace System.Reactive.Linq
             return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
         }
 
-        public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -80,7 +80,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> Select<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, Task<TResult>> selector)
+        public static IAsyncObserver<TSource> Select<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -140,7 +140,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> Select<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, Task<TResult>> selector)
+        public static IAsyncObserver<TSource> Select<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

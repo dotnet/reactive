@@ -49,7 +49,7 @@ for (var j = 1; j <= i; j++)
             return new AsyncPlan<<#=genArgs#>, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<<#=genArgs#>, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<<#=genArgs#>, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));

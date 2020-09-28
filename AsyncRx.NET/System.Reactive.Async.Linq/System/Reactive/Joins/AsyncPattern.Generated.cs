@@ -23,7 +23,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -51,7 +51,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -81,7 +81,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -113,7 +113,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -147,7 +147,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -183,7 +183,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -221,7 +221,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -261,7 +261,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -303,7 +303,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -347,7 +347,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -393,7 +393,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -441,7 +441,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -491,7 +491,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -543,7 +543,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -597,7 +597,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
@@ -653,7 +653,7 @@ namespace System.Reactive.Joins
             return new AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(this, selector);
         }
 
-        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, Task<TResult>> selector)
+        public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, ValueTask<TResult>> selector)
         {
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));

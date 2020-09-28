@@ -30,7 +30,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TSource> Catch<TSource, TException>(this IAsyncObservable<TSource> source, Func<TException, Task<IAsyncObservable<TSource>>> handler)
+        public static IAsyncObservable<TSource> Catch<TSource, TException>(this IAsyncObservable<TSource> source, Func<TException, ValueTask<IAsyncObservable<TSource>>> handler)
             where TException : Exception
         {
             if (source == null)
@@ -102,10 +102,10 @@ namespace System.Reactive.Linq
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            return Catch<TSource, TException>(observer, ex => Task.FromResult(handler(ex)));
+            return Catch<TSource, TException>(observer, ex => new ValueTask<IAsyncObservable<TSource>>(handler(ex)));
         }
 
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) Catch<TSource, TException>(IAsyncObserver<TSource> observer, Func<TException, Task<IAsyncObservable<TSource>>> handler)
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) Catch<TSource, TException>(IAsyncObserver<TSource> observer, Func<TException, ValueTask<IAsyncObservable<TSource>>> handler)
             where TException : Exception
         {
             if (observer == null)

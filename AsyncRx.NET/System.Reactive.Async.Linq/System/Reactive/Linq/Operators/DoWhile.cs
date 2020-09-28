@@ -69,7 +69,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TSource> DoWhile<TSource>(IAsyncObservable<TSource> source, Func<Task<bool>> condition)
+        public static IAsyncObservable<TSource> DoWhile<TSource>(IAsyncObservable<TSource> source, Func<ValueTask<bool>> condition)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

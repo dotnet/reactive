@@ -57,7 +57,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, Func<T1, T2, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, Func<T1, T2, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -133,7 +133,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, Func<T1, T2, T3, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, Func<T1, T2, T3, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -218,7 +218,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, Func<T1, T2, T3, T4, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, Func<T1, T2, T3, T4, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -312,7 +312,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, Func<T1, T2, T3, T4, T5, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, Func<T1, T2, T3, T4, T5, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -415,7 +415,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, Func<T1, T2, T3, T4, T5, T6, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, Func<T1, T2, T3, T4, T5, T6, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -527,7 +527,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, Func<T1, T2, T3, T4, T5, T6, T7, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, Func<T1, T2, T3, T4, T5, T6, T7, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -648,7 +648,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, Func<T1, T2, T3, T4, T5, T6, T7, T8, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, Func<T1, T2, T3, T4, T5, T6, T7, T8, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -778,7 +778,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -917,7 +917,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -1065,7 +1065,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -1222,7 +1222,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -1388,7 +1388,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, IAsyncObservable<T13> source13, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, IAsyncObservable<T13> source13, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -1563,7 +1563,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, IAsyncObservable<T13> source13, IAsyncObservable<T14> source14, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, IAsyncObservable<T13> source13, IAsyncObservable<T14> source14, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -1747,7 +1747,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, IAsyncObservable<T13> source13, IAsyncObservable<T14> source14, IAsyncObservable<T15> source15, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, Task<TResult>> selector)
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, IAsyncObservable<T13> source13, IAsyncObservable<T14> source14, IAsyncObservable<T15> source15, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, ValueTask<TResult>> selector)
         {
             if (source1 == null)
                 throw new ArgumentNullException(nameof(source1));
@@ -1903,10 +1903,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, TResult>(observer, (x1, x2) => Task.FromResult(selector(x1, x2)));
+            return Zip<T1, T2, TResult>(observer, (x1, x2) => new ValueTask<TResult>(selector(x1, x2)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>) Zip<T1, T2, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>) Zip<T1, T2, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -2093,10 +2093,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, TResult>(observer, (x1, x2, x3) => Task.FromResult(selector(x1, x2, x3)));
+            return Zip<T1, T2, T3, TResult>(observer, (x1, x2, x3) => new ValueTask<TResult>(selector(x1, x2, x3)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>) Zip<T1, T2, T3, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>) Zip<T1, T2, T3, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -2287,10 +2287,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, T4, TResult>(observer, (x1, x2, x3, x4) => Task.FromResult(selector(x1, x2, x3, x4)));
+            return Zip<T1, T2, T3, T4, TResult>(observer, (x1, x2, x3, x4) => new ValueTask<TResult>(selector(x1, x2, x3, x4)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>) Zip<T1, T2, T3, T4, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>) Zip<T1, T2, T3, T4, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -2485,10 +2485,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, T4, T5, TResult>(observer, (x1, x2, x3, x4, x5) => Task.FromResult(selector(x1, x2, x3, x4, x5)));
+            return Zip<T1, T2, T3, T4, T5, TResult>(observer, (x1, x2, x3, x4, x5) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>) Zip<T1, T2, T3, T4, T5, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>) Zip<T1, T2, T3, T4, T5, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -2687,10 +2687,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, T4, T5, T6, TResult>(observer, (x1, x2, x3, x4, x5, x6) => Task.FromResult(selector(x1, x2, x3, x4, x5, x6)));
+            return Zip<T1, T2, T3, T4, T5, T6, TResult>(observer, (x1, x2, x3, x4, x5, x6) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5, x6)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>) Zip<T1, T2, T3, T4, T5, T6, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>) Zip<T1, T2, T3, T4, T5, T6, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -2893,10 +2893,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, T4, T5, T6, T7, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7) => Task.FromResult(selector(x1, x2, x3, x4, x5, x6, x7)));
+            return Zip<T1, T2, T3, T4, T5, T6, T7, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5, x6, x7)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>) Zip<T1, T2, T3, T4, T5, T6, T7, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>) Zip<T1, T2, T3, T4, T5, T6, T7, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -3103,10 +3103,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8) => Task.FromResult(selector(x1, x2, x3, x4, x5, x6, x7, x8)));
+            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5, x6, x7, x8)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -3317,10 +3317,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9) => Task.FromResult(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9)));
+            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -3535,10 +3535,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) => Task.FromResult(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)));
+            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -3757,10 +3757,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11) => Task.FromResult(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11)));
+            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -3983,10 +3983,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12) => Task.FromResult(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)));
+            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -4213,10 +4213,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13) => Task.FromResult(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)));
+            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>, IAsyncObserver<T13>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>, IAsyncObserver<T13>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -4447,10 +4447,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14) => Task.FromResult(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14)));
+            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>, IAsyncObserver<T13>, IAsyncObserver<T14>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>, IAsyncObserver<T13>, IAsyncObserver<T14>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -4685,10 +4685,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15) => Task.FromResult(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)));
+            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)));
         }
 
-        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>, IAsyncObserver<T13>, IAsyncObserver<T14>, IAsyncObserver<T15>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, Task<TResult>> selector)
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>, IAsyncObserver<T13>, IAsyncObserver<T14>, IAsyncObserver<T15>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, ValueTask<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

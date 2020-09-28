@@ -26,7 +26,7 @@ namespace System.Reactive.Linq
             return Create<int>(observer => source.SubscribeSafeAsync(AsyncObserver.Count(observer, predicate)));
         }
 
-        public static IAsyncObservable<int> Count<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObservable<int> Count<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq
             return Where(Count<TSource>(observer), predicate);
         }
 
-        public static IAsyncObserver<TSource> Count<TSource>(IAsyncObserver<int> observer, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObserver<TSource> Count<TSource>(IAsyncObserver<int> observer, Func<TSource, ValueTask<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

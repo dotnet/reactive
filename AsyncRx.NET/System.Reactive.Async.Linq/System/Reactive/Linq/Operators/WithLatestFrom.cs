@@ -52,7 +52,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(this IAsyncObservable<TFirst> first, IAsyncObservable<TSecond> second, Func<TFirst, TSecond, Task<TResult>> resultSelector)
+        public static IAsyncObservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(this IAsyncObservable<TFirst> first, IAsyncObservable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> resultSelector)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -84,10 +84,10 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return WithLatestFrom<TFirst, TSecond, TResult>(observer, (x, y) => Task.FromResult(resultSelector(x, y)));
+            return WithLatestFrom<TFirst, TSecond, TResult>(observer, (x, y) => new ValueTask<TResult>(resultSelector(x, y)));
         }
 
-        public static (IAsyncObserver<TFirst>, IAsyncObserver<TSecond>) WithLatestFrom<TFirst, TSecond, TResult>(IAsyncObserver<TResult> observer, Func<TFirst, TSecond, Task<TResult>> resultSelector)
+        public static (IAsyncObserver<TFirst>, IAsyncObserver<TSecond>) WithLatestFrom<TFirst, TSecond, TResult>(IAsyncObserver<TResult> observer, Func<TFirst, TSecond, ValueTask<TResult>> resultSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

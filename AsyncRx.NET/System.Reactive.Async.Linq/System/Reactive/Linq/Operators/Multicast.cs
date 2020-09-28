@@ -27,17 +27,17 @@ namespace System.Reactive.Linq
             if (subjectFactory == null)
                 throw new ArgumentNullException(nameof(subjectFactory));
 
-            return Multicast(source, () => Task.FromResult<IAsyncSubject<TSource, TSource>>(subjectFactory()), x => Task.FromResult(x));
+            return Multicast(source, () => new ValueTask<IAsyncSubject<TSource, TSource>>(subjectFactory()), x => new ValueTask<IAsyncObservable<TSource>>(x));
         }
 
-        public static IAsyncObservable<TSource> Multicast<TSource>(this IAsyncObservable<TSource> source, Func<Task<IAsyncSubject<TSource>>> subjectFactory)
+        public static IAsyncObservable<TSource> Multicast<TSource>(this IAsyncObservable<TSource> source, Func<ValueTask<IAsyncSubject<TSource>>> subjectFactory)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (subjectFactory == null)
                 throw new ArgumentNullException(nameof(subjectFactory));
 
-            return Multicast<TSource, TSource, TSource>(source, async () => await subjectFactory().ConfigureAwait(false), x => Task.FromResult(x));
+            return Multicast<TSource, TSource, TSource>(source, async () => await subjectFactory().ConfigureAwait(false), x => new ValueTask<IAsyncObservable<TSource>>(x));
         }
 
         public static IAsyncObservable<TResult> Multicast<TSource, TIntermediate, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncSubject<TSource, TIntermediate>> subjectFactory, Func<IAsyncObservable<TIntermediate>, IAsyncObservable<TResult>> selector)
@@ -49,10 +49,10 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Multicast(source, () => Task.FromResult(subjectFactory()), x => Task.FromResult(selector(x)));
+            return Multicast(source, () => new ValueTask<IAsyncSubject<TSource, TIntermediate>>(subjectFactory()), x => new ValueTask<IAsyncObservable<TResult>>(selector(x)));
         }
 
-        public static IAsyncObservable<TResult> Multicast<TSource, TIntermediate, TResult>(this IAsyncObservable<TSource> source, Func<Task<IAsyncSubject<TSource, TIntermediate>>> subjectFactory, Func<IAsyncObservable<TIntermediate>, Task<IAsyncObservable<TResult>>> selector)
+        public static IAsyncObservable<TResult> Multicast<TSource, TIntermediate, TResult>(this IAsyncObservable<TSource> source, Func<ValueTask<IAsyncSubject<TSource, TIntermediate>>> subjectFactory, Func<IAsyncObservable<TIntermediate>, ValueTask<IAsyncObservable<TResult>>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
