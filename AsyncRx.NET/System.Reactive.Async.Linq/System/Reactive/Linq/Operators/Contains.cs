@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<bool> Contains<TSource>(this IAsyncObservable<TSource> source, TSource element)
         {
@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> Contains<TSource>(IAsyncObserver<bool> observer, TSource element)
         {

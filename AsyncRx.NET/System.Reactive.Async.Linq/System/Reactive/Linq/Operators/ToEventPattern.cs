@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IEventPatternSource<TEventArgs> ToEventPattern<TEventArgs>(this IAsyncObservable<EventPattern<TEventArgs>> source)
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> FirstAsync<TSource>(this IAsyncObservable<TSource> source) => First(source);
         public static IAsyncObservable<TSource> FirstAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate) => First(source, predicate);
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> First<TSource>(IAsyncObserver<TSource> observer)
         {

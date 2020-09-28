@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Scan<TSource>(this IAsyncObservable<TSource> source, Func<TSource, TSource, TSource> func)
         {
@@ -49,7 +49,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> Scan<TSource>(IAsyncObserver<TSource> observer, Func<TSource, TSource, TSource> func)
         {

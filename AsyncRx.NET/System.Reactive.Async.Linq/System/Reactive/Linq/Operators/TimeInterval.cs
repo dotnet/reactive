@@ -6,7 +6,7 @@ using System.Reactive.Concurrency;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TimeInterval<TSource>> TimeInterval<TSource>(this IAsyncObservable<TSource> source)
         {
@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> TimeInterval<TSource>(IAsyncObserver<TimeInterval<TSource>> observer)
         {

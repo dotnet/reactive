@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<long> Interval(TimeSpan period)
         {
@@ -28,7 +28,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static ValueTask<IAsyncDisposable> Interval(IAsyncObserver<long> observer, TimeSpan period) => Timer(observer, period, period);
 

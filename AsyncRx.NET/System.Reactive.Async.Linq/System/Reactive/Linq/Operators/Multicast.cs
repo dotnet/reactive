@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IConnectableAsyncObservable<TResult> Multicast<TSource, TResult>(this IAsyncObservable<TSource> source, IAsyncSubject<TSource, TResult> subject)
         {

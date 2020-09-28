@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Distinct<TSource>(IAsyncObservable<TSource> source)
         {
@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> Distinct<TSource>(IAsyncObserver<TSource> observer)
         {

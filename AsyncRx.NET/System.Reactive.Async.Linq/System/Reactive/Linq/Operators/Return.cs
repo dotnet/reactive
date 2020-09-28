@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Return<TSource>(TSource value)
         {
@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static ValueTask<IAsyncDisposable> Return<TSource>(IAsyncObserver<TSource> observer, TSource value) => Return(observer, value, ImmediateAsyncScheduler.Instance);
 

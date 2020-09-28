@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TResult> When<TResult>(IEnumerable<AsyncPlan<TResult>> plans)
         {

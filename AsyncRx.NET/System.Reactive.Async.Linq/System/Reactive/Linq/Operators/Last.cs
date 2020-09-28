@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> LastAsync<TSource>(this IAsyncObservable<TSource> source) => Last(source);
         public static IAsyncObservable<TSource> LastAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate) => Last(source, predicate);
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> Last<TSource>(IAsyncObserver<TSource> observer)
         {

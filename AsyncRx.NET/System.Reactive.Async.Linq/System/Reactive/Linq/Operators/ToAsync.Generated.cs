@@ -10,7 +10,7 @@ namespace System.Reactive.Linq
 {
     // REVIEW: Consider if these are worth retaining in the async space.
 
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static Func<IAsyncObservable<TResult>> ToAsync<TResult>(Func<TResult> function)
         {
@@ -864,7 +864,7 @@ namespace System.Reactive.Linq
 
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static ValueTask<IAsyncDisposable> ToAsync<TResult>(IAsyncObserver<TResult> observer, Func<TResult> function)
         {

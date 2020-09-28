@@ -9,7 +9,7 @@ namespace System.Reactive.Linq
 {
     // REVIEW: Expose PublishLast using ConcurrentAsyncAsyncSubject<T> underneath.
 
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IConnectableAsyncObservable<TSource> PublishLast<TSource>(this IAsyncObservable<TSource> source)
         {

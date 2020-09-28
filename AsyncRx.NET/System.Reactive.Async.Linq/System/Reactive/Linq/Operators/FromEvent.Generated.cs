@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<(T1 arg1, T2 arg2)> FromEvent<T1, T2>(Action<Action<T1, T2>> addHandler, Action<Action<T1, T2>> removeHandler)
         {

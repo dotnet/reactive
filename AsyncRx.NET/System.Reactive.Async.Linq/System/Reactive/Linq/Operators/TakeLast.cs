@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, int count)
         {
@@ -132,7 +132,7 @@ namespace System.Reactive.Linq
         public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler) => TakeLast(source, duration, scheduler, scheduler);
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static (IAsyncObserver<TSource>, IAsyncDisposable) TakeLast<TSource>(IAsyncObserver<TSource> observer, int count) => TakeLast(observer, count, TaskPoolAsyncScheduler.Default);
 

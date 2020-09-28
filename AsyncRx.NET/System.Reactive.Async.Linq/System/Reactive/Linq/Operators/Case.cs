@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TResult> Case<TValue, TResult>(Func<TValue> selector, IDictionary<TValue, IAsyncObservable<TResult>> sources) => Case(selector, sources, Empty<TResult>());
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Where<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate)
         {
@@ -49,7 +49,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> Where<TSource>(IAsyncObserver<TSource> observer, Func<TSource, bool> predicate)
         {
@@ -122,7 +122,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            int i = 0;
+            var i = 0;
 
             return Create<TSource>(
                 async x =>
@@ -156,7 +156,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            int i = 0;
+            var i = 0;
 
             return Create<TSource>(
                 async x =>

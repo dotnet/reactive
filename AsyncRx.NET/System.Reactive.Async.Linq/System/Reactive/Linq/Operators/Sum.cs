@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<int> SumInt32(IAsyncObserver<int> observer)
         {

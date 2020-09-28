@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TResult> Using<TResult, TResource>(Func<TResource> resourceFactory, Func<TResource, IAsyncObservable<TResult>> observableFactory)
             where TResource : IDisposable

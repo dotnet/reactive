@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
 <#
 for (var i = 2; i <= 16; i++)

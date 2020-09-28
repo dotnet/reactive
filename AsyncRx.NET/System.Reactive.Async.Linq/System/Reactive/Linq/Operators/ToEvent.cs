@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IEventSource<Unit> ToEvent<TSource>(this IAsyncObservable<Unit> source)
         {

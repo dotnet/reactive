@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, TResult> selector)
         {
@@ -49,7 +49,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> Select<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, TResult> selector)
         {
@@ -116,7 +116,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            int i = 0;
+            var i = 0;
 
             return Create<TSource>(
                 async x =>
@@ -147,7 +147,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            int i = 0;
+            var i = 0;
 
             return Create<TSource>(
                 async x =>

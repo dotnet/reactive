@@ -10,7 +10,7 @@ namespace System.Reactive.Linq
 {
     // TODO: Implement tail call behavior to flatten OnErrorResumeNext chains.
 
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> OnErrorResumeNext<TSource>(this IAsyncObservable<TSource> first, IAsyncObservable<TSource> second)
         {
@@ -56,7 +56,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static (IAsyncObserver<TSource>, IAsyncDisposable) OnErrorResumeNext<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> second)
         {

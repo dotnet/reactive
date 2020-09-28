@@ -6,7 +6,7 @@ using System.Reactive.Concurrency;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Start<TSource>(Func<TSource> function)
         {

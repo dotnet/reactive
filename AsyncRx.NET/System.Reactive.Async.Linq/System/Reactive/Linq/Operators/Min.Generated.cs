@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<Int32> Min(this IAsyncObservable<Int32> source)
         {
@@ -290,7 +290,7 @@ namespace System.Reactive.Linq
 
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> MinInt32<TSource>(IAsyncObserver<Int32> observer, Func<TSource, Int32> selector)
         {

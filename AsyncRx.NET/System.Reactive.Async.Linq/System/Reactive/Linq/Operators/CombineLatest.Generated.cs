@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<(T1, T2)> CombineLatest<T1, T2>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2)
         {
@@ -1811,7 +1811,7 @@ namespace System.Reactive.Linq
 
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static (IAsyncObserver<T1>, IAsyncObserver<T2>) CombineLatest<T1, T2>(IAsyncObserver<(T1, T2)> observer)
         {

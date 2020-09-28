@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<EventPattern<object>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler) => FromEventPattern(addHandler, removeHandler, GetSchedulerForCurrentContext());
 
@@ -257,7 +257,7 @@ namespace System.Reactive.Linq
 
         private static (MethodInfo addMethod, MethodInfo removeMethod, Type delegateType, bool isWinRT) GetEventMethods<TSender, TEventArgs>(Type targetType, object target, string eventName)
         {
-            var e = default(EventInfo);
+            EventInfo e;
 
             if (target == null)
             {

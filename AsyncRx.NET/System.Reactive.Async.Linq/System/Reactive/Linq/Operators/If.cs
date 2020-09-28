@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TResult> If<TResult>(Func<bool> condition, IAsyncObservable<TResult> thenSource) => If(condition, thenSource, Empty<TResult>());
 

@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TResult> Cast<TSource, TResult>(this IAsyncObservable<TSource> source)
         {
@@ -15,7 +15,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> Cast<TSource, TResult>(IAsyncObserver<TResult> observer)
         {

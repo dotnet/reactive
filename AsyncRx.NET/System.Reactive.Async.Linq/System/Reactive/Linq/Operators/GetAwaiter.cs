@@ -6,7 +6,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static AsyncAsyncSubject<TSource> GetAwaiter<TSource>(this IAsyncObservable<TSource> source)
         {

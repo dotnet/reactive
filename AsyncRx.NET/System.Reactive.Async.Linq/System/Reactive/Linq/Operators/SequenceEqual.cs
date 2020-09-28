@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         // TODO: Add SequenceEqual<T>(IAsyncObservable<T>, IAsyncEnumerable<T>).
 
@@ -61,7 +61,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static (IAsyncObserver<TSource>, IAsyncObserver<TSource>) SequenceEqual<TSource>(IAsyncObserver<bool> observer)
         {
