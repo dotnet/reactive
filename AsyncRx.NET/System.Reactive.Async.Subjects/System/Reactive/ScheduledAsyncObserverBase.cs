@@ -148,9 +148,9 @@ namespace System.Reactive
             }
         }
 
-        protected abstract IAwaitable RendezVous(ValueTask task);
+        protected abstract ValueTaskAwaitable RendezVous(ValueTask task);
 
-        protected abstract IAwaitable<R> RendezVous<R>(ValueTask<R> task);
+        protected abstract ValueTaskAwaitable<R> RendezVous<R>(ValueTask<R> task);
 
         public abstract ValueTask DisposeAsync();
     }

@@ -7,148 +7,180 @@ using System.Runtime.CompilerServices;
 
 namespace System.Threading.Tasks
 {
-    public sealed class ValueTaskAwaitable : IAwaitable, IAwaiter
+    public readonly struct ValueTaskAwaitable
     {
-        private readonly ConfiguredValueTaskAwaitable.ConfiguredValueTaskAwaiter _task;
+        private readonly ValueTask _task;
+        private readonly bool _continueOnCapturedContext;
         private readonly IAsyncScheduler _scheduler;
         private readonly CancellationToken _token;
 
         public ValueTaskAwaitable(ValueTask task, bool continueOnCapturedContext, IAsyncScheduler scheduler, CancellationToken token)
         {
-            if (task == null)
-                throw new ArgumentNullException(nameof(task));
-
-            _task = task.ConfigureAwait(continueOnCapturedContext).GetAwaiter();
+            _task = task;
+            _continueOnCapturedContext = continueOnCapturedContext;
             _scheduler = scheduler;
             _token = token;
         }
 
-        public bool IsCompleted => _task.IsCompleted;
+        public ValueTaskAwaiter GetAwaiter() => new ValueTaskAwaiter(_task.ConfigureAwait(_continueOnCapturedContext).GetAwaiter(), _scheduler, _token);
 
-        public IAwaiter GetAwaiter() => this;
-
-        public void GetResult()
+        public readonly struct ValueTaskAwaiter : INotifyCompletion
         {
-            _token.ThrowIfCancellationRequested();
+            private readonly ConfiguredValueTaskAwaitable.ConfiguredValueTaskAwaiter _awaiter;
+            private readonly IAsyncScheduler _scheduler;
+            private readonly CancellationToken _token;
 
-            _task.GetResult();
-        }
-
-        public void OnCompleted(Action continuation)
-        {
-            var cancel = default(IDisposable);
-
-            if (_token.CanBeCanceled)
+            public ValueTaskAwaiter(ConfiguredValueTaskAwaitable.ConfiguredValueTaskAwaiter awaiter, IAsyncScheduler scheduler, CancellationToken token)
             {
-                cancel = _token.Register(() =>
-                {
-                    Interlocked.Exchange(ref continuation, null)?.Invoke();
-                });
+                _awaiter = awaiter;
+                _scheduler = scheduler;
+                _token = token;
             }
 
-            try
+            public bool IsCompleted => _awaiter.IsCompleted;
+
+            public void GetResult()
             {
-                _task.OnCompleted(() =>
+                _token.ThrowIfCancellationRequested();
+
+                _awaiter.GetResult();
+            }
+
+            public void OnCompleted(Action continuation)
+            {
+                var cancel = default(IDisposable);
+
+                if (_token.CanBeCanceled)
                 {
-                    void Invoke()
+                    cancel = _token.Register(() =>
                     {
-                        cancel?.Dispose();
-
                         Interlocked.Exchange(ref continuation, null)?.Invoke();
-                    }
+                    });
+                }
 
-                    if (_scheduler != null)
+                try
+                {
+                    var scheduler = _scheduler;
+                    var token = _token;
+
+                    _awaiter.OnCompleted(() =>
                     {
-                        var t = _scheduler.ExecuteAsync(ct =>
+                        void Invoke()
+                        {
+                            cancel?.Dispose();
+
+                            Interlocked.Exchange(ref continuation, null)?.Invoke();
+                        }
+
+                        if (scheduler != null)
+                        {
+                            var t = scheduler.ExecuteAsync(ct =>
+                            {
+                                Invoke();
+
+                                return default;
+                            }, token);
+                        }
+                        else
                         {
                             Invoke();
-
-                            return default;
-                        }, _token);
-                    }
-                    else
-                    {
-                        Invoke();
-                    }
-                });
-            }
-            catch
-            {
-                cancel?.Dispose();
-                throw;
+                        }
+                    });
+                }
+                catch
+                {
+                    cancel?.Dispose();
+                    throw;
+                }
             }
         }
     }
 
-    public sealed class ValueTaskAwaitable<T> : IAwaitable<T>, IAwaiter<T>
+    public readonly struct ValueTaskAwaitable<T>
     {
-        private readonly ConfiguredValueTaskAwaitable<T>.ConfiguredValueTaskAwaiter _task;
+        private readonly ValueTask<T> _task;
+        private readonly bool _continueOnCapturedContext;
         private readonly IAsyncScheduler _scheduler;
         private readonly CancellationToken _token;
 
         public ValueTaskAwaitable(ValueTask<T> task, bool continueOnCapturedContext, IAsyncScheduler scheduler, CancellationToken token)
         {
-            if (task == null)
-                throw new ArgumentNullException(nameof(task));
-
-            _task = task.ConfigureAwait(continueOnCapturedContext).GetAwaiter();
+            _task = task;
+            _continueOnCapturedContext = continueOnCapturedContext;
             _scheduler = scheduler;
             _token = token;
         }
 
-        public bool IsCompleted => _task.IsCompleted;
+        public ValueTaskAwaiter GetAwaiter() => new ValueTaskAwaiter(_task.ConfigureAwait(_continueOnCapturedContext).GetAwaiter(), _scheduler, _token);
 
-        public IAwaiter<T> GetAwaiter() => this;
-
-        public T GetResult()
+        public readonly struct ValueTaskAwaiter : INotifyCompletion
         {
-            _token.ThrowIfCancellationRequested();
+            private readonly ConfiguredValueTaskAwaitable<T>.ConfiguredValueTaskAwaiter _awaiter;
+            private readonly IAsyncScheduler _scheduler;
+            private readonly CancellationToken _token;
 
-            return _task.GetResult();
-        }
-
-        public void OnCompleted(Action continuation)
-        {
-            var cancel = default(IDisposable);
-
-            if (_token.CanBeCanceled)
+            public ValueTaskAwaiter(ConfiguredValueTaskAwaitable<T>.ConfiguredValueTaskAwaiter awaiter, IAsyncScheduler scheduler, CancellationToken token)
             {
-                cancel = _token.Register(() =>
-                {
-                    Interlocked.Exchange(ref continuation, null)?.Invoke();
-                });
+                _awaiter = awaiter;
+                _scheduler = scheduler;
+                _token = token;
             }
 
-            try
+            public bool IsCompleted => _awaiter.IsCompleted;
+
+            public T GetResult()
             {
-                _task.OnCompleted(() =>
+                _token.ThrowIfCancellationRequested();
+
+                return _awaiter.GetResult();
+            }
+
+            public void OnCompleted(Action continuation)
+            {
+                var cancel = default(IDisposable);
+
+                if (_token.CanBeCanceled)
                 {
-                    void Invoke()
+                    cancel = _token.Register(() =>
                     {
-                        cancel?.Dispose();
-
                         Interlocked.Exchange(ref continuation, null)?.Invoke();
-                    }
+                    });
+                }
 
-                    if (_scheduler != null)
+                try
+                {
+                    var scheduler = _scheduler;
+                    var token = _token;
+
+                    _awaiter.OnCompleted(() =>
                     {
-                        var t = _scheduler.ExecuteAsync(ct =>
+                        void Invoke()
+                        {
+                            cancel?.Dispose();
+
+                            Interlocked.Exchange(ref continuation, null)?.Invoke();
+                        }
+
+                        if (scheduler != null)
+                        {
+                            var t = scheduler.ExecuteAsync(ct =>
+                            {
+                                Invoke();
+
+                                return default;
+                            }, token);
+                        }
+                        else
                         {
                             Invoke();
-
-                            return default;
-                        }, _token);
-                    }
-                    else
-                    {
-                        Invoke();
-                    }
-                });
-            }
-            catch
-            {
-                cancel?.Dispose();
-                throw;
+                        }
+                    });
+                }
+                catch
+                {
+                    cancel?.Dispose();
+                    throw;
+                }
             }
         }
     }
