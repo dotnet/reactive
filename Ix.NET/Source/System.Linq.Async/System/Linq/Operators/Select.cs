@@ -146,7 +146,7 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(selector));
 
 #if HAS_ASYNC_ENUMERABLE_CANCELLATION
-            return Core(IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<TResult>> selector);
+            return Core(source, selector);
 
             static async IAsyncEnumerable<TResult> Core(source, selector, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
 #else
