@@ -216,8 +216,6 @@ namespace System.Reactive.Concurrency
         {
             private readonly IAsyncScheduler _scheduler;
             private readonly CancellationToken _token;
-
-            private bool _done;
             private ExceptionDispatchInfo _error;
 
             public RendezVousAwaitable(IAsyncScheduler scheduler, CancellationToken token)
@@ -226,13 +224,13 @@ namespace System.Reactive.Concurrency
                 _token = token;
             }
 
-            public bool IsCompleted => _done;
+            public bool IsCompleted { get; private set; }
 
             public IAwaiter GetAwaiter() => this;
 
             public void GetResult()
             {
-                if (!_done)
+                if (!IsCompleted)
                 {
                     throw new InvalidOperationException(); // REVIEW: No support for blocking.
                 }
@@ -257,7 +255,7 @@ namespace System.Reactive.Concurrency
                     }
                     finally
                     {
-                        _done = true;
+                        IsCompleted = true;
                     }
 
                     return default;

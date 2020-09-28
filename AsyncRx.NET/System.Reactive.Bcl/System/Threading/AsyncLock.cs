@@ -9,30 +9,30 @@ namespace System.Threading
 {
     public sealed class AsyncLock
     {
-        private readonly object gate = new object();
-        private readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
-        private readonly AsyncLocal<int> recursionCount = new AsyncLocal<int>();
+        private readonly object _gate = new object();
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+        private readonly AsyncLocal<int> _recursionCount = new AsyncLocal<int>();
 
         public Task<Releaser> LockAsync()
         {
             var shouldAcquire = false;
 
-            lock (gate)
+            lock (_gate)
             {
-                if (recursionCount.Value == 0)
+                if (_recursionCount.Value == 0)
                 {
                     shouldAcquire = true;
-                    recursionCount.Value = 1;
+                    _recursionCount.Value = 1;
                 }
                 else
                 {
-                    recursionCount.Value++;
+                    _recursionCount.Value++;
                 }
             }
 
             if (shouldAcquire)
             {
-                return semaphore.WaitAsync().ContinueWith(_ => new Releaser(this));
+                return _semaphore.WaitAsync().ContinueWith(_ => new Releaser(this));
             }
 
             return Task.FromResult(new Releaser(this));
@@ -40,24 +40,24 @@ namespace System.Threading
 
         private void Release()
         {
-            lock (gate)
+            lock (_gate)
             {
-                Debug.Assert(recursionCount.Value > 0);
+                Debug.Assert(_recursionCount.Value > 0);
 
-                if (--recursionCount.Value == 0)
+                if (--_recursionCount.Value == 0)
                 {
-                    semaphore.Release();
+                    _semaphore.Release();
                 }
             }
         }
 
         public struct Releaser : IDisposable
         {
-            private readonly AsyncLock parent;
+            private readonly AsyncLock _parent;
 
-            public Releaser(AsyncLock parent) => this.parent = parent;
+            public Releaser(AsyncLock parent) => _parent = parent;
 
-            public void Dispose() => parent.Release();
+            public void Dispose() => _parent.Release();
         }
     }
 }

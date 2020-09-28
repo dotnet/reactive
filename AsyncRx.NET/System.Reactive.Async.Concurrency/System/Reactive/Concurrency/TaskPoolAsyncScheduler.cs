@@ -24,10 +24,7 @@ namespace System.Reactive.Concurrency
 
         public TaskPoolAsyncScheduler(TaskFactory factory)
         {
-            if (factory == null)
-                throw new ArgumentNullException(nameof(factory));
-
-            _factory = factory;
+            _factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
         protected override Task Delay(TimeSpan dueTime, CancellationToken token) => Task.Delay(dueTime, token);

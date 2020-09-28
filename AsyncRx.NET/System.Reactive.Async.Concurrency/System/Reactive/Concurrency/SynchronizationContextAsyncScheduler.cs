@@ -13,10 +13,7 @@ namespace System.Reactive.Concurrency
 
         public SynchronizationContextAsyncScheduler(SynchronizationContext context)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         protected override Task Delay(TimeSpan dueTime, CancellationToken token) => Task.Delay(dueTime, token);

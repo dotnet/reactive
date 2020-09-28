@@ -23,10 +23,7 @@ namespace System.Reactive.Disposables
         {
             private Func<ValueTask> _dispose;
 
-            public AnonymousAsyncDisposable(Func<ValueTask> dispose)
-            {
-                _dispose = dispose;
-            }
+            public AnonymousAsyncDisposable(Func<ValueTask> dispose) => _dispose = dispose;
 
             public ValueTask DisposeAsync() => Interlocked.Exchange(ref _dispose, null)?.Invoke() ?? default;
         }
