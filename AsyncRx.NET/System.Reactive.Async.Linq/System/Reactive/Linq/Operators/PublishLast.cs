@@ -29,14 +29,14 @@ namespace System.Reactive.Linq
             return Multicast(source, () => new SequentialAsyncAsyncSubject<TSource>(), selector);
         }
 
-        public static IAsyncObservable<TResult> PublishLast<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, Task<IAsyncObservable<TResult>>> selector)
+        public static IAsyncObservable<TResult> PublishLast<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, ValueTask<IAsyncObservable<TResult>>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Multicast(source, () => Task.FromResult<IAsyncSubject<TSource, TSource>>(new SequentialAsyncAsyncSubject<TSource>()), selector);
+            return Multicast(source, () => new ValueTask<IAsyncSubject<TSource, TSource>>(new SequentialAsyncAsyncSubject<TSource>()), selector);
         }
     }
 }

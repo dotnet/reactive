@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             return Create<bool>(observer => source.SubscribeSafeAsync(AsyncObserver.All(observer, predicate)));
         }
 
-        public static IAsyncObservable<bool> All<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObservable<bool> All<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -68,7 +68,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> All<TSource>(IAsyncObserver<bool> observer, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObserver<TSource> All<TSource>(IAsyncObserver<bool> observer, Func<TSource, ValueTask<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

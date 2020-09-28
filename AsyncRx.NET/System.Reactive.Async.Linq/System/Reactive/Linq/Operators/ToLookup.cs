@@ -36,7 +36,7 @@ namespace System.Reactive.Linq
             return Create<ILookup<TKey, TValue>>(observer => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, keySelector, valueSelector, comparer)));
         }
 
-        public static IAsyncObservable<ILookup<TKey, TValue>> ToLookup<TSource, TKey, TValue>(this IAsyncObservable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TValue>> valueSelector)
+        public static IAsyncObservable<ILookup<TKey, TValue>> ToLookup<TSource, TKey, TValue>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TValue>> valueSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -48,7 +48,7 @@ namespace System.Reactive.Linq
             return Create<ILookup<TKey, TValue>>(observer => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, keySelector, valueSelector)));
         }
 
-        public static IAsyncObservable<ILookup<TKey, TValue>> ToLookup<TSource, TKey, TValue>(this IAsyncObservable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TValue>> valueSelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncObservable<ILookup<TKey, TValue>> ToLookup<TSource, TKey, TValue>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TValue>> valueSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -104,7 +104,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> ToLookup<TSource, TKey, TValue>(IAsyncObserver<ILookup<TKey, TValue>> observer, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TValue>> valueSelector)
+        public static IAsyncObserver<TSource> ToLookup<TSource, TKey, TValue>(IAsyncObserver<ILookup<TKey, TValue>> observer, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TValue>> valueSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -116,7 +116,7 @@ namespace System.Reactive.Linq
             return ToLookup(observer, keySelector, valueSelector, EqualityComparer<TKey>.Default);
         }
 
-        public static IAsyncObserver<TSource> ToLookup<TSource, TKey, TValue>(IAsyncObserver<ILookup<TKey, TValue>> observer, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TValue>> valueSelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncObserver<TSource> ToLookup<TSource, TKey, TValue>(IAsyncObserver<ILookup<TKey, TValue>> observer, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TValue>> valueSelector, IEqualityComparer<TKey> comparer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -139,7 +139,7 @@ namespace System.Reactive.Linq
 
                     return d;
                 },
-                d => Task.FromResult<ILookup<TKey, TValue>>(d)
+                d => new ValueTask<ILookup<TKey, TValue>>(d)
             );
         }
     }

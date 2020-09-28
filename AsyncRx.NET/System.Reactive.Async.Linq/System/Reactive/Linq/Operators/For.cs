@@ -20,10 +20,10 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return For(source, x => Task.FromResult(resultSelector(x)));
+            return For(source, x => new ValueTask<IAsyncObservable<TResult>>(resultSelector(x)));
         }
 
-        public static IAsyncObservable<TResult> For<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, Task<IAsyncObservable<TResult>>> resultSelector)
+        public static IAsyncObservable<TResult> For<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncObservable<TResult>>> resultSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

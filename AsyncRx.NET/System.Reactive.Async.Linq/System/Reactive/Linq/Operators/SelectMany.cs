@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, Task<IAsyncObservable<TResult>>> selector)
+        public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<IAsyncObservable<TResult>>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -63,7 +63,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncObservable<TSource> source, Func<TSource, Task<IAsyncObservable<TCollection>>> collectionSelector, Func<TSource, TCollection, Task<TResult>> resultSelector)
+        public static IAsyncObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<IAsyncObservable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -99,7 +99,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, Task<IAsyncObservable<TResult>>> selector)
+        public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, ValueTask<IAsyncObservable<TResult>>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -135,7 +135,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, Task<IAsyncObservable<TCollection>>> collectionSelector, Func<TSource, int, TCollection, int, Task<TResult>> resultSelector)
+        public static IAsyncObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, ValueTask<IAsyncObservable<TCollection>>> collectionSelector, Func<TSource, int, TCollection, int, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -164,17 +164,17 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return SelectMany<TSource, TResult, TResult>(observer, x => Task.FromResult(selector(x)), (x, y) => Task.FromResult(y));
+            return SelectMany<TSource, TResult, TResult>(observer, x => new ValueTask<IAsyncObservable<TResult>>(selector(x)), (x, y) => new ValueTask<TResult>(y));
         }
 
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, Task<IAsyncObservable<TResult>>> selector)
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, ValueTask<IAsyncObservable<TResult>>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return SelectMany<TSource, TResult, TResult>(observer, selector, (x, y) => Task.FromResult(y));
+            return SelectMany<TSource, TResult, TResult>(observer, selector, (x, y) => new ValueTask<TResult>(y));
         }
 
         public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TCollection, TResult>(IAsyncObserver<TResult> observer, Func<TSource, IAsyncObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
@@ -186,10 +186,10 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return SelectMany<TSource, TCollection, TResult>(observer, x => Task.FromResult(collectionSelector(x)), (x, y) => Task.FromResult(resultSelector(x, y)));
+            return SelectMany<TSource, TCollection, TResult>(observer, x => new ValueTask<IAsyncObservable<TCollection>>(collectionSelector(x)), (x, y) => new ValueTask<TResult>(resultSelector(x, y)));
         }
 
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TCollection, TResult>(IAsyncObserver<TResult> observer, Func<TSource, Task<IAsyncObservable<TCollection>>> collectionSelector, Func<TSource, TCollection, Task<TResult>> resultSelector)
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TCollection, TResult>(IAsyncObserver<TResult> observer, Func<TSource, ValueTask<IAsyncObservable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -296,17 +296,17 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return SelectMany<TSource, TResult, TResult>(observer, (x, i) => Task.FromResult(selector(x, i)), (x, i, y, j) => Task.FromResult(y));
+            return SelectMany<TSource, TResult, TResult>(observer, (x, i) => new ValueTask<IAsyncObservable<TResult>>(selector(x, i)), (x, i, y, j) => new ValueTask<TResult>(y));
         }
 
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, Task<IAsyncObservable<TResult>>> selector)
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, ValueTask<IAsyncObservable<TResult>>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return SelectMany<TSource, TResult, TResult>(observer, selector, (x, i, y, j) => Task.FromResult(y));
+            return SelectMany<TSource, TResult, TResult>(observer, selector, (x, i, y, j) => new ValueTask<TResult>(y));
         }
 
         public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TCollection, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, IAsyncObservable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
@@ -318,10 +318,10 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return SelectMany<TSource, TCollection, TResult>(observer, (x, i) => Task.FromResult(collectionSelector(x, i)), (x, i, y, j) => Task.FromResult(resultSelector(x, i, y, j)));
+            return SelectMany<TSource, TCollection, TResult>(observer, (x, i) => new ValueTask<IAsyncObservable<TCollection>>(collectionSelector(x, i)), (x, i, y, j) => new ValueTask<TResult>(resultSelector(x, i, y, j)));
         }
 
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TCollection, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, Task<IAsyncObservable<TCollection>>> collectionSelector, Func<TSource, int, TCollection, int, Task<TResult>> resultSelector)
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TCollection, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, ValueTask<IAsyncObservable<TCollection>>> collectionSelector, Func<TSource, int, TCollection, int, ValueTask<TResult>> resultSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -330,8 +330,8 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            Func<(TSource item, int i), Task<IAsyncObservable<(TCollection item, int i)>>> collectionSelectorWithIndex = async t => (await collectionSelector(t.item, t.i).ConfigureAwait(false)).Select((item, i) => (item, i));
-            Func<(TSource item, int i), (TCollection item, int i), Task<TResult>> resultSelectorWithIndex = (outer, inner) => resultSelector(outer.item, outer.i, inner.item, inner.i);
+            Func<(TSource item, int i), ValueTask<IAsyncObservable<(TCollection item, int i)>>> collectionSelectorWithIndex = async t => (await collectionSelector(t.item, t.i).ConfigureAwait(false)).Select((item, i) => (item, i));
+            Func<(TSource item, int i), (TCollection item, int i), ValueTask<TResult>> resultSelectorWithIndex = (outer, inner) => resultSelector(outer.item, outer.i, inner.item, inner.i);
 
             var (outerObserverWithIndex, disposable) = SelectMany(observer, collectionSelectorWithIndex, resultSelectorWithIndex);
 

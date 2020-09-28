@@ -11,9 +11,9 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync) => StartAsync(functionAsync, ImmediateAsyncScheduler.Instance);
+        public static IAsyncObservable<TSource> StartAsync<TSource>(Func<ValueTask<TSource>> functionAsync) => StartAsync(functionAsync, ImmediateAsyncScheduler.Instance);
 
-        public static IAsyncObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TSource> StartAsync<TSource>(Func<ValueTask<TSource>> functionAsync, IAsyncScheduler scheduler)
         {
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
@@ -24,7 +24,7 @@ namespace System.Reactive.Linq
 
             try
             {
-                task = functionAsync();
+                task = functionAsync().AsTask();
             }
             catch (Exception ex)
             {
@@ -34,9 +34,9 @@ namespace System.Reactive.Linq
             return task.ToAsyncObservable(scheduler);
         }
 
-        public static IAsyncObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync) => StartAsync(functionAsync, ImmediateAsyncScheduler.Instance);
+        public static IAsyncObservable<TSource> StartAsync<TSource>(Func<CancellationToken, ValueTask<TSource>> functionAsync) => StartAsync(functionAsync, ImmediateAsyncScheduler.Instance);
 
-        public static IAsyncObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TSource> StartAsync<TSource>(Func<CancellationToken, ValueTask<TSource>> functionAsync, IAsyncScheduler scheduler)
         {
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
@@ -49,7 +49,7 @@ namespace System.Reactive.Linq
 
             try
             {
-                task = functionAsync(cancel.Token);
+                task = functionAsync(cancel.Token).AsTask();
             }
             catch (Exception ex)
             {

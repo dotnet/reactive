@@ -56,7 +56,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> UsingAsync<TResult, TResource>(Func<Task<TResource>> resourceFactory, Func<TResource, Task<IAsyncObservable<TResult>>> observableFactory)
+        public static IAsyncObservable<TResult> UsingAsync<TResult, TResource>(Func<ValueTask<TResource>> resourceFactory, Func<TResource, ValueTask<IAsyncObservable<TResult>>> observableFactory)
             where TResource : IDisposable
         {
             if (resourceFactory == null)
@@ -158,7 +158,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> UsingAwaitAsync<TResult, TResource>(Func<Task<TResource>> resourceFactory, Func<TResource, Task<IAsyncObservable<TResult>>> observableFactory)
+        public static IAsyncObservable<TResult> UsingAwaitAsync<TResult, TResource>(Func<ValueTask<TResource>> resourceFactory, Func<TResource, ValueTask<IAsyncObservable<TResult>>> observableFactory)
             where TResource : IAsyncDisposable
         {
             if (resourceFactory == null)

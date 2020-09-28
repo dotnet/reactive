@@ -168,7 +168,7 @@ namespace System.Reactive.Linq
             return subscription;
         }
 
-        private static async ValueTask<IAsyncDisposable> WindowAsyncCore<TSource>(IAsyncObservable<TSource> source, IAsyncObserver<IAsyncObservable<TSource>> observer, Func<IAsyncObserver<IAsyncObservable<TSource>>, IAsyncDisposable, Task<(IAsyncObserver<TSource>, IAsyncDisposable)>> createObserverAsync)
+        private static async ValueTask<IAsyncDisposable> WindowAsyncCore<TSource>(IAsyncObservable<TSource> source, IAsyncObserver<IAsyncObservable<TSource>> observer, Func<IAsyncObserver<IAsyncObservable<TSource>>, IAsyncDisposable, ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)>> createObserverAsync)
         {
             var d = new SingleAssignmentAsyncDisposable();
 
@@ -253,9 +253,9 @@ namespace System.Reactive.Linq
                 );
         }
 
-        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan) => Window(observer, subscription, timeSpan, TaskPoolAsyncScheduler.Default);
+        public static ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan) => Window(observer, subscription, timeSpan, TaskPoolAsyncScheduler.Default);
 
-        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan, IAsyncScheduler scheduler)
+        public static ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -281,7 +281,7 @@ namespace System.Reactive.Linq
                 await observer.OnNextAsync(wrapper).ConfigureAwait(false);
             }
 
-            async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
+            async ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
             {
                 await d.AddAsync(subscription).ConfigureAwait(false);
 
@@ -337,9 +337,9 @@ namespace System.Reactive.Linq
             return CoreAsync();
         }
 
-        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan, TimeSpan timeShift) => Window(observer, subscription, timeSpan, timeShift, TaskPoolAsyncScheduler.Default);
+        public static ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan, TimeSpan timeShift) => Window(observer, subscription, timeSpan, timeShift, TaskPoolAsyncScheduler.Default);
 
-        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan, TimeSpan timeShift, IAsyncScheduler scheduler)
+        public static ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan, TimeSpan timeShift, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -440,7 +440,7 @@ namespace System.Reactive.Linq
                 await inner.AssignAsync(task).ConfigureAwait(false);
             }
 
-            async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
+            async ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
             {
                 await d.AddAsync(subscription).ConfigureAwait(false);
                 await d.AddAsync(timer).ConfigureAwait(false);
@@ -493,9 +493,9 @@ namespace System.Reactive.Linq
             return CoreAsync();
         }
 
-        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan, int count) => Window(observer, subscription, timeSpan, count, TaskPoolAsyncScheduler.Default);
+        public static ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan, int count) => Window(observer, subscription, timeSpan, count, TaskPoolAsyncScheduler.Default);
 
-        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan, int count, IAsyncScheduler scheduler)
+        public static ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan, int count, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -553,7 +553,7 @@ namespace System.Reactive.Linq
                 return window;
             }
 
-            async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
+            async ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
             {
                 await d.AddAsync(subscription).ConfigureAwait(false);
                 await d.AddAsync(timer).ConfigureAwait(false);
@@ -612,7 +612,7 @@ namespace System.Reactive.Linq
             return CoreAsync();
         }
 
-        public static Task<(IAsyncObserver<TSource>, IAsyncObserver<TWindowBoundary>, IAsyncDisposable)> Window<TSource, TWindowBoundary>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription)
+        public static ValueTask<(IAsyncObserver<TSource>, IAsyncObserver<TWindowBoundary>, IAsyncDisposable)> Window<TSource, TWindowBoundary>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -631,7 +631,7 @@ namespace System.Reactive.Linq
                 await observer.OnNextAsync(wrapper).ConfigureAwait(false);
             }
 
-            async Task<(IAsyncObserver<TSource>, IAsyncObserver<TWindowBoundary>, IAsyncDisposable)> CoreAsync()
+            async ValueTask<(IAsyncObserver<TSource>, IAsyncObserver<TWindowBoundary>, IAsyncDisposable)> CoreAsync()
             {
                 await CreateWindowAsync().ConfigureAwait(false);
 
@@ -695,7 +695,7 @@ namespace System.Reactive.Linq
             return CoreAsync();
         }
 
-        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable, IAsyncDisposable)> Window<TSource, TWindowClosing>(IAsyncObserver<IAsyncObservable<TSource>> observer, Func<IAsyncObservable<TWindowClosing>> windowClosingSelector, IAsyncDisposable subscription)
+        public static ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable, IAsyncDisposable)> Window<TSource, TWindowClosing>(IAsyncObserver<IAsyncObservable<TSource>> observer, Func<IAsyncObservable<TWindowClosing>> windowClosingSelector, IAsyncDisposable subscription)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -772,7 +772,7 @@ namespace System.Reactive.Linq
                 await closingSubscription.AssignAsync(closingSubscriptionInner).ConfigureAwait(false);
             }
 
-            async Task<(IAsyncObserver<TSource>, IAsyncDisposable, IAsyncDisposable)> CoreAsync()
+            async ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable, IAsyncDisposable)> CoreAsync()
             {
                 await CreateWindowAsync().ConfigureAwait(false);
 

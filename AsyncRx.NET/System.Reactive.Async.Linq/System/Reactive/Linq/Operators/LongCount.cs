@@ -26,7 +26,7 @@ namespace System.Reactive.Linq
             return Create<long>(observer => source.SubscribeSafeAsync(AsyncObserver.LongCount(observer, predicate)));
         }
 
-        public static IAsyncObservable<long> LongCount<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObservable<long> LongCount<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq
             return Where(LongCount<TSource>(observer), predicate);
         }
 
-        public static IAsyncObserver<TSource> LongCount<TSource>(IAsyncObserver<long> observer, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObserver<TSource> LongCount<TSource>(IAsyncObserver<long> observer, Func<TSource, ValueTask<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

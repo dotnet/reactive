@@ -56,7 +56,7 @@ foreach (var t in types)
             return Create<<#=targetTypeName#>>(observer => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));
         }
 
-        public static IAsyncObservable<<#=targetTypeName#>> <#=name#><TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<<#=sourceTypeName#>>> selector)
+        public static IAsyncObservable<<#=targetTypeName#>> <#=name#><TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<<#=sourceTypeName#>>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -97,7 +97,7 @@ foreach (var t in types)
             return Select(<#=name#><#=methodName#>(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> <#=name#><#=methodName#><TSource>(IAsyncObserver<<#=targetTypeName#>> observer, Func<TSource, Task<<#=sourceTypeName#>>> selector)
+        public static IAsyncObserver<TSource> <#=name#><#=methodName#><TSource>(IAsyncObserver<<#=targetTypeName#>> observer, Func<TSource, ValueTask<<#=sourceTypeName#>>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

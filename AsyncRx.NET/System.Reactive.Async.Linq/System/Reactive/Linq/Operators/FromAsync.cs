@@ -10,7 +10,7 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync)
+        public static IAsyncObservable<TResult> FromAsync<TResult>(Func<ValueTask<TResult>> functionAsync)
         {
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             return Defer(() => StartAsync(functionAsync));
         }
 
-        public static IAsyncObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TResult> FromAsync<TResult>(Func<ValueTask<TResult>> functionAsync, IAsyncScheduler scheduler)
         {
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
@@ -28,7 +28,7 @@ namespace System.Reactive.Linq
             return Defer(() => StartAsync(functionAsync, scheduler));
         }
 
-        public static IAsyncObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync)
+        public static IAsyncObservable<TResult> FromAsync<TResult>(Func<CancellationToken, ValueTask<TResult>> functionAsync)
         {
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
@@ -36,7 +36,7 @@ namespace System.Reactive.Linq
             return Defer(() => StartAsync(functionAsync));
         }
 
-        public static IAsyncObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TResult> FromAsync<TResult>(Func<CancellationToken, ValueTask<TResult>> functionAsync, IAsyncScheduler scheduler)
         {
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));

@@ -37,7 +37,7 @@ namespace System.Reactive.Linq
             return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.DistinctUntilChanged(observer, keySelector)));
         }
 
-        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, Task<TKey>> keySelector)
+        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -59,7 +59,7 @@ namespace System.Reactive.Linq
             return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.DistinctUntilChanged(observer, keySelector, comparer)));
         }
 
-        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -102,7 +102,7 @@ namespace System.Reactive.Linq
             return DistinctUntilChanged(observer, keySelector, EqualityComparer<TKey>.Default);
         }
 
-        public static IAsyncObserver<TSource> DistinctUntilChanged<TSource, TKey>(IAsyncObserver<TSource> observer, Func<TSource, Task<TKey>> keySelector)
+        public static IAsyncObserver<TSource> DistinctUntilChanged<TSource, TKey>(IAsyncObserver<TSource> observer, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -167,7 +167,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> DistinctUntilChanged<TSource, TKey>(IAsyncObserver<TSource> observer, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncObserver<TSource> DistinctUntilChanged<TSource, TKey>(IAsyncObserver<TSource> observer, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

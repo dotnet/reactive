@@ -10,7 +10,7 @@ namespace System.Reactive.Linq
     {
         public static IAsyncObservable<TSource> LastAsync<TSource>(this IAsyncObservable<TSource> source) => Last(source);
         public static IAsyncObservable<TSource> LastAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate) => Last(source, predicate);
-        public static IAsyncObservable<TSource> LastAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate) => Last(source, predicate);
+        public static IAsyncObservable<TSource> LastAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate) => Last(source, predicate);
 
         public static IAsyncObservable<TSource> Last<TSource>(this IAsyncObservable<TSource> source)
         {
@@ -30,7 +30,7 @@ namespace System.Reactive.Linq
             return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Last(observer, predicate)));
         }
 
-        public static IAsyncObservable<TSource> Last<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObservable<TSource> Last<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -85,7 +85,7 @@ namespace System.Reactive.Linq
             return Where(Last(observer), predicate);
         }
 
-        public static IAsyncObserver<TSource> Last<TSource>(IAsyncObserver<TSource> observer, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObserver<TSource> Last<TSource>(IAsyncObserver<TSource> observer, Func<TSource, ValueTask<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
