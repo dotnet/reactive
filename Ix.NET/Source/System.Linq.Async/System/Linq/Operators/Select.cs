@@ -148,7 +148,7 @@ namespace System.Linq
 #if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, selector);
 
-            static async IAsyncEnumerable<TResult> Core(source, selector, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<TResult>> selector, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
 #else
             return Create(Core);
 
