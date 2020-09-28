@@ -1324,7 +1324,7 @@ namespace System.Reactive.Linq
         #region Func
 
         /// <summary>
-        /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// </summary>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
         /// <param name="functionAsync">Asynchronous function to convert.</param>
@@ -1341,7 +1341,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// </summary>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
         /// <param name="functionAsync">Asynchronous function to convert.</param>
@@ -1364,7 +1364,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
         /// </summary>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
@@ -1383,7 +1383,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
         /// </summary>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
@@ -1412,7 +1412,7 @@ namespace System.Reactive.Linq
         #region Action
 
         /// <summary>
-        /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// </summary>
         /// <param name="actionAsync">Asynchronous action to convert.</param>
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
@@ -1428,7 +1428,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// </summary>
         /// <param name="actionAsync">Asynchronous action to convert.</param>
         /// <param name="scheduler">Scheduler on which to notify observers.</param>
@@ -1450,7 +1450,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
         /// </summary>
         /// <param name="actionAsync">Asynchronous action to convert.</param>
@@ -1468,7 +1468,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
         /// </summary>
         /// <param name="actionAsync">Asynchronous action to convert.</param>
