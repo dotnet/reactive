@@ -16,10 +16,7 @@ namespace System.Reactive.Disposables
 
         public RefCountAsyncDisposable(IAsyncDisposable disposable)
         {
-            if (disposable == null)
-                throw new ArgumentNullException(nameof(disposable));
-
-            _disposable = disposable;
+            _disposable = disposable ?? throw new ArgumentNullException(nameof(disposable));
             _primaryDisposed = false;
             _count = 0;
         }

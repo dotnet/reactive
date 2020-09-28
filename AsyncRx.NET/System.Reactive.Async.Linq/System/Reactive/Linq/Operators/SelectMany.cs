@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, IAsyncObservable<TResult>> selector)
         {
@@ -155,7 +155,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, IAsyncObservable<TResult>> selector)
         {
@@ -330,10 +330,10 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            Func<(TSource item, int i), ValueTask<IAsyncObservable<(TCollection item, int i)>>> collectionSelectorWithIndex = async t => (await collectionSelector(t.item, t.i).ConfigureAwait(false)).Select((item, i) => (item, i));
-            Func<(TSource item, int i), (TCollection item, int i), ValueTask<TResult>> resultSelectorWithIndex = (outer, inner) => resultSelector(outer.item, outer.i, inner.item, inner.i);
+            async ValueTask<IAsyncObservable<(TCollection item, int i)>> collectionSelectorWithIndex((TSource item, int i) t) => (await collectionSelector(t.item, t.i).ConfigureAwait(false)).Select((item, i) => (item, i));
+            ValueTask<TResult> resultSelectorWithIndex((TSource item, int i) outer, (TCollection item, int i) inner) => resultSelector(outer.item, outer.i, inner.item, inner.i);
 
-            var (outerObserverWithIndex, disposable) = SelectMany(observer, collectionSelectorWithIndex, resultSelectorWithIndex);
+            var (outerObserverWithIndex, disposable) = SelectMany(observer, collectionSelectorWithIndex, (Func<(TSource item, int i), (TCollection item, int i), ValueTask<TResult>>)resultSelectorWithIndex);
 
             var outerObserver = Select<TSource, (TSource item, int i)>(outerObserverWithIndex, (item, i) => (item, i));
 

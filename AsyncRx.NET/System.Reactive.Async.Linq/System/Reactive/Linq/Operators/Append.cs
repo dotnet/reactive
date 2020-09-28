@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Append<TSource>(this IAsyncObservable<TSource> source, TSource value)
         {
@@ -112,7 +112,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> Append<TSource>(IAsyncObserver<TSource> observer, TSource value)
         {

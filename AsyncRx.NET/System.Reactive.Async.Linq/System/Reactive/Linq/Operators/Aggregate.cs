@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Aggregate<TSource>(this IAsyncObservable<TSource> source, Func<TSource, TSource, TSource> func)
         {
@@ -73,7 +73,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> Aggregate<TSource>(IAsyncObserver<TSource> observer, Func<TSource, TSource, TSource> func)
         {

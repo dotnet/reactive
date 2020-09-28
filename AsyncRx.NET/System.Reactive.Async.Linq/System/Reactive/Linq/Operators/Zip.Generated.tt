@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
 <#
 for (var i = 2; i <= 15; i++)
@@ -48,7 +48,7 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
+                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
 <#
 }
 #>
@@ -83,7 +83,7 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
+                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
 <#
 }
 #>
@@ -118,7 +118,7 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
+                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
 <#
 }
 #>
@@ -134,7 +134,7 @@ for (var j = 1; j <= i; j++)
 #>
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
 <#
 for (var i = 2; i <= 15; i++)

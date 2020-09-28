@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         // REVIEW: Use a tail-recursive sink.
 

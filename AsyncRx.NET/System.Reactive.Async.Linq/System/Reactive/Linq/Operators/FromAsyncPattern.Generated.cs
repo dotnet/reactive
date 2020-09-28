@@ -8,7 +8,7 @@ namespace System.Reactive.Linq
 {
     // REVIEW: Consider if these are worth retaining in the async space.
 
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static Func<IAsyncObservable<TResult>> FromAsyncPattern<TResult>(Func<AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -732,7 +732,7 @@ namespace System.Reactive.Linq
 
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncResult FromAsyncPattern<TResult>(IAsyncObserver<TResult> observer, Func<AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {

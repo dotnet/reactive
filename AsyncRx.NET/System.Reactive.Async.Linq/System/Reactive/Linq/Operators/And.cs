@@ -8,7 +8,7 @@ namespace System.Reactive.Linq
 {
     // REVIEW: Consider moving join patterns to a separate assembly.
 
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static AsyncPattern<TLeft, TRight> And<TLeft, TRight>(this IAsyncObservable<TLeft> left, IAsyncObservable<TRight> right)
         {

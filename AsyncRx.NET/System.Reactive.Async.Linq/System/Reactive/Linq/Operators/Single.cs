@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> SingleAsync<TSource>(this IAsyncObservable<TSource> source) => Single(source);
         public static IAsyncObservable<TSource> SingleAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate) => Single(source, predicate);
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> Single<TSource>(IAsyncObserver<TSource> observer)
         {

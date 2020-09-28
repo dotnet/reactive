@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Amb<TSource>(this IAsyncObservable<TSource> first, IAsyncObservable<TSource> second)
         {
@@ -26,8 +26,8 @@ namespace System.Reactive.Linq
 
                 var (firstObserver, secondObserver) = AsyncObserver.Amb(observer, firstSubscription, secondSubscription);
 
-                var firstTask = first.SubscribeSafeAsync(firstObserver).AsTask().ContinueWith(d => firstSubscription.AssignAsync(d.Result)).Unwrap();
-                var secondTask = second.SubscribeSafeAsync(secondObserver).AsTask().ContinueWith(d => secondSubscription.AssignAsync(d.Result)).Unwrap();
+                var firstTask = first.SubscribeSafeAsync(firstObserver).AsTask().ContinueWith(d => firstSubscription.AssignAsync(d.Result).AsTask()).Unwrap();
+                var secondTask = second.SubscribeSafeAsync(secondObserver).AsTask().ContinueWith(d => secondSubscription.AssignAsync(d.Result).AsTask()).Unwrap();
 
                 await Task.WhenAll(firstTask, secondTask).ConfigureAwait(false);
 
@@ -59,7 +59,7 @@ namespace System.Reactive.Linq
 
                 for (var i = 0; i < count; i++)
                 {
-                    tasks[i] = sources[i].SubscribeSafeAsync(observers[i]).AsTask().ContinueWith(d => subscriptions[i].AssignAsync(d.Result)).Unwrap();
+                    tasks[i] = sources[i].SubscribeSafeAsync(observers[i]).AsTask().ContinueWith(d => subscriptions[i].AssignAsync(d.Result).AsTask()).Unwrap();
                 }
 
                 await Task.WhenAll(tasks).ConfigureAwait(false);
@@ -69,7 +69,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static (IAsyncObserver<TSource>, IAsyncObserver<TSource>) Amb<TSource>(IAsyncObserver<TSource> observer, IAsyncDisposable first, IAsyncDisposable second)
         {

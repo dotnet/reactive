@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<int> AverageInt32(IAsyncObserver<double> observer)
         {

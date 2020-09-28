@@ -9,7 +9,7 @@ namespace System.Reactive.Linq
 {
     // REVIEW: Expose Publish using ConcurrentSimpleAsyncSubject<T> or ConcurrentBehaviorAsyncSubject<T> underneath.
 
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IConnectableAsyncObservable<TSource> Publish<TSource>(this IAsyncObservable<TSource> source)
         {

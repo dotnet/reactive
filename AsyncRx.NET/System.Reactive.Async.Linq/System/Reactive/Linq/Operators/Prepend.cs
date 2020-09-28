@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> StartWith<TSource>(this IAsyncObservable<TSource> source, params TSource[] values) => Prepend(source, values);
         public static IAsyncObservable<TSource> StartWith<TSource>(this IAsyncObservable<TSource> source, IEnumerable<TSource> values) => Prepend(source, values);
@@ -79,7 +79,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         // REVIEW: There's some asymmetry on these overloads. Should standardize to Concat style.
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Finally<TSource>(this IAsyncObservable<TSource> source, Action finallyAction)
         {

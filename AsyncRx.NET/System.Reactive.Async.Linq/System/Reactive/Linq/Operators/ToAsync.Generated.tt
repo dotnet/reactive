@@ -16,7 +16,7 @@ namespace System.Reactive.Linq
 {
     // REVIEW: Consider if these are worth retaining in the async space.
 
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
 <#
 for (var i = 0; i <= 16; i++)
@@ -118,7 +118,7 @@ for (var i = 0; i <= 16; i++)
 #>
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
 <#
 for (var i = 0; i <= 16; i++)

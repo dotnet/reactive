@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Max<TSource>(IAsyncObservable<TSource> source)
         {
@@ -28,7 +28,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> Max<TSource>(IAsyncObserver<TSource> observer)
         {

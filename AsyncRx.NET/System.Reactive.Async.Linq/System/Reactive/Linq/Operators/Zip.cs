@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         // TODO: Add Zip<T>(IAsyncObservable<T>, IAsyncEnumerable<T>) overload when we have reference to IAsyncEnumerable<T>.
 
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource>[] Zip<TSource>(IAsyncObserver<IList<TSource>> observer, int count)
         {

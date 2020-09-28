@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> ObserveOn<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler)
         {
@@ -30,7 +30,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> ObserveOn<TSource>(this IAsyncObserver<TSource> observer, IAsyncScheduler scheduler)
         {

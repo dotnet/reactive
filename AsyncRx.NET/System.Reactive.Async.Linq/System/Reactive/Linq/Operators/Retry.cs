@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Retry<TSource>(this IAsyncObservable<TSource> source)
         {
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static (IAsyncObserver<TSource>, IAsyncDisposable) Retry<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source)
         {

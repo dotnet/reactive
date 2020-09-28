@@ -10,7 +10,7 @@ namespace System.Reactive.Linq
 {
     // TODO: Implement tail call behavior to flatten Catch chains.
 
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Catch<TSource, TException>(this IAsyncObservable<TSource> source, Func<TException, IAsyncObservable<TSource>> handler)
             where TException : Exception
@@ -92,7 +92,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static (IAsyncObserver<TSource>, IAsyncDisposable) Catch<TSource, TException>(IAsyncObserver<TSource> observer, Func<TException, IAsyncObservable<TSource>> handler)
             where TException : Exception

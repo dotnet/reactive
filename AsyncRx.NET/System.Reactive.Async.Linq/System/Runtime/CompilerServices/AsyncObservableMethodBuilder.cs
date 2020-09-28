@@ -32,7 +32,7 @@ namespace System.Runtime.CompilerServices
         /// Creates an instance of the <see cref="AsyncObservableMethodBuilder{T}"/> struct.
         /// </summary>
         /// <returns>A new instance of the struct.</returns>
-        public static AsyncObservableMethodBuilder<T> Create() => default(AsyncObservableMethodBuilder<T>);
+        public static AsyncObservableMethodBuilder<T> Create() => default;
 
         /// <summary>
         /// Begins running the builder with the associated state machine.
@@ -57,13 +57,10 @@ namespace System.Runtime.CompilerServices
         /// <exception cref="InvalidOperationException">The state machine was previously set.</exception>
         public void SetStateMachine(IAsyncStateMachine stateMachine)
         {
-            if (stateMachine == null)
-                throw new ArgumentNullException(nameof(stateMachine));
-
             if (_stateMachine != null)
                 throw new InvalidOperationException();
 
-            _stateMachine = stateMachine;
+            _stateMachine = stateMachine ?? throw new ArgumentNullException(nameof(stateMachine));
         }
 
         /// <summary>
@@ -107,7 +104,7 @@ namespace System.Runtime.CompilerServices
         /// <summary>
         /// Gets the observable sequence for this builder.
         /// </summary>
-        public IAsyncObservable<T> Task => _inner ?? (_inner = new TaskObservable());
+        public IAsyncObservable<T> Task => _inner ??= new TaskObservable();
 
         /// <summary>
         /// Schedules the state machine to proceed to the next action when the specified awaiter completes.
@@ -190,7 +187,7 @@ namespace System.Runtime.CompilerServices
             {
                 ExceptionDispatchInfo.Capture(exception).Throw();
 
-                return System.Threading.Tasks.Task.CompletedTask;
+                return default;
             });
         }
 

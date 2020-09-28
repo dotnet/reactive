@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
 <#
 foreach (var t in types)
@@ -72,7 +72,7 @@ foreach (var t in types)
 #>
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
 <#
 foreach (var t in types)
