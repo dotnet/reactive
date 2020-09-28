@@ -187,7 +187,7 @@ namespace System.Runtime.CompilerServices
             {
                 ExceptionDispatchInfo.Capture(exception).Throw();
 
-                return System.Threading.Tasks.Task.CompletedTask;
+                return default;
             });
         }
 

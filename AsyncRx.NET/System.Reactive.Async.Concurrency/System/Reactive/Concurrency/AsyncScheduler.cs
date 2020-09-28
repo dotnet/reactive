@@ -90,7 +90,7 @@ namespace System.Reactive.Concurrency
                     tcs.SetResult(true);
                 }
 
-                return Task.CompletedTask;
+                return default;
             }, dueTime);
 
             using (token.Register(() => task.DisposeAsync()))
@@ -117,7 +117,7 @@ namespace System.Reactive.Concurrency
                     tcs.SetResult(true);
                 }
 
-                return Task.CompletedTask;
+                return default;
             }, dueTime);
 
             using (token.Register(() => task.DisposeAsync()))
