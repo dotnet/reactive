@@ -9,7 +9,7 @@ namespace System.Reactive.Linq
 {
     // REVIEW: Consider moving join patterns to a separate assembly.
 
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static AsyncPlan<TResult> Then<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, TResult> selector)
         {

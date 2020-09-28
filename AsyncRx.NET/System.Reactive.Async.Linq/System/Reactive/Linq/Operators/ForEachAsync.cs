@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
-        public static Task ForEachAsync<TSource>(this IAsyncObservable<TSource> source, Action<TSource> onNext, CancellationToken token = default(CancellationToken))
+        public static Task ForEachAsync<TSource>(this IAsyncObservable<TSource> source, Action<TSource> onNext, CancellationToken token = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -20,7 +20,7 @@ namespace System.Reactive.Linq
             return ForEachAsyncCore(source, (x, i) => { onNext(x); return Task.CompletedTask; }, token);
         }
 
-        public static Task ForEachAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task> onNext, CancellationToken token = default(CancellationToken))
+        public static Task ForEachAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task> onNext, CancellationToken token = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -30,7 +30,7 @@ namespace System.Reactive.Linq
             return ForEachAsyncCore(source, (x, i) => onNext(x), token);
         }
 
-        public static Task ForEachAsync<TSource>(this IAsyncObservable<TSource> source, Action<TSource, int> onNext, CancellationToken token = default(CancellationToken))
+        public static Task ForEachAsync<TSource>(this IAsyncObservable<TSource> source, Action<TSource, int> onNext, CancellationToken token = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -40,7 +40,7 @@ namespace System.Reactive.Linq
             return ForEachAsyncCore(source, (x, i) => { onNext(x, i); return Task.CompletedTask; }, token);
         }
 
-        public static Task ForEachAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, Task> onNext, CancellationToken token = default(CancellationToken))
+        public static Task ForEachAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, Task> onNext, CancellationToken token = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

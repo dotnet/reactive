@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> SubscribeOn<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler)
         {

@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Switch<TSource>(this IAsyncObservable<IAsyncObservable<TSource>> source)
         {
@@ -25,7 +25,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static (IAsyncObserver<IAsyncObservable<TSource>>, IAsyncDisposable) Switch<TSource>(IAsyncObserver<TSource> observer)
         {

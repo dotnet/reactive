@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<IList<TSource>> MinBy<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector)
         {
@@ -54,7 +54,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> MinBy<TSource, TKey>(IAsyncObserver<IList<TSource>> observer, Func<TSource, TKey> keySelector)
         {

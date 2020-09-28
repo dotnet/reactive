@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> ElementAtOrDefault<TSource>(this IAsyncObservable<TSource> source, int index)
         {
@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> ElementAtOrDefault<TSource>(IAsyncObserver<TSource> observer, int index)
         {
@@ -38,7 +38,7 @@ namespace System.Reactive.Linq
                 observer.OnErrorAsync,
                 async () =>
                 {
-                    await observer.OnNextAsync(default(TSource)).ConfigureAwait(false);
+                    await observer.OnNextAsync(default).ConfigureAwait(false);
                     await observer.OnCompletedAsync().ConfigureAwait(false);
                 }
             );

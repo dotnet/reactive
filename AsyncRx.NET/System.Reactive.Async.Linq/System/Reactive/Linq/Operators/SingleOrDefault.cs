@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> SingleOrDefaultAsync<TSource>(this IAsyncObservable<TSource> source) => SingleOrDefault(source);
         public static IAsyncObservable<TSource> SingleOrDefaultAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate) => SingleOrDefault(source, predicate);
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> SingleOrDefault<TSource>(IAsyncObserver<TSource> observer)
         {
@@ -66,7 +66,7 @@ namespace System.Reactive.Linq
                 observer.OnErrorAsync,
                 async () =>
                 {
-                    await observer.OnNextAsync(hasValue ? value : default(TSource)).ConfigureAwait(false);
+                    await observer.OnNextAsync(hasValue ? value : default).ConfigureAwait(false);
                     await observer.OnCompletedAsync().ConfigureAwait(false);
                 }
             );

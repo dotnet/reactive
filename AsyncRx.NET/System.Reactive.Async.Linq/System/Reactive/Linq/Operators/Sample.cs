@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Sample<TSource, TSample>(this IAsyncObservable<TSource> source, IAsyncObservable<TSample> sampler)
         {
@@ -62,7 +62,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static (IAsyncObserver<TSource>, IAsyncObserver<TSample>) Sample<TSource, TSample>(IAsyncObserver<TSource> observer)
         {

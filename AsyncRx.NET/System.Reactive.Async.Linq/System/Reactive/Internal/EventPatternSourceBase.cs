@@ -28,13 +28,8 @@ namespace System.Reactive
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="invokeHandler"/> is null.</exception>
         protected EventPatternSourceBase(IAsyncObservable<EventPattern<TSender, TEventArgs>> source, Action<Action<TSender, TEventArgs>, /*object,*/ EventPattern<TSender, TEventArgs>> invokeHandler)
         {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (invokeHandler == null)
-                throw new ArgumentNullException(nameof(invokeHandler));
-
-            _source = source;
-            _invokeHandler = invokeHandler;
+            _source = source ?? throw new ArgumentNullException(nameof(source));
+            _invokeHandler = invokeHandler ?? throw new ArgumentNullException(nameof(invokeHandler));
             _subscriptions = new Dictionary<Delegate, Stack<IAsyncDisposable>>();
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate)
         {
@@ -49,7 +49,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> SkipWhile<TSource>(IAsyncObserver<TSource> observer, Func<TSource, bool> predicate)
         {
@@ -58,7 +58,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            bool open = false;
+            var open = false;
 
             return Create<TSource>(
                 async x =>
@@ -93,7 +93,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            bool open = false;
+            var open = false;
 
             return Create<TSource>(
                 async x =>
@@ -128,8 +128,8 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            bool open = false;
-            int i = 0;
+            var open = false;
+            var i = 0;
 
             return Create<TSource>(
                 async x =>
@@ -164,8 +164,8 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            bool open = false;
-            int i = 0;
+            var open = false;
+            var i = 0;
 
             return Create<TSource>(
                 async x =>

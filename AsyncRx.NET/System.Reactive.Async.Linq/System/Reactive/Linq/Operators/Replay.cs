@@ -10,7 +10,7 @@ namespace System.Reactive.Linq
 {
     // REVIEW: Expose Replay using ConcurrentAsyncAsyncSubject<T> underneath.
 
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IConnectableAsyncObservable<TSource> Replay<TSource>(this IAsyncObservable<TSource> source)
         {

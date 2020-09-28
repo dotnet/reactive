@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<int> Count<TSource>(this IAsyncObservable<TSource> source)
         {
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq
         }
     }
 
-    partial class AsyncObserver
+    public partial class AsyncObserver
     {
         public static IAsyncObserver<TSource> Count<TSource>(IAsyncObserver<int> observer)
         {

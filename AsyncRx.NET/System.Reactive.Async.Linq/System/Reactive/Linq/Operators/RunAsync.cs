@@ -10,7 +10,7 @@ namespace System.Reactive.Linq
 {
     // REVIEW: Consider using these for GetAwaiter.
 
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static AsyncAsyncSubject<TSource> RunAsync<TSource>(this IAsyncObservable<TSource> source, CancellationToken token)
         {

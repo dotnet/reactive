@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    partial class AsyncObservable
+    public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> StartAsync<TSource>(Func<ValueTask<TSource>> functionAsync) => StartAsync(functionAsync, ImmediateAsyncScheduler.Instance);
 
@@ -20,7 +20,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var task = default(Task<TSource>);
+            Task<TSource> task;
 
             try
             {
@@ -73,7 +73,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var task = default(Task);
+            Task task;
 
             try
             {
