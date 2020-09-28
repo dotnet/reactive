@@ -36,7 +36,7 @@ namespace System.Reactive.Disposables
             _disposables = new List<IAsyncDisposable>(disposables);
         }
 
-        public async Task AddAsync(IAsyncDisposable disposable)
+        public async ValueTask AddAsync(IAsyncDisposable disposable)
         {
             if (disposable == null)
                 throw new ArgumentNullException(nameof(disposable));
@@ -61,7 +61,7 @@ namespace System.Reactive.Disposables
             }
         }
 
-        public async Task<bool> RemoveAsync(IAsyncDisposable disposable)
+        public async ValueTask<bool> RemoveAsync(IAsyncDisposable disposable)
         {
             if (disposable == null)
                 throw new ArgumentNullException(nameof(disposable));
