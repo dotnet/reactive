@@ -13,7 +13,7 @@ namespace System.Reactive.Disposables
 
         private IAsyncDisposable _disposable;
 
-        public async Task AssignAsync(IAsyncDisposable disposable)
+        public async ValueTask AssignAsync(IAsyncDisposable disposable)
         {
             if (disposable == null)
                 throw new ArgumentNullException(nameof(disposable));

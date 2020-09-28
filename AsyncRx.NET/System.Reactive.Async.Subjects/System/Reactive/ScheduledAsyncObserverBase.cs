@@ -148,10 +148,6 @@ namespace System.Reactive
             }
         }
 
-        protected abstract IAwaitable RendezVous(Task task);
-
-        protected abstract IAwaitable<R> RendezVous<R>(Task<R> task);
-
         protected abstract IAwaitable RendezVous(ValueTask task);
 
         protected abstract IAwaitable<R> RendezVous<R>(ValueTask<R> task);
