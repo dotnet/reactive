@@ -23,9 +23,9 @@ namespace System.Reactive
 
         public override ValueTask DisposeAsync() => _disposable.DisposeAsync();
 
-        protected override IAwaitable RendezVous(ValueTask task) => new ValueTaskAwaitable(task, false, _scheduler, CancellationToken.None);
+        protected override ValueTaskAwaitable RendezVous(ValueTask task) => new ValueTaskAwaitable(task, continueOnCapturedContext: false, _scheduler, CancellationToken.None);
 
-        protected override IAwaitable<R> RendezVous<R>(ValueTask<R> task) => new ValueTaskAwaitable<R>(task, false, _scheduler, CancellationToken.None);
+        protected override ValueTaskAwaitable<R> RendezVous<R>(ValueTask<R> task) => new ValueTaskAwaitable<R>(task, continueOnCapturedContext: false, _scheduler, CancellationToken.None);
 
         protected override async ValueTask ScheduleAsync()
         {

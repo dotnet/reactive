@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace System.Reactive.Concurrency
 {
     public static class AsyncScheduler
     {
-        public static IAwaitable RendezVous(this IAsyncScheduler scheduler, CancellationToken token = default)
+        public static RendezVousAwaitable RendezVous(this IAsyncScheduler scheduler, CancellationToken token = default)
         {
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
@@ -20,7 +21,7 @@ namespace System.Reactive.Concurrency
             return new RendezVousAwaitable(scheduler, token);
         }
 
-        public static IAwaitable RendezVous(this Task task, IAsyncScheduler scheduler, CancellationToken token = default)
+        public static TaskAwaitable RendezVous(this Task task, IAsyncScheduler scheduler, CancellationToken token = default)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
@@ -30,7 +31,7 @@ namespace System.Reactive.Concurrency
             return new TaskAwaitable(task, continueOnCapturedContext: false, scheduler, token);
         }
 
-        public static IAwaitable<T> RendezVous<T>(this Task<T> task, IAsyncScheduler scheduler, CancellationToken token = default)
+        public static TaskAwaitable<T> RendezVous<T>(this Task<T> task, IAsyncScheduler scheduler, CancellationToken token = default)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
@@ -40,7 +41,7 @@ namespace System.Reactive.Concurrency
             return new TaskAwaitable<T>(task, continueOnCapturedContext: false, scheduler, token);
         }
 
-        public static IAwaitable RendezVous(this ValueTask task, IAsyncScheduler scheduler, CancellationToken token = default)
+        public static ValueTaskAwaitable RendezVous(this ValueTask task, IAsyncScheduler scheduler, CancellationToken token = default)
         {
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
@@ -48,7 +49,7 @@ namespace System.Reactive.Concurrency
             return new ValueTaskAwaitable(task, continueOnCapturedContext: false, scheduler, token);
         }
 
-        public static IAwaitable<T> RendezVous<T>(this ValueTask<T> task, IAsyncScheduler scheduler, CancellationToken token = default)
+        public static ValueTaskAwaitable<T> RendezVous<T>(this ValueTask<T> task, IAsyncScheduler scheduler, CancellationToken token = default)
         {
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
@@ -196,11 +197,10 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        private sealed class RendezVousAwaitable : IAwaitable, IAwaiter // PERF: Can we avoid these allocations?
+        public readonly struct RendezVousAwaitable
         {
             private readonly IAsyncScheduler _scheduler;
             private readonly CancellationToken _token;
-            private ExceptionDispatchInfo _error;
 
             public RendezVousAwaitable(IAsyncScheduler scheduler, CancellationToken token)
             {
@@ -208,42 +208,55 @@ namespace System.Reactive.Concurrency
                 _token = token;
             }
 
-            public bool IsCompleted { get; private set; }
+            public RendezVousAwaiter GetAwaiter() => new RendezVousAwaiter(_scheduler, _token);
 
-            public IAwaiter GetAwaiter() => this;
-
-            public void GetResult()
+            public sealed class RendezVousAwaiter : INotifyCompletion
             {
-                if (!IsCompleted)
+                private readonly IAsyncScheduler _scheduler;
+                private readonly CancellationToken _token;
+                private ExceptionDispatchInfo _error;
+
+                public RendezVousAwaiter(IAsyncScheduler scheduler, CancellationToken token)
                 {
-                    throw new InvalidOperationException(); // REVIEW: No support for blocking.
+                    _scheduler = scheduler;
+                    _token = token;
                 }
 
-                if (_error != null)
+                public bool IsCompleted { get; private set; }
+
+                public void GetResult()
                 {
-                    _error.Throw();
+                    if (!IsCompleted)
+                    {
+                        throw new InvalidOperationException(); // REVIEW: No support for blocking.
+                    }
+
+                    if (_error != null)
+                    {
+                        _error.Throw();
+                    }
                 }
-            }
 
-            public void OnCompleted(Action continuation)
-            {
-                var t = _scheduler.ExecuteAsync(ct =>
+                public void OnCompleted(Action continuation)
                 {
-                    try
+                    var t = _scheduler.ExecuteAsync(ct =>
                     {
-                        continuation();
-                    }
-                    catch (Exception ex)
-                    {
-                        _error = ExceptionDispatchInfo.Capture(ex);
-                    }
-                    finally
-                    {
-                        IsCompleted = true;
-                    }
+                        try
+                        {
+                            continuation();
+                        }
+                        catch (Exception ex)
+                        {
+                            _error = ExceptionDispatchInfo.Capture(ex);
+                        }
+                        finally
+                        {
+                            IsCompleted = true;
+                        }
 
-                    return default;
-                }, _token);
+                        return default;
+                    }, _token);
+                }
             }
         }
     }
