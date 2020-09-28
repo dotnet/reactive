@@ -37,7 +37,7 @@ namespace System.Linq
 #if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, count);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, int count, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
 #else
             return Create(Core);
 
