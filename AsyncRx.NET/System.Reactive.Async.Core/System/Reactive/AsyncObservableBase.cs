@@ -17,7 +17,7 @@ namespace System.Reactive
 
             var subscription = await SubscribeAsyncCore(autoDetach).ConfigureAwait(false);
 
-            await autoDetach.AssignAsync(subscription);
+            await autoDetach.AssignAsync(subscription).ConfigureAwait(false);
 
             return autoDetach;
         }
@@ -38,7 +38,7 @@ namespace System.Reactive
                 _observer = observer;
             }
 
-            public async Task AssignAsync(IAsyncDisposable subscription)
+            public async ValueTask AssignAsync(IAsyncDisposable subscription)
             {
                 var shouldDispose = false;
 
@@ -184,7 +184,7 @@ namespace System.Reactive
                 }
             }
 
-            private async Task FinishAsync()
+            private async ValueTask FinishAsync()
             {
                 var subscription = default(IAsyncDisposable);
 
