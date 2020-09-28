@@ -13,7 +13,7 @@ namespace System.Threading
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
         private readonly AsyncLocal<int> _recursionCount = new AsyncLocal<int>();
 
-        public Task<Releaser> LockAsync()
+        public ValueTask<Releaser> LockAsync()
         {
             var shouldAcquire = false;
 
@@ -32,10 +32,10 @@ namespace System.Threading
 
             if (shouldAcquire)
             {
-                return _semaphore.WaitAsync().ContinueWith(_ => new Releaser(this));
+                return new ValueTask<Releaser>(_semaphore.WaitAsync().ContinueWith(_ => new Releaser(this)));
             }
 
-            return Task.FromResult(new Releaser(this));
+            return new ValueTask<Releaser>(new Releaser(this));
         }
 
         private void Release()

@@ -27,11 +27,11 @@ namespace System.Reactive.Concurrency
             _factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-        protected override Task Delay(TimeSpan dueTime, CancellationToken token) => Task.Delay(dueTime, token);
+        protected override ValueTask Delay(TimeSpan dueTime, CancellationToken token) => new ValueTask(Task.Delay(dueTime, token));
 
-        protected override Task ScheduleAsyncCore(Func<CancellationToken, Task> action, CancellationToken token)
+        protected override ValueTask ScheduleAsyncCore(Func<CancellationToken, ValueTask> action, CancellationToken token)
         {
-            var task = _factory.StartNew(() => action(token), token);
+            var task = _factory.StartNew(() => action(token).AsTask(), token);
 
             task.Unwrap().ContinueWith(t =>
             {
@@ -41,7 +41,7 @@ namespace System.Reactive.Concurrency
                 }
             });
 
-            return Task.CompletedTask;
+            return default;
         }
     }
 }

@@ -25,9 +25,9 @@ namespace System.Reactive
             _observer = observer;
         }
 
-        public Task EnsureActive() => EnsureActive(1);
+        public ValueTask EnsureActive() => EnsureActive(1);
 
-        public async Task EnsureActive(int count)
+        public async ValueTask EnsureActive(int count)
         {
             var shouldRun = false;
 
@@ -46,9 +46,9 @@ namespace System.Reactive
             }
         }
 
-        protected abstract Task ScheduleAsync();
+        protected abstract ValueTask ScheduleAsync();
 
-        protected async Task RunAsync(CancellationToken token)
+        protected async ValueTask RunAsync(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {

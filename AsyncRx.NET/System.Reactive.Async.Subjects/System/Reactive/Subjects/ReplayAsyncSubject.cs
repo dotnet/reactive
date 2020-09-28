@@ -230,11 +230,11 @@ namespace System.Reactive.Subjects
                 }
             }
 
-            private async Task EnsureActive(IScheduledAsyncObserver<T>[] observers)
+            private async ValueTask EnsureActive(IScheduledAsyncObserver<T>[] observers)
             {
                 if (_concurrent)
                 {
-                    await Task.WhenAll(observers.Select(o => o.EnsureActive())).ConfigureAwait(false);
+                    await Task.WhenAll(observers.Select(o => o.EnsureActive().AsTask())).ConfigureAwait(false);
                 }
                 else
                 {
@@ -285,9 +285,9 @@ namespace System.Reactive.Subjects
 
             protected abstract IScheduledAsyncObserver<T> CreateScheduledObserver(IAsyncObserver<T> observer);
 
-            protected abstract Task NextAsync(T value);
+            protected abstract ValueTask NextAsync(T value);
 
-            protected abstract Task<int> ReplayAsync(IScheduledAsyncObserver<T> observer);
+            protected abstract ValueTask<int> ReplayAsync(IScheduledAsyncObserver<T> observer);
 
             protected abstract void Trim();
 
@@ -337,15 +337,15 @@ namespace System.Reactive.Subjects
             {
             }
 
-            protected override Task NextAsync(T value)
+            protected override ValueTask NextAsync(T value)
             {
                 _hasValue = true;
                 _value = value;
 
-                return Task.CompletedTask;
+                return default;
             }
 
-            protected override async Task<int> ReplayAsync(IScheduledAsyncObserver<T> observer)
+            protected override async ValueTask<int> ReplayAsync(IScheduledAsyncObserver<T> observer)
             {
                 if (_hasValue)
                 {
@@ -368,14 +368,14 @@ namespace System.Reactive.Subjects
             {
             }
 
-            protected override Task NextAsync(T value)
+            protected override ValueTask NextAsync(T value)
             {
                 Values.Enqueue(value);
 
-                return Task.CompletedTask;
+                return default;
             }
 
-            protected override async Task<int> ReplayAsync(IScheduledAsyncObserver<T> observer)
+            protected override async ValueTask<int> ReplayAsync(IScheduledAsyncObserver<T> observer)
             {
                 var count = Values.Count;
 
@@ -432,14 +432,14 @@ namespace System.Reactive.Subjects
                 _window = window;
             }
 
-            protected override Task NextAsync(T value)
+            protected override ValueTask NextAsync(T value)
             {
                 _values.Enqueue(new Timestamped<T>(value, _scheduler.Now));
 
-                return Task.CompletedTask;
+                return default;
             }
 
-            protected override async Task<int> ReplayAsync(IScheduledAsyncObserver<T> observer)
+            protected override async ValueTask<int> ReplayAsync(IScheduledAsyncObserver<T> observer)
             {
                 var count = _values.Count;
 

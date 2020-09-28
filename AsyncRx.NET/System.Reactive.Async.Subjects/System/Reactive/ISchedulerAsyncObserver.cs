@@ -8,8 +8,8 @@ namespace System.Reactive
 {
     internal interface IScheduledAsyncObserver<T> : IAsyncObserver<T>, IAsyncDisposable
     {
-        Task EnsureActive();
+        ValueTask EnsureActive();
 
-        Task EnsureActive(int count);
+        ValueTask EnsureActive(int count);
     }
 }

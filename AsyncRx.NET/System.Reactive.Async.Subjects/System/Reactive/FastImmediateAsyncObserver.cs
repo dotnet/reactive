@@ -27,6 +27,6 @@ namespace System.Reactive
 
         protected override IAwaitable<R> RendezVous<R>(ValueTask<R> task) => new ValueTaskAwaitable<R>(task, false, null, CancellationToken.None);
 
-        protected override Task ScheduleAsync() => RunAsync(_disposable.Token);
+        protected override ValueTask ScheduleAsync() => RunAsync(_disposable.Token);
     }
 }

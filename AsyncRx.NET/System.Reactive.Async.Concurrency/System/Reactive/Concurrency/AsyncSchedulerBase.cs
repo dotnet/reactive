@@ -11,7 +11,7 @@ namespace System.Reactive.Concurrency
     {
         public virtual DateTimeOffset Now => DateTimeOffset.Now;
 
-        public virtual ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action)
+        public virtual ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, ValueTask> action)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
@@ -19,7 +19,7 @@ namespace System.Reactive.Concurrency
             return ScheduleAsyncCore(action);
         }
 
-        public virtual ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action, TimeSpan dueTime)
+        public virtual ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, ValueTask> action, TimeSpan dueTime)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
@@ -34,7 +34,7 @@ namespace System.Reactive.Concurrency
             });
         }
 
-        public virtual ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action, DateTimeOffset dueTime)
+        public virtual ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, ValueTask> action, DateTimeOffset dueTime)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
@@ -49,7 +49,7 @@ namespace System.Reactive.Concurrency
             });
         }
 
-        protected virtual async ValueTask<IAsyncDisposable> ScheduleAsyncCore(Func<CancellationToken, Task> action)
+        protected virtual async ValueTask<IAsyncDisposable> ScheduleAsyncCore(Func<CancellationToken, ValueTask> action)
         {
             var cad = new CancellationAsyncDisposable();
 
@@ -58,9 +58,9 @@ namespace System.Reactive.Concurrency
             return cad;
         }
 
-        protected abstract Task ScheduleAsyncCore(Func<CancellationToken, Task> action, CancellationToken token);
+        protected abstract ValueTask ScheduleAsyncCore(Func<CancellationToken, ValueTask> action, CancellationToken token);
 
-        protected abstract Task Delay(TimeSpan dueTime, CancellationToken token);
+        protected abstract ValueTask Delay(TimeSpan dueTime, CancellationToken token);
 
         protected static TimeSpan Normalize(TimeSpan timeSpan) => timeSpan < TimeSpan.Zero ? TimeSpan.Zero : timeSpan;
 
