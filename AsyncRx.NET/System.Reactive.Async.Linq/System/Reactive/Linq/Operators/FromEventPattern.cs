@@ -171,7 +171,7 @@ namespace System.Reactive.Linq
 
         private static IAsyncObservable<TResult> FromEventPatternCore<TSender, TEventArgs, TResult>(Type type, object target, string eventName, IAsyncScheduler scheduler, Func<TSender, TEventArgs, TResult> resultSelector)
         {
-            var (addMethod, removeMethod, delegateType, isWinRT) = GetEventMethods<object, object>(target.GetType(), target, eventName);
+            var (addMethod, removeMethod, delegateType, isWinRT) = GetEventMethods<object, object>(type, target, eventName);
 
             var res = default(IAsyncObservable<TResult>);
 
