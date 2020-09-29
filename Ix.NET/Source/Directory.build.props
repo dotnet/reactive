@@ -14,6 +14,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
