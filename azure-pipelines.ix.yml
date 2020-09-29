@@ -29,7 +29,7 @@ stages:
   jobs:
   - job: Build
     pool:
-      vmImage: windows-latest
+      vmImage: ubuntu-latest
     steps:
     - task: UseDotNet@2
       displayName: Use .NET Core 5.0.x SDK
