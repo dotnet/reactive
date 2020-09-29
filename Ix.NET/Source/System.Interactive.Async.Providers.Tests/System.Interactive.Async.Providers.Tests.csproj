@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net461;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net461;netcoreapp3.1</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
   </PropertyGroup>
 
@@ -39,10 +39,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AsyncQueryableExTests.Generated.tt</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
 </Project>

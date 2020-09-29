@@ -20,9 +20,6 @@ pr:
       - .editorconfig
       - azure-pipelines.ix.yml
 
-pool:
-  vmImage: windows-latest
-
 variables:
   BuildConfiguration: Release
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -31,6 +28,8 @@ stages:
 - stage: Build
   jobs:
   - job: Build
+    pool:
+      vmImage: windows-latest
     steps:
     - task: UseDotNet@2
       displayName: Use .NET Core 5.0.x SDK
