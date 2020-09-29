@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0;netstandard2.1;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <Title>System.Linq.Async.Queryable</Title>
     <PackageTags>LINQ;async;streams;query;provider</PackageTags>
     <Description>Provides support for Language-Integrated Query (LINQ) over IAsyncQueryable&lt;T&gt; sequences with query providers.</Description>
@@ -25,9 +25,4 @@
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
   </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
 </Project>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0;netstandard2.1;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <Title>System.Linq.Async</Title>    
     <PackageTags>LINQ;async;streams;query</PackageTags>
     <Description>Provides support for Language-Integrated Query (LINQ) over IAsyncEnumerable&lt;T&gt; sequences.</Description>  
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0' and '$(TargetFramework)' != 'netstandard2.1' " Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
+    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.1' and '$(TargetFramework)' != 'netstandard2.1' " Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
     <ReferenceAssemblyProjectReference Include="..\refs\System.Linq.Async.Ref\System.Linq.Async.Ref.csproj" />
   </ItemGroup>
 

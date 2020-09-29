@@ -20,9 +20,6 @@ pr:
       - .editorconfig
       - azure-pipelines.ix.yml
 
-pool:
-  vmImage: windows-latest
-
 variables:
   BuildConfiguration: Release
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -31,12 +28,26 @@ stages:
 - stage: Build
   jobs:
   - job: Build
+    pool:
+      vmImage: ubuntu-latest
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 3.1.x SDK
+      displayName: Use .NET Core 5.0.x SDK
       inputs:
-        version: 3.1.x
-        performMultiLevelLookup: true
+        version: 5.0.x
+        includePreviewVersions: true
+
+    - task: UseDotNet@2
+      displayName: .NET Core 3.1 runtime
+      inputs:
+        version: '3.1.x'
+        packageType: runtime
+        
+    - task: UseDotNet@2
+      displayName: .NET Core 2.1 runtime
+      inputs:
+        version: '2.1.x'
+        packageType: runtime        
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -45,7 +56,7 @@ stages:
         arguments: install --tool-path . nbgv
       displayName: Install NBGV tool
 
-    - script: nbgv cloud -p Ix.NET\Source
+    - script: ./nbgv cloud -p Ix.NET/Source
       displayName: Set Version
 
     - task: DotNetCoreCLI@2
@@ -59,7 +70,7 @@ stages:
         command: pack
         packagesToPack: Ix.NET/Source/**/System.Interactive*.csproj;Ix.NET/Source/**/System.Linq.*.csproj;!Ix.NET/Source/**/*.Tests*.csproj;!Ix.NET/Source/refs/**
         configuration: $(BuildConfiguration)
-        packDirectory: $(Build.ArtifactStagingDirectory)\artifacts
+        packDirectory: $(Build.ArtifactStagingDirectory)/artifacts
         verbosityPack: Minimal
       displayName: Pack
 
@@ -74,10 +85,10 @@ stages:
       inputs:
         command: test
         projects: Ix.NET/Source/**/*.Tests.csproj
-        arguments: -c $(BuildConfiguration) --settings Ix.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" /t:rebuild /p:ContinuousIntegrationBuild=false -- RunConfiguration.DisableAppDomain=true
+        arguments: -c $(BuildConfiguration) --settings Ix.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
       displayName: Run Tests
 
-    - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
+    - script: ./reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
       displayName: Create reports
 
     - task: PublishCodeCoverageResults@1
@@ -90,15 +101,9 @@ stages:
       artifact: config
       displayName: Publish signing config
 
-    - publish: $(Build.ArtifactStagingDirectory)\artifacts
+    - publish: $(Build.ArtifactStagingDirectory)/artifacts
       displayName: Publish artifacts
       artifact: BuildPackages
-
-    - task: PublishPipelineArtifact@0
-      displayName: Publish Code Coverage XML
-      inputs:
-        artifactName: Coverage Report XML
-        targetPath: $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml
 
 - stage: CodeSign
   condition: and(succeeded('Build'), not(eq(variables['build.reason'], 'PullRequest')))
