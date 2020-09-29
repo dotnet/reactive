@@ -210,7 +210,7 @@ namespace System.Linq
 #if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, keySelector, comparer);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
 #else
             return AsyncEnumerable.Create(Core);
 
@@ -255,7 +255,7 @@ namespace System.Linq
 #if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, keySelector, comparer);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TSource> comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
 #else
             return AsyncEnumerable.Create(Core);
 
@@ -301,7 +301,7 @@ namespace System.Linq
 #if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, keySelector, comparer);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TSource> comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
 #else
             return AsyncEnumerable.Create(Core);
 
