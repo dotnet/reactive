@@ -37,9 +37,15 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(first, second, comparer);
+
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 var set = new Set<TSource>(comparer);
 

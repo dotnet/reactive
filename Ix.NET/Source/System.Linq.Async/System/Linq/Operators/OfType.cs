@@ -30,9 +30,15 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(source);
+
+            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<object> source, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+#endif
             {
                 await foreach (var obj in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {

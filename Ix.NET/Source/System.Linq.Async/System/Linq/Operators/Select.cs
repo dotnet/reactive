@@ -50,9 +50,15 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(source, selector);
+
+            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TSource> source, Func<TSource, int, TResult> selector, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+#endif
             {
                 var index = -1;
 
@@ -107,9 +113,15 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(source, selector);
+
+            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+#endif
             {
                 var index = -1;
 
@@ -133,9 +145,15 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(source, selector);
+
+            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<TResult>> selector, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+#endif
             {
                 var index = -1;
 
