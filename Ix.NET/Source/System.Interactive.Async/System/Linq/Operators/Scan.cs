@@ -30,15 +30,9 @@ namespace System.Linq
             if (accumulator == null)
                 throw Error.ArgumentNull(nameof(accumulator));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, accumulator);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
@@ -76,15 +70,9 @@ namespace System.Linq
             if (accumulator == null)
                 throw Error.ArgumentNull(nameof(accumulator));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, seed, accumulator);
 
-            static async IAsyncEnumerable<TAccumulate> Core(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TAccumulate> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TAccumulate> Core(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 var res = seed;
 
@@ -113,15 +101,9 @@ namespace System.Linq
             if (accumulator == null)
                 throw Error.ArgumentNull(nameof(accumulator));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, accumulator);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
@@ -158,15 +140,9 @@ namespace System.Linq
             if (accumulator == null)
                 throw Error.ArgumentNull(nameof(accumulator));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, accumulator);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, TSource, CancellationToken, ValueTask<TSource>> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, TSource, CancellationToken, ValueTask<TSource>> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
@@ -205,15 +181,9 @@ namespace System.Linq
             if (accumulator == null)
                 throw Error.ArgumentNull(nameof(accumulator));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, seed, accumulator);
 
-            static async IAsyncEnumerable<TAccumulate> Core(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TAccumulate> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TAccumulate> Core(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 var res = seed;
 
@@ -245,15 +215,9 @@ namespace System.Linq
             if (accumulator == null)
                 throw Error.ArgumentNull(nameof(accumulator));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, seed, accumulator);
 
-            static async IAsyncEnumerable<TAccumulate> Core(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, CancellationToken, ValueTask<TAccumulate>> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TAccumulate> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TAccumulate> Core(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, CancellationToken, ValueTask<TAccumulate>> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 var res = seed;
 

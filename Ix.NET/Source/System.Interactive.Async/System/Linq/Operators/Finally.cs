@@ -25,15 +25,9 @@ namespace System.Linq
             if (finallyAction == null)
                 throw Error.ArgumentNull(nameof(finallyAction));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, finallyAction);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Action finallyAction, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Action finallyAction, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 try
                 {
@@ -64,15 +58,9 @@ namespace System.Linq
             if (finallyAction == null)
                 throw Error.ArgumentNull(nameof(finallyAction));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, finallyAction);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<Task> finallyAction, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<Task> finallyAction, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 try
                 {

@@ -21,14 +21,8 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
     <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_TASK_FROMEXCEPTION</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net46' or '$(TargetFramework)' == 'net461'">
-    <DefineConstants>$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0' or '$(TargetFramework)' == 'netstandard2.1' or '$(TargetFramework)' == 'netstandard2.0'">
     <DefineConstants>$(DefineConstants);HAS_VALUETUPLE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0' or '$(TargetFramework)' == 'netstandard2.1'">
-    <DefineConstants>$(DefineConstants);HAS_ASYNC_ENUMERABLE_CANCELLATION</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>

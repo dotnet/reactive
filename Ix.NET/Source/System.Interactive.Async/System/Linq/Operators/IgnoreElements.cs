@@ -22,15 +22,9 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 await foreach (var _ in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {

@@ -49,15 +49,9 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, predicate);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 var index = -1;
 
@@ -117,15 +111,9 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, predicate);
 
-            async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 var index = -1;
 
@@ -152,15 +140,9 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, predicate);
 
-            async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 var index = -1;
 
