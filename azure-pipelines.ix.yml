@@ -38,9 +38,16 @@ stages:
         includePreviewVersions: true
 
     - task: UseDotNet@2
+      displayName: .NET Core 3.1 runtime
       inputs:
         version: '3.1.x'
         packageType: runtime
+        
+    - task: UseDotNet@2
+      displayName: .NET Core 2.1 runtime
+      inputs:
+        version: '2.1.x'
+        packageType: runtime        
 
     - task: DotNetCoreCLI@2
       inputs:
