@@ -70,7 +70,7 @@ stages:
         command: pack
         packagesToPack: Ix.NET/Source/**/System.Interactive*.csproj;Ix.NET/Source/**/System.Linq.*.csproj;!Ix.NET/Source/**/*.Tests*.csproj;!Ix.NET/Source/refs/**
         configuration: $(BuildConfiguration)
-        packDirectory: $(Build.ArtifactStagingDirectory)\artifacts
+        packDirectory: $(Build.ArtifactStagingDirectory)/artifacts
         verbosityPack: Minimal
       displayName: Pack
 
@@ -101,7 +101,7 @@ stages:
       artifact: config
       displayName: Publish signing config
 
-    - publish: $(Build.ArtifactStagingDirectory)\artifacts
+    - publish: $(Build.ArtifactStagingDirectory)/artifacts
       displayName: Publish artifacts
       artifact: BuildPackages
 
