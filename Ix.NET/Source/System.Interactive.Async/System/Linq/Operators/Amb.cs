@@ -160,9 +160,9 @@ namespace System.Linq
             if (sources == null)
                 throw Error.ArgumentNull(nameof(sources));
 
-            return AsyncEnumerable.Create(Core);
+            return Core(sources);
 
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource>[] sources, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 //
                 // REVIEW: See remarks on binary overload for changes compared to the original.

@@ -255,46 +255,41 @@ namespace System.Linq
             return CatchCore(new[] { first, second });
         }
 
-        private static IAsyncEnumerable<TSource> CatchCore<TSource>(IEnumerable<IAsyncEnumerable<TSource>> sources)
+        private static async IAsyncEnumerable<TSource> CatchCore<TSource>(IEnumerable<IAsyncEnumerable<TSource>> sources, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            return AsyncEnumerable.Create(Core);
+            var error = default(ExceptionDispatchInfo);
 
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            foreach (var source in sources)
             {
-                var error = default(ExceptionDispatchInfo);
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
-                foreach (var source in sources)
+                error = null;
+
+                while (true)
                 {
-                    await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+                    TSource c;
 
-                    error = null;
-
-                    while (true)
+                    try
                     {
-                        TSource c;
-
-                        try
-                        {
-                            if (!await e.MoveNextAsync())
-                                break;
-
-                            c = e.Current;
-                        }
-                        catch (Exception ex)
-                        {
-                            error = ExceptionDispatchInfo.Capture(ex);
+                        if (!await e.MoveNextAsync())
                             break;
-                        }
 
-                        yield return c;
+                        c = e.Current;
+                    }
+                    catch (Exception ex)
+                    {
+                        error = ExceptionDispatchInfo.Capture(ex);
+                        break;
                     }
 
-                    if (error == null)
-                        break;
+                    yield return c;
                 }
 
-                error?.Throw();
+                if (error == null)
+                    break;
             }
+
+            error?.Throw();
         }
     }
 }
