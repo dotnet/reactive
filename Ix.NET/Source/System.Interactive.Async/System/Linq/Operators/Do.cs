@@ -297,151 +297,115 @@ namespace System.Linq
             return DoCore(source, new Action<TSource>(observer.OnNext), new Action<Exception>(observer.OnError), new Action(observer.OnCompleted));
         }
 
-        private static IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception>? onError, Action? onCompleted)
+        private static async IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception>? onError, Action? onCompleted, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
-            return Core(source, onNext, onError, onCompleted);
+            await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
-            // TODO: Can remove local function.
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception>? onError, Action? onCompleted, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            while (true)
             {
-                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+                TSource item;
 
-                while (true)
+                try
                 {
-                    TSource item;
-
-                    try
+                    if (!await e.MoveNextAsync())
                     {
-                        if (!await e.MoveNextAsync())
-                        {
-                            break;
-                        }
-
-                        item = e.Current;
-
-                        onNext(item);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        throw;
-                    }
-                    catch (Exception ex) when (onError != null)
-                    {
-                        onError(ex);
-                        throw;
+                        break;
                     }
 
-                    yield return item;
+                    item = e.Current;
+
+                    onNext(item);
+                }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Exception ex) when (onError != null)
+                {
+                    onError(ex);
+                    throw;
                 }
 
-                onCompleted?.Invoke();
+                yield return item;
             }
+
+            onCompleted?.Invoke();
         }
 
-        private static IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task>? onError, Func<Task>? onCompleted)
+        private static async IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task>? onError, Func<Task>? onCompleted, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
-            return Core(source, onNext, onError, onCompleted);
+            await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
-            // TODO: Can remove local function.
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task>? onError, Func<Task>? onCompleted, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            while (true)
             {
-                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+                TSource item;
 
-                while (true)
+                try
                 {
-                    TSource item;
-
-                    try
+                    if (!await e.MoveNextAsync())
                     {
-                        if (!await e.MoveNextAsync())
-                        {
-                            break;
-                        }
-
-                        item = e.Current;
-
-                        await onNext(item).ConfigureAwait(false);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        throw;
-                    }
-                    catch (Exception ex) when (onError != null)
-                    {
-                        await onError(ex).ConfigureAwait(false);
-                        throw;
+                        break;
                     }
 
-                    yield return item;
+                    item = e.Current;
+
+                    await onNext(item).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Exception ex) when (onError != null)
+                {
+                    await onError(ex).ConfigureAwait(false);
+                    throw;
                 }
 
-                if (onCompleted != null)
-                {
-                    await onCompleted().ConfigureAwait(false);
-                }
+                yield return item;
+            }
+
+            if (onCompleted != null)
+            {
+                await onCompleted().ConfigureAwait(false);
             }
         }
 
 #if !NO_DEEP_CANCELLATION
-        private static IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task>? onError, Func<CancellationToken, Task>? onCompleted)
+        private static async IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task>? onError, Func<CancellationToken, Task>? onCompleted, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
-            return Core(source, onNext, onError, onCompleted);
+            await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
-            // TODO: Can remove local function.
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task>? onError, Func<CancellationToken, Task>? onCompleted, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            while (true)
             {
-                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+                TSource item;
 
-                while (true)
+                try
                 {
-                    TSource item;
-
-                    try
+                    if (!await e.MoveNextAsync())
                     {
-                        if (!await e.MoveNextAsync())
-                        {
-                            break;
-                        }
-
-                        item = e.Current;
-
-                        await onNext(item, cancellationToken).ConfigureAwait(false);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        throw;
-                    }
-                    catch (Exception ex) when (onError != null)
-                    {
-                        await onError(ex, cancellationToken).ConfigureAwait(false);
-                        throw;
+                        break;
                     }
 
-                    yield return item;
+                    item = e.Current;
+
+                    await onNext(item, cancellationToken).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Exception ex) when (onError != null)
+                {
+                    await onError(ex, cancellationToken).ConfigureAwait(false);
+                    throw;
                 }
 
-                if (onCompleted != null)
-                {
-                    await onCompleted(cancellationToken).ConfigureAwait(false);
-                }
+                yield return item;
+            }
+
+            if (onCompleted != null)
+            {
+                await onCompleted(cancellationToken).ConfigureAwait(false);
             }
         }
 #endif

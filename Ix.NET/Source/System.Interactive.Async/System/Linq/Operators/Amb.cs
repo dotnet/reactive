@@ -25,15 +25,9 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(first, second);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 IAsyncEnumerator<TSource>? firstEnumerator = null;
                 IAsyncEnumerator<TSource>? secondEnumerator = null;
@@ -120,7 +114,7 @@ namespace System.Linq
                 }
 
                 try
-                {                    
+                {
                     await using (winner.ConfigureAwait(false))
                     {
                         if (!await moveNextWinner.ConfigureAwait(false))

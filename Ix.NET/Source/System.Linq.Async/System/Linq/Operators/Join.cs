@@ -55,15 +55,9 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
 
-            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return Create(Core);
-
-            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 await using var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
@@ -114,15 +108,9 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
 
-            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return Create(Core);
-
-            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 await using var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
@@ -174,15 +162,9 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
 
-            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector, Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, CancellationToken, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return Create(Core);
-
-            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector, Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, CancellationToken, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 await using var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
 

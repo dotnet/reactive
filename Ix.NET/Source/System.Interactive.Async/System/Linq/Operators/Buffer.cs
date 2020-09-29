@@ -26,15 +26,9 @@ namespace System.Linq
             if (count <= 0)
                 throw Error.ArgumentOutOfRange(nameof(count));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, count);
 
-            static async IAsyncEnumerable<IList<TSource>> Core(IAsyncEnumerable<TSource> source, int count, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<IList<TSource>> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<IList<TSource>> Core(IAsyncEnumerable<TSource> source, int count, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 var buffer = new List<TSource>(count);
 
@@ -76,15 +70,9 @@ namespace System.Linq
             if (skip <= 0)
                 throw Error.ArgumentOutOfRange(nameof(skip));
 
-#if HAS_ASYNC_ENUMERABLE_CANCELLATION
             return Core(source, count, skip);
 
-            static async IAsyncEnumerable<IList<TSource>> Core(IAsyncEnumerable<TSource> source, int count, int skip, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
-#else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<IList<TSource>> Core(CancellationToken cancellationToken)
-#endif
+            static async IAsyncEnumerable<IList<TSource>> Core(IAsyncEnumerable<TSource> source, int count, int skip, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 var buffers = new Queue<IList<TSource>>();
 
