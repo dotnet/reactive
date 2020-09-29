@@ -1,16 +1,5 @@
 ﻿<Project>
 
-  <!-- Workaround. Remove once we're on 3.1.300+
-  https://github.com/dotnet/sourcelink/issues/572 -->
-  <PropertyGroup>
-    <TargetFrameworkMonikerAssemblyAttributesPath>$([System.IO.Path]::Combine('$(IntermediateOutputPath)','$(TargetFrameworkMoniker).AssemblyAttributes$(DefaultLanguageSourceExtension)'))</TargetFrameworkMonikerAssemblyAttributesPath>
-  </PropertyGroup>
-  <ItemGroup>
-    <EmbeddedFiles Include="$(GeneratedAssemblyInfoFile)"/>
-  </ItemGroup>
-
-
-
   <!-- This props all need to be set in targets as they depend on the values set earlier -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
     <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_CODE_COVERAGE_ATTRIBUTE</DefineConstants>
@@ -28,5 +17,15 @@
   <PropertyGroup>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
   </PropertyGroup>
+
+  <!-- Remove once coverlet supports this built-in -->
+  <Target Name="CoverletGetPathMap"
+          DependsOnTargets="InitializeSourceRootMappedPaths"
+          Returns="@(_LocalTopLevelSourceRoot)"
+          Condition="'$(DeterministicSourcePaths)' == 'true'">
+    <ItemGroup>
+      <_LocalTopLevelSourceRoot Include="@(SourceRoot)" Condition="'%(SourceRoot.NestedRoot)' == ''"/>
+    </ItemGroup>
+  </Target>
 
 </Project>

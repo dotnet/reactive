@@ -33,10 +33,10 @@ stages:
   - job: Build
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 3.1.x SDK
+      displayName: Use .NET Core 5.0.x SDK
       inputs:
-        version: 3.1.x
-        performMultiLevelLookup: true
+        version: 5.0.x
+        includePreviewVersions: true
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -74,7 +74,7 @@ stages:
       inputs:
         command: test
         projects: Ix.NET/Source/**/*.Tests.csproj
-        arguments: -c $(BuildConfiguration) --settings Ix.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" /t:rebuild /p:ContinuousIntegrationBuild=false -- RunConfiguration.DisableAppDomain=true
+        arguments: -c $(BuildConfiguration) --settings Ix.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
       displayName: Run Tests
 
     - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
@@ -93,12 +93,6 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)\artifacts
       displayName: Publish artifacts
       artifact: BuildPackages
-
-    - task: PublishPipelineArtifact@0
-      displayName: Publish Code Coverage XML
-      inputs:
-        artifactName: Coverage Report XML
-        targetPath: $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml
 
 - stage: CodeSign
   condition: and(succeeded('Build'), not(eq(variables['build.reason'], 'PullRequest')))

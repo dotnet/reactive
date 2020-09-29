@@ -13,17 +13,14 @@
     <NoWarn>$(NoWarn);1701;1702;CS1591;NU5105</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
-    <DebugType Condition="'$(Configuration)' != 'Debug'">embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <!-- While in beta, we need to set preview for 8.0 manually (rather than latest). -->
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    <Deterministic>true</Deterministic>
   </PropertyGroup>
 
   <ItemGroup>
