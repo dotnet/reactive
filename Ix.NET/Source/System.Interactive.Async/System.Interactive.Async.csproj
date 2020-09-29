@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.SDK">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>Interactive Extensions Async Library used to express queries over asynchronous enumerable sequences.</Description>
