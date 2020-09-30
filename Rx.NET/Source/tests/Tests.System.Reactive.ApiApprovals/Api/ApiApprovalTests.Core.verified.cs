@@ -184,7 +184,7 @@ namespace System.Reactive
         protected abstract void OnNextCore(T value);
     }
     [System.Serializable]
-    public struct TimeInterval<T> : System.IEquatable<System.Reactive.TimeInterval<T>>
+    public readonly struct TimeInterval<T> : System.IEquatable<System.Reactive.TimeInterval<T>>
     {
         public TimeInterval(T value, System.TimeSpan interval) { }
         public System.TimeSpan Interval { get; }
@@ -201,7 +201,7 @@ namespace System.Reactive
         public static System.Reactive.Timestamped<T> Create<T>(T value, System.DateTimeOffset timestamp) { }
     }
     [System.Serializable]
-    public struct Timestamped<T> : System.IEquatable<System.Reactive.Timestamped<T>>
+    public readonly struct Timestamped<T> : System.IEquatable<System.Reactive.Timestamped<T>>
     {
         public Timestamped(T value, System.DateTimeOffset timestamp) { }
         public System.DateTimeOffset Timestamp { get; }
@@ -214,7 +214,7 @@ namespace System.Reactive
         public static bool operator ==(System.Reactive.Timestamped<T> first, System.Reactive.Timestamped<T> second) { }
     }
     [System.Serializable]
-    public struct Unit : System.IEquatable<System.Reactive.Unit>
+    public readonly struct Unit : System.IEquatable<System.Reactive.Unit>
     {
         public static System.Reactive.Unit Default { get; }
         public override bool Equals(object obj) { }

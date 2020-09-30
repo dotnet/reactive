@@ -17,7 +17,7 @@ namespace Microsoft.Reactive.Testing
 #if !NO_SERIALIZABLE
     [Serializable]
 #endif
-    public struct Recorded<T> : IEquatable<Recorded<T>>
+    public readonly struct Recorded<T> : IEquatable<Recorded<T>>
     {
         private readonly long _time;
         private readonly T _value;

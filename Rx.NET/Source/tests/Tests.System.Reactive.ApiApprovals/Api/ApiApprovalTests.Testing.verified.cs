@@ -55,7 +55,7 @@ namespace Microsoft.Reactive.Testing
     }
     [System.Diagnostics.DebuggerDisplay("{Value}@{Time}")]
     [System.Serializable]
-    public struct Recorded<T> : System.IEquatable<Microsoft.Reactive.Testing.Recorded<T>>
+    public readonly struct Recorded<T> : System.IEquatable<Microsoft.Reactive.Testing.Recorded<T>>
     {
         public Recorded(long time, T value) { }
         public long Time { get; }
@@ -69,7 +69,7 @@ namespace Microsoft.Reactive.Testing
     }
     [System.Diagnostics.DebuggerDisplay("({Subscribe}, {Unsubscribe})")]
     [System.Serializable]
-    public struct Subscription : System.IEquatable<Microsoft.Reactive.Testing.Subscription>
+    public readonly struct Subscription : System.IEquatable<Microsoft.Reactive.Testing.Subscription>
     {
         public const long Infinite = 9223372036854775807;
         public Subscription(long subscribe) { }

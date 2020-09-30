@@ -15,7 +15,7 @@ namespace System.Reactive
 #if !NO_SERIALIZABLE
     [Serializable]
 #endif
-    public struct TimeInterval<T> : IEquatable<TimeInterval<T>>
+    public readonly struct TimeInterval<T> : IEquatable<TimeInterval<T>>
     {
         /// <summary>
         /// Constructs a time interval value.
