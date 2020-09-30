@@ -506,7 +506,6 @@ namespace ReactiveTests.Tests
             Assert.False(enumerator.MoveNext());
         }
 
-#if NET45 || NET46 
         [Fact]
         public void CancellationDisposable_Ctor_Null()
         {
@@ -537,7 +536,7 @@ namespace ReactiveTests.Tests
             Assert.True(c.IsDisposed);
             Assert.True(c.Token.IsCancellationRequested);
         }
-#endif
+
         [Fact]
         public void ContextDisposable_CreateNullContext()
         {
