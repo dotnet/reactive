@@ -30,7 +30,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            Wait(action, closureAction => closureAction());
+            Wait(action, static closureAction => closureAction());
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            Wait(state, action, (actionObject, stateObject) => ((Action<TState>)actionObject)((TState)stateObject));
+            Wait(state, action, static (actionObject, stateObject) => ((Action<TState>)actionObject)((TState)stateObject));
         }
 
         private void Wait(object state, Delegate @delegate, Action<Delegate, object> action)

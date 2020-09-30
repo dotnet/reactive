@@ -405,7 +405,7 @@ namespace System.Reactive.Subjects
                     // Task objects or the async method builder's interaction with the
                     // SynchronizationContext object.
                     //
-                    _context.Post(c => ((Action)c)(), _callback);
+                    _context.Post(static c => ((Action)c)(), _callback);
                 }
                 else
                 {

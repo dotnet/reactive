@@ -332,20 +332,24 @@ namespace System.Reactive.Concurrency
         /// <returns>New stopwatch object; started at the time of the request.</returns>
         public IStopwatch StartStopwatch()
         {
-            var start = ToDateTimeOffset(Clock);
-            return new VirtualTimeStopwatch(() => ToDateTimeOffset(Clock) - start);
+            var start = ClockToDateTimeOffset();
+            return new VirtualTimeStopwatch(this, start);
         }
+
+        private DateTimeOffset ClockToDateTimeOffset() => ToDateTimeOffset(Clock);
 
         private sealed class VirtualTimeStopwatch : IStopwatch
         {
-            private readonly Func<TimeSpan> _getElapsed;
+            private readonly VirtualTimeSchedulerBase<TAbsolute, TRelative> _parent;
+            private readonly DateTimeOffset _start;
 
-            public VirtualTimeStopwatch(Func<TimeSpan> getElapsed)
+            public VirtualTimeStopwatch(VirtualTimeSchedulerBase<TAbsolute, TRelative> parent, DateTimeOffset start)
             {
-                _getElapsed = getElapsed;
+                _parent = parent;
+                _start = start;
             }
 
-            public TimeSpan Elapsed => _getElapsed();
+            public TimeSpan Elapsed => _parent.ClockToDateTimeOffset() - _start;
         }
     }
 

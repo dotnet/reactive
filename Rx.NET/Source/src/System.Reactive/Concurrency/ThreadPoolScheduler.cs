@@ -14,8 +14,8 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Instance">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
-        private static readonly Lazy<ThreadPoolScheduler> LazyInstance = new Lazy<ThreadPoolScheduler>(() => new ThreadPoolScheduler());
-        private static readonly Lazy<NewThreadScheduler> LazyNewBackgroundThread = new Lazy<NewThreadScheduler>(() => new NewThreadScheduler(action => new Thread(action) { IsBackground = true }));
+        private static readonly Lazy<ThreadPoolScheduler> LazyInstance = new Lazy<ThreadPoolScheduler>(static () => new ThreadPoolScheduler());
+        private static readonly Lazy<NewThreadScheduler> LazyNewBackgroundThread = new Lazy<NewThreadScheduler>(static () => new NewThreadScheduler(action => new Thread(action) { IsBackground = true }));
 
         /// <summary>
         /// Gets the singleton instance of the CLR thread pool scheduler.
@@ -44,7 +44,7 @@ namespace System.Reactive.Concurrency
             var workItem = new UserWorkItem<TState>(this, state, action);
 
             ThreadPool.QueueUserWorkItem(
-                closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                static closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
                 workItem);
 
             return workItem;
@@ -75,7 +75,7 @@ namespace System.Reactive.Concurrency
             var workItem = new UserWorkItem<TState>(this, state, action);
 
             workItem.CancelQueueDisposable = new Timer(
-                closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                static closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
                 workItem,
                 dt,
                 Timeout.InfiniteTimeSpan);
@@ -156,7 +156,7 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                ThreadPool.QueueUserWorkItem(_ => Tick(_), this);   // Replace with method group as soon as Roslyn will cache the delegate then.
+                ThreadPool.QueueUserWorkItem(static @this => Tick(@this), this);   // Replace with method group as soon as Roslyn will cache the delegate then.
             }
 
             private static void Tick(object state)
@@ -166,7 +166,7 @@ namespace System.Reactive.Concurrency
                 if (!timer._disposed)
                 {
                     timer._state = timer._action(timer._state);
-                    ThreadPool.QueueUserWorkItem(_ => Tick(_), timer);
+                    ThreadPool.QueueUserWorkItem(static t => Tick(t), timer);
                 }
             }
 
@@ -196,7 +196,7 @@ namespace System.Reactive.Concurrency
                 // Rooting of the timer happens through the this.Tick delegate's target object,
                 // which is the current instance and has a field to store the Timer instance.
                 //
-                _timer = new Timer(@this => ((PeriodicTimer<TState>)@this).Tick(), this, period, period);
+                _timer = new Timer(static @this => ((PeriodicTimer<TState>)@this).Tick(), this, period, period);
             }
 
             private void Tick()
