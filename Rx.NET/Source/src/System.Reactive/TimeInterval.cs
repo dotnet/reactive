@@ -43,10 +43,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="other">An object to compare to the current <see cref="TimeInterval{T}"/> value.</param>
         /// <returns><c>true</c> if both <see cref="TimeInterval{T}"/> values have the same <see cref="Value"/> and <see cref="Interval"/>; otherwise, <c>false</c>.</returns>
-        public bool Equals(TimeInterval<T> other)
-        {
-            return other.Interval.Equals(Interval) && EqualityComparer<T>.Default.Equals(Value, other.Value);
-        }
+        public bool Equals(TimeInterval<T> other) => other.Interval.Equals(Interval) && EqualityComparer<T>.Default.Equals(Value, other.Value);
 
         /// <summary>
         /// Determines whether the two specified <see cref="TimeInterval{T}"/> values have the same <see cref="Value"/> and <see cref="Interval"/>.
@@ -54,10 +51,7 @@ namespace System.Reactive
         /// <param name="first">The first <see cref="TimeInterval{T}"/> value to compare.</param>
         /// <param name="second">The second <see cref="TimeInterval{T}"/> value to compare.</param>
         /// <returns><c>true</c> if the first <see cref="TimeInterval{T}"/> value has the same <see cref="Value"/> and <see cref="Interval"/> as the second <see cref="TimeInterval{T}"/> value; otherwise, <c>false</c>.</returns>
-        public static bool operator ==(TimeInterval<T> first, TimeInterval<T> second)
-        {
-            return first.Equals(second);
-        }
+        public static bool operator ==(TimeInterval<T> first, TimeInterval<T> second) => first.Equals(second);
 
         /// <summary>
         /// Determines whether the two specified <see cref="TimeInterval{T}"/> values don't have the same <see cref="Value"/> and <see cref="Interval"/>.
@@ -65,26 +59,14 @@ namespace System.Reactive
         /// <param name="first">The first <see cref="TimeInterval{T}"/> value to compare.</param>
         /// <param name="second">The second <see cref="TimeInterval{T}"/> value to compare.</param>
         /// <returns><c>true</c> if the first <see cref="TimeInterval{T}"/> value has a different <see cref="Value"/> or <see cref="Interval"/> as the second <see cref="TimeInterval{T}"/> value; otherwise, <c>false</c>.</returns>
-        public static bool operator !=(TimeInterval<T> first, TimeInterval<T> second)
-        {
-            return !first.Equals(second);
-        }
+        public static bool operator !=(TimeInterval<T> first, TimeInterval<T> second) => !first.Equals(second);
 
         /// <summary>
         /// Determines whether the specified System.Object is equal to the current <see cref="TimeInterval{T}"/>.
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current <see cref="TimeInterval{T}"/>.</param>
         /// <returns><c>true</c> if the specified System.Object is equal to the current <see cref="TimeInterval{T}"/>; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
-        {
-            if (!(obj is TimeInterval<T>))
-            {
-                return false;
-            }
-
-            var other = (TimeInterval<T>)obj;
-            return Equals(other);
-        }
+        public override bool Equals(object obj) => obj is TimeInterval<T> && Equals((TimeInterval<T>)obj);
 
         /// <summary>
         /// Returns the hash code for the current <see cref="TimeInterval{T}"/> value.
@@ -92,6 +74,7 @@ namespace System.Reactive
         /// <returns>A hash code for the current <see cref="TimeInterval{T}"/> value.</returns>
         public override int GetHashCode()
         {
+            // TODO: Use proper hash code combiner.
             return Interval.GetHashCode() ^ (Value?.GetHashCode() ?? 1963);
         }
 
@@ -99,9 +82,6 @@ namespace System.Reactive
         /// Returns a string representation of the current <see cref="TimeInterval{T}"/> value.
         /// </summary>
         /// <returns>String representation of the current <see cref="TimeInterval{T}"/> value.</returns>
-        public override string ToString()
-        {
-            return string.Format(CultureInfo.CurrentCulture, "{0}@{1}", Value, Interval);
-        }
+        public override string ToString() => string.Format(CultureInfo.CurrentCulture, "{0}@{1}", Value, Interval);
     }
 }

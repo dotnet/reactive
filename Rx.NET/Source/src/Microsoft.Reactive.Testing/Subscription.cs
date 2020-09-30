@@ -22,18 +22,19 @@ namespace Microsoft.Reactive.Testing
         /// </summary>
         public const long Infinite = long.MaxValue;
 
+        // NB: Keep these fields for compat with serialized state.
         private readonly long _subscribe;
         private readonly long _unsubscribe;
 
         /// <summary>
         /// Gets the subscription virtual time.
         /// </summary>
-        public long Subscribe { get { return _subscribe; } }
+        public long Subscribe => _subscribe;
 
         /// <summary>
         /// Gets the unsubscription virtual time.
         /// </summary>
-        public long Unsubscribe { get { return _unsubscribe; } }
+        public long Unsubscribe => _unsubscribe;
 
         /// <summary>
         /// Creates a new subscription object with the given virtual subscription time.
@@ -61,10 +62,7 @@ namespace Microsoft.Reactive.Testing
         /// </summary>
         /// <param name="other">Subscription object to check for equality.</param>
         /// <returns>true if both objects are equal; false otherwise.</returns>
-        public bool Equals(Subscription other)
-        {
-            return Subscribe == other.Subscribe && Unsubscribe == other.Unsubscribe;
-        }
+        public bool Equals(Subscription other) => Subscribe == other.Subscribe && Unsubscribe == other.Unsubscribe;
 
         /// <summary>
         /// Determines whether the two specified Subscription values have the same Subscribe and Unsubscribe.
@@ -72,10 +70,7 @@ namespace Microsoft.Reactive.Testing
         /// <param name="left">The first Subscription value to compare.</param>
         /// <param name="right">The second Subscription value to compare.</param>
         /// <returns>true if the first Subscription value has the same Subscribe and Unsubscribe as the second Subscription value; otherwise, false.</returns>
-        public static bool operator ==(Subscription left, Subscription right)
-        {
-            return left.Equals(right);
-        }
+        public static bool operator ==(Subscription left, Subscription right) => left.Equals(right);
 
         /// <summary>
         /// Determines whether the two specified Subscription values don't have the same Subscribe and Unsubscribe.
@@ -83,25 +78,14 @@ namespace Microsoft.Reactive.Testing
         /// <param name="left">The first Subscription value to compare.</param>
         /// <param name="right">The second Subscription value to compare.</param>
         /// <returns>true if the first Subscription value has a different Subscribe or Unsubscribe as the second Subscription value; otherwise, false.</returns>
-        public static bool operator !=(Subscription left, Subscription right)
-        {
-            return !left.Equals(right);
-        }
+        public static bool operator !=(Subscription left, Subscription right) => !left.Equals(right);
 
         /// <summary>
         /// Determines whether the specified System.Object is equal to the current Subscription value.
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current Subscription value.</param>
         /// <returns>true if the specified System.Object is equal to the current Subscription value; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            if (obj is Subscription)
-            {
-                return Equals((Subscription)obj);
-            }
-
-            return false;
-        }
+        public override bool Equals(object obj) => obj is Subscription && Equals((Subscription)obj);
 
         /// <summary>
         /// Returns the hash code for the current Subscription value.
@@ -109,6 +93,7 @@ namespace Microsoft.Reactive.Testing
         /// <returns>A hash code for the current Subscription value.</returns>
         public override int GetHashCode()
         {
+            // TODO: Use proper hash code combiner.
             return Subscribe.GetHashCode() ^ Unsubscribe.GetHashCode();
         }
 
