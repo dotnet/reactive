@@ -73,7 +73,14 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (!_hasValue)
                 {
-                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    try
+                    {
+                        throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                    }
+                    catch (Exception e)
+                    {
+                        ForwardOnError(e);
+                    }
                 }
                 else
                 {
@@ -177,7 +184,14 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (!_hasValue)
                 {
-                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    try
+                    {
+                        throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                    }
+                    catch (Exception e)
+                    {
+                        ForwardOnError(e);
+                    }
                 }
                 else
                 {
@@ -231,7 +245,14 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (!_hasValue)
                 {
-                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    try
+                    {
+                        throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                    }
+                    catch (Exception e)
+                    {
+                        ForwardOnError(e);
+                    }
                 }
                 else
                 {
@@ -285,7 +306,14 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (!_hasValue)
                 {
-                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    try
+                    {
+                        throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                    }
+                    catch (Exception e)
+                    {
+                        ForwardOnError(e);
+                    }
                 }
                 else
                 {
@@ -339,7 +367,14 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (!_hasValue)
                 {
-                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    try
+                    {
+                        throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                    }
+                    catch (Exception e)
+                    {
+                        ForwardOnError(e);
+                    }
                 }
                 else
                 {
@@ -393,7 +428,14 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (!_hasValue)
                 {
-                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    try
+                    {
+                        throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                    }
+                    catch (Exception e)
+                    {
+                        ForwardOnError(e);
+                    }
                 }
                 else
                 {

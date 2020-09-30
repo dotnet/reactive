@@ -235,6 +235,7 @@ namespace System.Reactive.Linq
         {
             var value = default(TSource);
             var seenValue = false;
+            var moreThanOneElement = false;
             var ex = default(Exception);
 
             using (var evt = new WaitAndSetOnce())
@@ -247,7 +248,7 @@ namespace System.Reactive.Linq
                     {
                         if (seenValue)
                         {
-                            ex = new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_ELEMENT);
+                            moreThanOneElement = true;
                             evt.Set();
                         }
 
@@ -269,6 +270,11 @@ namespace System.Reactive.Linq
             }
 
             ex.ThrowIfNotNull();
+
+            if (moreThanOneElement)
+            {
+                throw new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_ELEMENT);
+            }
 
             if (throwOnEmpty && !seenValue)
             {

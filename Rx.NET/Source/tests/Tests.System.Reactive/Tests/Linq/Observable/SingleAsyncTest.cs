@@ -4,6 +4,9 @@
 
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using System.Threading.Tasks;
+
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
 using Xunit;
@@ -253,5 +256,59 @@ namespace ReactiveTests.Tests
             );
         }
 
+        [Fact] // https://github.com/dotnet/reactive/issues/1235
+        public void MeaningfulStackTrace()
+        {
+            static async Task Core()
+            {
+                static void AssertException(Exception e)
+                {
+                    Assert.IsType(typeof(InvalidOperationException), e);
+
+                    Assert.NotNull(e.StackTrace);
+                    Assert.NotEqual("", e.StackTrace);
+
+                    Assert.True(e.StackTrace.Contains("SingleAsync"));
+                }
+
+                var xs = Observable.Range(0, 2).SingleAsync();
+
+                try
+                {
+                    await xs;
+                }
+                catch (Exception e)
+                {
+                    AssertException(e);
+                }
+
+                try
+                {
+                    await xs.ToTask();
+                }
+                catch (Exception e)
+                {
+                    AssertException(e);
+                }
+
+                var tcs = new TaskCompletionSource<bool>();
+
+                xs.Subscribe(
+                    _ => { },
+                    e => tcs.SetException(e),
+                    () => tcs.SetResult(false));
+
+                try
+                {
+                    await tcs.Task;
+                }
+                catch (Exception e)
+                {
+                    AssertException(e);
+                }
+            }
+
+            Core().GetAwaiter().GetResult();
+        }
     }
 }
