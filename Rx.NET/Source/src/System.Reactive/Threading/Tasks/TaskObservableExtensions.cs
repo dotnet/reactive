@@ -470,7 +470,14 @@ namespace System.Reactive.Threading.Tasks
                 }
                 else
                 {
-                    _tcs.TrySetException(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    try
+                    {
+                        throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                    }
+                    catch (Exception e)
+                    {
+                        _tcs.TrySetException(e);
+                    }
                 }
 
                 _ctr.Dispose(); // no null-check needed (struct)

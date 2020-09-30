@@ -33,7 +33,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_seenValue)
                     {
-                        ForwardOnError(new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_ELEMENT));
+                        try
+                        {
+                            throw new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_ELEMENT);
+                        }
+                        catch (Exception e)
+                        {
+                            ForwardOnError(e);
+                        }
                         return;
                     }
 
@@ -94,7 +101,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         if (_seenValue)
                         {
-                            ForwardOnError(new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_MATCHING_ELEMENT));
+                            try
+                            {
+                                throw new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_MATCHING_ELEMENT);
+                            }
+                            catch (Exception e)
+                            {
+                                ForwardOnError(e);
+                            }
                             return;
                         }
 

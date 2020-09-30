@@ -44,7 +44,14 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (_i >= 0)
                 {
-                    ForwardOnError(new ArgumentOutOfRangeException("index"));
+                    try
+                    {
+                        throw new ArgumentOutOfRangeException("index");
+                    }
+                    catch (Exception e)
+                    {
+                        ForwardOnError(e);
+                    }
                 }
             }
         }
