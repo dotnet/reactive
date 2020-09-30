@@ -49,9 +49,7 @@ namespace ReactiveTests
 
         public void InvokeShutdown()
         {
-#if !USE_SL_DISPATCHER
             _dispatcher.InvokeShutdown();
-#endif
         }
 
         public static implicit operator Dispatcher(DispatcherWrapper wrapper)
@@ -59,13 +57,11 @@ namespace ReactiveTests
             return wrapper._dispatcher;
         }
 
-#if !USE_SL_DISPATCHER
         public event DispatcherUnhandledExceptionEventHandler UnhandledException
         {
             add { _dispatcher.UnhandledException += value; }
             remove { _dispatcher.UnhandledException -= value; }
         }
-#endif
 
         public void BeginInvoke(Action action)
         {
