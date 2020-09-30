@@ -16,7 +16,7 @@ namespace System.Reactive
     [Serializable]
 #endif
     [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Timestamped", Justification = "Reviewed and agreed upon.")]
-    public struct Timestamped<T> : IEquatable<Timestamped<T>>
+    public readonly struct Timestamped<T> : IEquatable<Timestamped<T>>
     {
         /// <summary>
         /// Constructs a timestamped value.

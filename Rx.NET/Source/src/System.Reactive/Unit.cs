@@ -10,7 +10,7 @@ namespace System.Reactive
 #if !NO_SERIALIZABLE
     [Serializable]
 #endif
-    public struct Unit : IEquatable<Unit>
+    public readonly struct Unit : IEquatable<Unit>
     {
         /// <summary>
         /// Determines whether the specified <see cref="Unit"/> value is equal to the current <see cref="Unit"/>. Because <see cref="Unit"/> has a single value, this always returns <c>true</c>.
