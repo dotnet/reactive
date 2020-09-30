@@ -73,9 +73,7 @@ namespace System.Reactive
         /// <summary>
         /// Represents an OnNext notification to an observer.
         /// </summary>
-#if !NO_DEBUGGER_ATTRIBUTES
         [DebuggerDisplay("OnNext({Value})")]
-#endif
 #if !NO_SERIALIZABLE
         [Serializable]
 #endif
@@ -228,9 +226,7 @@ namespace System.Reactive
         /// <summary>
         /// Represents an OnError notification to an observer.
         /// </summary>
-#if !NO_DEBUGGER_ATTRIBUTES
         [DebuggerDisplay("OnError({Exception})")]
-#endif
 #if !NO_SERIALIZABLE
         [Serializable]
 #endif

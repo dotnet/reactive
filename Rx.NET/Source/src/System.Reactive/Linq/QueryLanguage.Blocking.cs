@@ -322,11 +322,7 @@ namespace System.Reactive.Linq
 
             public void Dispose()
             {
-#if HAS_MREEXPLICITDISPOSABLE
-                ((IDisposable)_evt).Dispose();
-#else
                 _evt.Dispose();
-#endif
             }
         }
 
