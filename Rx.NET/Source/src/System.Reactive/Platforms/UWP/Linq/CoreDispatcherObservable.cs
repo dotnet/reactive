@@ -152,7 +152,7 @@ namespace System.Reactive.Linq
 
 #endregion
 
-#region SubscribeOn[Dispatcher]
+        #region SubscribeOn[Dispatcher]
 
         /// <summary>
         /// Wraps the source sequence in order to run its subscription and unsubscription logic on the specified dispatcher.
@@ -309,7 +309,7 @@ namespace System.Reactive.Linq
             return Synchronization.SubscribeOn(source, new CoreDispatcherScheduler(CoreDispatcherScheduler.Current.Dispatcher, priority));
         }
 
-#endregion
+        #endregion
     }
 }
 #endif

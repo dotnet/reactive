@@ -32,7 +32,7 @@ namespace System.Reactive.Windows.Foundation
 
             return new AsyncInfoToObservableBridge<Unit, Unit>(
                 source,
-                (iai, a) => ((IAsyncAction)iai).Completed += new AsyncActionCompletedHandler((iaa, status) => a(iaa, status)),
+                static (iai, a) => ((IAsyncAction)iai).Completed += new AsyncActionCompletedHandler((iaa, status) => a(iaa, status)),
                 iai => Unit.Default,
                 onProgress: null,
                 progress: null,
@@ -101,7 +101,7 @@ namespace System.Reactive.Windows.Foundation
             {
                 var progress = observer.ToProgress();
                 var src = source.ToObservable_(progress);
-                return src.Subscribe(_ => { }, observer.OnError, observer.OnCompleted);
+                return src.Subscribe(static _ => { }, observer.OnError, observer.OnCompleted);
             });
         }
 
@@ -109,9 +109,9 @@ namespace System.Reactive.Windows.Foundation
         {
             return new AsyncInfoToObservableBridge<Unit, TProgress>(
                 source,
-                (iai, a) => ((IAsyncActionWithProgress<TProgress>)iai).Completed += new AsyncActionWithProgressCompletedHandler<TProgress>((iaa, status) => a(iaa, status)),
+                static (iai, a) => ((IAsyncActionWithProgress<TProgress>)iai).Completed += new AsyncActionWithProgressCompletedHandler<TProgress>((iaa, status) => a(iaa, status)),
                 iai => Unit.Default,
-                (iai, a) => ((IAsyncActionWithProgress<TProgress>)iai).Progress += new AsyncActionProgressHandler<TProgress>((iap, p) => a(iap, p)),
+                static (iai, a) => ((IAsyncActionWithProgress<TProgress>)iai).Progress += new AsyncActionProgressHandler<TProgress>((iap, p) => a(iap, p)),
                 progress,
                 multiValue: false
             );
@@ -138,8 +138,8 @@ namespace System.Reactive.Windows.Foundation
 
             return new AsyncInfoToObservableBridge<TResult, Unit>(
                 source,
-                (iai, a) => ((IAsyncOperation<TResult>)iai).Completed += new AsyncOperationCompletedHandler<TResult>((iao, status) => a(iao, status)),
-                iai => ((IAsyncOperation<TResult>)iai).GetResults(),
+                static (iai, a) => ((IAsyncOperation<TResult>)iai).Completed += new AsyncOperationCompletedHandler<TResult>((iao, status) => a(iao, status)),
+                static iai => ((IAsyncOperation<TResult>)iai).GetResults(),
                 onProgress: null,
                 progress: null,
                 multiValue: false
@@ -210,7 +210,7 @@ namespace System.Reactive.Windows.Foundation
             {
                 var progress = observer.ToProgress();
                 var src = source.ToObservable_(progress, false);
-                return src.Subscribe(_ => { }, observer.OnError, observer.OnCompleted);
+                return src.Subscribe(static _ => { }, observer.OnError, observer.OnCompleted);
             });
         }
 
@@ -264,9 +264,9 @@ namespace System.Reactive.Windows.Foundation
         {
             return new AsyncInfoToObservableBridge<TResult, TProgress>(
                 source,
-                (iai, a) => ((IAsyncOperationWithProgress<TResult, TProgress>)iai).Completed += new AsyncOperationWithProgressCompletedHandler<TResult, TProgress>((iao, status) => a(iao, status)),
+                static (iai, a) => ((IAsyncOperationWithProgress<TResult, TProgress>)iai).Completed += new AsyncOperationWithProgressCompletedHandler<TResult, TProgress>((iao, status) => a(iao, status)),
                 iai => ((IAsyncOperationWithProgress<TResult, TProgress>)iai).GetResults(),
-                (iai, a) => ((IAsyncOperationWithProgress<TResult, TProgress>)iai).Progress += new AsyncOperationProgressHandler<TResult, TProgress>((iap, p) => a(iap, p)),
+                static (iai, a) => ((IAsyncOperationWithProgress<TResult, TProgress>)iai).Progress += new AsyncOperationProgressHandler<TResult, TProgress>((iap, p) => a(iap, p)),
                 progress,
                 supportsMultiple
             );

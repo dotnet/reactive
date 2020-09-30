@@ -494,7 +494,7 @@ namespace System.Reactive
         /// whenever the signals have to be drained.
         /// </summary>
         private static readonly Func<IScheduler, ObserveOnObserverNew<T>, IDisposable> DrainShortRunningFunc =
-            (scheduler, self) => self.DrainShortRunning(scheduler);
+            static (scheduler, self) => self.DrainShortRunning(scheduler);
 
         /// <summary>
         /// Emits at most one signal per run on a scheduler that doesn't like
@@ -682,7 +682,7 @@ namespace System.Reactive
         /// <summary>
         /// Static reference to the Drain method, saves allocation.
         /// </summary>
-        private static readonly Action<ObserveOnObserverLongRunning<TSource>, ICancelable> DrainLongRunning = (self, cancelable) => self.Drain();
+        private static readonly Action<ObserveOnObserverLongRunning<TSource>, ICancelable> DrainLongRunning = static (self, cancelable) => self.Drain();
 
         protected override void Dispose(bool disposing)
         {

@@ -76,7 +76,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return SchedulePeriodic_(scheduler, (state, action), period, t => { t.action(t.state); return t; });
+            return SchedulePeriodic_(scheduler, (state, action), period, static t => { t.action(t.state); return t; });
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return SchedulePeriodic_(scheduler, action, period, a => { a(); return a; });
+            return SchedulePeriodic_(scheduler, action, period, static a => { a(); return a; });
         }
 
         /// <summary>
@@ -377,7 +377,7 @@ namespace System.Reactive.Concurrency
                 _nextDue = _period;
                 _runState = Running;
 
-                Disposable.TrySetSingle(ref _task, _scheduler.Schedule(this, _nextDue, (@this, a) => @this.Tick(a)));
+                Disposable.TrySetSingle(ref _task, _scheduler.Schedule(this, _nextDue, static (@this, a) => @this.Tick(a)));
                 return this;
             }
 

@@ -38,7 +38,7 @@ namespace System.Reactive.Concurrency
             // an anonymous delegate will allow delegate caching.
             // Watch https://github.com/dotnet/roslyn/issues/5835 for compiler
             // support for caching delegates from method groups.
-            return scheduler.ScheduleRelative(action, dueTime, (s, a) => Invoke(s, a));
+            return scheduler.ScheduleRelative(action, dueTime, static (s, a) => Invoke(s, a));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return scheduler.ScheduleAbsolute(action, dueTime, (s, a) => Invoke(s, a));
+            return scheduler.ScheduleAbsolute(action, dueTime, static (s, a) => Invoke(s, a));
         }
 
         private static IDisposable Invoke(IScheduler scheduler, Action action)

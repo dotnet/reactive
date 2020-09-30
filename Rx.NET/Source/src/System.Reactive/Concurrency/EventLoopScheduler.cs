@@ -82,7 +82,7 @@ namespace System.Reactive.Concurrency
         /// Creates an object that schedules units of work on a designated thread.
         /// </summary>
         public EventLoopScheduler()
-            : this(a => new Thread(a) { Name = "Event Loop " + Interlocked.Increment(ref _counter), IsBackground = true })
+            : this(static a => new Thread(a) { Name = "Event Loop " + Interlocked.Increment(ref _counter), IsBackground = true })
         {
         }
 
@@ -218,18 +218,18 @@ namespace System.Reactive.Concurrency
                 _scheduler = scheduler;
                 _next = scheduler._stopwatch.Elapsed + period;
 
-                Disposable.TrySetSingle(ref _task, scheduler.Schedule(this, _next - scheduler._stopwatch.Elapsed, (_, s) => s.Tick(_)));
+                Disposable.TrySetSingle(ref _task, scheduler.Schedule(this, _next - scheduler._stopwatch.Elapsed, static (_, s) => s.Tick(_)));
             }
 
             private IDisposable Tick(IScheduler self)
             {
                 _next += _period;
 
-                Disposable.TrySetMultiple(ref _task, self.Schedule(this, _next - _scheduler._stopwatch.Elapsed, (_, s) => s.Tick(_)));
+                Disposable.TrySetMultiple(ref _task, self.Schedule(this, _next - _scheduler._stopwatch.Elapsed, static (_, s) => s.Tick(_)));
 
                 _gate.Wait(
                     this,
-                    closureWorkItem => closureWorkItem._state = closureWorkItem._action(closureWorkItem._state));
+                    static closureWorkItem => closureWorkItem._state = closureWorkItem._action(closureWorkItem._state));
 
                 return Disposable.Empty;
             }

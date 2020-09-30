@@ -27,7 +27,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return scheduler.Schedule(action, (_action, self) => _action(() => self(_action)));
+            return scheduler.Schedule(action, static (a, self) => a(() => self(a)));
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return scheduler.Schedule((state, action), (s, p) => InvokeRec1(s, p));
+            return scheduler.Schedule((state, action), static (s, p) => InvokeRec1(s, p));
         }
 
         private static IDisposable InvokeRec1<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState>> action) tuple)
@@ -81,7 +81,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return scheduler.Schedule(action, dueTime, (_action, self) => _action(dt => self(_action, dt)));
+            return scheduler.Schedule(action, dueTime, static (a, self) => a(ts => self(a, ts)));
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return scheduler.Schedule((state, action), dueTime, (s, p) => InvokeRec2(s, p));
+            return scheduler.Schedule((state, action), dueTime, static (s, p) => InvokeRec2(s, p));
         }
 
         private static IDisposable InvokeRec2<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState, TimeSpan>> action) tuple)
@@ -136,7 +136,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return scheduler.Schedule(action, dueTime, (_action, self) => _action(dt => self(_action, dt)));
+            return scheduler.Schedule(action, dueTime, static (a, self) => a(dt => self(a, dt)));
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return scheduler.Schedule((state, action), dueTime, (s, p) => InvokeRec3(s, p));
+            return scheduler.Schedule((state, action), dueTime, static (s, p) => InvokeRec3(s, p));
         }
 
         private static IDisposable InvokeRec3<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState, DateTimeOffset>> action) tuple)
@@ -206,7 +206,7 @@ namespace System.Reactive.Concurrency
                 var sad = new SingleAssignmentDisposable();
 
                 Group.Add(sad);
-                sad.Disposable = Scheduler.ScheduleAction((state, sad, @this: this), nextState =>
+                sad.Disposable = Scheduler.ScheduleAction((state, sad, @this: this), static nextState =>
                 {
                     nextState.@this.Group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
@@ -263,7 +263,7 @@ namespace System.Reactive.Concurrency
                 var sad = new SingleAssignmentDisposable();
 
                 Group.Add(sad);
-                sad.Disposable = Scheduler.ScheduleAction((state, sad, @this: this), dtOffset, nextState => {
+                sad.Disposable = Scheduler.ScheduleAction((state, sad, @this: this), dtOffset, static nextState => {
                     nextState.@this.Group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
                 });
