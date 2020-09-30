@@ -187,7 +187,6 @@ namespace System.Reactive.Concurrency
             {
                 Group.Dispose();
             }
-
         }
 
         private sealed class InvokeRec1State<TState> : InvokeRecBaseState

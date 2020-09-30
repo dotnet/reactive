@@ -12,8 +12,6 @@ namespace System.Reactive.Concurrency
     /// </summary>
     public sealed class NewThreadScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
-        private static readonly Lazy<NewThreadScheduler> Instance = new Lazy<NewThreadScheduler>(() => new NewThreadScheduler());
-
         private readonly Func<ThreadStart, Thread> _threadFactory;
 
         /// <summary>
@@ -27,7 +25,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets an instance of this scheduler that uses the default Thread constructor.
         /// </summary>
-        public static NewThreadScheduler Default => Instance.Value;
+        public static NewThreadScheduler Default { get; } = new NewThreadScheduler();
 
 #if !NO_THREAD
         /// <summary>

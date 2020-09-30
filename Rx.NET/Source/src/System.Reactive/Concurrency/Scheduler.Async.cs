@@ -483,18 +483,14 @@ namespace System.Reactive.Concurrency
         private sealed class CancelableScheduler : IScheduler
         {
             private readonly IScheduler _scheduler;
-            private readonly CancellationToken _cancellationToken;
 
             public CancelableScheduler(IScheduler scheduler, CancellationToken cancellationToken)
             {
                 _scheduler = scheduler;
-                _cancellationToken = cancellationToken;
+                Token = cancellationToken;
             }
 
-            public CancellationToken Token
-            {
-                get { return _cancellationToken; }
-            }
+            public CancellationToken Token { get; }
 
             public DateTimeOffset Now => _scheduler.Now;
 

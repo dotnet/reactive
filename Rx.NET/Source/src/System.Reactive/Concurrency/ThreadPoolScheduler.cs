@@ -14,13 +14,12 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Instance">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
-        private static readonly Lazy<ThreadPoolScheduler> LazyInstance = new Lazy<ThreadPoolScheduler>(() => new ThreadPoolScheduler());
         private static readonly Lazy<NewThreadScheduler> LazyNewBackgroundThread = new Lazy<NewThreadScheduler>(() => new NewThreadScheduler(action => new Thread(action) { IsBackground = true }));
 
         /// <summary>
         /// Gets the singleton instance of the CLR thread pool scheduler.
         /// </summary>
-        public static ThreadPoolScheduler Instance => LazyInstance.Value;
+        public static ThreadPoolScheduler Instance { get; } = new ThreadPoolScheduler();
 
         private ThreadPoolScheduler()
         {
