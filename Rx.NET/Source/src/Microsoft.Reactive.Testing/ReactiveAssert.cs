@@ -24,11 +24,11 @@ namespace Microsoft.Reactive.Testing
             sb.AppendLine();
             sb.Append("Expected: [");
             sb.Append(string.Join(", ", expected.Select(x => x.ToString()).ToArray()));
-            sb.Append("]");
+            sb.Append(']');
             sb.AppendLine();
             sb.Append("Actual..: [");
             sb.Append(string.Join(", ", actual.Select(x => x.ToString()).ToArray()));
-            sb.Append("]");
+            sb.Append(']');
             sb.AppendLine();
             return sb.ToString();
         }

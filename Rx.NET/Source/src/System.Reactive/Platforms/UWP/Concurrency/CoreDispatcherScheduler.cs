@@ -156,7 +156,7 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Schedules an action to be executed after <paramref name="dueTime"/> on the dispatcher, using a <see cref="DispatcherTimer"/> object.
+        /// Schedules an action to be executed after <paramref name="dueTime"/> on the dispatcher, using a <see cref="DispatcherQueueTimer"/> object.
         /// </summary>
         /// <typeparam name="TState">The type of the state passed to the scheduled action.</typeparam>
         /// <param name="state">State passed to the action to be executed.</param>
@@ -221,7 +221,7 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Schedules a periodic piece of work on the dispatcher, using a <see cref="DispatcherTimer"/> object.
+        /// Schedules a periodic piece of work on the dispatcher, using a <see cref="DispatcherQueueTimer"/> object.
         /// </summary>
         /// <typeparam name="TState">The type of the state passed to the scheduled action.</typeparam>
         /// <param name="state">Initial state passed to the action upon the first iteration.</param>

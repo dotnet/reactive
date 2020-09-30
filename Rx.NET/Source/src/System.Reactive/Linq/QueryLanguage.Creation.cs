@@ -384,7 +384,7 @@ namespace System.Reactive.Linq
             return Repeat_(value, scheduler);
         }
 
-        private IObservable<TResult> Repeat_<TResult>(TResult value, IScheduler scheduler)
+        private static IObservable<TResult> Repeat_<TResult>(TResult value, IScheduler scheduler)
         {
             var longRunning = scheduler.AsLongRunning();
             if (longRunning != null)
@@ -404,7 +404,7 @@ namespace System.Reactive.Linq
             return Repeat_(value, repeatCount, scheduler);
         }
 
-        private IObservable<TResult> Repeat_<TResult>(TResult value, int repeatCount, IScheduler scheduler)
+        private static IObservable<TResult> Repeat_<TResult>(TResult value, int repeatCount, IScheduler scheduler)
         {
             var longRunning = scheduler.AsLongRunning();
             if (longRunning != null)
