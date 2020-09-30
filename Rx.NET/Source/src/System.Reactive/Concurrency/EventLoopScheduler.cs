@@ -355,7 +355,7 @@ namespace System.Reactive.Concurrency
                             {
                                 item.Invoke();
                             }
-                            catch (ObjectDisposedException ex) when (nameof(EventLoopScheduler).Equals(ex.ObjectName))
+                            catch (ObjectDisposedException ex) when (ex.ObjectName == nameof(EventLoopScheduler))
                             {
                                 // Since we are not inside the lock at this point
                                 // the scheduler can be disposed before the item had a chance to run
