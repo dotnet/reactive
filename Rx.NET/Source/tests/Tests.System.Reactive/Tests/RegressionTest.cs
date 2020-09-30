@@ -18,7 +18,6 @@ namespace ReactiveTests.Tests
 
     public class RegressionTest : ReactiveTest
     {
-#if NET45 || NET46
         [Fact]
         public void Bug_ConcurrentMerge()
         {
@@ -42,7 +41,6 @@ namespace ReactiveTests.Tests
 
             Assert.True(Enumerable.Range(0, reps).ToList().SequenceEqual(resultQueue.ToList()));
         }
-#endif
 
         [Fact]
         public void Bug_1283()
