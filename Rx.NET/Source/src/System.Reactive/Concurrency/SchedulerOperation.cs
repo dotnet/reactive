@@ -68,7 +68,7 @@ namespace System.Reactive.Concurrency
 
             if (cancellationToken.CanBeCanceled)
             {
-                _ctr = _cancellationToken.Register(@this => ((SchedulerOperationAwaiter)@this).Cancel(), this);
+                _ctr = _cancellationToken.Register(static @this => ((SchedulerOperationAwaiter)@this).Cancel(), this);
             }
         }
 
@@ -120,7 +120,7 @@ namespace System.Reactive.Concurrency
                         // is a conscious design decision as the performance impact was non
                         // negligible and our schedulers abstract over more constructs.
                         //
-                        ctx.Post(a => ((Action)a)(), original);
+                        ctx.Post(static a => ((Action)a)(), original);
                     };
                 }
             }

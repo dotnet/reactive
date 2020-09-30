@@ -38,13 +38,15 @@ namespace System.Reactive.Threading.Tasks
                 var options = GetTaskContinuationOptions(_scheduler);
 
                 if (_scheduler == null)
-                    _task.ContinueWith((t, subjectObject) => t.EmitTaskResult((IObserver<Unit>)subjectObject), observer, cts.Token, options, TaskScheduler.Current);
+                {
+                    _task.ContinueWith(static (t, subjectObject) => t.EmitTaskResult((IObserver<Unit>)subjectObject), observer, cts.Token, options, TaskScheduler.Current);
+                }
                 else
                 {
                     _task.ContinueWithState(
-                        (task, tuple) => tuple.@this._scheduler.ScheduleAction(
+                        static (task, tuple) => tuple.@this._scheduler.ScheduleAction(
                             (task, tuple.observer),
-                            tuple2 => tuple2.task.EmitTaskResult(tuple2.observer)),
+                            static tuple2 => tuple2.task.EmitTaskResult(tuple2.observer)),
                         (@this: this, observer),
                         cts.Token,
                         options);
@@ -77,14 +79,14 @@ namespace System.Reactive.Threading.Tasks
 
                 if (_scheduler == null)
                 {
-                    _task.ContinueWith((t, subjectObject) => t.EmitTaskResult((IObserver<TResult>)subjectObject), observer, cts.Token, options, TaskScheduler.Current);
+                    _task.ContinueWith(static (t, subjectObject) => t.EmitTaskResult((IObserver<TResult>)subjectObject), observer, cts.Token, options, TaskScheduler.Current);
                 }
                 else
                 {
                     _task.ContinueWithState(
-                        (task, tuple) => tuple.@this._scheduler.ScheduleAction(
+                        static (task, tuple) => tuple.@this._scheduler.ScheduleAction(
                             (task, tuple.observer),
-                            tuple2 => tuple2.task.EmitTaskResult(tuple2.observer)),
+                            static tuple2 => tuple2.task.EmitTaskResult(tuple2.observer)),
                         (@this: this, observer),
                         cts.Token,
                         options);
@@ -178,7 +180,7 @@ namespace System.Reactive.Threading.Tasks
             var cts = new CancellationDisposable();
 
             task.ContinueWith(
-                (t, observerObject) => t.EmitTaskResult((IObserver<Unit>)observerObject), 
+                static (t, observerObject) => t.EmitTaskResult((IObserver<Unit>)observerObject), 
                 observer, 
                 cts.Token, 
                 TaskContinuationOptions.ExecuteSynchronously, 
@@ -296,7 +298,7 @@ namespace System.Reactive.Threading.Tasks
             var cts = new CancellationDisposable();
 
             task.ContinueWith(
-                (t, observerObject) => t.EmitTaskResult((IObserver<TResult>)observerObject), 
+                static (t, observerObject) => t.EmitTaskResult((IObserver<TResult>)observerObject), 
                 observer, 
                 cts.Token, 
                 TaskContinuationOptions.ExecuteSynchronously, 
@@ -407,24 +409,29 @@ namespace System.Reactive.Threading.Tasks
                 throw new ArgumentNullException(nameof(scheduler));
             }
             var tcs = new TaskCompletionSource<TResult>(task.AsyncState);
-            task.ContinueWith(t =>
-            {
-                scheduler.Schedule(() =>
+            task.ContinueWith(
+                static (t, o) =>
                 {
-                    if (t.IsCanceled)
+                    var (scheduler, tcs) = ((IScheduler, TaskCompletionSource<TResult>))o;
+
+                    scheduler.ScheduleAction((t, tcs), static state =>
                     {
-                        tcs.TrySetCanceled(new TaskCanceledException(t).CancellationToken);
-                    }
-                    else if (t.IsFaulted)
-                    {
-                        tcs.TrySetException(t.Exception.InnerExceptions);
-                    }
-                    else
-                    {
-                        tcs.TrySetResult(t.Result);
-                    }
-                });
-            }, TaskContinuationOptions.ExecuteSynchronously);
+                        if (state.t.IsCanceled)
+                        {
+                            state.tcs.TrySetCanceled(new TaskCanceledException(state.t).CancellationToken);
+                        }
+                        else if (state.t.IsFaulted)
+                        {
+                            state.tcs.TrySetException(state.t.Exception.InnerExceptions);
+                        }
+                        else
+                        {
+                            state.tcs.TrySetResult(state.t.Result);
+                        }
+                    });
+                },
+                (scheduler, tcs),
+                TaskContinuationOptions.ExecuteSynchronously);
             return tcs.Task;
         }
 
@@ -444,7 +451,7 @@ namespace System.Reactive.Threading.Tasks
 
                 if (ct.CanBeCanceled)
                 {
-                    _ctr = ct.Register(@this => ((ToTaskObserver<TResult>)@this).Cancel(), this);
+                    _ctr = ct.Register(static @this => ((ToTaskObserver<TResult>)@this).Cancel(), this);
                 }
             }
 

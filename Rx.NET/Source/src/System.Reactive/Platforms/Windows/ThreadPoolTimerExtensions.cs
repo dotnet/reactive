@@ -13,12 +13,12 @@ namespace System.Reactive.Concurrency
     {
         public static IDisposable AsDisposable(this ThreadPoolTimer threadPoolTimer)
         {
-            return Disposable.Create(threadPoolTimer, _ => _.Cancel());
+            return Disposable.Create(threadPoolTimer, static _ => _.Cancel());
         }
 
         public static IDisposable AsDisposable(this IAsyncInfo asyncInfo)
         {
-            return Disposable.Create(asyncInfo, _ => _.Cancel());
+            return Disposable.Create(asyncInfo, static _ => _.Cancel());
         }
     }
 }

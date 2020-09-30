@@ -46,7 +46,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-            Disposable.TryRelease(ref _disposable, Context, (disposable, context) => context.PostWithStartComplete(d => d.Dispose(), disposable));
+            Disposable.TryRelease(ref _disposable, Context, static (disposable, context) => context.PostWithStartComplete(static d => d.Dispose(), disposable));
         }
     }
 }

@@ -42,7 +42,7 @@ namespace System.Reactive.Concurrency
             var workItem = new UserWorkItem<TState>(this, state, action);
 
             workItem.CancelQueueDisposable = Cal.QueueUserWorkItem(
-                closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                static closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
                 workItem);
 
             return workItem;
@@ -73,7 +73,7 @@ namespace System.Reactive.Concurrency
             var workItem = new UserWorkItem<TState>(this, state, action);
 
             workItem.CancelQueueDisposable = Cal.StartTimer(
-                closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                static closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
                 workItem,
                 dt);
 
@@ -124,7 +124,7 @@ namespace System.Reactive.Concurrency
             {
                 _gate.Wait(
                     this,
-                    closureWorkItem => closureWorkItem._state = closureWorkItem._action(closureWorkItem._state));
+                    static closureWorkItem => closureWorkItem._state = closureWorkItem._action(closureWorkItem._state));
             }
 
             public void Dispose()

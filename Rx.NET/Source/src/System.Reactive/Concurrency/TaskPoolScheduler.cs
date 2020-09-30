@@ -147,7 +147,7 @@ namespace System.Reactive.Concurrency
             public bool IsDisposed => Disposable.GetIsDisposed(ref _cancel);
         }
 
-        private static readonly Lazy<TaskPoolScheduler> LazyInstance = new Lazy<TaskPoolScheduler>(() => new TaskPoolScheduler(new TaskFactory(TaskScheduler.Default)));
+        private static readonly Lazy<TaskPoolScheduler> LazyInstance = new Lazy<TaskPoolScheduler>(static () => new TaskPoolScheduler(new TaskFactory(TaskScheduler.Default)));
         private readonly TaskFactory _taskFactory;
 
         /// <summary>
@@ -294,7 +294,7 @@ namespace System.Reactive.Concurrency
             private void MoveNext()
             {
                 TaskHelpers.Delay(_period, _cts.Token).ContinueWith(
-                    (_, thisObject) =>
+                    static (_, thisObject) =>
                     {
                         var @this = (PeriodicallyScheduledWorkItem<TState>)thisObject;
 
@@ -302,7 +302,7 @@ namespace System.Reactive.Concurrency
 
                         @this._gate.Wait(
                             @this,
-                            closureThis => closureThis._state = closureThis._action(closureThis._state));
+                            static closureThis => closureThis._state = closureThis._action(closureThis._state));
                     },
                     this,
                     CancellationToken.None,

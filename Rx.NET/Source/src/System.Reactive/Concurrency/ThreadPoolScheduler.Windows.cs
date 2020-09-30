@@ -15,7 +15,7 @@ namespace System.Reactive.Concurrency
     [CLSCompliant(false)]
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerPeriodic
     {
-        private static readonly Lazy<ThreadPoolScheduler> LazyDefault = new Lazy<ThreadPoolScheduler>(() => new ThreadPoolScheduler());
+        private static readonly Lazy<ThreadPoolScheduler> LazyDefault = new Lazy<ThreadPoolScheduler>(static () => new ThreadPoolScheduler());
 
         /// <summary>
         /// Constructs a ThreadPoolScheduler that schedules units of work on the Windows ThreadPool.
@@ -177,7 +177,7 @@ namespace System.Reactive.Concurrency
             {
                 _gate.Wait(
                     this,
-                    @this => @this._state = @this._action(@this._state));
+                    static @this => @this._state = @this._action(@this._state));
             }
 
             public void Dispose()

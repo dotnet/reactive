@@ -126,7 +126,7 @@ namespace System.Reactive.Concurrency
                     if (t != null)
                     {
                         t.Stop();
-                        action = (_, __) => Disposable.Empty;
+                        action = static (_, __) => Disposable.Empty;
                     }
                 });
 
@@ -193,7 +193,7 @@ namespace System.Reactive.Concurrency
                     if (t != null)
                     {
                         t.Stop();
-                        action = _ => _;
+                        action = static _ => _;
                     }
                 });
             });
