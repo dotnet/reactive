@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 //
 // WARNING: The full namespace-qualified type name should stay the same for the discovery in System.Reactive.Core to work!
 //
@@ -27,7 +25,7 @@ namespace System.Reactive.PlatformServices
         /// <typeparam name="T">Service type.</typeparam>
         /// <param name="args">Optional set of arguments.</param>
         /// <returns>Service instance or <c>null</c> if not found.</returns>
-        public virtual T GetService<T>(object[] args) where T : class
+        public virtual T? GetService<T>(object[] args) where T : class
         {
             var t = typeof(T);
 
@@ -81,7 +79,7 @@ namespace System.Reactive.PlatformServices
                 {
                     var ifType = t.GetTypeInfo();
 
-                    var asm = new AssemblyName(ifType.Assembly.FullName)
+                    var asm = new AssemblyName(ifType.Assembly.FullName!)
                     {
                         Name = "System.Reactive"
                     };
@@ -91,7 +89,7 @@ namespace System.Reactive.PlatformServices
                     var dbg = Type.GetType(name, false);
                     if (dbg != null)
                     {
-                        return (T)Activator.CreateInstance(dbg);
+                        return (T?)Activator.CreateInstance(dbg);
                     }
                 }
             }

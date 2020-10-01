@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -41,7 +39,7 @@ namespace System.Reactive.PlatformServices
     public class PeriodicTimerSystemClockMonitor : INotifySystemClockChanged
     {
         private readonly TimeSpan _period;
-        private IDisposable _timer;
+        private IDisposable? _timer;
 
         /// <summary>
         /// Use the Unix milliseconds for the current time
@@ -49,7 +47,7 @@ namespace System.Reactive.PlatformServices
         /// </summary>
         private long _lastTimeUnixMillis;
 
-        private EventHandler<SystemClockChangedEventArgs> _systemClockChanged;
+        private EventHandler<SystemClockChangedEventArgs>? _systemClockChanged;
 
         private const int SyncMaxRetries = 100;
         private const double SyncMaxDelta = 10;

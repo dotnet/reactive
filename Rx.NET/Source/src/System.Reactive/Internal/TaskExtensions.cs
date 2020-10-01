@@ -1,8 +1,6 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 namespace System.Threading.Tasks
 {
@@ -13,7 +11,7 @@ namespace System.Threading.Tasks
             return task.ContinueWith(
                 (t, tupleObject) =>
                 {
-                    var (closureAction, closureState) = ((Action<Task, TState>, TState))tupleObject;
+                    var (closureAction, closureState) = ((Action<Task, TState>, TState))tupleObject!;
 
                     closureAction(t, closureState);
                 },
@@ -25,7 +23,7 @@ namespace System.Threading.Tasks
             return task.ContinueWith(
                 (t, tupleObject) =>
                 {
-                    var (closureAction, closureState) = ((Action<Task, TState>, TState))tupleObject;
+                    var (closureAction, closureState) = ((Action<Task, TState>, TState))tupleObject!;
 
                     closureAction(t, closureState);
                 },
@@ -38,7 +36,7 @@ namespace System.Threading.Tasks
             return task.ContinueWith(
                 (t, tupleObject) =>
                 {
-                    var (closureAction, closureState) = ((Action<Task, TState>, TState))tupleObject;
+                    var (closureAction, closureState) = ((Action<Task, TState>, TState))tupleObject!;
 
                     closureAction(t, closureState);
                 },
@@ -51,7 +49,7 @@ namespace System.Threading.Tasks
             return task.ContinueWith(
                 (t, tupleObject) =>
                 {
-                    var (closureAction, closureState) = ((Action<Task, TState>, TState))tupleObject;
+                    var (closureAction, closureState) = ((Action<Task, TState>, TState))tupleObject!;
 
                     closureAction(t, closureState);
                 },
@@ -66,7 +64,7 @@ namespace System.Threading.Tasks
             return task.ContinueWith(
                 (t, tupleObject) =>
                 {
-                    var (closureAction, closureState) = ((Action<Task<TResult>, TState>, TState))tupleObject;
+                    var (closureAction, closureState) = ((Action<Task<TResult>, TState>, TState))tupleObject!;
 
                     closureAction(t, closureState);
                 },
@@ -78,7 +76,7 @@ namespace System.Threading.Tasks
             return task.ContinueWith(
                 (t, tupleObject) =>
                 {
-                    var (closureAction, closureState) = ((Action<Task<TResult>, TState>, TState))tupleObject;
+                    var (closureAction, closureState) = ((Action<Task<TResult>, TState>, TState))tupleObject!;
 
                     closureAction(t, closureState);
                 },
@@ -91,7 +89,7 @@ namespace System.Threading.Tasks
             return task.ContinueWith(
                 (t, tupleObject) =>
                 {
-                    var (closureAction, closureState) = ((Action<Task<TResult>, TState>, TState))tupleObject;
+                    var (closureAction, closureState) = ((Action<Task<TResult>, TState>, TState))tupleObject!;
 
                     closureAction(t, closureState);
                 },
@@ -104,7 +102,7 @@ namespace System.Threading.Tasks
             return task.ContinueWith(
                 (t, tupleObject) =>
                 {
-                    var (closureAction, closureState) = ((Action<Task<TResult>, TState>, TState))tupleObject;
+                    var (closureAction, closureState) = ((Action<Task<TResult>, TState>, TState))tupleObject!;
 
                     closureAction(t, closureState);
                 },

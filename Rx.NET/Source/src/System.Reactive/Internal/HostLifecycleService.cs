@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Threading;
 
@@ -15,19 +13,19 @@ namespace System.Reactive.PlatformServices
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class HostLifecycleService
     {
-        private static readonly Lazy<IHostLifecycleNotifications> Notifications = new Lazy<IHostLifecycleNotifications>(InitializeNotifications);
+        private static readonly Lazy<IHostLifecycleNotifications?> Notifications = new Lazy<IHostLifecycleNotifications?>(InitializeNotifications);
 
         private static int _refCount;
 
         /// <summary>
         /// Event that gets raised when the host suspends the application.
         /// </summary>
-        public static event EventHandler<HostSuspendingEventArgs> Suspending;
+        public static event EventHandler<HostSuspendingEventArgs>? Suspending;
 
         /// <summary>
         /// Event that gets raised when the host resumes the application.
         /// </summary>
-        public static event EventHandler<HostResumingEventArgs> Resuming;
+        public static event EventHandler<HostResumingEventArgs>? Resuming;
 
         /// <summary>
         /// Adds a reference to the host lifecycle manager, causing it to be sending notifications.
@@ -62,17 +60,17 @@ namespace System.Reactive.PlatformServices
             }
         }
 
-        private static void OnSuspending(object sender, HostSuspendingEventArgs e)
+        private static void OnSuspending(object? sender, HostSuspendingEventArgs e)
         {
             Suspending?.Invoke(sender, e);
         }
 
-        private static void OnResuming(object sender, HostResumingEventArgs e)
+        private static void OnResuming(object? sender, HostResumingEventArgs e)
         {
             Resuming?.Invoke(sender, e);
         }
 
-        private static IHostLifecycleNotifications InitializeNotifications()
+        private static IHostLifecycleNotifications? InitializeNotifications()
         {
 #pragma warning disable CS0618 // Type or member is obsolete
             return PlatformEnlightenmentProvider.Current.GetService<IHostLifecycleNotifications>();

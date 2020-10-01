@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
@@ -42,7 +40,7 @@ namespace System.Reactive
         public IDisposable SubscribeRaw(IObserver<TSource> observer, bool enableSafeguard)
         {
             IDisposable run;
-            ISafeObserver<TSource> safeObserver = null;
+            ISafeObserver<TSource>? safeObserver = null;
 
             //
             // See AutoDetachObserver.cs for more information on the safeguarding requirement and
@@ -101,7 +99,7 @@ namespace System.Reactive
 
         public IDisposable SubscribeRaw(IObserver<TTarget> observer, bool enableSafeguard)
         {
-            ISafeObserver<TTarget> safeObserver = null;
+            ISafeObserver<TTarget>? safeObserver = null;
 
             //
             // See AutoDetachObserver.cs for more information on the safeguarding requirement and

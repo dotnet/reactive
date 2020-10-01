@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +9,7 @@ using System.Linq;
 namespace System.Reactive
 {
     internal sealed class Lookup<K, E> : ILookup<K, E>
+        where K : notnull
     {
         private readonly Dictionary<K, List<E>> _dictionary;
 
