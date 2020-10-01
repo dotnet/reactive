@@ -1,6 +1,6 @@
 [assembly: System.CLSCompliant(true)]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.7.2", FrameworkDisplayName=".NET Framework 4.7.2")]
 namespace Microsoft.Reactive.Testing
 {
     public interface ITestableObservable<T> : System.IObservable<T>

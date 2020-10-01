@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;netstandard2.0;net46;uap10.0.16299;net5.0;net5.0-windows10.0.19041</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;netstandard2.0;net472;uap10.0.16299;net5.0;net5.0-windows10.0.19041</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
@@ -44,20 +44,19 @@
   </ItemGroup>
 
   <!-- Windows includes for Desktop and UWP -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' or $(TargetFramework.StartsWith('uap10.0')) or '$(TargetFramework)' == 'netcoreapp3.1' or $(TargetFramework.StartsWith('net5.0-windows'))">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or '$(TargetFramework)' == 'netcoreapp3.1' or $(TargetFramework.StartsWith('net5.0-windows'))">
     <Compile Include="Platforms\Windows\**\*.cs" />
     <EmbeddedResource Include="Platforms\Windows\**\*.resx" />
   </ItemGroup>
 
   <!-- Desktop -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46'">
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472'">
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' or '$(TargetFramework)' == 'netcoreapp3.1' or $(TargetFramework.StartsWith('net5.0-windows'))">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'netcoreapp3.1' or $(TargetFramework.StartsWith('net5.0-windows'))">
     <Compile Include="Platforms\Desktop\**\*.cs" />
   </ItemGroup>
 

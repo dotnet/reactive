@@ -474,7 +474,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if DESKTOPCLR && NET46
+#if DESKTOPCLR && NET472
         [Fact]
         public void FromEventPattern_Reflection_Instance_MissingAccessors()
         {
