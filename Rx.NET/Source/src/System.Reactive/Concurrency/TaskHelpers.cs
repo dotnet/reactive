@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,6 +27,18 @@ namespace System.Reactive.Concurrency
             }
 
             return Task.Delay(delay, token);
+        }
+
+        public static Exception GetSingleException(this Task t)
+        {
+            Debug.Assert(t.IsFaulted && t.Exception != null);
+
+            if (t.Exception.InnerException != null)
+            {
+                return t.Exception.InnerException;
+            }
+
+            return t.Exception;
         }
     }
 }
