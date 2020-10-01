@@ -82,11 +82,12 @@ namespace System.Reactive
 
         private void Remove(Delegate handler)
         {
-            var d = default(IDisposable);
+            IDisposable d = null;
 
             lock (_subscriptions)
             {
                 var l = new Stack<IDisposable>();
+
                 if (_subscriptions.TryGetValue(handler, out l))
                 {
                     d = l.Pop();

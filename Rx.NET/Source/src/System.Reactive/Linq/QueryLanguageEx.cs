@@ -131,7 +131,7 @@ namespace System.Reactive.Linq
                     {
                         m.Disposable = _scheduler.Schedule(self =>
                         {
-                            var work = default(IObservable<TSource>);
+                            IObservable<TSource> work;
 
                             lock (q)
                             {
@@ -156,7 +156,7 @@ namespace System.Reactive.Linq
                                         observer.OnNext(x);
                                     }
 
-                                    var result = default(IObservable<TSource>);
+                                    IObservable<TSource> result;
                                     try
                                     {
                                         result = _selector(x);
@@ -167,6 +167,8 @@ namespace System.Reactive.Linq
                                         {
                                             observer.OnError(exception);
                                         }
+
+                                        return;
                                     }
 
                                     lock (q)
@@ -450,7 +452,7 @@ namespace System.Reactive.Linq
         {
             return Observable.Defer(() =>
             {
-                var chain = default(ChainObservable<TSource>);
+                ChainObservable<TSource> chain = null;
 
                 return source
                     .Select(

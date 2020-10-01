@@ -277,7 +277,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         ForwardOnNext(value);
 
-                        var timeoutSource = default(IObservable<TTimeout>);
+                        IObservable<TTimeout> timeoutSource;
                         try
                         {
                             timeoutSource = _timeoutSelector(value);

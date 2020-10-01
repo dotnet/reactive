@@ -22,7 +22,8 @@ namespace System.Reactive.Joins
         internal static JoinObserver<TSource> CreateObserver<TSource>(
             Dictionary<object, IJoinObserver> externalSubscriptions, IObservable<TSource> observable, Action<Exception> onError)
         {
-            var observer = default(JoinObserver<TSource>);
+            JoinObserver<TSource> observer;
+
             if (!externalSubscriptions.TryGetValue(observable, out var nonGeneric))
             {
                 observer = new JoinObserver<TSource>(observable, onError);
@@ -32,6 +33,7 @@ namespace System.Reactive.Joins
             {
                 observer = (JoinObserver<TSource>)nonGeneric;
             }
+            
             return observer;
         }
     }

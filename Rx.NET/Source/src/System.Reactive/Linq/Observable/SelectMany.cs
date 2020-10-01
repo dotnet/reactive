@@ -47,7 +47,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var collection = default(IObservable<TCollection>);
+                    IObservable<TCollection> collection;
 
                     try
                     {
@@ -210,7 +210,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnNext(TSource value)
                 {
                     var index = checked(_index++);
-                    var collection = default(IObservable<TCollection>);
+                    IObservable<TCollection> collection;
 
                     try
                     {
@@ -370,7 +370,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var xs = default(IEnumerable<TCollection>);
+                    IEnumerable<TCollection> xs;
                     try
                     {
                         xs = _collectionSelector(value);
@@ -459,7 +459,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var index = checked(_index++);
 
-                    var xs = default(IEnumerable<TCollection>);
+                    IEnumerable<TCollection> xs;
                     try
                     {
                         xs = _collectionSelector(value, index);
@@ -566,7 +566,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var task = default(Task<TCollection>);
+                    Task<TCollection> task;
                     try
                     {
                         Interlocked.Increment(ref _count);
@@ -723,7 +723,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var index = checked(_index++);
 
-                    var task = default(Task<TCollection>);
+                    Task<TCollection> task;
                     try
                     {
                         Interlocked.Increment(ref _count);
@@ -858,7 +858,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var inner = default(IObservable<TResult>);
+                    IObservable<TResult> inner;
 
                     try
                     {
@@ -1007,7 +1007,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_selectorOnError != null)
                     {
-                        var inner = default(IObservable<TResult>);
+                        IObservable<TResult> inner;
 
                         try
                         {
@@ -1036,7 +1036,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_selectorOnCompleted != null)
                     {
-                        var inner = default(IObservable<TResult>);
+                        IObservable<TResult> inner;
 
                         try
                         {
@@ -1092,7 +1092,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var inner = default(IObservable<TResult>);
+                    IObservable<TResult> inner;
 
                     try
                     {
@@ -1243,7 +1243,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_selectorOnError != null)
                     {
-                        var inner = default(IObservable<TResult>);
+                        IObservable<TResult> inner;
 
                         try
                         {
@@ -1272,7 +1272,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_selectorOnCompleted != null)
                     {
-                        var inner = default(IObservable<TResult>);
+                        IObservable<TResult> inner;
 
                         try
                         {
@@ -1322,7 +1322,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var xs = default(IEnumerable<TResult>);
+                    IEnumerable<TResult> xs;
                     try
                     {
                         xs = _selector(value);
@@ -1405,7 +1405,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var xs = default(IEnumerable<TResult>);
+                    IEnumerable<TResult> xs;
                     try
                     {
                         xs = _selector(value, checked(_index++));
@@ -1507,7 +1507,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var task = default(Task<TResult>);
+                    Task<TResult> task;
                     try
                     {
                         Interlocked.Increment(ref _count);
@@ -1642,7 +1642,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var task = default(Task<TResult>);
+                    Task<TResult> task;
                     try
                     {
                         Interlocked.Increment(ref _count);

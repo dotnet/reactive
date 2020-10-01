@@ -67,7 +67,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var res = false;
+                    bool res;
                     try
                     {
                         res = _predicate(value);

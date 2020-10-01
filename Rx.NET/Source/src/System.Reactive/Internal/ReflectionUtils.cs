@@ -25,7 +25,7 @@ namespace System.Reactive
 
         public static void GetEventMethods<TSender, TEventArgs>(Type targetType, object target, string eventName, out MethodInfo addMethod, out MethodInfo removeMethod, out Type delegateType, out bool isWinRT)
         {
-            var e = default(EventInfo);
+            EventInfo e;
 
             if (target == null)
             {

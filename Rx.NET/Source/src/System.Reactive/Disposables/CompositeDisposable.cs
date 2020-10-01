@@ -106,10 +106,12 @@ namespace System.Reactive.Disposables
                 {
                     throw new ArgumentException(Strings_Core.DISPOSABLES_CANT_CONTAIN_NULL, nameof(disposables));
                 }
+
                 list.Add(d);
             }
 
             _disposables = list;
+
             // _count can be read by other threads and thus should be properly visible
             // also releases the _disposables contents so it becomes thread-safe
             Volatile.Write(ref _count, _disposables.Count);
@@ -137,6 +139,7 @@ namespace System.Reactive.Disposables
                 if (!_disposed)
                 {
                     _disposables.Add(item);
+
                     // If read atomically outside the lock, it should be written atomically inside
                     // the plain read on _count is fine here because manipulation always happens
                     // from inside a lock.
@@ -222,12 +225,14 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-            var currentDisposables = default(List<IDisposable>);
+            List<IDisposable> currentDisposables = null;
+
             lock (_gate)
             {
                 if (!_disposed)
                 {
                     currentDisposables = _disposables;
+
                     // nulling out the reference is faster no risk to
                     // future Add/Remove because _disposed will be true
                     // and thus _disposables won't be touched again.
@@ -252,7 +257,8 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Clear()
         {
-            var previousDisposables = default(IDisposable[]);
+            IDisposable[] previousDisposables;
+
             lock (_gate)
             {
                 // disposed composites are always clear
@@ -294,6 +300,7 @@ namespace System.Reactive.Disposables
                 {
                     return false;
                 }
+
                 return _disposables.Contains(item);
             }
         }
@@ -331,7 +338,9 @@ namespace System.Reactive.Disposables
                     // to accommodate all _count disposables in this composite
                     throw new ArgumentOutOfRangeException(nameof(arrayIndex));
                 }
+                
                 var i = arrayIndex;
+                
                 foreach (var d in _disposables)
                 {
                     if (d != null)
@@ -359,6 +368,7 @@ namespace System.Reactive.Disposables
                 {
                     return EmptyEnumerator;
                 }
+
                 // the copy is unavoidable but the creation
                 // of an outer IEnumerable is avoidable
                 return new CompositeEnumerator(_disposables.ToArray());
@@ -418,10 +428,12 @@ namespace System.Reactive.Disposables
                 for (; ; )
                 {
                     var idx = ++_index;
+                    
                     if (idx >= disposables.Length)
                     {
                         return false;
                     }
+
                     // inlined that filter for null elements
                     if (disposables[idx] != null)
                     {

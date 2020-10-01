@@ -142,7 +142,7 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(handler));
             }
 
-            var d = default(IDisposable);
+            IDisposable d = null;
 
             lock (_subscriptions)
             {

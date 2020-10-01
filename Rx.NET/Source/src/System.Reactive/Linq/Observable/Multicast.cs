@@ -35,8 +35,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(Multicast<TSource, TIntermediate, TResult> parent)
             {
-                var observable = default(IObservable<TResult>);
-                var connectable = default(IConnectableObservable<TIntermediate>);
+                IObservable<TResult> observable;
+                IConnectableObservable<TIntermediate> connectable;
+
                 try
                 {
                     var subject = parent._subjectSelector();
@@ -59,6 +60,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     Disposable.TryDispose(ref _connection);
                 }
+                
                 base.Dispose(disposing);
             }
         }

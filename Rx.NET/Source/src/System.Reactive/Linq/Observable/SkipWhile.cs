@@ -35,7 +35,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_predicate != null)
                     {
-                        var shouldStart = default(bool);
+                        bool shouldStart;
                         try
                         {
                             shouldStart = !_predicate(value);
@@ -91,7 +91,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_predicate != null)
                     {
-                        var shouldStart = default(bool);
+                        bool shouldStart;
                         try
                         {
                             shouldStart = !_predicate(value, checked(_index++));

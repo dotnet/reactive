@@ -379,9 +379,7 @@ namespace System.Reactive
         /// <summary>
         /// Represents an OnCompleted notification to an observer.
         /// </summary>
-#if !NO_DEBUGGER_ATTRIBUTES
         [DebuggerDisplay("OnCompleted()")]
-#endif
 #if !NO_SERIALIZABLE
         [Serializable]
 #endif

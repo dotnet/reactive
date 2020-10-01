@@ -91,8 +91,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TLeft value)
                 {
-                    var id = 0;
-                    var rightID = 0;
+                    int id;
+                    int rightID;
+
                     lock (_parent._gate)
                     {
                         id = _parent._leftID++;
@@ -101,7 +102,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
 
-                    var duration = default(IObservable<TLeftDuration>);
+                    IObservable<TLeftDuration> duration;
                     try
                     {
                         duration = _parent._leftDurationSelector(value);
@@ -216,8 +217,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TRight value)
                 {
-                    var id = 0;
-                    var leftID = 0;
+                    int id;
+                    int leftID;
+
                     lock (_parent._gate)
                     {
                         id = _parent._rightID++;
@@ -225,7 +227,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         _parent._rightMap.Add(id, value);
                     }
 
-                    var duration = default(IObservable<TRightDuration>);
+                    IObservable<TRightDuration> duration;
                     try
                     {
                         duration = _parent._rightDurationSelector(value);

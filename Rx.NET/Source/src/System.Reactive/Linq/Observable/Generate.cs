@@ -67,8 +67,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     while (!cancel.IsDisposed)
                     {
-                        var hasResult = false;
+                        bool hasResult;
                         var result = default(TResult);
+
                         try
                         {
                             if (_first)
@@ -111,8 +112,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private void LoopRec(Action<_> recurse)
                 {
-                    var hasResult = false;
+                    bool hasResult;
                     var result = default(TResult);
+                    
                     try
                     {
                         if (_first)
@@ -212,12 +214,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private IDisposable InvokeRec(IScheduler self, TState state)
                 {
-                    var time = default(DateTimeOffset);
-
                     if (_hasResult)
                     {
                         ForwardOnNext(_result);
                     }
+
+                    var time = default(DateTimeOffset);
 
                     try
                     {
@@ -289,7 +291,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Func<TState, TResult> _resultSelector;
                 private readonly Func<TState, TimeSpan> _timeSelector;
 
-
                 public _(Relative parent, IObserver<TResult> observer)
                     : base(observer)
                 {
@@ -322,12 +323,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private IDisposable InvokeRec(IScheduler self, TState state)
                 {
-                    var time = default(TimeSpan);
-
                     if (_hasResult)
                     {
                         ForwardOnNext(_result);
                     }
+
+                    var time = default(TimeSpan);
 
                     try
                     {

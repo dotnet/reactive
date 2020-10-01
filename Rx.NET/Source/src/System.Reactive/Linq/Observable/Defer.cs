@@ -32,7 +32,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run()
             {
-                var result = default(IObservable<TValue>);
+                IObservable<TValue> result;
                 try
                 {
                     result = _observableFactory();

@@ -28,7 +28,8 @@ namespace System.Reactive.Linq.ObservableImpl
             }
 
             var errorSignals = new Subject<Exception>();
-            var redo = default(IObservable<U>);
+            
+            IObservable<U> redo;
 
             try
             {

@@ -80,7 +80,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var b = false;
+                    bool b;
 
                     try
                     {

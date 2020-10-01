@@ -55,8 +55,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Run()
                 {
-                    var doConnect = false;
-                    var conn = default(RefConnection);
+                    bool doConnect;
+                    RefConnection conn;
 
                     lock (_parent._gate)
                     {

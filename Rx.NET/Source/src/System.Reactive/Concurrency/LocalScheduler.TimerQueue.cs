@@ -207,7 +207,7 @@ namespace System.Reactive.Concurrency
         /// <returns>Empty disposable. Recursive work cancellation is wired through the original WorkItem.</returns>
         private IDisposable ExecuteNextShortTermWorkItem(IScheduler scheduler, IDisposable cancel)
         {
-            var next = default(WorkItem);
+            WorkItem next = null;
 
             lock (Gate)
             {

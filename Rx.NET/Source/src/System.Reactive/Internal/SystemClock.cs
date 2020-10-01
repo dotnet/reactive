@@ -121,7 +121,7 @@ namespace System.Reactive.PlatformServices
             //
             lock (SystemClockChanged)
             {
-                var remove = default(HashSet<WeakReference<LocalScheduler>>);
+                HashSet<WeakReference<LocalScheduler>> remove = null;
 
                 foreach (var handler in SystemClockChanged)
                 {

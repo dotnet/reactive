@@ -117,7 +117,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (!Volatile.Read(ref _once) && error is TException e)
                 {
-                    var result = default(IObservable<TSource>);
+                    IObservable<TSource> result;
                     try
                     {
                         result = _handler(e);

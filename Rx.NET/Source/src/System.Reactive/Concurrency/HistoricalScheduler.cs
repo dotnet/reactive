@@ -142,7 +142,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            var si = default(ScheduledItem<DateTimeOffset, TState>);
+            ScheduledItem<DateTimeOffset, TState> si = null;
 
             var run = new Func<IScheduler, TState, IDisposable>((scheduler, state1) =>
             {

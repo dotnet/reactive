@@ -208,7 +208,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TArgs> observer)
         {
-            var connection = default(IDisposable);
+            IDisposable connection;
 
             lock (_gate)
             {

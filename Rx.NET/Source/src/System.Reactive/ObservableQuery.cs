@@ -367,8 +367,10 @@ namespace System.Reactive
                 //
                 // Where to look for the matching operator?
                 //
-                var targetType = default(Type);
-                var methods = default(ILookup<string, MethodInfo>);
+                
+                Type targetType;
+                ILookup<string, MethodInfo> methods;
+
                 if (method.DeclaringType == typeof(Qbservable))
                 {
                     targetType = typeof(Observable);
