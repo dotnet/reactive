@@ -2373,8 +2373,8 @@ namespace System.Reactive.PlatformServices
     }
     public static class HostLifecycleService
     {
-        public  static  event System.EventHandler<System.Reactive.PlatformServices.HostResumingEventArgs> Resuming;
-        public  static  event System.EventHandler<System.Reactive.PlatformServices.HostSuspendingEventArgs> Suspending;
+        public  static  event System.EventHandler<System.Reactive.PlatformServices.HostResumingEventArgs>? Resuming;
+        public  static  event System.EventHandler<System.Reactive.PlatformServices.HostSuspendingEventArgs>? Suspending;
         public static void AddRef() { }
         public static void Release() { }
     }
@@ -2401,7 +2401,7 @@ namespace System.Reactive.PlatformServices
     }
     public interface IPlatformEnlightenmentProvider
     {
-        T GetService<T>(params object[] args)
+        T? GetService<T>(params object[] args)
             where T :  class;
     }
     public interface ISystemClock
