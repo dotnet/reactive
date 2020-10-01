@@ -209,11 +209,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var index = checked(_index++);
+                    int index;
                     IObservable<TCollection> collection;
 
                     try
                     {
+                        index = checked(_index++);
                         collection = _collectionSelector(value, index);
                     }
                     catch (Exception ex)
@@ -457,11 +458,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var index = checked(_index++);
+                    int index;
 
                     IEnumerable<TCollection> xs;
                     try
                     {
+                        index = checked(_index++);
                         xs = _collectionSelector(value, index);
                     }
                     catch (Exception exception)
@@ -721,11 +723,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var index = checked(_index++);
+                    int index;
 
                     Task<TCollection> task;
                     try
                     {
+                        index = checked(_index++);
                         Interlocked.Increment(ref _count);
                         task = _collectionSelector(value, index, _cancel.Token);
                     }
