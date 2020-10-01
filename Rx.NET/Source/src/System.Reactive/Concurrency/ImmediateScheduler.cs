@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Disposables;
 
 namespace System.Reactive.Concurrency
@@ -14,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.Immediate">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class ImmediateScheduler : LocalScheduler
     {
-        private static readonly Lazy<ImmediateScheduler> _instance = new Lazy<ImmediateScheduler>(static () => new ImmediateScheduler());
+        private static readonly Lazy<ImmediateScheduler> StaticInstance = new Lazy<ImmediateScheduler>(static () => new ImmediateScheduler());
 
         private ImmediateScheduler()
         {
@@ -23,7 +21,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the singleton instance of the immediate scheduler.
         /// </summary>
-        public static ImmediateScheduler Instance => _instance.Value;
+        public static ImmediateScheduler Instance => StaticInstance.Value;
 
         /// <summary>
         /// Schedules an action to be executed.
@@ -70,7 +68,7 @@ namespace System.Reactive.Concurrency
 
         private sealed class AsyncLockScheduler : LocalScheduler
         {
-            private AsyncLock _asyncLock;
+            private AsyncLock? _asyncLock;
 
             public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
             {

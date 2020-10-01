@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Linq;
 
 namespace System.Reactive.Subjects
@@ -19,7 +17,7 @@ namespace System.Reactive.Subjects
         private readonly IObservable<TSource> _source;
         private readonly object _gate;
 
-        private Connection _connection;
+        private Connection? _connection;
 
         /// <summary>
         /// Creates an observable that can be connected and disconnected from its source.
@@ -54,7 +52,7 @@ namespace System.Reactive.Subjects
         private sealed class Connection : IDisposable
         {
             private readonly ConnectableObservable<TSource, TResult> _parent;
-            private IDisposable _subscription;
+            private IDisposable? _subscription;
 
             public Connection(ConnectableObservable<TSource, TResult> parent, IDisposable subscription)
             {

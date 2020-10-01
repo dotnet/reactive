@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.PlatformServices;
@@ -43,7 +41,7 @@ namespace System.Reactive.Concurrency
         /// or can continue using the current timer (because no earlier long term work was
         /// added to the queue).
         /// </summary>
-        private static WorkItem _nextLongTermWorkItem;
+        private static WorkItem? _nextLongTermWorkItem;
 
         /// <summary>
         /// Short term work queue. Contains work that's due soon, computed at the time of
@@ -209,7 +207,7 @@ namespace System.Reactive.Concurrency
         /// <returns>Empty disposable. Recursive work cancellation is wired through the original WorkItem.</returns>
         private IDisposable ExecuteNextShortTermWorkItem(IScheduler scheduler, IDisposable cancel)
         {
-            WorkItem next = null;
+            WorkItem? next = null;
 
             lock (Gate)
             {
@@ -424,7 +422,7 @@ namespace System.Reactive.Concurrency
             public readonly LocalScheduler Scheduler;
             public readonly DateTimeOffset DueTime;
 
-            private IDisposable _disposable;
+            private IDisposable? _disposable;
             private int _hasRun;
 
             protected WorkItem(LocalScheduler scheduler, DateTimeOffset dueTime)
@@ -461,7 +459,7 @@ namespace System.Reactive.Concurrency
 
             protected abstract IDisposable InvokeCore(IScheduler scheduler);
 
-            public int CompareTo(WorkItem/*!*/ other) => Comparer<DateTimeOffset>.Default.Compare(DueTime, other.DueTime);
+            public int CompareTo(WorkItem? other) => Comparer<DateTimeOffset>.Default.Compare(DueTime, other!.DueTime);
 
             public void Dispose() => Disposable.TryDispose(ref _disposable);
         }

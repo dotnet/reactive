@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Reactive.Concurrency
@@ -26,17 +24,17 @@ namespace System.Reactive.Concurrency
         public static CurrentThreadScheduler Instance => StaticInstance.Value;
 
         [ThreadStatic]
-        private static SchedulerQueue<TimeSpan> _threadLocalQueue;
+        private static SchedulerQueue<TimeSpan>? _threadLocalQueue;
 
         [ThreadStatic]
-        private static IStopwatch _clock;
+        private static IStopwatch? _clock;
 
         [ThreadStatic]
         private static bool _running;
 
-        private static SchedulerQueue<TimeSpan> GetQueue() => _threadLocalQueue;
+        private static SchedulerQueue<TimeSpan>? GetQueue() => _threadLocalQueue;
 
-        private static void SetQueue(SchedulerQueue<TimeSpan> newQueue)
+        private static void SetQueue(SchedulerQueue<TimeSpan>? newQueue)
         {
             _threadLocalQueue = newQueue;
         }
@@ -84,7 +82,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            SchedulerQueue<TimeSpan> queue;
+            SchedulerQueue<TimeSpan>? queue;
 
             // There is no timed task and no task is currently running
             if (!_running)
