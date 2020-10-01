@@ -186,7 +186,6 @@ namespace System.Reactive.Concurrency
         {
             var d = new MultipleAssignmentDisposable();
 
-
             var timer = CreateDispatcherQueue().CreateTimer();
 
             timer.Tick += (o, e) =>
@@ -215,7 +214,7 @@ namespace System.Reactive.Concurrency
                 if (t != null)
                 {
                     t.Stop();
-                    action = static (_, __) => Disposable.Empty;
+                    action = static (s, t) => Disposable.Empty;
                 }
             });
 

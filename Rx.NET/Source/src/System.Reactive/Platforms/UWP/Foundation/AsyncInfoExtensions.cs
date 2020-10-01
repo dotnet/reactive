@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 #if HAS_WINRT
 using System.Reactive.Linq;
 using Windows.Foundation;
@@ -107,7 +105,7 @@ namespace System.Reactive.Windows.Foundation
             });
         }
 
-        private static IObservable<Unit> ToObservable_<TProgress>(this IAsyncActionWithProgress<TProgress> source, IProgress<TProgress> progress)
+        private static IObservable<Unit> ToObservable_<TProgress>(this IAsyncActionWithProgress<TProgress> source, IProgress<TProgress>? progress)
         {
             return new AsyncInfoToObservableBridge<Unit, TProgress>(
                 source,
@@ -262,7 +260,7 @@ namespace System.Reactive.Windows.Foundation
             return source.ToObservable_(progress, true);
         }
 
-        private static IObservable<TResult> ToObservable_<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source, IProgress<TProgress> progress, bool supportsMultiple)
+        private static IObservable<TResult> ToObservable_<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source, IProgress<TProgress>? progress, bool supportsMultiple)
         {
             return new AsyncInfoToObservableBridge<TResult, TProgress>(
                 source,

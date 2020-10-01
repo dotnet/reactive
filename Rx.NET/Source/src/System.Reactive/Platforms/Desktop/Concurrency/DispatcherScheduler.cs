@@ -163,7 +163,7 @@ namespace System.Reactive.Concurrency
                 if (t != null)
                 {
                     t.Stop();
-                    action = static (_, __) => Disposable.Empty;
+                    action = static (s, t) => Disposable.Empty;
                 }
             });
 

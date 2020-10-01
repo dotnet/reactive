@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 
 namespace System.Reactive.Joins
@@ -20,6 +18,7 @@ namespace System.Reactive.Joins
         {
             _onCompleted = onCompleted;
         }
+
         protected void AddJoinObserver(IJoinObserver joinObserver)
         {
             if (!_joinObservers.ContainsKey(joinObserver))
