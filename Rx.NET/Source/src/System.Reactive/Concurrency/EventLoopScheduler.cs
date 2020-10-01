@@ -297,7 +297,7 @@ namespace System.Reactive.Concurrency
             {
                 _evt.Wait();
 
-                var ready = default(ScheduledItem<TimeSpan>[]);
+                ScheduledItem<TimeSpan>[] ready = null;
 
                 lock (_gate)
                 {

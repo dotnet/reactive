@@ -252,7 +252,8 @@ namespace System.Reactive.Subjects
 
             public override void OnNext(T value)
             {
-                var o = default(IScheduledObserver<T>[]);
+                IScheduledObserver<T>[] o = null;
+
                 lock (_gate)
                 {
                     CheckDisposed();
@@ -281,7 +282,8 @@ namespace System.Reactive.Subjects
 
             public override void OnError(Exception error)
             {
-                var o = default(IScheduledObserver<T>[]);
+                IScheduledObserver<T>[] o = null;
+
                 lock (_gate)
                 {
                     CheckDisposed();
@@ -313,7 +315,8 @@ namespace System.Reactive.Subjects
 
             public override void OnCompleted()
             {
-                var o = default(IScheduledObserver<T>[]);
+                IScheduledObserver<T>[] o = null;
+
                 lock (_gate)
                 {
                     CheckDisposed();

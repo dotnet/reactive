@@ -54,7 +54,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                var currentid = default(ulong);
+                ulong currentid;
+
                 lock (_gate)
                 {
                     _hasValue = true;
@@ -155,7 +156,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                var throttle = default(IObservable<TThrottle>);
+                IObservable<TThrottle> throttle;
                 try
                 {
                     throttle = _throttleSelector(value);
@@ -171,6 +172,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 ulong currentid;
+                
                 lock (_gate)
                 {
                     _hasValue = true;

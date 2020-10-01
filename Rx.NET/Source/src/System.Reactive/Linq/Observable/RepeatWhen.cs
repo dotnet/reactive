@@ -27,11 +27,13 @@ namespace System.Reactive.Linq.ObservableImpl
             }
 
             var completeSignals = new Subject<object>();
-            var redo = default(IObservable<U>);
+
+            IObservable<U> redo;
 
             try
             {
                 redo = _handler(completeSignals);
+                
                 if (redo == null)
                 {
                     throw new NullReferenceException("The handler returned a null IObservable");

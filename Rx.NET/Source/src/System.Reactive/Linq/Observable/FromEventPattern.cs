@@ -96,7 +96,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable AddHandler(Delegate handler)
             {
-                var removeHandler = default(Action);
+                Action removeHandler;
 
                 try
                 {

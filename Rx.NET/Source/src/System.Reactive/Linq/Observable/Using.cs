@@ -33,7 +33,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(Using<TSource, TResource> parent)
             {
-                var source = default(IObservable<TSource>);
+                IObservable<TSource> source;
                 var disposable = Disposable.Empty;
                 try
                 {

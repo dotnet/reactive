@@ -136,7 +136,8 @@ namespace System.Reactive.Subjects
         /// </summary>
         public override void OnCompleted()
         {
-            var os = default(IObserver<T>[]);
+            IObserver<T>[] os = null;
+
             lock (_gate)
             {
                 CheckDisposed();
@@ -170,7 +171,8 @@ namespace System.Reactive.Subjects
                 throw new ArgumentNullException(nameof(error));
             }
 
-            var os = default(IObserver<T>[]);
+            IObserver<T>[] os = null;
+
             lock (_gate)
             {
                 CheckDisposed();
@@ -199,7 +201,8 @@ namespace System.Reactive.Subjects
         /// <param name="value">The value to send to all observers.</param>
         public override void OnNext(T value)
         {
-            var os = default(IObserver<T>[]);
+            IObserver<T>[] os = null;
+
             lock (_gate)
             {
                 CheckDisposed();
@@ -237,7 +240,7 @@ namespace System.Reactive.Subjects
                 throw new ArgumentNullException(nameof(observer));
             }
 
-            var ex = default(Exception);
+            Exception ex;
 
             lock (_gate)
             {

@@ -149,7 +149,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(IEnumerable<TSource> source, ISchedulerLongRunning scheduler)
             {
-                var e = default(IEnumerator<TSource>);
+                IEnumerator<TSource> e;
                 try
                 {
                     e = source.GetEnumerator();

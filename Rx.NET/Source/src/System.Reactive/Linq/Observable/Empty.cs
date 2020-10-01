@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(IScheduler scheduler)
             {
-                SetUpstream(scheduler.ScheduleAction(this, target => target.OnCompleted()));
+                SetUpstream(scheduler.ScheduleAction(this, static target => target.OnCompleted()));
             }
         }
     }

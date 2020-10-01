@@ -45,7 +45,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(IObservable<TSource> value)
             {
-                var id = default(ulong);
+                ulong id;
+                
                 lock (_gate)
                 {
                     id = unchecked(++_latest);

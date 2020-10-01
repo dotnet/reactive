@@ -90,7 +90,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override bool TryMoveNext(out TSource current)
             {
-                var kind = default(NotificationKind);
+                NotificationKind kind;
+
                 var value = default(TSource);
                 var error = default(Exception);
 

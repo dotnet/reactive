@@ -684,7 +684,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private void CreateBufferClose()
                 {
-                    var bufferClose = default(IObservable<TBufferClosing>);
+                    IObservable<TBufferClosing> bufferClose;
                     try
                     {
                         bufferClose = _bufferClosingSelector();

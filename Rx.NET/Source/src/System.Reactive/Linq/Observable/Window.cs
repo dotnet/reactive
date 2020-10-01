@@ -427,7 +427,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private void Tick(Subject<TSource> window)
                 {
-                    var newWindow = default(Subject<TSource>);
+                    Subject<TSource> newWindow;
+
                     lock (_gate)
                     {
                         if (window != _s)
@@ -448,7 +449,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var newWindow = default(Subject<TSource>);
+                    Subject<TSource> newWindow = null;
 
                     lock (_gate)
                     {
@@ -546,7 +547,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private void CreateWindowClose()
                 {
-                    var windowClose = default(IObservable<TWindowClosing>);
+                    IObservable<TWindowClosing> windowClose;
                     try
                     {
                         windowClose = _windowClosingSelector();

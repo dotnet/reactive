@@ -86,7 +86,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 var fireNewMapEntry = false;
-                var writer = default(ISubject<TElement>);
+                ISubject<TElement> writer;
                 try
                 {
                     //
@@ -125,9 +125,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var group = new GroupedObservable<TKey, TElement>(key, writer, _refCountDisposable);
 
-                    var duration = default(IObservable<TDuration>);
-
                     var durationGroup = new GroupedObservable<TKey, TElement>(key, writer);
+
+                    IObservable<TDuration> duration;
                     try
                     {
                         duration = _durationSelector(durationGroup);
@@ -208,7 +208,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_key == null)
                     {
-                        var @null = default(ISubject<TElement>);
+                        ISubject<TElement> @null;
+
                         lock (_parent._nullGate)
                         {
                             @null = _parent._null;
@@ -241,7 +242,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 //       using Subject<T>. It will transition into a terminal state, making one
                 //       of the two calls a no-op by swapping in a DoneObserver<T>.
                 //
-                var @null = default(ISubject<TElement>);
+                ISubject<TElement> @null;
+                
                 lock (_nullGate)
                 {
                     @null = _null;
@@ -267,7 +269,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 //       using Subject<T>. It will transition into a terminal state, making one
                 //       of the two calls a no-op by swapping in a DoneObserver<T>.
                 //
-                var @null = default(ISubject<TElement>);
+                ISubject<TElement> @null;
+
                 lock (_nullGate)
                 {
                     @null = _null;
