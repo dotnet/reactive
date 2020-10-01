@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 #if HAS_REMOTING
 using System.Reactive.Disposables;
 using System.Runtime.Remoting;
@@ -70,7 +68,7 @@ namespace System.Reactive.Linq
             return new SerializableObservable<TSource>(new RemotableObservable<TSource>(source, null));
         }
 
-        private static IObservable<TSource> Remotable_<TSource>(IObservable<TSource> source, ILease lease)
+        private static IObservable<TSource> Remotable_<TSource>(IObservable<TSource> source, ILease? lease)
         {
             return new SerializableObservable<TSource>(new RemotableObservable<TSource>(source, lease));
         }
@@ -167,9 +165,9 @@ namespace System.Reactive.Linq
         private sealed class RemotableObservable<T> : MarshalByRefObject, IObservable<T>
         {
             private readonly IObservable<T> _underlyingObservable;
-            private readonly ILease _lease;
+            private readonly ILease? _lease;
 
-            public RemotableObservable(IObservable<T> underlyingObservable, ILease lease)
+            public RemotableObservable(IObservable<T> underlyingObservable, ILease? lease)
             {
                 _underlyingObservable = underlyingObservable;
                 _lease = lease;
@@ -184,7 +182,7 @@ namespace System.Reactive.Linq
             }
 
             [SecurityCritical]
-            public override object InitializeLifetimeService()
+            public override object? InitializeLifetimeService()
             {
                 return _lease;
             }

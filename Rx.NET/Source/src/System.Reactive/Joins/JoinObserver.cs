@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -18,12 +16,11 @@ namespace System.Reactive.Joins
 
     internal sealed class JoinObserver<T> : ObserverBase<Notification<T>>, IJoinObserver
     {
-        private object _gate;
+        private object? _gate;
         private readonly IObservable<T> _source;
         private readonly Action<Exception> _onError;
         private readonly List<ActivePlan> _activePlans;
-        public Queue<Notification<T>> Queue { get; }
-        private IDisposable _subscription;
+        private IDisposable? _subscription;
         private bool _isDisposed;
 
         public JoinObserver(IObservable<T> source, Action<Exception> onError)
@@ -33,6 +30,8 @@ namespace System.Reactive.Joins
             Queue = new Queue<Notification<T>>();
             _activePlans = new List<ActivePlan>();
         }
+
+        public Queue<Notification<T>> Queue { get; }
 
         public void AddActivePlan(ActivePlan activePlan)
         {
@@ -52,13 +51,13 @@ namespace System.Reactive.Joins
 
         protected override void OnNextCore(Notification<T> notification)
         {
-            lock (_gate)
+            lock (_gate!) // NB: Called after Subscribe(object) is called.
             {
                 if (!_isDisposed)
                 {
                     if (notification.Kind == NotificationKind.OnError)
                     {
-                        _onError(notification.Exception);
+                        _onError(notification.Exception!);
                         return;
                     }
 

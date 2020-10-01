@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 #if WINDOWS
 using System.Reactive.Disposables;
 using System.Runtime.ExceptionServices;
@@ -186,7 +184,6 @@ namespace System.Reactive.Concurrency
         {
             var d = new MultipleAssignmentDisposable();
 
-
             var timer = CreateDispatcherQueue().CreateTimer();
 
             timer.Tick += (o, e) =>
@@ -201,7 +198,7 @@ namespace System.Reactive.Concurrency
                     finally
                     {
                         t.Stop();
-                        action = null;
+                        action = static (s, t) => Disposable.Empty;
                     }
                 }
             };
@@ -215,7 +212,7 @@ namespace System.Reactive.Concurrency
                 if (t != null)
                 {
                     t.Stop();
-                    action = static (_, __) => Disposable.Empty;
+                    action = static (s, t) => Disposable.Empty;
                 }
             });
 

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 #if HAS_WINRT
 using System.Reactive.Subjects;
 using Windows.Foundation;
@@ -16,7 +14,7 @@ namespace System.Reactive.Windows.Foundation
         private readonly Func<IAsyncInfo, TResult> _getResult;
         private readonly AsyncSubject<TResult> _subject;
 
-        public AsyncInfoToObservableBridge(IAsyncInfo info, Action<IAsyncInfo, Action<IAsyncInfo, AsyncStatus>> onCompleted, Func<IAsyncInfo, TResult> getResult, Action<IAsyncInfo, Action<IAsyncInfo, TProgress>> onProgress, IProgress<TProgress> progress, bool multiValue)
+        public AsyncInfoToObservableBridge(IAsyncInfo info, Action<IAsyncInfo, Action<IAsyncInfo, AsyncStatus>> onCompleted, Func<IAsyncInfo, TResult> getResult, Action<IAsyncInfo, Action<IAsyncInfo, TProgress>>? onProgress, IProgress<TProgress>? progress, bool multiValue)
         {
             _onCompleted = onCompleted;
             _getResult = getResult;
@@ -78,7 +76,7 @@ namespace System.Reactive.Windows.Foundation
             //
             // Close as early as possible, before running continuations which could fail. In case of
             // failure above, we don't close out the object in order to allow for debugging of the
-            // rogue implementation without losing state prematurely. Notice _getResults is merely
+            // rogue implementation without losing state prematurely. Notice _getResult is merely
             // an indirect call to the appropriate GetResults method, which is not supposed to throw.
             // Instead, an Error status should be returned.
             //
@@ -96,7 +94,7 @@ namespace System.Reactive.Windows.Foundation
             {
                 if (_getResult != null)
                 {
-                    _subject.OnNext(result);
+                    _subject.OnNext(result!); // NB: Has been assigned in switch statement above.
                 }
 
                 _subject.OnCompleted();
