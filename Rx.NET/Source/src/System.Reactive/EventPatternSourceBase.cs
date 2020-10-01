@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 
 namespace System.Reactive
@@ -144,7 +142,7 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(handler));
             }
 
-            IDisposable d = null;
+            IDisposable? d = null;
 
             lock (_subscriptions)
             {

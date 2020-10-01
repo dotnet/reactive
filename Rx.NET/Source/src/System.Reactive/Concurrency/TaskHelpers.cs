@@ -33,7 +33,7 @@ namespace System.Reactive.Concurrency
         {
             Debug.Assert(t.IsFaulted && t.Exception != null);
 
-            if (t.Exception.InnerException != null)
+            if (t.Exception!.InnerException != null)
             {
                 return t.Exception.InnerException;
             }
