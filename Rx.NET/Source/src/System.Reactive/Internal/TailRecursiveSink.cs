@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
 using System.Threading;
 
@@ -12,15 +11,16 @@ namespace System.Reactive
 {
     internal abstract class TailRecursiveSink<TSource> : IdentitySink<TSource>
     {
+        private readonly Stack<IEnumerator<IObservable<TSource>>> _stack = new Stack<IEnumerator<IObservable<TSource>>>();
+
+        private bool _isDisposed;
+        private int _trampoline;
+        private IDisposable? _currentSubscription;
+
         protected TailRecursiveSink(IObserver<TSource> observer)
             : base(observer)
         {
         }
-
-        private bool _isDisposed;
-        private int _trampoline;
-        private IDisposable _currentSubscription;
-        private readonly Stack<IEnumerator<IObservable<TSource>>> _stack = new Stack<IEnumerator<IObservable<TSource>>>();
 
         public void Run(IEnumerable<IObservable<TSource>> sources)
         {
@@ -85,7 +85,7 @@ namespace System.Reactive
                             continue;
                         }
 
-                        IObservable<TSource> next;
+                        IObservable<TSource>? next;
 
                         try
                         {
@@ -183,9 +183,9 @@ namespace System.Reactive
             }
         }
 
-        protected abstract IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source);
+        protected abstract IEnumerable<IObservable<TSource>>? Extract(IObservable<TSource> source);
 
-        private bool TryGetEnumerator(IEnumerable<IObservable<TSource>> sources, out IEnumerator<IObservable<TSource>> result)
+        private bool TryGetEnumerator(IEnumerable<IObservable<TSource>> sources, [NotNullWhen(true)] out IEnumerator<IObservable<TSource>>? result)
         {
             try
             {

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -35,7 +33,7 @@ namespace System.Reactive
 
             public override void Switch(Action<TLeft> caseLeft, Action<TRight> caseRight) => caseLeft(Value);
 
-            public bool Equals(Left other)
+            public bool Equals(Left? other)
             {
                 if (other == this)
                 {
@@ -50,9 +48,9 @@ namespace System.Reactive
                 return EqualityComparer<TLeft>.Default.Equals(Value, other.Value);
             }
 
-            public override bool Equals(object obj) => Equals(obj as Left);
+            public override bool Equals(object? obj) => Equals(obj as Left);
 
-            public override int GetHashCode() => EqualityComparer<TLeft>.Default.GetHashCode(Value);
+            public override int GetHashCode() => Value?.GetHashCode() ?? 0;
 
             public override string ToString()
             {
@@ -73,7 +71,7 @@ namespace System.Reactive
 
             public override void Switch(Action<TLeft> caseLeft, Action<TRight> caseRight) => caseRight(Value);
 
-            public bool Equals(Right other)
+            public bool Equals(Right? other)
             {
                 if (other == this)
                 {
@@ -88,9 +86,9 @@ namespace System.Reactive
                 return EqualityComparer<TRight>.Default.Equals(Value, other.Value);
             }
 
-            public override bool Equals(object obj) => Equals(obj as Right);
+            public override bool Equals(object? obj) => Equals(obj as Right);
 
-            public override int GetHashCode() => EqualityComparer<TRight>.Default.GetHashCode(Value);
+            public override int GetHashCode() => Value?.GetHashCode() ?? 0;
 
             public override string ToString() => string.Format(CultureInfo.CurrentCulture, "Right({0})", Value);
         }

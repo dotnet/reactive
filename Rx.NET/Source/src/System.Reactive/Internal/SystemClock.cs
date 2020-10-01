@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reactive.Concurrency;
@@ -24,7 +22,7 @@ namespace System.Reactive.PlatformServices
         private static readonly Lazy<ISystemClock> ServiceSystemClock = new Lazy<ISystemClock>(InitializeSystemClock);
         private static readonly Lazy<INotifySystemClockChanged> ServiceSystemClockChanged = new Lazy<INotifySystemClockChanged>(InitializeSystemClockChanged);
         internal static readonly HashSet<WeakReference<LocalScheduler>> SystemClockChanged = new HashSet<WeakReference<LocalScheduler>>();
-        private static IDisposable _systemClockChangedHandlerCollector;
+        private static IDisposable? _systemClockChangedHandlerCollector;
 
         private static int _refCount;
 
@@ -57,7 +55,7 @@ namespace System.Reactive.PlatformServices
             }
         }
 
-        internal static void OnSystemClockChanged(object sender, SystemClockChangedEventArgs e)
+        internal static void OnSystemClockChanged(object? sender, SystemClockChangedEventArgs e)
         {
             lock (SystemClockChanged)
             {
@@ -123,7 +121,7 @@ namespace System.Reactive.PlatformServices
             //
             lock (SystemClockChanged)
             {
-                HashSet<WeakReference<LocalScheduler>> remove = null;
+                HashSet<WeakReference<LocalScheduler>>? remove = null;
 
                 foreach (var handler in SystemClockChanged)
                 {
@@ -148,7 +146,7 @@ namespace System.Reactive.PlatformServices
 
                 if (SystemClockChanged.Count == 0)
                 {
-                    _systemClockChangedHandlerCollector.Dispose();
+                    _systemClockChangedHandlerCollector?.Dispose();
                     _systemClockChangedHandlerCollector = null;
                 }
             }

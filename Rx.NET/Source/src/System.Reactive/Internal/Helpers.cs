@@ -18,7 +18,7 @@ namespace System.Reactive
             };
         }
 
-        public static IObservable<T> Unpack<T>(IObservable<T> source)
+        public static IObservable<T>? Unpack<T>(IObservable<T>? source)
         {
             bool hasOpt;
 

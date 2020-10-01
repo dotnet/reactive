@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Reactive.PlatformServices
@@ -24,7 +22,7 @@ namespace System.Reactive.PlatformServices
         /// <typeparam name="T">Service type.</typeparam>
         /// <param name="args">Optional set of arguments.</param>
         /// <returns>Service instance or null if not found.</returns>
-        T GetService<T>(params object[] args) where T : class;
+        T? GetService<T>(params object[] args) where T : class;
     }
 
     /// <summary>

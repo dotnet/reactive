@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Threading;
 
@@ -29,7 +27,7 @@ namespace System.Reactive
         /// <param name="field">The target field to try to set atomically.</param>
         /// <param name="ex">The exception to set, not null (not verified).</param>
         /// <returns>True if the operation succeeded, false if the target was not null.</returns>
-        public static bool TrySetException(ref Exception field, Exception ex)
+        public static bool TrySetException(ref Exception? field, Exception ex)
         {
             return Interlocked.CompareExchange(ref field, ex, null) == null;
         }

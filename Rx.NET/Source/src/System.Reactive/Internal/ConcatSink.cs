@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 
 namespace System.Reactive
@@ -15,7 +13,7 @@ namespace System.Reactive
         {
         }
 
-        protected override IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source) => (source as IConcatenatable<TSource>)?.GetSources();
+        protected override IEnumerable<IObservable<TSource>>? Extract(IObservable<TSource> source) => (source as IConcatenatable<TSource>)?.GetSources();
 
         public override void OnCompleted() => Recurse();
     }
