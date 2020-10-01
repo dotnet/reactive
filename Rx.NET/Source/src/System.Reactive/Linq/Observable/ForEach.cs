@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -15,7 +13,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly Action<TSource> _onNext;
             private readonly Action _done;
 
-            private Exception _exception;
+            private Exception? _exception;
             private int _stopped;
 
             public Observer(Action<TSource> onNext, Action done)
@@ -24,7 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _done = done;
             }
 
-            public Exception Error => _exception;
+            public Exception? Error => _exception;
 
             public void OnNext(TSource value)
             {
@@ -65,7 +63,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly Action _done;
 
             private int _index;
-            private Exception _exception;
+            private Exception? _exception;
             private int _stopped;
 
             public ObserverIndexed(Action<TSource, int> onNext, Action done)
@@ -74,7 +72,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _done = done;
             }
 
-            public Exception Error => _exception;
+            public Exception? Error => _exception;
 
             public void OnNext(TSource value)
             {
