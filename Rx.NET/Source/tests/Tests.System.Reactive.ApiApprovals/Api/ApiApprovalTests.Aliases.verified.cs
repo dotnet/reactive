@@ -1,7 +1,7 @@
 [assembly: System.CLSCompliant(true)]
 [assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.7.2", FrameworkDisplayName=".NET Framework 4.7.2")]
 namespace System.Reactive.Linq
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]

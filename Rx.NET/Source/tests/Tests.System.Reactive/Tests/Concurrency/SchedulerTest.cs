@@ -375,7 +375,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#if DESKTOPCLR && NET46
+#if DESKTOPCLR && NET472
         [Fact]
         public void Scheduler_Periodic_HostLifecycleManagement()
         {
