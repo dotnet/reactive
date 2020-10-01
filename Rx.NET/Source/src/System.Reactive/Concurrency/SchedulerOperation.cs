@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -70,7 +68,7 @@ namespace System.Reactive.Concurrency
 
             if (cancellationToken.CanBeCanceled)
             {
-                _ctr = _cancellationToken.Register(static @this => ((SchedulerOperationAwaiter)@this).Cancel(), this);
+                _ctr = _cancellationToken.Register(static @this => ((SchedulerOperationAwaiter)@this!).Cancel(), this);
             }
         }
 
@@ -122,7 +120,7 @@ namespace System.Reactive.Concurrency
                         // is a conscious design decision as the performance impact was non
                         // negligible and our schedulers abstract over more constructs.
                         //
-                        ctx.Post(static a => ((Action)a)(), original);
+                        ctx.Post(static a => ((Action)a!)(), original);
                     };
                 }
             }
@@ -141,8 +139,8 @@ namespace System.Reactive.Concurrency
             _work = _schedule(_continuation);
         }
 
-        private volatile Action _continuation;
-        private volatile IDisposable _work;
+        private volatile Action? _continuation;
+        private volatile IDisposable? _work;
 
         private void Cancel()
         {
