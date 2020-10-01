@@ -552,7 +552,7 @@ namespace System.Reactive.Threading.Tasks
         /// <param name="scheduler">The scheduler used for overriding where the task completion signals will be issued.</param>
         /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="observable"/> or <paramref name="scheduler"/> is <c>null</c>.</exception>
-        public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken, object state, IScheduler scheduler)
+        public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken, object? state, IScheduler scheduler)
         {
             return observable.ToTask(cancellationToken, state).ContinueOnScheduler(scheduler);
         }
