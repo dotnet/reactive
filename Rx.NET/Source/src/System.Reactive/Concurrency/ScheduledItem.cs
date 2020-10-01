@@ -153,10 +153,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         public bool IsCanceled => Disposable.GetIsDisposed(ref _disposable);
 
-        void IDisposable.Dispose()
-        {
-            Cancel();
-        }
+        void IDisposable.Dispose() => Cancel();
     }
 
     /// <summary>
