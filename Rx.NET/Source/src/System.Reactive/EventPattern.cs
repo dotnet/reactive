@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 
 namespace System.Reactive
@@ -58,7 +56,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="other">An object to compare to the current <see cref="EventPattern{TSender, TEventArgs}"/> object.</param>
         /// <returns><c>true</c> if both <see cref="EventPattern{TSender, TEventArgs}"/> objects represent the same event; otherwise, <c>false</c>.</returns>
-        public bool Equals(EventPattern<TSender, TEventArgs> other)
+        public bool Equals(EventPattern<TSender, TEventArgs>? other)
         {
             if (other is null)
             {
@@ -78,7 +76,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current <see cref="EventPattern{TSender, TEventArgs}"/>.</param>
         /// <returns><c>true</c> if the specified System.Object is equal to the current <see cref="EventPattern{TSender, TEventArgs}"/>; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj) => Equals(obj as EventPattern<TSender, TEventArgs>);
+        public override bool Equals(object? obj) => Equals(obj as EventPattern<TSender, TEventArgs>);
 
         /// <summary>
         /// Returns the hash code for the current <see cref="EventPattern{TSender, TEventArgs}"/> instance.
@@ -86,8 +84,8 @@ namespace System.Reactive
         /// <returns>A hash code for the current <see cref="EventPattern{TSender, TEventArgs}"/> instance.</returns>
         public override int GetHashCode()
         {
-            var x = EqualityComparer<TSender>.Default.GetHashCode(Sender);
-            var y = EqualityComparer<TEventArgs>.Default.GetHashCode(EventArgs);
+            var x = Sender?.GetHashCode() ?? 0;
+            var y = EventArgs?.GetHashCode() ?? 0;
             return (x << 5) + (x ^ y);
         }
 

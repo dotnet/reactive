@@ -54,8 +54,8 @@ namespace System.Reactive
         public EventPattern(TSender sender, TEventArgs e) { }
         public TEventArgs EventArgs { get; }
         public TSender Sender { get; }
-        public override bool Equals(object obj) { }
-        public bool Equals(System.Reactive.EventPattern<TSender, TEventArgs> other) { }
+        public bool Equals(System.Reactive.EventPattern<TSender, TEventArgs>? other) { }
+        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public static bool operator !=(System.Reactive.EventPattern<TSender, TEventArgs> first, System.Reactive.EventPattern<TSender, TEventArgs> second) { }
         public static bool operator ==(System.Reactive.EventPattern<TSender, TEventArgs> first, System.Reactive.EventPattern<TSender, TEventArgs> second) { }
@@ -130,7 +130,7 @@ namespace System.Reactive
     public abstract class Notification<T> : System.IEquatable<System.Reactive.Notification<T>>
     {
         protected Notification() { }
-        public abstract System.Exception Exception { get; }
+        public abstract System.Exception? Exception { get; }
         public abstract bool HasValue { get; }
         public abstract System.Reactive.NotificationKind Kind { get; }
         public abstract T Value { get; }
@@ -138,8 +138,8 @@ namespace System.Reactive
         public abstract void Accept(System.Action<T> onNext, System.Action<System.Exception> onError, System.Action onCompleted);
         public abstract TResult Accept<TResult>(System.Reactive.IObserver<T, TResult> observer);
         public abstract TResult Accept<TResult>(System.Func<T, TResult> onNext, System.Func<System.Exception, TResult> onError, System.Func<TResult> onCompleted);
-        public override bool Equals(object obj) { }
-        public abstract bool Equals(System.Reactive.Notification<T> other);
+        public abstract bool Equals(System.Reactive.Notification<T>? other);
+        public override bool Equals(object? obj) { }
         public System.IObservable<T> ToObservable() { }
         public System.IObservable<T> ToObservable(System.Reactive.Concurrency.IScheduler scheduler) { }
         public static bool operator !=(System.Reactive.Notification<T> left, System.Reactive.Notification<T> right) { }
@@ -189,8 +189,8 @@ namespace System.Reactive
         public TimeInterval(T value, System.TimeSpan interval) { }
         public System.TimeSpan Interval { get; }
         public T Value { get; }
-        public override bool Equals(object obj) { }
         public bool Equals(System.Reactive.TimeInterval<T> other) { }
+        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
         public static bool operator !=(System.Reactive.TimeInterval<T> first, System.Reactive.TimeInterval<T> second) { }
@@ -206,8 +206,8 @@ namespace System.Reactive
         public Timestamped(T value, System.DateTimeOffset timestamp) { }
         public System.DateTimeOffset Timestamp { get; }
         public T Value { get; }
-        public override bool Equals(object obj) { }
         public bool Equals(System.Reactive.Timestamped<T> other) { }
+        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
         public static bool operator !=(System.Reactive.Timestamped<T> first, System.Reactive.Timestamped<T> second) { }
@@ -217,8 +217,8 @@ namespace System.Reactive
     public readonly struct Unit : System.IEquatable<System.Reactive.Unit>
     {
         public static System.Reactive.Unit Default { get; }
-        public override bool Equals(object obj) { }
         public bool Equals(System.Reactive.Unit other) { }
+        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
         public static bool operator !=(System.Reactive.Unit first, System.Reactive.Unit second) { }

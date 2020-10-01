@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -341,7 +339,7 @@ namespace System
                     //
                     var d = source.Subscribe/*Unsafe*/(consumer);
 
-                    consumer.SetResource(token.Register(state => ((IDisposable)state).Dispose(), d));
+                    consumer.SetResource(token.Register(state => ((IDisposable)state!).Dispose(), d));
                 }
             }
             else

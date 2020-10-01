@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -60,7 +58,7 @@ namespace System.Reactive
                 Expression.Call(
                     AsQueryable.MakeGenericMethod(typeof(TElement)),
                     Expression.Call(
-                        typeof(Observable).GetMethod(nameof(Observable.ToEnumerable)).MakeGenericMethod(typeof(TElement)),
+                        typeof(Observable).GetMethod(nameof(Observable.ToEnumerable))!.MakeGenericMethod(typeof(TElement)),
                         arg0
                     )
                 );
@@ -73,7 +71,7 @@ namespace System.Reactive
             return Expression.Lambda<Func<IQueryable<TElement>>>(res).Compile()();
         }
 
-        private static MethodInfo _staticAsQueryable;
+        private static MethodInfo? _staticAsQueryable;
 
         private static MethodInfo AsQueryable
         {
@@ -106,31 +104,35 @@ namespace System.Reactive
 
     internal class ObservableQuery
     {
-        protected object _source;
+        protected object? _source;
         protected Expression _expression;
 
-        public object Source
-        {
-            get { return _source; }
-        }
-
-        public Expression Expression
-        {
-            get { return _expression; }
-        }
-    }
-
-    internal class ObservableQuery<TSource> : ObservableQuery, IQbservable<TSource>
-    {
-        internal ObservableQuery(IObservable<TSource> source)
+        public ObservableQuery(object source)
         {
             _source = source;
             _expression = Expression.Constant(this);
         }
 
-        internal ObservableQuery(Expression expression)
+        public ObservableQuery(Expression expression)
         {
             _expression = expression;
+        }
+
+        public object? Source => _source;
+
+        public Expression Expression => _expression;
+    }
+
+    internal class ObservableQuery<TSource> : ObservableQuery, IQbservable<TSource>
+    {
+        internal ObservableQuery(IObservable<TSource> source)
+            : base(source)
+        {
+        }
+
+        internal ObservableQuery(Expression expression)
+            : base(expression)
+        {
         }
 
         public Type ElementType => typeof(TSource);
@@ -153,7 +155,7 @@ namespace System.Reactive
             return ((IObservable<TSource>)_source).Subscribe/*Unsafe*/(observer);
         }
 
-        public override string ToString()
+        public override string? ToString()
         {
             if (_expression is ConstantExpression c && c.Value == this)
             {
@@ -191,9 +193,9 @@ namespace System.Reactive
                 var method = node.Method;
                 var declaringType = method.DeclaringType;
 #if (CRIPPLED_REFLECTION && HAS_WINRT)
-                var baseType = declaringType.GetTypeInfo().BaseType;
+                var baseType = declaringType?.GetTypeInfo().BaseType;
 #else
-                var baseType = declaringType.BaseType;
+                var baseType = declaringType?.BaseType;
 #endif
                 if (baseType == typeof(QueryablePattern))
                 {
@@ -336,7 +338,7 @@ namespace System.Reactive
             private class Lazy<T>
             {
                 private readonly Func<T> _factory;
-                private T _value;
+                private T? _value;
                 private bool _initialized;
 
                 public Lazy(Func<T> factory)
@@ -357,7 +359,7 @@ namespace System.Reactive
                             }
                         }
 
-                        return _value;
+                        return _value!;
                     }
                 }
             }
@@ -380,7 +382,7 @@ namespace System.Reactive
                 }
                 else
                 {
-                    targetType = method.DeclaringType;
+                    targetType = method.DeclaringType!; // NB: These methods were found from a declaring type.
 
 #if (CRIPPLED_REFLECTION && HAS_WINRT)
                     var typeInfo = targetType.GetTypeInfo();
@@ -442,7 +444,7 @@ namespace System.Reactive
 #endif
             }
 
-            private static bool ArgsMatch(MethodInfo method, IList<Expression> arguments, Type[] typeArgs)
+            private static bool ArgsMatch(MethodInfo method, IList<Expression> arguments, Type[]? typeArgs)
             {
                 //
                 // Number of parameters should match. Notice we've sanitized IQbservableProvider "this"

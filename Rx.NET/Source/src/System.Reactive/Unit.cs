@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 namespace System.Reactive
 {
     /// <summary>
@@ -26,7 +24,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current <see cref="Unit"/>.</param>
         /// <returns><c>true</c> if the specified System.Object is a <see cref="Unit"/> value; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj) => obj is Unit;
+        public override bool Equals(object? obj) => obj is Unit;
 
         /// <summary>
         /// Returns the hash code for the current <see cref="Unit"/> value.

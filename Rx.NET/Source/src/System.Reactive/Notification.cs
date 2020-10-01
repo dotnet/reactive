@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -65,7 +63,7 @@ namespace System.Reactive
         /// <summary>
         /// Returns the exception of an OnError notification or returns <c>null</c>.
         /// </summary>
-        public abstract Exception Exception { get; }
+        public abstract Exception? Exception { get; }
 
         /// <summary>
         /// Gets the kind of notification that is represented.
@@ -97,7 +95,7 @@ namespace System.Reactive
             /// <summary>
             /// Returns <c>null</c>.
             /// </summary>
-            public override Exception Exception => null;
+            public override Exception? Exception => null;
 
             /// <summary>
             /// Returns <c>true</c>.
@@ -112,12 +110,12 @@ namespace System.Reactive
             /// <summary>
             /// Returns the hash code for this instance.
             /// </summary>
-            public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode(Value);
+            public override int GetHashCode() => Value?.GetHashCode() ?? 0;
 
             /// <summary>
             /// Indicates whether this instance and a specified object are equal.
             /// </summary>
-            public override bool Equals(Notification<T> other)
+            public override bool Equals(Notification<T>? other)
             {
                 if (ReferenceEquals(this, other))
                 {
@@ -245,7 +243,7 @@ namespace System.Reactive
             /// <summary>
             /// Throws the exception.
             /// </summary>
-            public override T Value { get { Exception.Throw(); return default; } }
+            public override T Value { get { Exception.Throw(); return default!; } }
 
             /// <summary>
             /// Returns the exception.
@@ -270,7 +268,7 @@ namespace System.Reactive
             /// <summary>
             /// Indicates whether this instance and other are equal.
             /// </summary>
-            public override bool Equals(Notification<T> other)
+            public override bool Equals(Notification<T>? other)
             {
                 if (ReferenceEquals(this, other))
                 {
@@ -408,7 +406,7 @@ namespace System.Reactive
             /// <summary>
             /// Returns <c>null</c>.
             /// </summary>
-            public override Exception Exception => null;
+            public override Exception? Exception => null;
 
             /// <summary>
             /// Returns <c>false</c>.
@@ -428,7 +426,7 @@ namespace System.Reactive
             /// <summary>
             /// Indicates whether this instance and other are equal.
             /// </summary>
-            public override bool Equals(Notification<T> other)
+            public override bool Equals(Notification<T>? other)
             {
                 if (ReferenceEquals(this, other))
                 {
@@ -541,7 +539,7 @@ namespace System.Reactive
         /// This means two <see cref="Notification{T}"/> objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
         /// In case one wants to determine whether two <see cref="Notification{T}"/> objects represent the same observer method call, use Object.ReferenceEquals identity equality instead.
         /// </remarks>
-        public abstract bool Equals(Notification<T> other);
+        public abstract bool Equals(Notification<T>? other);
 
         /// <summary>
         /// Determines whether the two specified <see cref="Notification{T}"/> objects have the same observer message payload.
@@ -592,7 +590,7 @@ namespace System.Reactive
         /// This means two <see cref="Notification{T}"/> objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
         /// In case one wants to determine whether two <see cref="Notification{T}"/> objects represent the same observer method call, use Object.ReferenceEquals identity equality instead.
         /// </remarks>
-        public override bool Equals(object obj) => Equals(obj as Notification<T>);
+        public override bool Equals(object? obj) => Equals(obj as Notification<T>);
 
         /// <summary>
         /// Invokes the observer's method corresponding to the notification.

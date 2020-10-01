@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -213,17 +211,17 @@ namespace System.Runtime.CompilerServices
             /// The underlying observable sequence to subscribe to in case the asynchronous method did not
             /// finish synchronously.
             /// </summary>
-            private readonly AsyncSubject<T> _subject;
+            private readonly AsyncSubject<T>? _subject;
 
             /// <summary>
             /// The result returned by the asynchronous method in case the method finished synchronously.
             /// </summary>
-            private readonly T _result;
+            private readonly T? _result;
 
             /// <summary>
             /// The exception thrown by the asynchronous method in case the method finished synchronously.
             /// </summary>
-            private readonly Exception _exception;
+            private readonly Exception? _exception;
 
             /// <summary>
             /// Creates a new <see cref="TaskObservable"/> for an asynchronous method that has not finished yet.
@@ -265,7 +263,7 @@ namespace System.Runtime.CompilerServices
                     throw new InvalidOperationException();
                 }
 
-                _subject.OnNext(result);
+                _subject!.OnNext(result);
                 _subject.OnCompleted();
             }
 
@@ -282,7 +280,7 @@ namespace System.Runtime.CompilerServices
                     throw new InvalidOperationException();
                 }
 
-                _subject.OnError(exception);
+                _subject!.OnError(exception);
             }
 
             /// <summary>
@@ -304,7 +302,7 @@ namespace System.Runtime.CompilerServices
                     return Disposable.Empty;
                 }
 
-                observer.OnNext(_result);
+                observer.OnNext(_result!);
                 return Disposable.Empty;
             }
 
@@ -332,7 +330,7 @@ namespace System.Runtime.CompilerServices
 
                 _exception.ThrowIfNotNull();
 
-                return _result;
+                return _result!;
             }
 
             /// <summary>
