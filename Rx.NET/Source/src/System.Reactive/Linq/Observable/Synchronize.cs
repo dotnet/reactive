@@ -2,14 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class Synchronize<TSource> : Producer<TSource, Synchronize<TSource>._>
     {
         private readonly IObservable<TSource> _source;
-        private readonly object _gate;
+        private readonly object? _gate;
 
         public Synchronize(IObservable<TSource> source, object gate)
         {
@@ -30,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly object _gate;
 
-            public _(object gate, IObserver<TSource> observer)
+            public _(object? gate, IObserver<TSource> observer)
                 : base(observer)
             {
                 _gate = gate ?? new object();
