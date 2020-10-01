@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#nullable disable
+
 //
 // WARNING: The full namespace-qualified type name should stay the same for the discovery in System.Reactive.Core to work!
 //
