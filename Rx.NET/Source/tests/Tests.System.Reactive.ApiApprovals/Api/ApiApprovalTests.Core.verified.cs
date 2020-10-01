@@ -2359,7 +2359,7 @@ namespace System.Reactive.PlatformServices
     public class CurrentPlatformEnlightenmentProvider : System.Reactive.PlatformServices.IPlatformEnlightenmentProvider
     {
         public CurrentPlatformEnlightenmentProvider() { }
-        public virtual T GetService<T>(object[] args)
+        public virtual T? GetService<T>(object[] args)
             where T :  class { }
     }
     public class DefaultSystemClock : System.Reactive.PlatformServices.ISystemClock
