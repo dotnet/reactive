@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Linq;
 
@@ -50,23 +48,28 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception ex)
                 {
-                    _lookup = null;
+                    Cleanup();
                     ForwardOnError(ex);
                 }
             }
 
             public override void OnError(Exception error)
             {
-                _lookup = null;
+                Cleanup();
                 ForwardOnError(error);
             }
 
             public override void OnCompleted()
             {
                 var lookup = _lookup;
-                _lookup = null;
+                Cleanup();
                 ForwardOnNext(lookup);
                 ForwardOnCompleted();
+            }
+
+            private void Cleanup()
+            {
+                _lookup = null!;
             }
         }
     }

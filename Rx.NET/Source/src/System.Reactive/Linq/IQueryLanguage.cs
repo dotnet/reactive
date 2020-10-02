@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Joins;
@@ -338,21 +339,21 @@ namespace System.Reactive.Linq
         IEnumerable<TResult> Collect<TSource, TResult>(IObservable<TSource> source, Func<TResult> getInitialCollector, Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector);
         TSource First<TSource>(IObservable<TSource> source);
         TSource First<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
-        TSource FirstOrDefault<TSource>(IObservable<TSource> source);
-        TSource FirstOrDefault<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
+        [return: MaybeNull] TSource FirstOrDefault<TSource>(IObservable<TSource> source);
+        [return: MaybeNull] TSource FirstOrDefault<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         void ForEach<TSource>(IObservable<TSource> source, Action<TSource> onNext);
         void ForEach<TSource>(IObservable<TSource> source, Action<TSource, int> onNext);
         IEnumerator<TSource> GetEnumerator<TSource>(IObservable<TSource> source);
         TSource Last<TSource>(IObservable<TSource> source);
         TSource Last<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
-        TSource LastOrDefault<TSource>(IObservable<TSource> source);
-        TSource LastOrDefault<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
+        [return: MaybeNull] TSource LastOrDefault<TSource>(IObservable<TSource> source);
+        [return: MaybeNull] TSource LastOrDefault<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IEnumerable<TSource> Latest<TSource>(IObservable<TSource> source);
         IEnumerable<TSource> MostRecent<TSource>(IObservable<TSource> source, TSource initialValue);
         IEnumerable<TSource> Next<TSource>(IObservable<TSource> source);
         TSource Single<TSource>(IObservable<TSource> source);
-        TSource SingleOrDefault<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
-        TSource SingleOrDefault<TSource>(IObservable<TSource> source);
+        [return: MaybeNull] TSource SingleOrDefault<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
+        [return: MaybeNull] TSource SingleOrDefault<TSource>(IObservable<TSource> source);
         TSource Single<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         TSource Wait<TSource>(IObservable<TSource> source);
 

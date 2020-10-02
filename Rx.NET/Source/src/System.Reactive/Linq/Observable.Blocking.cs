@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Reactive.Linq
 {
@@ -160,6 +161,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <seealso cref="Observable.FirstOrDefaultAsync{TSource}(IObservable{TSource})"/>
         [Obsolete(Constants_Linq.UseAsync)]
+        [return: MaybeNull]
         public static TSource FirstOrDefault<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -180,6 +182,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         /// <seealso cref="Observable.FirstOrDefaultAsync{TSource}(IObservable{TSource}, Func{TSource, bool})"/>
         [Obsolete(Constants_Linq.UseAsync)]
+        [return: MaybeNull]
         public static TSource FirstOrDefault<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
@@ -331,6 +334,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <seealso cref="Observable.LastOrDefaultAsync{TSource}(IObservable{TSource})"/>
         [Obsolete(Constants_Linq.UseAsync)]
+        [return: MaybeNull]
         public static TSource LastOrDefault<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -351,6 +355,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         /// <seealso cref="Observable.LastOrDefaultAsync{TSource}(IObservable{TSource}, Func{TSource, bool})"/>
         [Obsolete(Constants_Linq.UseAsync)]
+        [return: MaybeNull]
         public static TSource LastOrDefault<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
@@ -496,6 +501,7 @@ namespace System.Reactive.Linq
         /// <exception cref="InvalidOperationException">The source sequence contains more than one element.</exception>
         /// <seealso cref="Observable.SingleOrDefaultAsync{TSource}(IObservable{TSource})"/>
         [Obsolete(Constants_Linq.UseAsync)]
+        [return: MaybeNull]
         public static TSource SingleOrDefault<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -517,6 +523,7 @@ namespace System.Reactive.Linq
         /// <exception cref="InvalidOperationException">The sequence contains more than one element that satisfies the condition in the predicate.</exception>
         /// <seealso cref="Observable.SingleOrDefaultAsync{TSource}(IObservable{TSource}, Func{TSource, bool})"/>
         [Obsolete(Constants_Linq.UseAsync)]
+        [return: MaybeNull]
         public static TSource SingleOrDefault<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)

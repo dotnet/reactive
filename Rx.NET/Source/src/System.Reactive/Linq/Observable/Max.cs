@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -37,7 +35,7 @@ namespace System.Reactive.Linq.ObservableImpl
         private sealed class NonNull : _
         {
             private bool _hasValue;
-            private TSource _lastValue;
+            private TSource? _lastValue;
 
             public NonNull(IComparer<TSource> comparer, IObserver<TSource> observer)
                 : base(comparer, observer)
@@ -51,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     int comparison;
                     try
                     {
-                        comparison = _comparer.Compare(value, _lastValue);
+                        comparison = _comparer.Compare(value, _lastValue!);
                     }
                     catch (Exception ex)
                     {
@@ -86,7 +84,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 else
                 {
-                    ForwardOnNext(_lastValue);
+                    ForwardOnNext(_lastValue!);
                     ForwardOnCompleted();
                 }
             }
@@ -94,7 +92,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class Null : _
         {
-            private TSource _lastValue;
+            private TSource? _lastValue;
 
             public Null(IComparer<TSource> comparer, IObserver<TSource> observer)
                 : base(comparer, observer)
@@ -137,7 +135,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                ForwardOnNext(_lastValue);
+                ForwardOnNext(_lastValue!);
                 ForwardOnCompleted();
             }
         }

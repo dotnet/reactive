@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class Scan<TSource, TAccumulate> : Producer<TAccumulate, Scan<TSource, TAccumulate>._>
@@ -70,7 +68,7 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Func<TSource, TSource, TSource> _accumulator;
-            private TSource _accumulation;
+            private TSource? _accumulation;
             private bool _hasAccumulation;
 
             public _(Func<TSource, TSource, TSource> accumulator, IObserver<TSource> observer)
@@ -85,7 +83,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_hasAccumulation)
                     {
-                        _accumulation = _accumulator(_accumulation, value);
+                        _accumulation = _accumulator(_accumulation!, value);
                     }
                     else
                     {

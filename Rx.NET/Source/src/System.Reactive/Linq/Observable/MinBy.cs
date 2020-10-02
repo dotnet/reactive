@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -30,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly Func<TSource, TKey> _keySelector;
             private readonly IComparer<TKey> _comparer;
             private bool _hasValue;
-            private TKey _lastKey;
+            private TKey? _lastKey;
             private List<TSource> _list;
 
             public _(MinBy<TSource, TKey> parent, IObserver<IList<TSource>> observer)
@@ -51,8 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception ex)
                 {
-                    _list = null;
-                    _lastKey = default;
+                    Cleanup();
                     ForwardOnError(ex);
                     return;
                 }
@@ -68,12 +65,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     try
                     {
-                        comparison = _comparer.Compare(key, _lastKey);
+                        comparison = _comparer.Compare(key, _lastKey!);
                     }
                     catch (Exception ex)
                     {
-                        _list = null;
-                        _lastKey = default;
+                        Cleanup();
                         ForwardOnError(ex);
                         return;
                     }
@@ -94,10 +90,15 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnCompleted()
             {
                 var list = _list;
-                _list = null;
-                _lastKey = default;
+                Cleanup();
                 ForwardOnNext(list);
                 ForwardOnCompleted();
+            }
+
+            private void Cleanup()
+            {
+                _list = null!;
+                _lastKey = default;
             }
         }
     }

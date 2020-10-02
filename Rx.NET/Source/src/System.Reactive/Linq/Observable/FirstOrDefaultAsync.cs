@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class FirstOrDefaultAsync<TSource>
@@ -36,7 +34,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    ForwardOnNext(default);
+                    ForwardOnNext(default!);
                     ForwardOnCompleted();
                 }
             }
@@ -90,7 +88,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    ForwardOnNext(default);
+                    ForwardOnNext(default!);
                     ForwardOnCompleted();
                 }
             }

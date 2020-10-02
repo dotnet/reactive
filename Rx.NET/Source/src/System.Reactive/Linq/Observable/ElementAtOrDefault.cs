@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class ElementAtOrDefault<TSource> : Producer<TSource, ElementAtOrDefault<TSource>._>
@@ -44,7 +42,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                ForwardOnNext(default);
+                ForwardOnNext(default!);
                 ForwardOnCompleted();
             }
         }
