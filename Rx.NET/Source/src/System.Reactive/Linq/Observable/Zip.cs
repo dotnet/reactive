@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,10 +38,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly object _gate;
 
                 private readonly FirstObserver _firstObserver;
-                private IDisposable _firstDisposable;
+                private IDisposable? _firstDisposable;
 
                 private readonly SecondObserver _secondObserver;
-                private IDisposable _secondDisposable;
+                private IDisposable? _secondDisposable;
 
                 public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer)
                     : base(observer)
@@ -53,8 +51,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     _firstObserver = new FirstObserver(this);
                     _secondObserver = new SecondObserver(this);
 
-                    _firstObserver.Other = _secondObserver;
-                    _secondObserver.Other = _firstObserver;
+                    _firstObserver.SetOther(_secondObserver);
+                    _secondObserver.SetOther(_firstObserver);
 
                     _resultSelector = resultSelector;
                 }
@@ -80,22 +78,24 @@ namespace System.Reactive.Linq.ObservableImpl
                             _secondObserver.Dispose();
                         }
                     }
+
                     base.Dispose(disposing);
                 }
 
                 private sealed class FirstObserver : IObserver<TFirst>, IDisposable
                 {
                     private readonly _ _parent;
-                    private SecondObserver _other;
                     private readonly Queue<TFirst> _queue;
+                    private SecondObserver _other;
 
                     public FirstObserver(_ parent)
                     {
                         _parent = parent;
                         _queue = new Queue<TFirst>();
+                        _other = default!; // NB: Will be set by SetOther.
                     }
 
-                    public SecondObserver Other { set { _other = value; } }
+                    public void SetOther(SecondObserver other) { _other = other; }
 
                     public Queue<TFirst> Queue => _queue;
                     public bool Done { get; private set; }
@@ -168,16 +168,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 private sealed class SecondObserver : IObserver<TSecond>, IDisposable
                 {
                     private readonly _ _parent;
-                    private FirstObserver _other;
                     private readonly Queue<TSecond> _queue;
+                    private FirstObserver _other;
 
                     public SecondObserver(_ parent)
                     {
                         _parent = parent;
                         _queue = new Queue<TSecond>();
+                        _other = default!; // NB: Will be set by SetOther.
                     }
 
-                    public FirstObserver Other { set { _other = value; } }
+                    public void SetOther(FirstObserver other) { _other = other; }
 
                     public Queue<TSecond> Queue => _queue;
                     public bool Done { get; private set; }
@@ -278,7 +279,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 int _enumerationInProgress;
 
-                private IEnumerator<TSecond> _rightEnumerator;
+                private IEnumerator<TSecond>? _rightEnumerator;
 
                 private static readonly IEnumerator<TSecond> DisposedEnumerator = MakeDisposedEnumerator();
 
@@ -324,28 +325,34 @@ namespace System.Reactive.Linq.ObservableImpl
                             Interlocked.Exchange(ref _rightEnumerator, DisposedEnumerator)?.Dispose();
                         }
                     }
+
                     base.Dispose(disposing);
                 }
 
                 public override void OnNext(TFirst value)
                 {
                     var currentEnumerator = Volatile.Read(ref _rightEnumerator);
+
                     if (currentEnumerator == DisposedEnumerator)
                     {
                         return;
                     }
+
                     if (Interlocked.Increment(ref _enumerationInProgress) != 1)
                     {
                         return;
                     }
+
                     bool hasNext;
                     TSecond right = default;
                     var wasDisposed = false;
+
                     try
                     {
                         try
                         {
-                            hasNext = currentEnumerator.MoveNext();
+                            hasNext = currentEnumerator!.MoveNext();
+
                             if (hasNext)
                             {
                                 right = currentEnumerator.Current;
@@ -376,7 +383,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         TResult result;
                         try
                         {
-                            result = _resultSelector(value, right);
+                            result = _resultSelector(value, right!); // NB: Not null when hasNext is true.
                         }
                         catch (Exception ex)
                         {
@@ -590,11 +597,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 : base(observer)
             {
                 _gate = new object();
+
+                // NB: These will be set in Run before getting used.
+                _queues = null!;
+                _isDone = null!;
             }
 
             private Queue<TSource>[] _queues;
             private bool[] _isDone;
-            private IDisposable[] _subscriptions;
+            private IDisposable[]? _subscriptions;
 
             public void Run(IEnumerable<IObservable<TSource>> sources)
             {

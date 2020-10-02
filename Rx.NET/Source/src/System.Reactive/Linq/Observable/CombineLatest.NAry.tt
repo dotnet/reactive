@@ -8,8 +8,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -25,7 +23,7 @@ for (var i = 3; i <= 16; i++)
 {
     var ts = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j));
     var os = string.Join(", ", Enumerable.Range(1, i).Select(j => "IObservable<T" + j + "> source" + j));
-    var vs = string.Join(", ", Enumerable.Range(1, i).Select(j => "_observer" + j + ".Value"));
+    var vs = string.Join(", ", Enumerable.Range(1, i).Select(j => "_observer" + j + ".Value!"));
     var ss = string.Join(", ", Enumerable.Range(1, i).Select(j => "_source" + j));
 #>
     internal sealed class CombineLatest<<#=ts#>, TResult> : Producer<TResult, CombineLatest<<#=ts#>, TResult>._>
@@ -61,20 +59,29 @@ for (var j = 1; j <= i; j++)
         {
             private readonly Func<<#=ts#>, TResult> _resultSelector;
 
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+            private readonly CombineLatestObserver<T<#=j#>> _observer<#=j#>;
+<#
+}
+#>
+
             public _(Func<<#=ts#>, TResult> resultSelector, IObserver<TResult> observer)
                 : base(<#=i#>, observer)
             {
                 _resultSelector = resultSelector;
-            }
 
 <#
 for (var j = 1; j <= i; j++)
 {
 #>
-            private CombineLatestObserver<T<#=j#>> _observer<#=j#>;
+                _observer<#=j#> = new CombineLatestObserver<T<#=j#>>(_gate, this, <#=j - 1#>);
 <#
 }
 #>
+            }
 
             public void Run(<#=os#>)
             {
@@ -84,7 +91,7 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                subscriptions[<#=j - 1#>] = _observer<#=j#> = new CombineLatestObserver<T<#=j#>>(_gate, this, <#=j - 1#>);
+                subscriptions[<#=j - 1#>] = _observer<#=j#>;
 <#
 }
 #>
