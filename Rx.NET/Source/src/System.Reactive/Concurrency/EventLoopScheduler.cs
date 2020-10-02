@@ -378,13 +378,13 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        private void Tick(object state)
+        private void Tick(object? state)
         {
             lock (_gate)
             {
                 if (!_disposed)
                 {
-                    var item = (ScheduledItem<TimeSpan>)state;
+                    var item = (ScheduledItem<TimeSpan>)state!;
                     if (item == _nextItem)
                     {
                         _nextItem = null;

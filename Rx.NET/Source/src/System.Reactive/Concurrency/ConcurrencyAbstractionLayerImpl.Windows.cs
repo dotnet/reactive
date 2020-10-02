@@ -9,7 +9,7 @@ namespace System.Reactive.Concurrency
 {
     internal class /*Default*/ConcurrencyAbstractionLayerImpl : IConcurrencyAbstractionLayer
     {
-        public IDisposable StartTimer(Action<object> action, object state, TimeSpan dueTime)
+        public IDisposable StartTimer(Action<object?> action, object? state, TimeSpan dueTime)
         {
             var res = global::Windows.System.Threading.ThreadPoolTimer.CreateTimer(
                 tpt =>
@@ -44,7 +44,7 @@ namespace System.Reactive.Concurrency
             return res.AsDisposable();
         }
 
-        public IDisposable QueueUserWorkItem(Action<object> action, object state)
+        public IDisposable QueueUserWorkItem(Action<object?> action, object? state)
         {
             var res = global::Windows.System.Threading.ThreadPool.RunAsync(iaa =>
             {
@@ -73,7 +73,7 @@ namespace System.Reactive.Concurrency
 
         public bool SupportsLongRunning => false;
 
-        public void StartThread(Action<object> action, object state)
+        public void StartThread(Action<object?> action, object? state)
         {
             throw new NotSupportedException();
         }
