@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 #if !NO_THREAD
 using System.Reactive.Disposables;
 using System.Threading;
@@ -54,7 +52,7 @@ namespace System.Reactive.Concurrency
         {
             ThreadPool.QueueUserWorkItem(itemObject =>
             {
-                var item = (WorkItem)itemObject;
+                var item = (WorkItem)itemObject!;
 
                 item.Action(item.State);
             }, new WorkItem(action, state));
@@ -72,7 +70,7 @@ namespace System.Reactive.Concurrency
         {
             new Thread(itemObject =>
             {
-                var item = (WorkItem)itemObject;
+                var item = (WorkItem)itemObject!;
 
                 item.Action(item.State);
             })
@@ -165,7 +163,7 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                Disposable.SetSingle(ref _timer, new System.Threading.Timer(_ => Tick(_), this, dueTime, TimeSpan.FromMilliseconds(Timeout.Infinite)));
+                Disposable.SetSingle(ref _timer, new System.Threading.Timer(@this => Tick(@this!), this, dueTime, TimeSpan.FromMilliseconds(Timeout.Infinite)));
             }
 
             private static void Tick(object state)
@@ -199,7 +197,7 @@ namespace System.Reactive.Concurrency
         private sealed class PeriodicTimer : IDisposable
         {
             private Action _action;
-            private volatile System.Threading.Timer _timer;
+            private volatile System.Threading.Timer? _timer;
 
             public PeriodicTimer(Action action, TimeSpan period)
             {
@@ -209,7 +207,7 @@ namespace System.Reactive.Concurrency
                 // Rooting of the timer happens through the timer's state
                 // which is the current instance and has a field to store the Timer instance.
                 //
-                _timer = new System.Threading.Timer(_ => Tick(_), this, period, period);
+                _timer = new System.Threading.Timer(@this => Tick(@this!), this, period, period);
             }
 
             private static void Tick(object state)
@@ -241,7 +239,7 @@ namespace System.Reactive.Concurrency
             {
                 _action = action;
 
-                new Thread(_ => Loop(_))
+                new Thread(@this => Loop(@this!))
                 {
                     Name = "Rx-FastPeriodicTimer",
                     IsBackground = true
