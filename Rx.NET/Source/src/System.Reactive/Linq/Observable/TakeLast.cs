@@ -49,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _loopDisposable);
+                        Disposable.Dispose(ref _loopDisposable);
                     }
 
                     base.Dispose(disposing);
@@ -165,7 +165,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _loopDisposable);
+                        Disposable.Dispose(ref _loopDisposable);
                     }
                     base.Dispose(disposing);
                 }

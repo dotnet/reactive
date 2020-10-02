@@ -186,7 +186,7 @@ namespace System.Reactive.Concurrency
 
                 public void Dispose()
                 {
-                    Disposable.TryDispose(ref _cancel);
+                    Disposable.Dispose(ref _cancel);
                 }
 
                 public bool IsDisposed => Disposable.GetIsDisposed(ref _cancel);

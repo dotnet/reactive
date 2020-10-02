@@ -150,7 +150,7 @@ namespace System.Reactive.Linq
 
                     public void Dispose()
                     {
-                        Disposable.TryDispose(ref _disposable);
+                        Disposable.Dispose(ref _disposable);
                     }
 
                     public void OnCompleted()

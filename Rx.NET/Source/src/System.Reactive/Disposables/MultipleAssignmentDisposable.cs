@@ -41,7 +41,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-            Disposables.Disposable.TryDispose(ref _current);
+            Disposables.Disposable.Dispose(ref _current);
         }
     }
 }

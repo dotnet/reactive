@@ -88,7 +88,7 @@ namespace System.Reactive
         {
             if (disposing)
             {
-                Disposable.TryDispose(ref _disposable);
+                Disposable.Dispose(ref _disposable);
             }
         }
     }

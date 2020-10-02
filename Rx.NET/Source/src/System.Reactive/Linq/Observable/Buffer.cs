@@ -301,7 +301,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _timerSerial);
+                        Disposable.Dispose(ref _timerSerial);
                     }
                     base.Dispose(disposing);
                 }
@@ -459,7 +459,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _periodicDisposable);
+                        Disposable.Dispose(ref _periodicDisposable);
                     }
                     base.Dispose(disposing);
                 }
@@ -552,7 +552,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _timerSerial);
+                        Disposable.Dispose(ref _timerSerial);
                     }
                     base.Dispose(disposing);
                 }
@@ -679,7 +679,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _bufferClosingSerialDisposable);
+                        Disposable.Dispose(ref _bufferClosingSerialDisposable);
                     }
                     base.Dispose(disposing);
                 }
@@ -811,7 +811,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _boundariesDisposable);
+                        Disposable.Dispose(ref _boundariesDisposable);
                     }
                     base.Dispose(disposing);
                 }

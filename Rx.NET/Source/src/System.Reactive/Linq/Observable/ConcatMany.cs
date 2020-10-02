@@ -62,7 +62,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private void DisposeMain()
             {
-                Disposable.TryDispose(ref _upstream);
+                Disposable.Dispose(ref _upstream);
             }
 
             private bool IsDisposed()
@@ -204,7 +204,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Dispose()
                 {
-                    Disposable.TryDispose(ref Upstream);
+                    Disposable.Dispose(ref Upstream);
                 }
 
                 public void OnCompleted()

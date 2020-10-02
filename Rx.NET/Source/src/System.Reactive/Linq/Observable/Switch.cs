@@ -39,7 +39,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _innerSerialDisposable);
+                    Disposable.Dispose(ref _innerSerialDisposable);
                 }
 
                 base.Dispose(disposing);

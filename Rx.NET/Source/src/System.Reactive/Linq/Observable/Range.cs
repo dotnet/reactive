@@ -50,7 +50,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 base.Dispose(disposing);
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _task);
+                    Disposable.Dispose(ref _task);
                 }
             }
 

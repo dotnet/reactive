@@ -105,8 +105,8 @@ namespace System.Reactive.Disposables
 
             public override void Dispose()
             {
-                Disposable.TryDispose(ref _disposable1);
-                Disposable.TryDispose(ref _disposable2);
+                Disposable.Dispose(ref _disposable1);
+                Disposable.Dispose(ref _disposable2);
             }
         }
 

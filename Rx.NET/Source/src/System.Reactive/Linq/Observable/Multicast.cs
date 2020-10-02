@@ -60,7 +60,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _connection);
+                    Disposable.Dispose(ref _connection);
                 }
                 
                 base.Dispose(disposing);

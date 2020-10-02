@@ -52,8 +52,8 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _sourceDisposable);
-                    Disposable.TryDispose(ref _samplerDisposable);
+                    Disposable.Dispose(ref _sourceDisposable);
+                    Disposable.Dispose(ref _samplerDisposable);
                 }
                 base.Dispose(disposing);
             }
@@ -87,7 +87,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        Disposable.TryDispose(ref _sourceDisposable);
+                        Disposable.Dispose(ref _sourceDisposable);
                     }
                 }
             }
@@ -145,7 +145,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         else
                         {
-                            Disposable.TryDispose(ref _parent._samplerDisposable);
+                            Disposable.Dispose(ref _parent._samplerDisposable);
                         }
                     }
                 }
@@ -196,7 +196,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _sourceDisposable);
+                    Disposable.Dispose(ref _sourceDisposable);
                 }
                 base.Dispose(disposing);
             }
@@ -240,7 +240,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     _atEnd = true;
-                    Disposable.TryDispose(ref _sourceDisposable);
+                    Disposable.Dispose(ref _sourceDisposable);
                 }
             }
         }

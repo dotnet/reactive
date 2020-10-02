@@ -69,8 +69,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _firstDisposable);
-                        Disposable.TryDispose(ref _secondDisposable);
+                        Disposable.Dispose(ref _firstDisposable);
+                        Disposable.Dispose(ref _secondDisposable);
 
                         // clearing the queue should happen under the lock
                         // as they are plain Queue<T>s, not concurrent queues.
@@ -154,7 +154,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                             else
                             {
-                                Disposable.TryDispose(ref _parent._firstDisposable);
+                                Disposable.Dispose(ref _parent._firstDisposable);
                             }
                         }
                     }
@@ -236,7 +236,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                             else
                             {
-                                Disposable.TryDispose(ref _parent._secondDisposable);
+                                Disposable.Dispose(ref _parent._secondDisposable);
                             }
                         }
                     }
@@ -631,7 +631,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         for (var i = 0; i < subscriptions.Length; i++)
                         {
-                            Disposable.TryDispose(ref subscriptions[i]);
+                            Disposable.Dispose(ref subscriptions[i]);
                         }
 
                         lock (_gate)
@@ -694,7 +694,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         var subscriptions = Volatile.Read(ref _subscriptions);
                         if (subscriptions != null && subscriptions != Array.Empty<IDisposable>())
                         {
-                            Disposable.TryDispose(ref subscriptions[index]);
+                            Disposable.Dispose(ref subscriptions[index]);
                         }
                     }
                 }

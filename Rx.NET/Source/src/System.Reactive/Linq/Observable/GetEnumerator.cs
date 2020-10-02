@@ -47,14 +47,14 @@ namespace System.Reactive.Linq.ObservableImpl
         public void OnError(Exception error)
         {
             _error = error;
-            Disposable.TryDispose(ref _subscription);
+            Disposable.Dispose(ref _subscription);
             _gate.Release();
         }
 
         public void OnCompleted()
         {
             _done = true;
-            Disposable.TryDispose(ref _subscription);
+            Disposable.Dispose(ref _subscription);
             _gate.Release();
         }
 
@@ -86,7 +86,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public void Dispose()
         {
-            Disposable.TryDispose(ref _subscription);
+            Disposable.Dispose(ref _subscription);
 
             _disposed = true;
             _gate.Release();

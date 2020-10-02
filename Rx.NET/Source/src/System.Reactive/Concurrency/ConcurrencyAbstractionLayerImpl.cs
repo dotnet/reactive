@@ -180,7 +180,7 @@ namespace System.Reactive.Concurrency
                 }
                 finally
                 {
-                    Disposable.TryDispose(ref timer._timer);
+                    Disposable.Dispose(ref timer._timer);
                 }
             }
 

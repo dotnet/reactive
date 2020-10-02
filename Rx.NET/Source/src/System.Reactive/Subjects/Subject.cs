@@ -61,7 +61,7 @@ namespace System.Reactive.Subjects
 
         #region IObserver<T> implementation
 
-        private void ThrowDisposed()
+        private static void ThrowDisposed()
         {
             throw new ObjectDisposedException(string.Empty);
         }

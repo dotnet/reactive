@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _serialCancelable);
+                    Disposable.Dispose(ref _serialCancelable);
                 }
 
                 base.Dispose(disposing);
@@ -85,7 +85,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                Disposable.TryDispose(ref _serialCancelable);
+                Disposable.Dispose(ref _serialCancelable);
 
                 lock (_gate)
                 {
@@ -98,7 +98,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                Disposable.TryDispose(ref _serialCancelable);
+                Disposable.Dispose(ref _serialCancelable);
 
                 lock (_gate)
                 {
@@ -151,7 +151,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _serialCancelable);
+                    Disposable.Dispose(ref _serialCancelable);
                 }
                 base.Dispose(disposing);
             }
@@ -193,7 +193,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                Disposable.TryDispose(ref _serialCancelable);
+                Disposable.Dispose(ref _serialCancelable);
 
                 lock (_gate)
                 {
@@ -206,7 +206,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                Disposable.TryDispose(ref _serialCancelable);
+                Disposable.Dispose(ref _serialCancelable);
 
                 lock (_gate)
                 {

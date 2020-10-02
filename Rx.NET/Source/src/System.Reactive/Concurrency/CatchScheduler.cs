@@ -114,7 +114,7 @@ namespace System.Reactive.Concurrency
 
                 public void Dispose()
                 {
-                    Disposable.TryDispose(ref _cancel);
+                    Disposable.Dispose(ref _cancel);
                 }
 
                 private (PeriodicallyScheduledWorkItem<TState> @this, TState state) Tick(TState state)
@@ -144,7 +144,7 @@ namespace System.Reactive.Concurrency
                             throw;
                         }
 
-                        Disposable.TryDispose(ref _cancel);
+                        Disposable.Dispose(ref _cancel);
                         return default;
                     }
                 }

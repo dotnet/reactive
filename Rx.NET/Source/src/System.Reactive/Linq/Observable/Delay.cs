@@ -75,7 +75,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _cancelable);
+                        Disposable.Dispose(ref _cancelable);
                     }
                 }
 
@@ -280,7 +280,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _cancelable);
+                        Disposable.Dispose(ref _cancelable);
                     }
                 }
 
@@ -616,7 +616,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _subscription);
+                        Disposable.Dispose(ref _subscription);
                         _delays.Dispose();
                     }
                     base.Dispose(disposing);
@@ -659,7 +659,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         _atEnd = true;
-                        Disposable.TryDispose(ref _subscription);
+                        Disposable.Dispose(ref _subscription);
 
                         CheckDone();
                     }
@@ -808,7 +808,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     public void Dispose()
                     {
-                        Disposable.TryDispose(ref _subscription);
+                        Disposable.Dispose(ref _subscription);
                     }
                 }
             }

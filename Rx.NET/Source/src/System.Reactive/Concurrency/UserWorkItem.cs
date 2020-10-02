@@ -38,8 +38,8 @@ namespace System.Reactive.Concurrency
 
         public void Dispose()
         {
-            Disposable.TryDispose(ref _cancelQueueDisposable);
-            Disposable.TryDispose(ref _cancelRunDisposable);
+            Disposable.Dispose(ref _cancelQueueDisposable);
+            Disposable.Dispose(ref _cancelRunDisposable);
         }
     }
 }
