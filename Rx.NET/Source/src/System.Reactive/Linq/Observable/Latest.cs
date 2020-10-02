@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -33,8 +32,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private bool _notificationAvailable;
             private NotificationKind _kind;
-            private TSource _value;
-            private Exception _error;
+            private TSource? _value;
+            private Exception? _error;
 
             public override void OnNext(TSource value)
             {
@@ -90,7 +89,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public override bool TryMoveNext(out TSource current)
+            public override bool TryMoveNext([MaybeNullWhen(false)] out TSource current)
             {
                 NotificationKind kind;
 
@@ -119,10 +118,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 switch (kind)
                 {
                     case NotificationKind.OnNext:
-                        current = value;
+                        current = value!;
                         return true;
                     case NotificationKind.OnError:
-                        error.Throw();
+                        error!.Throw();
                         break;
                     case NotificationKind.OnCompleted:
                         break;

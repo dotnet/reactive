@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -15,10 +14,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
         }
 
-        protected override PushToPullSink<TSource, TSource> Run()
-        {
-            return new _();
-        }
+        protected override PushToPullSink<TSource, TSource> Run() => new _();
 
         private sealed class _ : PushToPullSink<TSource, TSource>
         {
@@ -33,8 +29,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private bool _waiting;
             private NotificationKind _kind;
-            private TSource _value;
-            private Exception _error;
+            private TSource? _value;
+            private Exception? _error;
 
             public override void OnNext(TSource value)
             {
@@ -92,7 +88,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public override bool TryMoveNext(out TSource current)
+            public override bool TryMoveNext([MaybeNullWhen(false)] out TSource current)
             {
                 var done = false;
 
@@ -127,10 +123,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 switch (_kind)
                 {
                     case NotificationKind.OnNext:
-                        current = _value;
+                        current = _value!;
                         return true;
                     case NotificationKind.OnError:
-                        _error.Throw();
+                        _error!.Throw();
                         break;
                     case NotificationKind.OnCompleted:
                         break;

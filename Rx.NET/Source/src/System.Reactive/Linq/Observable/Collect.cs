@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
 
             private TResult _collector;
-            private Exception _error;
+            private Exception? _error;
             private bool _hasCompleted;
             private bool _done;
 
@@ -78,7 +78,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public override bool TryMoveNext(out TResult current)
+            public override bool TryMoveNext([MaybeNullWhen(false)] out TResult current)
             {
                 lock (_gate)
                 {
@@ -86,7 +86,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (error != null)
                     {
                         current = default;
-                        _collector = default;
+                        _collector = default!;
                         error.Throw();
                     }
                     else
@@ -96,7 +96,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             if (_done)
                             {
                                 current = default;
-                                _collector = default;
+                                _collector = default!;
                                 return false;
                             }
 
