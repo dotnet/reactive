@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 #if !LEGACY_WINRT && !NO_THREAD
 using System.Reactive.Disposables;
 using System.Threading;
@@ -46,7 +44,7 @@ namespace System.Reactive.Concurrency
             var workItem = new UserWorkItem<TState>(this, state, action);
 
             ThreadPool.QueueUserWorkItem(
-                static closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                static closureWorkItem => ((UserWorkItem<TState>)closureWorkItem!).Run(),
                 workItem);
 
             return workItem;
@@ -77,7 +75,7 @@ namespace System.Reactive.Concurrency
             var workItem = new UserWorkItem<TState>(this, state, action);
 
             workItem.CancelQueueDisposable = new Timer(
-                static closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                static closureWorkItem => ((UserWorkItem<TState>)closureWorkItem!).Run(),
                 workItem,
                 dt,
                 Timeout.InfiniteTimeSpan);
@@ -158,7 +156,7 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                ThreadPool.QueueUserWorkItem(static @this => Tick(@this), this);   // Replace with method group as soon as Roslyn will cache the delegate then.
+                ThreadPool.QueueUserWorkItem(static @this => Tick(@this!), this);   // Replace with method group as soon as Roslyn will cache the delegate then.
             }
 
             private static void Tick(object state)
@@ -168,7 +166,7 @@ namespace System.Reactive.Concurrency
                 if (!timer._disposed)
                 {
                     timer._state = timer._action(timer._state);
-                    ThreadPool.QueueUserWorkItem(static t => Tick(t), timer);
+                    ThreadPool.QueueUserWorkItem(static t => Tick(t!), timer);
                 }
             }
 
@@ -185,7 +183,7 @@ namespace System.Reactive.Concurrency
             private Func<TState, TState> _action;
 
             private readonly AsyncLock _gate;
-            private volatile Timer _timer;
+            private volatile Timer? _timer;
 
             public PeriodicTimer(TState state, TimeSpan period, Func<TState, TState> action)
             {
@@ -198,7 +196,7 @@ namespace System.Reactive.Concurrency
                 // Rooting of the timer happens through the this.Tick delegate's target object,
                 // which is the current instance and has a field to store the Timer instance.
                 //
-                _timer = new Timer(static @this => ((PeriodicTimer<TState>)@this).Tick(), this, period, period);
+                _timer = new Timer(static @this => ((PeriodicTimer<TState>)@this!).Tick(), this, period, period);
             }
 
             private void Tick()
