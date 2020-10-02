@@ -34,7 +34,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(IScheduler scheduler)
             {
-                SetUpstream(scheduler.ScheduleAction(this, @this => @this.ForwardOnError(@this._exception)));
+                SetUpstream(scheduler.ScheduleAction(this, static @this => @this.ForwardOnError(@this._exception)));
             }
         }
     }

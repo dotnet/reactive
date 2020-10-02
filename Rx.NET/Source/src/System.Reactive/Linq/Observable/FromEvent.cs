@@ -289,7 +289,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 if (--@this._count == 0)
                                 {
-                                    closureParent._scheduler.ScheduleAction(@this._removeHandler, handler => handler.Dispose());
+                                    closureParent._scheduler.ScheduleAction(@this._removeHandler, static handler => handler.Dispose());
                                     closureParent._session = null;
                                 }
                             }
