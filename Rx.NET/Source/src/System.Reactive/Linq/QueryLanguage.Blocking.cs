@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Threading;
 
@@ -283,7 +281,7 @@ namespace System.Reactive.Linq
                 throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
             }
 
-            return value;
+            return value!;
         }
 
         #endregion

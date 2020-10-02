@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
@@ -256,7 +254,7 @@ namespace System.Reactive.Linq
                                 break;
                             case NotificationKind.OnError:
                                 rightSubscription.Dispose();
-                                observer.OnError(left.Exception);
+                                observer.OnError(left.Exception!);
                                 break;
                             case NotificationKind.OnCompleted:
                                 leftStopped = true;
@@ -275,7 +273,7 @@ namespace System.Reactive.Linq
                                         TResult result;
                                         try
                                         {
-                                            result = resultSelector(lastLeft, lastRight);
+                                            result = resultSelector(lastLeft!, lastRight!);
                                         }
                                         catch (Exception exception)
                                         {
@@ -299,7 +297,7 @@ namespace System.Reactive.Linq
                                 break;
                             case NotificationKind.OnError:
                                 leftSubscription.Dispose();
-                                observer.OnError(right.Exception);
+                                observer.OnError(right.Exception!);
                                 break;
                             case NotificationKind.OnCompleted:
                                 rightStopped = true;
@@ -318,7 +316,7 @@ namespace System.Reactive.Linq
                                         TResult result;
                                         try
                                         {
-                                            result = resultSelector(lastLeft, lastRight);
+                                            result = resultSelector(lastLeft!, lastRight!);
                                         }
                                         catch (Exception exception)
                                         {
@@ -379,7 +377,7 @@ namespace System.Reactive.Linq
                     {
                         var currentIndex = index;
                         var source = allSources[index];
-                        results.Add(default);
+                        results.Add(default!); // NB: Reserves a space; the default value gets overwritten below.
                         group.Add(source.Subscribe(
                             value =>
                             {
@@ -454,7 +452,7 @@ namespace System.Reactive.Linq
         {
             return Observable.Defer(() =>
             {
-                ChainObservable<TSource> chain = null;
+                ChainObservable<TSource>? chain = null;
 
                 return source
                     .Select(

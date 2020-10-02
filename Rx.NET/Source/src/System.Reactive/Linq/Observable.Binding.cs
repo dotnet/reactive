@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 
@@ -395,7 +393,7 @@ namespace System.Reactive.Linq
         /// <param name="onConnect">If not null, the connection's IDisposable is provided to it.</param>
         /// <returns>An observable sequence that connects to the source at most once when the given number of observers have subscribed to it.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IObservable<TSource> AutoConnect<TSource>(this IConnectableObservable<TSource> source, int minObservers = 1, Action<IDisposable> onConnect = null)
+        public static IObservable<TSource> AutoConnect<TSource>(this IConnectableObservable<TSource> source, int minObservers = 1, Action<IDisposable>? onConnect = null)
         {
             if (source == null)
             {

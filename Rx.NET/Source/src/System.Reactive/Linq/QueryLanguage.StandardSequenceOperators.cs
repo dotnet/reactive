@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Threading;
@@ -28,7 +26,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> DefaultIfEmpty<TSource>(IObservable<TSource> source)
         {
-            return new DefaultIfEmpty<TSource>(source, default);
+            return new DefaultIfEmpty<TSource>(source, default!);
         }
 
         public virtual IObservable<TSource> DefaultIfEmpty<TSource>(IObservable<TSource> source, TSource defaultValue)

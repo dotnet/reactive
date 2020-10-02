@@ -3,8 +3,6 @@
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 
- #nullable disable
-
 #pragma warning disable 1591
 
 using System.Collections.Generic;

@@ -2,13 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Threading;
-
-#if HAS_WINRT
-#endif
 
 namespace System.Reactive.Linq
 {
@@ -260,7 +255,7 @@ namespace System.Reactive.Linq
 
         #region Helper methods
 
-        private static IObservable<TResult> FromEventPattern_<TSender, TEventArgs, TResult>(Type targetType, object target, string eventName, Func<TSender, TEventArgs, TResult> getResult, IScheduler scheduler)
+        private static IObservable<TResult> FromEventPattern_<TSender, TEventArgs, TResult>(Type targetType, object? target, string eventName, Func<TSender, TEventArgs, TResult> getResult, IScheduler scheduler)
         {
             ReflectionUtils.GetEventMethods<TSender, TEventArgs>(targetType, target, eventName, out var addMethod, out var removeMethod, out var delegateType, out var isWinRT);
 
