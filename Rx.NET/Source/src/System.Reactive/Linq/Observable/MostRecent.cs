@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -31,7 +31,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private volatile NotificationKind _kind;
             private TSource _value;
-            private Exception _error;
+            private Exception? _error;
 
             public override void OnNext(TSource value)
             {
@@ -54,7 +54,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _kind = NotificationKind.OnCompleted;  // Write last!
             }
 
-            public override bool TryMoveNext(out TSource current)
+            public override bool TryMoveNext([MaybeNullWhen(false)]out TSource current)
             {
                 //
                 // Notice the _kind field is marked volatile and read before the other fields.
@@ -68,7 +68,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         current = _value;
                         return true;
                     case NotificationKind.OnError:
-                        _error.Throw();
+                        _error!.Throw();
                         break;
                     case NotificationKind.OnCompleted:
                         break;
