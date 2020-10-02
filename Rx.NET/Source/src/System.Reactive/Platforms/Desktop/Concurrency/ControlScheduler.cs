@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
-// See the LICENSE file in the project root for more information. 
-
-#nullable disable
+// See the LICENSE file in the project root for more information.
 
 using System.Reactive.Disposables;
 using System.Threading;
@@ -33,10 +31,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the control associated with the ControlScheduler.
         /// </summary>
-        public Control Control
-        {
-            get { return _control; }
-        }
+        public Control Control => _control;
 
         /// <summary>
         /// Schedules an action to be executed on the message loop associated with the control.
@@ -114,7 +109,7 @@ namespace System.Reactive.Concurrency
                         finally
                         {
                             t.Stop();
-                            action = null;
+                            action = static (s, t) => Disposable.Empty;
                         }
                     }
                 };
