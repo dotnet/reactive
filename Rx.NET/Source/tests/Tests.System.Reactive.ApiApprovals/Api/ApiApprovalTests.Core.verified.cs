@@ -2435,7 +2435,6 @@ namespace System.Reactive.PlatformServices
     }
     public static class PlatformEnlightenmentProvider
     {
-        [System.Obsolete("This mechanism will be removed in the next major version", false)]
         public static System.Reactive.PlatformServices.IPlatformEnlightenmentProvider Current { get; set; }
     }
     public static class SystemClock
