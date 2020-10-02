@@ -36,18 +36,26 @@ namespace System.Reactive.PlatformServices
     {
         private static IPlatformEnlightenmentProvider _current = CreatePlatformProvider();
 
+        //
+        // NOTE TO MAINTAINERS
+        //
+        //  Do *NOT* remove this mechanism which has been used beyond its original goal of supporting dependency injection when we were unifying
+        //  the different Rx implementations as one Portable Library with platform-specific PlatformServices assemblies on top. Besides this, it
+        //  has been used (and is still being used) for hosting scenarios where the host wants control over thread creation (cf. CAL), or other
+        //  services (e.g. interception of query operators for logging, debugging, quota management, policy injection, etc.). Compat matters and
+        //  lack thereof results in users getting stuck on older versions or having to resort to forking.
+        //
+
         /// <summary>
         /// (Infrastructure) Gets the current enlightenment provider. If none is loaded yet, accessing this property triggers provider resolution.
         /// </summary>
         /// <remarks>
         /// This member is used by the Rx infrastructure and not meant for public consumption or implementation.
         /// </remarks>
-        [Obsolete("This mechanism will be removed in the next major version", false)]
         public static IPlatformEnlightenmentProvider Current
         {
             get => _current;
             set => _current = value ?? throw new ArgumentNullException(nameof(value));
-
         }
 
         private static IPlatformEnlightenmentProvider CreatePlatformProvider() => new CurrentPlatformEnlightenmentProvider();
