@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
@@ -52,16 +50,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 private TState _state;
                 private bool _first;
 
-                public void Run(IScheduler _scheduler)
+                public void Run(IScheduler scheduler)
                 {
-                    var longRunning = _scheduler.AsLongRunning();
+                    var longRunning = scheduler.AsLongRunning();
                     if (longRunning != null)
                     {
                         SetUpstream(longRunning.ScheduleLongRunning(this, static (@this, c) => @this.Loop(c)));
                     }
                     else
                     {
-                        SetUpstream(_scheduler.Schedule(this, static (@this, a) => @this.LoopRec(a)));
+                        SetUpstream(scheduler.Schedule(this, static (@this, a) => @this.LoopRec(a)));
                     }
                 }
 
