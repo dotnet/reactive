@@ -47,7 +47,7 @@ namespace System.Reactive.Concurrency
         /// <param name="state">State to pass to the method.</param>
         /// <param name="dueTime">Time to execute the method on.</param>
         /// <returns>Disposable object that can be used to stop the timer.</returns>
-        IDisposable StartTimer(Action<object> action, object state, TimeSpan dueTime);
+        IDisposable StartTimer(Action<object?> action, object? state, TimeSpan dueTime);
 
         /// <summary>
         /// Queues a method for periodic execution based on the specified period.
@@ -63,7 +63,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Method to execute.</param>
         /// <param name="state">State to pass to the method.</param>
         /// <returns>Disposable object that can be used to cancel the queued method.</returns>
-        IDisposable QueueUserWorkItem(Action<object> action, object state);
+        IDisposable QueueUserWorkItem(Action<object?> action, object? state);
 
         /// <summary>
         /// Blocking sleep operation.
@@ -87,6 +87,6 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="action">Method to execute.</param>
         /// <param name="state">State to pass to the method.</param>
-        void StartThread(Action<object> action, object state);
+        void StartThread(Action<object?> action, object? state);
     }
 }

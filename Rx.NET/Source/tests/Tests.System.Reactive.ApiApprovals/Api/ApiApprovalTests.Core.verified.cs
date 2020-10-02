@@ -302,12 +302,12 @@ namespace System.Reactive.Concurrency
     public interface IConcurrencyAbstractionLayer
     {
         bool SupportsLongRunning { get; }
-        System.IDisposable QueueUserWorkItem(System.Action<object> action, object state);
+        System.IDisposable QueueUserWorkItem(System.Action<object?> action, object? state);
         void Sleep(System.TimeSpan timeout);
         System.IDisposable StartPeriodicTimer(System.Action action, System.TimeSpan period);
         System.Reactive.Concurrency.IStopwatch StartStopwatch();
-        void StartThread(System.Action<object> action, object state);
-        System.IDisposable StartTimer(System.Action<object> action, object state, System.TimeSpan dueTime);
+        void StartThread(System.Action<object?> action, object? state);
+        System.IDisposable StartTimer(System.Action<object?> action, object? state, System.TimeSpan dueTime);
     }
     public interface IScheduledItem<TAbsolute>
     {
