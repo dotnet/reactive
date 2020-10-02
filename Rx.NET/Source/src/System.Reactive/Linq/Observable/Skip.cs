@@ -119,7 +119,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _sourceDisposable);
+                        Disposable.Dispose(ref _sourceDisposable);
                     }
                     base.Dispose(disposing);
                 }

@@ -95,7 +95,7 @@ namespace System.Reactive.Joins
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _subscription);
+                    Disposable.Dispose(ref _subscription);
                 }
 
                 _isDisposed = true;

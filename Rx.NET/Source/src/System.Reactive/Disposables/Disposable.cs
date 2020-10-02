@@ -240,6 +240,19 @@ namespace System.Reactive.Disposables
             return true;
         }
 
+        /// <summary>
+        /// Disposes <paramref name="fieldRef" />. 
+        /// </summary>
+        internal static void Dispose(ref IDisposable fieldRef)
+        {
+            var old = Interlocked.Exchange(ref fieldRef, BooleanDisposable.True);
+
+            if (old != BooleanDisposable.True)
+            {
+                old?.Dispose();
+            }
+        }
+
         internal static bool TryRelease<TState>(ref IDisposable fieldRef, TState state, Action<IDisposable, TState> disposeAction)
         {
             var old = Interlocked.Exchange(ref fieldRef, BooleanDisposable.True);

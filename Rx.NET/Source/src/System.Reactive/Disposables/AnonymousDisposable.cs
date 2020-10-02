@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Threading;
 
 namespace System.Reactive.Disposables
@@ -13,7 +11,7 @@ namespace System.Reactive.Disposables
     /// </summary>
     internal sealed class AnonymousDisposable : ICancelable
     {
-        private volatile Action _dispose;
+        private volatile Action? _dispose;
 
         /// <summary>
         /// Constructs a new disposable with the given action used for disposal.
@@ -46,7 +44,7 @@ namespace System.Reactive.Disposables
     internal sealed class AnonymousDisposable<TState> : ICancelable
     {
         private TState _state;
-        private volatile Action<TState> _dispose;
+        private volatile Action<TState>? _dispose;
 
         /// <summary>
         /// Constructs a new disposable with the given action used for disposal.
@@ -72,7 +70,7 @@ namespace System.Reactive.Disposables
         public void Dispose()
         {
             Interlocked.Exchange(ref _dispose, null)?.Invoke(_state);
-            _state = default;
+            _state = default!;
         }
     }
 }

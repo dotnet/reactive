@@ -461,7 +461,7 @@ namespace System.Reactive.Concurrency
 
             public int CompareTo(WorkItem? other) => Comparer<DateTimeOffset>.Default.Compare(DueTime, other!.DueTime);
 
-            public void Dispose() => Disposable.TryDispose(ref _disposable);
+            public void Dispose() => Disposable.Dispose(ref _disposable);
         }
 
         /// <summary>

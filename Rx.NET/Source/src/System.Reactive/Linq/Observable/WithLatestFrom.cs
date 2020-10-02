@@ -59,7 +59,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _secondDisposable);
+                    Disposable.Dispose(ref _secondDisposable);
                 }
                 base.Dispose(disposing);
             }
@@ -136,7 +136,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnCompleted()
                 {
-                    Disposable.TryDispose(ref _parent._secondDisposable);
+                    Disposable.Dispose(ref _parent._secondDisposable);
                 }
 
                 public void OnError(Exception error)

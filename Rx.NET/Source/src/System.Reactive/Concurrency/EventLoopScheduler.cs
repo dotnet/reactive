@@ -236,7 +236,7 @@ namespace System.Reactive.Concurrency
 
             public void Dispose()
             {
-                Disposable.TryDispose(ref _task);
+                Disposable.Dispose(ref _task);
                 _gate.Dispose();
             }
         }
@@ -265,7 +265,7 @@ namespace System.Reactive.Concurrency
                 if (!_disposed)
                 {
                     _disposed = true;
-                    Disposable.TryDispose(ref _nextTimer);
+                    Disposable.Dispose(ref _nextTimer);
                     _evt.Release();
                 }
             }

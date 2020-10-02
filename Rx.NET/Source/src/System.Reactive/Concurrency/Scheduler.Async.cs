@@ -38,7 +38,7 @@ namespace System.Reactive.Concurrency
             public void Dispose()
             {
                 _cts.Cancel();
-                Disposable.TryDispose(ref _run);
+                Disposable.Dispose(ref _run);
             }
         }
 

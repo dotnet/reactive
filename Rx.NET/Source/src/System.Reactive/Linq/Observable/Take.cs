@@ -128,7 +128,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _task);
+                        Disposable.Dispose(ref _task);
                     }
                     base.Dispose(disposing);
                 }

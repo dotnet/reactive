@@ -60,7 +60,7 @@ namespace System.Reactive
                         enumerator.Dispose();
                     }
 
-                    Disposable.TryDispose(ref _currentSubscription);
+                    Disposable.Dispose(ref _currentSubscription);
                 }
                 else
                 {

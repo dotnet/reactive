@@ -115,7 +115,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
 
                         // disconnect
-                        Disposable.TryDispose(ref targetConnection._disposable);
+                        Disposable.Dispose(ref targetConnection._disposable);
                     }
                 }
             }

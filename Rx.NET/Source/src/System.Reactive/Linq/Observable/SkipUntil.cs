@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (!Disposable.GetIsDisposed(ref _otherDisposable))
                     {
-                        Disposable.TryDispose(ref _otherDisposable);
+                        Disposable.Dispose(ref _otherDisposable);
                     }
                 }
 
@@ -98,7 +98,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (!Disposable.GetIsDisposed(ref _parent._otherDisposable))
                     {
-                        Disposable.TryDispose(ref _parent._otherDisposable);
+                        Disposable.Dispose(ref _parent._otherDisposable);
                     }
                 }
 
@@ -178,7 +178,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _task);
+                    Disposable.Dispose(ref _task);
                 }
                 base.Dispose(disposing);
             }

@@ -317,7 +317,7 @@ namespace System.Reactive
 
             if (disposing)
             {
-                Disposable.TryDispose(ref _disposable);
+                Disposable.Dispose(ref _disposable);
             }
         }
     }
@@ -361,7 +361,7 @@ namespace System.Reactive
 
             if (disposing)
             {
-                Disposable.TryDispose(ref _run);
+                Disposable.Dispose(ref _run);
             }
         }
     }
@@ -423,7 +423,7 @@ namespace System.Reactive
             base.Dispose(disposing);
             if (disposing)
             {
-                Disposable.TryDispose(ref _task);
+                Disposable.Dispose(ref _task);
                 Clear(_queue);
             }
         }
@@ -689,7 +689,7 @@ namespace System.Reactive
                 Monitor.Pulse(_suspendGuard);
             }
             // Cancel the drain task handle.
-            Disposable.TryDispose(ref _drainTask);
+            Disposable.Dispose(ref _drainTask);
             base.Dispose(disposing);
         }
 

@@ -80,8 +80,8 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _upstream);
-                    Disposable.TryDispose(ref HandlerUpstream);
+                    Disposable.Dispose(ref _upstream);
+                    Disposable.Dispose(ref HandlerUpstream);
                 }
                 base.Dispose(disposing);
             }

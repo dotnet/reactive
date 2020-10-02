@@ -893,7 +893,7 @@ namespace ReactiveTests.Tests
         {
             var field = default(IDisposable);
 
-            Disposable.TryDispose(ref field);
+            Disposable.Dispose(ref field);
 
             var count = 0;
 

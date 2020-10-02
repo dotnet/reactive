@@ -383,7 +383,7 @@ namespace System.Reactive.Concurrency
 
             void IDisposable.Dispose()
             {
-                Disposable.TryDispose(ref _task);
+                Disposable.Dispose(ref _task);
                 Cancel();
             }
 

@@ -210,7 +210,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 protected override void Dispose(bool disposing)
                 {
-                    Disposable.TryDispose(ref _timerDisposable);
+                    Disposable.Dispose(ref _timerDisposable);
                     base.Dispose(disposing);
                 }
 
@@ -319,7 +319,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 protected override void Dispose(bool disposing)
                 {
-                    Disposable.TryDispose(ref _timerDisposable);
+                    Disposable.Dispose(ref _timerDisposable);
                     base.Dispose(disposing);
                 }
 

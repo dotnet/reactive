@@ -41,7 +41,7 @@ namespace System.Reactive
             //Sink is internal so this can pretty much be enforced.
             //_observer = NopObserver<TTarget>.Instance;
 
-            Disposable.TryDispose(ref _upstream);
+            Disposable.Dispose(ref _upstream);
         }
 
         public void ForwardOnNext(TTarget value)
@@ -68,7 +68,7 @@ namespace System.Reactive
 
         protected void DisposeUpstream()
         {
-            Disposable.TryDispose(ref _upstream);
+            Disposable.Dispose(ref _upstream);
         }
     }
 

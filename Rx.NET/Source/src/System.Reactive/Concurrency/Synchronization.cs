@@ -64,7 +64,7 @@ namespace System.Reactive.Concurrency
 
                 public void Dispose()
                 {
-                    Disposable.TryDispose(ref _cancel);
+                    Disposable.Dispose(ref _cancel);
                 }
             }
 
@@ -138,7 +138,7 @@ namespace System.Reactive.Concurrency
 
                 public void Dispose()
                 {
-                    Disposable.TryDispose(ref _cancel);
+                    Disposable.Dispose(ref _cancel);
                 }
             }
 

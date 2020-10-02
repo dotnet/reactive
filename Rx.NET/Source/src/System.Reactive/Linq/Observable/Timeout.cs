@@ -60,9 +60,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _mainDisposable);
-                        Disposable.TryDispose(ref _otherDisposable);
-                        Disposable.TryDispose(ref _timerDisposable);
+                        Disposable.Dispose(ref _mainDisposable);
+                        Disposable.Dispose(ref _otherDisposable);
+                        Disposable.Dispose(ref _timerDisposable);
                     }
                     base.Dispose(disposing);
                 }
@@ -82,7 +82,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (Volatile.Read(ref _index) == idx && Interlocked.CompareExchange(ref _index, long.MaxValue, idx) == idx)
                     {
-                        Disposable.TryDispose(ref _mainDisposable);
+                        Disposable.Dispose(ref _mainDisposable);
 
                         var d = _other.Subscribe(GetForwarder());
 
@@ -110,7 +110,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (Interlocked.Exchange(ref _index, long.MaxValue) != long.MaxValue)
                     {
-                        Disposable.TryDispose(ref _timerDisposable);
+                        Disposable.Dispose(ref _timerDisposable);
 
                         ForwardOnError(error);
                     }
@@ -120,7 +120,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (Interlocked.Exchange(ref _index, long.MaxValue) != long.MaxValue)
                     {
-                        Disposable.TryDispose(ref _timerDisposable);
+                        Disposable.Dispose(ref _timerDisposable);
 
                         ForwardOnCompleted();
                     }
@@ -170,7 +170,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _serialDisposable);
+                        Disposable.Dispose(ref _serialDisposable);
                     }
                     base.Dispose(disposing);
                 }
@@ -260,8 +260,8 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _sourceDisposable);
-                    Disposable.TryDispose(ref _timerDisposable);
+                    Disposable.Dispose(ref _sourceDisposable);
+                    Disposable.Dispose(ref _timerDisposable);
                 }
                 base.Dispose(disposing);
             }

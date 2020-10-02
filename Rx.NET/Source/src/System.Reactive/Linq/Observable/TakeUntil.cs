@@ -47,7 +47,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (!Disposable.GetIsDisposed(ref _otherDisposable))
                     {
-                        Disposable.TryDispose(ref _otherDisposable);
+                        Disposable.Dispose(ref _otherDisposable);
                     }
                 }
 
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void OnCompleted()
                 {
                     // Completion doesn't mean termination in Rx.NET for this operator
-                    Disposable.TryDispose(ref _parent._otherDisposable);
+                    Disposable.Dispose(ref _parent._otherDisposable);
                 }
 
                 public void OnError(Exception error)
@@ -155,7 +155,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _timerDisposable);
+                    Disposable.Dispose(ref _timerDisposable);
                 }
                 base.Dispose(disposing);
             }

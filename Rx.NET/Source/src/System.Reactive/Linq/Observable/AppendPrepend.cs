@@ -155,7 +155,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _schedulerDisposable);
+                        Disposable.Dispose(ref _schedulerDisposable);
                     }
                     base.Dispose(disposing);
                 }
@@ -404,7 +404,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _schedulerDisposable);
+                        Disposable.Dispose(ref _schedulerDisposable);
                     }
 
                     base.Dispose(disposing);

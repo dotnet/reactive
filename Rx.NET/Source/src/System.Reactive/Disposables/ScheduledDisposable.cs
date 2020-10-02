@@ -50,6 +50,6 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Disposes the wrapped disposable on the provided scheduler.
         /// </summary>
-        public void Dispose() => Scheduler.ScheduleAction(this, scheduler => Disposables.Disposable.TryDispose(ref scheduler._disposable));
+        public void Dispose() => Scheduler.ScheduleAction(this, scheduler => Disposables.Disposable.Dispose(ref scheduler._disposable));
     }
 }

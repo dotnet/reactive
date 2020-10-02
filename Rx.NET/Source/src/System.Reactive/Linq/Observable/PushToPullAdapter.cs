@@ -75,7 +75,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public void Dispose()
         {
-            Disposable.TryDispose(ref _upstream);
+            Disposable.Dispose(ref _upstream);
         }
 
         public void SetUpstream(IDisposable d)
