@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
@@ -107,19 +105,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class _ : IdentitySink<TSource>
             {
+                private readonly object _gate = new object();
+
                 public _(IObserver<TSource> observer)
                     : base(observer)
                 {
                 }
 
-                private object _gate;
-
-                private IDisposable _task;
+                private IDisposable? _task;
 
                 public void Run(Time parent)
                 {
-                    _gate = new object();
-
                     Disposable.SetSingle(ref _task, parent._scheduler.ScheduleAction(this, parent._duration, state => state.Tick()));
                     Run(parent._source);
                 }
@@ -130,6 +126,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         Disposable.Dispose(ref _task);
                     }
+
                     base.Dispose(disposing);
                 }
 
