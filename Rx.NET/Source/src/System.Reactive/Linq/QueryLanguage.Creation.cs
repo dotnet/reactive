@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Threading.Tasks;
@@ -143,7 +141,7 @@ namespace System.Reactive.Linq
                 private sealed class TaskDisposeCompletionObserver : IObserver<IDisposable>, IDisposable
                 {
                     private readonly IObserver<TResult> _observer;
-                    private IDisposable _disposable;
+                    private IDisposable? _disposable;
 
                     public TaskDisposeCompletionObserver(IObserver<TResult> observer)
                     {
@@ -220,7 +218,7 @@ namespace System.Reactive.Linq
                 private sealed class TaskDisposeCompletionObserver : IObserver<Action>, IDisposable
                 {
                     private readonly IObserver<TResult> _observer;
-                    private Action _disposable;
+                    private Action? _disposable;
 
                     public TaskDisposeCompletionObserver(IObserver<TResult> observer)
                     {

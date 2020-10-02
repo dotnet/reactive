@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 
@@ -12,7 +10,7 @@ namespace System.Reactive.Linq
     internal sealed class GroupedObservable<TKey, TElement> : ObservableBase<TElement>, IGroupedObservable<TKey, TElement>
     {
         private readonly IObservable<TElement> _subject;
-        private readonly RefCountDisposable _refCount;
+        private readonly RefCountDisposable? _refCount;
 
         public GroupedObservable(TKey key, ISubject<TElement> subject, RefCountDisposable refCount)
         {

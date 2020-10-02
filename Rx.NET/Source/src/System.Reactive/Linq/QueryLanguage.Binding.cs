@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 
@@ -101,7 +99,7 @@ namespace System.Reactive.Linq
 
         #region + AutoConnect +
 
-        public virtual IObservable<TSource> AutoConnect<TSource>(IConnectableObservable<TSource> source, int minObservers = 1, Action<IDisposable> onConnect = null)
+        public virtual IObservable<TSource> AutoConnect<TSource>(IConnectableObservable<TSource> source, int minObservers = 1, Action<IDisposable>? onConnect = null)
         {
             if (minObservers <= 0)
             {
