@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Threading;
@@ -48,7 +46,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _donel;
                 private bool _doner;
 
-                private IDisposable _second;
+                private IDisposable? _second;
 
                 public void Run(Observable parent)
                 {
@@ -62,6 +60,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         Disposable.Dispose(ref _second);
                     }
+
                     base.Dispose(disposing);
                 }
 
@@ -242,7 +241,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _comparer = comparer;
                 }
 
-                private IEnumerator<TSource> _enumerator;
+                private IEnumerator<TSource>? _enumerator;
 
                 private static readonly IEnumerator<TSource> DisposedEnumerator = MakeDisposedEnumerator();
 
@@ -286,6 +285,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         Interlocked.Exchange(ref _enumerator, DisposedEnumerator)?.Dispose();
                     }
+
                     base.Dispose(disposing);
                 }
 
@@ -295,7 +295,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     try
                     {
-                        if (_enumerator.MoveNext())
+                        if (_enumerator!.MoveNext()) // NB: Non-null after Run is called.
                         {
                             var current = _enumerator.Current;
                             equal = _comparer.Equals(value, current);
@@ -319,7 +319,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     bool hasNext;
                     try
                     {
-                        hasNext = _enumerator.MoveNext();
+                        hasNext = _enumerator!.MoveNext(); // NB: Non-null after Run is called.
                     }
                     catch (Exception exception)
                     {
