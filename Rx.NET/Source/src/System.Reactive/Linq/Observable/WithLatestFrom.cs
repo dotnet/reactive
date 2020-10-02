@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -27,6 +25,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TResult>
         {
+            private readonly object _gate = new object();
+            private readonly object _latestGate = new object();
+
             private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
             public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer)
@@ -35,19 +36,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            private object _gate;
             private volatile bool _hasLatest;
-            private TSecond _latest;
+            private TSecond? _latest;
 
-            private object _latestGate;
-
-            private IDisposable _secondDisposable;
+            private IDisposable? _secondDisposable;
 
             public void Run(IObservable<TFirst> first, IObservable<TSecond> second)
             {
-                _gate = new object();
-                _latestGate = new object();
-
                 var fstO = new FirstObserver(this);
                 var sndO = new SecondObserver(this);
 
@@ -61,6 +56,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     Disposable.Dispose(ref _secondDisposable);
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -93,12 +89,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_parent._hasLatest) // Volatile read
                     {
-
                         TSecond latest;
 
                         lock (_parent._latestGate)
                         {
-                            latest = _parent._latest;
+                            latest = _parent._latest!; // NB: Not null when hasLatest is true.
                         }
 
                         TResult res;

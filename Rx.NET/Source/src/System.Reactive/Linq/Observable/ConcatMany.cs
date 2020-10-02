@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Concurrent;
 using System.Reactive.Disposables;
 using System.Threading;
@@ -25,9 +23,12 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 throw new ArgumentNullException(nameof(observer));
             }
+
             var parent = new ConcatManyOuterObserver(observer);
+
             var d = _sources.SubscribeSafe(parent);
             parent.OnSubscribe(d);
+
             return parent;
         }
 
@@ -36,9 +37,10 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly IObserver<T> _downstream;
             private readonly ConcurrentQueue<IObservable<T>> _queue;
             private readonly InnerObserver _innerObserver;
-            private IDisposable _upstream;
+
+            private IDisposable? _upstream;
             private int _trampoline;
-            private Exception _error;
+            private Exception? _error;
             private bool _done;
             private int _active;
 
@@ -176,7 +178,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly ConcatManyOuterObserver _parent;
 
-                internal IDisposable Upstream;
+                internal IDisposable? Upstream;
 
                 internal InnerObserver(ConcatManyOuterObserver parent)
                 {
@@ -191,14 +193,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 internal bool Finish()
                 {
                     var sad = Volatile.Read(ref Upstream);
+
                     if (sad != BooleanDisposable.True)
                     {
                         if (Interlocked.CompareExchange(ref Upstream, null, sad) == sad)
                         {
-                            sad.Dispose();
+                            sad!.Dispose(); // NB: Cannot be null when we get here; SetDisposable is called before Inner[Error|Completed] calls Finish.
                             return true;
                         }
                     }
+
                     return false;
                 }
 
@@ -207,20 +211,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     Disposable.Dispose(ref Upstream);
                 }
 
-                public void OnCompleted()
-                {
-                    _parent.InnerComplete();
-                }
+                public void OnCompleted() => _parent.InnerComplete();
 
-                public void OnError(Exception error)
-                {
-                    _parent.InnerError(error);
-                }
+                public void OnError(Exception error) => _parent.InnerError(error);
 
-                public void OnNext(T value)
-                {
-                    _parent.InnerNext(value);
-                }
+                public void OnNext(T value) => _parent.InnerNext(value);
             }
         }
     }

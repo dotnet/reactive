@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Threading;
@@ -30,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            protected override IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source)
+            protected override IEnumerable<IObservable<TSource>>? Extract(IObservable<TSource> source)
             {
                 if (source is Catch<TSource> @catch)
                 {
@@ -40,7 +38,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return null;
             }
 
-            private Exception _lastException;
+            private Exception? _lastException;
 
             public override void OnError(Exception error)
             {
@@ -99,7 +97,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
 
             private bool _once;
-            private IDisposable _subscription;
+            private IDisposable? _subscription;
 
             public override void Run(IObservable<TSource> source)
             {
@@ -112,6 +110,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     Disposable.Dispose(ref _subscription);
                 }
+
                 base.Dispose(disposing);
             }
 

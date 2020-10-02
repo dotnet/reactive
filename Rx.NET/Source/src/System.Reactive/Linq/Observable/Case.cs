@@ -2,13 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class Case<TValue, TResult> : Producer<TResult, Case<TValue, TResult>._>, IEvaluatableObservable<TResult>
+        where TValue : notnull
     {
         private readonly Func<TValue> _selector;
         private readonly IDictionary<TValue, IObservable<TResult>> _sources;
