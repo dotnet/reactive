@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Threading;
@@ -119,7 +117,7 @@ namespace System.Reactive.Concurrency
                 private readonly IObservable<TSource> _source;
                 private readonly IObserver<TSource> _observer;
                 private readonly SynchronizationContext _context;
-                private IDisposable _cancel;
+                private IDisposable? _cancel;
 
                 public Subscription(IObservable<TSource> source, SynchronizationContext context, IObserver<TSource> observer)
                 {
