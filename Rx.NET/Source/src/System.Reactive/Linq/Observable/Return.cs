@@ -34,7 +34,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(IScheduler scheduler)
             {
-                SetUpstream(scheduler.ScheduleAction(this, @this => @this.Invoke()));
+                SetUpstream(scheduler.ScheduleAction(this, static @this => @this.Invoke()));
             }
 
             private void Invoke()

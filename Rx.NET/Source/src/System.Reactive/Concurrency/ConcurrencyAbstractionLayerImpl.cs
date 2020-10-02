@@ -163,7 +163,7 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                Disposable.SetSingle(ref _timer, new System.Threading.Timer(@this => Tick(@this!), this, dueTime, TimeSpan.FromMilliseconds(Timeout.Infinite)));
+                Disposable.SetSingle(ref _timer, new System.Threading.Timer(static @this => Tick(@this!), this, dueTime, TimeSpan.FromMilliseconds(Timeout.Infinite)));
             }
 
             private static void Tick(object state)
@@ -207,7 +207,7 @@ namespace System.Reactive.Concurrency
                 // Rooting of the timer happens through the timer's state
                 // which is the current instance and has a field to store the Timer instance.
                 //
-                _timer = new System.Threading.Timer(@this => Tick(@this!), this, period, period);
+                _timer = new System.Threading.Timer(static @this => Tick(@this!), this, period, period);
             }
 
             private static void Tick(object state)
@@ -239,7 +239,7 @@ namespace System.Reactive.Concurrency
             {
                 _action = action;
 
-                new Thread(@this => Loop(@this!))
+                new Thread(static @this => Loop(@this!))
                 {
                     Name = "Rx-FastPeriodicTimer",
                     IsBackground = true

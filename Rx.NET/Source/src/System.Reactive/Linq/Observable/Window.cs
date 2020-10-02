@@ -210,7 +210,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         _nextShift += _timeShift;
                     }
 
-                    m.Disposable = _scheduler.ScheduleAction((@this: this, isSpan, isShift), ts, tuple => tuple.@this.Tick(tuple.isSpan, tuple.isShift));
+                    m.Disposable = _scheduler.ScheduleAction((@this: this, isSpan, isShift), ts, static tuple => tuple.@this.Tick(tuple.isSpan, tuple.isShift));
                 }
 
                 private void Tick(bool isSpan, bool isShift)
@@ -313,7 +313,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     CreateWindow();
 
-                    groupDisposable.Add(parent._scheduler.SchedulePeriodic(this, parent._timeSpan, @this => @this.Tick()));
+                    groupDisposable.Add(parent._scheduler.SchedulePeriodic(this, parent._timeSpan, static @this => @this.Tick()));
                     groupDisposable.Add(parent._source.SubscribeSafe(this));
 
                     SetUpstream(_refCountDisposable);
@@ -424,7 +424,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var m = new SingleAssignmentDisposable();
                     _timerD.Disposable = m;
 
-                    m.Disposable = _scheduler.ScheduleAction((@this: this, window), _timeSpan, tuple => tuple.@this.Tick(tuple.window));
+                    m.Disposable = _scheduler.ScheduleAction((@this: this, window), _timeSpan, static tuple => tuple.@this.Tick(tuple.window));
                 }
 
                 private void Tick(Subject<TSource> window)
@@ -542,7 +542,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     groupDisposable.Add(source.SubscribeSafe(this));
 
-                    _windowGate.Wait(this, @this => @this.CreateWindowClose());
+                    _windowGate.Wait(this, static @this => @this.CreateWindowClose());
 
                     SetUpstream(_refCountDisposable);
                 }
@@ -581,7 +581,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         ForwardOnNext(window);
                     }
 
-                    _windowGate.Wait(this, @this => @this.CreateWindowClose());
+                    _windowGate.Wait(this, static @this => @this.CreateWindowClose());
                 }
 
                 private sealed class WindowClosingObserver : SafeObserver<TWindowClosing>
