@@ -161,7 +161,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Run(Absolute parent)
                 {
-                    SetUpstream(parent._scheduler.ScheduleAction(this, parent._dueTime, @this => @this.Timeout()));
+                    SetUpstream(parent._scheduler.ScheduleAction(this, parent._dueTime, static @this => @this.Timeout()));
 
                     Disposable.TrySetSingle(ref _serialDisposable, parent._source.SubscribeSafe(this));
                 }

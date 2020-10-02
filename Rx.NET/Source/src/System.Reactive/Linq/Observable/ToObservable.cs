@@ -52,7 +52,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 // is used to have LoopRec bail out and perform proper clean-up of the
                 // enumerator.
                 //
-                scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+                scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
             }
 
             protected override void Dispose(bool disposing)
@@ -119,7 +119,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 // is used to have LoopRec bail out and perform proper clean-up of the
                 // enumerator.
                 //
-                scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+                scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
 
                 return Disposable.Empty;
             }
@@ -162,7 +162,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return;
                 }
 
-                SetUpstream(scheduler.ScheduleLongRunning((@this: this, e), (tuple, cancelable) => tuple.@this.Loop(tuple.e, cancelable)));
+                SetUpstream(scheduler.ScheduleLongRunning((@this: this, e), static (tuple, cancelable) => tuple.@this.Loop(tuple.e, cancelable)));
             }
 
             private void Loop(IEnumerator<TSource> enumerator, ICancelable cancel)

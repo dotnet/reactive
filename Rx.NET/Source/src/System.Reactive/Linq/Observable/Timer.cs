@@ -130,7 +130,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Run(Periodic parent, DateTimeOffset dueTime)
                 {
-                    SetUpstream(parent._scheduler.Schedule(this, dueTime, (innerScheduler, @this) => @this.InvokeStart(innerScheduler)));
+                    SetUpstream(parent._scheduler.Schedule(this, dueTime, static (innerScheduler, @this) => @this.InvokeStart(innerScheduler)));
                 }
 
                 public void Run(Periodic parent, TimeSpan dueTime)
@@ -140,11 +140,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     //
                     if (dueTime == _period)
                     {
-                        SetUpstream(parent._scheduler.SchedulePeriodic(this, _period, @this => @this.Tick()));
+                        SetUpstream(parent._scheduler.SchedulePeriodic(this, _period, static @this => @this.Tick()));
                     }
                     else
                     {
-                        SetUpstream(parent._scheduler.Schedule(this, dueTime, (innerScheduler, @this) => @this.InvokeStart(innerScheduler)));
+                        SetUpstream(parent._scheduler.Schedule(this, dueTime, static (innerScheduler, @this) => @this.InvokeStart(innerScheduler)));
                     }
                 }
 
@@ -227,7 +227,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var d = new SingleAssignmentDisposable();
                     _periodic = d;
                     _index = 1;
-                    d.Disposable = self.SchedulePeriodic(this, _period, @this => @this.Tock());
+                    d.Disposable = self.SchedulePeriodic(this, _period, static @this => @this.Tock());
 
                     try
                     {
@@ -247,7 +247,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     //
                     if (Interlocked.Decrement(ref _pendingTickCount) > 0)
                     {
-                        var c = self.Schedule((@this: this, index: 1L), (tuple, action) => tuple.@this.CatchUp(tuple.index, action));
+                        var c = self.Schedule((@this: this, index: 1L), static (tuple, action) => tuple.@this.CatchUp(tuple.index, action));
 
                         return StableCompositeDisposable.Create(d, c);
                     }

@@ -70,11 +70,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     var longRunning = _loopScheduler.AsLongRunning();
                     if (longRunning != null)
                     {
-                        Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, (@this, c) => @this.Loop(c)));
+                        Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, static (@this, c) => @this.Loop(c)));
                     }
                     else
                     {
-                        var first = _loopScheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+                        var first = _loopScheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
                         Disposable.TrySetSingle(ref _loopDisposable, first);
                     }
                 }
@@ -85,7 +85,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         ForwardOnNext(_queue.Dequeue());
 
-                        var next = scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+                        var next = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
                         Disposable.TrySetMultiple(ref _loopDisposable, next);
                     }
                     else
@@ -186,11 +186,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     var longRunning = _loopScheduler.AsLongRunning();
                     if (longRunning != null)
                     {
-                        Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, (@this, c) => @this.Loop(c)));
+                        Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, static (@this, c) => @this.Loop(c)));
                     }
                     else
                     {
-                        var first = _loopScheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+                        var first = _loopScheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
                         Disposable.TrySetSingle(ref _loopDisposable, first);
                     }
                 }
@@ -201,7 +201,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         ForwardOnNext(_queue.Dequeue().Value);
 
-                        var next = scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+                        var next = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
                         Disposable.TrySetMultiple(ref _loopDisposable, next);
                     }
                     else
