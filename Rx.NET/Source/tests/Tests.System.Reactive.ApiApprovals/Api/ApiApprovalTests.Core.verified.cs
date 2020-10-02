@@ -2408,6 +2408,7 @@ namespace System.Reactive.PlatformServices
     }
     public interface IExceptionServices
     {
+        [System.Diagnostics.CodeAnalysis.DoesNotReturn]
         void Rethrow(System.Exception exception);
     }
     public interface IHostLifecycleNotifications
