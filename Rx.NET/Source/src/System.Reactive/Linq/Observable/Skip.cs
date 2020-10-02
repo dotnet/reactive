@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
@@ -107,7 +105,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                 }
 
-                private IDisposable _sourceDisposable;
+                private IDisposable? _sourceDisposable;
 
                 public void Run(Time parent)
                 {
@@ -121,6 +119,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         Disposable.Dispose(ref _sourceDisposable);
                     }
+
                     base.Dispose(disposing);
                 }
 

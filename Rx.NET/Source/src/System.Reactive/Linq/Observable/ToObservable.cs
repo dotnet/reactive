@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -27,7 +25,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private IEnumerator<TSource> _enumerator;
+            private IEnumerator<TSource>? _enumerator;
 
             private volatile bool _disposed;
 
@@ -60,6 +58,7 @@ namespace System.Reactive.Linq.ObservableImpl
             protected override void Dispose(bool disposing)
             {
                 base.Dispose(disposing);
+
                 if (disposing)
                 {
                     _disposed = true;
@@ -72,11 +71,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 var ex = default(Exception);
                 var current = default(TSource);
 
-                var enumerator = _enumerator;
+                var enumerator = _enumerator!; // NB: Loop only runs after enumerator is assigned.
 
                 if (_disposed)
                 {
-                    _enumerator.Dispose();
+                    enumerator.Dispose();
                     _enumerator = null;
 
                     return Disposable.Empty;
@@ -113,7 +112,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return Disposable.Empty;
                 }
 
-                ForwardOnNext(current);
+                ForwardOnNext(current!); // NB: Non-null when hasNext is true.
 
                 //
                 // We never allow the scheduled work to be cancelled. Instead, the _disposed flag
@@ -199,7 +198,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         break;
                     }
 
-                    ForwardOnNext(current);
+                    ForwardOnNext(current!); // NB: Non-null when hasNext is true.
                 }
 
                 enumerator.Dispose();
