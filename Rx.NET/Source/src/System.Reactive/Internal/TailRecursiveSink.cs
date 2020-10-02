@@ -40,6 +40,7 @@ namespace System.Reactive
             {
                 DisposeAll();
             }
+
             base.Dispose(disposing);
         }
 

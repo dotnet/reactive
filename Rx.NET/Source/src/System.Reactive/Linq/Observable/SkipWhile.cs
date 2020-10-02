@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class SkipWhile<TSource>
@@ -25,7 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class _ : IdentitySink<TSource>
             {
-                private Func<TSource, bool> _predicate;
+                private Func<TSource, bool>? _predicate;
 
                 public _(Func<TSource, bool> predicate, IObserver<TSource> observer)
                     : base(observer)
@@ -80,7 +78,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class _ : IdentitySink<TSource>
             {
-                private Func<TSource, int, bool> _predicate;
+                private Func<TSource, int, bool>? _predicate;
                 private int _index;
 
                 public _(Func<TSource, int, bool> predicate, IObserver<TSource> observer)
