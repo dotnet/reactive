@@ -32,7 +32,6 @@ namespace System.Reactive.Concurrency
 
         public IDisposable CancelQueueDisposable
         {
-            get => Disposable.GetValue(ref _cancelQueueDisposable);
             set => Disposable.SetSingle(ref _cancelQueueDisposable, value);
         }
 

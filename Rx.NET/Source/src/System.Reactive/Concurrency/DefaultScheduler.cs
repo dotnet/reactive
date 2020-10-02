@@ -42,7 +42,7 @@ namespace System.Reactive.Concurrency
             var workItem = new UserWorkItem<TState>(this, state, action);
 
             workItem.CancelQueueDisposable = Cal.QueueUserWorkItem(
-                static closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                static closureWorkItem => ((UserWorkItem<TState>)closureWorkItem!).Run(),
                 workItem);
 
             return workItem;
@@ -73,7 +73,7 @@ namespace System.Reactive.Concurrency
             var workItem = new UserWorkItem<TState>(this, state, action);
 
             workItem.CancelQueueDisposable = Cal.StartTimer(
-                static closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                static closureWorkItem => ((UserWorkItem<TState>)closureWorkItem!).Run(),
                 workItem,
                 dt);
 
@@ -171,7 +171,7 @@ namespace System.Reactive.Concurrency
                     Cal.StartThread(
                         thisObject =>
                         {
-                            var @this = (LongScheduledWorkItem<TState>)thisObject;
+                            var @this = (LongScheduledWorkItem<TState>)thisObject!;
 
                             //
                             // Notice we don't check d.IsDisposed. The contract for ISchedulerLongRunning

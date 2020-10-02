@@ -17,17 +17,17 @@ namespace System.Reactive.Concurrency
     {
         private sealed class WorkItem
         {
-            public WorkItem(Action<object> action, object state)
+            public WorkItem(Action<object?> action, object? state)
             {
                 Action = action;
                 State = state;
             }
 
-            public Action<object> Action { get; }
-            public object State { get; }
+            public Action<object?> Action { get; }
+            public object? State { get; }
         }
 
-        public IDisposable StartTimer(Action<object> action, object state, TimeSpan dueTime) => new Timer(action, state, Normalize(dueTime));
+        public IDisposable StartTimer(Action<object?> action, object? state, TimeSpan dueTime) => new Timer(action, state, Normalize(dueTime));
 
         public IDisposable StartPeriodicTimer(Action action, TimeSpan period)
         {
@@ -48,7 +48,7 @@ namespace System.Reactive.Concurrency
             return new PeriodicTimer(action, period);
         }
 
-        public IDisposable QueueUserWorkItem(Action<object> action, object state)
+        public IDisposable QueueUserWorkItem(Action<object?> action, object? state)
         {
             ThreadPool.QueueUserWorkItem(itemObject =>
             {
@@ -66,7 +66,7 @@ namespace System.Reactive.Concurrency
 
         public bool SupportsLongRunning => true;
 
-        public void StartThread(Action<object> action, object state)
+        public void StartThread(Action<object?> action, object? state)
         {
             new Thread(itemObject =>
             {
@@ -152,13 +152,13 @@ namespace System.Reactive.Concurrency
 
         private sealed class Timer : IDisposable
         {
-            private volatile object _state;
-            private Action<object> _action;
+            private volatile object? _state;
+            private Action<object?> _action;
             private IDisposable _timer;
 
             private static readonly object DisposedState = new object();
 
-            public Timer(Action<object> action, object state, TimeSpan dueTime)
+            public Timer(Action<object?> action, object? state, TimeSpan dueTime)
             {
                 _state = state;
                 _action = action;
@@ -188,7 +188,7 @@ namespace System.Reactive.Concurrency
             {
                 if (Disposable.TryDispose(ref _timer))
                 {
-                    _action = Stubs<object>.Ignore;
+                    _action = Stubs<object?>.Ignore;
                     _state = DisposedState;
                 }
             }
