@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reflection;
 using System.Threading;
@@ -19,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
     {
         public sealed class Impl<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TEventArgs>>
         {
-            private readonly Func<EventHandler<TEventArgs>, TDelegate> _conversion;
+            private readonly Func<EventHandler<TEventArgs>, TDelegate>? _conversion;
 
             public Impl(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
                 : base(addHandler, removeHandler, scheduler)
@@ -113,7 +111,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         removeHandler = AddHandlerCore(handler);
                     }
                 }
-                catch (TargetInvocationException tie)
+                catch (TargetInvocationException tie) when (tie.InnerException != null)
                 {
                     throw tie.InnerException;
                 }
@@ -123,7 +121,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private sealed class RemoveHandlerDisposable : IDisposable
             {
-                private Action _removeHandler;
+                private Action? _removeHandler;
 
                 public RemoveHandlerDisposable(Action removeHandler)
                 {
@@ -136,7 +134,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         Interlocked.Exchange(ref _removeHandler, null)?.Invoke();
                     }
-                    catch (TargetInvocationException tie)
+                    catch (TargetInvocationException tie) when (tie.InnerException != null)
                     {
                         throw tie.InnerException;
                     }

@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
-using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
@@ -162,7 +159,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class FromEvent<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, TEventArgs>
     {
-        private readonly Func<Action<TEventArgs>, TDelegate> _conversion;
+        private readonly Func<Action<TEventArgs>, TDelegate>? _conversion;
 
         public FromEvent(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
             : base(addHandler, removeHandler, scheduler)
@@ -206,7 +203,7 @@ namespace System.Reactive.Linq.ObservableImpl
         protected abstract TDelegate GetHandler(Action<TArgs> onNext);
         protected abstract IDisposable AddHandler(TDelegate handler);
 
-        private Session _session;
+        private Session? _session;
 
         protected override IDisposable Run(IObserver<TArgs> observer)
         {
@@ -237,8 +234,8 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly EventProducer<TDelegate, TArgs> _parent;
             private readonly Subject<TArgs> _subject;
+            private readonly SingleAssignmentDisposable _removeHandler = new SingleAssignmentDisposable();
 
-            private SingleAssignmentDisposable _removeHandler;
             private int _count;
 
             public Session(EventProducer<TDelegate, TArgs> parent)
@@ -309,13 +306,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_parent._gate) */
                 {
                     //
-                    // When the ref count goes to zero, no-one should be able to perform operations on
-                    // the session object anymore, because it gets nulled out.
-                    //
-                    Debug.Assert(_removeHandler == null);
-                    _removeHandler = new SingleAssignmentDisposable();
-
-                    //
                     // Conversion code is supposed to be a pure function and shouldn't be run on the
                     // scheduler, but the add handler call should. Notice the scheduler can be the
                     // ImmediateScheduler, causing synchronous invocation. This is the default when
@@ -370,7 +360,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _addHandler(handler);
             return Disposable.Create(
                 (_removeHandler, handler),
-                tuple => tuple._removeHandler(tuple.handler));
+                static tuple => tuple._removeHandler(tuple.handler));
         }
     }
 }

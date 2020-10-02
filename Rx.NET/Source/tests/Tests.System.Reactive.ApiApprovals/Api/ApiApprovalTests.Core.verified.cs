@@ -47,11 +47,11 @@ namespace System.Reactive
     }
     public class EventPattern<TEventArgs> : System.Reactive.EventPattern<object, TEventArgs>
     {
-        public EventPattern(object sender, TEventArgs e) { }
+        public EventPattern(object? sender, TEventArgs e) { }
     }
     public class EventPattern<TSender, TEventArgs> : System.IEquatable<System.Reactive.EventPattern<TSender, TEventArgs>>, System.Reactive.IEventPattern<TSender, TEventArgs>
     {
-        public EventPattern(TSender sender, TEventArgs e) { }
+        public EventPattern(TSender? sender, TEventArgs e) { }
         public TEventArgs EventArgs { get; }
         public TSender Sender { get; }
         public bool Equals(System.Reactive.EventPattern<TSender, TEventArgs>? other) { }
