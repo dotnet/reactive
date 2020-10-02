@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,7 +35,7 @@ namespace System.Reactive.Concurrency
                 scheduler._taskFactory.StartNew(
                     thisObject =>
                     {
-                        var @this = (ScheduledWorkItem<TState>)thisObject;
+                        var @this = (ScheduledWorkItem<TState>)thisObject!;
                         //
                         // BREAKING CHANGE v2.0 > v1.x - No longer escalating exceptions using a throwing
                         //                               helper thread.
@@ -94,7 +92,7 @@ namespace System.Reactive.Concurrency
                 TaskHelpers.Delay(dueTime, ct.Token).ContinueWith(
                     (_, thisObject) =>
                     {
-                        var @this = (SlowlyScheduledWorkItem<TState>)thisObject;
+                        var @this = (SlowlyScheduledWorkItem<TState>)thisObject!;
 
                         if (!Disposable.GetIsDisposed(ref @this._cancel))
                         {
@@ -104,7 +102,7 @@ namespace System.Reactive.Concurrency
                     this,
                     CancellationToken.None,
                     TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion,
-                    scheduler._taskFactory.Scheduler);
+                    scheduler._taskFactory.Scheduler ?? TaskScheduler.Default);
             }
 
             public void Dispose()
@@ -118,7 +116,7 @@ namespace System.Reactive.Concurrency
             private readonly TState _state;
             private readonly Action<TState, ICancelable> _action;
 
-            private IDisposable _cancel;
+            private IDisposable? _cancel;
 
             public LongScheduledWorkItem(TaskPoolScheduler scheduler, TState state, Action<TState, ICancelable> action)
             {
@@ -128,7 +126,7 @@ namespace System.Reactive.Concurrency
                 scheduler._taskFactory.StartNew(
                     thisObject =>
                     {
-                        var @this = (LongScheduledWorkItem<TState>)thisObject;
+                        var @this = (LongScheduledWorkItem<TState>)thisObject!;
 
                         //
                         // Notice we don't check _cancel.IsDisposed. The contract for ISchedulerLongRunning
@@ -298,7 +296,7 @@ namespace System.Reactive.Concurrency
                 TaskHelpers.Delay(_period, _cts.Token).ContinueWith(
                     static (_, thisObject) =>
                     {
-                        var @this = (PeriodicallyScheduledWorkItem<TState>)thisObject;
+                        var @this = (PeriodicallyScheduledWorkItem<TState>)thisObject!;
 
                         @this.MoveNext();
 
@@ -309,7 +307,7 @@ namespace System.Reactive.Concurrency
                     this,
                     CancellationToken.None,
                     TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion,
-                    _taskFactory.Scheduler
+                    _taskFactory.Scheduler ?? TaskScheduler.Default
                 );
             }
         }

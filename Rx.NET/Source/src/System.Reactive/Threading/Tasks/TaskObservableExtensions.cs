@@ -44,10 +44,10 @@ namespace System.Reactive.Threading.Tasks
                 else
                 {
                     _task.ContinueWithState(
-                        static (task, tuple) => tuple.@this._scheduler.ScheduleAction(
+                        static (task, tuple) => tuple.scheduler.ScheduleAction(
                             (task, tuple.observer),
                             static tuple2 => tuple2.task.EmitTaskResult(tuple2.observer)),
-                        (@this: this, observer),
+                        (scheduler: _scheduler, observer),
                         cts.Token,
                         options);
                 }
@@ -84,10 +84,10 @@ namespace System.Reactive.Threading.Tasks
                 else
                 {
                     _task.ContinueWithState(
-                        static (task, tuple) => tuple.@this._scheduler.ScheduleAction(
+                        static (task, tuple) => tuple.scheduler.ScheduleAction(
                             (task, tuple.observer),
                             static tuple2 => tuple2.task.EmitTaskResult(tuple2.observer)),
-                        (@this: this, observer),
+                        (scheduler: _scheduler, observer),
                         cts.Token,
                         options);
                 }

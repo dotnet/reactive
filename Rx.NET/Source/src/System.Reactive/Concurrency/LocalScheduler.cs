@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 namespace System.Reactive.Concurrency
 {
     /// <summary>
@@ -73,7 +71,7 @@ namespace System.Reactive.Concurrency
         /// </remarks>
         public virtual IStopwatch StartStopwatch() => ConcurrencyAbstractionLayer.Current.StartStopwatch();
 
-        object IServiceProvider.GetService(Type serviceType) => GetService(serviceType);
+        object? IServiceProvider.GetService(Type serviceType) => GetService(serviceType);
 
         /// <summary>
         /// Discovers scheduler services by interface type. The base class implementation returns
@@ -82,7 +80,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="serviceType">Scheduler service interface type to discover.</param>
         /// <returns>Object implementing the requested service, if available; <c>null</c> otherwise.</returns>
-        protected virtual object GetService(Type serviceType)
+        protected virtual object? GetService(Type serviceType)
         {
             if (serviceType == typeof(IStopwatchProvider))
             {
