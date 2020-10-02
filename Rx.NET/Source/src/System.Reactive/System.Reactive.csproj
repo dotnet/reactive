@@ -66,10 +66,10 @@
 
   <!-- Designer support -->
   <ItemGroup>
-    <Compile Update="Linq\IQueryLanguage.Generated.cs">
+    <Compile Update="Linq\IQueryLanguage.NAry.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>IQueryLanguage.tt</DependentUpon>
+      <DependentUpon>IQueryLanguage.NAry.tt</DependentUpon>
     </Compile>
     <Compile Update="Joins\Pattern.Generated.cs">
       <DesignTime>True</DesignTime>
@@ -81,40 +81,40 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>QueryablePattern.tt</DependentUpon>
     </Compile>
-    <Compile Update="Linq\Observable\CombineLatest.Generated.cs">
+    <Compile Update="Linq\Observable\CombineLatest.NAry.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>CombineLatest.Generated.tt</DependentUpon>
+      <DependentUpon>CombineLatest.NAry.tt</DependentUpon>
     </Compile>
-    <Compile Update="Linq\Observable\Zip.Generated.cs">
+    <Compile Update="Linq\Observable\Zip.NAry.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Zip.Generated.tt</DependentUpon>
+      <DependentUpon>Zip.NAry.tt</DependentUpon>
     </Compile>
-    <Compile Update="Linq\Observable.Multiple.CombineLatest.Generated.cs">
+    <Compile Update="Linq\Observable.Multiple.CombineLatest.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Observable.Multiple.CombineLatest.tt</DependentUpon>
     </Compile>
-    <Compile Update="Linq\Observable.Multiple.Zip.Generated.cs">
+    <Compile Update="Linq\Observable.Multiple.Zip.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Observable.Multiple.Zip.tt</DependentUpon>
     </Compile>
-    <Compile Update="Linq\QueryLanguage.Multiple.CombineLatest.Generated.cs">
+    <Compile Update="Linq\QueryLanguage.Multiple.CombineLatest.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>QueryLanguage.Multiple.CombineLatest.tt</DependentUpon>
     </Compile>
-    <Compile Update="Linq\QueryLanguage.Multiple.Zip.Generated.cs">
+    <Compile Update="Linq\QueryLanguage.Multiple.Zip.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>QueryLanguage.Multiple.Zip.tt</DependentUpon>
     </Compile>
 
-    <None Update="Linq\IQueryLanguage.tt">
+    <None Update="Linq\IQueryLanguage.NAry.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>IQueryLanguage.Generated.cs</LastGenOutput>
+      <LastGenOutput>IQueryLanguage.NAry.cs</LastGenOutput>
     </None>
     <None Update="Joins\Pattern.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -124,28 +124,28 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>QueryablePattern.Generated.cs</LastGenOutput>
     </None>
-    <None Update="Linq\Observable\CombineLatest.Generated.tt">
+    <None Update="Linq\Observable\CombineLatest.NAry.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CombineLatest.Generated.cs</LastGenOutput>
+      <LastGenOutput>CombineLatest.NAry.cs</LastGenOutput>
     </None>
-    <None Update="Linq\Observable\Zip.Generated.tt">
+    <None Update="Linq\Observable\Zip.NAry.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Zip.Generated.cs</LastGenOutput>
+      <LastGenOutput>Zip.NAry.cs</LastGenOutput>
     </None>
     <None Update="Linq\Observable.Multiple.CombineLatest.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Observable.Multiple.CombineLatest.Generated.cs</LastGenOutput>
+      <LastGenOutput>Observable.Multiple.CombineLatest.cs</LastGenOutput>
     </None>
     <None Update="Linq\Observable.Multiple.Zip.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Observable.Multiple.Zip.Generated.cs</LastGenOutput>
+      <LastGenOutput>Observable.Multiple.Zip.cs</LastGenOutput>
     </None>
     <None Update="Linq\QueryLanguage.Multiple.CombineLatest.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>QueryLanguage.Multiple.CombineLatest.Generated.cs</LastGenOutput>
+      <LastGenOutput>QueryLanguage.Multiple.CombineLatest.cs</LastGenOutput>
     </None>
     <None Update="Linq\QueryLanguage.Multiple.Zip.tt">
-      <LastGenOutput>QueryLanguage.Multiple.Zip.Generated.cs</LastGenOutput>
+      <LastGenOutput>QueryLanguage.Multiple.Zip.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
   </ItemGroup>
