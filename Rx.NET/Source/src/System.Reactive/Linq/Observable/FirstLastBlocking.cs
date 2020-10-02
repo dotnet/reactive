@@ -2,17 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal abstract class BaseBlocking<T> : ManualResetEventSlim, IObserver<T>
     {
-        internal T _value;
+        internal T? _value;
         internal bool _hasValue;
-        internal Exception _error;
+        internal Exception? _error;
 
         internal BaseBlocking() { }
 

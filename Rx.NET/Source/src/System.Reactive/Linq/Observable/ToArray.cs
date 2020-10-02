@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -38,16 +36,21 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                _list = null;
+                Cleanup();
                 base.OnError(error);
             }
 
             public override void OnCompleted()
             {
                 var list = _list;
-                _list = null;
+                Cleanup();
                 ForwardOnNext(list.ToArray());
                 ForwardOnCompleted();
+            }
+
+            private void Cleanup()
+            {
+                _list = null!;
             }
         }
     }

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class SingleOrDefaultAsync<TSource>
@@ -23,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class _ : IdentitySink<TSource>
             {
-                private TSource _value;
+                private TSource? _value;
                 private bool _seenValue;
 
                 public _(IObserver<TSource> observer)
@@ -52,7 +50,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    ForwardOnNext(_value);
+                    ForwardOnNext(_value!);
                     ForwardOnCompleted();
                 }
             }
@@ -76,7 +74,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly Func<TSource, bool> _predicate;
-                private TSource _value;
+                private TSource? _value;
                 private bool _seenValue;
 
                 public _(Func<TSource, bool> predicate, IObserver<TSource> observer)
@@ -121,7 +119,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    ForwardOnNext(_value);
+                    ForwardOnNext(_value!);
                     ForwardOnCompleted();
                 }
             }

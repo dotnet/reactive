@@ -7,6 +7,8 @@ using System.Threading;
 
 namespace System.Reactive.Linq
 {
+    using System.Diagnostics.CodeAnalysis;
+
     using ObservableImpl;
 
     internal partial class QueryLanguage
@@ -43,7 +45,7 @@ namespace System.Reactive.Linq
 
         public virtual TSource First<TSource>(IObservable<TSource> source)
         {
-            return FirstOrDefaultInternal(source, true);
+            return FirstOrDefaultInternal(source, true)!;
         }
 
         public virtual TSource First<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
@@ -55,16 +57,19 @@ namespace System.Reactive.Linq
 
         #region FirstOrDefault
 
+        [return: MaybeNull]
         public virtual TSource FirstOrDefault<TSource>(IObservable<TSource> source)
         {
             return FirstOrDefaultInternal(source, false);
         }
 
+        [return: MaybeNull]
         public virtual TSource FirstOrDefault<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             return FirstOrDefault(Where(source, predicate));
         }
 
+        [return: MaybeNull]
         private static TSource FirstOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
         {
             using (var consumer = new FirstBlocking<TSource>())
@@ -80,6 +85,7 @@ namespace System.Reactive.Linq
                 {
                     throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
                 }
+
                 return consumer._value;
             }
         }
@@ -134,7 +140,7 @@ namespace System.Reactive.Linq
 
         public virtual TSource Last<TSource>(IObservable<TSource> source)
         {
-            return LastOrDefaultInternal(source, true);
+            return LastOrDefaultInternal(source, true)!;
         }
 
         public virtual TSource Last<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
@@ -146,16 +152,19 @@ namespace System.Reactive.Linq
 
         #region LastOrDefault
 
+        [return: MaybeNull]
         public virtual TSource LastOrDefault<TSource>(IObservable<TSource> source)
         {
             return LastOrDefaultInternal(source, false);
         }
 
+        [return: MaybeNull]
         public virtual TSource LastOrDefault<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             return LastOrDefault(Where(source, predicate));
         }
 
+        [return: MaybeNull]
         private static TSource LastOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
         {
             using (var consumer = new LastBlocking<TSource>())
@@ -172,6 +181,7 @@ namespace System.Reactive.Linq
                 {
                     throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
                 }
+
                 return consumer._value;
             }
         }
@@ -209,7 +219,7 @@ namespace System.Reactive.Linq
 
         public virtual TSource Single<TSource>(IObservable<TSource> source)
         {
-            return SingleOrDefaultInternal(source, true);
+            return SingleOrDefaultInternal(source, true)!;
         }
 
         public virtual TSource Single<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
@@ -221,16 +231,19 @@ namespace System.Reactive.Linq
 
         #region SingleOrDefault
 
+        [return: MaybeNull]
         public virtual TSource SingleOrDefault<TSource>(IObservable<TSource> source)
         {
             return SingleOrDefaultInternal(source, false);
         }
 
+        [return: MaybeNull]
         public virtual TSource SingleOrDefault<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             return SingleOrDefault(Where(source, predicate));
         }
 
+        [return: MaybeNull]
         private static TSource SingleOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
         {
             var value = default(TSource);
@@ -281,7 +294,7 @@ namespace System.Reactive.Linq
                 throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
             }
 
-            return value!;
+            return value;
         }
 
         #endregion
@@ -290,7 +303,7 @@ namespace System.Reactive.Linq
 
         public virtual TSource Wait<TSource>(IObservable<TSource> source)
         {
-            return LastOrDefaultInternal(source, true);
+            return LastOrDefaultInternal(source, true)!;
         }
 
         #endregion

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class Cast<TSource, TResult> : Producer<TResult, Cast<TSource, TResult>._> /* Could optimize further by deriving from Select<TResult> and providing Combine<TResult2>. We're not doing this (yet) for debuggability. */
@@ -31,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 TResult result;
                 try
                 {
-                    result = (TResult)(object)value;
+                    result = (TResult)(object?)value;
                 }
                 catch (Exception exception)
                 {
@@ -39,7 +37,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return;
                 }
 
-                ForwardOnNext(result);
+                ForwardOnNext(result!);
             }
         }
     }

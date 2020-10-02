@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Subjects;
 using System.Threading;
 
@@ -18,10 +16,10 @@ namespace System.Reactive.Linq.ObservableImpl
     {
         private readonly IConnectableObservable<T> _source;
         private readonly int _minObservers;
-        private readonly Action<IDisposable> _onConnect;
+        private readonly Action<IDisposable>? _onConnect;
         private int _count;
 
-        internal AutoConnect(IConnectableObservable<T> source, int minObservers, Action<IDisposable> onConnect)
+        internal AutoConnect(IConnectableObservable<T> source, int minObservers, Action<IDisposable>? onConnect)
         {
             _source = source;
             _minObservers = minObservers;

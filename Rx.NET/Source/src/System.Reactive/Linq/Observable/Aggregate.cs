@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class Aggregate<TSource> : Producer<TSource, Aggregate<TSource>._>
@@ -24,7 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Func<TSource, TSource, TSource> _accumulator;
-            private TSource _accumulation;
+            private TSource? _accumulation;
             private bool _hasAccumulation;
 
             public _(Func<TSource, TSource, TSource> accumulator, IObserver<TSource> observer)
@@ -44,7 +42,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     try
                     {
-                        _accumulation = _accumulator(_accumulation, value);
+                        _accumulation = _accumulator(_accumulation!, value);
                     }
                     catch (Exception exception)
                     {
@@ -75,7 +73,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 else
                 {
-                    var accumulation = _accumulation;
+                    var accumulation = _accumulation!;
                     _accumulation = default;
                     ForwardOnNext(accumulation);
                     ForwardOnCompleted();
@@ -104,7 +102,7 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class _ : Sink<TSource, TAccumulate>
         {
             private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
-            private TAccumulate _accumulation;
+            private TAccumulate? _accumulation;
 
             public _(TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, IObserver<TAccumulate> observer)
                 : base(observer)
@@ -117,7 +115,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 try
                 {
-                    _accumulation = _accumulator(_accumulation, value);
+                    _accumulation = _accumulator(_accumulation!, value);
                 }
                 catch (Exception exception)
                 {
@@ -134,7 +132,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                var accumulation = _accumulation;
+                var accumulation = _accumulation!;
                 _accumulation = default;
                 ForwardOnNext(accumulation);
                 ForwardOnCompleted();
@@ -166,7 +164,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
             private readonly Func<TAccumulate, TResult> _resultSelector;
 
-            private TAccumulate _accumulation;
+            private TAccumulate? _accumulation;
 
             public _(Aggregate<TSource, TAccumulate, TResult> parent, IObserver<TResult> observer)
                 : base(observer)
@@ -181,25 +179,30 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 try
                 {
-                    _accumulation = _accumulator(_accumulation, value);
+                    _accumulation = _accumulator(_accumulation!, value);
                 }
                 catch (Exception exception)
                 {
+                    _accumulation = default;
                     ForwardOnError(exception);
                 }
             }
 
             public override void OnError(Exception error)
             {
+                _accumulation = default;
                 ForwardOnError(error);
             }
 
             public override void OnCompleted()
             {
+                var accumulation = _accumulation!;
+                _accumulation = default;
+
                 TResult result;
                 try
                 {
-                    result = _resultSelector(_accumulation);
+                    result = _resultSelector(accumulation);
                 }
                 catch (Exception exception)
                 {
