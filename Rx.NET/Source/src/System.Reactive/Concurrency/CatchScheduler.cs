@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Disposables;
 using System.Runtime.CompilerServices;
 
@@ -46,7 +44,7 @@ namespace System.Reactive.Concurrency
             return new CatchScheduler<TException>(scheduler, _handler, cache);
         }
 
-        protected override bool TryGetService(IServiceProvider provider, Type serviceType, out object service)
+        protected override bool TryGetService(IServiceProvider provider, Type serviceType, out object? service)
         {
             service = provider.GetService(serviceType);
 
@@ -111,7 +109,7 @@ namespace System.Reactive.Concurrency
                     _action = action;
 
                     // Note that avoiding closure allocation here would introduce infinite generic recursion over the TState argument
-                    Disposable.SetSingle(ref _cancel, scheduler._scheduler.SchedulePeriodic(state, period, state1 => this.Tick(state1).state ?? default));
+                    Disposable.SetSingle(ref _cancel, scheduler._scheduler.SchedulePeriodic(state, period, state1 => Tick(state1).state));
                 }
 
                 public void Dispose()

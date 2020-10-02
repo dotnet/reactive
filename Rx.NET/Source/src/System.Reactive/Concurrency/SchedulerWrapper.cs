@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Runtime.CompilerServices;
 
 namespace System.Reactive.Concurrency
@@ -69,7 +67,7 @@ namespace System.Reactive.Concurrency
 
         protected abstract SchedulerWrapper Clone(IScheduler scheduler, ConditionalWeakTable<IScheduler, IScheduler> cache);
 
-        public object GetService(Type serviceType)
+        public object? GetService(Type serviceType)
         {
             if (!(_scheduler is IServiceProvider serviceProvider))
             {
@@ -84,6 +82,6 @@ namespace System.Reactive.Concurrency
             return serviceProvider.GetService(serviceType);
         }
 
-        protected abstract bool TryGetService(IServiceProvider provider, Type serviceType, out object service);
+        protected abstract bool TryGetService(IServiceProvider provider, Type serviceType, out object? service);
     }
 }

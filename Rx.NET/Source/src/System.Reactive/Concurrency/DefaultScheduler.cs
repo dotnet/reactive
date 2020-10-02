@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Disposables;
 
 namespace System.Reactive.Concurrency
@@ -14,13 +12,13 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.Default">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class DefaultScheduler : LocalScheduler, ISchedulerPeriodic
     {
-        private static readonly Lazy<DefaultScheduler> _instance = new Lazy<DefaultScheduler>(() => new DefaultScheduler());
+        private static readonly Lazy<DefaultScheduler> DefaultInstance = new Lazy<DefaultScheduler>(() => new DefaultScheduler());
         private static readonly IConcurrencyAbstractionLayer Cal = ConcurrencyAbstractionLayer.Current;
 
         /// <summary>
         /// Gets the singleton instance of the default scheduler.
         /// </summary>
-        public static DefaultScheduler Instance => _instance.Value;
+        public static DefaultScheduler Instance => DefaultInstance.Value;
 
         private DefaultScheduler()
         {
@@ -143,7 +141,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="serviceType">Scheduler service interface type to discover.</param>
         /// <returns>Object implementing the requested service, if available; null otherwise.</returns>
-        protected override object GetService(Type serviceType)
+        protected override object? GetService(Type serviceType)
         {
             if (serviceType == typeof(ISchedulerLongRunning))
             {
@@ -163,7 +161,7 @@ namespace System.Reactive.Concurrency
                 private readonly TState _state;
                 private readonly Action<TState, ICancelable> _action;
 
-                private IDisposable _cancel;
+                private IDisposable? _cancel;
 
                 public LongScheduledWorkItem(TState state, Action<TState, ICancelable> action)
                 {

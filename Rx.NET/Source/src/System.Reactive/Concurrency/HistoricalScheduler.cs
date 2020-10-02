@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -109,7 +107,7 @@ namespace System.Reactive.Concurrency
         /// Gets the next scheduled item to be executed.
         /// </summary>
         /// <returns>The next scheduled item.</returns>
-        protected override IScheduledItem<DateTimeOffset> GetNext()
+        protected override IScheduledItem<DateTimeOffset>? GetNext()
         {
             while (_queue.Count > 0)
             {
@@ -144,11 +142,11 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            ScheduledItem<DateTimeOffset, TState> si = null;
+            ScheduledItem<DateTimeOffset, TState>? si = null;
 
             var run = new Func<IScheduler, TState, IDisposable>((scheduler, state1) =>
             {
-                _queue.Remove(si);
+                _queue.Remove(si!); // NB: Assigned before function is invoked.
                 return action(scheduler, state1);
             });
 

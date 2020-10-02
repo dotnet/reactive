@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +13,7 @@ namespace System.Reactive.Concurrency
         private sealed class AsyncInvocation<TState> : IDisposable
         {
             private readonly CancellationTokenSource _cts = new CancellationTokenSource();
-            private IDisposable _run;
+            private IDisposable? _run;
 
             public IDisposable Run(IScheduler self, TState s, Func<IScheduler, TState, CancellationToken, Task<IDisposable>> action)
             {
@@ -25,7 +23,7 @@ namespace System.Reactive.Concurrency
                 action(new CancelableScheduler(self, _cts.Token), s, _cts.Token).ContinueWith(
                     static (t, thisObject) =>
                     {
-                        var @this = (AsyncInvocation<TState>)thisObject;
+                        var @this = (AsyncInvocation<TState>)thisObject!;
 
                         t.Exception?.Handle(static e => e is OperationCanceledException);
 

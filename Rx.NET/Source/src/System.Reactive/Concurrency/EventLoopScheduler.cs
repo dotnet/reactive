@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Threading;
@@ -36,7 +34,7 @@ namespace System.Reactive.Concurrency
         /// Thread used by the event loop to run work items on. No work should be run on any other thread.
         /// If ExitIfEmpty is set, the thread can quit and a new thread will be created when new work is scheduled.
         /// </summary>
-        private Thread _thread;
+        private Thread? _thread;
 
         /// <summary>
         /// Gate to protect data structures, including the work queue and the ready list.
@@ -63,12 +61,12 @@ namespace System.Reactive.Concurrency
         /// Work item that will be scheduled next. Used upon reevaluation of the queue to check whether the next
         /// item is still the same. If not, a new timer needs to be started (see below).
         /// </summary>
-        private ScheduledItem<TimeSpan> _nextItem;
+        private ScheduledItem<TimeSpan>? _nextItem;
 
         /// <summary>
         /// Disposable that always holds the timer to dispatch the first element in the queue.
         /// </summary>
-        private IDisposable _nextTimer;
+        private IDisposable? _nextTimer;
 
         /// <summary>
         /// Flag indicating whether the event loop should quit. When set, the event should be signaled as well to
@@ -299,7 +297,7 @@ namespace System.Reactive.Concurrency
             {
                 _evt.Wait();
 
-                ScheduledItem<TimeSpan>[] ready = null;
+                ScheduledItem<TimeSpan>[]? ready = null;
 
                 lock (_gate)
                 {

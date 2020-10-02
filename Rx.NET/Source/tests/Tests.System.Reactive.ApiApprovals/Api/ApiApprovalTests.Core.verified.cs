@@ -253,7 +253,7 @@ namespace System.Reactive.Concurrency
     public sealed class DefaultScheduler : System.Reactive.Concurrency.LocalScheduler, System.Reactive.Concurrency.ISchedulerPeriodic
     {
         public static System.Reactive.Concurrency.DefaultScheduler Instance { get; }
-        protected override object GetService(System.Type serviceType) { }
+        protected override object? GetService(System.Type serviceType) { }
         public override System.IDisposable Schedule<TState>(TState state, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
         public override System.IDisposable Schedule<TState>(TState state, System.TimeSpan dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
         public System.IDisposable SchedulePeriodic<TState>(TState state, System.TimeSpan period, System.Func<TState, TState> action) { }
@@ -287,7 +287,7 @@ namespace System.Reactive.Concurrency
         public HistoricalScheduler() { }
         public HistoricalScheduler(System.DateTimeOffset initialClock) { }
         public HistoricalScheduler(System.DateTimeOffset initialClock, System.Collections.Generic.IComparer<System.DateTimeOffset> comparer) { }
-        protected override System.Reactive.Concurrency.IScheduledItem<System.DateTimeOffset> GetNext() { }
+        protected override System.Reactive.Concurrency.IScheduledItem<System.DateTimeOffset>? GetNext() { }
         public override System.IDisposable ScheduleAbsolute<TState>(TState state, System.DateTimeOffset dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
     }
     public abstract class HistoricalSchedulerBase : System.Reactive.Concurrency.VirtualTimeSchedulerBase<System.DateTimeOffset, System.TimeSpan>
@@ -347,7 +347,7 @@ namespace System.Reactive.Concurrency
     {
         protected LocalScheduler() { }
         public virtual System.DateTimeOffset Now { get; }
-        protected virtual object GetService(System.Type serviceType) { }
+        protected virtual object? GetService(System.Type serviceType) { }
         public virtual System.IDisposable Schedule<TState>(TState state, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
         public virtual System.IDisposable Schedule<TState>(TState state, System.DateTimeOffset dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
         public abstract System.IDisposable Schedule<TState>(TState state, System.TimeSpan dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action);
@@ -370,15 +370,15 @@ namespace System.Reactive.Concurrency
         public TAbsolute DueTime { get; }
         public bool IsCanceled { get; }
         public void Cancel() { }
-        public int CompareTo(System.Reactive.Concurrency.ScheduledItem<TAbsolute> other) { }
-        public override bool Equals(object obj) { }
+        public int CompareTo(System.Reactive.Concurrency.ScheduledItem<TAbsolute>? other) { }
+        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public void Invoke() { }
         protected abstract System.IDisposable InvokeCore();
-        public static bool operator !=(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool operator !=(System.Reactive.Concurrency.ScheduledItem<TAbsolute>? left, System.Reactive.Concurrency.ScheduledItem<TAbsolute>? right) { }
         public static bool operator <(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
         public static bool operator <=(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
-        public static bool operator ==(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool operator ==(System.Reactive.Concurrency.ScheduledItem<TAbsolute>? left, System.Reactive.Concurrency.ScheduledItem<TAbsolute>? right) { }
         public static bool operator >(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
         public static bool operator >=(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
     }
@@ -405,9 +405,9 @@ namespace System.Reactive.Concurrency
         public static System.Reactive.Concurrency.IScheduler TaskPool { get; }
         [System.Obsolete(@"This property is no longer supported due to refactoring of the API surface and elimination of platform-specific dependencies. Consider using Scheduler.Default to obtain the platform's most appropriate pool-based scheduler. In order to access a specific pool-based scheduler, please add a reference to the System.Reactive.PlatformServices assembly for your target platform and use the appropriate scheduler in the System.Reactive.Concurrency namespace.")]
         public static System.Reactive.Concurrency.IScheduler ThreadPool { get; }
-        public static System.Reactive.Concurrency.ISchedulerLongRunning AsLongRunning(this System.Reactive.Concurrency.IScheduler scheduler) { }
-        public static System.Reactive.Concurrency.ISchedulerPeriodic AsPeriodic(this System.Reactive.Concurrency.IScheduler scheduler) { }
-        public static System.Reactive.Concurrency.IStopwatchProvider AsStopwatchProvider(this System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Concurrency.ISchedulerLongRunning? AsLongRunning(this System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Concurrency.ISchedulerPeriodic? AsPeriodic(this System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Concurrency.IStopwatchProvider? AsStopwatchProvider(this System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Reactive.Concurrency.IScheduler Catch<TException>(this System.Reactive.Concurrency.IScheduler scheduler, System.Func<TException, bool> handler)
             where TException : System.Exception { }
         public static System.Reactive.Concurrency.IScheduler DisableOptimizations(this System.Reactive.Concurrency.IScheduler scheduler) { }
@@ -515,8 +515,8 @@ namespace System.Reactive.Concurrency
         protected abstract TAbsolute Add(TAbsolute absolute, TRelative relative);
         public void AdvanceBy(TRelative time) { }
         public void AdvanceTo(TAbsolute time) { }
-        protected abstract System.Reactive.Concurrency.IScheduledItem<TAbsolute> GetNext();
-        protected virtual object GetService(System.Type serviceType) { }
+        protected abstract System.Reactive.Concurrency.IScheduledItem<TAbsolute>? GetNext();
+        protected virtual object? GetService(System.Type serviceType) { }
         public System.IDisposable Schedule<TState>(TState state, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
         public System.IDisposable Schedule<TState>(TState state, System.DateTimeOffset dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
         public System.IDisposable Schedule<TState>(TState state, System.TimeSpan dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
@@ -541,7 +541,7 @@ namespace System.Reactive.Concurrency
     {
         protected VirtualTimeScheduler() { }
         protected VirtualTimeScheduler(TAbsolute initialClock, System.Collections.Generic.IComparer<TAbsolute> comparer) { }
-        protected override System.Reactive.Concurrency.IScheduledItem<TAbsolute> GetNext() { }
+        protected override System.Reactive.Concurrency.IScheduledItem<TAbsolute>? GetNext() { }
         public override System.IDisposable ScheduleAbsolute<TState>(TState state, TAbsolute dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
     }
 }

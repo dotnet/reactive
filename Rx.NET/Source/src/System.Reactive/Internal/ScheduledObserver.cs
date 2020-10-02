@@ -68,7 +68,7 @@ namespace System.Reactive
                 {
                     if (_dispatcherJob == null)
                     {
-                        _dispatcherJob = _longRunning.ScheduleLongRunning(Dispatch);
+                        _dispatcherJob = _longRunning!.ScheduleLongRunning(Dispatch); // NB: Only reachable when long-running.
 
                         Disposable.TrySetSerial(ref _disposable, StableCompositeDisposable.Create
                         (

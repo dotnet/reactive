@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -36,7 +34,7 @@ namespace System.Reactive.Concurrency
             return new DisableOptimizationsScheduler(scheduler, _optimizationInterfaces, cache);
         }
 
-        protected override bool TryGetService(IServiceProvider provider, Type serviceType, out object service)
+        protected override bool TryGetService(IServiceProvider provider, Type serviceType, out object? service)
         {
             service = null;
             return _optimizationInterfaces.Contains(serviceType);
