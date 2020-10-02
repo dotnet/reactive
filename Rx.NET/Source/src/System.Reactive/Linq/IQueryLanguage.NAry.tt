@@ -7,7 +7,7 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ output extension=".Generated.cs" #>
+<#@ output extension=".cs" #>
 namespace System.Reactive.Linq
 {
     partial interface IQueryLanguage
