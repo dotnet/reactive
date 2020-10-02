@@ -67,7 +67,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 Disposable.TrySetSerial(ref _serialCancelable, null);
-                Disposable.TrySetSerial(ref _serialCancelable, _scheduler.ScheduleAction((@this: this, currentid), _dueTime, tuple => tuple.@this.Propagate(tuple.currentid)));
+                Disposable.TrySetSerial(ref _serialCancelable, _scheduler.ScheduleAction((@this: this, currentid), _dueTime, static tuple => tuple.@this.Propagate(tuple.currentid)));
             }
 
             private void Propagate(ulong currentid)

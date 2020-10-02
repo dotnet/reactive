@@ -41,7 +41,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(IScheduler scheduler)
             {
-                var first = scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+                var first = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
                 Disposable.TrySetSingle(ref _task, first);
             }
 
@@ -61,7 +61,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _index = idx + 1;
                     ForwardOnNext(idx);
-                    var next = scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+                    var next = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
                     Disposable.TrySetMultiple(ref _task, next);
                 }
                 else
@@ -104,7 +104,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(ISchedulerLongRunning scheduler)
             {
-                SetUpstream(scheduler.ScheduleLongRunning(this, (@this, cancel) => @this.Loop(cancel)));
+                SetUpstream(scheduler.ScheduleLongRunning(this, static (@this, cancel) => @this.Loop(cancel)));
             }
 
             private void Loop(ICancelable cancel)
