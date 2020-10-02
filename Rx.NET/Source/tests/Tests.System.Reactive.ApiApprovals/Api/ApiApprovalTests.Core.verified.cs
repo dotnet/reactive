@@ -1027,8 +1027,10 @@ namespace System.Reactive.Linq
         public static System.IObservable<TSource> FirstAsync<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> FirstAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [return: System.Diagnostics.CodeAnalysis.MaybeNull]
         public static TSource FirstOrDefault<TSource>(this System.IObservable<TSource> source) { }
         [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [return: System.Diagnostics.CodeAnalysis.MaybeNull]
         public static TSource FirstOrDefault<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.IObservable<TSource> FirstOrDefaultAsync<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> FirstOrDefaultAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
@@ -1180,8 +1182,10 @@ namespace System.Reactive.Linq
         public static System.IObservable<TSource> LastAsync<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> LastAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [return: System.Diagnostics.CodeAnalysis.MaybeNull]
         public static TSource LastOrDefault<TSource>(this System.IObservable<TSource> source) { }
         [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [return: System.Diagnostics.CodeAnalysis.MaybeNull]
         public static TSource LastOrDefault<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.IObservable<TSource> LastOrDefaultAsync<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> LastOrDefaultAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
@@ -1347,8 +1351,10 @@ namespace System.Reactive.Linq
         public static System.IObservable<TSource> SingleAsync<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> SingleAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [return: System.Diagnostics.CodeAnalysis.MaybeNull]
         public static TSource SingleOrDefault<TSource>(this System.IObservable<TSource> source) { }
         [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
+        [return: System.Diagnostics.CodeAnalysis.MaybeNull]
         public static TSource SingleOrDefault<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.IObservable<TSource> SingleOrDefaultAsync<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> SingleOrDefaultAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
