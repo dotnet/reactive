@@ -14,7 +14,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.DistinctUntilChanged(observer)));
+            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.DistinctUntilChanged(observer)));
         }
 
         public static IAsyncObservable<TSource> DistinctUntilChanged<TSource>(IAsyncObservable<TSource> source, IEqualityComparer<TSource> comparer)

@@ -13,7 +13,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TimeInterval<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.TimeInterval(observer)));
+            return Create<TSource, TimeInterval<TSource>>(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.TimeInterval(observer)));
         }
 
         public static IAsyncObservable<TimeInterval<TSource>> TimeInterval<TSource>(this IAsyncObservable<TSource> source, IClock clock)

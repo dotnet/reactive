@@ -48,7 +48,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(observer => AsyncObserver.Repeat(observer, source));
+            return Create(source, (source, observer) => AsyncObserver.Repeat(observer, source));
         }
 
         public static IAsyncObservable<TSource> Repeat<TSource>(this IAsyncObservable<TSource> source, int repeatCount)

@@ -13,7 +13,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<HashSet<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.ToHashSet(observer)));
+            return Create<TSource, HashSet<TSource>>(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.ToHashSet(observer)));
         }
 
         public static IAsyncObservable<HashSet<TSource>> ToHashSet<TSource>(this IAsyncObservable<TSource> source, IEqualityComparer<TSource> comparer)

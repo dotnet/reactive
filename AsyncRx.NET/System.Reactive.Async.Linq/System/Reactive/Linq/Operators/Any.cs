@@ -13,7 +13,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<bool>(observer => source.SubscribeSafeAsync(AsyncObserver.Any<TSource>(observer)));
+            return Create<TSource, bool>(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.Any<TSource>(observer)));
         }
 
         public static IAsyncObservable<bool> Any<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate)
