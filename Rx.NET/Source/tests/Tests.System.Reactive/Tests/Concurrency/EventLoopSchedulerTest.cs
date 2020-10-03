@@ -20,7 +20,7 @@ namespace ReactiveTests.Tests
 
     public class EventLoopSchedulerTest
     {
-        private static readonly TimeSpan MaxWaitTime = TimeSpan.FromSeconds(5);
+        private static readonly TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
 
         [Fact]
         public void EventLoop_ArgumentChecking()
@@ -68,7 +68,7 @@ namespace ReactiveTests.Tests
                 ran = true;
                 gate.Release();
             });
-            Assert.True(gate.WaitOne(MaxWaitTime));
+            Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
             Assert.True(ran);
         }
 
@@ -84,7 +84,7 @@ namespace ReactiveTests.Tests
                 id = Thread.CurrentThread.ManagedThreadId;
                 gate.Release();
             });
-            Assert.True(gate.WaitOne(MaxWaitTime));
+            Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
             Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, id);
         }
 #endif
@@ -101,7 +101,7 @@ namespace ReactiveTests.Tests
                 results.Add(1);
                 gate.Release();
             });
-            Assert.True(gate.WaitOne(MaxWaitTime));
+            Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
             results.AssertEqual(0, 1);
         }
 
@@ -167,7 +167,7 @@ namespace ReactiveTests.Tests
                             gate.Release();
                         });
 
-            Assert.True(gate.WaitOne(MaxWaitTime));
+            Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
             results.AssertEqual(1, 0);
         }
 
@@ -184,7 +184,7 @@ namespace ReactiveTests.Tests
                 gate.Release();
             });
 
-            Assert.True(gate.WaitOne(MaxWaitTime));
+            Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
             results.AssertEqual(1, 0);
         }
 
@@ -206,7 +206,7 @@ namespace ReactiveTests.Tests
                             });
                         });
 
-            Assert.True(gate.WaitOne(MaxWaitTime));
+            Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
             results.AssertEqual(0, 1, 2);
         }
 
@@ -229,7 +229,7 @@ namespace ReactiveTests.Tests
                 });
             });
 
-            Assert.True(gate.WaitOne(MaxWaitTime));
+            Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
             results.AssertEqual(0, 4, 1, 2);
         }
 
@@ -244,7 +244,7 @@ namespace ReactiveTests.Tests
                 ran = true;
                 gate.Release();
             }));
-            Assert.True(gate.WaitOne(MaxWaitTime));
+            Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
             Assert.True(ran);
         }
 
@@ -262,7 +262,7 @@ namespace ReactiveTests.Tests
                 sw.Stop();
                 gate.Release();
             });
-            Assert.True(gate.WaitOne(MaxWaitTime));
+            Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
             Assert.True(ran, "ran");
             Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
         }
@@ -288,7 +288,7 @@ namespace ReactiveTests.Tests
                 });
             });
 
-            Assert.True(gate.WaitOne(MaxWaitTime));
+            Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
             Assert.True(ran, "ran");
             Assert.True(sw.ElapsedMilliseconds > 380, "due " + sw.ElapsedMilliseconds);
         }
