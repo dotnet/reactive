@@ -26,8 +26,6 @@ namespace ReactiveTests.Tests
 {
     public class ObserveOnTest : TestBase
     {
-        private static TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
-
         #region + TestBase +
 
         [Fact]
@@ -221,6 +219,7 @@ namespace ReactiveTests.Tests
 
     public class ObserveOnReactiveTest : ReactiveTest
     {
+        private static TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
 
         [Fact]
         public void ObserveOn_Scheduler_ArgumentChecking()
