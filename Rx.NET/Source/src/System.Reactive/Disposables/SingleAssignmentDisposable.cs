@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
-
 namespace System.Reactive.Disposables
 {
     /// <summary>
@@ -13,7 +10,7 @@ namespace System.Reactive.Disposables
     /// </summary>
     public sealed class SingleAssignmentDisposable : ICancelable
     {
-        private IDisposable _current;
+        private IDisposable? _current;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleAssignmentDisposable"/> class.
@@ -31,7 +28,7 @@ namespace System.Reactive.Disposables
         /// Gets or sets the underlying disposable. After disposal, the result of getting this property is undefined.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown if the <see cref="SingleAssignmentDisposable"/> has already been assigned to.</exception>
-        public IDisposable Disposable
+        public IDisposable? Disposable
         {
             get => Disposables.Disposable.GetValueOrDefault(ref _current);
             set => Disposables.Disposable.SetSingle(ref _current, value);

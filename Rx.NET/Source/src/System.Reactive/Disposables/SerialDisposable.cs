@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
-
 namespace System.Reactive.Disposables
 {
     /// <summary>
@@ -12,7 +9,7 @@ namespace System.Reactive.Disposables
     /// </summary>
     public sealed class SerialDisposable : ICancelable
     {
-        private IDisposable _current;
+        private IDisposable? _current;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.SerialDisposable"/> class.
@@ -30,7 +27,7 @@ namespace System.Reactive.Disposables
         /// Gets or sets the underlying disposable.
         /// </summary>
         /// <remarks>If the SerialDisposable has already been disposed, assignment to this property causes immediate disposal of the given disposable object. Assigning this property disposes the previous disposable object.</remarks>
-        public IDisposable Disposable
+        public IDisposable? Disposable
         {
             get => Disposables.Disposable.GetValue(ref _current);
             set => Disposables.Disposable.TrySetSerial(ref _current, value);

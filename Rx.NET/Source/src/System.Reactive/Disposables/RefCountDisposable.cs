@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Threading;
 
 namespace System.Reactive.Disposables
@@ -14,7 +12,9 @@ namespace System.Reactive.Disposables
     public sealed class RefCountDisposable : ICancelable
     {
         private readonly bool _throwWhenDisposed;
-        private IDisposable _disposable;
+
+        private IDisposable? _disposable;
+
         /// <summary>
         /// Holds the number of active child disposables and the
         /// indicator bit (31) if the main _disposable has been marked
@@ -167,7 +167,7 @@ namespace System.Reactive.Disposables
 
         private sealed class InnerDisposable : IDisposable
         {
-            private RefCountDisposable _parent;
+            private RefCountDisposable? _parent;
 
             public InnerDisposable(RefCountDisposable parent)
             {
