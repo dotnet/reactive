@@ -22,12 +22,10 @@ using System.Windows.Threading;
 using System.Windows.Forms;
 #endif
 
-
 namespace ReactiveTests.Tests
 {
     public class ObserveOnTest : TestBase
     {
-
         #region + TestBase +
 
         [Fact]
@@ -221,6 +219,7 @@ namespace ReactiveTests.Tests
 
     public class ObserveOnReactiveTest : ReactiveTest
     {
+        private static TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
 
         [Fact]
         public void ObserveOn_Scheduler_ArgumentChecking()
@@ -657,7 +656,7 @@ namespace ReactiveTests.Tests
             Observable.Range(1, N).ObserveOn(_scheduler1)
                 .Subscribe(v => { }, () => cde.Signal());
 
-            Assert.True(cde.Wait(5000), "Timeout!");
+            Assert.True(cde.Wait(MaxWaitTime), "Timeout!");
         }
 
         [Fact]
@@ -679,7 +678,7 @@ namespace ReactiveTests.Tests
                     () => cde.Signal()
                 );
 
-            Assert.True(cde.Wait(5000), "Timeout!");
+            Assert.True(cde.Wait(MaxWaitTime), "Timeout!");
 
             Assert.Equal(1, threads.Count);
         }
@@ -703,7 +702,7 @@ namespace ReactiveTests.Tests
                     () => cde.Signal()
                 );
 
-            Assert.True(cde.Wait(5000), "Timeout!");
+            Assert.True(cde.Wait(MaxWaitTime), "Timeout!");
 
             Assert.True(threads.Count >= 1);
         }

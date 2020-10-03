@@ -29,14 +29,15 @@ namespace System.Reactive
         /// <param name="item">The item to signal.</param>
         /// <param name="wip">Indicates there is an emission going on currently.</param>
         /// <param name="error">The field containing an error or terminal indicator.</param>
-        public static void ForwardOnNext<T>(ISink<T> sink, T item, ref int wip, ref Exception error)
+        public static void ForwardOnNext<T>(ISink<T> sink, T item, ref int wip, ref Exception? error)
         {
             if (Interlocked.CompareExchange(ref wip, 1, 0) == 0)
             {
                 sink.ForwardOnNext(item);
+
                 if (Interlocked.Decrement(ref wip) != 0)
                 {
-                    var ex = error;
+                    var ex = error!; // NB: A concurrent OnError or OnCompleted will either set Terminated or the original exception, so never null here.
                     if (ex != ExceptionHelper.Terminated)
                     {
                         error = ExceptionHelper.Terminated;

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
@@ -30,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly TResult _value;
 
-                private IDisposable _task;
+                private IDisposable? _task;
 
                 public _(TResult value, IObserver<TResult> observer)
                     : base(observer)
@@ -47,6 +45,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected override void Dispose(bool disposing)
                 {
                     base.Dispose(disposing);
+
                     if (disposing)
                     {
                         Disposable.Dispose(ref _task);
@@ -131,7 +130,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private int _remaining;
 
-                private IDisposable _task;
+                private IDisposable? _task;
 
                 public _(TResult value, int repeatCount, IObserver<TResult> observer)
                     : base(observer)
@@ -149,6 +148,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected override void Dispose(bool disposing)
                 {
                     base.Dispose(disposing);
+
                     if (disposing)
                     {
                         Disposable.Dispose(ref _task);
@@ -173,6 +173,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         var next = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
                         Disposable.TrySetMultiple(ref _task, next);
                     }
+
                     return Disposable.Empty;
                 }
             }
@@ -216,6 +217,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var value = _value;
                     var n = _remaining;
+
                     while (n > 0 && !cancel.IsDisposed)
                     {
                         ForwardOnNext(value);

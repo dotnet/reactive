@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
@@ -26,9 +24,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private IDisposable _otherDisposable;
+            private IDisposable? _otherDisposable;
             private int _halfSerializer;
-            private Exception _error;
+            private Exception? _error;
 
             public _(IObserver<TSource> observer)
                 : base(observer)
@@ -136,9 +134,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private IDisposable _timerDisposable;
+            private IDisposable? _timerDisposable;
             private int _wip;
-            private Exception _error;
+            private Exception? _error;
 
             public _(IObserver<TSource> observer)
                 : base(observer)
@@ -157,6 +155,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     Disposable.Dispose(ref _timerDisposable);
                 }
+
                 base.Dispose(disposing);
             }
 

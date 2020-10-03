@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,11 +13,11 @@ namespace System.Reactive.Linq.ObservableImpl
     internal sealed class GetEnumerator<TSource> : IEnumerator<TSource>, IObserver<TSource>
     {
         private readonly ConcurrentQueue<TSource> _queue;
-        private TSource _current;
-        private Exception _error;
+        private TSource? _current;
+        private Exception? _error;
         private bool _done;
         private bool _disposed;
-        private IDisposable _subscription;
+        private IDisposable? _subscription;
 
         private readonly SemaphoreSlim _gate;
 
@@ -80,9 +78,9 @@ namespace System.Reactive.Linq.ObservableImpl
             return false;
         }
 
-        public TSource Current => _current;
+        public TSource Current => _current!; // NB: Only called after MoveNext returns true and assigns a value.
 
-        object Collections.IEnumerator.Current => _current;
+        object Collections.IEnumerator.Current => _current!;
 
         public void Dispose()
         {

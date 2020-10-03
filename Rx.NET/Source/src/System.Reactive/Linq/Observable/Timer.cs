@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
@@ -171,7 +169,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 private int _pendingTickCount;
-                private IDisposable _periodic;
+                private IDisposable? _periodic;
 
                 private IDisposable InvokeStart(IScheduler self)
                 {
@@ -285,7 +283,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception e)
                     {
-                        _periodic.Dispose();
+                        _periodic!.Dispose(); // NB: _periodic is assigned before this runs.
                         e.Throw();
                     }
 

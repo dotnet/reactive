@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
@@ -36,10 +34,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly TimeSpan _dueTime;
                 private readonly IObservable<TSource> _other;
                 private readonly IScheduler _scheduler;
+
                 private long _index;
-                private IDisposable _mainDisposable;
-                private IDisposable _otherDisposable;
-                private IDisposable _timerDisposable;
+                private IDisposable? _mainDisposable;
+                private IDisposable? _otherDisposable;
+                private IDisposable? _timerDisposable;
 
                 public _(Relative parent, IObserver<TSource> observer)
                     : base(observer)
@@ -64,6 +63,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         Disposable.Dispose(ref _otherDisposable);
                         Disposable.Dispose(ref _timerDisposable);
                     }
+
                     base.Dispose(disposing);
                 }
 
@@ -71,8 +71,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (Disposable.TrySetMultiple(ref _timerDisposable, null))
                     {
-
-                        var d = _scheduler.ScheduleAction((idx, instance: this), _dueTime, state => { state.instance.Timeout(state.idx); });
+                        var d = _scheduler.ScheduleAction((idx, instance: this), _dueTime, static state => { state.instance.Timeout(state.idx); });
 
                         Disposable.TrySetMultiple(ref _timerDisposable, d);
                     }
@@ -150,7 +149,8 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly IObservable<TSource> _other;
-                private IDisposable _serialDisposable;
+
+                private IDisposable? _serialDisposable;
                 private int _wip;
 
                 public _(IObservable<TSource> other, IObserver<TSource> observer)
@@ -172,6 +172,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         Disposable.Dispose(ref _serialDisposable);
                     }
+
                     base.Dispose(disposing);
                 }
 
@@ -237,8 +238,9 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly Func<TSource, IObservable<TTimeout>> _timeoutSelector;
             private readonly IObservable<TSource> _other;
-            private IDisposable _sourceDisposable;
-            private IDisposable _timerDisposable;
+
+            private IDisposable? _sourceDisposable;
+            private IDisposable? _timerDisposable;
             private long _index;
 
             public _(Timeout<TSource, TTimeout> parent, IObserver<TSource> observer)
@@ -247,7 +249,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 _timeoutSelector = parent._timeoutSelector;
                 _other = parent._other;
             }
-
 
             public void Run(Timeout<TSource, TTimeout> parent)
             {
@@ -263,6 +264,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     Disposable.Dispose(ref _sourceDisposable);
                     Disposable.Dispose(ref _timerDisposable);
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -328,12 +330,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     ForwardOnError(error);
                     return true;
                 }
+
                 return false;
             }
 
             private void SetTimer(IObservable<TTimeout> timeout, long idx)
             {
                 var timeoutObserver = new TimeoutObserver(this, idx);
+
                 if (Disposable.TrySetSerial(ref _timerDisposable, timeoutObserver))
                 {
                     var d = timeout.Subscribe(timeoutObserver);
