@@ -41,8 +41,8 @@ namespace System.Reactive
     }
     public abstract class EventPatternSourceBase<TSender, TEventArgs>
     {
-        protected EventPatternSourceBase(System.IObservable<System.Reactive.EventPattern<TSender, TEventArgs>> source, System.Action<System.Action<TSender, TEventArgs>, System.Reactive.EventPattern<TSender, TEventArgs>> invokeHandler) { }
-        protected void Add(System.Delegate handler, System.Action<TSender, TEventArgs> invoke) { }
+        protected EventPatternSourceBase(System.IObservable<System.Reactive.EventPattern<TSender, TEventArgs>> source, System.Action<System.Action<TSender?, TEventArgs>, System.Reactive.EventPattern<TSender, TEventArgs>> invokeHandler) { }
+        protected void Add(System.Delegate handler, System.Action<TSender?, TEventArgs> invoke) { }
         protected void Remove(System.Delegate handler) { }
     }
     public class EventPattern<TEventArgs> : System.Reactive.EventPattern<object, TEventArgs>
