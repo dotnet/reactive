@@ -70,7 +70,7 @@ namespace System.Reactive.Linq
         {
             return new EventPatternSource<TEventArgs>(
                 source,
-                (h, evt) => h(evt.Sender, evt.EventArgs)
+                static (h, evt) => h(evt.Sender, evt.EventArgs)
             );
         }
 

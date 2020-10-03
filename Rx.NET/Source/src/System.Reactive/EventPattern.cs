@@ -68,7 +68,7 @@ namespace System.Reactive
                 return true;
             }
 
-            return EqualityComparer<TSender>.Default.Equals(Sender, other.Sender) && EqualityComparer<TEventArgs>.Default.Equals(EventArgs, other.EventArgs);
+            return EqualityComparer<TSender?>.Default.Equals(Sender, other.Sender) && EqualityComparer<TEventArgs>.Default.Equals(EventArgs, other.EventArgs);
         }
 
         /// <summary>

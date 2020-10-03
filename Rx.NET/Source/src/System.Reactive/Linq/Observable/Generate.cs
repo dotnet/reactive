@@ -96,7 +96,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (hasResult)
                         {
-                            ForwardOnNext(result);
+                            ForwardOnNext(result!);
                         }
                         else
                         {
@@ -141,7 +141,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (hasResult)
                     {
-                        ForwardOnNext(result);
+                        ForwardOnNext(result!);
                         recurse(this);
                     }
                     else
@@ -195,9 +195,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private bool _first;
                 private bool _hasResult;
-                private TResult _result;
+                private TResult? _result;
 
-                private IDisposable _timerDisposable;
+                private IDisposable? _timerDisposable;
 
                 public void Run(IScheduler outerScheduler, TState initialState)
                 {
@@ -216,7 +216,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_hasResult)
                     {
-                        ForwardOnNext(_result);
+                        ForwardOnNext(_result!);
                     }
 
                     var time = default(DateTimeOffset);
@@ -304,9 +304,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private bool _first;
                 private bool _hasResult;
-                private TResult _result;
+                private TResult? _result;
 
-                private IDisposable _timerDisposable;
+                private IDisposable? _timerDisposable;
 
                 public void Run(IScheduler outerScheduler, TState initialState)
                 {
@@ -325,7 +325,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_hasResult)
                     {
-                        ForwardOnNext(_result);
+                        ForwardOnNext(_result!);
                     }
 
                     var time = default(TimeSpan);

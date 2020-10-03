@@ -246,7 +246,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler)
         {
-            return FromEventPattern_<TSender, TEventArgs, EventPattern<TSender, TEventArgs>>(type, null, eventName, (sender, args) => new EventPattern<TSender, TEventArgs>(sender, args), scheduler);
+            return FromEventPattern_<TSender, TEventArgs, EventPattern<TSender, TEventArgs>>(type, null, eventName, static (sender, args) => new EventPattern<TSender, TEventArgs>(sender, args), scheduler);
         }
 
         #endregion
@@ -259,14 +259,7 @@ namespace System.Reactive.Linq
         {
             ReflectionUtils.GetEventMethods<TSender, TEventArgs>(targetType, target, eventName, out var addMethod, out var removeMethod, out var delegateType, out var isWinRT);
 
-#if HAS_WINRT
-            if (isWinRT)
-            {
-                return new FromEventPattern.Handler<TSender, TEventArgs, TResult>(target, delegateType, addMethod, removeMethod, getResult, true, scheduler);
-            }
-#endif
-
-            return new FromEventPattern.Handler<TSender, TEventArgs, TResult>(target, delegateType, addMethod, removeMethod, getResult, false, scheduler);
+            return new FromEventPattern.Handler<TSender, TEventArgs, TResult>(target, delegateType, addMethod, removeMethod, getResult, isWinRT, scheduler);
         }
 
         #endregion
@@ -329,7 +322,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TEventArgs> FromEvent_<TEventArgs>(Action<Action<TEventArgs>> addHandler, Action<Action<TEventArgs>> removeHandler, IScheduler scheduler)
         {
-            return new FromEvent<Action<TEventArgs>, TEventArgs>(h => h, addHandler, removeHandler, scheduler);
+            return new FromEvent<Action<TEventArgs>, TEventArgs>(static h => h, addHandler, removeHandler, scheduler);
         }
 
         #endregion
@@ -348,7 +341,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<Unit> FromEvent_(Action<Action> addHandler, Action<Action> removeHandler, IScheduler scheduler)
         {
-            return new FromEvent<Action, Unit>(h => new Action(() => h(new Unit())), addHandler, removeHandler, scheduler);
+            return new FromEvent<Action, Unit>(static h => new Action(() => h(new Unit())), addHandler, removeHandler, scheduler);
         }
 
         #endregion
@@ -363,7 +356,7 @@ namespace System.Reactive.Linq
 
             if (context != null)
             {
-                return new SynchronizationContextScheduler(context, false);
+                return new SynchronizationContextScheduler(context, alwaysPost: false);
             }
 
             return SchedulerDefaults.ConstantTimeOperations;

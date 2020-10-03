@@ -64,7 +64,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public sealed class Handler<TSender, TEventArgs, TResult> : EventProducer<Delegate, TResult>
         {
-            private readonly object _target;
+            private readonly object? _target;
             private readonly Type _delegateType;
             private readonly MethodInfo _addMethod;
             private readonly MethodInfo _removeMethod;
@@ -73,7 +73,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly bool _isWinRT;
 #endif
 
-            public Handler(object target, Type delegateType, MethodInfo addMethod, MethodInfo removeMethod, Func<TSender, TEventArgs, TResult> getResult, bool isWinRT, IScheduler scheduler)
+            public Handler(object? target, Type delegateType, MethodInfo addMethod, MethodInfo removeMethod, Func<TSender, TEventArgs, TResult> getResult, bool isWinRT, IScheduler scheduler)
                 : base(scheduler)
             {
 #if HAS_WINRT
