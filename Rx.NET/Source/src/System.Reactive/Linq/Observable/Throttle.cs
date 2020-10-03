@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
@@ -28,6 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
+            private readonly object _gate = new object();
             private readonly TimeSpan _dueTime;
             private readonly IScheduler _scheduler;
 
@@ -38,10 +37,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = parent._scheduler;
             }
 
-            private readonly object _gate = new object();
-            private TSource _value;
+            private TSource? _value;
             private bool _hasValue;
-            private IDisposable _serialCancelable;
+            private IDisposable? _serialCancelable;
             private ulong _id;
 
             protected override void Dispose(bool disposing)
@@ -76,7 +74,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_hasValue && _id == currentid)
                     {
-                        ForwardOnNext(_value);
+                        ForwardOnNext(_value!);
                     }
 
                     _hasValue = false;
@@ -104,7 +102,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_hasValue)
                     {
-                        ForwardOnNext(_value);
+                        ForwardOnNext(_value!);
                     }
 
                     ForwardOnCompleted();
@@ -133,6 +131,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
+            private readonly object _gate = new object();
             private readonly Func<TSource, IObservable<TThrottle>> _throttleSelector;
 
             public _(Throttle<TSource, TThrottle> parent, IObserver<TSource> observer)
@@ -141,10 +140,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _throttleSelector = parent._throttleSelector;
             }
 
-            private readonly object _gate = new object();
-            private TSource _value;
+            private TSource? _value;
             private bool _hasValue;
-            private IDisposable _serialCancelable;
+            private IDisposable? _serialCancelable;
             private ulong _id;
 
             protected override void Dispose(bool disposing)
@@ -153,6 +151,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     Disposable.Dispose(ref _serialCancelable);
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -212,7 +211,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_hasValue)
                     {
-                        ForwardOnNext(_value);
+                        ForwardOnNext(_value!);
                     }
 
                     ForwardOnCompleted();

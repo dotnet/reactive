@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Threading;
@@ -419,7 +417,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                             if (hasNext)
                             {
-                                ForwardOnNext(current);
+                                ForwardOnNext(current!);
                             }
                         }
                     }
@@ -510,7 +508,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                             if (hasNext)
                             {
-                                ForwardOnNext(current);
+                                ForwardOnNext(current!);
                             }
                         }
                     }
@@ -1373,7 +1371,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                             if (hasNext)
                             {
-                                ForwardOnNext(current);
+                                ForwardOnNext(current!);
                             }
                         }
                     }
@@ -1456,7 +1454,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                             if (hasNext)
                             {
-                                ForwardOnNext(current);
+                                ForwardOnNext(current!);
                             }
                         }
                     }
