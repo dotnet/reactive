@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -28,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            protected override IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source)
+            protected override IEnumerable<IObservable<TSource>>? Extract(IObservable<TSource> source)
             {
                 if (source is OnErrorResumeNext<TSource> oern)
                 {

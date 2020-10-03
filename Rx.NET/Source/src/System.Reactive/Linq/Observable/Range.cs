@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
@@ -30,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly int _end;
             private int _index;
-            private IDisposable _task;
+            private IDisposable? _task;
 
             public RangeSink(int start, int count, IObserver<int> observer)
                 : base(observer)
@@ -57,6 +55,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private IDisposable LoopRec(IScheduler scheduler)
             {
                 var idx = _index;
+
                 if (idx != _end)
                 {
                     _index = idx + 1;
@@ -68,6 +67,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     ForwardOnCompleted();
                 }
+
                 return Disposable.Empty;
             }
         }
@@ -111,6 +111,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var idx = _index;
                 var end = _end;
+
                 while (!cancel.IsDisposed && idx != end)
                 {
                     ForwardOnNext(idx++);

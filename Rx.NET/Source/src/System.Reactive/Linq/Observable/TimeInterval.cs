@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -30,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IStopwatch _watch;
+            private IStopwatch? _watch;
             private TimeSpan _last;
 
             public void Run(TimeInterval<TSource> parent)
@@ -43,7 +41,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                var now = _watch.Elapsed;
+                var now = _watch!.Elapsed; // NB: Watch is assigned during Run.
                 var span = now.Subtract(_last);
                 _last = now;
                 ForwardOnNext(new Reactive.TimeInterval<TSource>(value, span));

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Concurrent;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
@@ -36,6 +34,7 @@ namespace System.Reactive.Linq.ObservableImpl
             try
             {
                 redo = _handler(errorSignals);
+
                 if (redo == null)
                 {
                     throw new NullReferenceException("The handler returned a null IObservable");
@@ -59,15 +58,15 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class MainObserver : Sink<T>, IObserver<T>
         {
+            private readonly IObservable<T> _source;
             private readonly IObserver<Exception> _errorSignal;
 
             internal readonly HandlerObserver HandlerConsumer;
-            private readonly IObservable<T> _source;
-            private IDisposable _upstream;
-            internal IDisposable HandlerUpstream;
+            private IDisposable? _upstream;
+            internal IDisposable? HandlerUpstream;
             private int _trampoline;
             private int _halfSerializer;
-            private Exception _error;
+            private Exception? _error;
 
             internal MainObserver(IObserver<T> downstream, IObservable<T> source, IObserver<Exception> errorSignal) : base(downstream)
             {
@@ -83,6 +82,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     Disposable.Dispose(ref _upstream);
                     Disposable.Dispose(ref HandlerUpstream);
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -161,11 +161,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
     internal sealed class RedoSerializedObserver<X> : IObserver<X>
     {
-        private readonly IObserver<X> _downstream;
-        private int _wip;
-        private Exception _terminalException;
         private static readonly Exception SignaledIndicator = new Exception();
+
+        private readonly IObserver<X> _downstream;
         private readonly ConcurrentQueue<X> _queue;
+
+        private int _wip;
+        private Exception? _terminalException;
 
         internal RedoSerializedObserver(IObserver<X> downstream)
         {

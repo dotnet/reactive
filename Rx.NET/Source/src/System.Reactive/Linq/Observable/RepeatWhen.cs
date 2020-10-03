@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 using System.Threading;
@@ -59,21 +57,22 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class MainObserver : Sink<T>, IObserver<T>
         {
-            private readonly IObserver<Exception> _errorSignal;
+            private readonly IObservable<T> _source;
+            private readonly IObserver<object> _completeSignal;
 
             internal readonly HandlerObserver HandlerConsumer;
-            private readonly IObservable<T> _source;
-            private IDisposable _upstream;
 
-            internal IDisposable HandlerUpstream;
+            internal IDisposable? HandlerUpstream;
+
+            private IDisposable? _upstream;
             private int _trampoline;
             private int _halfSerializer;
-            private Exception _error;
+            private Exception? _error;
 
-            internal MainObserver(IObserver<T> downstream, IObservable<T> source, IObserver<Exception> errorSignal) : base(downstream)
+            internal MainObserver(IObserver<T> downstream, IObservable<T> source, IObserver<object> completeSignal) : base(downstream)
             {
                 _source = source;
-                _errorSignal = errorSignal;
+                _completeSignal = completeSignal;
                 HandlerConsumer = new HandlerObserver(this);
             }
 
@@ -84,6 +83,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     Disposable.Dispose(ref _upstream);
                     Disposable.Dispose(ref HandlerUpstream);
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -91,9 +91,14 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (Disposable.TrySetSerial(ref _upstream, null))
                 {
-                    _errorSignal.OnNext(null);
-                }
+                    //
+                    // NB: Unfortunately this thing slipped in using `object` rather than `Unit`, which is our type used to represent nothing,
+                    //     so we have to stick with it and just let a `null` go in here. Users are supposed to ignore the elements produced,
+                    //     which `Unit` is making obvious since there's only one value. However, we're stuck here for compat reasons.
+                    //
 
+                    _completeSignal.OnNext(null!);
+                }
             }
 
             public void OnError(Exception error)
@@ -143,22 +148,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     _main = main;
                 }
 
-                public void OnCompleted()
-                {
-                    _main.HandlerComplete();
-                }
+                public void OnCompleted() => _main.HandlerComplete();
 
-                public void OnError(Exception error)
-                {
-                    _main.HandlerError(error);
-                }
+                public void OnError(Exception error) => _main.HandlerError(error);
 
-                public void OnNext(U value)
-                {
-                    _main.HandlerNext();
-                }
+                public void OnNext(U value) => _main.HandlerNext();
             }
         }
-
     }
 }

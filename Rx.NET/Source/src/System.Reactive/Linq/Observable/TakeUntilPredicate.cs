@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
-
 namespace System.Reactive.Linq.ObservableImpl
 {
     /// <summary>
@@ -31,21 +28,15 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly Func<TSource, bool> _stopPredicate;
 
-            public TakeUntilPredicateObserver(IObserver<TSource> downstream,
-                Func<TSource, bool> predicate) : base(downstream)
+            public TakeUntilPredicateObserver(IObserver<TSource> downstream, Func<TSource, bool> predicate)
+                : base(downstream)
             {
                 _stopPredicate = predicate;
             }
 
-            public override void OnCompleted()
-            {
-                ForwardOnCompleted();
-            }
+            public override void OnCompleted() => ForwardOnCompleted();
 
-            public override void OnError(Exception error)
-            {
-                ForwardOnError(error);
-            }
+            public override void OnError(Exception error) => ForwardOnError(error);
 
             public override void OnNext(TSource value)
             {
@@ -61,6 +52,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     ForwardOnError(ex);
                     return;
                 }
+
                 if (shouldStop)
                 {
                     ForwardOnCompleted();
