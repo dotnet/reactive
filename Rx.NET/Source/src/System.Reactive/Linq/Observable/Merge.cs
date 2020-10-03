@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +29,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class _ : Sink<IObservable<TSource>, TSource>
             {
+                private readonly object _gate = new object();
                 private readonly int _maxConcurrent;
+                private readonly Queue<IObservable<TSource>> _q = new Queue<IObservable<TSource>>();
+                private readonly CompositeDisposable _group = new CompositeDisposable();
 
                 public _(int maxConcurrent, IObserver<TSource> observer)
                     : base(observer)
@@ -38,10 +40,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _maxConcurrent = maxConcurrent;
                 }
 
-                private readonly object _gate = new object();
-                private readonly Queue<IObservable<TSource>> _q = new Queue<IObservable<TSource>>();
                 private volatile bool _isStopped;
-                private readonly CompositeDisposable _group = new CompositeDisposable();
                 private int _activeCount;
 
                 public override void OnNext(IObservable<TSource> value)
@@ -165,14 +164,15 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class _ : Sink<IObservable<TSource>, TSource>
             {
+                private readonly object _gate = new object();
+                private readonly CompositeDisposable _group = new CompositeDisposable();
+
                 public _(IObserver<TSource> observer)
                     : base(observer)
                 {
                 }
 
-                private readonly object _gate = new object();
                 private volatile bool _isStopped;
-                private readonly CompositeDisposable _group = new CompositeDisposable();
 
                 public override void OnNext(IObservable<TSource> value)
                 {
@@ -284,13 +284,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class _ : Sink<Task<TSource>, TSource>
             {
+                private readonly object _gate = new object();
+                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+
                 public _(IObserver<TSource> observer)
                     : base(observer)
                 {
                 }
 
-                private readonly object _gate = new object();
-                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
                 private volatile int _count = 1;
 
                 public override void OnNext(Task<TSource> value)
@@ -302,7 +303,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        value.ContinueWith((t, thisObject) => ((_)thisObject).OnCompletedTask(t), this, _cts.Token);
+                        value.ContinueWith((t, thisObject) => ((_)thisObject!).OnCompletedTask(t), this, _cts.Token);
                     }
                 }
 
@@ -324,7 +325,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             lock (_gate)
                             {
-                                ForwardOnError(task.Exception.InnerException);
+                                ForwardOnError(TaskHelpers.GetSingleException(task));
                             }
                         }
                         break;

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
@@ -33,11 +31,11 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IDisposable _sourceDisposable;
-            private IDisposable _samplerDisposable;
+            private IDisposable? _sourceDisposable;
+            private IDisposable? _samplerDisposable;
 
             private bool _hasValue;
-            private TSource _value;
+            private TSource? _value;
             private bool _sourceAtEnd;
             private bool _samplerAtEnd;
 
@@ -55,6 +53,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     Disposable.Dispose(ref _sourceDisposable);
                     Disposable.Dispose(ref _samplerDisposable);
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -108,7 +107,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         if (_parent._hasValue)
                         {
                             _parent._hasValue = false;
-                            _parent.ForwardOnNext(_parent._value);
+                            _parent.ForwardOnNext(_parent._value!);
                         }
 
                         if (_parent._sourceAtEnd)
@@ -136,7 +135,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         if (_parent._hasValue)
                         {
                             _parent._hasValue = false;
-                            _parent.ForwardOnNext(_parent._value);
+                            _parent.ForwardOnNext(_parent._value!);
                         }
 
                         if (_parent._sourceAtEnd)
@@ -179,10 +178,10 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IDisposable _sourceDisposable;
+            private IDisposable? _sourceDisposable;
 
             private bool _hasValue;
-            private TSource _value;
+            private TSource? _value;
             private bool _atEnd;
 
             public void Run(Sample<TSource> parent)
@@ -198,6 +197,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     Disposable.Dispose(ref _sourceDisposable);
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -208,7 +208,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (_hasValue)
                     {
                         _hasValue = false;
-                        ForwardOnNext(_value);
+                        ForwardOnNext(_value!);
                     }
 
                     if (_atEnd)

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -31,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly int _count;
                 private int _index;
-                private IList<TSource> _buffer;
+                private IList<TSource>? _buffer;
 
                 internal ExactSink(IObserver<IList<TSource>> observer, int count) : base(observer)
                 {
@@ -104,7 +102,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly int _count;
                 private readonly int _skip;
                 private int _index;
-                private IList<TSource> _buffer;
+                private IList<TSource>? _buffer;
 
                 internal SkipSink(IObserver<IList<TSource>> observer, int count, int skip) : base(observer)
                 {
@@ -127,7 +125,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (++idx == _count)
                     {
                         _buffer = null;
-                        ForwardOnNext(buffer);
+                        ForwardOnNext(buffer!); // NB: Counting logic with _index ensures non-null.
                     }
 
                     if (idx == _skip)
@@ -272,7 +270,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly IScheduler _scheduler;
                 private readonly object _gate = new object();
                 private readonly Queue<List<TSource>> _q = new Queue<List<TSource>>();
-                private IDisposable _timerSerial;
+                private IDisposable? _timerSerial;
 
                 public _(TimeSliding parent, IObserver<IList<TSource>> observer)
                     : base(observer)
@@ -348,7 +346,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         _nextShift += _timeShift;
                     }
 
-                    m.Disposable = _scheduler.ScheduleAction((@this: this, isSpan, isShift), ts, tuple => tuple.@this.Tick(tuple.isSpan, tuple.isShift));
+                    m.Disposable = _scheduler.ScheduleAction((@this: this, isSpan, isShift), ts, static tuple => tuple.@this.Tick(tuple.isSpan, tuple.isShift));
                 }
 
                 private void Tick(bool isSpan, bool isShift)
@@ -438,20 +436,18 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly object _gate = new object();
+                private List<TSource> _list = new List<TSource>();
 
                 public _(IObserver<IList<TSource>> observer)
                     : base(observer)
                 {
                 }
 
-                private List<TSource> _list;
-                private IDisposable _periodicDisposable;
+                private IDisposable? _periodicDisposable;
 
                 public void Run(TimeHopping parent)
                 {
-                    _list = new List<TSource>();
-
-                    Disposable.SetSingle(ref _periodicDisposable, parent._scheduler.SchedulePeriodic(this, parent._timeSpan, @this => @this.Tick()));
+                    Disposable.SetSingle(ref _periodicDisposable, parent._scheduler.SchedulePeriodic(this, parent._timeSpan, static @this => @this.Tick()));
                     Run(parent._source);
                 }
 
@@ -525,7 +521,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly Ferry _parent;
                 private readonly object _gate = new object();
-                private IDisposable _timerSerial;
+                private List<TSource> _s = new List<TSource>();
 
                 public _(Ferry parent, IObserver<IList<TSource>> observer)
                     : base(observer)
@@ -533,13 +529,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     _parent = parent;
                 }
 
-                private IList<TSource> _s;
+                private IDisposable? _timerSerial;
                 private int _n;
                 private int _windowId;
 
                 public void Run()
                 {
-                    _s = new List<TSource>();
                     _n = 0;
                     _windowId = 0;
 
@@ -554,6 +549,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         Disposable.Dispose(ref _timerSerial);
                     }
+
                     base.Dispose(disposing);
                 }
 
@@ -562,7 +558,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var m = new SingleAssignmentDisposable();
                     Disposable.TrySetSerial(ref _timerSerial, m);
 
-                    m.Disposable = _parent._scheduler.ScheduleAction((@this: this, id), _parent._timeSpan, tuple => tuple.@this.Tick(tuple.id));
+                    m.Disposable = _parent._scheduler.ScheduleAction((@this: this, id), _parent._timeSpan, static tuple => tuple.@this.Tick(tuple.id));
                 }
 
                 private void Tick(int id)
@@ -655,8 +651,10 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly object _gate = new object();
                 private readonly AsyncLock _bufferGate = new AsyncLock();
-                private IDisposable _bufferClosingSerialDisposable;
                 private readonly Func<IObservable<TBufferClosing>> _bufferClosingSelector;
+
+                private List<TSource> _buffer = new List<TSource>();
+                private IDisposable? _bufferClosingSerialDisposable;
 
                 public _(Selector parent, IObserver<IList<TSource>> observer)
                     : base(observer)
@@ -664,15 +662,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     _bufferClosingSelector = parent._bufferClosingSelector;
                 }
 
-                private IList<TSource> _buffer;
-
                 public override void Run(IObservable<TSource> source)
                 {
-                    _buffer = new List<TSource>();
-
                     base.Run(source);
 
-                    _bufferGate.Wait(this, @this => @this.CreateBufferClose());
+                    _bufferGate.Wait(this, static @this => @this.CreateBufferClose());
                 }
 
                 protected override void Dispose(bool disposing)
@@ -716,7 +710,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         ForwardOnNext(res);
                     }
 
-                    _bufferGate.Wait(this, @this => @this.CreateBufferClose());
+                    _bufferGate.Wait(this, static @this => @this.CreateBufferClose());
                 }
 
                 private sealed class BufferClosingObserver : SafeObserver<TBufferClosing>
@@ -791,18 +785,16 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly object _gate = new object();
 
+                private List<TSource> _buffer = new List<TSource>();
+                private IDisposable? _boundariesDisposable;
+
                 public _(IObserver<IList<TSource>> observer)
                     : base(observer)
                 {
                 }
 
-                private IList<TSource> _buffer;
-                private IDisposable _boundariesDisposable;
-
                 public void Run(Boundaries parent)
                 {
-                    _buffer = new List<TSource>();
-
                     Run(parent._source);
                     Disposable.SetSingle(ref _boundariesDisposable, parent._bufferBoundaries.SubscribeSafe(new BufferClosingObserver(this)));
                 }
@@ -813,6 +805,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         Disposable.Dispose(ref _boundariesDisposable);
                     }
+
                     base.Dispose(disposing);
                 }
 
