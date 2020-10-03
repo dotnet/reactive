@@ -73,7 +73,7 @@ namespace System.Reactive
                         Disposable.TrySetSerial(ref _disposable, StableCompositeDisposable.Create
                         (
                             _dispatcherJob,
-                            _dispatcherEventRelease
+                            _dispatcherEventRelease!
                         ));
                     }
                 }

@@ -21,10 +21,10 @@ namespace System.Reactive
             private bool _isAdded;
             private readonly Delegate _handler;
             private readonly object _gate = new object();
-            private readonly Action<TSender, TEventArgs> _invoke;
+            private readonly Action<TSender?, TEventArgs> _invoke;
             private readonly EventPatternSourceBase<TSender, TEventArgs> _sourceBase;
 
-            public Observer(EventPatternSourceBase<TSender, TEventArgs> sourceBase, Delegate handler, Action<TSender, TEventArgs> invoke)
+            public Observer(EventPatternSourceBase<TSender, TEventArgs> sourceBase, Delegate handler, Action<TSender?, TEventArgs> invoke)
             {
                 _handler = handler;
                 _invoke = invoke;
@@ -77,7 +77,7 @@ namespace System.Reactive
 
         private readonly IObservable<EventPattern<TSender, TEventArgs>> _source;
         private readonly Dictionary<Delegate, Stack<IDisposable>> _subscriptions;
-        private readonly Action<Action<TSender, TEventArgs>, /*object,*/ EventPattern<TSender, TEventArgs>> _invokeHandler;
+        private readonly Action<Action<TSender?, TEventArgs>, /*object,*/ EventPattern<TSender, TEventArgs>> _invokeHandler;
 
         /// <summary>
         /// Creates a new event pattern source.
@@ -85,7 +85,7 @@ namespace System.Reactive
         /// <param name="source">Source sequence to expose as an event.</param>
         /// <param name="invokeHandler">Delegate used to invoke the event for each element of the sequence.</param>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="invokeHandler"/> is <c>null</c>.</exception>
-        protected EventPatternSourceBase(IObservable<EventPattern<TSender, TEventArgs>> source, Action<Action<TSender, TEventArgs>, /*object,*/ EventPattern<TSender, TEventArgs>> invokeHandler)
+        protected EventPatternSourceBase(IObservable<EventPattern<TSender, TEventArgs>> source, Action<Action<TSender?, TEventArgs>, /*object,*/ EventPattern<TSender, TEventArgs>> invokeHandler)
         {
             _source = source ?? throw new ArgumentNullException(nameof(source));
             _invokeHandler = invokeHandler ?? throw new ArgumentNullException(nameof(invokeHandler));
@@ -98,7 +98,7 @@ namespace System.Reactive
         /// <param name="handler">Event handler to add. The same delegate should be passed to the <see cref="Remove(Delegate)"/> operation in order to remove the event handler.</param>
         /// <param name="invoke">Invocation delegate to raise the event in the derived class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="handler"/> or <paramref name="invoke"/> is <c>null</c>.</exception>
-        protected void Add(Delegate handler, Action<TSender, TEventArgs> invoke)
+        protected void Add(Delegate handler, Action<TSender?, TEventArgs> invoke)
         {
             if (handler == null)
             {
