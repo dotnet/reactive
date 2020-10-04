@@ -50,7 +50,7 @@ namespace System.Reactive.Concurrency
 
         public IDisposable QueueUserWorkItem(Action<object?> action, object? state)
         {
-            ThreadPool.QueueUserWorkItem(itemObject =>
+            ThreadPool.QueueUserWorkItem(static itemObject =>
             {
                 var item = (WorkItem)itemObject!;
 
@@ -68,7 +68,7 @@ namespace System.Reactive.Concurrency
 
         public void StartThread(Action<object?> action, object? state)
         {
-            new Thread(itemObject =>
+            new Thread(static itemObject =>
             {
                 var item = (WorkItem)itemObject!;
 
@@ -163,34 +163,31 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                Disposable.SetSingle(ref _timer, new System.Threading.Timer(static @this => Tick(@this!), this, dueTime, TimeSpan.FromMilliseconds(Timeout.Infinite)));
+                Disposable.SetSingle(ref _timer, new System.Threading.Timer(static @this => ((Timer)@this!).Tick(), this, dueTime, TimeSpan.FromMilliseconds(Timeout.Infinite)));
             }
 
-            private static void Tick(object state)
+            private void Tick()
             {
-                var timer = (Timer)state;
-
                 try
                 {
-                    var timerState = timer._state;
+                    var timerState = _state;
                     if (timerState != DisposedState)
                     {
-                        timer._action(timerState);
+                        _action(timerState);
                     }
                 }
                 finally
                 {
-                    Disposable.Dispose(ref timer._timer);
+                    Disposable.Dispose(ref _timer);
                 }
             }
 
             public void Dispose()
             {
-                if (Disposable.TryDispose(ref _timer))
-                {
-                    _action = Stubs<object?>.Ignore;
-                    _state = DisposedState;
-                }
+                Disposable.Dispose(ref _timer);
+
+                _action = Stubs<object?>.Ignore;
+                _state = DisposedState;
             }
         }
 
@@ -207,15 +204,10 @@ namespace System.Reactive.Concurrency
                 // Rooting of the timer happens through the timer's state
                 // which is the current instance and has a field to store the Timer instance.
                 //
-                _timer = new System.Threading.Timer(static @this => Tick(@this!), this, period, period);
+                _timer = new System.Threading.Timer(static @this => ((PeriodicTimer)@this!).Tick(), this, period, period);
             }
 
-            private static void Tick(object state)
-            {
-                var timer = (PeriodicTimer)state;
-
-                timer._action();
-            }
+            private void Tick() => _action();
 
             public void Dispose()
             {
@@ -239,7 +231,7 @@ namespace System.Reactive.Concurrency
             {
                 _action = action;
 
-                new Thread(static @this => Loop(@this!))
+                new Thread(static @this => ((FastPeriodicTimer)@this!).Loop())
                 {
                     Name = "Rx-FastPeriodicTimer",
                     IsBackground = true
@@ -247,20 +239,15 @@ namespace System.Reactive.Concurrency
                 .Start(this);
             }
 
-            private static void Loop(object threadParam)
+            private void Loop()
             {
-                var timer = (FastPeriodicTimer)threadParam;
-
-                while (!timer._disposed)
+                while (!_disposed)
                 {
-                    timer._action();
+                    _action();
                 }
             }
 
-            public void Dispose()
-            {
-                _disposed = true;
-            }
+            public void Dispose() => _disposed = true;
         }
     }
 }
