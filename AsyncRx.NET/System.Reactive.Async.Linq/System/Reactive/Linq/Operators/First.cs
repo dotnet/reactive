@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.First(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.First(observer)));
         }
 
         public static IAsyncObservable<TSource> First<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate)

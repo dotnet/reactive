@@ -11,7 +11,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource, Notification<TSource>>(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.Materialize(observer)));
+            return Create<TSource, Notification<TSource>>(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.Materialize(observer)));
         }
     }
 

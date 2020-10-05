@@ -13,7 +13,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource, IList<TSource>>(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.ToList(observer)));
+            return Create<TSource, IList<TSource>>(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.ToList(observer)));
         }
     }
 

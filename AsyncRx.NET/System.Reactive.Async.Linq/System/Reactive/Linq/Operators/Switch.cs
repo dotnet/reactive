@@ -16,7 +16,7 @@ namespace System.Reactive.Linq
 
             return Create<IAsyncObservable<TSource>, TSource>(
                 source,
-                async (source, observer) =>
+                async static (source, observer) =>
                 {
                     var (sink, cancel) = AsyncObserver.Switch(observer);
 

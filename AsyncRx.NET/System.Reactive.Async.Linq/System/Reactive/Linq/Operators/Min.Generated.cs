@@ -13,7 +13,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinInt32(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinInt32(observer)));
         }
 
         public static IAsyncObservable<Int32> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Int32> selector)
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableInt32(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableInt32(observer)));
         }
 
         public static IAsyncObservable<Int32?> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Int32?> selector)
@@ -69,7 +69,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinInt64(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinInt64(observer)));
         }
 
         public static IAsyncObservable<Int64> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Int64> selector)
@@ -97,7 +97,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableInt64(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableInt64(observer)));
         }
 
         public static IAsyncObservable<Int64?> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Int64?> selector)
@@ -125,7 +125,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinSingle(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinSingle(observer)));
         }
 
         public static IAsyncObservable<Single> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Single> selector)
@@ -153,7 +153,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableSingle(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableSingle(observer)));
         }
 
         public static IAsyncObservable<Single?> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Single?> selector)
@@ -181,7 +181,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinDouble(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinDouble(observer)));
         }
 
         public static IAsyncObservable<Double> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Double> selector)
@@ -209,7 +209,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableDouble(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableDouble(observer)));
         }
 
         public static IAsyncObservable<Double?> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Double?> selector)
@@ -237,7 +237,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinDecimal(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinDecimal(observer)));
         }
 
         public static IAsyncObservable<Decimal> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Decimal> selector)
@@ -265,7 +265,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableDecimal(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableDecimal(observer)));
         }
 
         public static IAsyncObservable<Decimal?> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Decimal?> selector)

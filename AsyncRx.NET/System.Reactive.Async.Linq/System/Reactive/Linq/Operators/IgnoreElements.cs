@@ -11,7 +11,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.IgnoreElements(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.IgnoreElements(observer)));
         }
     }
 

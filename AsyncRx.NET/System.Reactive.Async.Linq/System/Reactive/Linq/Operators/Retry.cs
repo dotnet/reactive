@@ -16,7 +16,7 @@ namespace System.Reactive.Linq
 
             return Create(
                 source,
-                async (source, observer) =>
+                async static (source, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.Retry(observer, source);
 

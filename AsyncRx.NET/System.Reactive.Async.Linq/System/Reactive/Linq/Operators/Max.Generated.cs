@@ -13,7 +13,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxInt32(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxInt32(observer)));
         }
 
         public static IAsyncObservable<Int32> Max<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Int32> selector)
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableInt32(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableInt32(observer)));
         }
 
         public static IAsyncObservable<Int32?> Max<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Int32?> selector)
@@ -69,7 +69,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxInt64(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxInt64(observer)));
         }
 
         public static IAsyncObservable<Int64> Max<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Int64> selector)
@@ -97,7 +97,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableInt64(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableInt64(observer)));
         }
 
         public static IAsyncObservable<Int64?> Max<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Int64?> selector)
@@ -125,7 +125,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxSingle(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxSingle(observer)));
         }
 
         public static IAsyncObservable<Single> Max<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Single> selector)
@@ -153,7 +153,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableSingle(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableSingle(observer)));
         }
 
         public static IAsyncObservable<Single?> Max<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Single?> selector)
@@ -181,7 +181,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxDouble(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxDouble(observer)));
         }
 
         public static IAsyncObservable<Double> Max<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Double> selector)
@@ -209,7 +209,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableDouble(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableDouble(observer)));
         }
 
         public static IAsyncObservable<Double?> Max<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Double?> selector)
@@ -237,7 +237,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxDecimal(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxDecimal(observer)));
         }
 
         public static IAsyncObservable<Decimal> Max<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Decimal> selector)
@@ -265,7 +265,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableDecimal(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableDecimal(observer)));
         }
 
         public static IAsyncObservable<Decimal?> Max<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Decimal?> selector)

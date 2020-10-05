@@ -43,7 +43,7 @@ foreach (var t in types)
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<<#=sourceTypeName#>, <#=targetTypeName#>>(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer)));
+            return Create<<#=sourceTypeName#>, <#=targetTypeName#>>(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer)));
         }
 
         public static IAsyncObservable<<#=targetTypeName#>> <#=name#><TSource>(this IAsyncObservable<TSource> source, Func<TSource, <#=sourceTypeName#>> selector)

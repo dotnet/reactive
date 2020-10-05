@@ -14,7 +14,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, (source, observer) => source.SubscribeSafeAsync(AsyncObserver.Min(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.Min(observer)));
         }
 
         public static IAsyncObservable<TSource> Min<TSource>(IAsyncObservable<TSource> source, IComparer<TSource> comparer)
