@@ -2480,7 +2480,7 @@ namespace System.Reactive.Subjects
         public override void OnError(System.Exception error) { }
         public override void OnNext(T value) { }
         public override System.IDisposable Subscribe(System.IObserver<T> observer) { }
-        public bool TryGetValue(out T value) { }
+        public bool TryGetValue([System.Diagnostics.CodeAnalysis.MaybeNullWhen(false)] out T value) { }
     }
     public interface IConnectableObservable<out T> : System.IObservable<T>
     {
