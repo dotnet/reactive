@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Configuration;
 using System.Reactive.Concurrency;
 using System.Threading;
 using System.Threading.Tasks;
@@ -1125,5 +1126,56 @@ namespace System.Reactive.Linq
         }
 
         #endregion
+    }
+
+    public static partial class ObservableEx
+    {
+        /// <summary>
+        /// Merges two observable sequences into one observable sequence by combining each element from the first source with the latest element from the second source, if any.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <returns>An observable sequence containing the result of combining each element of the first source with the latest element from the second source, if any, as a tuple value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
+        public static IObservable<(TFirst First, TSecond Second)> WithLatestFrom<TFirst, TSecond>(this IObservable<TFirst> first, IObservable<TSecond> second)
+        {
+            if (first == null)
+            {
+                throw new ArgumentNullException(nameof(first));
+            }
+
+            if (second == null)
+            {
+                throw new ArgumentNullException(nameof(second));
+            }
+
+            return s_impl.WithLatestFrom(first, second);
+        }
+
+        /// <summary>
+        /// Merges an observable sequence and an enumerable sequence into one observable sequence of tuple values.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first observable source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second enumerable source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second enumerable source.</param>
+        /// <returns>An observable sequence containing the result of pairwise combining the elements of the first and second source as a tuple value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
+        public static IObservable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IObservable<TFirst> first, IEnumerable<TSecond> second)
+        {
+            if (first == null)
+            {
+                throw new ArgumentNullException(nameof(first));
+            }
+
+            if (second == null)
+            {
+                throw new ArgumentNullException(nameof(second));
+            }
+
+            return s_impl.Zip(first, second);
+        }
     }
 }

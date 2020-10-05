@@ -10,7 +10,7 @@ namespace System.Reactive.Linq
     /// <summary>
     /// Provides a set of static methods for writing in-memory queries over observable sequences.
     /// </summary>
-    public static class ObservableEx
+    public static partial class ObservableEx
     {
 #pragma warning disable IDE1006 // Naming Styles: 3rd party code is known to reflect for this specific field name
         private static IQueryLanguageEx s_impl = QueryServices.GetQueryImpl<IQueryLanguageEx>(new QueryLanguageEx());

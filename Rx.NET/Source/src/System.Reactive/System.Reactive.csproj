@@ -27,6 +27,10 @@
     <!-- Workaround so the files appear in VS -->
     <None Include="Platforms\**\*.*" />
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+    <None Update="Linq\QbservableEx.NAry.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>QbservableEx.NAry.cs</LastGenOutput>
+    </None>
     <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />
     <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />
   </ItemGroup>
@@ -100,6 +104,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Observable.Multiple.Zip.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Linq\QbservableEx.NAry.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QbservableEx.NAry.tt</DependentUpon>
     </Compile>
     <Compile Update="Linq\QueryLanguage.Multiple.CombineLatest.cs">
       <DesignTime>True</DesignTime>
@@ -179,6 +188,11 @@
     <None Include="build\_._" PackagePath="buildTransitive\net5.0" Pack="true" />
     <None Include="build\System.Reactive.targets" PackagePath="buildTransitive\netcoreapp3.1" Pack="true" />
     <None Include="build\System.Reactive.targets" PackagePath="build\netcoreapp3.1" Pack="true" />
+    <None Include="Linq\QbservableEx.NAry.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QbservableEx.NAry.tt</DependentUpon>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
