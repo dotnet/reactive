@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -30,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IDisposable _innerSerialDisposable;
+            private IDisposable? _innerSerialDisposable;
             private bool _isStopped;
             private ulong _latest;
             private bool _hasLatest;
