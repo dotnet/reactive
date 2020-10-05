@@ -113,6 +113,16 @@ for (int j = 0; j < i; j++)
         /// <exception cref="ArgumentNullException"><#=paramRefs#> is null.</exception>
         public static IObservable<<#=tuple#>> Zip<<#=genArgs#>>(this <#=parameters#>)
         {
+<#
+for (int j = 0; j < i; j++)
+{
+#>
+            if (<#=ordinals[j]#> == null)
+                throw new ArgumentNullException(nameof(<#=ordinals[j]#>));
+<#
+}
+#>
+
             return s_impl.Zip(<#=sources#>);
         }
 
