@@ -159,24 +159,6 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Tries to dispose <paramref name="fieldRef" />. 
-        /// </summary>
-        /// <returns>true if <paramref name="fieldRef" /> was not disposed previously and was successfully disposed.</returns>
-        /// <returns>false if <paramref name="fieldRef" /> was disposed previously.</returns>
-        internal static bool TryDispose(ref IDisposable fieldRef)
-        {
-            var old = Interlocked.Exchange(ref fieldRef, BooleanDisposable.True);
-
-            if (old == BooleanDisposable.True)
-            {
-                return false;
-            }
-
-            old?.Dispose();
-            return true;
-        }
-
-        /// <summary>
         /// Disposes <paramref name="fieldRef" />. 
         /// </summary>
         internal static void Dispose(ref IDisposable fieldRef)
@@ -187,19 +169,6 @@ namespace System.Reactive.Disposables
             {
                 old?.Dispose();
             }
-        }
-
-        internal static bool TryRelease<TState>(ref IDisposable fieldRef, TState state, Action<IDisposable, TState> disposeAction)
-        {
-            var old = Interlocked.Exchange(ref fieldRef, BooleanDisposable.True);
-
-            if (old == BooleanDisposable.True)
-            {
-                return false;
-            }
-
-            disposeAction(old, state);
-            return true;
         }
     }
 }

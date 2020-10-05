@@ -598,7 +598,7 @@ namespace System.Reactive.Disposables
     public sealed class MultipleAssignmentDisposable : System.IDisposable, System.Reactive.Disposables.ICancelable
     {
         public MultipleAssignmentDisposable() { }
-        public System.IDisposable Disposable { get; set; }
+        public System.IDisposable? Disposable { get; set; }
         public bool IsDisposed { get; }
         public void Dispose() { }
     }
@@ -621,14 +621,14 @@ namespace System.Reactive.Disposables
     public sealed class SerialDisposable : System.IDisposable, System.Reactive.Disposables.ICancelable
     {
         public SerialDisposable() { }
-        public System.IDisposable Disposable { get; set; }
+        public System.IDisposable? Disposable { get; set; }
         public bool IsDisposed { get; }
         public void Dispose() { }
     }
     public sealed class SingleAssignmentDisposable : System.IDisposable, System.Reactive.Disposables.ICancelable
     {
         public SingleAssignmentDisposable() { }
-        public System.IDisposable Disposable { get; set; }
+        public System.IDisposable? Disposable { get; set; }
         public bool IsDisposed { get; }
         public void Dispose() { }
     }

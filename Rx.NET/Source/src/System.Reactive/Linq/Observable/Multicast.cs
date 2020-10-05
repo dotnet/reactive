@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 
@@ -28,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TResult>
         {
-            private IDisposable _connection;
+            private IDisposable? _connection;
 
             public _(IObserver<TResult> observer)
                 : base(observer)

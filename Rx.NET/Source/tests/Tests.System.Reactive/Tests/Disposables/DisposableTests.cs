@@ -887,19 +887,5 @@ namespace ReactiveTests.Tests
             Assert.True(disp3);
             Assert.True(d.IsDisposed);
         }
-
-        [Fact]
-        public void Disposable_TryRelease_Already_Disposed()
-        {
-            var field = default(IDisposable);
-
-            Disposable.Dispose(ref field);
-
-            var count = 0;
-
-            Assert.False(Disposable.TryRelease(ref field, 1, (d, i) => count = i));
-
-            Assert.Equal(0, count);
-        }
     }
 }
