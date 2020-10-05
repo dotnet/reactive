@@ -14,14 +14,16 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, cancel) = AsyncObserver.Switch(observer);
+            return Create<IAsyncObservable<TSource>, TSource>(
+                source,
+                async static (source, observer) =>
+                {
+                    var (sink, cancel) = AsyncObserver.Switch(observer);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, cancel);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, cancel);
+                });
         }
     }
 

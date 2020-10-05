@@ -11,7 +11,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Cast<TSource, TResult>(observer)));
+            return Create<TSource, TResult>(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.Cast<TSource, TResult>(observer)));
         }
     }
 

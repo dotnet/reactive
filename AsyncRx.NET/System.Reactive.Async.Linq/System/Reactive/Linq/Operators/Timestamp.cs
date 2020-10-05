@@ -13,7 +13,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<Timestamped<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.Timestamp(observer)));
+            return Create<TSource, Timestamped<TSource>>(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.Timestamp(observer)));
         }
 
         public static IAsyncObservable<Timestamped<TSource>> Timestamp<TSource>(this IAsyncObservable<TSource> source, IClock clock)

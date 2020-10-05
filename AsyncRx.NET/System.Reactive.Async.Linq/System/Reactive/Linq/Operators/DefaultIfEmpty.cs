@@ -11,7 +11,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.DefaultIfEmpty<TSource>(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.DefaultIfEmpty(observer)));
         }
 
         public static IAsyncObservable<TSource> DefaultIfEmpty<TSource>(this IAsyncObservable<TSource> source, TSource defaultValue)
@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.DefaultIfEmpty<TSource>(observer, defaultValue)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.DefaultIfEmpty(observer, defaultValue)));
         }
     }
 

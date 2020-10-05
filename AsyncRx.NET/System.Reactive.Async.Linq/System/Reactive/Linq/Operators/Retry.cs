@@ -14,14 +14,16 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.Retry(observer, source);
+            return Create(
+                source,
+                async static (source, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.Retry(observer, source);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
 
         public static IAsyncObservable<TSource> Retry<TSource>(this IAsyncObservable<TSource> source, int retryCount)

@@ -13,7 +13,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<long>(observer => source.SubscribeSafeAsync(AsyncObserver.LongCount<TSource>(observer)));
+            return Create<TSource, long>(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.LongCount<TSource>(observer)));
         }
 
         public static IAsyncObservable<long> LongCount<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate)
