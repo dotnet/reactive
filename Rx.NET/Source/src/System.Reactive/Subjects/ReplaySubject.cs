@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -228,7 +226,7 @@ namespace System.Reactive.Subjects
             private ImmutableList<IScheduledObserver<T>> _observers;
 
             private bool _isStopped;
-            private Exception _error;
+            private Exception? _error;
             private bool _isDisposed;
 
             protected ReplayBase()
@@ -254,7 +252,7 @@ namespace System.Reactive.Subjects
 
             public override void OnNext(T value)
             {
-                IScheduledObserver<T>[] o = null;
+                IScheduledObserver<T>[]? o = null;
 
                 lock (_gate)
                 {
@@ -284,7 +282,7 @@ namespace System.Reactive.Subjects
 
             public override void OnError(Exception error)
             {
-                IScheduledObserver<T>[] o = null;
+                IScheduledObserver<T>[]? o = null;
 
                 lock (_gate)
                 {
@@ -317,7 +315,7 @@ namespace System.Reactive.Subjects
 
             public override void OnCompleted()
             {
-                IScheduledObserver<T>[] o = null;
+                IScheduledObserver<T>[]? o = null;
 
                 lock (_gate)
                 {
@@ -410,7 +408,7 @@ namespace System.Reactive.Subjects
                 lock (_gate)
                 {
                     _isDisposed = true;
-                    _observers = null;
+                    _observers = null!; // NB: Disposed checks happen prior to accessing _observers.
                     DisposeCore();
                 }
             }
@@ -576,7 +574,7 @@ namespace System.Reactive.Subjects
         private sealed class ReplayOne : ReplayBufferBase
         {
             private bool _hasValue;
-            private T _value;
+            private T? _value;
 
             protected override void Trim()
             {
@@ -598,7 +596,7 @@ namespace System.Reactive.Subjects
                 if (_hasValue)
                 {
                     n = 1;
-                    observer.OnNext(_value);
+                    observer.OnNext(_value!);
                 }
 
                 return n;
@@ -714,12 +712,12 @@ namespace System.Reactive.Subjects
         /// Standby queue to swap out for _queue when transferring ownership. This allows to reuse
         /// queues in case of busy subjects where the initial replay doesn't suffice to catch up.
         /// </summary>
-        private Queue<T> _queue2;
+        private Queue<T>? _queue2;
 
         /// <summary>
         /// Exception passed to an OnError notification, if any.
         /// </summary>
-        private Exception _error;
+        private Exception? _error;
 
         /// <summary>
         /// Indicates whether an OnCompleted notification was received.

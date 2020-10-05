@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
 
 namespace System.Reactive.Subjects
@@ -22,7 +21,7 @@ namespace System.Reactive.Subjects
         private ImmutableList<IObserver<T>> _observers;
         private bool _isStopped;
         private T _value;
-        private Exception _exception;
+        private Exception? _exception;
         private bool _isDisposed;
 
         #endregion
@@ -111,7 +110,7 @@ namespace System.Reactive.Subjects
         /// In some cases, it may be necessary for a caller to use external synchronization to avoid race conditions.
         /// </alert>
         /// </remarks>
-        public bool TryGetValue(out T value)
+        public bool TryGetValue([MaybeNullWhen(false)] out T value)
         {
             lock (_gate)
             {
@@ -138,7 +137,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         public override void OnCompleted()
         {
-            IObserver<T>[] os = null;
+            IObserver<T>[]? os = null;
 
             lock (_gate)
             {
@@ -173,7 +172,7 @@ namespace System.Reactive.Subjects
                 throw new ArgumentNullException(nameof(error));
             }
 
-            IObserver<T>[] os = null;
+            IObserver<T>[]? os = null;
 
             lock (_gate)
             {
@@ -203,7 +202,7 @@ namespace System.Reactive.Subjects
         /// <param name="value">The value to send to all observers.</param>
         public override void OnNext(T value)
         {
-            IObserver<T>[] os = null;
+            IObserver<T>[]? os = null;
 
             lock (_gate)
             {
@@ -242,7 +241,7 @@ namespace System.Reactive.Subjects
                 throw new ArgumentNullException(nameof(observer));
             }
 
-            Exception ex;
+            Exception? ex;
 
             lock (_gate)
             {
@@ -282,8 +281,8 @@ namespace System.Reactive.Subjects
             lock (_gate)
             {
                 _isDisposed = true;
-                _observers = null;
-                _value = default;
+                _observers = null!; // NB: Disposed checks happen prior to accessing _observers.
+                _value = default!;
                 _exception = null;
             }
         }
@@ -301,7 +300,7 @@ namespace System.Reactive.Subjects
         private sealed class Subscription : IDisposable
         {
             private readonly BehaviorSubject<T> _subject;
-            private IObserver<T> _observer;
+            private IObserver<T>? _observer;
 
             public Subscription(BehaviorSubject<T> subject, IObserver<T> observer)
             {

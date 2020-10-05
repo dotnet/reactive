@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Reactive.Disposables;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -20,17 +18,17 @@ namespace System.Reactive.Subjects
         #region Fields
 
         private AsyncSubjectDisposable[] _observers;
-        private T _value;
+        private T? _value;
         private bool _hasValue;
-        private Exception _exception;
+        private Exception? _exception;
 
         /// <summary>
-        /// A pre-allocated empty array indicating the AsyncSubject has terminated
+        /// A pre-allocated empty array indicating the AsyncSubject has terminated.
         /// </summary>
         private static readonly AsyncSubjectDisposable[] Terminated = new AsyncSubjectDisposable[0];
 
         /// <summary>
-        /// A pre-allocated empty array indicating the AsyncSubject has terminated
+        /// A pre-allocated empty array indicating the AsyncSubject has been disposed.
         /// </summary>
         private static readonly AsyncSubjectDisposable[] Disposed = new AsyncSubjectDisposable[0];
 
@@ -41,10 +39,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Creates a subject that can only receive one value and that value is cached for all future observations.
         /// </summary>
-        public AsyncSubject()
-        {
-            _observers = Array.Empty<AsyncSubjectDisposable>();
-        }
+        public AsyncSubject() => _observers = Array.Empty<AsyncSubjectDisposable>();
 
         #endregion
 
@@ -53,7 +48,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Indicates whether the subject has observers subscribed to it.
         /// </summary>
-        public override bool HasObservers => _observers.Length != 0;
+        public override bool HasObservers => Volatile.Read(ref _observers).Length != 0;
 
         /// <summary>
         /// Indicates whether the subject has been disposed.
@@ -74,19 +69,23 @@ namespace System.Reactive.Subjects
             for (; ; )
             {
                 var observers = Volatile.Read(ref _observers);
+
                 if (observers == Disposed)
                 {
                     _exception = null;
                     ThrowDisposed();
                     break;
                 }
+
                 if (observers == Terminated)
                 {
                     break;
                 }
+
                 if (Interlocked.CompareExchange(ref _observers, Terminated, observers) == observers)
                 {
                     var hasValue = _hasValue;
+
                     if (hasValue)
                     {
                         var value = _value;
@@ -95,7 +94,7 @@ namespace System.Reactive.Subjects
                         {
                             if (!o.IsDisposed())
                             {
-                                o.Downstream.OnNext(value);
+                                o.Downstream.OnNext(value!);
                                 o.Downstream.OnCompleted();
                             }
                         }
@@ -129,6 +128,7 @@ namespace System.Reactive.Subjects
             for (; ; )
             {
                 var observers = Volatile.Read(ref _observers);
+
                 if (observers == Disposed)
                 {
                     _exception = null;
@@ -136,11 +136,14 @@ namespace System.Reactive.Subjects
                     ThrowDisposed();
                     break;
                 }
+
                 if (observers == Terminated)
                 {
                     break;
                 }
+
                 _exception = error;
+
                 if (Interlocked.CompareExchange(ref _observers, Terminated, observers) == observers)
                 {
                     foreach (var o in observers)
@@ -162,6 +165,7 @@ namespace System.Reactive.Subjects
         public override void OnNext(T value)
         {
             var observers = Volatile.Read(ref _observers);
+
             if (observers == Disposed)
             {
                 _value = default;
@@ -169,6 +173,7 @@ namespace System.Reactive.Subjects
                 ThrowDisposed();
                 return;
             }
+
             if (observers == Terminated)
             {
                 return;
@@ -200,6 +205,7 @@ namespace System.Reactive.Subjects
             if (!Add(parent))
             {
                 var ex = _exception;
+
                 if (ex != null)
                 {
                     observer.OnError(ex);
@@ -208,10 +214,12 @@ namespace System.Reactive.Subjects
                 {
                     if (_hasValue)
                     {
-                        observer.OnNext(_value);
+                        observer.OnNext(_value!);
                     }
+
                     observer.OnCompleted();
                 }
+
                 return Disposable.Empty;
             }
 
@@ -223,6 +231,7 @@ namespace System.Reactive.Subjects
             for (; ; )
             {
                 var a = Volatile.Read(ref _observers);
+
                 if (a == Disposed)
                 {
                     _value = default;
@@ -238,8 +247,10 @@ namespace System.Reactive.Subjects
 
                 var n = a.Length;
                 var b = new AsyncSubjectDisposable[n + 1];
+
                 Array.Copy(a, 0, b, 0, n);
                 b[n] = inner;
+
                 if (Interlocked.CompareExchange(ref _observers, b, a) == a)
                 {
                     return true;
@@ -277,6 +288,7 @@ namespace System.Reactive.Subjects
                 }
 
                 AsyncSubjectDisposable[] b;
+
                 if (n == 1)
                 {
                     b = Array.Empty<AsyncSubjectDisposable>();
@@ -284,6 +296,7 @@ namespace System.Reactive.Subjects
                 else
                 {
                     b = new AsyncSubjectDisposable[n - 1];
+
                     Array.Copy(a, 0, b, 0, j);
                     Array.Copy(a, j + 1, b, j, n - j - 1);
                 }
@@ -301,7 +314,7 @@ namespace System.Reactive.Subjects
         private sealed class AsyncSubjectDisposable : IDisposable
         {
             internal readonly IObserver<T> Downstream;
-            private AsyncSubject<T> _parent;
+            private AsyncSubject<T>? _parent;
 
             public AsyncSubjectDisposable(AsyncSubject<T> parent, IObserver<T> downstream)
             {
@@ -324,10 +337,7 @@ namespace System.Reactive.Subjects
 
         #region IDisposable implementation
 
-        private static void ThrowDisposed()
-        {
-            throw new ObjectDisposedException(string.Empty);
-        }
+        private static void ThrowDisposed() => throw new ObjectDisposedException(string.Empty);
 
         /// <summary>
         /// Unsubscribe all observers and release resources.
@@ -377,7 +387,7 @@ namespace System.Reactive.Subjects
 
         private sealed class AwaitObserver : IObserver<T>
         {
-            private readonly SynchronizationContext _context;
+            private readonly SynchronizationContext? _context;
             private readonly Action _callback;
 
             public AwaitObserver(Action callback, bool originalContext)
@@ -407,7 +417,7 @@ namespace System.Reactive.Subjects
                     // Task objects or the async method builder's interaction with the
                     // SynchronizationContext object.
                     //
-                    _context.Post(static c => ((Action)c)(), _callback);
+                    _context.Post(static c => ((Action)c!)(), _callback);
                 }
                 else
                 {
@@ -443,7 +453,7 @@ namespace System.Reactive.Subjects
                 throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
             }
 
-            return _value;
+            return _value!;
         }
 
         #endregion
