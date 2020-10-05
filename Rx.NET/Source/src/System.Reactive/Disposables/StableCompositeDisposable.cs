@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Threading;
 
@@ -92,8 +90,8 @@ namespace System.Reactive.Disposables
 
         private sealed class Binary : StableCompositeDisposable
         {
-            private IDisposable _disposable1;
-            private IDisposable _disposable2;
+            private IDisposable? _disposable1;
+            private IDisposable? _disposable2;
 
             public Binary(IDisposable disposable1, IDisposable disposable2)
             {
@@ -112,7 +110,7 @@ namespace System.Reactive.Disposables
 
         private sealed class NAryEnumerable : StableCompositeDisposable
         {
-            private volatile List<IDisposable> _disposables;
+            private volatile List<IDisposable>? _disposables;
 
             public NAryEnumerable(IEnumerable<IDisposable> disposables)
             {
@@ -121,7 +119,7 @@ namespace System.Reactive.Disposables
                 //
                 // Doing this on the list to avoid duplicate enumeration of disposables.
                 //
-                if (_disposables.Contains(null))
+                if (_disposables.Contains(null!))
                 {
                     throw new ArgumentException(Strings_Core.DISPOSABLES_CANT_CONTAIN_NULL, nameof(disposables));
                 }
@@ -144,19 +142,20 @@ namespace System.Reactive.Disposables
 
         private sealed class NAryArray : StableCompositeDisposable
         {
-            private IDisposable[] _disposables;
+            private IDisposable[]? _disposables;
 
             public NAryArray(IDisposable[] disposables)
             {
-                var n = disposables.Length;
-                var ds = new IDisposable[n];
-                // These are likely already vectorized in the framework
-                // At least they are faster than loop-copying
-                Array.Copy(disposables, 0, ds, 0, n);
-                if (Array.IndexOf(ds, null) != -1)
+                if (Array.IndexOf(disposables, null!) != -1)
                 {
                     throw new ArgumentException(Strings_Core.DISPOSABLES_CANT_CONTAIN_NULL, nameof(disposables));
                 }
+
+                var n = disposables.Length;
+                var ds = new IDisposable[n];
+
+                Array.Copy(disposables, 0, ds, 0, n);
+
                 Volatile.Write(ref _disposables, ds);
             }
 
@@ -181,7 +180,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         private sealed class NAryTrustedArray : StableCompositeDisposable
         {
-            private IDisposable[] _disposables;
+            private IDisposable[]? _disposables;
 
             public NAryTrustedArray(IDisposable[] disposables)
             {
