@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Globalization;
 using System.Reflection;
 
@@ -25,9 +23,9 @@ namespace System.Reactive
             return method.CreateDelegate(delegateType, o);
         }
 
-        public static void GetEventMethods<TSender, TEventArgs>(Type targetType, object target, string eventName, out MethodInfo addMethod, out MethodInfo removeMethod, out Type delegateType, out bool isWinRT)
+        public static void GetEventMethods<TSender, TEventArgs>(Type targetType, object? target, string eventName, out MethodInfo addMethod, out MethodInfo removeMethod, out Type delegateType, out bool isWinRT)
         {
-            EventInfo e;
+            EventInfo? e;
 
             if (target == null)
             {
@@ -46,18 +44,23 @@ namespace System.Reactive
                 }
             }
 
-            addMethod = e.GetAddMethod();
-            removeMethod = e.GetRemoveMethod();
+            var add = e.GetAddMethod();
 
-            if (addMethod == null)
+            if (add == null)
             {
                 throw new InvalidOperationException(Strings_Linq.EVENT_MISSING_ADD_METHOD);
             }
 
-            if (removeMethod == null)
+            addMethod = add;
+
+            var remove = e.GetRemoveMethod();
+
+            if (remove == null)
             {
                 throw new InvalidOperationException(Strings_Linq.EVENT_MISSING_REMOVE_METHOD);
             }
+
+            removeMethod = remove;
 
             var psa = addMethod.GetParameters();
             if (psa.Length != 1)
@@ -88,7 +91,7 @@ namespace System.Reactive
 
             delegateType = psa[0].ParameterType;
 
-            var invokeMethod = delegateType.GetMethod("Invoke");
+            var invokeMethod = delegateType.GetMethod("Invoke")!; // NB: Delegates always have an Invoke method.
 
             var parameters = invokeMethod.GetParameters();
 

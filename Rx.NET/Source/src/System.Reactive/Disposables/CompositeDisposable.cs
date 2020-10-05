@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -18,7 +16,7 @@ namespace System.Reactive.Disposables
     {
         private readonly object _gate = new object();
         private bool _disposed;
-        private List<IDisposable> _disposables;
+        private List<IDisposable?> _disposables;
         private int _count;
         private const int ShrinkThreshold = 64;
 
@@ -31,7 +29,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public CompositeDisposable()
         {
-            _disposables = new List<IDisposable>();
+            _disposables = new List<IDisposable?>();
         }
 
         /// <summary>
@@ -46,7 +44,7 @@ namespace System.Reactive.Disposables
                 throw new ArgumentOutOfRangeException(nameof(capacity));
             }
 
-            _disposables = new List<IDisposable>(capacity);
+            _disposables = new List<IDisposable?>(capacity);
         }
 
         /// <summary>
@@ -62,7 +60,11 @@ namespace System.Reactive.Disposables
                 throw new ArgumentNullException(nameof(disposables));
             }
 
-            Init(disposables, disposables.Length);
+            _disposables = ToList(disposables);
+
+            // _count can be read by other threads and thus should be properly visible
+            // also releases the _disposables contents so it becomes thread-safe
+            Volatile.Write(ref _count, _disposables.Count);
         }
 
         /// <summary>
@@ -78,27 +80,23 @@ namespace System.Reactive.Disposables
                 throw new ArgumentNullException(nameof(disposables));
             }
 
-            // If the disposables is a collection, get its size
-            // and use it as a capacity hint for the copy.
-            if (disposables is ICollection<IDisposable> c)
-            {
-                Init(disposables, c.Count);
-            }
-            else
-            {
-                // Unknown sized disposables, use the default capacity hint
-                Init(disposables, DefaultCapacity);
-            }
+            _disposables = ToList(disposables);
+
+            // _count can be read by other threads and thus should be properly visible
+            // also releases the _disposables contents so it becomes thread-safe
+            Volatile.Write(ref _count, _disposables.Count);
         }
 
-        /// <summary>
-        /// Initialize the inner disposable list and count fields.
-        /// </summary>
-        /// <param name="disposables">The enumerable sequence of disposables.</param>
-        /// <param name="capacityHint">The number of items expected from <paramref name="disposables"/></param>
-        private void Init(IEnumerable<IDisposable> disposables, int capacityHint)
+        private static List<IDisposable?> ToList(IEnumerable<IDisposable> disposables)
         {
-            var list = new List<IDisposable>(capacityHint);
+            var capacity = disposables switch
+            {
+                IDisposable[] a => a.Length,
+                ICollection<IDisposable> c => c.Count,
+                _ => DefaultCapacity
+            };
+
+            var list = new List<IDisposable?>(capacity);
 
             // do the copy and null-check in one step to avoid a
             // second loop for just checking for null items
@@ -112,11 +110,7 @@ namespace System.Reactive.Disposables
                 list.Add(d);
             }
 
-            _disposables = list;
-
-            // _count can be read by other threads and thus should be properly visible
-            // also releases the _disposables contents so it becomes thread-safe
-            Volatile.Write(ref _count, _disposables.Count);
+            return list;
         }
 
         /// <summary>
@@ -197,7 +191,7 @@ namespace System.Reactive.Disposables
 
                 if (current.Capacity > ShrinkThreshold && _count < current.Capacity / 2)
                 {
-                    var fresh = new List<IDisposable>(current.Capacity / 2);
+                    var fresh = new List<IDisposable?>(current.Capacity / 2);
 
                     foreach (var d in current)
                     {
@@ -227,7 +221,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-            List<IDisposable> currentDisposables = null;
+            List<IDisposable?>? currentDisposables = null;
 
             lock (_gate)
             {
@@ -238,7 +232,7 @@ namespace System.Reactive.Disposables
                     // nulling out the reference is faster no risk to
                     // future Add/Remove because _disposed will be true
                     // and thus _disposables won't be touched again.
-                    _disposables = null;
+                    _disposables = null!; // NB: All accesses are guarded by _disposed checks.
 
                     Volatile.Write(ref _count, 0);
                     Volatile.Write(ref _disposed, true);
@@ -259,7 +253,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Clear()
         {
-            IDisposable[] previousDisposables;
+            IDisposable?[] previousDisposables;
 
             lock (_gate)
             {
@@ -393,25 +387,25 @@ namespace System.Reactive.Disposables
         /// method to avoid allocation on disposed or empty composites.
         /// </summary>
         private static readonly CompositeEnumerator EmptyEnumerator =
-            new CompositeEnumerator(Array.Empty<IDisposable>());
+            new CompositeEnumerator(Array.Empty<IDisposable?>());
 
         /// <summary>
         /// An enumerator for an array of disposables.
         /// </summary>
         private sealed class CompositeEnumerator : IEnumerator<IDisposable>
         {
-            private readonly IDisposable[] _disposables;
+            private readonly IDisposable?[] _disposables;
             private int _index;
 
-            public CompositeEnumerator(IDisposable[] disposables)
+            public CompositeEnumerator(IDisposable?[] disposables)
             {
                 _disposables = disposables;
                 _index = -1;
             }
 
-            public IDisposable Current => _disposables[_index];
+            public IDisposable Current => _disposables[_index]!; // NB: _index is only advanced to non-null positions.
 
-            object IEnumerator.Current => _disposables[_index];
+            object IEnumerator.Current => _disposables[_index]!;
 
             public void Dispose()
             {
