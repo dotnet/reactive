@@ -1628,6 +1628,56 @@ namespace System.Reactive.Linq
     }
     public static class ObservableEx
     {
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond>> CombineLatest<TFirst, TSecond>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond, TThird>> CombineLatest<TFirst, TSecond, TThird>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth>> CombineLatest<TFirst, TSecond, TThird, TFourth>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                null})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth>>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth) { }
         [System.Reactive.Experimental]
         public static System.IObservable<System.Reactive.Unit> Create(System.Func<System.Collections.Generic.IEnumerable<System.IObservable<object>>> iteratorMethod) { }
         [System.Reactive.Experimental]
@@ -1650,6 +1700,64 @@ namespace System.Reactive.Linq
         public static System.IObservable<TResult> ManySelect<TSource, TResult>(this System.IObservable<TSource> source, System.Func<System.IObservable<TSource>, TResult> selector, System.Reactive.Concurrency.IScheduler scheduler) { }
         [System.Reactive.Experimental]
         public static System.Reactive.ListObservable<TSource> ToListObservable<TSource>(this System.IObservable<TSource> source) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond>> WithLatestFrom<TFirst, TSecond>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond>> Zip<TFirst, TSecond>(this System.IObservable<TFirst> first, System.Collections.Generic.IEnumerable<TSecond> second) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond>> Zip<TFirst, TSecond>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond, TThird>> Zip<TFirst, TSecond, TThird>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth>> Zip<TFirst, TSecond, TThird, TFourth>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>> Zip<TFirst, TSecond, TThird, TFourth, TFifth>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh"})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                null})]
+        public static System.IObservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth>>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth) { }
     }
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class Qbservable
@@ -2341,6 +2449,235 @@ namespace System.Reactive.Linq
     [System.Reactive.Linq.LocalQueryMethodImplementationType(typeof(System.Reactive.Linq.ObservableEx))]
     public static class QbservableEx
     {
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond>> CombineLatest<TFirst, TSecond>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird>> CombineLatest<TFirst, TSecond, TThird>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth>> CombineLatest<TFirst, TSecond, TThird, TFourth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth>>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth>>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth>>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth, System.IObservable<TTenth> tenth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                "Eleventh",
+                null,
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth, TEleventh>>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth, System.IObservable<TTenth> tenth, System.IObservable<TEleventh> eleventh) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                "Eleventh",
+                "Twelfth",
+                null,
+                null,
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth, TEleventh, TTwelfth>>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth, System.IObservable<TTenth> tenth, System.IObservable<TEleventh> eleventh, System.IObservable<TTwelfth> twelfth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                "Eleventh",
+                "Twelfth",
+                "Thirteenth",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth>>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth, System.IObservable<TTenth> tenth, System.IObservable<TEleventh> eleventh, System.IObservable<TTwelfth> twelfth, System.IObservable<TThirteenth> thirteenth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                "Eleventh",
+                "Twelfth",
+                "Thirteenth",
+                "Fourteenth",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth>>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth, System.IObservable<TTenth> tenth, System.IObservable<TEleventh> eleventh, System.IObservable<TTwelfth> twelfth, System.IObservable<TThirteenth> thirteenth, System.IObservable<TFourteenth> fourteenth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                "Eleventh",
+                "Twelfth",
+                "Thirteenth",
+                "Fourteenth",
+                "Fifteenth",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, System.ValueTuple<TFifteenth>>>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth, System.IObservable<TTenth> tenth, System.IObservable<TEleventh> eleventh, System.IObservable<TTwelfth> twelfth, System.IObservable<TThirteenth> thirteenth, System.IObservable<TFourteenth> fourteenth, System.IObservable<TFifteenth> fifteenth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                "Eleventh",
+                "Twelfth",
+                "Thirteenth",
+                "Fourteenth",
+                "Fifteenth",
+                "Sixteenth",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, System.ValueTuple<TFifteenth, TSixteenth>>>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth, TSixteenth>(
+                    this System.Reactive.Linq.IQbservable<TFirst> first,
+                    System.IObservable<TSecond> second,
+                    System.IObservable<TThird> third,
+                    System.IObservable<TFourth> fourth,
+                    System.IObservable<TFifth> fifth,
+                    System.IObservable<TSixth> sixth,
+                    System.IObservable<TSeventh> seventh,
+                    System.IObservable<TEighth> eighth,
+                    System.IObservable<TNinth> ninth,
+                    System.IObservable<TTenth> tenth,
+                    System.IObservable<TEleventh> eleventh,
+                    System.IObservable<TTwelfth> twelfth,
+                    System.IObservable<TThirteenth> thirteenth,
+                    System.IObservable<TFourteenth> fourteenth,
+                    System.IObservable<TFifteenth> fifteenth,
+                    System.IObservable<TSixteenth> sixteenth) { }
         [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> Create(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Collections.Generic.IEnumerable<System.IObservable<object>>>> iteratorMethod) { }
         [System.Reactive.Experimental]
@@ -2361,6 +2698,243 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TResult> ManySelect<TSource, TResult>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<System.IObservable<TSource>, TResult>> selector) { }
         [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<TResult> ManySelect<TSource, TResult>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<System.IObservable<TSource>, TResult>> selector, System.Reactive.Concurrency.IScheduler scheduler) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond>> WithLatestFrom<TFirst, TSecond>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond>> Zip<TFirst, TSecond>(this System.Reactive.Linq.IQbservable<TFirst> first, System.Collections.Generic.IEnumerable<TSecond> second) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond>> Zip<TFirst, TSecond>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird>> Zip<TFirst, TSecond, TThird>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth>> Zip<TFirst, TSecond, TThird, TFourth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>> Zip<TFirst, TSecond, TThird, TFourth, TFifth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh"})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth>>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth>>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth>>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth, System.IObservable<TTenth> tenth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                "Eleventh",
+                null,
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth, TEleventh>>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth, System.IObservable<TTenth> tenth, System.IObservable<TEleventh> eleventh) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                "Eleventh",
+                "Twelfth",
+                null,
+                null,
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth, TEleventh, TTwelfth>>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth, System.IObservable<TTenth> tenth, System.IObservable<TEleventh> eleventh, System.IObservable<TTwelfth> twelfth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                "Eleventh",
+                "Twelfth",
+                "Thirteenth",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth>>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth, System.IObservable<TTenth> tenth, System.IObservable<TEleventh> eleventh, System.IObservable<TTwelfth> twelfth, System.IObservable<TThirteenth> thirteenth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                "Eleventh",
+                "Twelfth",
+                "Thirteenth",
+                "Fourteenth",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth>>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth, System.IObservable<TTenth> tenth, System.IObservable<TEleventh> eleventh, System.IObservable<TTwelfth> twelfth, System.IObservable<TThirteenth> thirteenth, System.IObservable<TFourteenth> fourteenth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                "Eleventh",
+                "Twelfth",
+                "Thirteenth",
+                "Fourteenth",
+                "Fifteenth",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, System.ValueTuple<TFifteenth>>>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.IObservable<TThird> third, System.IObservable<TFourth> fourth, System.IObservable<TFifth> fifth, System.IObservable<TSixth> sixth, System.IObservable<TSeventh> seventh, System.IObservable<TEighth> eighth, System.IObservable<TNinth> ninth, System.IObservable<TTenth> tenth, System.IObservable<TEleventh> eleventh, System.IObservable<TTwelfth> twelfth, System.IObservable<TThirteenth> thirteenth, System.IObservable<TFourteenth> fourteenth, System.IObservable<TFifteenth> fifteenth) { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "First",
+                "Second",
+                "Third",
+                "Fourth",
+                "Fifth",
+                "Sixth",
+                "Seventh",
+                "Eighth",
+                "Ninth",
+                "Tenth",
+                "Eleventh",
+                "Twelfth",
+                "Thirteenth",
+                "Fourteenth",
+                "Fifteenth",
+                "Sixteenth",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null})]
+        public static System.Reactive.Linq.IQbservable<System.ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, System.ValueTuple<TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, System.ValueTuple<TFifteenth, TSixteenth>>>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth, TSixteenth>(
+                    this System.Reactive.Linq.IQbservable<TFirst> first,
+                    System.IObservable<TSecond> second,
+                    System.IObservable<TThird> third,
+                    System.IObservable<TFourth> fourth,
+                    System.IObservable<TFifth> fifth,
+                    System.IObservable<TSixth> sixth,
+                    System.IObservable<TSeventh> seventh,
+                    System.IObservable<TEighth> eighth,
+                    System.IObservable<TNinth> ninth,
+                    System.IObservable<TTenth> tenth,
+                    System.IObservable<TEleventh> eleventh,
+                    System.IObservable<TTwelfth> twelfth,
+                    System.IObservable<TThirteenth> thirteenth,
+                    System.IObservable<TFourteenth> fourteenth,
+                    System.IObservable<TFifteenth> fifteenth,
+                    System.IObservable<TSixteenth> sixteenth) { }
     }
     public class QueryDebugger
     {
