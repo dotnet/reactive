@@ -10,7 +10,9 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
-    internal class QueryLanguageEx : IQueryLanguageEx
+    using ObservableImpl;
+
+    internal partial class QueryLanguageEx : IQueryLanguageEx
     {
         #region Create
 
@@ -527,6 +529,24 @@ namespace System.Reactive.Linq
         public virtual ListObservable<TSource> ToListObservable<TSource>(IObservable<TSource> source)
         {
             return new ListObservable<TSource>(source);
+        }
+
+        #endregion
+
+        #region WithLatestFrom
+
+        public virtual IObservable<(TFirst First, TSecond Second)> WithLatestFrom<TFirst, TSecond>(IObservable<TFirst> first, IObservable<TSecond> second)
+        {
+            return new WithLatestFrom<TFirst, TSecond, (TFirst, TSecond)>(first, second, (t1, t2) => (t1, t2));
+        }
+
+        #endregion
+
+        #region Zip
+
+        public virtual IObservable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(IObservable<TFirst> first, IEnumerable<TSecond> second)
+        {
+            return new Zip<TFirst, TSecond, (TFirst, TSecond)>.Enumerable(first, second, (t1, t2) => (t1, t2));
         }
 
         #endregion

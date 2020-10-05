@@ -348,6 +348,66 @@ namespace System.Reactive.Linq
         }
 #endif
 
+        /// <summary>
+        /// Merges two observable sequences into one observable sequence by combining each element from the first source with the latest element from the second source, if any.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <returns>An observable sequence containing the result of combining each element of the first source with the latest element from the second source, if any, as a tuple value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second)> WithLatestFrom<TFirst, TSecond>(this IQbservable<TFirst> first, IObservable<TSecond> second)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second)>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => QbservableEx.WithLatestFrom<TFirst, TSecond>(default(IQbservable<TFirst>), default(IObservable<TSecond>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TFirst), typeof(TSecond)),
+#endif
+                    first.Expression,
+                    GetSourceExpression(second)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges an observable sequence and an enumerable sequence into one observable sequence of tuple values.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first observable source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second enumerable source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second enumerable source.</param>
+        /// <returns>An observable sequence containing the result of pairwise combining the elements of the first and second source as a tuple value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IQbservable<TFirst> first, IEnumerable<TSecond> second)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second)>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => QbservableEx.Zip<TFirst, TSecond>(default(IQbservable<TFirst>), default(IEnumerable<TSecond>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TFirst), typeof(TSecond)),
+#endif
+                    first.Expression,
+                    GetSourceExpression(second)
+                )
+            );
+        }
+
     }
 }
 
