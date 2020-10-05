@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
     [CLSCompliant(false)]
     public static class CoreDispatcherObservable
     {
-        #region ObserveOn[Dispatcher]
+        #region ObserveOn[CoreDispatcher]
 
         /// <summary>
         /// Wraps the source sequence in order to run its observer callbacks on the specified dispatcher.
@@ -150,9 +150,9 @@ namespace System.Reactive.Linq
             return Synchronization.ObserveOn(source, new CoreDispatcherScheduler(CoreDispatcherScheduler.Current.Dispatcher, priority));
         }
 
-#endregion
+        #endregion
 
-        #region SubscribeOn[Dispatcher]
+        #region SubscribeOn[CoreDispatcher]
 
         /// <summary>
         /// Wraps the source sequence in order to run its subscription and unsubscription logic on the specified dispatcher.

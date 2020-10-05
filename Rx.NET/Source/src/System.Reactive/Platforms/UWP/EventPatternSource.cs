@@ -18,7 +18,7 @@ namespace System.Reactive
         {
             add
             {
-                Add(value, (o, e) => value(o, e));
+                Add(value, (o, e) => value(o!, e));
             }
 
             remove

@@ -436,7 +436,7 @@ namespace System.Reactive
         /// _queue field is not re-read from memory unnecessarily
         /// due to the memory barriers inside TryDequeue mandating it
         /// despite the field is read-only.</param>
-        private void Clear(ConcurrentQueue<T> q)
+        private static void Clear(ConcurrentQueue<T> q)
         {
             while (q.TryDequeue(out var _))
             {

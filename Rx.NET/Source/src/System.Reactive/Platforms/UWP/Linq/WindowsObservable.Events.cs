@@ -111,7 +111,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return new EventPatternSource<TSender, TEventArgs>(source, static (h, evt) => h(evt.Sender, evt.EventArgs));
+            return new EventPatternSource<TSender, TEventArgs>(source, static (h, evt) => h(evt.Sender!, evt.EventArgs));
         }
     }
 }

@@ -142,7 +142,7 @@ namespace System.Reactive.Linq
             return Concat_(Select(sources, TaskObservableExtensions.ToObservable));
         }
 
-        private IObservable<TSource> Concat_<TSource>(IObservable<IObservable<TSource>> sources)
+        private static IObservable<TSource> Concat_<TSource>(IObservable<IObservable<TSource>> sources)
         {
             return new ConcatMany<TSource>(sources);
         }
@@ -263,7 +263,7 @@ namespace System.Reactive.Linq
             return Switch_(Select(sources, TaskObservableExtensions.ToObservable));
         }
 
-        private IObservable<TSource> Switch_<TSource>(IObservable<IObservable<TSource>> sources)
+        private static IObservable<TSource> Switch_<TSource>(IObservable<IObservable<TSource>> sources)
         {
             return new Switch<TSource>(sources);
         }
