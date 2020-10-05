@@ -300,7 +300,7 @@ namespace System.Reactive.Subjects
         private sealed class Subscription : IDisposable
         {
             private readonly BehaviorSubject<T> _subject;
-            private IObserver<T> _observer;
+            private IObserver<T>? _observer;
 
             public Subscription(BehaviorSubject<T> subject, IObserver<T> observer)
             {

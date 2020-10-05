@@ -16,7 +16,7 @@ namespace System.Reactive.Subjects
     {
         #region Fields
 
-        private volatile SubjectDisposable[] _observers;
+        private SubjectDisposable[] _observers;
         private Exception? _exception;
         private static readonly SubjectDisposable[] Terminated = new SubjectDisposable[0];
         private static readonly SubjectDisposable[] Disposed = new SubjectDisposable[0];
@@ -28,10 +28,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Creates a subject.
         /// </summary>
-        public Subject()
-        {
-            _observers = Array.Empty<SubjectDisposable>();
-        }
+        public Subject() => _observers = Array.Empty<SubjectDisposable>();
 
         #endregion
 
@@ -40,12 +37,12 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Indicates whether the subject has observers subscribed to it.
         /// </summary>
-        public override bool HasObservers => _observers.Length != 0;
+        public override bool HasObservers => Volatile.Read(ref _observers).Length != 0;
 
         /// <summary>
         /// Indicates whether the subject has been disposed.
         /// </summary>
-        public override bool IsDisposed => _observers == Disposed;
+        public override bool IsDisposed => Volatile.Read(ref _observers) == Disposed;
 
         #endregion
 
@@ -62,7 +59,7 @@ namespace System.Reactive.Subjects
         {
             for (; ; )
             {
-                var observers = _observers;
+                var observers = Volatile.Read(ref _observers);
 
                 if (observers == Disposed)
                 {
@@ -102,7 +99,7 @@ namespace System.Reactive.Subjects
 
             for (; ; )
             {
-                var observers = _observers;
+                var observers = Volatile.Read(ref _observers);
 
                 if (observers == Disposed)
                 {
@@ -136,7 +133,7 @@ namespace System.Reactive.Subjects
         /// <param name="value">The value to send to all currently subscribed observers.</param>
         public override void OnNext(T value)
         {
-            var observers = _observers;
+            var observers = Volatile.Read(ref _observers);
 
             if (observers == Disposed)
             {
@@ -171,7 +168,7 @@ namespace System.Reactive.Subjects
             var disposable = default(SubjectDisposable);
             for (; ; )
             {
-                var observers = _observers;
+                var observers = Volatile.Read(ref _observers);
 
                 if (observers == Disposed)
                 {
@@ -222,7 +219,7 @@ namespace System.Reactive.Subjects
         {
             for (; ; )
             {
-                var a = _observers;
+                var a = Volatile.Read(ref _observers);
                 var n = a.Length;
 
                 if (n == 0)

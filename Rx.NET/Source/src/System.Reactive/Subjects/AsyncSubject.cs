@@ -23,12 +23,12 @@ namespace System.Reactive.Subjects
         private Exception? _exception;
 
         /// <summary>
-        /// A pre-allocated empty array indicating the AsyncSubject has terminated
+        /// A pre-allocated empty array indicating the AsyncSubject has terminated.
         /// </summary>
         private static readonly AsyncSubjectDisposable[] Terminated = new AsyncSubjectDisposable[0];
 
         /// <summary>
-        /// A pre-allocated empty array indicating the AsyncSubject has terminated
+        /// A pre-allocated empty array indicating the AsyncSubject has been disposed.
         /// </summary>
         private static readonly AsyncSubjectDisposable[] Disposed = new AsyncSubjectDisposable[0];
 
@@ -39,10 +39,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Creates a subject that can only receive one value and that value is cached for all future observations.
         /// </summary>
-        public AsyncSubject()
-        {
-            _observers = Array.Empty<AsyncSubjectDisposable>();
-        }
+        public AsyncSubject() => _observers = Array.Empty<AsyncSubjectDisposable>();
 
         #endregion
 
@@ -51,7 +48,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Indicates whether the subject has observers subscribed to it.
         /// </summary>
-        public override bool HasObservers => _observers.Length != 0;
+        public override bool HasObservers => Volatile.Read(ref _observers).Length != 0;
 
         /// <summary>
         /// Indicates whether the subject has been disposed.
@@ -291,6 +288,7 @@ namespace System.Reactive.Subjects
                 }
 
                 AsyncSubjectDisposable[] b;
+
                 if (n == 1)
                 {
                     b = Array.Empty<AsyncSubjectDisposable>();
@@ -339,10 +337,7 @@ namespace System.Reactive.Subjects
 
         #region IDisposable implementation
 
-        private static void ThrowDisposed()
-        {
-            throw new ObjectDisposedException(string.Empty);
-        }
+        private static void ThrowDisposed() => throw new ObjectDisposedException(string.Empty);
 
         /// <summary>
         /// Unsubscribe all observers and release resources.
