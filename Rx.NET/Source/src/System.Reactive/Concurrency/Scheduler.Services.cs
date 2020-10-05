@@ -70,7 +70,7 @@ namespace System.Reactive.Concurrency
         {
             if (scheduler is IServiceProvider svc)
             {
-                return (T)svc.GetService(typeof(T));
+                return (T?)svc.GetService(typeof(T));
             }
 
             return null;

@@ -112,17 +112,17 @@ namespace System.Reactive.Concurrency
                     _context.Post(OnCompletedPosted, state: null);
                 }
 
-                private void OnNextPosted(object value)
+                private void OnNextPosted(object? value)
                 {
-                    ForwardOnNext((TSource)value);
+                    ForwardOnNext((TSource)value!);
                 }
 
-                private void OnErrorPosted(object error)
+                private void OnErrorPosted(object? error)
                 {
-                    ForwardOnError((Exception)error);
+                    ForwardOnError((Exception)error!);
                 }
 
-                private void OnCompletedPosted(object ignored)
+                private void OnCompletedPosted(object? ignored)
                 {
                     ForwardOnCompleted();
                 }

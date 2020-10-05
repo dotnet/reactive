@@ -56,7 +56,7 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => ToQbservable<TSource>(default)),
 #else
-                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
 #endif
                     source.Expression
                 )
@@ -90,7 +90,7 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => ToQbservable<TSource>(default)),
 #else
-                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
 #endif
                     source.Expression,
                     Expression.Constant(scheduler)

@@ -10,8 +10,8 @@ namespace System.Reactive.PlatformServices
 {
     internal class HostLifecycleNotifications : IHostLifecycleNotifications
     {
-        private EventHandler<SuspendingEventArgs> _suspending;
-        private EventHandler<object> _resuming;
+        private EventHandler<SuspendingEventArgs>? _suspending;
+        private EventHandler<object>? _resuming;
 
         public event EventHandler<HostSuspendingEventArgs> Suspending
         {

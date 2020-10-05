@@ -45,7 +45,7 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => And<TLeft, TRight>(default, default)),
 #else
-                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TLeft), typeof(TRight)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TLeft), typeof(TRight)),
 #endif
                     left.Expression,
                     GetSourceExpression(right)
@@ -80,7 +80,7 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Then<TSource, TResult>(default, default)),
 #else
-                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
 #endif
                     source.Expression,
                     selector
@@ -114,7 +114,7 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => When<TResult>(default, default)),
 #else
-                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.NewArrayInit(
@@ -151,7 +151,7 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => When(default, default(IEnumerable<QueryablePlan<TResult>>))),
 #else
-                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(plans, typeof(IEnumerable<QueryablePlan<TResult>>))

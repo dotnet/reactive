@@ -11,13 +11,14 @@ using Windows.UI.Core;
 #if HAS_OS_XAML
 using Windows.UI.Xaml;
 #endif
+
 namespace System.Reactive.Concurrency
 {
     /// <summary>
     /// Represents an object that schedules units of work on a <see cref="CoreDispatcher"/>.
     /// </summary>
     /// <remarks>
-    /// This scheduler type is typically used indirectly through the <see cref="Linq.DispatcherObservable.ObserveOnDispatcher{TSource}(IObservable{TSource})"/> and <see cref="Linq.DispatcherObservable.SubscribeOnDispatcher{TSource}(IObservable{TSource})"/> methods that use the current Dispatcher.
+    /// This scheduler type is typically used indirectly through the <see cref="Linq.CoreDispatcherObservable.ObserveOnCoreDispatcher{TSource}(IObservable{TSource})"/> and <see cref="Linq.CoreDispatcherObservable.SubscribeOnCoreDispatcher{TSource}(IObservable{TSource})"/> methods that use the current CoreDispatcher.
     /// </remarks>
     [CLSCompliant(false)]
     public sealed class CoreDispatcherScheduler : LocalScheduler, ISchedulerPeriodic

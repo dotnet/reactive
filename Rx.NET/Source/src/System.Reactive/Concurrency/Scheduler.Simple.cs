@@ -34,7 +34,7 @@ namespace System.Reactive.Concurrency
             // the anonymous lambda can be replaced by the method group again. Until then,
             // to avoid the repetition of code, the call to Invoke is left intact.
             // Watch https://github.com/dotnet/roslyn/issues/5835
-            return scheduler.Schedule(action, static (s, a) => Invoke(s, a));
+            return scheduler.Schedule(action, static (_, a) => Invoke(a));
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace System.Reactive.Concurrency
             }
 
             // See note above.
-            return scheduler.Schedule(action, dueTime, static (s, a) => Invoke(s, a));
+            return scheduler.Schedule(action, dueTime, static (_, a) => Invoke(a));
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace System.Reactive.Concurrency
             }
 
             // See note above.
-            return scheduler.Schedule((state, action), dueTime, static (s, tuple) => Invoke(s, tuple));
+            return scheduler.Schedule((state, action), dueTime, static (_, tuple) => Invoke(tuple));
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
 
             // See note above.
-            return scheduler.Schedule((state, action), dueTime, static (s, tuple) => Invoke(s, tuple));
+            return scheduler.Schedule((state, action), dueTime, static (_, tuple) => Invoke(tuple));
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace System.Reactive.Concurrency
             }
 
             // See note above.
-            return scheduler.Schedule(action, dueTime, static (s, a) => Invoke(s, a));
+            return scheduler.Schedule(action, dueTime, static (_, a) => Invoke(a));
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace System.Reactive.Concurrency
             }
 
             // See note above.
-            return scheduler.Schedule((state, action), dueTime, static (s, tuple) => Invoke(s, tuple));
+            return scheduler.Schedule((state, action), dueTime, static (_, tuple) => Invoke(tuple));
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
 
             // See note above.
-            return scheduler.Schedule((state, action), dueTime, static (s, tuple) => Invoke(s, tuple));
+            return scheduler.Schedule((state, action), dueTime, static (_, tuple) => Invoke(tuple));
         }
 
         /// <summary>
@@ -248,19 +248,19 @@ namespace System.Reactive.Concurrency
             return scheduler.ScheduleLongRunning(action, static (a, c) => a(c));
         }
 
-        private static IDisposable Invoke(IScheduler scheduler, Action action)
+        private static IDisposable Invoke(Action action)
         {
             action();
             return Disposable.Empty;
         }
 
-        private static IDisposable Invoke<TState>(IScheduler scheduler, (TState state, Action<TState> action) tuple)
+        private static IDisposable Invoke<TState>((TState state, Action<TState> action) tuple)
         {
             tuple.action(tuple.state);
             return Disposable.Empty;
         }
 
-        private static IDisposable Invoke<TState>(IScheduler scheduler, (TState state, Func<TState, IDisposable> action) tuple)
+        private static IDisposable Invoke<TState>((TState state, Func<TState, IDisposable> action) tuple)
         {
             return tuple.action(tuple.state);
         }

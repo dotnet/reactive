@@ -207,7 +207,7 @@ namespace System.Reactive
                         //
                         var pattern = Visit(node.Object);
                         var arguments = node.Arguments.Select(arg => Unquote(Visit(arg))).ToArray();
-                        var then = Expression.Call(pattern, "Then", method.GetGenericArguments(), arguments);
+                        var then = Expression.Call(pattern!, method.Name, method.GetGenericArguments(), arguments);
                         return then;
                     }
 
@@ -218,7 +218,7 @@ namespace System.Reactive
                         //
                         var lhs = Visit(node.Object);
                         var arguments = node.Arguments.Select(arg => Visit(arg)).ToArray();
-                        var and = Expression.Call(lhs, "And", method.GetGenericArguments(), arguments);
+                        var and = Expression.Call(lhs!, method.Name, method.GetGenericArguments(), arguments);
                         return and;
                     }
                 }

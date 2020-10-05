@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
@@ -629,7 +630,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             lock (_gate)
                             {
-                                ForwardOnError(task.Exception.InnerException);
+                                ForwardOnError(TaskHelpers.GetSingleException(task));
                             }
 
                             break;
@@ -786,7 +787,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             lock (_gate)
                             {
-                                ForwardOnError(task.Exception.InnerException);
+                                ForwardOnError(TaskHelpers.GetSingleException(task));
                             }
 
                             break;
@@ -1532,7 +1533,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        task.ContinueWith((closureTask, thisObject) => ((_)thisObject).OnCompletedTask(closureTask), this, _cts.Token);
+                        task.ContinueWith((closureTask, thisObject) => ((_)thisObject!).OnCompletedTask(closureTask), this, _cts.Token);
                     }
                 }
 
@@ -1555,7 +1556,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             lock (_gate)
                             {
-                                ForwardOnError(task.Exception.InnerException);
+                                ForwardOnError(TaskHelpers.GetSingleException(task));
                             }
 
                             break;
@@ -1667,7 +1668,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        task.ContinueWith((closureTask, thisObject) => ((_)thisObject).OnCompletedTask(closureTask), this, _cts.Token);
+                        task.ContinueWith((closureTask, thisObject) => ((_)thisObject!).OnCompletedTask(closureTask), this, _cts.Token);
                     }
                 }
 
@@ -1690,7 +1691,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             lock (_gate)
                             {
-                                ForwardOnError(task.Exception.InnerException);
+                                ForwardOnError(TaskHelpers.GetSingleException(task));
                             }
 
                             break;
