@@ -90,7 +90,7 @@ namespace System.Reactive
 
                         try
                         {
-                            next = Helpers.Unpack(currentObservable);
+                            next = Unpack(currentObservable);
                         }
                         catch (Exception ex)
                         {
@@ -165,6 +165,24 @@ namespace System.Reactive
                 {
                     break;
                 }
+            }
+
+            static IObservable<T>? Unpack<T>(IObservable<T>? source)
+            {
+                bool hasOpt;
+
+                do
+                {
+                    hasOpt = false;
+
+                    if (source is IEvaluatableObservable<T> eval)
+                    {
+                        source = eval.Eval();
+                        hasOpt = true;
+                    }
+                } while (hasOpt);
+
+                return source;
             }
         }
 
