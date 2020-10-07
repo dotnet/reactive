@@ -67,7 +67,7 @@ namespace System.Reactive
                 done = current.Kind != NotificationKind.OnNext;
             }
 
-            current.Exception.ThrowIfNotNull();
+            current.Exception?.Throw();
 
             return current.HasValue;
         }

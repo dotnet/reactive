@@ -84,10 +84,7 @@ namespace System.Reactive.Subjects
                 {
                     CheckDisposed();
 
-                    if (_exception != null)
-                    {
-                        throw _exception;
-                    }
+                    _exception?.Throw();
 
                     return _value;
                 }
@@ -121,10 +118,7 @@ namespace System.Reactive.Subjects
                     return false;
                 }
 
-                if (_exception != null)
-                {
-                    throw _exception;
-                }
+                _exception?.Throw();
 
                 value = _value;
                 return true;
