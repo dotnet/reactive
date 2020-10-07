@@ -427,7 +427,7 @@ namespace System.Reactive.Subjects
                 e.Wait();
             }
 
-            _exception.ThrowIfNotNull();
+            _exception?.Throw();
 
             if (!_hasValue)
             {

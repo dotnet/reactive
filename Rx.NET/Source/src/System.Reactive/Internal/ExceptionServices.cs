@@ -15,14 +15,6 @@ namespace System.Reactive
         [DoesNotReturn]
         public static void Throw(this Exception exception) => Services.Value.Rethrow(exception);
 
-        public static void ThrowIfNotNull(this Exception? exception)
-        {
-            if (exception != null)
-            {
-                Services.Value.Rethrow(exception);
-            }
-        }
-
         private static IExceptionServices Initialize()
         {
 #pragma warning disable CS0618 // Type or member is obsolete

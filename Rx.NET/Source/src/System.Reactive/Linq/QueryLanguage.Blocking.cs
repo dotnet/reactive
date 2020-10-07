@@ -78,7 +78,7 @@ namespace System.Reactive.Linq
                 consumer.Wait();
             }
 
-            consumer._error.ThrowIfNotNull();
+            consumer._error?.Throw();
 
             if (throwOnEmpty && !consumer._hasValue)
             {
@@ -101,7 +101,7 @@ namespace System.Reactive.Linq
                 sink.Wait();
             }
 
-            sink.Error.ThrowIfNotNull();
+            sink.Error?.Throw();
         }
 
         public virtual void ForEach<TSource>(IObservable<TSource> source, Action<TSource, int> onNext)
@@ -113,7 +113,7 @@ namespace System.Reactive.Linq
                 sink.Wait();
             }
 
-            sink.Error.ThrowIfNotNull();
+            sink.Error?.Throw();
         }
 
         #endregion
@@ -166,7 +166,7 @@ namespace System.Reactive.Linq
                 consumer.Wait();
             }
 
-            consumer._error.ThrowIfNotNull();
+            consumer._error?.Throw();
 
             if (throwOnEmpty && !consumer._hasValue)
             {
@@ -243,7 +243,7 @@ namespace System.Reactive.Linq
                 consumer.Wait();
             }
 
-            consumer._error.ThrowIfNotNull();
+            consumer._error?.Throw();
 
             if (consumer._hasMoreThanOneElement)
             {

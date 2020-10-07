@@ -70,7 +70,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return true;
             }
 
-            _error.ThrowIfNotNull();
+            _error?.Throw();
 
             Debug.Assert(_done);
 

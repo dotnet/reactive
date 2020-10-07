@@ -328,7 +328,7 @@ namespace System.Runtime.CompilerServices
                     return _subject.GetResult();
                 }
 
-                _exception.ThrowIfNotNull();
+                _exception?.Throw();
 
                 return _result!;
             }
