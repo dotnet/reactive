@@ -266,6 +266,8 @@ namespace System.Reactive.Subjects
                 _observer = observer;
             }
 
+            public IObserver<T>? Observer => _observer;
+
             public void Dispose()
             {
                 var observer = Interlocked.Exchange(ref _observer, null);
@@ -277,8 +279,6 @@ namespace System.Reactive.Subjects
                 _subject.Unsubscribe(this);
                 _subject = null!;
             }
-
-            public IObserver<T>? Observer => _observer;
         }
 
         #endregion
