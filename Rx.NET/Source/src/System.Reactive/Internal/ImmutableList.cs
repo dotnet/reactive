@@ -10,15 +10,9 @@ namespace System.Reactive
 
         private readonly T[] _data;
 
-        private ImmutableList()
-        {
-            _data = Array.Empty<T>();
-        }
+        private ImmutableList() => _data = Array.Empty<T>();
 
-        public ImmutableList(T[] data)
-        {
-            _data = data;
-        }
+        public ImmutableList(T[] data) => _data = data;
 
         public T[] Data => _data;
 
@@ -34,7 +28,7 @@ namespace System.Reactive
 
         public ImmutableList<T> Remove(T value)
         {
-            var i = IndexOf(value);
+            var i = Array.IndexOf(_data, value);
             if (i < 0)
             {
                 return this;
@@ -52,19 +46,6 @@ namespace System.Reactive
             Array.Copy(_data, i + 1, newData, i, length - i - 1);
 
             return new ImmutableList<T>(newData);
-        }
-
-        private int IndexOf(T value)
-        {
-            for (var i = 0; i < _data.Length; ++i)
-            {
-                if (Equals(_data[i], value))
-                {
-                    return i;
-                }
-            }
-
-            return -1;
         }
     }
 }
