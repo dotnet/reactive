@@ -310,7 +310,7 @@ namespace System.Reactive.Subjects
         private sealed class AsyncSubjectDisposable : IDisposable
         {
             private AsyncSubject<T> _subject;
-            private IObserver<T>? _observer;
+            private volatile IObserver<T>? _observer;
 
             public AsyncSubjectDisposable(AsyncSubject<T> subject, IObserver<T> observer)
             {
@@ -318,7 +318,7 @@ namespace System.Reactive.Subjects
                 _observer = observer;
             }
 
-            public IObserver<T>? Observer => Volatile.Read(ref _observer);
+            public IObserver<T>? Observer => _observer;
 
             public void Dispose()
             {
