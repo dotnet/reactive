@@ -36,7 +36,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1> : ActivePlan
+    internal sealed class ActivePlan<T1> : ActivePlan
     {
         private readonly Action<T1> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -67,7 +67,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2> : ActivePlan
+    internal sealed class ActivePlan<T1, T2> : ActivePlan
     {
         private readonly Action<T1, T2> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -106,7 +106,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3> : ActivePlan
     {
         private readonly Action<T1, T2, T3> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -152,7 +152,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -205,7 +205,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4, T5> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4, T5> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4, T5> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -266,7 +266,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4, T5, T6> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4, T5, T6> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4, T5, T6> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -335,7 +335,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4, T5, T6, T7> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4, T5, T6, T7> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -411,7 +411,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -496,7 +496,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -589,7 +589,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -689,7 +689,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -796,7 +796,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -911,7 +911,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -1033,7 +1033,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -1162,7 +1162,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> _onNext;
         private readonly JoinObserver<T1> _first;
@@ -1299,7 +1299,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> : ActivePlan
+    internal sealed class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> : ActivePlan
     {
         private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> _onNext;
         private readonly JoinObserver<T1> _first;

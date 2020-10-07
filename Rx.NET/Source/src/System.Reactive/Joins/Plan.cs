@@ -38,7 +38,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, TResult> : Plan<TResult>
     {
         internal Pattern<T1> Expression { get; }
 
@@ -83,7 +83,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, T2, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2> Expression { get; }
 
@@ -131,7 +131,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, T2, T3, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3> Expression { get; }
 
@@ -183,7 +183,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, T2, T3, T4, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4> Expression { get; }
 
@@ -238,7 +238,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, T2, T3, T4, T5, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, T5, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5> Expression { get; }
 
@@ -296,7 +296,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, T2, T3, T4, T5, T6, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, T5, T6, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5, T6> Expression { get; }
 
@@ -358,7 +358,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, T2, T3, T4, T5, T6, T7, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, T5, T6, T7, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5, T6, T7> Expression { get; }
 
@@ -423,7 +423,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, T5, T6, T7, T8, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8> Expression { get; }
 
@@ -491,7 +491,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9> Expression { get; }
 
@@ -562,7 +562,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Expression { get; }
 
@@ -636,7 +636,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Expression { get; }
 
@@ -714,7 +714,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Expression { get; }
 
@@ -797,7 +797,7 @@ namespace System.Reactive.Joins
     }
 
 
-    internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Expression { get; }
 
@@ -883,7 +883,7 @@ namespace System.Reactive.Joins
     }
 
 
-    internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Expression { get; }
 
@@ -975,7 +975,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Expression { get; }
 
@@ -1069,7 +1069,7 @@ namespace System.Reactive.Joins
             return activePlan;
         }
     }
-    internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> : Plan<TResult>
+    internal sealed class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> Expression { get; }
 
