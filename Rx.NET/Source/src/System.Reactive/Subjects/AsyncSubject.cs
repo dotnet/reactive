@@ -196,70 +196,64 @@ namespace System.Reactive.Subjects
                 throw new ArgumentNullException(nameof(observer));
             }
 
-            var parent = new AsyncSubjectDisposable(this, observer);
-
-            if (!Add(parent))
-            {
-                var ex = _exception;
-
-                if (ex != null)
-                {
-                    observer.OnError(ex);
-                }
-                else
-                {
-                    if (_hasValue)
-                    {
-                        observer.OnNext(_value!);
-                    }
-
-                    observer.OnCompleted();
-                }
-
-                return Disposable.Empty;
-            }
-
-            return parent;
-        }
-
-        private bool Add(AsyncSubjectDisposable inner)
-        {
+            var disposable = default(AsyncSubjectDisposable);
             for (; ; )
             {
-                var a = Volatile.Read(ref _observers);
+                var observers = Volatile.Read(ref _observers);
 
-                if (a == Disposed)
+                if (observers == Disposed)
                 {
                     _value = default;
                     _exception = null;
                     ThrowDisposed();
-                    return true;
+
+                    break;
                 }
 
-                if (a == Terminated)
+                if (observers == Terminated)
                 {
-                    return false;
+                    var ex = _exception;
+
+                    if (ex != null)
+                    {
+                        observer.OnError(ex);
+                    }
+                    else
+                    {
+                        if (_hasValue)
+                        {
+                            observer.OnNext(_value!);
+                        }
+
+                        observer.OnCompleted();
+                    }
+
+                    break;
                 }
 
-                var n = a.Length;
+                disposable ??= new AsyncSubjectDisposable(this, observer);
+
+                var n = observers.Length;
                 var b = new AsyncSubjectDisposable[n + 1];
 
-                Array.Copy(a, 0, b, 0, n);
-                b[n] = inner;
+                Array.Copy(observers, 0, b, 0, n);
 
-                if (Interlocked.CompareExchange(ref _observers, b, a) == a)
+                b[n] = disposable;
+
+                if (Interlocked.CompareExchange(ref _observers, b, observers) == observers)
                 {
-                    return true;
+                    return disposable;
                 }
             }
+
+            return Disposable.Empty;
         }
 
-        private void Remove(AsyncSubjectDisposable inner)
+        private void Unsubscribe(AsyncSubjectDisposable observer)
         {
             for (; ; )
             {
                 var a = Volatile.Read(ref _observers);
-
                 var n = a.Length;
 
                 if (n == 0)
@@ -267,16 +261,7 @@ namespace System.Reactive.Subjects
                     break;
                 }
 
-                var j = -1;
-
-                for (var i = 0; i < n; i++)
-                {
-                    if (a[i] == inner)
-                    {
-                        j = i;
-                        break;
-                    }
-                }
+                var j = Array.IndexOf(a, observer);
 
                 if (j < 0)
                 {
@@ -328,7 +313,7 @@ namespace System.Reactive.Subjects
                     return;
                 }
 
-                _subject.Remove(this);
+                _subject.Unsubscribe(this);
                 _subject = null!;
             }
         }

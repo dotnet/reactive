@@ -194,10 +194,7 @@ namespace System.Reactive.Subjects
                     break;
                 }
 
-                if (disposable == null)
-                {
-                    disposable = new SubjectDisposable(this, observer);
-                }
+                disposable ??= new SubjectDisposable(this, observer);
 
                 var n = observers.Length;
                 var b = new SubjectDisposable[n + 1];
