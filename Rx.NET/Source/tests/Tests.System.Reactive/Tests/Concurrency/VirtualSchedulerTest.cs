@@ -113,18 +113,15 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact(Skip = "Ignored")]
+        [Fact]
         public void Virtual_ScheduleActionDue()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var ran = false;
-            var sw = new Stopwatch();
-            sw.Start();
             var scheduler = new VirtualSchedulerTestScheduler();
-            scheduler.Schedule(TimeSpan.FromSeconds(0.2), () => { sw.Stop(); Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            scheduler.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
             scheduler.Start();
             Assert.True(ran, "ran");
-            Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
         }
 #endif
 

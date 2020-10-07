@@ -145,16 +145,13 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact(Skip = "Ignored")]
+        [Fact]
         public void Immediate_ScheduleActionDue()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var ran = false;
-            var sw = new Stopwatch();
-            sw.Start();
-            Scheduler.Immediate.Schedule(TimeSpan.FromSeconds(0.2), () => { sw.Stop(); Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            Scheduler.Immediate.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
             Assert.True(ran, "ran");
-            Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
         }
 #endif
     }
