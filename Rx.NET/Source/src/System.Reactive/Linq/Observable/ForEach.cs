@@ -8,29 +8,22 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class ForEach<TSource>
     {
-        public sealed class Observer : IObserver<TSource>
+        public abstract class ObserverBase : ManualResetEventSlim, IObserver<TSource>
         {
-            private readonly Action<TSource> _onNext;
-            private readonly Action _done;
-
             private Exception? _exception;
             private int _stopped;
 
-            public Observer(Action<TSource> onNext, Action done)
-            {
-                _onNext = onNext;
-                _done = done;
-            }
-
             public Exception? Error => _exception;
+
+            protected abstract void OnNextCore(TSource value);
 
             public void OnNext(TSource value)
             {
-                if (_stopped == 0)
+                if (Volatile.Read(ref _stopped) == 0)
                 {
                     try
                     {
-                        _onNext(value);
+                        OnNextCore(value);
                     }
                     catch (Exception ex)
                     {
@@ -44,7 +37,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 if (Interlocked.Exchange(ref _stopped, 1) == 0)
                 {
                     _exception = error;
-                    _done();
+                    Set();
                 }
             }
 
@@ -52,59 +45,29 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (Interlocked.Exchange(ref _stopped, 1) == 0)
                 {
-                    _done();
+                    Set();
                 }
             }
         }
 
-        public sealed class ObserverIndexed : IObserver<TSource>
+        public sealed class Observer : ObserverBase
+        {
+            private readonly Action<TSource> _onNext;
+
+            public Observer(Action<TSource> onNext) => _onNext = onNext;
+
+            protected override void OnNextCore(TSource value) => _onNext(value);
+        }
+
+        public sealed class ObserverIndexed : ObserverBase
         {
             private readonly Action<TSource, int> _onNext;
-            private readonly Action _done;
 
             private int _index;
-            private Exception? _exception;
-            private int _stopped;
 
-            public ObserverIndexed(Action<TSource, int> onNext, Action done)
-            {
-                _onNext = onNext;
-                _done = done;
-            }
+            public ObserverIndexed(Action<TSource, int> onNext) => _onNext = onNext;
 
-            public Exception? Error => _exception;
-
-            public void OnNext(TSource value)
-            {
-                if (_stopped == 0)
-                {
-                    try
-                    {
-                        _onNext(value, checked(_index++));
-                    }
-                    catch (Exception ex)
-                    {
-                        OnError(ex);
-                    }
-                }
-            }
-
-            public void OnError(Exception error)
-            {
-                if (Interlocked.Exchange(ref _stopped, 1) == 0)
-                {
-                    _exception = error;
-                    _done();
-                }
-            }
-
-            public void OnCompleted()
-            {
-                if (Interlocked.Exchange(ref _stopped, 1) == 0)
-                {
-                    _done();
-                }
-            }
+            protected override void OnNextCore(TSource value) => _onNext(value, checked(_index++));
         }
     }
 }

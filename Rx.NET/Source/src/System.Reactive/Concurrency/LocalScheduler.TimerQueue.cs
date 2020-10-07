@@ -459,7 +459,7 @@ namespace System.Reactive.Concurrency
 
             protected abstract IDisposable InvokeCore(IScheduler scheduler);
 
-            public int CompareTo(WorkItem? other) => Comparer<DateTimeOffset>.Default.Compare(DueTime, other!.DueTime);
+            public int CompareTo(WorkItem? other) => DueTime.CompareTo(other!.DueTime);
 
             public void Dispose() => Disposable.Dispose(ref _disposable);
         }

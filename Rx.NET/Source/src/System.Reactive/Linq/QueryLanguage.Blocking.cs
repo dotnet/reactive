@@ -3,11 +3,10 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Threading;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Reactive.Linq
 {
-    using System.Diagnostics.CodeAnalysis;
 
     using ObservableImpl;
 
@@ -45,7 +44,7 @@ namespace System.Reactive.Linq
 
         public virtual TSource First<TSource>(IObservable<TSource> source)
         {
-            return FirstOrDefaultInternal(source, true)!;
+            return FirstOrDefaultInternal(source, throwOnEmpty: true)!;
         }
 
         public virtual TSource First<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
@@ -60,7 +59,7 @@ namespace System.Reactive.Linq
         [return: MaybeNull]
         public virtual TSource FirstOrDefault<TSource>(IObservable<TSource> source)
         {
-            return FirstOrDefaultInternal(source, false);
+            return FirstOrDefaultInternal(source, throwOnEmpty: false);
         }
 
         [return: MaybeNull]
@@ -72,22 +71,21 @@ namespace System.Reactive.Linq
         [return: MaybeNull]
         private static TSource FirstOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
         {
-            using (var consumer = new FirstBlocking<TSource>())
+            using var consumer = new FirstBlocking<TSource>();
+
+            using (source.Subscribe(consumer))
             {
-                using (source.Subscribe(consumer))
-                {
-                    consumer.Wait();
-                }
-
-                consumer._error.ThrowIfNotNull();
-
-                if (throwOnEmpty && !consumer._hasValue)
-                {
-                    throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
-                }
-
-                return consumer._value;
+                consumer.Wait();
             }
+
+            consumer._error.ThrowIfNotNull();
+
+            if (throwOnEmpty && !consumer._hasValue)
+            {
+                throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+            }
+
+            return consumer._value;
         }
 
         #endregion
@@ -96,32 +94,26 @@ namespace System.Reactive.Linq
 
         public virtual void ForEach<TSource>(IObservable<TSource> source, Action<TSource> onNext)
         {
-            using (var evt = new WaitAndSetOnce())
+            using var sink = new ForEach<TSource>.Observer(onNext);
+
+            using (source.SubscribeSafe(sink))
             {
-                var sink = new ForEach<TSource>.Observer(onNext, () => evt.Set());
-
-                using (source.SubscribeSafe(sink))
-                {
-                    evt.WaitOne();
-                }
-
-                sink.Error.ThrowIfNotNull();
+                sink.Wait();
             }
+
+            sink.Error.ThrowIfNotNull();
         }
 
         public virtual void ForEach<TSource>(IObservable<TSource> source, Action<TSource, int> onNext)
         {
-            using (var evt = new WaitAndSetOnce())
+            using var sink = new ForEach<TSource>.ObserverIndexed(onNext);
+
+            using (source.SubscribeSafe(sink))
             {
-                var sink = new ForEach<TSource>.ObserverIndexed(onNext, () => evt.Set());
-
-                using (source.SubscribeSafe(sink))
-                {
-                    evt.WaitOne();
-                }
-
-                sink.Error.ThrowIfNotNull();
+                sink.Wait();
             }
+
+            sink.Error.ThrowIfNotNull();
         }
 
         #endregion
@@ -140,7 +132,7 @@ namespace System.Reactive.Linq
 
         public virtual TSource Last<TSource>(IObservable<TSource> source)
         {
-            return LastOrDefaultInternal(source, true)!;
+            return LastOrDefaultInternal(source, throwOnEmpty: true)!;
         }
 
         public virtual TSource Last<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
@@ -155,7 +147,7 @@ namespace System.Reactive.Linq
         [return: MaybeNull]
         public virtual TSource LastOrDefault<TSource>(IObservable<TSource> source)
         {
-            return LastOrDefaultInternal(source, false);
+            return LastOrDefaultInternal(source, throwOnEmpty: false);
         }
 
         [return: MaybeNull]
@@ -167,23 +159,21 @@ namespace System.Reactive.Linq
         [return: MaybeNull]
         private static TSource LastOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
         {
-            using (var consumer = new LastBlocking<TSource>())
+            using var consumer = new LastBlocking<TSource>();
+
+            using (source.Subscribe(consumer))
             {
-
-                using (source.Subscribe(consumer))
-                {
-                    consumer.Wait();
-                }
-
-                consumer._error.ThrowIfNotNull();
-
-                if (throwOnEmpty && !consumer._hasValue)
-                {
-                    throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
-                }
-
-                return consumer._value;
+                consumer.Wait();
             }
+
+            consumer._error.ThrowIfNotNull();
+
+            if (throwOnEmpty && !consumer._hasValue)
+            {
+                throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+            }
+
+            return consumer._value;
         }
 
         #endregion
@@ -219,7 +209,7 @@ namespace System.Reactive.Linq
 
         public virtual TSource Single<TSource>(IObservable<TSource> source)
         {
-            return SingleOrDefaultInternal(source, true)!;
+            return SingleOrDefaultInternal(source, throwOnEmpty: true)!;
         }
 
         public virtual TSource Single<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
@@ -234,7 +224,7 @@ namespace System.Reactive.Linq
         [return: MaybeNull]
         public virtual TSource SingleOrDefault<TSource>(IObservable<TSource> source)
         {
-            return SingleOrDefaultInternal(source, false);
+            return SingleOrDefaultInternal(source, throwOnEmpty: false);
         }
 
         [return: MaybeNull]
@@ -246,55 +236,26 @@ namespace System.Reactive.Linq
         [return: MaybeNull]
         private static TSource SingleOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
         {
-            var value = default(TSource);
-            var seenValue = false;
-            var moreThanOneElement = false;
-            var ex = default(Exception);
+            using var consumer = new SingleBlocking<TSource>();
 
-            using (var evt = new WaitAndSetOnce())
+            using (source.Subscribe(consumer))
             {
-                //
-                // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
-                //
-                using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
-                    v =>
-                    {
-                        if (seenValue)
-                        {
-                            moreThanOneElement = true;
-                            evt.Set();
-                        }
-
-                        value = v;
-                        seenValue = true;
-                    },
-                    e =>
-                    {
-                        ex = e;
-                        evt.Set();
-                    },
-                    () =>
-                    {
-                        evt.Set();
-                    })))
-                {
-                    evt.WaitOne();
-                }
+                consumer.Wait();
             }
 
-            ex.ThrowIfNotNull();
+            consumer._error.ThrowIfNotNull();
 
-            if (moreThanOneElement)
+            if (consumer._hasMoreThanOneElement)
             {
                 throw new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_ELEMENT);
             }
 
-            if (throwOnEmpty && !seenValue)
+            if (throwOnEmpty && !consumer._hasValue)
             {
                 throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
             }
 
-            return value;
+            return consumer._value;
         }
 
         #endregion
@@ -304,39 +265,6 @@ namespace System.Reactive.Linq
         public virtual TSource Wait<TSource>(IObservable<TSource> source)
         {
             return LastOrDefaultInternal(source, true)!;
-        }
-
-        #endregion
-
-        #region |> Helpers <|
-
-        private class WaitAndSetOnce : IDisposable
-        {
-            private readonly ManualResetEvent _evt;
-            private int _hasSet;
-
-            public WaitAndSetOnce()
-            {
-                _evt = new ManualResetEvent(false);
-            }
-
-            public void Set()
-            {
-                if (Interlocked.Exchange(ref _hasSet, 1) == 0)
-                {
-                    _evt.Set();
-                }
-            }
-
-            public void WaitOne()
-            {
-                _evt.WaitOne();
-            }
-
-            public void Dispose()
-            {
-                _evt.Dispose();
-            }
         }
 
         #endregion
