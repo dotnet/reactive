@@ -57,87 +57,70 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SubscribeOn_Control()
         {
-            var lbl = CreateLabel();
-
-            var evt2 = new ManualResetEvent(false);
-            var evt = new ManualResetEvent(false);
             bool okay = true;
-            var d = Observable.Create<int>(obs =>
+
+            using (WinFormsTestUtils.RunTest(out var lbl))
             {
-                lbl.Text = "Subscribe";
-                okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
-                evt2.Set();
-
-                return () =>
+                var evt2 = new ManualResetEvent(false);
+                var evt = new ManualResetEvent(false);
+                var d = Observable.Create<int>(obs =>
                 {
-                    lbl.Text = "Unsubscribe";
+                    lbl.Text = "Subscribe";
                     okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
-                    evt.Set();
-                };
-            })
-            .SubscribeOn(lbl)
-            .Subscribe(_ => {});
+                    evt2.Set();
 
-            evt2.WaitOne();
-            d.Dispose();
+                    return () =>
+                    {
+                        lbl.Text = "Unsubscribe";
+                        okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
+                        evt.Set();
+                    };
+                })
+                .SubscribeOn(lbl)
+                .Subscribe(_ => {});
 
-            evt.WaitOne();
-            Application.Exit();
+                evt2.WaitOne();
+                d.Dispose();
+
+                evt.WaitOne();
+            }
+
             Assert.True(okay);
         }
 
         [Fact]
         public void SubscribeOn_ControlScheduler()
         {
-            var lbl = CreateLabel();
-
-            var evt2 = new ManualResetEvent(false);
-            var evt = new ManualResetEvent(false);
             bool okay = true;
-            var d = Observable.Create<int>(obs =>
-            {
-                lbl.Text = "Subscribe";
-                okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
-                evt2.Set();
 
-                return () =>
+            using (WinFormsTestUtils.RunTest(out var lbl))
+            {
+                var evt2 = new ManualResetEvent(false);
+                var evt = new ManualResetEvent(false);
+                
+                var d = Observable.Create<int>(obs =>
                 {
-                    lbl.Text = "Unsubscribe";
+                    lbl.Text = "Subscribe";
                     okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
-                    evt.Set();
-                };
-            })
-            .SubscribeOn(new ControlScheduler(lbl))
-            .Subscribe(_ => { });
+                    evt2.Set();
 
-            evt2.WaitOne();
-            d.Dispose();
+                    return () =>
+                    {
+                        lbl.Text = "Unsubscribe";
+                        okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
+                        evt.Set();
+                    };
+                })
+                .SubscribeOn(new ControlScheduler(lbl))
+                .Subscribe(_ => { });
 
-            evt.WaitOne();
-            Application.Exit();
+                evt2.WaitOne();
+                d.Dispose();
+
+                evt.WaitOne();
+            }
+
             Assert.True(okay);
-        }
-
-        private Label CreateLabel()
-        {
-            var loaded = new ManualResetEvent(false);
-            var lbl = default(Label);
-
-            var t = new Thread(() =>
-            {
-                lbl = new Label();
-                var frm = new Form { Controls = { lbl }, Width = 0, Height = 0, FormBorderStyle = FormBorderStyle.None, ShowInTaskbar = false };
-                frm.Load += (_, __) =>
-                {
-                    loaded.Set();
-                };
-                Application.Run(frm);
-            });
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
-
-            loaded.WaitOne();
-            return lbl;
         }
 #endif
 
@@ -146,77 +129,12 @@ namespace ReactiveTests.Tests
         [Asynchronous]
         public void SubscribeOn_Dispatcher()
         {
-            var dispatcher = DispatcherHelpers.EnsureDispatcher();
-
-            RunAsync(evt =>
+            using (DispatcherHelpers.RunTest(out var dispatcher))
             {
-                var s = new AsyncSubject<Unit>();
-                bool okay = true;
-                var d = Observable.Create<int>(obs =>
+                RunAsync(evt =>
                 {
-                    okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
-                    s.OnNext(Unit.Default);
-                    s.OnCompleted();
-
-                    return () =>
-                    {
-                        okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
-                        Assert.True(okay);
-                        dispatcher.InvokeShutdown();
-                        evt.Set();
-                    };
-                })
-                .SubscribeOn(dispatcher)
-                .Subscribe(_ => { });
-
-                s.Subscribe(_ => d.Dispose());
-            });
-        }
-
-        [Fact]
-        [Asynchronous]
-        public void SubscribeOn_DispatcherScheduler()
-        {
-            var dispatcher = DispatcherHelpers.EnsureDispatcher();
-
-            RunAsync(evt =>
-            {
-                var s = new AsyncSubject<Unit>();
-                bool okay = true;
-                var d = Observable.Create<int>(obs =>
-                {
-                    okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
-                    s.OnNext(Unit.Default);
-                    s.OnCompleted();
-
-                    return () =>
-                    {
-                        okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
-                        Assert.True(okay);
-                        dispatcher.InvokeShutdown();
-                        evt.Set();
-                    };
-                })
-                .SubscribeOn(new DispatcherScheduler(dispatcher))
-                .Subscribe(_ => { });
-
-                s.Subscribe(_ => d.Dispose());
-            });
-        }
-
-        [Fact]
-        [Asynchronous]
-        public void SubscribeOn_CurrentDispatcher()
-        {
-            var dispatcher = DispatcherHelpers.EnsureDispatcher();
-
-            RunAsync(evt =>
-            {
-                var s = new AsyncSubject<Unit>();
-                bool okay = true;
-
-                dispatcher.BeginInvoke(new Action(() =>
-                {
+                    var s = new AsyncSubject<Unit>();
+                    bool okay = true;
                     var d = Observable.Create<int>(obs =>
                     {
                         okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
@@ -227,16 +145,81 @@ namespace ReactiveTests.Tests
                         {
                             okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
                             Assert.True(okay);
-                            dispatcher.InvokeShutdown();
                             evt.Set();
                         };
                     })
-                    .SubscribeOnDispatcher()
+                    .SubscribeOn(dispatcher)
                     .Subscribe(_ => { });
 
                     s.Subscribe(_ => d.Dispose());
-                }));
-            });
+                });
+            }
+        }
+
+        [Fact]
+        [Asynchronous]
+        public void SubscribeOn_DispatcherScheduler()
+        {
+            using (DispatcherHelpers.RunTest(out var dispatcher))
+            {
+                RunAsync(evt =>
+                {
+                    var s = new AsyncSubject<Unit>();
+                    bool okay = true;
+                    var d = Observable.Create<int>(obs =>
+                    {
+                        okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
+                        s.OnNext(Unit.Default);
+                        s.OnCompleted();
+
+                        return () =>
+                        {
+                            okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
+                            Assert.True(okay);
+                            evt.Set();
+                        };
+                    })
+                    .SubscribeOn(new DispatcherScheduler(dispatcher))
+                    .Subscribe(_ => { });
+
+                    s.Subscribe(_ => d.Dispose());
+                });
+            }
+        }
+
+        [Fact]
+        [Asynchronous]
+        public void SubscribeOn_CurrentDispatcher()
+        {
+            using (DispatcherHelpers.RunTest(out var dispatcher))
+            {
+                RunAsync(evt =>
+                {
+                    var s = new AsyncSubject<Unit>();
+                    bool okay = true;
+
+                    dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        var d = Observable.Create<int>(obs =>
+                        {
+                            okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
+                            s.OnNext(Unit.Default);
+                            s.OnCompleted();
+
+                            return () =>
+                            {
+                                okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
+                                Assert.True(okay);
+                                evt.Set();
+                            };
+                        })
+                        .SubscribeOnDispatcher()
+                        .Subscribe(_ => { });
+
+                        s.Subscribe(_ => d.Dispose());
+                    }));
+                });
+            }
         }
 #endif
 
