@@ -47,10 +47,7 @@ namespace System.Reactive.Concurrency
         /// Enqueues the specified work item to be scheduled.
         /// </summary>
         /// <param name="scheduledItem">Work item to be scheduled.</param>
-        public void Enqueue(ScheduledItem<TAbsolute> scheduledItem)
-        {
-            _queue.Enqueue(scheduledItem);
-        }
+        public void Enqueue(ScheduledItem<TAbsolute> scheduledItem) => _queue.Enqueue(scheduledItem);
 
         /// <summary>
         /// Removes the specified work item from the scheduler queue.

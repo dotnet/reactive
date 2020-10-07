@@ -359,15 +359,10 @@ namespace System.Reactive.Subjects
                 throw new ArgumentNullException(nameof(continuation));
             }
 
-            OnCompleted(continuation, originalContext: true);
-        }
-
-        private void OnCompleted(Action continuation, bool originalContext)
-        {
             //
             // [OK] Use of unsafe Subscribe: this type's Subscribe implementation is safe.
             //
-            Subscribe/*Unsafe*/(new AwaitObserver(continuation, originalContext));
+            Subscribe/*Unsafe*/(new AwaitObserver(continuation));
         }
 
         private sealed class AwaitObserver : IObserver<T>
@@ -375,13 +370,9 @@ namespace System.Reactive.Subjects
             private readonly SynchronizationContext? _context;
             private readonly Action _callback;
 
-            public AwaitObserver(Action callback, bool originalContext)
+            public AwaitObserver(Action callback)
             {
-                if (originalContext)
-                {
-                    _context = SynchronizationContext.Current;
-                }
-
+                _context = SynchronizationContext.Current;
                 _callback = callback;
             }
 
@@ -426,9 +417,14 @@ namespace System.Reactive.Subjects
         {
             if (Volatile.Read(ref _observers) != Terminated)
             {
-                var e = new ManualResetEvent(initialState: false);
-                OnCompleted(() => e.Set(), originalContext: false);
-                e.WaitOne();
+                using var e = new ManualResetEventSlim(initialState: false);
+
+                //
+                // [OK] Use of unsafe Subscribe: this type's Subscribe implementation is safe.
+                //
+                Subscribe/*Unsafe*/(new BlockingObserver(e));
+
+                e.Wait();
             }
 
             _exception.ThrowIfNotNull();
@@ -439,6 +435,21 @@ namespace System.Reactive.Subjects
             }
 
             return _value!;
+        }
+
+        private sealed class BlockingObserver : IObserver<T>
+        {
+            private readonly ManualResetEventSlim _e;
+
+            public BlockingObserver(ManualResetEventSlim e) => _e = e;
+
+            public void OnCompleted() => Done();
+
+            public void OnError(Exception error) => Done();
+
+            public void OnNext(T value) { }
+
+            private void Done() => _e.Set();
         }
 
         #endregion
