@@ -316,7 +316,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void AppendPrepend_SchedulerRecursive()
         {
-            var scheduler = new EventLoopScheduler();
+            using var scheduler = new EventLoopScheduler();
 
             var source = Observable.Range(1, 1000).DelaySubscription(TimeSpan.FromMilliseconds(100), ThreadPoolScheduler.Instance);
 

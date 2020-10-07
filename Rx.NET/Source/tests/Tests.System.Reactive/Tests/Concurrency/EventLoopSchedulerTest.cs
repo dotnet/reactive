@@ -25,7 +25,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void EventLoop_ArgumentChecking()
         {
-            var el = new EventLoopScheduler();
+            using var el = new EventLoopScheduler();
 
 #if !NO_THREAD
             ReactiveAssert.Throws<ArgumentNullException>(() => new EventLoopScheduler(null));
@@ -40,7 +40,9 @@ namespace ReactiveTests.Tests
         [Fact]
         public void EventLoop_Now()
         {
-            var res = new EventLoopScheduler().Now - DateTime.Now;
+            using var el = new EventLoopScheduler();
+
+            var res = el.Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
 
@@ -62,7 +64,7 @@ namespace ReactiveTests.Tests
         {
             var ran = false;
             var gate = new Semaphore(0, 1);
-            var el = new EventLoopScheduler();
+            using var el = new EventLoopScheduler();
             el.Schedule(() =>
             {
                 ran = true;
@@ -78,7 +80,7 @@ namespace ReactiveTests.Tests
         {
             var id = default(int);
             var gate = new Semaphore(0, 1);
-            var el = new EventLoopScheduler();
+            using var el = new EventLoopScheduler();
             el.Schedule(() =>
             {
                 id = Thread.CurrentThread.ManagedThreadId;
@@ -94,7 +96,7 @@ namespace ReactiveTests.Tests
         {
             var results = new List<int>();
             var gate = new Semaphore(0, 1);
-            var el = new EventLoopScheduler();
+            using var el = new EventLoopScheduler();
             el.Schedule(() => results.Add(0));
             el.Schedule(() =>
             {
@@ -113,7 +115,7 @@ namespace ReactiveTests.Tests
             var f = new ManualResetEvent(false);
 
             var results = new List<int>();
-            var el = new EventLoopScheduler();
+            using var el = new EventLoopScheduler();
             el.Schedule(() => results.Add(0));
             el.Schedule(() =>
             {
@@ -159,7 +161,7 @@ namespace ReactiveTests.Tests
         {
             var results = new List<int>();
             var gate = new Semaphore(0, 1);
-            var el = new EventLoopScheduler();
+            using var el = new EventLoopScheduler();
             el.Schedule(TimeSpan.FromMilliseconds(50), () => results.Add(1));
             el.Schedule(TimeSpan.FromMilliseconds(100), () =>
                         {
@@ -176,7 +178,7 @@ namespace ReactiveTests.Tests
         {
             var results = new List<int>();
             var gate = new Semaphore(0, 1);
-            var el = new EventLoopScheduler();
+            using var el = new EventLoopScheduler();
             el.Schedule(() => results.Add(1));
             el.Schedule(TimeSpan.FromMilliseconds(100), () =>
             {
@@ -193,7 +195,7 @@ namespace ReactiveTests.Tests
         {
             var results = new List<int>();
             var gate = new Semaphore(0, 1);
-            var el = new EventLoopScheduler();
+            using var el = new EventLoopScheduler();
 
             el.Schedule(TimeSpan.FromMilliseconds(100), () =>
                         {
@@ -215,7 +217,7 @@ namespace ReactiveTests.Tests
         {
             var results = new List<int>();
             var gate = new Semaphore(0, 1);
-            var el = new EventLoopScheduler();
+            using var el = new EventLoopScheduler();
 
             el.Schedule(TimeSpan.FromMilliseconds(100), () =>
             {
@@ -237,7 +239,7 @@ namespace ReactiveTests.Tests
         public void EventLoop_ScheduleActionNested()
         {
             var ran = false;
-            var el = new EventLoopScheduler();
+            using var el = new EventLoopScheduler();
             var gate = new Semaphore(0, 1);
             el.Schedule(() => el.Schedule(() =>
             {
@@ -252,7 +254,7 @@ namespace ReactiveTests.Tests
         public void EventLoop_ScheduleActionDue()
         {
             var ran = false;
-            var el = new EventLoopScheduler();
+            using var el = new EventLoopScheduler();
             var sw = new Stopwatch();
             var gate = new Semaphore(0, 1);
             sw.Start();
@@ -271,7 +273,7 @@ namespace ReactiveTests.Tests
         public void EventLoop_ScheduleActionDueNested()
         {
             var ran = false;
-            var el = new EventLoopScheduler();
+            using var el = new EventLoopScheduler();
             var gate = new Semaphore(0, 1);
 
             var sw = new Stopwatch();
@@ -297,7 +299,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Stopwatch()
         {
-            StopwatchTest.Run(new EventLoopScheduler());
+            using var el = new EventLoopScheduler();
+            StopwatchTest.Run(el);
         }
 #endif
 
