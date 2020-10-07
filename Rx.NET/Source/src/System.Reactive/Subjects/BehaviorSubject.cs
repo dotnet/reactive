@@ -4,6 +4,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Subjects
 {
@@ -269,6 +270,17 @@ namespace System.Reactive.Subjects
             return Disposable.Empty;
         }
 
+        private void Unsubscribe(IObserver<T> observer)
+        {
+            lock (_gate)
+            {
+                if (!_isDisposed)
+                {
+                    _observers = _observers.Remove(observer);
+                }
+            }
+        }
+
         #endregion
 
         #region IDisposable implementation
@@ -299,7 +311,7 @@ namespace System.Reactive.Subjects
 
         private sealed class Subscription : IDisposable
         {
-            private readonly BehaviorSubject<T> _subject;
+            private BehaviorSubject<T> _subject;
             private IObserver<T>? _observer;
 
             public Subscription(BehaviorSubject<T> subject, IObserver<T> observer)
@@ -310,17 +322,14 @@ namespace System.Reactive.Subjects
 
             public void Dispose()
             {
-                if (_observer != null)
+                var observer = Interlocked.Exchange(ref _observer, null);
+                if (observer == null)
                 {
-                    lock (_subject._gate)
-                    {
-                        if (!_subject._isDisposed && _observer != null)
-                        {
-                            _subject._observers = _subject._observers.Remove(_observer);
-                            _observer = null;
-                        }
-                    }
+                    return;
                 }
+
+                _subject.Unsubscribe(observer);
+                _subject = null!;
             }
         }
 

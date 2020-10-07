@@ -58,18 +58,12 @@ namespace System.Reactive.Subjects
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
         public ReplaySubject(int bufferSize)
         {
-            switch (bufferSize)
+            _implementation = bufferSize switch
             {
-                case 1:
-                    _implementation = new ReplayOne();
-                    break;
-                case int.MaxValue:
-                    _implementation = new ReplayAll();
-                    break;
-                default:
-                    _implementation = new ReplayMany(bufferSize);
-                    break;
-            }
+                1 => new ReplayOne(),
+                int.MaxValue => new ReplayAll(),
+                _ => new ReplayMany(bufferSize),
+            };
         }
 
         /// <summary>
@@ -444,8 +438,8 @@ namespace System.Reactive.Subjects
 
             private sealed class Subscription : IDisposable
             {
-                private readonly ReplayBase _subject;
-                private readonly IScheduledObserver<T> _observer;
+                private ReplayBase _subject;
+                private IScheduledObserver<T>? _observer;
 
                 public Subscription(ReplayBase subject, IScheduledObserver<T> observer)
                 {
@@ -455,8 +449,16 @@ namespace System.Reactive.Subjects
 
                 public void Dispose()
                 {
-                    _observer.Dispose();
-                    _subject.Unsubscribe(_observer);
+                    var observer = Interlocked.Exchange(ref _observer, null);
+                    if (observer == null)
+                    {
+                        return;
+                    }
+
+                    observer.Dispose();
+
+                    _subject.Unsubscribe(observer);
+                    _subject = null!;
                 }
             }
         }

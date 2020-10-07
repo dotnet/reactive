@@ -90,23 +90,22 @@ namespace System.Reactive.Subjects
                     {
                         var value = _value;
 
-                        foreach (var o in observers)
+                        foreach (var observer in observers)
                         {
-                            if (!o.IsDisposed())
+                            var o = observer.Observer;
+
+                            if (o != null)
                             {
-                                o.Downstream.OnNext(value!);
-                                o.Downstream.OnCompleted();
+                                o.OnNext(value!);
+                                o.OnCompleted();
                             }
                         }
                     }
                     else
                     {
-                        foreach (var o in observers)
+                        foreach (var observer in observers)
                         {
-                            if (!o.IsDisposed())
-                            {
-                                o.Downstream.OnCompleted();
-                            }
+                            observer.Observer?.OnCompleted();
                         }
                     }
                 }
@@ -146,12 +145,9 @@ namespace System.Reactive.Subjects
 
                 if (Interlocked.CompareExchange(ref _observers, Terminated, observers) == observers)
                 {
-                    foreach (var o in observers)
+                    foreach (var observer in observers)
                     {
-                        if (!o.IsDisposed())
-                        {
-                            o.Downstream.OnError(error);
-                        }
+                        observer.Observer?.OnError(error);
                     }
                 }
             }
@@ -313,23 +309,27 @@ namespace System.Reactive.Subjects
         /// </summary>
         private sealed class AsyncSubjectDisposable : IDisposable
         {
-            internal readonly IObserver<T> Downstream;
-            private AsyncSubject<T>? _parent;
+            private AsyncSubject<T> _subject;
+            private IObserver<T>? _observer;
 
-            public AsyncSubjectDisposable(AsyncSubject<T> parent, IObserver<T> downstream)
+            public AsyncSubjectDisposable(AsyncSubject<T> subject, IObserver<T> observer)
             {
-                _parent = parent;
-                Downstream = downstream;
+                _subject = subject;
+                _observer = observer;
             }
+
+            public IObserver<T>? Observer => Volatile.Read(ref _observer);
 
             public void Dispose()
             {
-                Interlocked.Exchange(ref _parent, null)?.Remove(this);
-            }
+                var observer = Interlocked.Exchange(ref _observer, null);
+                if (observer == null)
+                {
+                    return;
+                }
 
-            internal bool IsDisposed()
-            {
-                return Volatile.Read(ref _parent) == null;
+                _subject.Remove(this);
+                _subject = null!;
             }
         }
 
