@@ -12,7 +12,7 @@ namespace System.Reactive.PlatformServices
     //          Another copy is kept in System.Reactive.PlatformServices to enlighten the default lowest common denominator
     //          behavior of Rx for PLIB when used on a more capable platform.
     //
-    internal class DefaultExceptionServices/*Impl*/ : IExceptionServices
+    internal sealed class DefaultExceptionServices/*Impl*/ : IExceptionServices
     {
 #pragma warning disable CS8763 // NB: On down-level platforms, Throw is not marked as DoesNotReturn.
         [DoesNotReturn]

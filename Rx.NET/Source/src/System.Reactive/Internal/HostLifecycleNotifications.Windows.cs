@@ -8,7 +8,7 @@ using Windows.ApplicationModel.Core;
 
 namespace System.Reactive.PlatformServices
 {
-    internal class HostLifecycleNotifications : IHostLifecycleNotifications
+    internal sealed class HostLifecycleNotifications : IHostLifecycleNotifications
     {
         private EventHandler<SuspendingEventArgs>? _suspending;
         private EventHandler<object>? _resuming;

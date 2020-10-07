@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace System.Reactive.Concurrency
 {
-    internal class /*Default*/ConcurrencyAbstractionLayerImpl : IConcurrencyAbstractionLayer
+    internal sealed class /*Default*/ConcurrencyAbstractionLayerImpl : IConcurrencyAbstractionLayer
     {
         public IDisposable StartTimer(Action<object?> action, object? state, TimeSpan dueTime)
         {

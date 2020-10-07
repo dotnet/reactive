@@ -73,18 +73,7 @@ namespace System.Reactive
 
         private static MethodInfo? _staticAsQueryable;
 
-        private static MethodInfo AsQueryable
-        {
-            get
-            {
-                if (_staticAsQueryable == null)
-                {
-                    _staticAsQueryable = Qbservable.InfoOf<object>(() => Queryable.AsQueryable<object>(null)).GetGenericMethodDefinition();
-                }
-
-                return _staticAsQueryable;
-            }
-        }
+        private static MethodInfo AsQueryable => _staticAsQueryable ??=  Qbservable.InfoOf<object>(() => Queryable.AsQueryable<object>(null!)).GetGenericMethodDefinition();
 
         IQueryable IQueryProvider.CreateQuery(Expression expression)
         {
