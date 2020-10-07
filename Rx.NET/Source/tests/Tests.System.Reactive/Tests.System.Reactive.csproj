@@ -9,7 +9,6 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
-
   <ItemGroup>
     <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
