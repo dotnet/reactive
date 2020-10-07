@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Disposables;
+
 #if NETCOREAPP2_1 || NET472 || NETCOREAPP3_1 || CSWINRT
 using System.Threading;
 #endif
@@ -15,8 +17,12 @@ namespace ReactiveTests
 #if HAS_DISPATCHER
     static class DispatcherHelpers
     {
-        public static DispatcherWrapper EnsureDispatcher()
+        private static readonly Semaphore s_oneDispatcher = new Semaphore(1, 1);
+
+        public static IDisposable RunTest(out DispatcherWrapper wrapper)
         {
+            s_oneDispatcher.WaitOne();
+
 #if DESKTOPCLR
             var dispatcher = new Thread(Dispatcher.Run);
             dispatcher.IsBackground = true;
@@ -29,11 +35,38 @@ namespace ReactiveTests
 
             while (d.BeginInvoke(new Action(() => { })).Status == DispatcherOperationStatus.Aborted) ;
 
-            return new DispatcherWrapper(d);
+            wrapper = new DispatcherWrapper(d);
+
+            return new DispatcherTest(dispatcher);
 #else
-            return new DispatcherWrapper(Dispatcher.CurrentDispatcher);
+            wrapper = new DispatcherWrapper(Dispatcher.CurrentDispatcher);
+
+            return Disposable.Empty; // REVIEW: Anything to shut down?
 #endif
         }
+
+#if DESKTOPCLR
+        private sealed class DispatcherTest : IDisposable
+        {
+            private readonly Thread _t;
+
+            public DispatcherTest(Thread t)
+            {
+                _t = t;
+            }
+
+            public void Dispose()
+            {
+                var d = Dispatcher.FromThread(_t);
+
+                d.BeginInvoke(new Action(() => d.InvokeShutdown()));
+
+                _t.Join();
+
+                s_oneDispatcher.Release();
+            }
+        }
+#endif
     }
 
     class DispatcherWrapper
@@ -46,11 +79,6 @@ namespace ReactiveTests
         }
 
         public Dispatcher Dispatcher { get { return _dispatcher; } }
-
-        public void InvokeShutdown()
-        {
-            _dispatcher.InvokeShutdown();
-        }
 
         public static implicit operator Dispatcher(DispatcherWrapper wrapper)
         {
