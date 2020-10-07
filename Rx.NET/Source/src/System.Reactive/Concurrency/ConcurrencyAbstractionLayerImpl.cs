@@ -13,7 +13,7 @@ namespace System.Reactive.Concurrency
     //          Another copy is kept in System.Reactive.PlatformServices to enlighten the default lowest common denominator
     //          behavior of Rx for PLIB when used on a more capable platform.
     //
-    internal class /*Default*/ConcurrencyAbstractionLayerImpl : IConcurrencyAbstractionLayer
+    internal sealed class /*Default*/ConcurrencyAbstractionLayerImpl : IConcurrencyAbstractionLayer
     {
         private sealed class WorkItem
         {

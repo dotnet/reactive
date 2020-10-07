@@ -11,7 +11,7 @@ namespace System.Reactive.Subjects
     /// </summary>
     /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
     /// <typeparam name="TResult">The type of the elements in the resulting sequence, after transformation through the subject.</typeparam>
-    internal class ConnectableObservable<TSource, TResult> : IConnectableObservable<TResult>
+    internal sealed class ConnectableObservable<TSource, TResult> : IConnectableObservable<TResult>
     {
         private readonly ISubject<TSource, TResult> _subject;
         private readonly IObservable<TSource> _source;
