@@ -39,6 +39,13 @@ namespace System.Reactive
         public TimeSpan Interval { get; }
 
         /// <summary>
+        /// Deconstructs the time interval value into a value and a time interval.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="interval">Time interval associated with the value.</param>
+        public void Deconstruct(out T value, out TimeSpan interval) => (value, interval) = (Value, Interval);
+
+        /// <summary>
         /// Determines whether the current <see cref="TimeInterval{T}"/> value has the same <see cref="Value"/> and <see cref="Interval"/> as a specified <see cref="TimeInterval{T}"/> value.
         /// </summary>
         /// <param name="other">An object to compare to the current <see cref="TimeInterval{T}"/> value.</param>

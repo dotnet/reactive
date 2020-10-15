@@ -40,6 +40,13 @@ namespace System.Reactive
         public DateTimeOffset Timestamp { get; }
 
         /// <summary>
+        /// Deconstructs the timestamped value into a value and a timestamp.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="timestamp">Timestamp associated with the value.</param>
+        public void Deconstruct(out T value, out DateTimeOffset timestamp) => (value, timestamp) = (Value, Timestamp);
+
+        /// <summary>
         /// Determines whether the current <see cref="Timestamped{T}" /> value has the same <see cref="Value"/> and <see cref="Timestamp"/> as a specified <see cref="Timestamped{T}" /> value.
         /// </summary>
         /// <param name="other">An object to compare to the current <see cref="Timestamped{T}" /> value.</param>
