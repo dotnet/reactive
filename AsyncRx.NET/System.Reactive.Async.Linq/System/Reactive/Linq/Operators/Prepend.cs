@@ -21,7 +21,11 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(async observer => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, value).ConfigureAwait(false)).ConfigureAwait(false));
+            return Create(
+                source,
+                value,
+                default(TSource),
+                async (source, value, observer) => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, value).ConfigureAwait(false)).ConfigureAwait(false));
         }
 
         public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, TSource value, IAsyncScheduler scheduler)
@@ -31,7 +35,11 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(observer => AsyncObserver.Prepend(observer, source, value, scheduler));
+            return Create(
+                source,
+                (scheduler, value),
+                default(TSource),
+                (source, state, observer) => AsyncObserver.Prepend(observer, source, state.value, state.scheduler));
         }
 
         public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, params TSource[] values)
@@ -41,7 +49,11 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create<TSource>(async observer => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, values).ConfigureAwait(false)).ConfigureAwait(false));
+            return Create(
+                source,
+                values,
+                default(TSource),
+                async (source, values, observer) => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, values).ConfigureAwait(false)).ConfigureAwait(false));
         }
 
         public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, params TSource[] values)
@@ -53,7 +65,11 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create<TSource>(observer => AsyncObserver.Prepend(observer, source, scheduler, values));
+            return Create(
+                source,
+                (scheduler, values),
+                default(TSource),
+                (source, state, observer) => AsyncObserver.Prepend(observer, source, state.scheduler, state.values)); ;
         }
 
         public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, IEnumerable<TSource> values)
@@ -63,7 +79,11 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create<TSource>(async observer => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, values).ConfigureAwait(false)).ConfigureAwait(false));
+            return Create(
+                source,
+                values,
+                default(TSource),
+                async (source, values, observer) => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, values).ConfigureAwait(false)).ConfigureAwait(false));
         }
 
         public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, IEnumerable<TSource> values)
@@ -75,7 +95,11 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create<TSource>(observer => AsyncObserver.Prepend(observer, source, scheduler, values));
+            return Create(
+                source,
+                (scheduler, values),
+                default(TSource),
+                (source, state, observer) => AsyncObserver.Prepend(observer, source, state.scheduler, state.values));
         }
     }
 

@@ -19,14 +19,17 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, drain) = await AsyncObserver.Delay(observer, dueTime).ConfigureAwait(false);
+            return Create(
+                source,
+                dueTime,
+                async (source, dueTime, observer) =>
+                {
+                    var (sink, drain) = await AsyncObserver.Delay(observer, dueTime).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, drain);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, drain);
+                });
         }
 
         public static IAsyncObservable<TSource> Delay<TSource>(this IAsyncObservable<TSource> source, TimeSpan dueTime, IAsyncScheduler scheduler)
@@ -36,14 +39,17 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, drain) = await AsyncObserver.Delay(observer, dueTime, scheduler).ConfigureAwait(false);
+            return Create(
+                source,
+                (dueTime, scheduler),
+                async (source, state, observer) =>
+                {
+                    var (sink, drain) = await AsyncObserver.Delay(observer, state.dueTime, state.scheduler).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, drain);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, drain);
+                });
         }
     }
 

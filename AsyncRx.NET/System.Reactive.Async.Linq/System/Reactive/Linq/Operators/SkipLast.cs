@@ -22,7 +22,11 @@ namespace System.Reactive.Linq
                 return source;
             }
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipLast(observer, count)));
+            return Create(
+                source,
+                count,
+                default(TSource),
+                (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.SkipLast(observer, count)));
         }
 
 
@@ -38,7 +42,11 @@ namespace System.Reactive.Linq
                 return source;
             }
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipLast(observer, duration)));
+            return Create(
+                source,
+                duration,
+                default(TSource),
+                (source, duration, observer) => source.SubscribeSafeAsync(AsyncObserver.SkipLast(observer, duration)));
         }
 
         public static IAsyncObservable<TSource> SkipLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IClock clock)
@@ -55,7 +63,11 @@ namespace System.Reactive.Linq
                 return source;
             }
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipLast(observer, duration, clock)));
+            return Create(
+                source,
+                (duration, clock),
+                default(TSource),
+                (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.SkipLast(observer, state.duration, state.clock)));
         }
     }
 

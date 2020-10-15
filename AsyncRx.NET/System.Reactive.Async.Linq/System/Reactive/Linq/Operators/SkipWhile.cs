@@ -15,7 +15,11 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
+            return Create(
+                source,
+                predicate,
+                default(TSource),
+                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
@@ -25,7 +29,11 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
+            return Create(
+                source,
+                predicate,
+                default(TSource),
+                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, bool> predicate)
@@ -35,7 +43,11 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
+            return Create(
+                source,
+                predicate,
+                default(TSource),
+                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
@@ -45,7 +57,11 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
+            return Create(
+                source,
+                predicate,
+                default(TSource),
+                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
     }
 

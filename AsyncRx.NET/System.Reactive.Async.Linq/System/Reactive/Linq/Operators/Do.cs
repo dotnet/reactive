@@ -15,7 +15,10 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            return Create<TSource>(target => source.SubscribeSafeAsync(AsyncObserver.Do(target, observer)));
+            return Create(
+                source,
+                observer,
+                (source, observer, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, observer)));
         }
 
         public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Action<TSource> onNext)
@@ -25,7 +28,10 @@ namespace System.Reactive.Linq
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            return Create<TSource>(target => source.SubscribeSafeAsync(AsyncObserver.Do(target, onNext)));
+            return Create(
+                source,
+                onNext,
+                (source, onNext, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, onNext)));
         }
 
         public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Action<Exception> onError)
@@ -35,7 +41,10 @@ namespace System.Reactive.Linq
             if (onError == null)
                 throw new ArgumentNullException(nameof(onError));
 
-            return Create<TSource>(target => source.SubscribeSafeAsync(AsyncObserver.Do(target, onError)));
+            return Create(
+                source,
+                onError,
+                (source, onError, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, onError)));
         }
 
         public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Action onCompleted)
@@ -45,7 +54,10 @@ namespace System.Reactive.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return Create<TSource>(target => source.SubscribeSafeAsync(AsyncObserver.Do(target, onCompleted)));
+            return Create(
+                source,
+                onCompleted,
+                (source, onCompleted, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, onCompleted)));
         }
 
         public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
@@ -59,7 +71,10 @@ namespace System.Reactive.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return Create<TSource>(target => source.SubscribeSafeAsync(AsyncObserver.Do(target, onNext, onError, onCompleted)));
+            return Create(
+                source,
+                (onNext, onError, onCompleted),
+                (source, state, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, state.onNext, state.onError, state.onCompleted)));
         }
 
         public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, IAsyncObserver<TSource> observer)
@@ -69,7 +84,10 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            return Create<TSource>(target => source.SubscribeSafeAsync(AsyncObserver.Do(target, observer)));
+            return Create(
+                source,
+                observer,
+                (source, observer, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, observer)));
         }
 
         public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask> onNext)
@@ -79,7 +97,10 @@ namespace System.Reactive.Linq
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            return Create<TSource>(target => source.SubscribeSafeAsync(AsyncObserver.Do(target, onNext)));
+            return Create(
+                source,
+                onNext,
+                (source, onNext, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, onNext)));
         }
 
         public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Func<Exception, ValueTask> onError)
@@ -89,7 +110,10 @@ namespace System.Reactive.Linq
             if (onError == null)
                 throw new ArgumentNullException(nameof(onError));
 
-            return Create<TSource>(target => source.SubscribeSafeAsync(AsyncObserver.Do(target, onError)));
+            return Create(
+                source,
+                onError,
+                (source, onError, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, onError)));
         }
 
         public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Func<ValueTask> onCompleted)
@@ -99,7 +123,10 @@ namespace System.Reactive.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return Create<TSource>(target => source.SubscribeSafeAsync(AsyncObserver.Do(target, onCompleted)));
+            return Create(
+                source,
+                onCompleted,
+                (source, onCompleted, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, onCompleted)));
         }
 
         public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask> onNext, Func<Exception, ValueTask> onError, Func<ValueTask> onCompleted)
@@ -113,7 +140,10 @@ namespace System.Reactive.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return Create<TSource>(target => source.SubscribeSafeAsync(AsyncObserver.Do(target, onNext, onError, onCompleted)));
+            return Create(
+                source,
+                (onNext, onError, onCompleted),
+                (source, state, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, state.onNext, state.onError, state.onCompleted)));
         }
     }
 

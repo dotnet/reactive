@@ -18,7 +18,11 @@ namespace System.Reactive.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return Create<IGroupedAsyncObservable<TKey, TSource>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector)));
+            return Create(
+                source,
+                keySelector,
+                default(IGroupedAsyncObservable<TKey, TSource>),
+                (source, keySelector, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
@@ -30,7 +34,11 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<IGroupedAsyncObservable<TKey, TSource>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, comparer)));
+            return Create(
+                source,
+                (keySelector, comparer),
+                default(IGroupedAsyncObservable<TKey, TSource>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.comparer)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, int capacity)
@@ -42,7 +50,11 @@ namespace System.Reactive.Linq
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
 
-            return Create<IGroupedAsyncObservable<TKey, TSource>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, capacity)));
+            return Create(
+                source,
+                (keySelector, capacity),
+                default(IGroupedAsyncObservable<TKey, TSource>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.capacity)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, int capacity, IEqualityComparer<TKey> comparer)
@@ -56,7 +68,11 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<IGroupedAsyncObservable<TKey, TSource>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, capacity, comparer)));
+            return Create(
+                source,
+                (keySelector, capacity, comparer),
+                default(IGroupedAsyncObservable<TKey, TSource>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.capacity, state.comparer)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
@@ -68,7 +84,11 @@ namespace System.Reactive.Linq
             if (elementSelector == null)
                 throw new ArgumentNullException(nameof(elementSelector));
 
-            return Create<IGroupedAsyncObservable<TKey, TElement>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, elementSelector)));
+            return Create(
+                source,
+                (keySelector, elementSelector),
+                default(IGroupedAsyncObservable<TKey, TElement>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.elementSelector)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
@@ -82,7 +102,11 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<IGroupedAsyncObservable<TKey, TElement>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, elementSelector, comparer)));
+            return Create(
+                source,
+                (keySelector, elementSelector, comparer),
+                default(IGroupedAsyncObservable<TKey, TElement>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.elementSelector, state.comparer)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, int capacity)
@@ -96,7 +120,11 @@ namespace System.Reactive.Linq
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
 
-            return Create<IGroupedAsyncObservable<TKey, TElement>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, elementSelector, capacity)));
+            return Create(
+                source,
+                (keySelector, elementSelector, capacity),
+                default(IGroupedAsyncObservable<TKey, TElement>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.elementSelector, state.capacity)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, int capacity, IEqualityComparer<TKey> comparer)
@@ -112,7 +140,11 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<IGroupedAsyncObservable<TKey, TElement>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, elementSelector, capacity, comparer)));
+            return Create(
+                source,
+                (keySelector, elementSelector, capacity, comparer),
+                default(IGroupedAsyncObservable<TKey, TElement>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.elementSelector, state.capacity, state.comparer)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
@@ -122,7 +154,11 @@ namespace System.Reactive.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return Create<IGroupedAsyncObservable<TKey, TSource>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector)));
+            return Create(
+                source,
+                keySelector,
+                default(IGroupedAsyncObservable<TKey, TSource>),
+                (source, keySelector, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
@@ -134,7 +170,11 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<IGroupedAsyncObservable<TKey, TSource>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, comparer)));
+            return Create(
+                source,
+                (keySelector, comparer),
+                default(IGroupedAsyncObservable<TKey, TSource>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.comparer)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, int capacity)
@@ -146,7 +186,11 @@ namespace System.Reactive.Linq
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
 
-            return Create<IGroupedAsyncObservable<TKey, TSource>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, capacity)));
+            return Create(
+                source,
+                (keySelector, capacity),
+                default(IGroupedAsyncObservable<TKey, TSource>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.capacity)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, int capacity, IEqualityComparer<TKey> comparer)
@@ -160,7 +204,11 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<IGroupedAsyncObservable<TKey, TSource>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, capacity, comparer)));
+            return Create(
+                source,
+                (keySelector, capacity, comparer),
+                default(IGroupedAsyncObservable<TKey, TSource>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.capacity, state.comparer)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector)
@@ -172,7 +220,11 @@ namespace System.Reactive.Linq
             if (elementSelector == null)
                 throw new ArgumentNullException(nameof(elementSelector));
 
-            return Create<IGroupedAsyncObservable<TKey, TElement>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, elementSelector)));
+            return Create(
+                source,
+                (keySelector, elementSelector),
+                default(IGroupedAsyncObservable<TKey, TElement>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.elementSelector)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer)
@@ -186,7 +238,11 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<IGroupedAsyncObservable<TKey, TElement>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, elementSelector, comparer)));
+            return Create(
+                source,
+                (keySelector, elementSelector, comparer),
+                default(IGroupedAsyncObservable<TKey, TElement>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.elementSelector, state.comparer)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, int capacity)
@@ -200,7 +256,11 @@ namespace System.Reactive.Linq
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
 
-            return Create<IGroupedAsyncObservable<TKey, TElement>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, elementSelector, capacity)));
+            return Create(
+                source,
+                (keySelector, elementSelector, capacity),
+                default(IGroupedAsyncObservable<TKey, TElement>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.elementSelector, state.capacity)));
         }
 
         public static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, int capacity, IEqualityComparer<TKey> comparer)
@@ -216,7 +276,11 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<IGroupedAsyncObservable<TKey, TElement>>(observer => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, keySelector, elementSelector, capacity, comparer)));
+            return Create(
+                source,
+                (keySelector, elementSelector, capacity, comparer),
+                default(IGroupedAsyncObservable<TKey, TElement>),
+                (source, state, observer) => GroupByCore(source, observer, (o, d) => AsyncObserver.GroupBy(o, d, state.keySelector, state.elementSelector, state.capacity, state.comparer)));
         }
 
         private static async ValueTask<IAsyncDisposable> GroupByCore<TSource, TKey, TElement>(IAsyncObservable<TSource> source, IAsyncObserver<IGroupedAsyncObservable<TKey, TElement>> observer, Func<IAsyncObserver<IGroupedAsyncObservable<TKey, TElement>>, IAsyncDisposable, (IAsyncObserver<TSource>, IAsyncDisposable)> createObserver)

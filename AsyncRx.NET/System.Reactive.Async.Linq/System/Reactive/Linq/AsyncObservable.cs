@@ -29,6 +29,28 @@ namespace System.Reactive.Linq
             }
         }
 
+        private sealed class AsyncObservableImpl<TSource, TResult, TState> : AsyncObservableBase<TResult>
+        {
+            private readonly TState _state;
+            private readonly IAsyncObservable<TSource> _source;
+            private readonly Func<IAsyncObservable<TSource>, TState, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> _subscribeAsync;
+
+            public AsyncObservableImpl(IAsyncObservable<TSource> source, TState state, Func<IAsyncObservable<TSource>, TState, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
+            {
+                _source = source;
+                _state = state;
+                _subscribeAsync = subscribeAsync ?? throw new ArgumentNullException(nameof(subscribeAsync));
+            }
+
+            protected override ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<TResult> observer)
+            {
+                if (observer == null)
+                    throw new ArgumentNullException(nameof(observer));
+
+                return _subscribeAsync(_source, _state, observer);
+            }
+        }
+
         public static IAsyncObservable<T> Create<T>(Func<IAsyncObserver<T>, ValueTask<IAsyncDisposable>> subscribeAsync)
         {
             if (subscribeAsync == null)
@@ -43,6 +65,19 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(subscribeAsync));
 
             return new AsyncObservableImpl<TSource, TResult>(source, subscribeAsync);
+        }
+
+        internal static IAsyncObservable<TResult> Create<TSource, TResult, TState>(IAsyncObservable<TSource> source, TState state, TResult dummy, Func<IAsyncObservable<TSource>, TState, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
+        {
+            if (subscribeAsync == null)
+                throw new ArgumentNullException(nameof(subscribeAsync));
+
+            return new AsyncObservableImpl<TSource, TResult, TState>(source, state, subscribeAsync);
+        }
+
+        internal static IAsyncObservable<TSource> Create<TSource, TState>(IAsyncObservable<TSource> source, TState state, Func<IAsyncObservable<TSource>, TState, IAsyncObserver<TSource>, ValueTask<IAsyncDisposable>> subscribeAsync)
+        {
+            return Create(source, state, default(TSource), subscribeAsync);
         }
 
         internal static IAsyncObservable<TSource> Create<TSource>(IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, IAsyncObserver<TSource>, ValueTask<IAsyncDisposable>> subscribeAsync)

@@ -15,7 +15,10 @@ namespace System.Reactive.Linq
             if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.ElementAt(observer, index)));
+            return Create(
+                source,
+                index,
+                (source, index, observer) => source.SubscribeSafeAsync(AsyncObserver.ElementAt(observer, index)));
         }
     }
 

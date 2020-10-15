@@ -19,14 +19,18 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.OnErrorResumeNext(observer, second);
+            return Create(
+                first,
+                second,
+                default(TSource),
+                async (first, second, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.OnErrorResumeNext(observer, second);
 
-                var subscription = await first.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await first.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
 
         public static IAsyncObservable<TSource> OnErrorResumeNext<TSource>(params IAsyncObservable<TSource>[] sources) => OnErrorResumeNext((IEnumerable<IAsyncObservable<TSource>>)sources);

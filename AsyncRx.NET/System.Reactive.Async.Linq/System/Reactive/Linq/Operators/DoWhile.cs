@@ -18,55 +18,58 @@ namespace System.Reactive.Linq
             if (condition == null)
                 throw new ArgumentNullException(nameof(condition));
 
-            return Create<TSource>(async observer =>
-            {
-                var subscription = new SerialAsyncDisposable();
-
-                var o = default(IAsyncObserver<TSource>);
-
-                o = AsyncObserver.CreateUnsafe<TSource>(
-                        observer.OnNextAsync,
-                        observer.OnErrorAsync,
-                        MoveNext
-                    );
-
-                async Task Subscribe()
+            return Create(
+                source,
+                condition,
+                async (source, condition, observer) =>
                 {
-                    var sad = new SingleAssignmentAsyncDisposable();
-                    await subscription.AssignAsync(sad).ConfigureAwait(false);
+                    var subscription = new SerialAsyncDisposable();
 
-                    var d = await source.SubscribeSafeAsync(o).ConfigureAwait(false);
-                    await sad.AssignAsync(d).ConfigureAwait(false);
-                }
+                    var o = default(IAsyncObserver<TSource>);
 
-                async ValueTask MoveNext()
-                {
-                    var b = default(bool);
+                    o = AsyncObserver.CreateUnsafe<TSource>(
+                            observer.OnNextAsync,
+                            observer.OnErrorAsync,
+                            MoveNext
+                        );
 
-                    try
+                    async Task Subscribe()
                     {
-                        b = condition();
-                    }
-                    catch (Exception ex)
-                    {
-                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
-                        return;
+                        var sad = new SingleAssignmentAsyncDisposable();
+                        await subscription.AssignAsync(sad).ConfigureAwait(false);
+
+                        var d = await source.SubscribeSafeAsync(o).ConfigureAwait(false);
+                        await sad.AssignAsync(d).ConfigureAwait(false);
                     }
 
-                    if (b)
+                    async ValueTask MoveNext()
                     {
-                        await Subscribe().ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        await observer.OnCompletedAsync().ConfigureAwait(false);
-                    }
-                }
+                        var b = default(bool);
 
-                await Subscribe().ConfigureAwait(false);
+                        try
+                        {
+                            b = condition();
+                        }
+                        catch (Exception ex)
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                            return;
+                        }
 
-                return subscription;
-            });
+                        if (b)
+                        {
+                            await Subscribe().ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            await observer.OnCompletedAsync().ConfigureAwait(false);
+                        }
+                    }
+
+                    await Subscribe().ConfigureAwait(false);
+
+                    return subscription;
+                });
         }
 
         public static IAsyncObservable<TSource> DoWhile<TSource>(IAsyncObservable<TSource> source, Func<ValueTask<bool>> condition)
@@ -76,55 +79,58 @@ namespace System.Reactive.Linq
             if (condition == null)
                 throw new ArgumentNullException(nameof(condition));
 
-            return Create<TSource>(async observer =>
-            {
-                var subscription = new SerialAsyncDisposable();
-
-                var o = default(IAsyncObserver<TSource>);
-
-                o = AsyncObserver.CreateUnsafe<TSource>(
-                        observer.OnNextAsync,
-                        observer.OnErrorAsync,
-                        MoveNext
-                    );
-
-                async Task Subscribe()
+            return Create(
+                source,
+                condition,
+                async (source, condition, observer) =>
                 {
-                    var sad = new SingleAssignmentAsyncDisposable();
-                    await subscription.AssignAsync(sad).ConfigureAwait(false);
+                    var subscription = new SerialAsyncDisposable();
 
-                    var d = await source.SubscribeSafeAsync(o).ConfigureAwait(false);
-                    await sad.AssignAsync(d).ConfigureAwait(false);
-                }
+                    var o = default(IAsyncObserver<TSource>);
 
-                async ValueTask MoveNext()
-                {
-                    var b = default(bool);
+                    o = AsyncObserver.CreateUnsafe<TSource>(
+                            observer.OnNextAsync,
+                            observer.OnErrorAsync,
+                            MoveNext
+                        );
 
-                    try
+                    async Task Subscribe()
                     {
-                        b = await condition().ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
-                        return;
+                        var sad = new SingleAssignmentAsyncDisposable();
+                        await subscription.AssignAsync(sad).ConfigureAwait(false);
+
+                        var d = await source.SubscribeSafeAsync(o).ConfigureAwait(false);
+                        await sad.AssignAsync(d).ConfigureAwait(false);
                     }
 
-                    if (b)
+                    async ValueTask MoveNext()
                     {
-                        await Subscribe().ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        await observer.OnCompletedAsync().ConfigureAwait(false);
-                    }
-                }
+                        var b = default(bool);
 
-                await Subscribe().ConfigureAwait(false);
+                        try
+                        {
+                            b = await condition().ConfigureAwait(false);
+                        }
+                        catch (Exception ex)
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                            return;
+                        }
 
-                return subscription;
-            });
+                        if (b)
+                        {
+                            await Subscribe().ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            await observer.OnCompletedAsync().ConfigureAwait(false);
+                        }
+                    }
+
+                    await Subscribe().ConfigureAwait(false);
+
+                    return subscription;
+                });
         }
     }
 }

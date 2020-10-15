@@ -23,7 +23,11 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<bool>(observer => source.SubscribeSafeAsync(AsyncObserver.Any(observer, predicate)));
+            return Create(
+                source,
+                predicate,
+                default(bool),
+                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Any(observer, predicate)));
         }
 
         public static IAsyncObservable<bool> Any<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
@@ -33,7 +37,11 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<bool>(observer => source.SubscribeSafeAsync(AsyncObserver.Any(observer, predicate)));
+            return Create(
+                source,
+                predicate,
+                default(bool),
+                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Any(observer, predicate)));
         }
     }
 

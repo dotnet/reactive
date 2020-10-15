@@ -23,7 +23,11 @@ namespace System.Reactive.Linq
                 return source;
             }
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Skip(observer, count)));
+            return Create(
+                source,
+                count,
+                default(TSource),
+                (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Skip(observer, count)));
         }
 
         public static IAsyncObservable<TSource> Skip<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration)
@@ -40,14 +44,18 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use SkipUntil with a Timer parameter. Do we want Skip on the observer?
 
-            return Create<TSource>(async observer =>
-            {
-                var (sourceObserver, timer) = await AsyncObserver.Skip(observer, duration).ConfigureAwait(false);
+            return Create(
+                source,
+                duration,
+                default(TSource),
+                async (source, duration, observer) =>
+                {
+                    var (sourceObserver, timer) = await AsyncObserver.Skip(observer, duration).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, timer);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, timer);
+                });
         }
 
         public static IAsyncObservable<TSource> Skip<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler)
@@ -66,14 +74,18 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use SkipUntil with a Timer parameter. Do we want Skip on the observer?
 
-            return Create<TSource>(async observer =>
-            {
-                var (sourceObserver, timer) = await AsyncObserver.Skip(observer, duration).ConfigureAwait(false);
+            return Create(
+                source,
+                (duration, scheduler),
+                default(TSource),
+                async (source, state, observer) =>
+                {
+                    var (sourceObserver, timer) = await AsyncObserver.Skip(observer, state.duration).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, timer);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, timer);
+                });
         }
     }
 

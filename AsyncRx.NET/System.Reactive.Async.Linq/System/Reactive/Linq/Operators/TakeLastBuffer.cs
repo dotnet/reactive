@@ -22,7 +22,11 @@ namespace System.Reactive.Linq
                 return Empty<IList<TSource>>();
             }
 
-            return Create<IList<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.TakeLastBuffer(observer, count)));
+            return Create(
+                source,
+                count,
+                default(IList<TSource>),
+                (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.TakeLastBuffer(observer, count)));
         }
 
         public static IAsyncObservable<IList<TSource>> TakeLastBuffer<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration)
@@ -37,7 +41,11 @@ namespace System.Reactive.Linq
                 return Empty<IList<TSource>>();
             }
 
-            return Create<IList<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.TakeLastBuffer(observer, duration)));
+            return Create(
+                source,
+                duration,
+                default(IList<TSource>),
+                (source, duration, observer) => source.SubscribeSafeAsync(AsyncObserver.TakeLastBuffer(observer, duration)));
         }
 
         public static IAsyncObservable<IList<TSource>> TakeLastBuffer<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IClock clock)
@@ -54,7 +62,11 @@ namespace System.Reactive.Linq
                 return Empty<IList<TSource>>();
             }
 
-            return Create<IList<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.TakeLastBuffer(observer, duration, clock)));
+            return Create(
+                source,
+                (duration, clock),
+                default(IList<TSource>),
+                (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.TakeLastBuffer(observer, state.duration, state.clock)));
         }
     }
 

@@ -16,18 +16,22 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(async observer =>
-            {
-                var sourceSubscription = new SingleAssignmentAsyncDisposable();
+            return Create(
+                source,
+                dueTime,
+                default(TSource),
+                async (source, dueTime, observer) =>
+                {
+                    var sourceSubscription = new SingleAssignmentAsyncDisposable();
 
-                var (sink, disposable) = await AsyncObserver.Timeout(observer, sourceSubscription, dueTime).ConfigureAwait(false);
+                    var (sink, disposable) = await AsyncObserver.Timeout(observer, sourceSubscription, dueTime).ConfigureAwait(false);
 
-                var sourceSubscriptionInner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var sourceSubscriptionInner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                await sourceSubscription.AssignAsync(sourceSubscriptionInner).ConfigureAwait(false);
+                    await sourceSubscription.AssignAsync(sourceSubscriptionInner).ConfigureAwait(false);
 
-                return disposable;
-            });
+                    return disposable;
+                });
         }
 
         public static IAsyncObservable<TSource> Timeout<TSource>(this IAsyncObservable<TSource> source, TimeSpan dueTime, IAsyncScheduler scheduler)
@@ -37,18 +41,22 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(async observer =>
-            {
-                var sourceSubscription = new SingleAssignmentAsyncDisposable();
+            return Create(
+                source,
+                (dueTime, scheduler),
+                default(TSource),
+                async (source, state, observer) =>
+                {
+                    var sourceSubscription = new SingleAssignmentAsyncDisposable();
 
-                var (sink, disposable) = await AsyncObserver.Timeout(observer, sourceSubscription, dueTime, scheduler).ConfigureAwait(false);
+                    var (sink, disposable) = await AsyncObserver.Timeout(observer, sourceSubscription, state.dueTime, state.scheduler).ConfigureAwait(false);
 
-                var sourceSubscriptionInner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var sourceSubscriptionInner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                await sourceSubscription.AssignAsync(sourceSubscriptionInner).ConfigureAwait(false);
+                    await sourceSubscription.AssignAsync(sourceSubscriptionInner).ConfigureAwait(false);
 
-                return disposable;
-            });
+                    return disposable;
+                });
         }
 
         public static IAsyncObservable<TSource> Timeout<TSource>(this IAsyncObservable<TSource> source, TimeSpan dueTime, IAsyncObservable<TSource> other)
@@ -58,18 +66,22 @@ namespace System.Reactive.Linq
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
-            return Create<TSource>(async observer =>
-            {
-                var sourceSubscription = new SingleAssignmentAsyncDisposable();
+            return Create(
+                source,
+                (dueTime, other),
+                default(TSource),
+                async (source, state, observer) =>
+                {
+                    var sourceSubscription = new SingleAssignmentAsyncDisposable();
 
-                var (sink, disposable) = await AsyncObserver.Timeout(observer, sourceSubscription, dueTime, other).ConfigureAwait(false);
+                    var (sink, disposable) = await AsyncObserver.Timeout(observer, sourceSubscription, state.dueTime, state.other).ConfigureAwait(false);
 
-                var sourceSubscriptionInner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var sourceSubscriptionInner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                await sourceSubscription.AssignAsync(sourceSubscriptionInner).ConfigureAwait(false);
+                    await sourceSubscription.AssignAsync(sourceSubscriptionInner).ConfigureAwait(false);
 
-                return disposable;
-            });
+                    return disposable;
+                });
         }
 
         public static IAsyncObservable<TSource> Timeout<TSource>(this IAsyncObservable<TSource> source, TimeSpan dueTime, IAsyncObservable<TSource> other, IAsyncScheduler scheduler)
@@ -81,18 +93,22 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(async observer =>
-            {
-                var sourceSubscription = new SingleAssignmentAsyncDisposable();
+            return Create(
+                source,
+                (dueTime, other, scheduler),
+                default(TSource),
+                async (source, state, observer) =>
+                {
+                    var sourceSubscription = new SingleAssignmentAsyncDisposable();
 
-                var (sink, disposable) = await AsyncObserver.Timeout(observer, sourceSubscription, dueTime, other, scheduler).ConfigureAwait(false);
+                    var (sink, disposable) = await AsyncObserver.Timeout(observer, sourceSubscription, state.dueTime, state.other, state.scheduler).ConfigureAwait(false);
 
-                var sourceSubscriptionInner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var sourceSubscriptionInner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                await sourceSubscription.AssignAsync(sourceSubscriptionInner).ConfigureAwait(false);
+                    await sourceSubscription.AssignAsync(sourceSubscriptionInner).ConfigureAwait(false);
 
-                return disposable;
-            });
+                    return disposable;
+                });
         }
     }
 

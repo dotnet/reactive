@@ -19,14 +19,18 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, drain) = await AsyncObserver.ObserveOn(observer, scheduler).ConfigureAwait(false);
+            return Create(
+                source,
+                scheduler,
+                default(TSource),
+                async (source, scheduler, observer) =>
+                {
+                    var (sink, drain) = await AsyncObserver.ObserveOn(observer, scheduler).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, drain);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, drain);
+                });
         }
     }
 

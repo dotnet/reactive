@@ -23,7 +23,11 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Take(observer, count)));
+            return Create(
+                source,
+                count,
+                default(TSource),
+                (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Take(observer, count)));
         }
 
         public static IAsyncObservable<TSource> Take<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration)
@@ -40,14 +44,18 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want Take on the observer?
 
-            return Create<TSource>(async observer =>
-            {
-                var (sourceObserver, timer) = await AsyncObserver.Take(observer, duration).ConfigureAwait(false);
+            return Create(
+                source,
+                duration,
+                default(TSource),
+                async (source, duration, observer) =>
+                {
+                    var (sourceObserver, timer) = await AsyncObserver.Take(observer, duration).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, timer);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, timer);
+                });
         }
 
         public static IAsyncObservable<TSource> Take<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler)
@@ -56,7 +64,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
-            if (scheduler == null)
+            if (scheduler == null)  // REVIEW: scheduler not used.
                 throw new ArgumentNullException(nameof(scheduler));
 
             if (duration == TimeSpan.Zero)
@@ -66,14 +74,18 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want Take on the observer?
 
-            return Create<TSource>(async observer =>
-            {
-                var (sourceObserver, timer) = await AsyncObserver.Take(observer, duration).ConfigureAwait(false);
+            return Create(
+                source,
+                (duration, scheduler),
+                default(TSource),
+                async (source, state, observer) =>
+                {
+                    var (sourceObserver, timer) = await AsyncObserver.Take(observer, state.duration).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, timer);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, timer);
+                });
         }
     }
 

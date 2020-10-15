@@ -28,32 +28,36 @@ namespace System.Reactive.Linq
             if (disposeScheduler == null)
                 throw new ArgumentNullException(nameof(disposeScheduler));
 
-            return Create<TSource>(async observer =>
-            {
-                var m = new SingleAssignmentAsyncDisposable();
-                var d = new SerialAsyncDisposable();
-
-                await d.AssignAsync(m).ConfigureAwait(false);
-
-                var scheduled = await subscribeScheduler.ScheduleAsync(async ct =>
+            return Create(
+                source,
+                (subscribeScheduler, disposeScheduler),
+                default(TSource),
+                async (source, state, observer) =>
                 {
-                    var subscription = await source.SubscribeSafeAsync(observer).RendezVous(subscribeScheduler, ct);
+                    var m = new SingleAssignmentAsyncDisposable();
+                    var d = new SerialAsyncDisposable();
 
-                    var scheduledDispose = AsyncDisposable.Create(async () =>
+                    await d.AssignAsync(m).ConfigureAwait(false);
+
+                    var scheduled = await state.subscribeScheduler.ScheduleAsync(async ct =>
                     {
-                        await disposeScheduler.ScheduleAsync(async _ =>
+                        var subscription = await source.SubscribeSafeAsync(observer).RendezVous(state.subscribeScheduler, ct);
+
+                        var scheduledDispose = AsyncDisposable.Create(async () =>
                         {
-                            await subscription.DisposeAsync().RendezVous(disposeScheduler, ct);
-                        }).ConfigureAwait(false);
-                    });
+                            await state.disposeScheduler.ScheduleAsync(async _ =>
+                            {
+                                await subscription.DisposeAsync().RendezVous(state.disposeScheduler, ct);
+                            }).ConfigureAwait(false);
+                        });
 
-                    await d.AssignAsync(scheduledDispose).RendezVous(subscribeScheduler, ct);
-                }).ConfigureAwait(false);
+                        await d.AssignAsync(scheduledDispose).RendezVous(state.subscribeScheduler, ct);
+                    }).ConfigureAwait(false);
 
-                await m.AssignAsync(scheduled).ConfigureAwait(false);
+                    await m.AssignAsync(scheduled).ConfigureAwait(false);
 
-                return d;
-            });
+                    return d;
+                });
         }
     }
 }

@@ -23,7 +23,10 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Distinct(observer, comparer)));
+            return Create(
+                source,
+                comparer,
+                (source, comparer, observer) => source.SubscribeSafeAsync(AsyncObserver.Distinct(observer, comparer)));
         }
     }
 

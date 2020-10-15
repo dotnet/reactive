@@ -16,22 +16,25 @@ namespace System.Reactive.Linq
             if (finallyAction == null)
                 throw new ArgumentNullException(nameof(finallyAction));
 
-            return Create<TSource>(async observer =>
-            {
-                var subscription = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
-
-                return AsyncDisposable.Create(async () =>
+            return Create(
+                source,
+                finallyAction,
+                async (source, finallyAction, observer) =>
                 {
-                    try
+                    var subscription = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
+
+                    return AsyncDisposable.Create(async () =>
                     {
-                        await subscription.DisposeAsync().ConfigureAwait(false);
-                    }
-                    finally
-                    {
-                        finallyAction();
-                    }
+                        try
+                        {
+                            await subscription.DisposeAsync().ConfigureAwait(false);
+                        }
+                        finally
+                        {
+                            finallyAction();
+                        }
+                    });
                 });
-            });
         }
 
         public static IAsyncObservable<TSource> Finally<TSource>(this IAsyncObservable<TSource> source, Func<Task> finallyAction)
@@ -41,22 +44,25 @@ namespace System.Reactive.Linq
             if (finallyAction == null)
                 throw new ArgumentNullException(nameof(finallyAction));
 
-            return Create<TSource>(async observer =>
-            {
-                var subscription = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
-
-                return AsyncDisposable.Create(async () =>
+            return Create(
+                source,
+                finallyAction,
+                async (source, finallyAction, observer) =>
                 {
-                    try
+                    var subscription = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
+
+                    return AsyncDisposable.Create(async () =>
                     {
-                        await subscription.DisposeAsync().ConfigureAwait(false);
-                    }
-                    finally
-                    {
-                        await finallyAction().ConfigureAwait(false);
-                    }
+                        try
+                        {
+                            await subscription.DisposeAsync().ConfigureAwait(false);
+                        }
+                        finally
+                        {
+                            await finallyAction().ConfigureAwait(false);
+                        }
+                    });
                 });
-            });
         }
     }
 }

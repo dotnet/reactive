@@ -17,17 +17,21 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Create<(TFirst first, TSecond second)>(async observer =>
-            {
-                var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer);
+            return Create(
+                first,
+                second,
+                default((TFirst first, TSecond second)),
+                async (first, second, observer) =>
+                {
+                    var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer);
 
-                // REVIEW: Consider concurrent subscriptions.
+                    // REVIEW: Consider concurrent subscriptions.
 
-                var firstSubscription = await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false);
-                var secondSubscription = await second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false);
+                    var firstSubscription = await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false);
+                    var secondSubscription = await second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
-            });
+                    return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
+                });
         }
 
         public static IAsyncObservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(this IAsyncObservable<TFirst> first, IAsyncObservable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
@@ -39,17 +43,21 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create<TResult>(async observer =>
-            {
-                var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, resultSelector);
+            return Create(
+                first,
+                (second, resultSelector),
+                default(TResult),
+                async (first, state, observer) =>
+                {
+                    var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, state.resultSelector);
 
-                // REVIEW: Consider concurrent subscriptions.
+                    // REVIEW: Consider concurrent subscriptions.
 
-                var firstSubscription = await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false);
-                var secondSubscription = await second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false);
+                    var firstSubscription = await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false);
+                    var secondSubscription = await state.second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
-            });
+                    return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
+                });
         }
 
         public static IAsyncObservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(this IAsyncObservable<TFirst> first, IAsyncObservable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> resultSelector)
@@ -61,17 +69,21 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create<TResult>(async observer =>
-            {
-                var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, resultSelector);
+            return Create(
+                first,
+                (second, resultSelector),
+                default(TResult),
+                async (first, state, observer) =>
+                {
+                    var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, state.resultSelector);
 
-                // REVIEW: Consider concurrent subscriptions.
+                    // REVIEW: Consider concurrent subscriptions.
 
-                var firstSubscription = await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false);
-                var secondSubscription = await second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false);
+                    var firstSubscription = await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false);
+                    var secondSubscription = await state.second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
-            });
+                    return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
+                });
         }
     }
 

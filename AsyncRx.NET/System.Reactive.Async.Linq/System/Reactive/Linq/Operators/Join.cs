@@ -24,20 +24,24 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create<TResult>(async observer =>
-            {
-                var subscriptions = new CompositeAsyncDisposable();
+            return Create(
+                left,
+                (right, leftDurationSelector, rightDurationSelector, resultSelector),
+                default(TResult),
+                async (left, state, observer) =>
+                {
+                    var subscriptions = new CompositeAsyncDisposable();
 
-                var (leftObserver, rightObserver, disposable) = AsyncObserver.Join(observer, subscriptions, leftDurationSelector, rightDurationSelector, resultSelector);
+                    var (leftObserver, rightObserver, disposable) = AsyncObserver.Join(observer, subscriptions, state.leftDurationSelector, state.rightDurationSelector, state.resultSelector);
 
-                var leftSubscription = await left.SubscribeSafeAsync(leftObserver).ConfigureAwait(false);
-                await subscriptions.AddAsync(leftSubscription).ConfigureAwait(false);
+                    var leftSubscription = await left.SubscribeSafeAsync(leftObserver).ConfigureAwait(false);
+                    await subscriptions.AddAsync(leftSubscription).ConfigureAwait(false);
 
-                var rightSubscription = await right.SubscribeSafeAsync(rightObserver).ConfigureAwait(false);
-                await subscriptions.AddAsync(rightSubscription).ConfigureAwait(false);
+                    var rightSubscription = await state.right.SubscribeSafeAsync(rightObserver).ConfigureAwait(false);
+                    await subscriptions.AddAsync(rightSubscription).ConfigureAwait(false);
 
-                return disposable;
-            });
+                    return disposable;
+                });
         }
     }
 
