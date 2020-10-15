@@ -7,15 +7,17 @@
     <RootNamespace>Tests.System.Reactive</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Source\ReactiveX.snk</AssemblyOriginatorKeyFile>
-    <UseWPF>true</UseWPF>
-    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
   
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <UseWPF >true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
     <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net5.0-windows'))">
+    <UseWPF >true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
     <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
   </PropertyGroup>
 
