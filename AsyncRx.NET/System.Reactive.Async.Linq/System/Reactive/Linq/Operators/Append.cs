@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
                 source,
                 value,
                 default(TSource),
-                (source, value, observer) => source.SubscribeSafeAsync(AsyncObserver.Append(observer, value)));
+                static(source, value, observer) => source.SubscribeSafeAsync(AsyncObserver.Append(observer, value)));
         }
 
         public static IAsyncObservable<TSource> Append<TSource>(this IAsyncObservable<TSource> source, TSource value, IAsyncScheduler scheduler)

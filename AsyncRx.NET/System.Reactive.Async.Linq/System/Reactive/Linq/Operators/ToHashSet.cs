@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
                 source,
                 comparer,
                 default(HashSet<TSource>),
-                (source, comparer, observer) => source.SubscribeSafeAsync(AsyncObserver.ToHashSet(observer, comparer)));
+                static (source, comparer, observer) => source.SubscribeSafeAsync(AsyncObserver.ToHashSet(observer, comparer)));
         }
     }
 

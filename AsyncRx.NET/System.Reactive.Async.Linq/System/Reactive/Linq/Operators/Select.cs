@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(TResult),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
         }
 
         public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
@@ -33,7 +33,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(TResult),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
         }
 
         public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, TResult> selector)
@@ -47,7 +47,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(TResult),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
         }
 
         public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector)
@@ -61,7 +61,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(TResult),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
         }
     }
 

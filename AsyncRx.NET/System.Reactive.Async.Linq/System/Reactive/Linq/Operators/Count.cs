@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(int),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Count(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Count(observer, predicate)));
         }
 
         public static IAsyncObservable<int> Count<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(int),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Count(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Count(observer, predicate)));
         }
     }
 

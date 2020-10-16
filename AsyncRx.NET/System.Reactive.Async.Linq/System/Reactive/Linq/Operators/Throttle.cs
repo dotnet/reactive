@@ -21,7 +21,7 @@ namespace System.Reactive.Linq
                 source,
                 dueTime,
                 default(TSource),
-                async (source, dueTime, observer) =>
+                static async (source, dueTime, observer) =>
                 {
                     var d = new CompositeAsyncDisposable();
 
@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
                 source,
                 (dueTime, scheduler),
                 default(TSource),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var d = new CompositeAsyncDisposable();
 
@@ -77,7 +77,7 @@ namespace System.Reactive.Linq
                 source,
                 throttleSelector,
                 default(TSource),
-                async (source, throttleSelector, observer) =>
+                static async (source, throttleSelector, observer) =>
                 {
                     var d = new CompositeAsyncDisposable();
 

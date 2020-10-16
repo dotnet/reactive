@@ -28,7 +28,7 @@ namespace System.Reactive.Linq
                 left,
                 (right, leftDurationSelector, rightDurationSelector, resultSelector),
                 default(TResult),
-                async (left, state, observer) =>
+                static async (left, state, observer) =>
                 {
                     var subscriptions = new CompositeAsyncDisposable();
 

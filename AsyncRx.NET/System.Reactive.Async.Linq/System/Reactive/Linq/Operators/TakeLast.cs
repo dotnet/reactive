@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
                 source,
                 count,
                 default(TSource),
-                async (source, count, observer) =>
+                static async (source, count, observer) =>
                 {
                     var (sink, drain) = AsyncObserver.TakeLast(observer, count);
 
@@ -55,7 +55,7 @@ namespace System.Reactive.Linq
                 source,
                 (count, scheduler),
                 default(TSource),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, drain) = AsyncObserver.TakeLast(observer, state.count, state.scheduler);
 
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq
                 source,
                 duration,
                 default(TSource),
-                async (source, duration, observer) =>
+                static async (source, duration, observer) =>
                 {
                     var (sink, drain) = AsyncObserver.TakeLast(observer, duration);
 
@@ -109,7 +109,7 @@ namespace System.Reactive.Linq
                 source,
                 (duration, clock),
                 default(TSource),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, drain) = AsyncObserver.TakeLast(observer, state.duration, state.clock);
 
@@ -139,7 +139,7 @@ namespace System.Reactive.Linq
                 source,
                 (duration, clock, scheduler),
                 default(TSource),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, drain) = AsyncObserver.TakeLast(observer, state.duration, state.clock, state.scheduler);
 

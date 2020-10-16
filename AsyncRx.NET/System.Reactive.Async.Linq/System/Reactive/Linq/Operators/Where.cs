@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(TSource),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> Where<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
@@ -33,7 +33,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(TSource),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> Where<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, bool> predicate)
@@ -47,7 +47,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(TSource),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> Where<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
@@ -61,7 +61,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(TSource),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
         }
     }
 

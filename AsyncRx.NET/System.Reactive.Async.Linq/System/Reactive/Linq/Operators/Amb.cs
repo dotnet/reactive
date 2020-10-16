@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
                 first,
                 second,
                 default(TSource),
-                async (first, second, observer) =>
+                static async (first, second, observer) =>
                 {
                     var firstSubscription = new SingleAssignmentAsyncDisposable();
                     var secondSubscription = new SingleAssignmentAsyncDisposable();

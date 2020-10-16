@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
                 source,
                 clock,
                 default(TimeInterval<TSource>),
-                (source, clock, observer) => source.SubscribeSafeAsync(AsyncObserver.TimeInterval(observer, clock))); ;
+                static (source, clock, observer) => source.SubscribeSafeAsync(AsyncObserver.TimeInterval(observer, clock))); ;
         }
     }
 

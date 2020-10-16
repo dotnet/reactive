@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
                 source,
                 count,
                 default(IList<TSource>),
-                (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Buffer(observer, count)));
+                static (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Buffer(observer, count)));
         }
 
         public static IAsyncObservable<IList<TSource>> Buffer<TSource>(this IAsyncObservable<TSource> source, int count, int skip)
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
                 source,
                 (count, skip),
                 default(IList<TSource>),
-                (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Buffer(observer, state.count, state.skip)));
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Buffer(observer, state.count, state.skip)));
         }
 
         public static IAsyncObservable<IList<TSource>> Buffer<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan)
@@ -53,7 +53,7 @@ namespace System.Reactive.Linq
                 source,
                 timeSpan,
                 default(IList<TSource>),
-                async (source, timeSpan, observer) =>
+                static async (source, timeSpan, observer) =>
                 {
                     var (sink, timer) = await AsyncObserver.Buffer(observer, timeSpan).ConfigureAwait(false);
 
@@ -76,7 +76,7 @@ namespace System.Reactive.Linq
                 source,
                 (timeSpan, scheduler),
                 default(IList<TSource>),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, timer) = await AsyncObserver.Buffer(observer, state.timeSpan, state.scheduler).ConfigureAwait(false);
 
@@ -99,7 +99,7 @@ namespace System.Reactive.Linq
                 source,
                 (timeSpan, timeShift),
                 default(IList<TSource>),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, timer) = await AsyncObserver.Buffer(observer, state.timeSpan, state.timeShift).ConfigureAwait(false);
 
@@ -124,7 +124,7 @@ namespace System.Reactive.Linq
                 source,
                 (timeSpan, timeShift, scheduler),
                 default(IList<TSource>),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, timer) = await AsyncObserver.Buffer(observer, state.timeSpan, state.timeShift, state.scheduler).ConfigureAwait(false);
 
@@ -147,7 +147,7 @@ namespace System.Reactive.Linq
                 source,
                 (timeSpan, count),
                 default(IList<TSource>),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, timer) = await AsyncObserver.Buffer(observer, state.timeSpan, state.count).ConfigureAwait(false);
 
@@ -172,7 +172,7 @@ namespace System.Reactive.Linq
                 source,
                 (timeSpan, count, scheduler),
                 default(IList<TSource>),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, timer) = await AsyncObserver.Buffer(observer, state.timeSpan, state.count, state.scheduler).ConfigureAwait(false);
 
@@ -193,7 +193,7 @@ namespace System.Reactive.Linq
                 source,
                 bufferBoundaries,
                 default(IList<TSource>),
-                async (source, bufferBoundaries, observer) =>
+                static async (source, bufferBoundaries, observer) =>
                 {
                     var (sourceObserver, boundariesObserver) = AsyncObserver.Buffer<TSource, TBufferBoundary>(observer);
 
@@ -217,7 +217,7 @@ namespace System.Reactive.Linq
                 source,
                 bufferClosingSelector,
                 default(IList<TSource>),
-                async (source, bufferClosingSelector, observer) =>
+                static async (source, bufferClosingSelector, observer) =>
                 {
                     var (sourceObserver, closingDisposable) = await AsyncObserver.Buffer<TSource, TBufferClosing>(observer, bufferClosingSelector).ConfigureAwait(false);
 

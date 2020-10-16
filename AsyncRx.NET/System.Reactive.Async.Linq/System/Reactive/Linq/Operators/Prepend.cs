@@ -25,7 +25,7 @@ namespace System.Reactive.Linq
                 source,
                 value,
                 default(TSource),
-                async (source, value, observer) => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, value).ConfigureAwait(false)).ConfigureAwait(false));
+                static async (source, value, observer) => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, value).ConfigureAwait(false)).ConfigureAwait(false));
         }
 
         public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, TSource value, IAsyncScheduler scheduler)
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
                 source,
                 (scheduler, value),
                 default(TSource),
-                (source, state, observer) => AsyncObserver.Prepend(observer, source, state.value, state.scheduler));
+                static (source, state, observer) => AsyncObserver.Prepend(observer, source, state.value, state.scheduler));
         }
 
         public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, params TSource[] values)
@@ -53,7 +53,7 @@ namespace System.Reactive.Linq
                 source,
                 values,
                 default(TSource),
-                async (source, values, observer) => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, values).ConfigureAwait(false)).ConfigureAwait(false));
+                static async (source, values, observer) => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, values).ConfigureAwait(false)).ConfigureAwait(false));
         }
 
         public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, params TSource[] values)
@@ -69,7 +69,7 @@ namespace System.Reactive.Linq
                 source,
                 (scheduler, values),
                 default(TSource),
-                (source, state, observer) => AsyncObserver.Prepend(observer, source, state.scheduler, state.values)); ;
+                static (source, state, observer) => AsyncObserver.Prepend(observer, source, state.scheduler, state.values)); ;
         }
 
         public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, IEnumerable<TSource> values)
@@ -83,7 +83,7 @@ namespace System.Reactive.Linq
                 source,
                 values,
                 default(TSource),
-                async (source, values, observer) => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, values).ConfigureAwait(false)).ConfigureAwait(false));
+                static async (source, values, observer) => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, values).ConfigureAwait(false)).ConfigureAwait(false));
         }
 
         public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, IEnumerable<TSource> values)
@@ -99,7 +99,7 @@ namespace System.Reactive.Linq
                 source,
                 (scheduler, values),
                 default(TSource),
-                (source, state, observer) => AsyncObserver.Prepend(observer, source, state.scheduler, state.values));
+                static (source, state, observer) => AsyncObserver.Prepend(observer, source, state.scheduler, state.values));
         }
     }
 

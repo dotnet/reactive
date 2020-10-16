@@ -20,7 +20,7 @@ namespace System.Reactive.Linq
                 source,
                 keySelector,
                 default(IList<TSource>),
-                (source, keySelector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, keySelector)));
+                static (source, keySelector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, keySelector)));
         }
 
         public static IAsyncObservable<IList<TSource>> MaxBy<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
@@ -36,7 +36,7 @@ namespace System.Reactive.Linq
                 source,
                 (keySelector, comparer),
                 default(IList<TSource>),
-                (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, state.keySelector, state.comparer)));
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, state.keySelector, state.comparer)));
         }
 
         public static IAsyncObservable<IList<TSource>> MaxBy<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
                 source,
                 keySelector,
                 default(IList<TSource>),
-                (source, keySelector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, keySelector)));
+                static (source, keySelector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, keySelector)));
         }
 
         public static IAsyncObservable<IList<TSource>> MaxBy<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer)
@@ -66,7 +66,7 @@ namespace System.Reactive.Linq
                 source,
                 (keySelector, comparer),
                 default(IList<TSource>),
-                (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, state.keySelector, state.comparer)));
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, state.keySelector, state.comparer)));
         }
     }
 

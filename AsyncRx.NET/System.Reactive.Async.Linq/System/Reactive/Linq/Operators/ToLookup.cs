@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
                 source,
                 (keySelector, valueSelector),
                 default(ILookup<TKey, TValue>),
-                (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector)));
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector)));
         }
 
         public static IAsyncObservable<ILookup<TKey, TValue>> ToLookup<TSource, TKey, TValue>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TValue> valueSelector, IEqualityComparer<TKey> comparer)
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
                 source,
                 (keySelector, valueSelector, comparer),
                 default(ILookup<TKey, TValue>),
-                (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector, state.comparer)));
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector, state.comparer)));
         }
 
         public static IAsyncObservable<ILookup<TKey, TValue>> ToLookup<TSource, TKey, TValue>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TValue>> valueSelector)
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq
                 source,
                 (keySelector, valueSelector),
                 default(ILookup<TKey, TValue>),
-                (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector)));
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector)));
         }
 
         public static IAsyncObservable<ILookup<TKey, TValue>> ToLookup<TSource, TKey, TValue>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TValue>> valueSelector, IEqualityComparer<TKey> comparer)
@@ -75,7 +75,7 @@ namespace System.Reactive.Linq
                 source,
                 (keySelector, valueSelector, comparer),
                 default(ILookup<TKey, TValue>),
-                (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector, state.comparer)));
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector, state.comparer)));
         }
     }
 

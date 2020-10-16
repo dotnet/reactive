@@ -26,7 +26,7 @@ namespace System.Reactive.Linq
                 thenSource,
                 (elseSource, condition),
                 default(TResult),
-                (thenSource, state, observer) =>
+                static (thenSource, state, observer) =>
                 {
                     var b = default(bool);
 
@@ -60,7 +60,7 @@ namespace System.Reactive.Linq
                 thenSource,
                 (elseSource, condition),
                 default(TResult),
-                async (thenSource, state, observer) =>
+                static async (thenSource, state, observer) =>
                 {
                     var b = default(bool);
 

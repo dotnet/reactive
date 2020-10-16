@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int32),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinInt32(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinInt32(observer, selector)));
         }
 
         public static IAsyncObservable<Int32> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Int32>> selector)
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int32),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinInt32(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinInt32(observer, selector)));
         }
 
         public static IAsyncObservable<Int32?> Min(this IAsyncObservable<Int32?> source)
@@ -63,7 +63,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int32?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableInt32(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableInt32(observer, selector)));
         }
 
         public static IAsyncObservable<Int32?> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Int32?>> selector)
@@ -77,7 +77,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int32?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableInt32(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableInt32(observer, selector)));
         }
 
         public static IAsyncObservable<Int64> Min(this IAsyncObservable<Int64> source)
@@ -99,7 +99,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int64),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinInt64(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinInt64(observer, selector)));
         }
 
         public static IAsyncObservable<Int64> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Int64>> selector)
@@ -113,7 +113,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int64),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinInt64(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinInt64(observer, selector)));
         }
 
         public static IAsyncObservable<Int64?> Min(this IAsyncObservable<Int64?> source)
@@ -135,7 +135,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int64?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableInt64(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableInt64(observer, selector)));
         }
 
         public static IAsyncObservable<Int64?> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Int64?>> selector)
@@ -149,7 +149,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int64?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableInt64(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableInt64(observer, selector)));
         }
 
         public static IAsyncObservable<Single> Min(this IAsyncObservable<Single> source)
@@ -171,7 +171,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Single),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinSingle(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinSingle(observer, selector)));
         }
 
         public static IAsyncObservable<Single> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Single>> selector)
@@ -185,7 +185,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Single),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinSingle(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinSingle(observer, selector)));
         }
 
         public static IAsyncObservable<Single?> Min(this IAsyncObservable<Single?> source)
@@ -207,7 +207,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Single?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableSingle(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableSingle(observer, selector)));
         }
 
         public static IAsyncObservable<Single?> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Single?>> selector)
@@ -221,7 +221,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Single?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableSingle(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableSingle(observer, selector)));
         }
 
         public static IAsyncObservable<Double> Min(this IAsyncObservable<Double> source)
@@ -243,7 +243,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Double),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinDouble(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinDouble(observer, selector)));
         }
 
         public static IAsyncObservable<Double> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Double>> selector)
@@ -257,7 +257,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Double),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinDouble(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinDouble(observer, selector)));
         }
 
         public static IAsyncObservable<Double?> Min(this IAsyncObservable<Double?> source)
@@ -279,7 +279,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Double?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableDouble(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableDouble(observer, selector)));
         }
 
         public static IAsyncObservable<Double?> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Double?>> selector)
@@ -293,7 +293,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Double?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableDouble(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableDouble(observer, selector)));
         }
 
         public static IAsyncObservable<Decimal> Min(this IAsyncObservable<Decimal> source)
@@ -315,7 +315,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Decimal),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinDecimal(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinDecimal(observer, selector)));
         }
 
         public static IAsyncObservable<Decimal> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Decimal>> selector)
@@ -329,7 +329,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Decimal),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinDecimal(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinDecimal(observer, selector)));
         }
 
         public static IAsyncObservable<Decimal?> Min(this IAsyncObservable<Decimal?> source)
@@ -351,7 +351,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Decimal?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableDecimal(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableDecimal(observer, selector)));
         }
 
         public static IAsyncObservable<Decimal?> Min<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Decimal?>> selector)
@@ -365,7 +365,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Decimal?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableDecimal(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinNullableDecimal(observer, selector)));
         }
 
     }

@@ -21,7 +21,7 @@ namespace System.Reactive.Linq
                 first,
                 second,
                 default((TFirst first, TSecond second)),
-                async (first, second, observer) =>
+                static async (first, second, observer) =>
                 {
                     var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer);
 
@@ -47,7 +47,7 @@ namespace System.Reactive.Linq
                 first,
                 (second, resultSelector),
                 default(TResult),
-                async (first, state, observer) =>
+                static async (first, state, observer) =>
                 {
                     var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, state.resultSelector);
 
@@ -73,7 +73,7 @@ namespace System.Reactive.Linq
                 first,
                 (second, resultSelector),
                 default(TResult),
-                async (first, state, observer) =>
+                static async (first, state, observer) =>
                 {
                     var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, state.resultSelector);
 

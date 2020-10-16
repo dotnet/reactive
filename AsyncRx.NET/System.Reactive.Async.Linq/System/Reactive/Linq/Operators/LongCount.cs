@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(long),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.LongCount(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.LongCount(observer, predicate)));
         }
 
         public static IAsyncObservable<long> LongCount<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(long),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.LongCount(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.LongCount(observer, predicate)));
         }
     }
 

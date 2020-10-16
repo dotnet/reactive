@@ -33,7 +33,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(TSource),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Last(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Last(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> Last<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
@@ -47,7 +47,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(TSource),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Last(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Last(observer, predicate)));
         }
     }
 

@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
                 source,
                 until,
                 default(TSource),
-                async (source, until, observer) =>
+                static async (source, until, observer) =>
                 {
                     var (sourceObserver, untilObserver) = AsyncObserver.SkipUntil<TSource, TUntil>(observer);
 
@@ -49,7 +49,7 @@ namespace System.Reactive.Linq
                 source,
                 endTime,
                 default(TSource),
-                async (source, endTime, observer) =>
+                static async (source, endTime, observer) =>
                 {
                     var (sourceObserver, timer) = await AsyncObserver.SkipUntil(observer, endTime).ConfigureAwait(false);
 
@@ -72,7 +72,7 @@ namespace System.Reactive.Linq
                 source,
                 (scheduler, endTime),
                 default(TSource),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sourceObserver, timer) = await AsyncObserver.SkipUntil(observer, state.endTime).ConfigureAwait(false);
 

@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
                 source,
                 count,
                 default(TSource),
-                (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Take(observer, count)));
+                static (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Take(observer, count)));
         }
 
         public static IAsyncObservable<TSource> Take<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration)
@@ -48,7 +48,7 @@ namespace System.Reactive.Linq
                 source,
                 duration,
                 default(TSource),
-                async (source, duration, observer) =>
+                static async (source, duration, observer) =>
                 {
                     var (sourceObserver, timer) = await AsyncObserver.Take(observer, duration).ConfigureAwait(false);
 
@@ -78,7 +78,7 @@ namespace System.Reactive.Linq
                 source,
                 (duration, scheduler),
                 default(TSource),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sourceObserver, timer) = await AsyncObserver.Take(observer, state.duration).ConfigureAwait(false);
 

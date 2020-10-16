@@ -37,7 +37,7 @@ namespace System.Reactive.Linq
                 source,
                 retryCount,
                 default(TSource),
-                async (source, retryCount, observer) =>
+                static async (source, retryCount, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.Retry(observer, source, retryCount);
 

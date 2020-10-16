@@ -24,7 +24,7 @@ namespace System.Reactive.Linq
                 source,
                 count,
                 default(IAsyncObservable<TSource>),
-                (source, count, observer) => WindowCore(source, observer, (o, d) => AsyncObserver.Window(o, d, count)));
+                static (source, count, observer) => WindowCore(source, observer, (o, d) => AsyncObserver.Window(o, d, count)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, int count, int skip)
@@ -40,7 +40,7 @@ namespace System.Reactive.Linq
                 source,
                 (count, skip),
                 default(IAsyncObservable<TSource>),
-                (source, state, observer) => WindowCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.count, state.skip)));
+                static (source, state, observer) => WindowCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.count, state.skip)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan)
@@ -54,7 +54,7 @@ namespace System.Reactive.Linq
                 source,
                 timeSpan,
                 default(IAsyncObservable<TSource>),
-                (source, timeSpan, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, timeSpan)));
+                static (source, timeSpan, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, timeSpan)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan, IAsyncScheduler scheduler)
@@ -70,7 +70,7 @@ namespace System.Reactive.Linq
                 source,
                 (timeSpan, scheduler),
                 default(IAsyncObservable<TSource>),
-                (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.scheduler)));
+                static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.scheduler)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift)
@@ -86,7 +86,7 @@ namespace System.Reactive.Linq
                 source,
                 (timeSpan, timeShift),
                 default(IAsyncObservable<TSource>),
-                (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.timeShift)));
+                static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.timeShift)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift, IAsyncScheduler scheduler)
@@ -104,7 +104,7 @@ namespace System.Reactive.Linq
                 source,
                 (timeSpan, timeShift, scheduler),
                 default(IAsyncObservable<TSource>),
-                (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.timeShift, state.scheduler)));
+                static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.timeShift, state.scheduler)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan, int count)
@@ -120,7 +120,7 @@ namespace System.Reactive.Linq
                 source,
                 (timeSpan, count),
                 default(IAsyncObservable<TSource>),
-                (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.count)));
+                static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.count)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan, int count, IAsyncScheduler scheduler)
@@ -138,7 +138,7 @@ namespace System.Reactive.Linq
                 source,
                 (timeSpan, count, scheduler),
                 default(IAsyncObservable<TSource>),
-                (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.count, state.scheduler)));
+                static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.count, state.scheduler)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource, TWindowBoundary>(this IAsyncObservable<TSource> source, IAsyncObservable<TWindowBoundary> windowBoundaries)
@@ -152,7 +152,7 @@ namespace System.Reactive.Linq
                 source,
                 windowBoundaries,
                 default(IAsyncObservable<TSource>),
-                async (source, windowBoundaries, observer) =>
+                static async (source, windowBoundaries, observer) =>
                 {
                     var d = new CompositeAsyncDisposable();
 
@@ -181,7 +181,7 @@ namespace System.Reactive.Linq
                 source,
                 windowClosingSelector,
                 default(IAsyncObservable<TSource>),
-                async (source, windowClosingSelector, observer) =>
+                static async (source, windowClosingSelector, observer) =>
                 {
                     var d = new CompositeAsyncDisposable();
 

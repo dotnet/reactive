@@ -21,7 +21,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(TResult),
-                async (source, selector, observer) =>
+                static async (source, selector, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
 
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(TResult),
-                async (source, selector, observer) =>
+                static async (source, selector, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
 
@@ -65,7 +65,7 @@ namespace System.Reactive.Linq
                 source,
                 (collectionSelector, resultSelector),
                 default(TResult),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector);
 
@@ -88,7 +88,7 @@ namespace System.Reactive.Linq
                 source,
                 (collectionSelector, resultSelector),
                 default(TResult),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector);
 
@@ -109,7 +109,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(TResult),
-                async (source, selector, observer) =>
+                static async (source, selector, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
 
@@ -130,7 +130,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(TResult),
-                async (source, selector, observer) =>
+                static async (source, selector, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
 
@@ -153,7 +153,7 @@ namespace System.Reactive.Linq
                 source,
                 (collectionSelector, resultSelector),
                 default(TResult),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector);
 
@@ -176,7 +176,7 @@ namespace System.Reactive.Linq
                 source,
                 (collectionSelector, resultSelector),
                 default(TResult),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector);
 

@@ -67,7 +67,7 @@ namespace System.Reactive.Linq
                 source,
                 (subjectFactory, selector),
                 default(TResult),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var observable = default(IAsyncObservable<TResult>);
                     var connectable = default(IConnectableAsyncObservable<TIntermediate>);

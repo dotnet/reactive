@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
                 source,
                 until,
                 default(TSource),
-                async (source, until, observer) =>
+                static async (source, until, observer) =>
                 {
                     var (sourceObserver, untilObserver) = AsyncObserver.TakeUntil<TSource, TUntil>(observer);
 
@@ -49,7 +49,7 @@ namespace System.Reactive.Linq
                 source,
                 endTime,
                 default(TSource),
-                async (source, endTime, observer) =>
+                static async (source, endTime, observer) =>
                 {
                     var (sourceObserver, timer) = await AsyncObserver.TakeUntil(observer, endTime).ConfigureAwait(false);
 
@@ -72,7 +72,7 @@ namespace System.Reactive.Linq
                 source,
                 (endTime, scheduler),
                 default(TSource),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sourceObserver, timer) = await AsyncObserver.TakeUntil(observer, state.endTime, state.scheduler).ConfigureAwait(false);
 

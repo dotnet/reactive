@@ -20,7 +20,7 @@ namespace System.Reactive.Linq
                 source,
                 dueTime,
                 default(TSource),
-                async (source, dueTime, observer) =>
+                static async (source, dueTime, observer) =>
                 {
                     var sourceSubscription = new SingleAssignmentAsyncDisposable();
 
@@ -45,7 +45,7 @@ namespace System.Reactive.Linq
                 source,
                 (dueTime, scheduler),
                 default(TSource),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var sourceSubscription = new SingleAssignmentAsyncDisposable();
 
@@ -70,7 +70,7 @@ namespace System.Reactive.Linq
                 source,
                 (dueTime, other),
                 default(TSource),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var sourceSubscription = new SingleAssignmentAsyncDisposable();
 
@@ -97,7 +97,7 @@ namespace System.Reactive.Linq
                 source,
                 (dueTime, other, scheduler),
                 default(TSource),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var sourceSubscription = new SingleAssignmentAsyncDisposable();
 

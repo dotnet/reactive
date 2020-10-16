@@ -31,7 +31,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(TSource),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.SingleOrDefault(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.SingleOrDefault(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> SingleOrDefault<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
@@ -45,7 +45,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(TSource),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.SingleOrDefault(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.SingleOrDefault(observer, predicate)));
         }
     }
 

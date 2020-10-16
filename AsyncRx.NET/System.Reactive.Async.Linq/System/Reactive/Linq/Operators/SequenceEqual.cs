@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
                 first,
                 second,
                 default(bool),
-                async (first, second, observer) =>
+                static async (first, second, observer) =>
                 {
                     var (firstObserver, secondObserver) = AsyncObserver.SequenceEqual<TSource>(observer);
 
@@ -52,7 +52,7 @@ namespace System.Reactive.Linq
                 first,
                 (second, comparer),
                 default(bool),
-                async (first, state, observer) =>
+                static async (first, state, observer) =>
                 {
                     var (firstObserver, secondObserver) = AsyncObserver.SequenceEqual(observer, state.comparer);
 

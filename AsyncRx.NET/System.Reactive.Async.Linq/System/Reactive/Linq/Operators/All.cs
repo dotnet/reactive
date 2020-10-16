@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(bool),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.All(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.All(observer, predicate)));
         }
 
         public static IAsyncObservable<bool> All<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
@@ -33,7 +33,7 @@ namespace System.Reactive.Linq
                 source,
                 predicate,
                 default(bool),
-                (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.All(observer, predicate)));
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.All(observer, predicate)));
         }
     }
 

@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
                 source,
                 element,
                 default(bool),
-                (source, element, observer) => source.SubscribeSafeAsync(AsyncObserver.Contains(observer, element)));
+                static (source, element, observer) => source.SubscribeSafeAsync(AsyncObserver.Contains(observer, element)));
         }
 
         public static IAsyncObservable<bool> Contains<TSource>(this IAsyncObservable<TSource> source, TSource element, IEqualityComparer<TSource> comparer)
@@ -31,7 +31,7 @@ namespace System.Reactive.Linq
                 source,
                 (element, comparer),
                 default(bool),
-                (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Contains(observer, state.element, state.comparer)));
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Contains(observer, state.element, state.comparer)));
         }
     }
 

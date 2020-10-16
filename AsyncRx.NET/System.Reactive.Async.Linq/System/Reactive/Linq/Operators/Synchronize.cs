@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
                 source,
                 gate,
                 default(TSource),
-                (source, gate, observer) => source.SubscribeSafeAsync(AsyncObserver.Synchronize(observer, gate)));
+                static (source, gate, observer) => source.SubscribeSafeAsync(AsyncObserver.Synchronize(observer, gate)));
         }
     }
 

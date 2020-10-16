@@ -32,7 +32,7 @@ namespace System.Reactive.Linq
                 source,
                 (subscribeScheduler, disposeScheduler),
                 default(TSource),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var m = new SingleAssignmentAsyncDisposable();
                     var d = new SerialAsyncDisposable();

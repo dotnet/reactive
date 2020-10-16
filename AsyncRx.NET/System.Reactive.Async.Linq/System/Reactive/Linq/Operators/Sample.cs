@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
                 source,
                 sampler,
                 default(TSource),
-                async (source, sampler, observer) =>
+                static async (source, sampler, observer) =>
                 {
                     var (sourceSink, samplerSink) = AsyncObserver.Sample<TSource, TSample>(observer);
 
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq
                 source,
                 interval,
                 default(TSource),
-                async (source, interval, observer) =>
+                static async (source, interval, observer) =>
                 {
                     var (sourceSink, sampler) = await AsyncObserver.Sample(observer, interval).ConfigureAwait(false);
 
@@ -63,7 +63,7 @@ namespace System.Reactive.Linq
                 source,
                 (scheduler, interval),
                 default(TSource),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sourceSink, sampler) = await AsyncObserver.Sample(observer, state.interval, state.scheduler).ConfigureAwait(false);
 

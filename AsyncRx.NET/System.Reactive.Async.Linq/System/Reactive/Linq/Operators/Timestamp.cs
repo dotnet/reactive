@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
                 source,
                 clock,
                 default(Timestamped<TSource>),
-                (source, clock, observer) => source.SubscribeSafeAsync(AsyncObserver.Timestamp(observer, clock)));
+                static (source, clock, observer) => source.SubscribeSafeAsync(AsyncObserver.Timestamp(observer, clock)));
         }
     }
 

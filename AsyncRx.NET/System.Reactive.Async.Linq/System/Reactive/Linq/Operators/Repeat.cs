@@ -62,7 +62,7 @@ namespace System.Reactive.Linq
                 source,
                 repeatCount,
                 default(TSource),
-                (source, repeatCount, observer) => AsyncObserver.Repeat(observer, source, repeatCount));
+                static (source, repeatCount, observer) => AsyncObserver.Repeat(observer, source, repeatCount));
         }
     }
 

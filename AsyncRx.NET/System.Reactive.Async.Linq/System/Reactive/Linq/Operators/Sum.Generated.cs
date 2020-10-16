@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int32),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumInt32(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumInt32(observer, selector)));
         }
 
         public static IAsyncObservable<Int32> Sum<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Int32>> selector)
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int32),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumInt32(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumInt32(observer, selector)));
         }
 
         public static IAsyncObservable<Int32?> Sum(this IAsyncObservable<Int32?> source)
@@ -63,7 +63,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int32?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableInt32(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableInt32(observer, selector)));
         }
 
         public static IAsyncObservable<Int32?> Sum<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Int32?>> selector)
@@ -77,7 +77,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int32?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableInt32(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableInt32(observer, selector)));
         }
 
         public static IAsyncObservable<Int64> Sum(this IAsyncObservable<Int64> source)
@@ -99,7 +99,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int64),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumInt64(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumInt64(observer, selector)));
         }
 
         public static IAsyncObservable<Int64> Sum<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Int64>> selector)
@@ -113,7 +113,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int64),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumInt64(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumInt64(observer, selector)));
         }
 
         public static IAsyncObservable<Int64?> Sum(this IAsyncObservable<Int64?> source)
@@ -135,7 +135,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int64?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableInt64(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableInt64(observer, selector)));
         }
 
         public static IAsyncObservable<Int64?> Sum<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Int64?>> selector)
@@ -149,7 +149,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Int64?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableInt64(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableInt64(observer, selector)));
         }
 
         public static IAsyncObservable<Single> Sum(this IAsyncObservable<Single> source)
@@ -171,7 +171,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Single),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumSingle(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumSingle(observer, selector)));
         }
 
         public static IAsyncObservable<Single> Sum<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Single>> selector)
@@ -185,7 +185,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Single),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumSingle(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumSingle(observer, selector)));
         }
 
         public static IAsyncObservable<Single?> Sum(this IAsyncObservable<Single?> source)
@@ -207,7 +207,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Single?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableSingle(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableSingle(observer, selector)));
         }
 
         public static IAsyncObservable<Single?> Sum<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Single?>> selector)
@@ -221,7 +221,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Single?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableSingle(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableSingle(observer, selector)));
         }
 
         public static IAsyncObservable<Double> Sum(this IAsyncObservable<Double> source)
@@ -243,7 +243,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Double),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumDouble(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumDouble(observer, selector)));
         }
 
         public static IAsyncObservable<Double> Sum<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Double>> selector)
@@ -257,7 +257,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Double),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumDouble(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumDouble(observer, selector)));
         }
 
         public static IAsyncObservable<Double?> Sum(this IAsyncObservable<Double?> source)
@@ -279,7 +279,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Double?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableDouble(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableDouble(observer, selector)));
         }
 
         public static IAsyncObservable<Double?> Sum<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Double?>> selector)
@@ -293,7 +293,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Double?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableDouble(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableDouble(observer, selector)));
         }
 
         public static IAsyncObservable<Decimal> Sum(this IAsyncObservable<Decimal> source)
@@ -315,7 +315,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Decimal),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumDecimal(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumDecimal(observer, selector)));
         }
 
         public static IAsyncObservable<Decimal> Sum<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Decimal>> selector)
@@ -329,7 +329,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Decimal),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumDecimal(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumDecimal(observer, selector)));
         }
 
         public static IAsyncObservable<Decimal?> Sum(this IAsyncObservable<Decimal?> source)
@@ -351,7 +351,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Decimal?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableDecimal(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableDecimal(observer, selector)));
         }
 
         public static IAsyncObservable<Decimal?> Sum<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<Decimal?>> selector)
@@ -365,7 +365,7 @@ namespace System.Reactive.Linq
                 source,
                 selector,
                 default(Decimal?),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableDecimal(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.SumNullableDecimal(observer, selector)));
         }
 
     }

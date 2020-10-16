@@ -28,7 +28,7 @@ namespace System.Reactive.Linq
                 source,
                 comparer,
                 default(TSource),
-                (source, comparer, observer) => source.SubscribeSafeAsync(AsyncObserver.Max(observer, comparer)));
+                static (source, comparer, observer) => source.SubscribeSafeAsync(AsyncObserver.Max(observer, comparer)));
         }
     }
 

@@ -57,7 +57,7 @@ foreach (var t in types)
                 source,
                 selector,
                 default(<#=targetTypeName#>),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));
         }
 
         public static IAsyncObservable<<#=targetTypeName#>> <#=name#><TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<<#=sourceTypeName#>>> selector)
@@ -71,7 +71,7 @@ foreach (var t in types)
                 source,
                 selector,
                 default(<#=targetTypeName#>),
-                (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));
+                static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));
         }
 
 <#

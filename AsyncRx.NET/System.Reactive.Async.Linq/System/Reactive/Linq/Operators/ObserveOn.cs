@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
                 source,
                 scheduler,
                 default(TSource),
-                async (source, scheduler, observer) =>
+                static async (source, scheduler, observer) =>
                 {
                     var (sink, drain) = await AsyncObserver.ObserveOn(observer, scheduler).ConfigureAwait(false);
 
