@@ -18,10 +18,9 @@ namespace System.Reactive.Linq
             if (until == null)
                 throw new ArgumentNullException(nameof(until));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 until,
-                default(TSource),
                 static async (source, until, observer) =>
                 {
                     var (sourceObserver, untilObserver) = AsyncObserver.TakeUntil<TSource, TUntil>(observer);
@@ -45,10 +44,9 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want TakeUntil on the observer?
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 endTime,
-                default(TSource),
                 static async (source, endTime, observer) =>
                 {
                     var (sourceObserver, timer) = await AsyncObserver.TakeUntil(observer, endTime).ConfigureAwait(false);
@@ -68,10 +66,9 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want TakeUntil on the observer?
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (endTime, scheduler),
-                default(TSource),
                 static async (source, state, observer) =>
                 {
                     var (sourceObserver, timer) = await AsyncObserver.TakeUntil(observer, state.endTime, state.scheduler).ConfigureAwait(false);

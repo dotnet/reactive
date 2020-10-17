@@ -22,10 +22,9 @@ namespace System.Reactive.Linq
             if (elseSource == null)
                 throw new ArgumentNullException(nameof(elseSource));
 
-            return Create(
+            return Build<TResult>.From(
                 thenSource,
                 (elseSource, condition),
-                default(TResult),
                 static (thenSource, state, observer) =>
                 {
                     var b = default(bool);
@@ -56,10 +55,9 @@ namespace System.Reactive.Linq
             if (elseSource == null)
                 throw new ArgumentNullException(nameof(elseSource));
 
-            return Create(
+            return Build<TResult>.From(
                 thenSource,
                 (elseSource, condition),
-                default(TResult),
                 static async (thenSource, state, observer) =>
                 {
                     var b = default(bool);

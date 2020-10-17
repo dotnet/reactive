@@ -19,10 +19,9 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Create(
+            return Build<TSource>.From(
                 first,
                 second,
-                default(TSource),
                 static async (first, second, observer) =>
                 {
                     var firstSubscription = new SingleAssignmentAsyncDisposable();

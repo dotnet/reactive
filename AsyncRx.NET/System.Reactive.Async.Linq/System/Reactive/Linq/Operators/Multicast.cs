@@ -63,10 +63,9 @@ namespace System.Reactive.Linq
 
             // REVIEW: Use a lifted observer operator.
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 (subjectFactory, selector),
-                default(TResult),
                 static async (source, state, observer) =>
                 {
                     var observable = default(IAsyncObservable<TResult>);

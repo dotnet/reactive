@@ -16,10 +16,9 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 dueTime,
-                default(TSource),
                 static async (source, dueTime, observer) =>
                 {
                     var sourceSubscription = new SingleAssignmentAsyncDisposable();
@@ -41,10 +40,9 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (dueTime, scheduler),
-                default(TSource),
                 static async (source, state, observer) =>
                 {
                     var sourceSubscription = new SingleAssignmentAsyncDisposable();
@@ -66,10 +64,9 @@ namespace System.Reactive.Linq
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (dueTime, other),
-                default(TSource),
                 static async (source, state, observer) =>
                 {
                     var sourceSubscription = new SingleAssignmentAsyncDisposable();
@@ -93,10 +90,9 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (dueTime, other, scheduler),
-                default(TSource),
                 static async (source, state, observer) =>
                 {
                     var sourceSubscription = new SingleAssignmentAsyncDisposable();

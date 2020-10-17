@@ -23,10 +23,9 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(
+            return Build<bool>.From(
                 source,
                 predicate,
-                default(bool),
                 static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Any(observer, predicate)));
         }
 
@@ -37,10 +36,9 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(
+            return Build<bool>.From(
                 source,
                 predicate,
-                default(bool),
                 static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Any(observer, predicate)));
         }
     }

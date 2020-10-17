@@ -19,10 +19,9 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Create(
+            return Build<bool>.From(
                 first,
                 second,
-                default(bool),
                 static async (first, second, observer) =>
                 {
                     var (firstObserver, secondObserver) = AsyncObserver.SequenceEqual<TSource>(observer);
@@ -48,10 +47,9 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(
+            return Build<bool>.From(
                 first,
                 (second, comparer),
-                default(bool),
                 static async (first, state, observer) =>
                 {
                     var (firstObserver, secondObserver) = AsyncObserver.SequenceEqual(observer, state.comparer);

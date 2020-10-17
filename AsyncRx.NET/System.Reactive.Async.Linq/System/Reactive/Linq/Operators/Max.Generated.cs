@@ -23,10 +23,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Int32>.From(
                 source,
                 selector,
-                default(Int32),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxInt32(observer, selector)));
         }
 
@@ -37,10 +36,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Int32>.From(
                 source,
                 selector,
-                default(Int32),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxInt32(observer, selector)));
         }
 
@@ -59,10 +57,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Int32?>.From(
                 source,
                 selector,
-                default(Int32?),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableInt32(observer, selector)));
         }
 
@@ -73,10 +70,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Int32?>.From(
                 source,
                 selector,
-                default(Int32?),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableInt32(observer, selector)));
         }
 
@@ -95,10 +91,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Int64>.From(
                 source,
                 selector,
-                default(Int64),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxInt64(observer, selector)));
         }
 
@@ -109,10 +104,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Int64>.From(
                 source,
                 selector,
-                default(Int64),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxInt64(observer, selector)));
         }
 
@@ -131,10 +125,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Int64?>.From(
                 source,
                 selector,
-                default(Int64?),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableInt64(observer, selector)));
         }
 
@@ -145,10 +138,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Int64?>.From(
                 source,
                 selector,
-                default(Int64?),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableInt64(observer, selector)));
         }
 
@@ -167,10 +159,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Single>.From(
                 source,
                 selector,
-                default(Single),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxSingle(observer, selector)));
         }
 
@@ -181,10 +172,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Single>.From(
                 source,
                 selector,
-                default(Single),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxSingle(observer, selector)));
         }
 
@@ -203,10 +193,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Single?>.From(
                 source,
                 selector,
-                default(Single?),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableSingle(observer, selector)));
         }
 
@@ -217,10 +206,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Single?>.From(
                 source,
                 selector,
-                default(Single?),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableSingle(observer, selector)));
         }
 
@@ -239,10 +227,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Double>.From(
                 source,
                 selector,
-                default(Double),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxDouble(observer, selector)));
         }
 
@@ -253,10 +240,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Double>.From(
                 source,
                 selector,
-                default(Double),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxDouble(observer, selector)));
         }
 
@@ -275,10 +261,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Double?>.From(
                 source,
                 selector,
-                default(Double?),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableDouble(observer, selector)));
         }
 
@@ -289,10 +274,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Double?>.From(
                 source,
                 selector,
-                default(Double?),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableDouble(observer, selector)));
         }
 
@@ -311,10 +295,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Decimal>.From(
                 source,
                 selector,
-                default(Decimal),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxDecimal(observer, selector)));
         }
 
@@ -325,10 +308,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Decimal>.From(
                 source,
                 selector,
-                default(Decimal),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxDecimal(observer, selector)));
         }
 
@@ -347,10 +329,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Decimal?>.From(
                 source,
                 selector,
-                default(Decimal?),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableDecimal(observer, selector)));
         }
 
@@ -361,10 +342,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<Decimal?>.From(
                 source,
                 selector,
-                default(Decimal?),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxNullableDecimal(observer, selector)));
         }
 

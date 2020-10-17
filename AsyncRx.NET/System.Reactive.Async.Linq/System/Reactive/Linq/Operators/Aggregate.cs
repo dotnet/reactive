@@ -15,10 +15,9 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 func,
-                default(TSource),
                 static (source, func, observer) => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, func)));
         }
 
@@ -29,10 +28,9 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 func,
-                default(TSource),
                 static (source, func, observer) => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, func)));
         }
 
@@ -43,10 +41,9 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 (seed, func),
-                default(TResult),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, state.seed, state.func)));
         }
 
@@ -57,10 +54,9 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 (seed, func),
-                default(TResult),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, state.seed, state.func)));
         }
 
@@ -73,10 +69,9 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 (seed, func, resultSelector),
-                default(TResult),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, state.seed, state.func, state.resultSelector)));
         }
 
@@ -89,10 +84,9 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 (seed, func, resultSelector),
-                default(TResult),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, state.seed, state.func, state.resultSelector)));
         }
     }

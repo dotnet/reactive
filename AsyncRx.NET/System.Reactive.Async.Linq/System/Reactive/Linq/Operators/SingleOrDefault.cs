@@ -27,10 +27,9 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 predicate,
-                default(TSource),
                 static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.SingleOrDefault(observer, predicate)));
         }
 
@@ -41,10 +40,9 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 predicate,
-                default(TSource),
                 static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.SingleOrDefault(observer, predicate)));
         }
     }

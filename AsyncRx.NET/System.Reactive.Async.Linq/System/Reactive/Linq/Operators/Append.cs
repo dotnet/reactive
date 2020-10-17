@@ -15,10 +15,9 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 value,
-                default(TSource),
                 static(source, value, observer) => source.SubscribeSafeAsync(AsyncObserver.Append(observer, value)));
         }
 

@@ -23,10 +23,9 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 count,
-                default(TSource),
                 static async (source, count, observer) =>
                 {
                     var (sink, drain) = AsyncObserver.TakeLast(observer, count);
@@ -51,10 +50,9 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (count, scheduler),
-                default(TSource),
                 static async (source, state, observer) =>
                 {
                     var (sink, drain) = AsyncObserver.TakeLast(observer, state.count, state.scheduler);
@@ -77,10 +75,9 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 duration,
-                default(TSource),
                 static async (source, duration, observer) =>
                 {
                     var (sink, drain) = AsyncObserver.TakeLast(observer, duration);
@@ -105,10 +102,9 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (duration, clock),
-                default(TSource),
                 static async (source, state, observer) =>
                 {
                     var (sink, drain) = AsyncObserver.TakeLast(observer, state.duration, state.clock);
@@ -135,10 +131,9 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (duration, clock, scheduler),
-                default(TSource),
                 static async (source, state, observer) =>
                 {
                     var (sink, drain) = AsyncObserver.TakeLast(observer, state.duration, state.clock, state.scheduler);

@@ -20,10 +20,9 @@ namespace System.Reactive.Linq
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create(
+            return Build<IAsyncObservable<TSource>>.From(
                 source,
                 count,
-                default(IAsyncObservable<TSource>),
                 static (source, count, observer) => WindowCore(source, observer, (o, d) => AsyncObserver.Window(o, d, count)));
         }
 
@@ -36,10 +35,9 @@ namespace System.Reactive.Linq
             if (skip <= 0)
                 throw new ArgumentOutOfRangeException(nameof(skip));
 
-            return Create(
+            return Build<IAsyncObservable<TSource>>.From(
                 source,
                 (count, skip),
-                default(IAsyncObservable<TSource>),
                 static (source, state, observer) => WindowCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.count, state.skip)));
         }
 
@@ -50,10 +48,9 @@ namespace System.Reactive.Linq
             if (timeSpan < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
 
-            return Create(
+            return Build<IAsyncObservable<TSource>>.From(
                 source,
                 timeSpan,
-                default(IAsyncObservable<TSource>),
                 static (source, timeSpan, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, timeSpan)));
         }
 
@@ -66,10 +63,9 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create(
+            return Build<IAsyncObservable<TSource>>.From(
                 source,
                 (timeSpan, scheduler),
-                default(IAsyncObservable<TSource>),
                 static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.scheduler)));
         }
 
@@ -82,10 +78,9 @@ namespace System.Reactive.Linq
             if (timeShift < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(timeShift));
 
-            return Create(
+            return Build<IAsyncObservable<TSource>>.From(
                 source,
                 (timeSpan, timeShift),
-                default(IAsyncObservable<TSource>),
                 static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.timeShift)));
         }
 
@@ -100,10 +95,9 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create(
+            return Build<IAsyncObservable<TSource>>.From(
                 source,
                 (timeSpan, timeShift, scheduler),
-                default(IAsyncObservable<TSource>),
                 static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.timeShift, state.scheduler)));
         }
 
@@ -116,10 +110,9 @@ namespace System.Reactive.Linq
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create(
+            return Build<IAsyncObservable<TSource>>.From(
                 source,
                 (timeSpan, count),
-                default(IAsyncObservable<TSource>),
                 static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.count)));
         }
 
@@ -134,10 +127,9 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create(
+            return Build<IAsyncObservable<TSource>>.From(
                 source,
                 (timeSpan, count, scheduler),
-                default(IAsyncObservable<TSource>),
                 static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.count, state.scheduler)));
         }
 
@@ -148,10 +140,9 @@ namespace System.Reactive.Linq
             if (windowBoundaries == null)
                 throw new ArgumentNullException(nameof(windowBoundaries));
 
-            return Create(
+            return Build<IAsyncObservable<TSource>>.From(
                 source,
                 windowBoundaries,
-                default(IAsyncObservable<TSource>),
                 static async (source, windowBoundaries, observer) =>
                 {
                     var d = new CompositeAsyncDisposable();
@@ -177,10 +168,9 @@ namespace System.Reactive.Linq
             if (windowClosingSelector == null)
                 throw new ArgumentNullException(nameof(windowClosingSelector));
 
-            return Create(
+            return Build<IAsyncObservable<TSource>>.From(
                 source,
                 windowClosingSelector,
-                default(IAsyncObservable<TSource>),
                 static async (source, windowClosingSelector, observer) =>
                 {
                     var d = new CompositeAsyncDisposable();

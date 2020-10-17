@@ -28,10 +28,9 @@ namespace System.Reactive.Linq
             if (disposeScheduler == null)
                 throw new ArgumentNullException(nameof(disposeScheduler));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (subscribeScheduler, disposeScheduler),
-                default(TSource),
                 static async (source, state, observer) =>
                 {
                     var m = new SingleAssignmentAsyncDisposable();

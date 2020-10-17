@@ -23,10 +23,9 @@ namespace System.Reactive.Linq
             if (clock == null)
                 throw new ArgumentNullException(nameof(clock));
 
-            return Create(
+            return Build<Timestamped<TSource>>.From(
                 source,
                 clock,
-                default(Timestamped<TSource>),
                 static (source, clock, observer) => source.SubscribeSafeAsync(AsyncObserver.Timestamp(observer, clock)));
         }
     }

@@ -23,10 +23,9 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(
+            return Build<int>.From(
                 source,
                 predicate,
-                default(int),
                 static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Count(observer, predicate)));
         }
 
@@ -37,10 +36,9 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(
+            return Build<int>.From(
                 source,
                 predicate,
-                default(int),
                 static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Count(observer, predicate)));
         }
     }

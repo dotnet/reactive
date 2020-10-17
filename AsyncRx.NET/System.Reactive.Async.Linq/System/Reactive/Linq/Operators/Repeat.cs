@@ -58,10 +58,9 @@ namespace System.Reactive.Linq
             if (repeatCount < 0)
                 throw new ArgumentNullException(nameof(repeatCount));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 repeatCount,
-                default(TSource),
                 static (source, repeatCount, observer) => AsyncObserver.Repeat(observer, source, repeatCount));
         }
     }

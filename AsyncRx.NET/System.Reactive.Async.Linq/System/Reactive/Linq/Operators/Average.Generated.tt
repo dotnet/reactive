@@ -53,10 +53,9 @@ foreach (var t in types)
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<<#=targetTypeName#>>.From(
                 source,
                 selector,
-                default(<#=targetTypeName#>),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));
         }
 
@@ -67,10 +66,9 @@ foreach (var t in types)
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<<#=targetTypeName#>>.From(
                 source,
                 selector,
-                default(<#=targetTypeName#>),
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));
         }
 

@@ -24,10 +24,9 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create(
+            return Build<TResult>.From(
                 left,
                 (right, leftDurationSelector, rightDurationSelector, resultSelector),
-                default(TResult),
                 static async (left, state, observer) =>
                 {
                     var subscriptions = new CompositeAsyncDisposable();

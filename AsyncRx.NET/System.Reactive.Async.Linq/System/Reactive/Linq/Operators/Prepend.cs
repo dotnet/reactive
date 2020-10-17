@@ -21,10 +21,9 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 value,
-                default(TSource),
                 static async (source, value, observer) => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, value).ConfigureAwait(false)).ConfigureAwait(false));
         }
 
@@ -35,10 +34,9 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (scheduler, value),
-                default(TSource),
                 static (source, state, observer) => AsyncObserver.Prepend(observer, source, state.value, state.scheduler));
         }
 
@@ -49,10 +47,9 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 values,
-                default(TSource),
                 static async (source, values, observer) => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, values).ConfigureAwait(false)).ConfigureAwait(false));
         }
 
@@ -65,10 +62,9 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (scheduler, values),
-                default(TSource),
                 static (source, state, observer) => AsyncObserver.Prepend(observer, source, state.scheduler, state.values)); ;
         }
 
@@ -79,10 +75,9 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 values,
-                default(TSource),
                 static async (source, values, observer) => await source.SubscribeSafeAsync(await AsyncObserver.Prepend(observer, values).ConfigureAwait(false)).ConfigureAwait(false));
         }
 
@@ -95,10 +90,9 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (scheduler, values),
-                default(TSource),
                 static (source, state, observer) => AsyncObserver.Prepend(observer, source, state.scheduler, state.values));
         }
     }

@@ -13,10 +13,9 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(
+            return Build<bool>.From(
                 source,
                 element,
-                default(bool),
                 static (source, element, observer) => source.SubscribeSafeAsync(AsyncObserver.Contains(observer, element)));
         }
 
@@ -27,10 +26,9 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(
+            return Build<bool>.From(
                 source,
                 (element, comparer),
-                default(bool),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Contains(observer, state.element, state.comparer)));
         }
     }

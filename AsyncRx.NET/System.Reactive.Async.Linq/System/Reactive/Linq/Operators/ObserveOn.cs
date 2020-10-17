@@ -19,10 +19,9 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 scheduler,
-                default(TSource),
                 static async (source, scheduler, observer) =>
                 {
                     var (sink, drain) = await AsyncObserver.ObserveOn(observer, scheduler).ConfigureAwait(false);

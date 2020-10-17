@@ -15,10 +15,9 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 func,
-                default(TSource),
                 static (source, func, observer) => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, func)));
         }
 
@@ -29,10 +28,9 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 func,
-                default(TSource),
                 static (source, func, observer) => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, func)));
         }
 
@@ -43,10 +41,9 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 (func, seed),
-                default(TResult),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, state.seed, state.func)));
         }
 
@@ -57,10 +54,9 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 (func, seed),
-                default(TResult),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, state.seed, state.func)));
         }
     }

@@ -23,10 +23,9 @@ namespace System.Reactive.Linq
             if (gate == null)
                 throw new ArgumentNullException(nameof(gate));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 gate,
-                default(TSource),
                 static (source, gate, observer) => source.SubscribeSafeAsync(AsyncObserver.Synchronize(observer, gate)));
         }
     }

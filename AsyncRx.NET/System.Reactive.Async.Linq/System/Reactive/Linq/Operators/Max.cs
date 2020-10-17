@@ -24,10 +24,9 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 comparer,
-                default(TSource),
                 static (source, comparer, observer) => source.SubscribeSafeAsync(AsyncObserver.Max(observer, comparer)));
         }
     }

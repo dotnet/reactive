@@ -16,10 +16,9 @@ namespace System.Reactive.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return Create(
+            return Build<IList<TSource>>.From(
                 source,
                 keySelector,
-                default(IList<TSource>),
                 static (source, keySelector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, keySelector)));
         }
 
@@ -32,10 +31,9 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(
+            return Build<IList<TSource>>.From(
                 source,
                 (keySelector, comparer),
-                default(IList<TSource>),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, state.keySelector, state.comparer)));
         }
 
@@ -46,10 +44,9 @@ namespace System.Reactive.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return Create(
+            return Build<IList<TSource>>.From(
                 source,
                 keySelector,
-                default(IList<TSource>),
                 static (source, keySelector, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, keySelector)));
         }
 
@@ -62,10 +59,9 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(
+            return Build<IList<TSource>>.From(
                 source,
                 (keySelector, comparer),
-                default(IList<TSource>),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, state.keySelector, state.comparer)));
         }
     }

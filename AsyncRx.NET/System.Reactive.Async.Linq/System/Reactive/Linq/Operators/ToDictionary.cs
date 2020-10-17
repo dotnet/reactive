@@ -18,10 +18,9 @@ namespace System.Reactive.Linq
             if (valueSelector == null)
                 throw new ArgumentNullException(nameof(valueSelector));
 
-            return Create(
+            return Build<IDictionary<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector),
-                default(IDictionary<TKey, TValue>),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, state.keySelector, state.valueSelector)));
         }
 
@@ -36,10 +35,9 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(
+            return Build<IDictionary<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector, comparer),
-                default(IDictionary<TKey, TValue>),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, state.keySelector, state.valueSelector, state.comparer))); ;
         }
 
@@ -52,10 +50,9 @@ namespace System.Reactive.Linq
             if (valueSelector == null)
                 throw new ArgumentNullException(nameof(valueSelector));
 
-            return Create(
+            return Build<IDictionary<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector),
-                default(IDictionary<TKey, TValue>),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, state.keySelector, state.valueSelector)));
         }
 
@@ -70,10 +67,9 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(
+            return Build<IDictionary<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector, comparer),
-                default(IDictionary<TKey, TValue>),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, state.keySelector, state.valueSelector, state.comparer)));
         }
     }

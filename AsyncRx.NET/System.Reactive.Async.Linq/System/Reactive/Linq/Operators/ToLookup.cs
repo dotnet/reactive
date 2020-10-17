@@ -19,10 +19,9 @@ namespace System.Reactive.Linq
             if (valueSelector == null)
                 throw new ArgumentNullException(nameof(valueSelector));
 
-            return Create(
+            return Build<ILookup<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector),
-                default(ILookup<TKey, TValue>),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector)));
         }
 
@@ -37,10 +36,9 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(
+            return Build<ILookup<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector, comparer),
-                default(ILookup<TKey, TValue>),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector, state.comparer)));
         }
 
@@ -53,10 +51,9 @@ namespace System.Reactive.Linq
             if (valueSelector == null)
                 throw new ArgumentNullException(nameof(valueSelector));
 
-            return Create(
+            return Build<ILookup<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector),
-                default(ILookup<TKey, TValue>),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector)));
         }
 
@@ -71,10 +68,9 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(
+            return Build<ILookup<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector, comparer),
-                default(ILookup<TKey, TValue>),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector, state.comparer)));
         }
     }

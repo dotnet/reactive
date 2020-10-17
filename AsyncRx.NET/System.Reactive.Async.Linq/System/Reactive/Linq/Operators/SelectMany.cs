@@ -17,10 +17,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 selector,
-                default(TResult),
                 static async (source, selector, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
@@ -38,10 +37,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 selector,
-                default(TResult),
                 static async (source, selector, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
@@ -61,10 +59,9 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 (collectionSelector, resultSelector),
-                default(TResult),
                 static async (source, state, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector);
@@ -84,10 +81,9 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 (collectionSelector, resultSelector),
-                default(TResult),
                 static async (source, state, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector);
@@ -105,10 +101,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 selector,
-                default(TResult),
                 static async (source, selector, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
@@ -126,10 +121,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 selector,
-                default(TResult),
                 static async (source, selector, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
@@ -149,10 +143,9 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 (collectionSelector, resultSelector),
-                default(TResult),
                 static async (source, state, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector);
@@ -172,10 +165,9 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create(
+            return Build<TResult>.From(
                 source,
                 (collectionSelector, resultSelector),
-                default(TResult),
                 static async (source, state, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector);

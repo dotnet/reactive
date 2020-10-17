@@ -22,10 +22,9 @@ namespace System.Reactive.Linq
                 return Empty<IList<TSource>>();
             }
 
-            return Create(
+            return Build<IList<TSource>>.From(
                 source,
                 count,
-                default(IList<TSource>),
                 static (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.TakeLastBuffer(observer, count)));
         }
 
@@ -41,10 +40,9 @@ namespace System.Reactive.Linq
                 return Empty<IList<TSource>>();
             }
 
-            return Create(
+            return Build<IList<TSource>>.From(
                 source,
                 duration,
-                default(IList<TSource>),
                 static (source, duration, observer) => source.SubscribeSafeAsync(AsyncObserver.TakeLastBuffer(observer, duration)));
         }
 
@@ -62,10 +60,9 @@ namespace System.Reactive.Linq
                 return Empty<IList<TSource>>();
             }
 
-            return Create(
+            return Build<IList<TSource>>.From(
                 source,
                 (duration, clock),
-                default(IList<TSource>),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.TakeLastBuffer(observer, state.duration, state.clock)));
         }
     }

@@ -18,10 +18,9 @@ namespace System.Reactive.Linq
             if (sampler == null)
                 throw new ArgumentNullException(nameof(sampler));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 sampler,
-                default(TSource),
                 static async (source, sampler, observer) =>
                 {
                     var (sourceSink, samplerSink) = AsyncObserver.Sample<TSource, TSample>(observer);
@@ -38,10 +37,9 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 interval,
-                default(TSource),
                 static async (source, interval, observer) =>
                 {
                     var (sourceSink, sampler) = await AsyncObserver.Sample(observer, interval).ConfigureAwait(false);
@@ -59,10 +57,9 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (scheduler, interval),
-                default(TSource),
                 static async (source, state, observer) =>
                 {
                     var (sourceSink, sampler) = await AsyncObserver.Sample(observer, state.interval, state.scheduler).ConfigureAwait(false);

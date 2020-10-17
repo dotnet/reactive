@@ -17,10 +17,9 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Create(
+            return Build<(TFirst first, TSecond second)>.From(
                 first,
                 second,
-                default((TFirst first, TSecond second)),
                 static async (first, second, observer) =>
                 {
                     var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer);
@@ -43,10 +42,9 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create(
+            return Build<TResult>.From(
                 first,
                 (second, resultSelector),
-                default(TResult),
                 static async (first, state, observer) =>
                 {
                     var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, state.resultSelector);
@@ -69,10 +67,9 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create(
+            return Build<TResult>.From(
                 first,
                 (second, resultSelector),
-                default(TResult),
                 static async (first, state, observer) =>
                 {
                     var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, state.resultSelector);

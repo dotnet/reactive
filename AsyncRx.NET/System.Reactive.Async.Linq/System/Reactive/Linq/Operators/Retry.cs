@@ -33,10 +33,9 @@ namespace System.Reactive.Linq
             if (retryCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(retryCount));
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 retryCount,
-                default(TSource),
                 static async (source, retryCount, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.Retry(observer, source, retryCount);

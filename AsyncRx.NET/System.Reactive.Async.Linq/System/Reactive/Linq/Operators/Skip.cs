@@ -23,10 +23,9 @@ namespace System.Reactive.Linq
                 return source;
             }
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 count,
-                default(TSource),
                 static (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Skip(observer, count)));
         }
 
@@ -44,10 +43,9 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use SkipUntil with a Timer parameter. Do we want Skip on the observer?
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 duration,
-                default(TSource),
                 static async (source, duration, observer) =>
                 {
                     var (sourceObserver, timer) = await AsyncObserver.Skip(observer, duration).ConfigureAwait(false);
@@ -74,10 +72,9 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use SkipUntil with a Timer parameter. Do we want Skip on the observer?
 
-            return Create(
+            return Build<TSource>.From(
                 source,
                 (duration, scheduler),
-                default(TSource),
                 static async (source, state, observer) =>
                 {
                     var (sourceObserver, timer) = await AsyncObserver.Skip(observer, state.duration).ConfigureAwait(false);
