@@ -15,7 +15,10 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, func)));
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                func,
+                static (source, func, observer) => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, func)));
         }
 
         public static IAsyncObservable<TSource> Aggregate<TSource>(this IAsyncObservable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> func)
@@ -25,7 +28,10 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, func)));
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                func,
+                static (source, func, observer) => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, func)));
         }
 
         public static IAsyncObservable<TResult> Aggregate<TSource, TResult>(this IAsyncObservable<TSource> source, TResult seed, Func<TResult, TSource, TResult> func)
@@ -35,7 +41,10 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, seed, func)));
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (seed, func),
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, state.seed, state.func)));
         }
 
         public static IAsyncObservable<TResult> Aggregate<TSource, TResult>(this IAsyncObservable<TSource> source, TResult seed, Func<TResult, TSource, ValueTask<TResult>> func)
@@ -45,7 +54,10 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, seed, func)));
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (seed, func),
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, state.seed, state.func)));
         }
 
         public static IAsyncObservable<TResult> Aggregate<TSource, TAccumulate, TResult>(this IAsyncObservable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> func, Func<TAccumulate, TResult> resultSelector)
@@ -57,7 +69,10 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, seed, func, resultSelector)));
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (seed, func, resultSelector),
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, state.seed, state.func, state.resultSelector)));
         }
 
         public static IAsyncObservable<TResult> Aggregate<TSource, TAccumulate, TResult>(this IAsyncObservable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> func, Func<TAccumulate, ValueTask<TResult>> resultSelector)
@@ -69,7 +84,10 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, seed, func, resultSelector)));
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (seed, func, resultSelector),
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Aggregate(observer, state.seed, state.func, state.resultSelector)));
         }
     }
 

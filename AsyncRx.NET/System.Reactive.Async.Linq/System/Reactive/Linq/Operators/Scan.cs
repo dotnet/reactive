@@ -15,7 +15,10 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, func)));
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                func,
+                static (source, func, observer) => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, func)));
         }
 
         public static IAsyncObservable<TSource> Scan<TSource>(this IAsyncObservable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> func)
@@ -25,7 +28,10 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, func)));
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                func,
+                static (source, func, observer) => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, func)));
         }
 
         public static IAsyncObservable<TResult> Scan<TSource, TResult>(this IAsyncObservable<TSource> source, TResult seed, Func<TResult, TSource, TResult> func)
@@ -35,7 +41,10 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, seed, func)));
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (func, seed),
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, state.seed, state.func)));
         }
 
         public static IAsyncObservable<TResult> Scan<TSource, TResult>(this IAsyncObservable<TSource> source, TResult seed, Func<TResult, TSource, ValueTask<TResult>> func)
@@ -45,7 +54,10 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, seed, func)));
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (func, seed),
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, state.seed, state.func)));
         }
     }
 

@@ -18,15 +18,18 @@ namespace System.Reactive.Linq
             if (sampler == null)
                 throw new ArgumentNullException(nameof(sampler));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sourceSink, samplerSink) = AsyncObserver.Sample<TSource, TSample>(observer);
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                sampler,
+                static async (source, sampler, observer) =>
+                {
+                    var (sourceSink, samplerSink) = AsyncObserver.Sample<TSource, TSample>(observer);
 
-                var sourceSubscription = await source.SubscribeSafeAsync(sourceSink).ConfigureAwait(false);
-                var samplerSubscription = await sampler.SubscribeSafeAsync(samplerSink).ConfigureAwait(false);
+                    var sourceSubscription = await source.SubscribeSafeAsync(sourceSink).ConfigureAwait(false);
+                    var samplerSubscription = await sampler.SubscribeSafeAsync(samplerSink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(sourceSubscription, samplerSubscription);
-            });
+                    return StableCompositeAsyncDisposable.Create(sourceSubscription, samplerSubscription);
+                });
         }
 
         public static IAsyncObservable<TSource> Sample<TSource>(this IAsyncObservable<TSource> source, TimeSpan interval)
@@ -34,14 +37,17 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sourceSink, sampler) = await AsyncObserver.Sample(observer, interval).ConfigureAwait(false);
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                interval,
+                static async (source, interval, observer) =>
+                {
+                    var (sourceSink, sampler) = await AsyncObserver.Sample(observer, interval).ConfigureAwait(false);
 
-                var sourceSubscription = await source.SubscribeSafeAsync(sourceSink).ConfigureAwait(false);
+                    var sourceSubscription = await source.SubscribeSafeAsync(sourceSink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(sourceSubscription, sampler);
-            });
+                    return StableCompositeAsyncDisposable.Create(sourceSubscription, sampler);
+                });
         }
 
         public static IAsyncObservable<TSource> Sample<TSource>(this IAsyncObservable<TSource> source, TimeSpan interval, IAsyncScheduler scheduler)
@@ -51,14 +57,17 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sourceSink, sampler) = await AsyncObserver.Sample(observer, interval, scheduler).ConfigureAwait(false);
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                (scheduler, interval),
+                static async (source, state, observer) =>
+                {
+                    var (sourceSink, sampler) = await AsyncObserver.Sample(observer, state.interval, state.scheduler).ConfigureAwait(false);
 
-                var sourceSubscription = await source.SubscribeSafeAsync(sourceSink).ConfigureAwait(false);
+                    var sourceSubscription = await source.SubscribeSafeAsync(sourceSink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(sourceSubscription, sampler);
-            });
+                    return StableCompositeAsyncDisposable.Create(sourceSubscription, sampler);
+                });
         }
     }
 

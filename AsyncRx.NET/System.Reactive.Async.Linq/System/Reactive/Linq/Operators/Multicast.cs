@@ -63,33 +63,36 @@ namespace System.Reactive.Linq
 
             // REVIEW: Use a lifted observer operator.
 
-            return Create<TResult>(async observer =>
-            {
-                var observable = default(IAsyncObservable<TResult>);
-                var connectable = default(IConnectableAsyncObservable<TIntermediate>);
-
-                try
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (subjectFactory, selector),
+                static async (source, state, observer) =>
                 {
-                    var subject = await subjectFactory().ConfigureAwait(false);
-                    connectable = new ConnectableAsyncObservable<TSource, TIntermediate>(source, subject);
-                    observable = await selector(connectable).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
-                    return AsyncDisposable.Nop;
-                }
+                    var observable = default(IAsyncObservable<TResult>);
+                    var connectable = default(IConnectableAsyncObservable<TIntermediate>);
 
-                var d = new CompositeAsyncDisposable();
+                    try
+                    {
+                        var subject = await state.subjectFactory().ConfigureAwait(false);
+                        connectable = new ConnectableAsyncObservable<TSource, TIntermediate>(source, subject);
+                        observable = await state.selector(connectable).ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        return AsyncDisposable.Nop;
+                    }
 
-                var subscription = await observable.SubscribeAsync(observer).ConfigureAwait(false);
-                await d.AddAsync(subscription).ConfigureAwait(false);
+                    var d = new CompositeAsyncDisposable();
 
-                var connection = await connectable.ConnectAsync().ConfigureAwait(false);
-                await d.AddAsync(connection).ConfigureAwait(false);
+                    var subscription = await observable.SubscribeAsync(observer).ConfigureAwait(false);
+                    await d.AddAsync(subscription).ConfigureAwait(false);
 
-                return d;
-            });
+                    var connection = await connectable.ConnectAsync().ConfigureAwait(false);
+                    await d.AddAsync(connection).ConfigureAwait(false);
+
+                    return d;
+                });
         }
     }
 }

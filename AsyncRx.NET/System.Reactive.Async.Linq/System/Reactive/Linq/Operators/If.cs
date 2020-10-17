@@ -22,21 +22,24 @@ namespace System.Reactive.Linq
             if (elseSource == null)
                 throw new ArgumentNullException(nameof(elseSource));
 
-            return Create<TResult>(observer =>
-            {
-                var b = default(bool);
-
-                try
+            return CreateAsyncObservable<TResult>.From(
+                thenSource,
+                (elseSource, condition),
+                static (thenSource, state, observer) =>
                 {
-                    b = condition();
-                }
-                catch (Exception ex)
-                {
-                    return Throw<TResult>(ex).SubscribeAsync(observer);
-                }
+                    var b = default(bool);
 
-                return (b ? thenSource : elseSource).SubscribeSafeAsync(observer);
-            });
+                    try
+                    {
+                        b = state.condition();
+                    }
+                    catch (Exception ex)
+                    {
+                        return Throw<TResult>(ex).SubscribeAsync(observer);
+                    }
+
+                    return (b ? thenSource : state.elseSource).SubscribeSafeAsync(observer);
+                });
         }
 
         public static IAsyncObservable<TResult> If<TResult>(Func<ValueTask<bool>> condition, IAsyncObservable<TResult> thenSource) => If(condition, thenSource, Empty<TResult>());
@@ -52,21 +55,24 @@ namespace System.Reactive.Linq
             if (elseSource == null)
                 throw new ArgumentNullException(nameof(elseSource));
 
-            return Create<TResult>(async observer =>
-            {
-                var b = default(bool);
-
-                try
+            return CreateAsyncObservable<TResult>.From(
+                thenSource,
+                (elseSource, condition),
+                static async (thenSource, state, observer) =>
                 {
-                    b = await condition().ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    return await Throw<TResult>(ex).SubscribeAsync(observer).ConfigureAwait(false);
-                }
+                    var b = default(bool);
 
-                return await (b ? thenSource : elseSource).SubscribeSafeAsync(observer).ConfigureAwait(false);
-            });
+                    try
+                    {
+                        b = await state.condition().ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        return await Throw<TResult>(ex).SubscribeAsync(observer).ConfigureAwait(false);
+                    }
+
+                    return await (b ? thenSource : state.elseSource).SubscribeSafeAsync(observer).ConfigureAwait(false);
+                });
         }
     }
 }

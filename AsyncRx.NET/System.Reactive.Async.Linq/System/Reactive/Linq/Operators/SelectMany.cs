@@ -17,14 +17,17 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                selector,
+                static async (source, selector, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
 
         public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<IAsyncObservable<TResult>>> selector)
@@ -34,14 +37,17 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                selector,
+                static async (source, selector, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
 
         public static IAsyncObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncObservable<TSource> source, Func<TSource, IAsyncObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
@@ -53,14 +59,17 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create<TResult>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.SelectMany(observer, collectionSelector, resultSelector);
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (collectionSelector, resultSelector),
+                static async (source, state, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
 
         public static IAsyncObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<IAsyncObservable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
@@ -72,14 +81,17 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create<TResult>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.SelectMany(observer, collectionSelector, resultSelector);
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (collectionSelector, resultSelector),
+                static async (source, state, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
 
         public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, IAsyncObservable<TResult>> selector)
@@ -89,14 +101,17 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                selector,
+                static async (source, selector, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
 
         public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, ValueTask<IAsyncObservable<TResult>>> selector)
@@ -106,14 +121,17 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                selector,
+                static async (source, selector, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
 
         public static IAsyncObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, IAsyncObservable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
@@ -125,14 +143,17 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create<TResult>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.SelectMany(observer, collectionSelector, resultSelector);
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (collectionSelector, resultSelector),
+                static async (source, state, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
 
         public static IAsyncObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, ValueTask<IAsyncObservable<TCollection>>> collectionSelector, Func<TSource, int, TCollection, int, ValueTask<TResult>> resultSelector)
@@ -144,14 +165,17 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create<TResult>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.SelectMany(observer, collectionSelector, resultSelector);
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (collectionSelector, resultSelector),
+                static async (source, state, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
     }
 

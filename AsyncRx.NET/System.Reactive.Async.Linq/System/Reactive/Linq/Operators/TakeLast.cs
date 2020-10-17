@@ -23,14 +23,17 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, drain) = AsyncObserver.TakeLast(observer, count);
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                count,
+                static async (source, count, observer) =>
+                {
+                    var (sink, drain) = AsyncObserver.TakeLast(observer, count);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, drain);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, drain);
+                });
         }
 
         public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, int count, IAsyncScheduler scheduler)
@@ -47,14 +50,17 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, drain) = AsyncObserver.TakeLast(observer, count, scheduler);
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                (count, scheduler),
+                static async (source, state, observer) =>
+                {
+                    var (sink, drain) = AsyncObserver.TakeLast(observer, state.count, state.scheduler);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, drain);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, drain);
+                });
         }
 
         public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration)
@@ -69,14 +75,17 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, drain) = AsyncObserver.TakeLast(observer, duration);
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                duration,
+                static async (source, duration, observer) =>
+                {
+                    var (sink, drain) = AsyncObserver.TakeLast(observer, duration);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, drain);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, drain);
+                });
         }
 
         public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IClock clock)
@@ -93,14 +102,17 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, drain) = AsyncObserver.TakeLast(observer, duration, clock);
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                (duration, clock),
+                static async (source, state, observer) =>
+                {
+                    var (sink, drain) = AsyncObserver.TakeLast(observer, state.duration, state.clock);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, drain);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, drain);
+                });
         }
 
         public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IClock clock, IAsyncScheduler scheduler)
@@ -119,14 +131,17 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, drain) = AsyncObserver.TakeLast(observer, duration, clock, scheduler);
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                (duration, clock, scheduler),
+                static async (source, state, observer) =>
+                {
+                    var (sink, drain) = AsyncObserver.TakeLast(observer, state.duration, state.clock, state.scheduler);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, drain);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, drain);
+                });
         }
 
         public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler) => TakeLast(source, duration, scheduler, scheduler);

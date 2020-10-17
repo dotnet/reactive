@@ -17,20 +17,23 @@ namespace System.Reactive.Linq
             if (dueTime < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(dueTime));
 
-            return Create<TSource>(async observer =>
-            {
-                var d = new CompositeAsyncDisposable();
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                dueTime,
+                static async (source, dueTime, observer) =>
+                {
+                    var d = new CompositeAsyncDisposable();
 
-                var (sink, throttler) = AsyncObserver.Throttle(observer, dueTime);
+                    var (sink, throttler) = AsyncObserver.Throttle(observer, dueTime);
 
-                await d.AddAsync(throttler).ConfigureAwait(false);
+                    await d.AddAsync(throttler).ConfigureAwait(false);
 
-                var sourceSubscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var sourceSubscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                await d.AddAsync(sourceSubscription).ConfigureAwait(false);
+                    await d.AddAsync(sourceSubscription).ConfigureAwait(false);
 
-                return d;
-            });
+                    return d;
+                });
         }
 
         public static IAsyncObservable<TSource> Throttle<TSource>(this IAsyncObservable<TSource> source, TimeSpan dueTime, IAsyncScheduler scheduler)
@@ -42,20 +45,23 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(async observer =>
-            {
-                var d = new CompositeAsyncDisposable();
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                (dueTime, scheduler),
+                static async (source, state, observer) =>
+                {
+                    var d = new CompositeAsyncDisposable();
 
-                var (sink, throttler) = AsyncObserver.Throttle(observer, dueTime, scheduler);
+                    var (sink, throttler) = AsyncObserver.Throttle(observer, state.dueTime, state.scheduler);
 
-                await d.AddAsync(throttler).ConfigureAwait(false);
+                    await d.AddAsync(throttler).ConfigureAwait(false);
 
-                var sourceSubscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var sourceSubscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                await d.AddAsync(sourceSubscription).ConfigureAwait(false);
+                    await d.AddAsync(sourceSubscription).ConfigureAwait(false);
 
-                return d;
-            });
+                    return d;
+                });
         }
 
         public static IAsyncObservable<TSource> Throttle<TSource, TThrottle>(this IAsyncObservable<TSource> source, Func<TSource, IAsyncObservable<TThrottle>> throttleSelector)
@@ -65,20 +71,23 @@ namespace System.Reactive.Linq
             if (throttleSelector == null)
                 throw new ArgumentNullException(nameof(throttleSelector));
 
-            return Create<TSource>(async observer =>
-            {
-                var d = new CompositeAsyncDisposable();
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                throttleSelector,
+                static async (source, throttleSelector, observer) =>
+                {
+                    var d = new CompositeAsyncDisposable();
 
-                var (sink, throttler) = AsyncObserver.Throttle(observer, throttleSelector);
+                    var (sink, throttler) = AsyncObserver.Throttle(observer, throttleSelector);
 
-                await d.AddAsync(throttler).ConfigureAwait(false);
+                    await d.AddAsync(throttler).ConfigureAwait(false);
 
-                var sourceSubscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var sourceSubscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                await d.AddAsync(sourceSubscription).ConfigureAwait(false);
+                    await d.AddAsync(sourceSubscription).ConfigureAwait(false);
 
-                return d;
-            });
+                    return d;
+                });
         }
     }
 

@@ -19,20 +19,23 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Create<TSource>(async observer =>
-            {
-                var firstSubscription = new SingleAssignmentAsyncDisposable();
-                var secondSubscription = new SingleAssignmentAsyncDisposable();
+            return CreateAsyncObservable<TSource>.From(
+                first,
+                second,
+                static async (first, second, observer) =>
+                {
+                    var firstSubscription = new SingleAssignmentAsyncDisposable();
+                    var secondSubscription = new SingleAssignmentAsyncDisposable();
 
-                var (firstObserver, secondObserver) = AsyncObserver.Amb(observer, firstSubscription, secondSubscription);
+                    var (firstObserver, secondObserver) = AsyncObserver.Amb(observer, firstSubscription, secondSubscription);
 
-                var firstTask = first.SubscribeSafeAsync(firstObserver).AsTask().ContinueWith(d => firstSubscription.AssignAsync(d.Result).AsTask()).Unwrap();
-                var secondTask = second.SubscribeSafeAsync(secondObserver).AsTask().ContinueWith(d => secondSubscription.AssignAsync(d.Result).AsTask()).Unwrap();
+                    var firstTask = first.SubscribeSafeAsync(firstObserver).AsTask().ContinueWith(d => firstSubscription.AssignAsync(d.Result).AsTask()).Unwrap();
+                    var secondTask = second.SubscribeSafeAsync(secondObserver).AsTask().ContinueWith(d => secondSubscription.AssignAsync(d.Result).AsTask()).Unwrap();
 
-                await Task.WhenAll(firstTask, secondTask).ConfigureAwait(false);
+                    await Task.WhenAll(firstTask, secondTask).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
-            });
+                    return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
+                });
         }
 
         public static IAsyncObservable<TSource> Amb<TSource>(this IEnumerable<IAsyncObservable<TSource>> sources) => Amb(sources.ToArray());

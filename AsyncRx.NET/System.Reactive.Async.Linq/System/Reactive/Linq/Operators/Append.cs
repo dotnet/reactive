@@ -15,7 +15,10 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Append(observer, value)));
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                value,
+                static(source, value, observer) => source.SubscribeSafeAsync(AsyncObserver.Append(observer, value)));
         }
 
         public static IAsyncObservable<TSource> Append<TSource>(this IAsyncObservable<TSource> source, TSource value, IAsyncScheduler scheduler)
@@ -25,20 +28,23 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(async observer =>
-            {
-                var d = new CompositeAsyncDisposable();
+            return Create(
+                source,
+                (value, scheduler),
+                async (source, state, observer) =>
+                {
+                    var d = new CompositeAsyncDisposable();
 
-                var (sink, disposable) = AsyncObserver.Append(observer, value, scheduler);
+                    var (sink, disposable) = AsyncObserver.Append(observer, state.value, state.scheduler);
 
-                await d.AddAsync(disposable).ConfigureAwait(false);
+                    await d.AddAsync(disposable).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                await d.AddAsync(subscription).ConfigureAwait(false);
+                    await d.AddAsync(subscription).ConfigureAwait(false);
 
-                return d;
-            });
+                    return d;
+                });
         }
 
         public static IAsyncObservable<TSource> Append<TSource>(this IAsyncObservable<TSource> source, params TSource[] values)
@@ -48,7 +54,10 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Append(observer, values)));
+            return Create(
+                source,
+                values,
+                (source, values, observer) => source.SubscribeSafeAsync(AsyncObserver.Append(observer, values)));
         }
 
         public static IAsyncObservable<TSource> Append<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, params TSource[] values)
@@ -60,20 +69,23 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create<TSource>(async observer =>
-            {
-                var d = new CompositeAsyncDisposable();
+            return Create(
+                source,
+                (scheduler, values),
+                async (source, state, observer) =>
+                {
+                    var d = new CompositeAsyncDisposable();
 
-                var (sink, disposable) = AsyncObserver.Append(observer, scheduler, values);
+                    var (sink, disposable) = AsyncObserver.Append(observer, state.scheduler, state.values);
 
-                await d.AddAsync(disposable).ConfigureAwait(false);
+                    await d.AddAsync(disposable).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                await d.AddAsync(subscription).ConfigureAwait(false);
+                    await d.AddAsync(subscription).ConfigureAwait(false);
 
-                return d;
-            });
+                    return d;
+                });
         }
 
         public static IAsyncObservable<TSource> Append<TSource>(this IAsyncObservable<TSource> source, IEnumerable<TSource> values)
@@ -83,7 +95,10 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Append(observer, values)));
+            return Create(
+                source,
+                values,
+                (source, values, observer) => source.SubscribeSafeAsync(AsyncObserver.Append(observer, values)));
         }
 
         public static IAsyncObservable<TSource> Append<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, IEnumerable<TSource> values)
@@ -95,20 +110,23 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create<TSource>(async observer =>
-            {
-                var d = new CompositeAsyncDisposable();
+            return Create(
+                source,
+                (scheduler, values),
+                async (source, state, observer) =>
+                {
+                    var d = new CompositeAsyncDisposable();
 
-                var (sink, disposable) = AsyncObserver.Append(observer, scheduler, values);
+                    var (sink, disposable) = AsyncObserver.Append(observer, state.scheduler, state.values);
 
-                await d.AddAsync(disposable).ConfigureAwait(false);
+                    await d.AddAsync(disposable).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                await d.AddAsync(subscription).ConfigureAwait(false);
+                    await d.AddAsync(subscription).ConfigureAwait(false);
 
-                return d;
-            });
+                    return d;
+                });
         }
     }
 

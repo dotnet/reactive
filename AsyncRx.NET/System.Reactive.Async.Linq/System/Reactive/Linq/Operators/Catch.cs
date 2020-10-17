@@ -20,14 +20,17 @@ namespace System.Reactive.Linq
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.Catch(observer, handler);
+            return Create(
+                source,
+                handler,
+                async (source, handler, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.Catch(observer, handler);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
 
         public static IAsyncObservable<TSource> Catch<TSource, TException>(this IAsyncObservable<TSource> source, Func<TException, ValueTask<IAsyncObservable<TSource>>> handler)
@@ -38,14 +41,17 @@ namespace System.Reactive.Linq
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.Catch(observer, handler);
+            return Create(
+                source,
+                handler,
+                async (source, handler, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.Catch(observer, handler);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
 
         public static IAsyncObservable<TSource> Catch<TSource>(this IAsyncObservable<TSource> first, IAsyncObservable<TSource> second)
@@ -55,14 +61,17 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.Catch(observer, second);
+            return Create(
+                first,
+                second,
+                async (first, second, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.Catch(observer, second);
 
-                var subscription = await first.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await first.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
 
         public static IAsyncObservable<TSource> Catch<TSource>(params IAsyncObservable<TSource>[] sources) => Catch((IEnumerable<IAsyncObservable<TSource>>)sources);

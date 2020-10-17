@@ -33,14 +33,17 @@ namespace System.Reactive.Linq
             if (retryCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(retryCount));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sink, inner) = AsyncObserver.Retry(observer, source, retryCount);
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                retryCount,
+                static async (source, retryCount, observer) =>
+                {
+                    var (sink, inner) = AsyncObserver.Retry(observer, source, retryCount);
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
         }
     }
 

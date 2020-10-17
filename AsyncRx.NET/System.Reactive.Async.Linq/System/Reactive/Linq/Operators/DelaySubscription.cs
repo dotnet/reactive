@@ -24,20 +24,23 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(async observer =>
-            {
-                var d = new CompositeAsyncDisposable();
-
-                var task = await scheduler.ScheduleAsync(async ct =>
+            return Create(
+                source,
+                (dueTime, scheduler),
+                async (source, state, observer) =>
                 {
-                    var inner = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
-                    await d.AddAsync(inner).ConfigureAwait(false);
-                }, dueTime).ConfigureAwait(false);
+                    var d = new CompositeAsyncDisposable();
 
-                await d.AddAsync(task).ConfigureAwait(false);
+                    var task = await state.scheduler.ScheduleAsync(async ct =>
+                    {
+                        var inner = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
+                        await d.AddAsync(inner).ConfigureAwait(false);
+                    }, state.dueTime).ConfigureAwait(false);
 
-                return d;
-            });
+                    await d.AddAsync(task).ConfigureAwait(false);
+
+                    return d;
+                });
         }
 
         public static IAsyncObservable<TSource> DelaySubscription<TSource>(this IAsyncObservable<TSource> source, DateTimeOffset dueTime)
@@ -55,20 +58,23 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(async observer =>
-            {
-                var d = new CompositeAsyncDisposable();
-
-                var task = await scheduler.ScheduleAsync(async ct =>
+            return Create(
+                source,
+                (dueTime, scheduler),
+                async (source, state, observer) =>
                 {
-                    var inner = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
-                    await d.AddAsync(inner).ConfigureAwait(false);
-                }, dueTime).ConfigureAwait(false);
+                    var d = new CompositeAsyncDisposable();
 
-                await d.AddAsync(task).ConfigureAwait(false);
+                    var task = await state.scheduler.ScheduleAsync(async ct =>
+                    {
+                        var inner = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
+                        await d.AddAsync(inner).ConfigureAwait(false);
+                    }, state.dueTime).ConfigureAwait(false);
 
-                return d;
-            });
+                    await d.AddAsync(task).ConfigureAwait(false);
+
+                    return d;
+                });
         }
     }
 }

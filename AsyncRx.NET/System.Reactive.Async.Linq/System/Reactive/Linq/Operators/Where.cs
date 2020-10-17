@@ -15,7 +15,10 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                predicate,
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> Where<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
@@ -25,7 +28,10 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                predicate,
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> Where<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, bool> predicate)
@@ -35,7 +41,10 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                predicate,
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> Where<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
@@ -45,7 +54,10 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                predicate,
+                static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
         }
     }
 

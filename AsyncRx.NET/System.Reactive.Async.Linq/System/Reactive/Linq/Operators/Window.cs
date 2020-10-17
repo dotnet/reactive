@@ -20,7 +20,10 @@ namespace System.Reactive.Linq
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create<IAsyncObservable<TSource>>(observer => WindowCore(source, observer, (o, d) => AsyncObserver.Window(o, d, count)));
+            return CreateAsyncObservable<IAsyncObservable<TSource>>.From(
+                source,
+                count,
+                static (source, count, observer) => WindowCore(source, observer, (o, d) => AsyncObserver.Window(o, d, count)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, int count, int skip)
@@ -32,7 +35,10 @@ namespace System.Reactive.Linq
             if (skip <= 0)
                 throw new ArgumentOutOfRangeException(nameof(skip));
 
-            return Create<IAsyncObservable<TSource>>(observer => WindowCore(source, observer, (o, d) => AsyncObserver.Window(o, d, count, skip)));
+            return CreateAsyncObservable<IAsyncObservable<TSource>>.From(
+                source,
+                (count, skip),
+                static (source, state, observer) => WindowCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.count, state.skip)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan)
@@ -42,7 +48,10 @@ namespace System.Reactive.Linq
             if (timeSpan < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
 
-            return Create<IAsyncObservable<TSource>>(observer => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, timeSpan)));
+            return CreateAsyncObservable<IAsyncObservable<TSource>>.From(
+                source,
+                timeSpan,
+                static (source, timeSpan, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, timeSpan)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan, IAsyncScheduler scheduler)
@@ -54,7 +63,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<IAsyncObservable<TSource>>(observer => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, timeSpan, scheduler)));
+            return CreateAsyncObservable<IAsyncObservable<TSource>>.From(
+                source,
+                (timeSpan, scheduler),
+                static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.scheduler)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift)
@@ -66,7 +78,10 @@ namespace System.Reactive.Linq
             if (timeShift < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(timeShift));
 
-            return Create<IAsyncObservable<TSource>>(observer => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, timeSpan, timeShift)));
+            return CreateAsyncObservable<IAsyncObservable<TSource>>.From(
+                source,
+                (timeSpan, timeShift),
+                static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.timeShift)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift, IAsyncScheduler scheduler)
@@ -80,7 +95,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<IAsyncObservable<TSource>>(observer => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, timeSpan, timeShift, scheduler)));
+            return CreateAsyncObservable<IAsyncObservable<TSource>>.From(
+                source,
+                (timeSpan, timeShift, scheduler),
+                static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.timeShift, state.scheduler)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan, int count)
@@ -92,7 +110,10 @@ namespace System.Reactive.Linq
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create<IAsyncObservable<TSource>>(observer => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, timeSpan, count)));
+            return CreateAsyncObservable<IAsyncObservable<TSource>>.From(
+                source,
+                (timeSpan, count),
+                static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.count)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan, int count, IAsyncScheduler scheduler)
@@ -106,7 +127,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<IAsyncObservable<TSource>>(observer => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, timeSpan, count, scheduler)));
+            return CreateAsyncObservable<IAsyncObservable<TSource>>.From(
+                source,
+                (timeSpan, count, scheduler),
+                static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.timeSpan, state.count, state.scheduler)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource, TWindowBoundary>(this IAsyncObservable<TSource> source, IAsyncObservable<TWindowBoundary> windowBoundaries)
@@ -116,20 +140,23 @@ namespace System.Reactive.Linq
             if (windowBoundaries == null)
                 throw new ArgumentNullException(nameof(windowBoundaries));
 
-            return Create<IAsyncObservable<TSource>>(async observer =>
-            {
-                var d = new CompositeAsyncDisposable();
+            return CreateAsyncObservable<IAsyncObservable<TSource>>.From(
+                source,
+                windowBoundaries,
+                static async (source, windowBoundaries, observer) =>
+                {
+                    var d = new CompositeAsyncDisposable();
 
-                var (sourceObserver, boundariesObserver, subscription) = await AsyncObserver.Window<TSource, TWindowBoundary>(observer, d).ConfigureAwait(false);
+                    var (sourceObserver, boundariesObserver, subscription) = await AsyncObserver.Window<TSource, TWindowBoundary>(observer, d).ConfigureAwait(false);
 
-                var sourceSubscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
-                await d.AddAsync(sourceSubscription).ConfigureAwait(false);
+                    var sourceSubscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
+                    await d.AddAsync(sourceSubscription).ConfigureAwait(false);
 
-                var boundariesSubscription = await windowBoundaries.SubscribeSafeAsync(boundariesObserver).ConfigureAwait(false);
-                await d.AddAsync(boundariesSubscription).ConfigureAwait(false);
+                    var boundariesSubscription = await windowBoundaries.SubscribeSafeAsync(boundariesObserver).ConfigureAwait(false);
+                    await d.AddAsync(boundariesSubscription).ConfigureAwait(false);
 
-                return subscription;
-            });
+                    return subscription;
+                });
         }
 
         // REVIEW: This overload is inherited from Rx but arguably a bit esoteric as it doesn't provide context to the closing selector.
@@ -141,19 +168,22 @@ namespace System.Reactive.Linq
             if (windowClosingSelector == null)
                 throw new ArgumentNullException(nameof(windowClosingSelector));
 
-            return Create<IAsyncObservable<TSource>>(async observer =>
-            {
-                var d = new CompositeAsyncDisposable();
+            return CreateAsyncObservable<IAsyncObservable<TSource>>.From(
+                source,
+                windowClosingSelector,
+                static async (source, windowClosingSelector, observer) =>
+                {
+                    var d = new CompositeAsyncDisposable();
 
-                var (sourceObserver, closingSubscription, subscription) = await AsyncObserver.Window<TSource, TWindowClosing>(observer, windowClosingSelector, d).ConfigureAwait(false);
+                    var (sourceObserver, closingSubscription, subscription) = await AsyncObserver.Window<TSource, TWindowClosing>(observer, windowClosingSelector, d).ConfigureAwait(false);
 
-                await d.AddAsync(closingSubscription).ConfigureAwait(false);
+                    await d.AddAsync(closingSubscription).ConfigureAwait(false);
 
-                var sourceSubscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
-                await d.AddAsync(sourceSubscription).ConfigureAwait(false);
+                    var sourceSubscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
+                    await d.AddAsync(sourceSubscription).ConfigureAwait(false);
 
-                return subscription;
-            });
+                    return subscription;
+                });
         }
 
         private static async ValueTask<IAsyncDisposable> WindowCore<TSource>(IAsyncObservable<TSource> source, IAsyncObserver<IAsyncObservable<TSource>> observer, Func<IAsyncObserver<IAsyncObservable<TSource>>, IAsyncDisposable, (IAsyncObserver<TSource>, IAsyncDisposable)> createObserver)

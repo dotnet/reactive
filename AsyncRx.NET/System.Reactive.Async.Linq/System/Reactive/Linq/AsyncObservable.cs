@@ -9,23 +9,58 @@ namespace System.Reactive.Linq
 {
     public static partial class AsyncObservable
     {
-        private sealed class AsyncObservableImpl<TSource, TResult> : AsyncObservableBase<TResult>
+        internal static class CreateAsyncObservable<TResult>
         {
-            private readonly IAsyncObservable<TSource> _source;
-            private readonly Func<IAsyncObservable<TSource>, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> _subscribeAsync;
-
-            public AsyncObservableImpl(IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
+            private sealed class AsyncObservableImpl<TSource> : AsyncObservableBase<TResult>
             {
-                _source = source;
-                _subscribeAsync = subscribeAsync ?? throw new ArgumentNullException(nameof(subscribeAsync));
+                private readonly IAsyncObservable<TSource> _source;
+                private readonly Func<IAsyncObservable<TSource>, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> _subscribeAsync;
+
+                public AsyncObservableImpl(IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
+                {
+                    _source = source ?? throw new ArgumentNullException(nameof(source));
+                    _subscribeAsync = subscribeAsync ?? throw new ArgumentNullException(nameof(subscribeAsync));
+                }
+
+                protected override ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<TResult> observer)
+                {
+                    if (observer == null)
+                        throw new ArgumentNullException(nameof(observer));
+
+                    return _subscribeAsync(_source, observer);
+                }
             }
 
-            protected override ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<TResult> observer)
+            private sealed class AsyncObservableImpl<TSource, TState> : AsyncObservableBase<TResult>
             {
-                if (observer == null)
-                    throw new ArgumentNullException(nameof(observer));
+                private readonly TState _state;
+                private readonly IAsyncObservable<TSource> _source;
+                private readonly Func<IAsyncObservable<TSource>, TState, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> _subscribeAsync;
 
-                return _subscribeAsync(_source, observer);
+                public AsyncObservableImpl(IAsyncObservable<TSource> source, TState state, Func<IAsyncObservable<TSource>, TState, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
+                {
+                    _state = state;
+                    _source = source ?? throw new ArgumentNullException(nameof(source));
+                    _subscribeAsync = subscribeAsync ?? throw new ArgumentNullException(nameof(subscribeAsync));
+                }
+
+                protected override ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<TResult> observer)
+                {
+                    if (observer == null)
+                        throw new ArgumentNullException(nameof(observer));
+
+                    return _subscribeAsync(_source, _state, observer);
+                }
+            }
+
+            public static IAsyncObservable<TResult> From<TSource>(IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
+            {
+                return new AsyncObservableImpl<TSource>(source, subscribeAsync);
+            }
+
+            public static IAsyncObservable<TResult> From<TSource, TState>(IAsyncObservable<TSource> source, TState state, Func<IAsyncObservable<TSource>, TState, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
+            {
+                return new AsyncObservableImpl<TSource, TState>(source, state, subscribeAsync);
             }
         }
 
@@ -39,10 +74,12 @@ namespace System.Reactive.Linq
 
         internal static IAsyncObservable<TResult> Create<TSource, TResult>(IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
         {
-            if (subscribeAsync == null)
-                throw new ArgumentNullException(nameof(subscribeAsync));
+            return CreateAsyncObservable<TResult>.From(source, subscribeAsync);
+        }
 
-            return new AsyncObservableImpl<TSource, TResult>(source, subscribeAsync);
+        internal static IAsyncObservable<TSource> Create<TSource, TState>(IAsyncObservable<TSource> source, TState state, Func<IAsyncObservable<TSource>, TState, IAsyncObserver<TSource>, ValueTask<IAsyncDisposable>> subscribeAsync)
+        {
+            return CreateAsyncObservable<TSource>.From(source, state, subscribeAsync);
         }
 
         internal static IAsyncObservable<TSource> Create<TSource>(IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, IAsyncObserver<TSource>, ValueTask<IAsyncDisposable>> subscribeAsync)

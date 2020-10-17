@@ -18,20 +18,23 @@ namespace System.Reactive.Linq
             if (until == null)
                 throw new ArgumentNullException(nameof(until));
 
-            return Create<TSource>(async observer =>
-            {
-                var (sourceObserver, untilObserver) = AsyncObserver.SkipUntil<TSource, TUntil>(observer);
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                until,
+                static async (source, until, observer) =>
+                {
+                    var (sourceObserver, untilObserver) = AsyncObserver.SkipUntil<TSource, TUntil>(observer);
 
-                var sourceTask = source.SubscribeSafeAsync(sourceObserver);
-                var untilTask = until.SubscribeSafeAsync(untilObserver);
+                    var sourceTask = source.SubscribeSafeAsync(sourceObserver);
+                    var untilTask = until.SubscribeSafeAsync(untilObserver);
 
-                // REVIEW: Consider concurrent subscriptions.
+                    // REVIEW: Consider concurrent subscriptions.
 
-                var d1 = await sourceTask.ConfigureAwait(false);
-                var d2 = await untilTask.ConfigureAwait(false);
+                    var d1 = await sourceTask.ConfigureAwait(false);
+                    var d2 = await untilTask.ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(d1, d2);
-            });
+                    return StableCompositeAsyncDisposable.Create(d1, d2);
+                });
         }
 
         public static IAsyncObservable<TSource> SkipUntil<TSource>(this IAsyncObservable<TSource> source, DateTimeOffset endTime)
@@ -41,14 +44,17 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use SkipUntil with a Timer parameter. Do we want SkipUntil on the observer?
 
-            return Create<TSource>(async observer =>
-            {
-                var (sourceObserver, timer) = await AsyncObserver.SkipUntil(observer, endTime).ConfigureAwait(false);
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                endTime,
+                static async (source, endTime, observer) =>
+                {
+                    var (sourceObserver, timer) = await AsyncObserver.SkipUntil(observer, endTime).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, timer);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, timer);
+                });
         }
 
         public static IAsyncObservable<TSource> SkipUntil<TSource>(this IAsyncObservable<TSource> source, DateTimeOffset endTime, IAsyncScheduler scheduler)
@@ -60,14 +66,17 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use SkipUntil with a Timer parameter. Do we want SkipUntil on the observer?
 
-            return Create<TSource>(async observer =>
-            {
-                var (sourceObserver, timer) = await AsyncObserver.SkipUntil(observer, endTime).ConfigureAwait(false);
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                (scheduler, endTime),
+                static async (source, state, observer) =>
+                {
+                    var (sourceObserver, timer) = await AsyncObserver.SkipUntil(observer, state.endTime).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
+                    var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(subscription, timer);
-            });
+                    return StableCompositeAsyncDisposable.Create(subscription, timer);
+                });
         }
     }
 

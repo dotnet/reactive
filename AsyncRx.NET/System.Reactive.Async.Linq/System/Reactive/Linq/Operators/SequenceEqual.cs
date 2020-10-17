@@ -19,20 +19,23 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Create<bool>(async observer =>
-            {
-                var (firstObserver, secondObserver) = AsyncObserver.SequenceEqual<TSource>(observer);
+            return CreateAsyncObservable<bool>.From(
+                first,
+                second,
+                static async (first, second, observer) =>
+                {
+                    var (firstObserver, secondObserver) = AsyncObserver.SequenceEqual<TSource>(observer);
 
-                var firstTask = first.SubscribeSafeAsync(firstObserver);
-                var secondTask = second.SubscribeSafeAsync(secondObserver);
+                    var firstTask = first.SubscribeSafeAsync(firstObserver);
+                    var secondTask = second.SubscribeSafeAsync(secondObserver);
 
-                // REVIEW: Consider concurrent subscriptions.
+                    // REVIEW: Consider concurrent subscriptions.
 
-                var d1 = await firstTask.ConfigureAwait(false);
-                var d2 = await secondTask.ConfigureAwait(false);
+                    var d1 = await firstTask.ConfigureAwait(false);
+                    var d2 = await secondTask.ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(d1, d2);
-            });
+                    return StableCompositeAsyncDisposable.Create(d1, d2);
+                });
         }
 
         public static IAsyncObservable<bool> SequenceEqual<TSource>(this IAsyncObservable<TSource> first, IAsyncObservable<TSource> second, IEqualityComparer<TSource> comparer)
@@ -44,20 +47,23 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<bool>(async observer =>
-            {
-                var (firstObserver, secondObserver) = AsyncObserver.SequenceEqual(observer, comparer);
+            return CreateAsyncObservable<bool>.From(
+                first,
+                (second, comparer),
+                static async (first, state, observer) =>
+                {
+                    var (firstObserver, secondObserver) = AsyncObserver.SequenceEqual(observer, state.comparer);
 
-                var firstTask = first.SubscribeSafeAsync(firstObserver);
-                var secondTask = second.SubscribeSafeAsync(secondObserver);
+                    var firstTask = first.SubscribeSafeAsync(firstObserver);
+                    var secondTask = state.second.SubscribeSafeAsync(secondObserver);
 
-                // REVIEW: Consider concurrent subscriptions.
+                    // REVIEW: Consider concurrent subscriptions.
 
-                var d1 = await firstTask.ConfigureAwait(false);
-                var d2 = await secondTask.ConfigureAwait(false);
+                    var d1 = await firstTask.ConfigureAwait(false);
+                    var d2 = await secondTask.ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(d1, d2);
-            });
+                    return StableCompositeAsyncDisposable.Create(d1, d2);
+                });
         }
     }
 
