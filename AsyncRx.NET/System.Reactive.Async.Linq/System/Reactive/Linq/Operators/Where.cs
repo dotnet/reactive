@@ -15,7 +15,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 predicate,
                 static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
@@ -28,7 +28,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 predicate,
                 static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 predicate,
                 static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));
@@ -54,7 +54,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 predicate,
                 static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.Where(observer, predicate)));

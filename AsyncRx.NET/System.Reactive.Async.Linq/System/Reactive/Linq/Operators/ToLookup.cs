@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
             if (valueSelector == null)
                 throw new ArgumentNullException(nameof(valueSelector));
 
-            return Build<ILookup<TKey, TValue>>.From(
+            return CreateAsyncObservable<ILookup<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector)));
@@ -36,7 +36,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Build<ILookup<TKey, TValue>>.From(
+            return CreateAsyncObservable<ILookup<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector, comparer),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector, state.comparer)));
@@ -51,7 +51,7 @@ namespace System.Reactive.Linq
             if (valueSelector == null)
                 throw new ArgumentNullException(nameof(valueSelector));
 
-            return Build<ILookup<TKey, TValue>>.From(
+            return CreateAsyncObservable<ILookup<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector)));
@@ -68,7 +68,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Build<ILookup<TKey, TValue>>.From(
+            return CreateAsyncObservable<ILookup<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector, comparer),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToLookup(observer, state.keySelector, state.valueSelector, state.comparer)));

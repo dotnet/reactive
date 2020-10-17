@@ -28,7 +28,7 @@ namespace System.Reactive.Linq
             if (disposeScheduler == null)
                 throw new ArgumentNullException(nameof(disposeScheduler));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 (subscribeScheduler, disposeScheduler),
                 static async (source, state, observer) =>

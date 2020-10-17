@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Build<(TFirst first, TSecond second)>.From(
+            return CreateAsyncObservable<(TFirst first, TSecond second)>.From(
                 first,
                 second,
                 static async (first, second, observer) =>
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 first,
                 (second, resultSelector),
                 static async (first, state, observer) =>
@@ -67,7 +67,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 first,
                 (second, resultSelector),
                 static async (first, state, observer) =>

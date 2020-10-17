@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 count,
                 static async (source, count, observer) =>
@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 (count, scheduler),
                 static async (source, state, observer) =>
@@ -75,7 +75,7 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 duration,
                 static async (source, duration, observer) =>
@@ -102,7 +102,7 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 (duration, clock),
                 static async (source, state, observer) =>
@@ -131,7 +131,7 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 (duration, clock, scheduler),
                 static async (source, state, observer) =>

@@ -9,7 +9,7 @@ namespace System.Reactive.Linq
 {
     public static partial class AsyncObservable
     {
-        internal static class Build<TResult>
+        internal static class CreateAsyncObservable<TResult>
         {
             private sealed class AsyncObservableImpl<TSource> : AsyncObservableBase<TResult>
             {
@@ -92,12 +92,12 @@ namespace System.Reactive.Linq
             if (subscribeAsync == null)
                 throw new ArgumentNullException(nameof(subscribeAsync));
 
-            return Build<TResult>.From(source, subscribeAsync);
+            return CreateAsyncObservable<TResult>.From(source, subscribeAsync);
         }
 
         internal static IAsyncObservable<TSource> Create<TSource, TState>(IAsyncObservable<TSource> source, TState state, Func<IAsyncObservable<TSource>, TState, IAsyncObserver<TSource>, ValueTask<IAsyncDisposable>> subscribeAsync)
         {
-            return Build<TSource>.From(source, state, subscribeAsync);
+            return CreateAsyncObservable<TSource>.From(source, state, subscribeAsync);
         }
 
         internal static IAsyncObservable<TSource> Create<TSource>(IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, IAsyncObserver<TSource>, ValueTask<IAsyncDisposable>> subscribeAsync)

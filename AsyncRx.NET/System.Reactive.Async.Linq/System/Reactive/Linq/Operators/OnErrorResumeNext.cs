@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 first,
                 second,
                 static async (first, second, observer) =>

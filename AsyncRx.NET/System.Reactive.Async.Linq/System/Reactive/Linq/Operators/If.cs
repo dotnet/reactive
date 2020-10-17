@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
             if (elseSource == null)
                 throw new ArgumentNullException(nameof(elseSource));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 thenSource,
                 (elseSource, condition),
                 static (thenSource, state, observer) =>
@@ -55,7 +55,7 @@ namespace System.Reactive.Linq
             if (elseSource == null)
                 throw new ArgumentNullException(nameof(elseSource));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 thenSource,
                 (elseSource, condition),
                 static async (thenSource, state, observer) =>

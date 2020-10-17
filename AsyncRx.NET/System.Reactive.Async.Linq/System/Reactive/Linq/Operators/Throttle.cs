@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
             if (dueTime < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(dueTime));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 dueTime,
                 static async (source, dueTime, observer) =>
@@ -45,7 +45,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 (dueTime, scheduler),
                 static async (source, state, observer) =>
@@ -71,7 +71,7 @@ namespace System.Reactive.Linq
             if (throttleSelector == null)
                 throw new ArgumentNullException(nameof(throttleSelector));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 throttleSelector,
                 static async (source, throttleSelector, observer) =>

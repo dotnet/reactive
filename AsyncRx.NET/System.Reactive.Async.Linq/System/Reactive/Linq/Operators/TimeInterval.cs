@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
             if (clock == null)
                 throw new ArgumentNullException(nameof(clock));
 
-            return Build<TimeInterval<TSource>>.From(
+            return CreateAsyncObservable<TimeInterval<TSource>>.From(
                 source,
                 clock,
                 static (source, clock, observer) => source.SubscribeSafeAsync(AsyncObserver.TimeInterval(observer, clock))); ;

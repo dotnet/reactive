@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Build<bool>.From(
+            return CreateAsyncObservable<bool>.From(
                 first,
                 second,
                 static async (first, second, observer) =>
@@ -47,7 +47,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Build<bool>.From(
+            return CreateAsyncObservable<bool>.From(
                 first,
                 (second, comparer),
                 static async (first, state, observer) =>

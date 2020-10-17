@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
                 return source;
             }
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 count,
                 static (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.SkipLast(observer, count)));
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
                 return source;
             }
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 duration,
                 static (source, duration, observer) => source.SubscribeSafeAsync(AsyncObserver.SkipLast(observer, duration)));
@@ -61,7 +61,7 @@ namespace System.Reactive.Linq
                 return source;
             }
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 (duration, clock),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.SkipLast(observer, state.duration, state.clock)));

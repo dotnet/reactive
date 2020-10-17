@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
             if (count <= 0)
                 throw new ArgumentNullException(nameof(count));
 
-            return Build<IList<TSource>>.From(
+            return CreateAsyncObservable<IList<TSource>>.From(
                 source,
                 count,
                 static (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Buffer(observer, count)));
@@ -34,7 +34,7 @@ namespace System.Reactive.Linq
             if (skip <= 0)
                 throw new ArgumentNullException(nameof(skip));
 
-            return Build<IList<TSource>>.From(
+            return CreateAsyncObservable<IList<TSource>>.From(
                 source,
                 (count, skip),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.Buffer(observer, state.count, state.skip)));
@@ -47,7 +47,7 @@ namespace System.Reactive.Linq
             if (timeSpan < TimeSpan.Zero)
                 throw new ArgumentNullException(nameof(timeSpan));
 
-            return Build<IList<TSource>>.From(
+            return CreateAsyncObservable<IList<TSource>>.From(
                 source,
                 timeSpan,
                 static async (source, timeSpan, observer) =>
@@ -69,7 +69,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Build<IList<TSource>>.From(
+            return CreateAsyncObservable<IList<TSource>>.From(
                 source,
                 (timeSpan, scheduler),
                 static async (source, state, observer) =>
@@ -91,7 +91,7 @@ namespace System.Reactive.Linq
             if (timeShift < TimeSpan.Zero)
                 throw new ArgumentNullException(nameof(timeShift));
 
-            return Build<IList<TSource>>.From(
+            return CreateAsyncObservable<IList<TSource>>.From(
                 source,
                 (timeSpan, timeShift),
                 static async (source, state, observer) =>
@@ -115,7 +115,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Build<IList<TSource>>.From(
+            return CreateAsyncObservable<IList<TSource>>.From(
                 source,
                 (timeSpan, timeShift, scheduler),
                 static async (source, state, observer) =>
@@ -137,7 +137,7 @@ namespace System.Reactive.Linq
             if (count <= 0)
                 throw new ArgumentNullException(nameof(count));
 
-            return Build<IList<TSource>>.From(
+            return CreateAsyncObservable<IList<TSource>>.From(
                 source,
                 (timeSpan, count),
                 static async (source, state, observer) =>
@@ -161,7 +161,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Build<IList<TSource>>.From(
+            return CreateAsyncObservable<IList<TSource>>.From(
                 source,
                 (timeSpan, count, scheduler),
                 static async (source, state, observer) =>
@@ -181,7 +181,7 @@ namespace System.Reactive.Linq
             if (bufferBoundaries == null)
                 throw new ArgumentNullException(nameof(bufferBoundaries));
 
-            return Build<IList<TSource>>.From(
+            return CreateAsyncObservable<IList<TSource>>.From(
                 source,
                 bufferBoundaries,
                 static async (source, bufferBoundaries, observer) =>
@@ -204,7 +204,7 @@ namespace System.Reactive.Linq
             if (bufferClosingSelector == null)
                 throw new ArgumentNullException(nameof(bufferClosingSelector));
 
-            return Build<IList<TSource>>.From(
+            return CreateAsyncObservable<IList<TSource>>.From(
                 source,
                 bufferClosingSelector,
                 static async (source, bufferClosingSelector, observer) =>

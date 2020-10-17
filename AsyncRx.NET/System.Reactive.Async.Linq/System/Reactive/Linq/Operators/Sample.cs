@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             if (sampler == null)
                 throw new ArgumentNullException(nameof(sampler));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 sampler,
                 static async (source, sampler, observer) =>
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 interval,
                 static async (source, interval, observer) =>
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 (scheduler, interval),
                 static async (source, state, observer) =>

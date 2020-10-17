@@ -15,7 +15,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
@@ -28,7 +28,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
@@ -54,7 +54,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));

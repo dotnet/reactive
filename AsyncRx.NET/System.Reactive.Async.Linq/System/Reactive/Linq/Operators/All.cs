@@ -15,7 +15,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Build<bool>.From(
+            return CreateAsyncObservable<bool>.From(
                 source,
                 predicate,
                 static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.All(observer, predicate)));
@@ -28,7 +28,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Build<bool>.From(
+            return CreateAsyncObservable<bool>.From(
                 source,
                 predicate,
                 static (source, predicate, observer) => source.SubscribeSafeAsync(AsyncObserver.All(observer, predicate)));

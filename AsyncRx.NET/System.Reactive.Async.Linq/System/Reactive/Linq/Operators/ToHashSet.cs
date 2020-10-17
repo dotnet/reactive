@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Build<HashSet<TSource>>.From(
+            return CreateAsyncObservable<HashSet<TSource>>.From(
                 source,
                 comparer,
                 static (source, comparer, observer) => source.SubscribeSafeAsync(AsyncObserver.ToHashSet(observer, comparer)));

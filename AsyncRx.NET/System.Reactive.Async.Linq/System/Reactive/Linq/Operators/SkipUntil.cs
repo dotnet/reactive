@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             if (until == null)
                 throw new ArgumentNullException(nameof(until));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 until,
                 static async (source, until, observer) =>
@@ -44,7 +44,7 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use SkipUntil with a Timer parameter. Do we want SkipUntil on the observer?
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 endTime,
                 static async (source, endTime, observer) =>
@@ -66,7 +66,7 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use SkipUntil with a Timer parameter. Do we want SkipUntil on the observer?
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 (scheduler, endTime),
                 static async (source, state, observer) =>

@@ -24,7 +24,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 left,
                 (right, leftDurationSelector, rightDurationSelector, resultSelector),
                 static async (left, state, observer) =>

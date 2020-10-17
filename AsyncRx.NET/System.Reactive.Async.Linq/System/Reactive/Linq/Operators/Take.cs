@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
                 return Empty<TSource>();
             }
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 count,
                 static (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Take(observer, count)));
@@ -43,7 +43,7 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want Take on the observer?
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 duration,
                 static async (source, duration, observer) =>
@@ -72,7 +72,7 @@ namespace System.Reactive.Linq
 
             // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want Take on the observer?
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 (duration, scheduler),
                 static async (source, state, observer) =>

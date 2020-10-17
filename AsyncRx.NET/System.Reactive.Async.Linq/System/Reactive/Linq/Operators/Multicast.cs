@@ -63,7 +63,7 @@ namespace System.Reactive.Linq
 
             // REVIEW: Use a lifted observer operator.
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 (subjectFactory, selector),
                 static async (source, state, observer) =>

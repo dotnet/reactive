@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             if (valueSelector == null)
                 throw new ArgumentNullException(nameof(valueSelector));
 
-            return Build<IDictionary<TKey, TValue>>.From(
+            return CreateAsyncObservable<IDictionary<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, state.keySelector, state.valueSelector)));
@@ -35,7 +35,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Build<IDictionary<TKey, TValue>>.From(
+            return CreateAsyncObservable<IDictionary<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector, comparer),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, state.keySelector, state.valueSelector, state.comparer))); ;
@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
             if (valueSelector == null)
                 throw new ArgumentNullException(nameof(valueSelector));
 
-            return Build<IDictionary<TKey, TValue>>.From(
+            return CreateAsyncObservable<IDictionary<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, state.keySelector, state.valueSelector)));
@@ -67,7 +67,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Build<IDictionary<TKey, TValue>>.From(
+            return CreateAsyncObservable<IDictionary<TKey, TValue>>.From(
                 source,
                 (keySelector, valueSelector, comparer),
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, state.keySelector, state.valueSelector, state.comparer)));

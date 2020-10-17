@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 selector,
                 static async (source, selector, observer) =>
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 selector,
                 static async (source, selector, observer) =>
@@ -59,7 +59,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 (collectionSelector, resultSelector),
                 static async (source, state, observer) =>
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 (collectionSelector, resultSelector),
                 static async (source, state, observer) =>
@@ -101,7 +101,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 selector,
                 static async (source, selector, observer) =>
@@ -121,7 +121,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 selector,
                 static async (source, selector, observer) =>
@@ -143,7 +143,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 (collectionSelector, resultSelector),
                 static async (source, state, observer) =>
@@ -165,7 +165,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Build<TResult>.From(
+            return CreateAsyncObservable<TResult>.From(
                 source,
                 (collectionSelector, resultSelector),
                 static async (source, state, observer) =>

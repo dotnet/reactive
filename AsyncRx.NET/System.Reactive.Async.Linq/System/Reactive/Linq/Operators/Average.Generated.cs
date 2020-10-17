@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Double>.From(
+            return CreateAsyncObservable<Double>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageInt32(observer, selector)));
@@ -36,7 +36,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Double>.From(
+            return CreateAsyncObservable<Double>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageInt32(observer, selector)));
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Double?>.From(
+            return CreateAsyncObservable<Double?>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageNullableInt32(observer, selector)));
@@ -70,7 +70,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Double?>.From(
+            return CreateAsyncObservable<Double?>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageNullableInt32(observer, selector)));
@@ -91,7 +91,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Double>.From(
+            return CreateAsyncObservable<Double>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageInt64(observer, selector)));
@@ -104,7 +104,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Double>.From(
+            return CreateAsyncObservable<Double>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageInt64(observer, selector)));
@@ -125,7 +125,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Double?>.From(
+            return CreateAsyncObservable<Double?>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageNullableInt64(observer, selector)));
@@ -138,7 +138,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Double?>.From(
+            return CreateAsyncObservable<Double?>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageNullableInt64(observer, selector)));
@@ -159,7 +159,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Single>.From(
+            return CreateAsyncObservable<Single>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageSingle(observer, selector)));
@@ -172,7 +172,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Single>.From(
+            return CreateAsyncObservable<Single>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageSingle(observer, selector)));
@@ -193,7 +193,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Single?>.From(
+            return CreateAsyncObservable<Single?>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageNullableSingle(observer, selector)));
@@ -206,7 +206,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Single?>.From(
+            return CreateAsyncObservable<Single?>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageNullableSingle(observer, selector)));
@@ -227,7 +227,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Double>.From(
+            return CreateAsyncObservable<Double>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageDouble(observer, selector)));
@@ -240,7 +240,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Double>.From(
+            return CreateAsyncObservable<Double>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageDouble(observer, selector)));
@@ -261,7 +261,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Double?>.From(
+            return CreateAsyncObservable<Double?>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageNullableDouble(observer, selector)));
@@ -274,7 +274,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Double?>.From(
+            return CreateAsyncObservable<Double?>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageNullableDouble(observer, selector)));
@@ -295,7 +295,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Decimal>.From(
+            return CreateAsyncObservable<Decimal>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageDecimal(observer, selector)));
@@ -308,7 +308,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Decimal>.From(
+            return CreateAsyncObservable<Decimal>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageDecimal(observer, selector)));
@@ -329,7 +329,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Decimal?>.From(
+            return CreateAsyncObservable<Decimal?>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageNullableDecimal(observer, selector)));
@@ -342,7 +342,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<Decimal?>.From(
+            return CreateAsyncObservable<Decimal?>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.AverageNullableDecimal(observer, selector)));

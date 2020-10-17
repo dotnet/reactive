@@ -33,7 +33,7 @@ namespace System.Reactive.Linq
             if (retryCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(retryCount));
 
-            return Build<TSource>.From(
+            return CreateAsyncObservable<TSource>.From(
                 source,
                 retryCount,
                 static async (source, retryCount, observer) =>
