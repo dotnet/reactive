@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 (dueTime, scheduler),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var d = new CompositeAsyncDisposable();
 
@@ -61,7 +61,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 (dueTime, scheduler),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var d = new CompositeAsyncDisposable();
 

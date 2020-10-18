@@ -26,7 +26,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 comparer,
-                (source, comparer, observer) => source.SubscribeSafeAsync(AsyncObserver.Distinct(observer, comparer)));
+                static (source, comparer, observer) => source.SubscribeSafeAsync(AsyncObserver.Distinct(observer, comparer)));
         }
     }
 

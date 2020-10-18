@@ -21,7 +21,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 condition,
-                async (source, condition, observer) =>
+                static async (source, condition, observer) =>
                 {
                     var subscription = new SerialAsyncDisposable();
 
@@ -82,7 +82,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 condition,
-                async (source, condition, observer) =>
+                static async (source, condition, observer) =>
                 {
                     var subscription = new SerialAsyncDisposable();
 

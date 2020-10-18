@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 dueTime,
-                async (source, dueTime, observer) =>
+                static async (source, dueTime, observer) =>
                 {
                     var (sink, drain) = await AsyncObserver.Delay(observer, dueTime).ConfigureAwait(false);
 
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 (dueTime, scheduler),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var (sink, drain) = await AsyncObserver.Delay(observer, state.dueTime, state.scheduler).ConfigureAwait(false);
 
