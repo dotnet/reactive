@@ -32,7 +32,7 @@ namespace System.Reactive.Linq.ObservableImpl
             //
             // [OK] Use of unsafe Subscribe: non-pretentious exact mirror with the dual GetEnumerator method.
             //
-            Disposable.TrySetSingle(ref _subscription, source.Subscribe/*Unsafe*/(this));
+            Disposable.SetSingle(ref _subscription, source.Subscribe/*Unsafe*/(this));
             return this;
         }
 

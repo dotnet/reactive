@@ -377,7 +377,7 @@ namespace System.Reactive.Concurrency
                 _nextDue = _period;
                 _runState = Running;
 
-                Disposable.TrySetSingle(ref _task, _scheduler.Schedule(this, _nextDue, static (@this, a) => @this.Tick(a)));
+                Disposable.SetSingle(ref _task, _scheduler.Schedule(this, _nextDue, static (@this, a) => @this.Tick(a)));
                 return this;
             }
 

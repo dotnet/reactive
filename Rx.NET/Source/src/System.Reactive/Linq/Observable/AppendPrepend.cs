@@ -136,7 +136,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (_append)
                     {
                         var disposable = _scheduler.ScheduleAction(this, AppendValue);
-                        Disposable.TrySetSingle(ref _schedulerDisposable, disposable);
+                        Disposable.SetSingle(ref _schedulerDisposable, disposable);
                     }
                     else
                     {
