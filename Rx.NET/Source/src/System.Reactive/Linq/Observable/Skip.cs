@@ -105,19 +105,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                 }
 
-                private IDisposable? _sourceDisposable;
+                private SingleAssignmentDisposableValue _sourceDisposable;
 
                 public void Run(Time parent)
                 {
                     SetUpstream(parent._scheduler.ScheduleAction(this, parent._duration, state => state.Tick()));
-                    Disposable.SetSingle(ref _sourceDisposable, parent._source.SubscribeSafe(this));
+                    _sourceDisposable.Disposable = parent._source.SubscribeSafe(this);
                 }
 
                 protected override void Dispose(bool disposing)
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _sourceDisposable);
+                        _sourceDisposable.Dispose();
                     }
 
                     base.Dispose(disposing);

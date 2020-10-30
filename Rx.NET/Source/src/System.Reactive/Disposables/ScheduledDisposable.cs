@@ -11,7 +11,7 @@ namespace System.Reactive.Disposables
     /// </summary>
     public sealed class ScheduledDisposable : ICancelable
     {
-        private IDisposable _disposable;
+        private SingleAssignmentDisposableValue _disposable;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScheduledDisposable"/> class that uses an <see cref="IScheduler"/> on which to dispose the disposable.
@@ -27,7 +27,7 @@ namespace System.Reactive.Disposables
             }
 
             Scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
-            Disposables.Disposable.SetSingle(ref _disposable, disposable);
+            _disposable.Disposable = disposable;
         }
 
         /// <summary>
@@ -38,16 +38,16 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets the underlying disposable. After disposal, the result is undefined.
         /// </summary>
-        public IDisposable Disposable => Disposables.Disposable.GetValueOrDefault(ref _disposable);
+        public IDisposable Disposable => _disposable.Disposable ?? Disposables.Disposable.Empty;
 
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed => Disposables.Disposable.GetIsDisposed(ref _disposable);
+        public bool IsDisposed => _disposable.IsDisposed;
 
         /// <summary>
         /// Disposes the wrapped disposable on the provided scheduler.
         /// </summary>
-        public void Dispose() => Scheduler.ScheduleAction(this, scheduler => Disposables.Disposable.Dispose(ref scheduler._disposable));
+        public void Dispose() => Scheduler.ScheduleAction(this, scheduler => scheduler._disposable.Dispose());
     }
 }

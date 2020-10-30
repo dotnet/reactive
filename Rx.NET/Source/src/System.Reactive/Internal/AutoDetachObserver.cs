@@ -10,7 +10,7 @@ namespace System.Reactive
     {
         private readonly IObserver<T> _observer;
 
-        private IDisposable? _disposable;
+        private SingleAssignmentDisposableValue _disposable;
 
         public AutoDetachObserver(IObserver<T> observer)
         {
@@ -19,7 +19,7 @@ namespace System.Reactive
 
         public void SetResource(IDisposable resource)
         {
-            Disposable.SetSingle(ref _disposable, resource);
+            _disposable.Disposable = resource;
         }
 
         protected override void OnNextCore(T value)
@@ -100,7 +100,7 @@ namespace System.Reactive
 
             if (disposing)
             {
-                Disposable.Dispose(ref _disposable);
+                _disposable.Dispose();
             }
         }
     }

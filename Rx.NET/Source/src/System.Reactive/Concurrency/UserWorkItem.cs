@@ -8,8 +8,8 @@ namespace System.Reactive.Concurrency
 {
     internal sealed class UserWorkItem<TState> : IDisposable
     {
-        private IDisposable? _cancelRunDisposable;
-        private IDisposable? _cancelQueueDisposable;
+        private SingleAssignmentDisposableValue _cancelRunDisposable;
+        private SingleAssignmentDisposableValue _cancelQueueDisposable;
 
         private readonly TState _state;
         private readonly IScheduler _scheduler;
@@ -24,21 +24,21 @@ namespace System.Reactive.Concurrency
 
         public void Run()
         {
-            if (!Disposable.GetIsDisposed(ref _cancelRunDisposable))
+            if (!_cancelRunDisposable.IsDisposed)
             {
-                Disposable.SetSingle(ref _cancelRunDisposable, _action(_scheduler, _state));
+                _cancelRunDisposable.Disposable = _action(_scheduler, _state);
             }
         }
 
         public IDisposable CancelQueueDisposable
         {
-            set => Disposable.SetSingle(ref _cancelQueueDisposable, value);
+            set => _cancelQueueDisposable.Disposable = value;
         }
 
         public void Dispose()
         {
-            Disposable.Dispose(ref _cancelQueueDisposable);
-            Disposable.Dispose(ref _cancelRunDisposable);
+            _cancelQueueDisposable.Dispose();
+            _cancelRunDisposable.Dispose();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace System.Reactive
 
     internal abstract class Sink<TTarget> : ISink<TTarget>, IDisposable
     {
-        private IDisposable? _upstream;
+        private SingleAssignmentDisposableValue _upstream;
         private volatile IObserver<TTarget> _observer;
 
         protected Sink(IObserver<TTarget> observer)
@@ -41,7 +41,7 @@ namespace System.Reactive
             //Sink is internal so this can pretty much be enforced.
             //_observer = NopObserver<TTarget>.Instance;
 
-            Disposable.Dispose(ref _upstream);
+            _upstream.Dispose();
         }
 
         public void ForwardOnNext(TTarget value)
@@ -63,12 +63,12 @@ namespace System.Reactive
 
         protected void SetUpstream(IDisposable upstream)
         {
-            Disposable.SetSingle(ref _upstream, upstream);
+            _upstream.Disposable = upstream;
         }
 
         protected void DisposeUpstream()
         {
-            Disposable.Dispose(ref _upstream);
+            _upstream.Dispose();
         }
     }
 

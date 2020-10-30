@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private IDisposable? _otherDisposable;
+            private SingleAssignmentDisposableValue _otherDisposable;
             private int _halfSerializer;
             private Exception? _error;
 
@@ -35,7 +35,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(TakeUntil<TSource, TOther> parent)
             {
-                Disposable.SetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
+                _otherDisposable.Disposable = parent._other.Subscribe(new OtherObserver(this));
                 Run(parent._source);
             }
 
@@ -43,9 +43,9 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    if (!Disposable.GetIsDisposed(ref _otherDisposable))
+                    if (!_otherDisposable.IsDisposed)
                     {
-                        Disposable.Dispose(ref _otherDisposable);
+                        _otherDisposable.Dispose();
                     }
                 }
 
@@ -79,7 +79,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void OnCompleted()
                 {
                     // Completion doesn't mean termination in Rx.NET for this operator
-                    Disposable.Dispose(ref _parent._otherDisposable);
+                    _parent._otherDisposable.Dispose();
                 }
 
                 public void OnError(Exception error)
@@ -134,7 +134,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private IDisposable? _timerDisposable;
+            private SingleAssignmentDisposableValue _timerDisposable;
             private int _wip;
             private Exception? _error;
 
@@ -145,7 +145,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(TakeUntil<TSource> parent)
             {
-                Disposable.SetSingle(ref _timerDisposable, parent._scheduler.ScheduleAction(this, parent._endTime, state => state.Tick()));
+                _timerDisposable.Disposable = parent._scheduler.ScheduleAction(this, parent._endTime, state => state.Tick());
                 Run(parent._source);
             }
 
@@ -153,7 +153,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _timerDisposable);
+                    _timerDisposable.Dispose();
                 }
 
                 base.Dispose(disposing);

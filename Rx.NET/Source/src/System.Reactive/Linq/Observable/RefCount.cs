@@ -83,13 +83,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     Run(_parent._source);
 
                     // then connect the source if necessary
-                    if (doConnect && !Disposable.GetIsDisposed(ref conn._disposable))
+                    if (doConnect && !conn._disposable.IsDisposed)
                     {
                         // this makes sure if the connection ends synchronously
                         // only the currently known connection is affected
                         // and a connection from a concurrent reconnection won't
                         // interfere
-                        Disposable.SetSingle(ref conn._disposable, _parent._source.Connect());
+                        conn._disposable.Disposable = _parent._source.Connect();
                     }
                 }
 
@@ -119,7 +119,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
 
                         // disconnect
-                        Disposable.Dispose(ref targetConnection._disposable);
+                        targetConnection._disposable.Dispose();
                     }
                 }
             }
@@ -131,7 +131,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private sealed class RefConnection
             {
                 internal int _count;
-                internal IDisposable? _disposable;
+                internal SingleAssignmentDisposableValue _disposable;
             }
         }
 

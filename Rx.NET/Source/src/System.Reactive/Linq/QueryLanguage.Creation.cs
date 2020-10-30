@@ -141,7 +141,7 @@ namespace System.Reactive.Linq
                 private sealed class TaskDisposeCompletionObserver : IObserver<IDisposable>, IDisposable
                 {
                     private readonly IObserver<TResult> _observer;
-                    private IDisposable? _disposable;
+                    private SingleAssignmentDisposableValue _disposable;
 
                     public TaskDisposeCompletionObserver(IObserver<TResult> observer)
                     {
@@ -150,7 +150,7 @@ namespace System.Reactive.Linq
 
                     public void Dispose()
                     {
-                        Disposable.Dispose(ref _disposable);
+                        _disposable.Dispose();
                     }
 
                     public void OnCompleted()
@@ -164,7 +164,7 @@ namespace System.Reactive.Linq
 
                     public void OnNext(IDisposable value)
                     {
-                        Disposable.SetSingle(ref _disposable, value);
+                        _disposable.Disposable = value;
                     }
                 }
 

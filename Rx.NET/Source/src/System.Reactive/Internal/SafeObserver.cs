@@ -66,7 +66,7 @@ namespace System.Reactive
             return new WrappingSafeObserver(observer);
         }
 
-        private IDisposable? _disposable;
+        private SingleAssignmentDisposableValue _disposable;
 
         public abstract void OnNext(TSource value);
 
@@ -76,7 +76,7 @@ namespace System.Reactive
 
         public void SetResource(IDisposable resource)
         {
-            Disposable.SetSingle(ref _disposable, resource);
+            _disposable.Disposable = resource;
         }
 
         public void Dispose()
@@ -88,7 +88,7 @@ namespace System.Reactive
         {
             if (disposing)
             {
-                Disposable.Dispose(ref _disposable);
+                _disposable.Dispose();
             }
         }
     }

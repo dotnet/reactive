@@ -607,20 +607,20 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 private bool _atEnd;
-                private IDisposable? _subscription;
+                private SingleAssignmentDisposableValue _subscription;
 
                 public void Run(TParent parent)
                 {
                     _atEnd = false;
 
-                    Disposable.SetSingle(ref _subscription, RunCore(parent));
+                    _subscription.Disposable = RunCore(parent);
                 }
 
                 protected override void Dispose(bool disposing)
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _subscription);
+                        _subscription.Dispose();
                         _delays.Dispose();
                     }
                     base.Dispose(disposing);
@@ -663,7 +663,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         _atEnd = true;
-                        Disposable.Dispose(ref _subscription);
+                        _subscription.Dispose();
 
                         CheckDone();
                     }

@@ -324,7 +324,7 @@ namespace System.Reactive
 
     internal sealed class ObserveOnObserver<T> : ScheduledObserver<T>
     {
-        private IDisposable? _run;
+        private SingleAssignmentDisposableValue _run;
 
         public ObserveOnObserver(IScheduler scheduler, IObserver<T> observer)
             : base(scheduler, observer)
@@ -334,7 +334,7 @@ namespace System.Reactive
 
         public void Run(IObservable<T> source)
         {
-            Disposable.SetSingle(ref _run, source.SubscribeSafe(this));
+            _run.Disposable = source.SubscribeSafe(this);
         }
 
         protected override void OnNextCore(T value)
@@ -361,7 +361,7 @@ namespace System.Reactive
 
             if (disposing)
             {
-                Disposable.Dispose(ref _run);
+                _run.Dispose();
             }
         }
     }
@@ -626,7 +626,7 @@ namespace System.Reactive
         /// <summary>
         /// The disposable tracking the drain task.
         /// </summary>
-        private IDisposable? _drainTask;
+        private SingleAssignmentDisposableValue _drainTask;
 
         public ObserveOnObserverLongRunning(ISchedulerLongRunning scheduler, IObserver<TSource> observer) : base(observer)
         {
@@ -660,7 +660,7 @@ namespace System.Reactive
             if (Volatile.Read(ref _runDrainOnce) == 0
                 && Interlocked.CompareExchange(ref _runDrainOnce, 1, 0) == 0)
             {
-                Disposable.SetSingle(ref _drainTask, _scheduler.ScheduleLongRunning(this, DrainLongRunning));
+                _drainTask.Disposable = _scheduler.ScheduleLongRunning(this, DrainLongRunning);
             }
 
             // Indicate more work is to be done by the drain loop
@@ -689,7 +689,7 @@ namespace System.Reactive
                 Monitor.Pulse(_suspendGuard);
             }
             // Cancel the drain task handle.
-            Disposable.Dispose(ref _drainTask);
+            _drainTask.Dispose();
             base.Dispose(disposing);
         }
 

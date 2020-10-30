@@ -443,11 +443,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                 }
 
-                private IDisposable? _periodicDisposable;
+                private SingleAssignmentDisposableValue _periodicDisposable;
 
                 public void Run(TimeHopping parent)
                 {
-                    Disposable.SetSingle(ref _periodicDisposable, parent._scheduler.SchedulePeriodic(this, parent._timeSpan, static @this => @this.Tick()));
+                    _periodicDisposable.Disposable = parent._scheduler.SchedulePeriodic(this, parent._timeSpan, static @this => @this.Tick());
                     Run(parent._source);
                 }
 
@@ -455,7 +455,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _periodicDisposable);
+                        _periodicDisposable.Dispose();
                     }
                     base.Dispose(disposing);
                 }
@@ -786,7 +786,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly object _gate = new object();
 
                 private List<TSource> _buffer = new List<TSource>();
-                private IDisposable? _boundariesDisposable;
+                private SingleAssignmentDisposableValue _boundariesDisposable;
 
                 public _(IObserver<IList<TSource>> observer)
                     : base(observer)
@@ -796,14 +796,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void Run(Boundaries parent)
                 {
                     Run(parent._source);
-                    Disposable.SetSingle(ref _boundariesDisposable, parent._bufferBoundaries.SubscribeSafe(new BufferClosingObserver(this)));
+                    _boundariesDisposable.Disposable = parent._bufferBoundaries.SubscribeSafe(new BufferClosingObserver(this));
                 }
 
                 protected override void Dispose(bool disposing)
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _boundariesDisposable);
+                        _boundariesDisposable.Dispose();
                     }
 
                     base.Dispose(disposing);

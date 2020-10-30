@@ -117,7 +117,7 @@ namespace System.Reactive.Concurrency
                 private readonly IObservable<TSource> _source;
                 private readonly IObserver<TSource> _observer;
                 private readonly SynchronizationContext _context;
-                private IDisposable? _cancel;
+                private SingleAssignmentDisposableValue _cancel;
 
                 public Subscription(IObservable<TSource> source, SynchronizationContext context, IObserver<TSource> observer)
                 {
@@ -128,9 +128,9 @@ namespace System.Reactive.Concurrency
                     context.PostWithStartComplete(
                         @this =>
                         {
-                            if (!Disposable.GetIsDisposed(ref @this._cancel))
+                            if (!@this._cancel.IsDisposed)
                             {
-                                Disposable.SetSingle(ref @this._cancel, new ContextDisposable(@this._context, @this._source.SubscribeSafe(@this._observer)));
+                                @this._cancel.Disposable = new ContextDisposable(@this._context, @this._source.SubscribeSafe(@this._observer));
                             }
                         },
                         this);
@@ -138,7 +138,7 @@ namespace System.Reactive.Concurrency
 
                 public void Dispose()
                 {
-                    Disposable.Dispose(ref _cancel);
+                    _cancel.Dispose();
                 }
             }
 

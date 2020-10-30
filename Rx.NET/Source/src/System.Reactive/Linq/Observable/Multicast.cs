@@ -26,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TResult>
         {
-            private IDisposable? _connection;
+            private SingleAssignmentDisposableValue _connection;
 
             public _(IObserver<TResult> observer)
                 : base(observer)
@@ -51,14 +51,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 Run(observable);
-                Disposable.SetSingle(ref _connection, connectable.Connect());
+                _connection.Disposable = connectable.Connect();
             }
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _connection);
+                    _connection.Dispose();
                 }
                 
                 base.Dispose(disposing);

@@ -422,7 +422,7 @@ namespace System.Reactive.Concurrency
             public readonly LocalScheduler Scheduler;
             public readonly DateTimeOffset DueTime;
 
-            private IDisposable? _disposable;
+            private SingleAssignmentDisposableValue _disposable;
             private int _hasRun;
 
             protected WorkItem(LocalScheduler scheduler, DateTimeOffset dueTime)
@@ -445,9 +445,9 @@ namespace System.Reactive.Concurrency
                 {
                     try
                     {
-                        if (!Disposable.GetIsDisposed(ref _disposable))
+                        if (!_disposable.IsDisposed)
                         {
-                            Disposable.SetSingle(ref _disposable, InvokeCore(scheduler));
+                            _disposable.Disposable = InvokeCore(scheduler);
                         }
                     }
                     finally
@@ -461,7 +461,7 @@ namespace System.Reactive.Concurrency
 
             public int CompareTo(WorkItem? other) => DueTime.CompareTo(other!.DueTime);
 
-            public void Dispose() => Disposable.Dispose(ref _disposable);
+            public void Dispose() => _disposable.Dispose();
         }
 
         /// <summary>
