@@ -38,7 +38,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly ConcurrentQueue<IObservable<T>> _queue;
             private readonly InnerObserver _innerObserver;
 
-            private IDisposable? _upstream;
+            private SingleAssignmentDisposableValue _upstream;
             private int _trampoline;
             private Exception? _error;
             private bool _done;
@@ -53,7 +53,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal void OnSubscribe(IDisposable d)
             {
-                Disposable.SetSingle(ref _upstream, d);
+                _upstream.Disposable = d;
             }
 
             public void Dispose()
@@ -64,12 +64,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private void DisposeMain()
             {
-                Disposable.Dispose(ref _upstream);
+                _upstream.Dispose();
             }
 
             private bool IsDisposed()
             {
-                return Disposable.GetIsDisposed(ref _upstream);
+                return _upstream.IsDisposed;
             }
 
             public void OnCompleted()

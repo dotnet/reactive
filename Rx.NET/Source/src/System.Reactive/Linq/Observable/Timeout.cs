@@ -36,8 +36,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly IScheduler _scheduler;
 
                 private long _index;
-                private IDisposable? _mainDisposable;
-                private IDisposable? _otherDisposable;
+                private SingleAssignmentDisposableValue _mainDisposable;
+                private SingleAssignmentDisposableValue _otherDisposable;
                 private IDisposable? _timerDisposable;
 
                 public _(Relative parent, IObserver<TSource> observer)
@@ -52,15 +52,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     CreateTimer(0L);
 
-                    Disposable.SetSingle(ref _mainDisposable, source.SubscribeSafe(this));
+                    _mainDisposable.Disposable = source.SubscribeSafe(this);
                 }
 
                 protected override void Dispose(bool disposing)
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _mainDisposable);
-                        Disposable.Dispose(ref _otherDisposable);
+                        _mainDisposable.Dispose();
+                        _otherDisposable.Dispose();
                         Disposable.Dispose(ref _timerDisposable);
                     }
 
@@ -81,11 +81,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (Volatile.Read(ref _index) == idx && Interlocked.CompareExchange(ref _index, long.MaxValue, idx) == idx)
                     {
-                        Disposable.Dispose(ref _mainDisposable);
+                        _mainDisposable.Dispose();
 
                         var d = _other.Subscribe(GetForwarder());
 
-                        Disposable.SetSingle(ref _otherDisposable, d);
+                        _otherDisposable.Disposable = d;
                     }
                 }
 
@@ -150,7 +150,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly IObservable<TSource> _other;
 
-                private IDisposable? _serialDisposable;
+                private SerialDisposableValue _serialDisposable;
                 private int _wip;
 
                 public _(IObservable<TSource> other, IObserver<TSource> observer)
@@ -163,14 +163,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     SetUpstream(parent._scheduler.ScheduleAction(this, parent._dueTime, static @this => @this.Timeout()));
 
-                    Disposable.TrySetSingle(ref _serialDisposable, parent._source.SubscribeSafe(this));
+                    _serialDisposable.Disposable = parent._source.SubscribeSafe(this);
                 }
 
                 protected override void Dispose(bool disposing)
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _serialDisposable);
+                        _serialDisposable.Dispose();
                     }
 
                     base.Dispose(disposing);
@@ -180,7 +180,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (Interlocked.Increment(ref _wip) == 1)
                     {
-                        Disposable.TrySetSerial(ref _serialDisposable, _other.SubscribeSafe(GetForwarder()));
+                        _serialDisposable.Disposable = _other.SubscribeSafe(GetForwarder());
                     }
                 }
 
@@ -191,7 +191,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         ForwardOnNext(value);
                         if (Interlocked.Decrement(ref _wip) != 0)
                         {
-                            Disposable.TrySetSerial(ref _serialDisposable, _other.SubscribeSafe(GetForwarder()));
+                            _serialDisposable.Disposable = _other.SubscribeSafe(GetForwarder());
                         }
                     }
                 }

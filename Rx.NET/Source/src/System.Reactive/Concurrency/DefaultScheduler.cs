@@ -161,7 +161,7 @@ namespace System.Reactive.Concurrency
                 private readonly TState _state;
                 private readonly Action<TState, ICancelable> _action;
 
-                private IDisposable? _cancel;
+                private SingleAssignmentDisposableValue _cancel;
 
                 public LongScheduledWorkItem(TState state, Action<TState, ICancelable> action)
                 {
@@ -186,10 +186,10 @@ namespace System.Reactive.Concurrency
 
                 public void Dispose()
                 {
-                    Disposable.Dispose(ref _cancel);
+                    _cancel.Dispose();
                 }
 
-                public bool IsDisposed => Disposable.GetIsDisposed(ref _cancel);
+                public bool IsDisposed => _cancel.IsDisposed;
             }
 
             public static readonly ISchedulerLongRunning Instance = new LongRunning();

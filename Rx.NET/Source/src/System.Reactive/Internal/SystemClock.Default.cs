@@ -39,7 +39,7 @@ namespace System.Reactive.PlatformServices
     public class PeriodicTimerSystemClockMonitor : INotifySystemClockChanged
     {
         private readonly TimeSpan _period;
-        private IDisposable? _timer;
+        private SerialDisposableValue _timer;
 
         /// <summary>
         /// Use the Unix milliseconds for the current time
@@ -78,13 +78,13 @@ namespace System.Reactive.PlatformServices
             {
                 _systemClockChanged -= value;
 
-                Disposable.TrySetSerial(ref _timer, Disposable.Empty);
+                _timer.Disposable = Disposable.Empty;
             }
         }
 
         private void NewTimer()
         {
-            Disposable.TrySetSerial(ref _timer, Disposable.Empty);
+            _timer.Disposable = Disposable.Empty;
 
             var n = 0L;
             for (; ; )
@@ -92,13 +92,13 @@ namespace System.Reactive.PlatformServices
                 var now = SystemClock.UtcNow.ToUnixTimeMilliseconds();
                 Interlocked.Exchange(ref _lastTimeUnixMillis, now);
 
-                Disposable.TrySetSerial(ref _timer, ConcurrencyAbstractionLayer.Current.StartPeriodicTimer(TimeChanged, _period));
+                _timer.Disposable = ConcurrencyAbstractionLayer.Current.StartPeriodicTimer(TimeChanged, _period);
 
                 if (Math.Abs(SystemClock.UtcNow.ToUnixTimeMilliseconds() - now) <= SyncMaxDelta)
                 {
                     break;
                 }
-                if (Volatile.Read(ref _timer) == Disposable.Empty)
+                if (_timer.Disposable == Disposable.Empty)
                 {
                     break;
                 }

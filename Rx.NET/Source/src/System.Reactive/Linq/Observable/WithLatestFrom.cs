@@ -39,14 +39,14 @@ namespace System.Reactive.Linq.ObservableImpl
             private volatile bool _hasLatest;
             private TSecond? _latest;
 
-            private IDisposable? _secondDisposable;
+            private SingleAssignmentDisposableValue _secondDisposable;
 
             public void Run(IObservable<TFirst> first, IObservable<TSecond> second)
             {
                 var fstO = new FirstObserver(this);
                 var sndO = new SecondObserver(this);
 
-                Disposable.SetSingle(ref _secondDisposable, second.SubscribeSafe(sndO));
+                _secondDisposable.Disposable = second.SubscribeSafe(sndO);
                 SetUpstream(first.SubscribeSafe(fstO));
             }
 
@@ -54,7 +54,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _secondDisposable);
+                    _secondDisposable.Dispose();
                 }
 
                 base.Dispose(disposing);
@@ -131,7 +131,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnCompleted()
                 {
-                    Disposable.Dispose(ref _parent._secondDisposable);
+                    _parent._secondDisposable.Dispose();
                 }
 
                 public void OnError(Exception error)

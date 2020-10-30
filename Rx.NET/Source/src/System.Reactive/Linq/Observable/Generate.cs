@@ -197,18 +197,18 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _hasResult;
                 private TResult? _result;
 
-                private IDisposable? _timerDisposable;
+                private MultipleAssignmentDisposableValue _timerDisposable;
 
                 public void Run(IScheduler outerScheduler, TState initialState)
                 {
                     var timer = new SingleAssignmentDisposable();
-                    Disposable.TrySetMultiple(ref _timerDisposable, timer);
+                    _timerDisposable.Disposable = timer;
                     timer.Disposable = outerScheduler.Schedule((@this: this, initialState), static (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.initialState));
                 }
 
                 protected override void Dispose(bool disposing)
                 {
-                    Disposable.Dispose(ref _timerDisposable);
+                    _timerDisposable.Dispose();
                     base.Dispose(disposing);
                 }
 
@@ -253,7 +253,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     var timer = new SingleAssignmentDisposable();
-                    Disposable.TrySetMultiple(ref _timerDisposable, timer);
+                    _timerDisposable.Disposable = timer;
                     timer.Disposable = self.Schedule((@this: this, state), time, static (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.state));
 
                     return Disposable.Empty;
@@ -306,18 +306,18 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _hasResult;
                 private TResult? _result;
 
-                private IDisposable? _timerDisposable;
+                private MultipleAssignmentDisposableValue _timerDisposable;
 
                 public void Run(IScheduler outerScheduler, TState initialState)
                 {
                     var timer = new SingleAssignmentDisposable();
-                    Disposable.TrySetMultiple(ref _timerDisposable, timer);
+                    _timerDisposable.Disposable = timer;
                     timer.Disposable = outerScheduler.Schedule((@this: this, initialState), static (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.initialState));
                 }
 
                 protected override void Dispose(bool disposing)
                 {
-                    Disposable.Dispose(ref _timerDisposable);
+                    _timerDisposable.Dispose();
                     base.Dispose(disposing);
                 }
 
@@ -362,7 +362,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     var timer = new SingleAssignmentDisposable();
-                    Disposable.TrySetMultiple(ref _timerDisposable, timer);
+                    _timerDisposable.Disposable = timer;
                     timer.Disposable = self.Schedule((@this: this, state), time, static (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.state));
 
                     return Disposable.Empty;

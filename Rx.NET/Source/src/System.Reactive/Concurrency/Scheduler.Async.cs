@@ -13,7 +13,7 @@ namespace System.Reactive.Concurrency
         private sealed class AsyncInvocation<TState> : IDisposable
         {
             private readonly CancellationTokenSource _cts = new CancellationTokenSource();
-            private IDisposable? _run;
+            private SingleAssignmentDisposableValue _run;
 
             public IDisposable Run(IScheduler self, TState s, Func<IScheduler, TState, CancellationToken, Task<IDisposable>> action)
             {
@@ -27,7 +27,7 @@ namespace System.Reactive.Concurrency
 
                         t.Exception?.Handle(static e => e is OperationCanceledException);
 
-                        Disposable.SetSingle(ref @this._run, t.Result);
+                        @this._run.Disposable = t.Result;
                     },
                     this,
                     TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.NotOnCanceled);
@@ -38,7 +38,7 @@ namespace System.Reactive.Concurrency
             public void Dispose()
             {
                 _cts.Cancel();
-                Disposable.Dispose(ref _run);
+                _run.Dispose();
             }
         }
 

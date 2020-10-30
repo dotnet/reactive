@@ -46,19 +46,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _donel;
                 private bool _doner;
 
-                private IDisposable? _second;
+                private SingleAssignmentDisposableValue _second;
 
                 public void Run(Observable parent)
                 {
                     SetUpstream(parent._first.SubscribeSafe(new FirstObserver(this)));
-                    Disposable.SetSingle(ref _second, parent._second.SubscribeSafe(new SecondObserver(this)));
+                    _second.Disposable = parent._second.SubscribeSafe(new SecondObserver(this));
                 }
 
                 protected override void Dispose(bool disposing)
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _second);
+                        _second.Dispose();
                     }
 
                     base.Dispose(disposing);

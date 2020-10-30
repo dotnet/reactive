@@ -49,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
             var parent = new MainObserver(observer, _source, new RedoSerializedObserver<Exception>(errorSignals));
 
             var d = redo.SubscribeSafe(parent.HandlerConsumer);
-            Disposable.SetSingle(ref parent.HandlerUpstream, d);
+            parent.HandlerUpstream.Disposable = d;
 
             parent.HandlerNext();
 
@@ -63,7 +63,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal readonly HandlerObserver HandlerConsumer;
             private IDisposable? _upstream;
-            internal IDisposable? HandlerUpstream;
+            internal SingleAssignmentDisposableValue HandlerUpstream;
             private int _trampoline;
             private int _halfSerializer;
             private Exception? _error;
@@ -80,7 +80,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 if (disposing)
                 {
                     Disposable.Dispose(ref _upstream);
-                    Disposable.Dispose(ref HandlerUpstream);
+                    HandlerUpstream.Dispose();
                 }
 
                 base.Dispose(disposing);

@@ -66,7 +66,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Disposable that always holds the timer to dispatch the first element in the queue.
         /// </summary>
-        private IDisposable? _nextTimer;
+        private SerialDisposableValue _nextTimer;
 
         /// <summary>
         /// Flag indicating whether the event loop should quit. When set, the event should be signaled as well to
@@ -265,7 +265,7 @@ namespace System.Reactive.Concurrency
                 if (!_disposed)
                 {
                     _disposed = true;
-                    Disposable.Dispose(ref _nextTimer);
+                    _nextTimer.Dispose();
                     _evt.Release();
                 }
             }
@@ -334,7 +334,7 @@ namespace System.Reactive.Concurrency
                             _nextItem = next;
 
                             var due = next.DueTime - _stopwatch.Elapsed;
-                            Disposable.TrySetSerial(ref _nextTimer, ConcurrencyAbstractionLayer.Current.StartTimer(Tick, next, due));
+                            _nextTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(Tick, next, due);
                         }
                     }
 

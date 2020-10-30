@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
         private Exception? _error;
         private bool _done;
         private bool _disposed;
-        private IDisposable? _subscription;
+        private SingleAssignmentDisposableValue _subscription;
 
         private readonly SemaphoreSlim _gate;
 
@@ -32,7 +32,7 @@ namespace System.Reactive.Linq.ObservableImpl
             //
             // [OK] Use of unsafe Subscribe: non-pretentious exact mirror with the dual GetEnumerator method.
             //
-            Disposable.TrySetSingle(ref _subscription, source.Subscribe/*Unsafe*/(this));
+            _subscription.Disposable = source.Subscribe/*Unsafe*/(this);
             return this;
         }
 
@@ -45,14 +45,14 @@ namespace System.Reactive.Linq.ObservableImpl
         public void OnError(Exception error)
         {
             _error = error;
-            Disposable.Dispose(ref _subscription);
+            _subscription.Dispose();
             _gate.Release();
         }
 
         public void OnCompleted()
         {
             _done = true;
-            Disposable.Dispose(ref _subscription);
+            _subscription.Dispose();
             _gate.Release();
         }
 
@@ -84,7 +84,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public void Dispose()
         {
-            Disposable.Dispose(ref _subscription);
+            _subscription.Dispose();
 
             _disposed = true;
             _gate.Release();

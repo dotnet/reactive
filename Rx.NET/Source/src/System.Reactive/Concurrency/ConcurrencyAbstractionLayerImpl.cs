@@ -154,7 +154,7 @@ namespace System.Reactive.Concurrency
         {
             private volatile object? _state;
             private Action<object?> _action;
-            private IDisposable _timer;
+            private SingleAssignmentDisposableValue _timer;
 
             private static readonly object DisposedState = new object();
 
@@ -163,7 +163,7 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                Disposable.SetSingle(ref _timer, new System.Threading.Timer(static @this => ((Timer)@this!).Tick(), this, dueTime, TimeSpan.FromMilliseconds(Timeout.Infinite)));
+                _timer.Disposable = new System.Threading.Timer(static @this => ((Timer)@this!).Tick(), this, dueTime, TimeSpan.FromMilliseconds(Timeout.Infinite));
             }
 
             private void Tick()
@@ -178,13 +178,13 @@ namespace System.Reactive.Concurrency
                 }
                 finally
                 {
-                    Disposable.Dispose(ref _timer);
+                    _timer.Dispose();
                 }
             }
 
             public void Dispose()
             {
-                Disposable.Dispose(ref _timer);
+                _timer.Dispose();
 
                 _action = Stubs<object?>.Ignore;
                 _state = DisposedState;

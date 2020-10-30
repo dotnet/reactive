@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IDisposable? _disposable;
+            private SingleAssignmentDisposableValue _disposable;
 
             public void Run(Using<TSource, TResource> parent)
             {
@@ -63,7 +63,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 // Run(). In the synchronous case this would else dispose
                 // the the resource before the source subscription.
                 Run(source);
-                Disposable.SetSingle(ref _disposable, disposable);
+                _disposable.Disposable = disposable;
             }
 
             protected override void Dispose(bool disposing)
@@ -72,7 +72,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _disposable);
+                    _disposable.Dispose();
                 }
             }
         }

@@ -32,7 +32,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
     internal abstract class PushToPullSink<TSource, TResult> : IObserver<TSource>, IEnumerator<TResult>
     {
-        private IDisposable? _upstream;
+        private SingleAssignmentDisposableValue _upstream;
 
         public abstract void OnNext(TSource value);
         public abstract void OnError(Exception error);
@@ -76,12 +76,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public void Dispose()
         {
-            Disposable.Dispose(ref _upstream);
+            _upstream.Dispose();
         }
 
         public void SetUpstream(IDisposable d)
         {
-            Disposable.SetSingle(ref _upstream, d);
+            _upstream.Disposable = d;
         }
     }
 }

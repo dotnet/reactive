@@ -31,8 +31,8 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IDisposable? _sourceDisposable;
-            private IDisposable? _samplerDisposable;
+            private SingleAssignmentDisposableValue _sourceDisposable;
+            private SingleAssignmentDisposableValue _samplerDisposable;
 
             private bool _hasValue;
             private TSource? _value;
@@ -41,17 +41,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(Sample<TSource, TSample> parent)
             {
-                Disposable.SetSingle(ref _sourceDisposable, parent._source.SubscribeSafe(this));
+                _sourceDisposable.Disposable = parent._source.SubscribeSafe(this);
 
-                Disposable.SetSingle(ref _samplerDisposable, parent._sampler.SubscribeSafe(new SampleObserver(this)));
+                _samplerDisposable.Disposable = parent._sampler.SubscribeSafe(new SampleObserver(this));
             }
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _sourceDisposable);
-                    Disposable.Dispose(ref _samplerDisposable);
+                    _sourceDisposable.Dispose();
+                    _samplerDisposable.Dispose();
                 }
 
                 base.Dispose(disposing);
@@ -86,7 +86,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        Disposable.Dispose(ref _sourceDisposable);
+                        _sourceDisposable.Dispose();
                     }
                 }
             }
@@ -144,7 +144,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         else
                         {
-                            Disposable.Dispose(ref _parent._samplerDisposable);
+                            _parent._samplerDisposable.Dispose();
                         }
                     }
                 }
@@ -178,7 +178,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IDisposable? _sourceDisposable;
+            private SingleAssignmentDisposableValue _sourceDisposable;
 
             private bool _hasValue;
             private TSource? _value;
@@ -186,7 +186,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(Sample<TSource> parent)
             {
-                Disposable.SetSingle(ref _sourceDisposable, parent._source.SubscribeSafe(this));
+                _sourceDisposable.Disposable = parent._source.SubscribeSafe(this);
 
                 SetUpstream(parent._scheduler.SchedulePeriodic(parent._interval, Tick));
             }
@@ -195,7 +195,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _sourceDisposable);
+                    _sourceDisposable.Dispose();
                 }
 
                 base.Dispose(disposing);
@@ -240,7 +240,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     _atEnd = true;
-                    Disposable.Dispose(ref _sourceDisposable);
+                    _sourceDisposable.Dispose();
                 }
             }
         }

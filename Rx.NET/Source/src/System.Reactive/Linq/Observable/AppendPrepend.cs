@@ -105,7 +105,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly TSource _value;
                 private readonly IScheduler _scheduler;
                 private readonly bool _append;
-                private IDisposable? _schedulerDisposable;
+                private SingleAssignmentDisposableValue _schedulerDisposable;
 
                 public _(SingleValue parent, IObserver<TSource> observer)
                     : base(observer)
@@ -136,7 +136,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (_append)
                     {
                         var disposable = _scheduler.ScheduleAction(this, AppendValue);
-                        Disposable.TrySetSingle(ref _schedulerDisposable, disposable);
+                        _schedulerDisposable.Disposable = disposable;
                     }
                     else
                     {
@@ -154,7 +154,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _schedulerDisposable);
+                        _schedulerDisposable.Dispose();
                     }
                     base.Dispose(disposing);
                 }

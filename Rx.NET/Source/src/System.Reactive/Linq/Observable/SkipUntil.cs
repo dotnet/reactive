@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private IDisposable? _otherDisposable;
+            private SingleAssignmentDisposableValue _otherDisposable;
             private bool _forward;
             private int _halfSerializer;
             private Exception? _error;
@@ -36,7 +36,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(SkipUntil<TSource, TOther> parent)
             {
-                Disposable.TrySetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
+                _otherDisposable.Disposable = parent._other.Subscribe(new OtherObserver(this));
                 Run(parent._source);
             }
 
@@ -44,9 +44,9 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    if (!Disposable.GetIsDisposed(ref _otherDisposable))
+                    if (!_otherDisposable.IsDisposed)
                     {
-                        Disposable.Dispose(ref _otherDisposable);
+                        _otherDisposable.Dispose();
                     }
                 }
 
@@ -94,9 +94,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Dispose()
                 {
-                    if (!Disposable.GetIsDisposed(ref _parent._otherDisposable))
+                    if (!_parent._otherDisposable.IsDisposed)
                     {
-                        Disposable.Dispose(ref _parent._otherDisposable);
+                        _parent._otherDisposable.Dispose();
                     }
                 }
 
@@ -164,11 +164,11 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IDisposable? _task;
+            private SingleAssignmentDisposableValue _task;
 
             public void Run(SkipUntil<TSource> parent)
             {
-                Disposable.SetSingle(ref _task, parent._scheduler.ScheduleAction(this, parent._startTime, static state => state.Tick()));
+                _task.Disposable = parent._scheduler.ScheduleAction(this, parent._startTime, static state => state.Tick());
                 Run(parent._source);
             }
 
@@ -176,7 +176,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _task);
+                    _task.Dispose();
                 }
 
                 base.Dispose(disposing);

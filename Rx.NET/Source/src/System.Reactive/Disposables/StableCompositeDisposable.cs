@@ -90,21 +90,21 @@ namespace System.Reactive.Disposables
 
         private sealed class Binary : StableCompositeDisposable
         {
-            private IDisposable? _disposable1;
-            private IDisposable? _disposable2;
+            private SingleAssignmentDisposableValue _disposable1;
+            private SingleAssignmentDisposableValue _disposable2;
 
             public Binary(IDisposable disposable1, IDisposable disposable2)
             {
-                Volatile.Write(ref _disposable1, disposable1);
-                Volatile.Write(ref _disposable2, disposable2);
+                _disposable1.Disposable = disposable1;
+                _disposable2.Disposable = disposable2;
             }
 
-            public override bool IsDisposed => Disposable.GetIsDisposed(ref _disposable1);
+            public override bool IsDisposed => _disposable1.IsDisposed;
 
             public override void Dispose()
             {
-                Disposable.Dispose(ref _disposable1);
-                Disposable.Dispose(ref _disposable2);
+                _disposable1.Dispose();
+                _disposable2.Dispose();
             }
         }
 

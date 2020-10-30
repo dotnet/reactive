@@ -39,8 +39,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            private IDisposable? _firstDisposable;
-            private IDisposable? _secondDisposable;
+            private SingleAssignmentDisposableValue _firstDisposable;
+            private SingleAssignmentDisposableValue _secondDisposable;
 
             public void Run(IObservable<TFirst> first, IObservable<TSecond> second)
             {
@@ -50,16 +50,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 fstO.SetOther(sndO);
                 sndO.SetOther(fstO);
 
-                Disposable.SetSingle(ref _firstDisposable, first.SubscribeSafe(fstO));
-                Disposable.SetSingle(ref _secondDisposable, second.SubscribeSafe(sndO));
+                _firstDisposable.Disposable = first.SubscribeSafe(fstO);
+                _secondDisposable.Disposable = second.SubscribeSafe(sndO);
             }
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _firstDisposable);
-                    Disposable.Dispose(ref _secondDisposable);
+                    _firstDisposable.Dispose();
+                    _secondDisposable.Dispose();
                 }
 
                 base.Dispose(disposing);
@@ -131,7 +131,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         else
                         {
-                            Disposable.Dispose(ref _parent._firstDisposable);
+                            _parent._firstDisposable.Dispose();
                         }
                     }
                 }
@@ -203,7 +203,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         else
                         {
-                            Disposable.Dispose(ref _parent._secondDisposable);
+                            _parent._secondDisposable.Dispose();
                         }
                     }
                 }

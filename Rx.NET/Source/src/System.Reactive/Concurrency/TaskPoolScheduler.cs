@@ -20,7 +20,7 @@ namespace System.Reactive.Concurrency
             private readonly TaskPoolScheduler _scheduler;
             private readonly Func<IScheduler, TState, IDisposable> _action;
 
-            private IDisposable _cancel;
+            private SerialDisposableValue _cancel;
 
             public ScheduledWorkItem(TaskPoolScheduler scheduler, TState state, Func<IScheduler, TState, IDisposable> action)
             {
@@ -30,7 +30,7 @@ namespace System.Reactive.Concurrency
 
                 var cancelable = new CancellationDisposable();
 
-                Disposable.SetSingle(ref _cancel, cancelable);
+                _cancel.Disposable = cancelable;
 
                 scheduler._taskFactory.StartNew(
                     thisObject =>
@@ -60,7 +60,7 @@ namespace System.Reactive.Concurrency
                         // exceptions at stage 2. If the exception isn't handled at the Rx level, it
                         // propagates by means of a rethrow, falling back to behavior in 3.
                         //
-                        Disposable.TrySetSerial(ref @this._cancel, @this._action(@this._scheduler, @this._state));
+                        @this._cancel.Disposable = @this._action(@this._scheduler, @this._state);
                     },
                     this,
                     cancelable.Token);
@@ -68,7 +68,7 @@ namespace System.Reactive.Concurrency
 
             public void Dispose()
             {
-                Disposable.Dispose(ref _cancel);
+                _cancel.Dispose();
             }
         }
 
@@ -78,7 +78,7 @@ namespace System.Reactive.Concurrency
             private readonly TaskPoolScheduler _scheduler;
             private readonly Func<IScheduler, TState, IDisposable> _action;
 
-            private IDisposable _cancel;
+            private MultipleAssignmentDisposableValue _cancel;
 
             public SlowlyScheduledWorkItem(TaskPoolScheduler scheduler, TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
             {
@@ -87,16 +87,16 @@ namespace System.Reactive.Concurrency
                 _scheduler = scheduler;
 
                 var ct = new CancellationDisposable();
-                Disposable.SetSingle(ref _cancel, ct);
+                _cancel.Disposable = ct;
 
                 TaskHelpers.Delay(dueTime, ct.Token).ContinueWith(
                     (_, thisObject) =>
                     {
                         var @this = (SlowlyScheduledWorkItem<TState>)thisObject!;
 
-                        if (!Disposable.GetIsDisposed(ref @this._cancel))
+                        if (!@this._cancel.IsDisposed)
                         {
-                            Disposable.TrySetMultiple(ref @this._cancel, @this._action(@this._scheduler, @this._state));
+                            @this._cancel.Disposable = @this._action(@this._scheduler, @this._state);
                         }
                     },
                     this,
@@ -107,7 +107,7 @@ namespace System.Reactive.Concurrency
 
             public void Dispose()
             {
-                Disposable.Dispose(ref _cancel);
+                _cancel.Dispose();
             }
         }
 
@@ -116,7 +116,7 @@ namespace System.Reactive.Concurrency
             private readonly TState _state;
             private readonly Action<TState, ICancelable> _action;
 
-            private IDisposable? _cancel;
+            private SingleAssignmentDisposableValue _cancel;
 
             public LongScheduledWorkItem(TaskPoolScheduler scheduler, TState state, Action<TState, ICancelable> action)
             {
@@ -141,10 +141,10 @@ namespace System.Reactive.Concurrency
 
             public void Dispose()
             {
-                Disposable.Dispose(ref _cancel);
+                _cancel.Dispose();
             }
 
-            public bool IsDisposed => Disposable.GetIsDisposed(ref _cancel);
+            public bool IsDisposed => _cancel.IsDisposed;
         }
 
         private static readonly Lazy<TaskPoolScheduler> LazyInstance = new Lazy<TaskPoolScheduler>(static () => new TaskPoolScheduler(new TaskFactory(TaskScheduler.Default)));

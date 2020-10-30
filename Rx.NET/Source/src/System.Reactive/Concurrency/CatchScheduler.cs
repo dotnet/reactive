@@ -97,7 +97,7 @@ namespace System.Reactive.Concurrency
         {
             private sealed class PeriodicallyScheduledWorkItem<TState> : IDisposable
             {
-                private IDisposable _cancel;
+                private SingleAssignmentDisposableValue _cancel;
                 private bool _failed;
 
                 private readonly Func<TState, TState> _action;
@@ -109,12 +109,12 @@ namespace System.Reactive.Concurrency
                     _action = action;
 
                     // Note that avoiding closure allocation here would introduce infinite generic recursion over the TState argument
-                    Disposable.SetSingle(ref _cancel, scheduler._scheduler.SchedulePeriodic(state, period, state1 => Tick(state1).state));
+                    _cancel.Disposable = scheduler._scheduler.SchedulePeriodic(state, period, state1 => Tick(state1).state);
                 }
 
                 public void Dispose()
                 {
-                    Disposable.Dispose(ref _cancel);
+                    _cancel.Dispose();
                 }
 
                 private (PeriodicallyScheduledWorkItem<TState> @this, TState state) Tick(TState state)
@@ -144,7 +144,7 @@ namespace System.Reactive.Concurrency
                             throw;
                         }
 
-                        Disposable.Dispose(ref _cancel);
+                        _cancel.Dispose();
                         return default;
                     }
                 }

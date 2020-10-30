@@ -112,11 +112,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                 }
 
-                private IDisposable? _task;
+                private SingleAssignmentDisposableValue _task;
 
                 public void Run(Time parent)
                 {
-                    Disposable.SetSingle(ref _task, parent._scheduler.ScheduleAction(this, parent._duration, state => state.Tick()));
+                    _task.Disposable = parent._scheduler.ScheduleAction(this, parent._duration, state => state.Tick());
                     Run(parent._source);
                 }
 
@@ -124,7 +124,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _task);
+                        _task.Dispose();
                     }
 
                     base.Dispose(disposing);
