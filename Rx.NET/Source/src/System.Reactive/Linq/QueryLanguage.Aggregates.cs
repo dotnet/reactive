@@ -219,12 +219,12 @@ namespace System.Reactive.Linq
 
         #region + FirstAsyncOrDefaultAsync +
 
-        public virtual IObservable<TSource> FirstOrDefaultAsync<TSource>(IObservable<TSource> source)
+        public virtual IObservable<TSource?> FirstOrDefaultAsync<TSource>(IObservable<TSource> source)
         {
             return new FirstOrDefaultAsync<TSource>.Sequence(source);
         }
 
-        public virtual IObservable<TSource> FirstOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
+        public virtual IObservable<TSource?> FirstOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             return new FirstOrDefaultAsync<TSource>.Predicate(source, predicate);
         }

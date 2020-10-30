@@ -54,8 +54,8 @@ namespace System.Reactive.Linq
         IObservable<TSource> ElementAtOrDefault<TSource>(IObservable<TSource> source, int index);
         IObservable<TSource> FirstAsync<TSource>(IObservable<TSource> source);
         IObservable<TSource> FirstAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
-        IObservable<TSource> FirstOrDefaultAsync<TSource>(IObservable<TSource> source);
-        IObservable<TSource> FirstOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
+        IObservable<TSource?> FirstOrDefaultAsync<TSource>(IObservable<TSource> source);
+        IObservable<TSource?> FirstOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<bool> IsEmpty<TSource>(IObservable<TSource> source);
         IObservable<TSource> LastAsync<TSource>(IObservable<TSource> source);
         IObservable<TSource> LastAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);

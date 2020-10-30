@@ -827,7 +827,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source observable sequence.</param>
         /// <returns>Sequence containing the first element in the observable sequence, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IObservable<TSource> FirstOrDefaultAsync<TSource>(this IObservable<TSource> source)
+        public static IObservable<TSource?> FirstOrDefaultAsync<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
             {
@@ -845,7 +845,7 @@ namespace System.Reactive.Linq
         /// <param name="predicate">A predicate function to evaluate for elements in the source sequence.</param>
         /// <returns>Sequence containing the first element in the observable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
-        public static IObservable<TSource> FirstOrDefaultAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
+        public static IObservable<TSource?> FirstOrDefaultAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
             {
