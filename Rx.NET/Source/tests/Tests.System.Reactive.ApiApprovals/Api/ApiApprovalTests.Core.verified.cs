@@ -986,7 +986,7 @@ namespace System.Reactive.Linq
         public static System.IObservable<TResult> Create<TResult>(System.Func<System.IObserver<TResult>, System.Threading.CancellationToken, System.Threading.Tasks.Task> subscribeAsync) { }
         public static System.IObservable<TResult> Create<TResult>(System.Func<System.IObserver<TResult>, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.Action>> subscribeAsync) { }
         public static System.IObservable<TResult> Create<TResult>(System.Func<System.IObserver<TResult>, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IDisposable>> subscribeAsync) { }
-        public static System.IObservable<TSource> DefaultIfEmpty<TSource>(this System.IObservable<TSource> source) { }
+        public static System.IObservable<TSource?> DefaultIfEmpty<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> DefaultIfEmpty<TSource>(this System.IObservable<TSource> source, TSource defaultValue) { }
         public static System.IObservable<TResult> Defer<TResult>(System.Func<System.IObservable<TResult>> observableFactory) { }
         public static System.IObservable<TResult> Defer<TResult>(System.Func<System.Threading.Tasks.Task<System.IObservable<TResult>>> observableFactoryAsync) { }

@@ -24,14 +24,16 @@ namespace System.Reactive.Linq
 
         #region + DefaultIfEmpty +
 
-        public virtual IObservable<TSource> DefaultIfEmpty<TSource>(IObservable<TSource> source)
+        public virtual IObservable<TSource?> DefaultIfEmpty<TSource>(IObservable<TSource> source)
         {
-            return new DefaultIfEmpty<TSource>(source, default!);
+            return new DefaultIfEmpty<TSource>(source, default);
         }
 
         public virtual IObservable<TSource> DefaultIfEmpty<TSource>(IObservable<TSource> source, TSource defaultValue)
         {
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return new DefaultIfEmpty<TSource>(source, defaultValue);
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
 
         #endregion

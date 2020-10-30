@@ -584,7 +584,7 @@ namespace System.Reactive.Linq
         #region * StandardSequenceOperators *
 
         IObservable<TResult> Cast<TResult>(IObservable<object> source);
-        IObservable<TSource> DefaultIfEmpty<TSource>(IObservable<TSource> source);
+        IObservable<TSource?> DefaultIfEmpty<TSource>(IObservable<TSource> source);
         IObservable<TSource> DefaultIfEmpty<TSource>(IObservable<TSource> source, TSource defaultValue);
         IObservable<TSource> Distinct<TSource>(IObservable<TSource> source);
         IObservable<TSource> Distinct<TSource>(IObservable<TSource> source, IEqualityComparer<TSource> comparer);
