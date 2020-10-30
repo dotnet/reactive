@@ -755,7 +755,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that produces the element at the specified position in the source sequence, or a default value if the index is outside the bounds of the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than zero.</exception>
-        public static IObservable<TSource> ElementAtOrDefault<TSource>(this IObservable<TSource> source, int index)
+        public static IObservable<TSource?> ElementAtOrDefault<TSource>(this IObservable<TSource> source, int index)
         {
             if (source == null)
             {

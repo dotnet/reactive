@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class ElementAtOrDefault<TSource> : Producer<TSource, ElementAtOrDefault<TSource>._>
+    internal sealed class ElementAtOrDefault<TSource> : Producer<TSource?, ElementAtOrDefault<TSource>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly int _index;
@@ -15,15 +15,15 @@ namespace System.Reactive.Linq.ObservableImpl
             _index = index;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(_index, observer);
+        protected override _ CreateSink(IObserver<TSource?> observer) => new _(_index, observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : IdentitySink<TSource>
+        internal sealed class _ : Sink<TSource, TSource?>
         {
             private int _i;
 
-            public _(int index, IObserver<TSource> observer)
+            public _(int index, IObserver<TSource?> observer)
                 : base(observer)
             {
                 _i = index;
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                ForwardOnNext(default!);
+                ForwardOnNext(default);
                 ForwardOnCompleted();
             }
         }

@@ -196,7 +196,7 @@ namespace System.Reactive.Linq
 
         #region + ElementAtOrDefault +
 
-        public virtual IObservable<TSource> ElementAtOrDefault<TSource>(IObservable<TSource> source, int index)
+        public virtual IObservable<TSource?> ElementAtOrDefault<TSource>(IObservable<TSource> source, int index)
         {
             return new ElementAtOrDefault<TSource>(source, index);
         }

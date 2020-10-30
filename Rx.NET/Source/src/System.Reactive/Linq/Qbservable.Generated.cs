@@ -4551,7 +4551,7 @@ namespace System.Reactive.Linq
         /// <paramref name="source" /> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="index" /> is less than zero.</exception>
-        public static IQbservable<TSource> ElementAtOrDefault<TSource>(this IQbservable<TSource> source, int index)
+        public static IQbservable<TSource?> ElementAtOrDefault<TSource>(this IQbservable<TSource> source, int index)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

@@ -1017,7 +1017,7 @@ namespace System.Reactive.Linq
         public static System.IObservable<TSource> Do<TSource>(this System.IObservable<TSource> source, System.Action<TSource> onNext, System.Action<System.Exception> onError, System.Action onCompleted) { }
         public static System.IObservable<TSource> DoWhile<TSource>(this System.IObservable<TSource> source, System.Func<bool> condition) { }
         public static System.IObservable<TSource> ElementAt<TSource>(this System.IObservable<TSource> source, int index) { }
-        public static System.IObservable<TSource> ElementAtOrDefault<TSource>(this System.IObservable<TSource> source, int index) { }
+        public static System.IObservable<TSource?> ElementAtOrDefault<TSource>(this System.IObservable<TSource> source, int index) { }
         public static System.IObservable<TResult> Empty<TResult>() { }
         public static System.IObservable<TResult> Empty<TResult>(System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<TResult> Empty<TResult>(TResult witness) { }
@@ -1926,7 +1926,7 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TSource> Do<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Action<TSource>> onNext, System.Linq.Expressions.Expression<System.Action<System.Exception>> onError, System.Linq.Expressions.Expression<System.Action> onCompleted) { }
         public static System.Reactive.Linq.IQbservable<TSource> DoWhile<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<bool>> condition) { }
         public static System.Reactive.Linq.IQbservable<TSource> ElementAt<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, int index) { }
-        public static System.Reactive.Linq.IQbservable<TSource> ElementAtOrDefault<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, int index) { }
+        public static System.Reactive.Linq.IQbservable<TSource?> ElementAtOrDefault<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, int index) { }
         public static System.Reactive.Linq.IQbservable<TResult> Empty<TResult>(this System.Reactive.Linq.IQbservableProvider provider) { }
         public static System.Reactive.Linq.IQbservable<TResult> Empty<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Reactive.Linq.IQbservable<TResult> Empty<TResult>(this System.Reactive.Linq.IQbservableProvider provider, TResult witness) { }

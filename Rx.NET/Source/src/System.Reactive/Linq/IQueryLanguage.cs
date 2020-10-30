@@ -51,7 +51,7 @@ namespace System.Reactive.Linq
         IObservable<int> Count<TSource>(IObservable<TSource> source);
         IObservable<int> Count<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<TSource> ElementAt<TSource>(IObservable<TSource> source, int index);
-        IObservable<TSource> ElementAtOrDefault<TSource>(IObservable<TSource> source, int index);
+        IObservable<TSource?> ElementAtOrDefault<TSource>(IObservable<TSource> source, int index);
         IObservable<TSource> FirstAsync<TSource>(IObservable<TSource> source);
         IObservable<TSource> FirstAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<TSource?> FirstOrDefaultAsync<TSource>(IObservable<TSource> source);
