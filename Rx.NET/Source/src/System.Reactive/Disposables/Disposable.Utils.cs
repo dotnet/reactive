@@ -43,6 +43,7 @@ namespace System.Reactive.Disposables
                 : current;
         }
 
+        /// <summary>
         /// Tries to assign <paramref name="value" /> to <paramref name="fieldRef" />.
         /// </summary>
         /// <returns>A <see cref="TrySetSingleResult"/> value indicating the outcome of the operation.</returns>
