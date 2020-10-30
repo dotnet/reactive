@@ -26,7 +26,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource?> DefaultIfEmpty<TSource>(IObservable<TSource> source)
         {
-            return DefaultIfEmpty(source, default!);
+            return new DefaultIfEmpty<TSource>(source, default!);
         }
 
         public virtual IObservable<TSource> DefaultIfEmpty<TSource>(IObservable<TSource> source, TSource defaultValue)
