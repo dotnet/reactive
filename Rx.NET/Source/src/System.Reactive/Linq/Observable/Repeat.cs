@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly TResult _value;
 
-                private IDisposable? _task;
+                private MultipleAssignmentDisposableValue _task;
 
                 public _(TResult value, IObserver<TResult> observer)
                     : base(observer)
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void Run(IScheduler scheduler)
                 {
                     var first = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRecInf(innerScheduler));
-                    Disposable.TrySetSingle(ref _task, first);
+                    _task.TrySetFirst(first);
                 }
 
                 protected override void Dispose(bool disposing)
@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _task);
+                        _task.Dispose();
                     }
                 }
 
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     ForwardOnNext(_value);
 
                     var next = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRecInf(innerScheduler));
-                    Disposable.TrySetMultiple(ref _task, next);
+                    _task.Disposable = next;
 
                     return Disposable.Empty;
                 }
@@ -130,7 +130,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private int _remaining;
 
-                private IDisposable? _task;
+                private MultipleAssignmentDisposableValue _task;
 
                 public _(TResult value, int repeatCount, IObserver<TResult> observer)
                     : base(observer)
@@ -142,7 +142,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void Run(IScheduler scheduler)
                 {
                     var first = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
-                    Disposable.TrySetSingle(ref _task, first);
+                    _task.TrySetFirst(first);
                 }
 
                 protected override void Dispose(bool disposing)
@@ -151,7 +151,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _task);
+                        _task.Dispose();
                     }
                 }
 
@@ -171,7 +171,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     else
                     {
                         var next = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
-                        Disposable.TrySetMultiple(ref _task, next);
+                        _task.Disposable = next;
                     }
 
                     return Disposable.Empty;

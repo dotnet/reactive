@@ -208,7 +208,7 @@ namespace System.Reactive.Concurrency
 
             private TState _state;
             private TimeSpan _next;
-            private IDisposable _task;
+            private MultipleAssignmentDisposableValue _task;
 
             public PeriodicallyScheduledWorkItem(EventLoopScheduler scheduler, TState state, TimeSpan period, Func<TState, TState> action)
             {
@@ -218,14 +218,14 @@ namespace System.Reactive.Concurrency
                 _scheduler = scheduler;
                 _next = scheduler._stopwatch.Elapsed + period;
 
-                Disposable.TrySetSingle(ref _task, scheduler.Schedule(this, _next - scheduler._stopwatch.Elapsed, static (_, s) => s.Tick(_)));
+                _task.TrySetFirst(scheduler.Schedule(this, _next - scheduler._stopwatch.Elapsed, static (_, s) => s.Tick(_)));
             }
 
             private IDisposable Tick(IScheduler self)
             {
                 _next += _period;
 
-                Disposable.TrySetMultiple(ref _task, self.Schedule(this, _next - _scheduler._stopwatch.Elapsed, static (_, s) => s.Tick(_)));
+                _task.Disposable = self.Schedule(this, _next - _scheduler._stopwatch.Elapsed, static (_, s) => s.Tick(_));
 
                 _gate.Wait(
                     this,
@@ -236,7 +236,7 @@ namespace System.Reactive.Concurrency
 
             public void Dispose()
             {
-                Disposable.Dispose(ref _task);
+                _task.Dispose();
                 _gate.Dispose();
             }
         }

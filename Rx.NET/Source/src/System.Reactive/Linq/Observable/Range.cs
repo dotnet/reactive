@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly int _end;
             private int _index;
-            private IDisposable? _task;
+            private MultipleAssignmentDisposableValue _task;
 
             public RangeSink(int start, int count, IObserver<int> observer)
                 : base(observer)
@@ -40,7 +40,7 @@ namespace System.Reactive.Linq.ObservableImpl
             public void Run(IScheduler scheduler)
             {
                 var first = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
-                Disposable.TrySetSingle(ref _task, first);
+                _task.TrySetFirst(first);
             }
 
             protected override void Dispose(bool disposing)
@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 base.Dispose(disposing);
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _task);
+                    _task.Dispose();
                 }
             }
 
@@ -61,7 +61,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _index = idx + 1;
                     ForwardOnNext(idx);
                     var next = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
-                    Disposable.TrySetMultiple(ref _task, next);
+                    _task.Disposable = next;
                 }
                 else
                 {
