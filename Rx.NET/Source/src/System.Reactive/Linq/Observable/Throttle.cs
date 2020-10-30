@@ -39,14 +39,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private TSource? _value;
             private bool _hasValue;
-            private IDisposable? _serialCancelable;
+            private SerialDisposableValue _serialCancelable;
             private ulong _id;
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _serialCancelable);
+                    _serialCancelable.Dispose();
                 }
 
                 base.Dispose(disposing);
@@ -64,8 +64,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     currentid = _id;
                 }
 
-                Disposable.TrySetSerial(ref _serialCancelable, null);
-                Disposable.TrySetSerial(ref _serialCancelable, _scheduler.ScheduleAction((@this: this, currentid), _dueTime, static tuple => tuple.@this.Propagate(tuple.currentid)));
+                _serialCancelable.Disposable = null;
+                _serialCancelable.Disposable = _scheduler.ScheduleAction((@this: this, currentid), _dueTime, static tuple => tuple.@this.Propagate(tuple.currentid));
             }
 
             private void Propagate(ulong currentid)
@@ -83,7 +83,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                Disposable.Dispose(ref _serialCancelable);
+                _serialCancelable.Dispose();
 
                 lock (_gate)
                 {
@@ -96,7 +96,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                Disposable.Dispose(ref _serialCancelable);
+                _serialCancelable.Dispose();
 
                 lock (_gate)
                 {
@@ -142,14 +142,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private TSource? _value;
             private bool _hasValue;
-            private IDisposable? _serialCancelable;
+            private SerialDisposableValue _serialCancelable;
             private ulong _id;
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _serialCancelable);
+                    _serialCancelable.Dispose();
                 }
 
                 base.Dispose(disposing);
@@ -182,17 +182,17 @@ namespace System.Reactive.Linq.ObservableImpl
                     currentid = _id;
                 }
 
-                Disposable.TrySetSerial(ref _serialCancelable, null);
+                _serialCancelable.Disposable = null;
 
                 var newInnerObserver = new ThrottleObserver(this, value, currentid);
                 newInnerObserver.SetResource(throttle.SubscribeSafe(newInnerObserver));
 
-                Disposable.TrySetSerial(ref _serialCancelable, newInnerObserver);
+                _serialCancelable.Disposable = newInnerObserver;
             }
 
             public override void OnError(Exception error)
             {
-                Disposable.Dispose(ref _serialCancelable);
+                _serialCancelable.Dispose();
 
                 lock (_gate)
                 {
@@ -205,7 +205,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                Disposable.Dispose(ref _serialCancelable);
+                _serialCancelable.Dispose();
 
                 lock (_gate)
                 {

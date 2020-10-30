@@ -150,7 +150,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly IObservable<TSource> _other;
 
-                private IDisposable? _serialDisposable;
+                private SerialDisposableValue _serialDisposable;
                 private int _wip;
 
                 public _(IObservable<TSource> other, IObserver<TSource> observer)
@@ -163,14 +163,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     SetUpstream(parent._scheduler.ScheduleAction(this, parent._dueTime, static @this => @this.Timeout()));
 
-                    Disposable.TrySetSingle(ref _serialDisposable, parent._source.SubscribeSafe(this));
+                    _serialDisposable.Disposable = parent._source.SubscribeSafe(this);
                 }
 
                 protected override void Dispose(bool disposing)
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _serialDisposable);
+                        _serialDisposable.Dispose();
                     }
 
                     base.Dispose(disposing);
@@ -180,7 +180,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (Interlocked.Increment(ref _wip) == 1)
                     {
-                        Disposable.TrySetSerial(ref _serialDisposable, _other.SubscribeSafe(GetForwarder()));
+                        _serialDisposable.Disposable = _other.SubscribeSafe(GetForwarder());
                     }
                 }
 
@@ -191,7 +191,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         ForwardOnNext(value);
                         if (Interlocked.Decrement(ref _wip) != 0)
                         {
-                            Disposable.TrySetSerial(ref _serialDisposable, _other.SubscribeSafe(GetForwarder()));
+                            _serialDisposable.Disposable = _other.SubscribeSafe(GetForwarder());
                         }
                     }
                 }

@@ -270,7 +270,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly IScheduler _scheduler;
                 private readonly object _gate = new object();
                 private readonly Queue<List<TSource>> _q = new Queue<List<TSource>>();
-                private IDisposable? _timerSerial;
+                private SerialDisposableValue _timerSerial;
 
                 public _(TimeSliding parent, IObserver<IList<TSource>> observer)
                     : base(observer)
@@ -299,7 +299,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _timerSerial);
+                        _timerSerial.Dispose();
                     }
                     base.Dispose(disposing);
                 }
@@ -314,7 +314,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var m = new SingleAssignmentDisposable();
 
-                    Disposable.TrySetSerial(ref _timerSerial, m);
+                    _timerSerial.Disposable = m;
 
                     var isSpan = false;
                     var isShift = false;
@@ -529,7 +529,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _parent = parent;
                 }
 
-                private IDisposable? _timerSerial;
+                private SerialDisposableValue _timerSerial;
                 private int _n;
                 private int _windowId;
 
@@ -547,7 +547,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _timerSerial);
+                        _timerSerial.Dispose();
                     }
 
                     base.Dispose(disposing);
@@ -556,7 +556,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void CreateTimer(int id)
                 {
                     var m = new SingleAssignmentDisposable();
-                    Disposable.TrySetSerial(ref _timerSerial, m);
+                    _timerSerial.Disposable = m;
 
                     m.Disposable = _parent._scheduler.ScheduleAction((@this: this, id), _parent._timeSpan, static tuple => tuple.@this.Tick(tuple.id));
                 }
@@ -654,7 +654,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Func<IObservable<TBufferClosing>> _bufferClosingSelector;
 
                 private List<TSource> _buffer = new List<TSource>();
-                private IDisposable? _bufferClosingSerialDisposable;
+                private SerialDisposableValue _bufferClosingSerialDisposable;
 
                 public _(Selector parent, IObserver<IList<TSource>> observer)
                     : base(observer)
@@ -673,7 +673,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _bufferClosingSerialDisposable);
+                        _bufferClosingSerialDisposable.Dispose();
                     }
                     base.Dispose(disposing);
                 }
@@ -695,7 +695,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     var closingObserver = new BufferClosingObserver(this);
-                    Disposable.TrySetSerial(ref _bufferClosingSerialDisposable, closingObserver);
+                    _bufferClosingSerialDisposable.Disposable = closingObserver;
                     closingObserver.SetResource(bufferClose.SubscribeSafe(closingObserver));
                 }
 

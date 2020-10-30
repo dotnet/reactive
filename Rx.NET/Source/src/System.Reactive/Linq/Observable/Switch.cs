@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IDisposable? _innerSerialDisposable;
+            private SerialDisposableValue _innerSerialDisposable;
             private bool _isStopped;
             private ulong _latest;
             private bool _hasLatest;
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _innerSerialDisposable);
+                    _innerSerialDisposable.Dispose();
                 }
 
                 base.Dispose(disposing);
@@ -55,7 +55,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var innerObserver = new InnerObserver(this, id);
 
-                Disposable.TrySetSerial(ref _innerSerialDisposable, innerObserver);
+                _innerSerialDisposable.Disposable = innerObserver;
                 innerObserver.SetResource(value.SubscribeSafe(innerObserver));
             }
 

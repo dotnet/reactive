@@ -20,7 +20,7 @@ namespace System.Reactive.Concurrency
             private readonly TaskPoolScheduler _scheduler;
             private readonly Func<IScheduler, TState, IDisposable> _action;
 
-            private IDisposable _cancel;
+            private SerialDisposableValue _cancel;
 
             public ScheduledWorkItem(TaskPoolScheduler scheduler, TState state, Func<IScheduler, TState, IDisposable> action)
             {
@@ -30,7 +30,7 @@ namespace System.Reactive.Concurrency
 
                 var cancelable = new CancellationDisposable();
 
-                Disposable.SetSingle(ref _cancel, cancelable);
+                _cancel.Disposable = cancelable;
 
                 scheduler._taskFactory.StartNew(
                     thisObject =>
@@ -60,7 +60,7 @@ namespace System.Reactive.Concurrency
                         // exceptions at stage 2. If the exception isn't handled at the Rx level, it
                         // propagates by means of a rethrow, falling back to behavior in 3.
                         //
-                        Disposable.TrySetSerial(ref @this._cancel, @this._action(@this._scheduler, @this._state));
+                        @this._cancel.Disposable = @this._action(@this._scheduler, @this._state);
                     },
                     this,
                     cancelable.Token);
@@ -68,7 +68,7 @@ namespace System.Reactive.Concurrency
 
             public void Dispose()
             {
-                Disposable.Dispose(ref _cancel);
+                _cancel.Dispose();
             }
         }
 
