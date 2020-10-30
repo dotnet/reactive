@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Threading;
+
 namespace System.Reactive.Disposables
 {
     /// <summary>
@@ -14,7 +16,11 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed => Disposables.Disposable.GetIsDisposed(ref _current);
+        public bool IsDisposed =>
+            // We use a sentinel value to indicate we've been disposed. This sentinel never leaks
+            // to the outside world (see the Disposable property getter), so no-one can ever assign
+            // this value to us manually.
+            Volatile.Read(ref _current) == BooleanDisposable.True;
 
         /// <summary>
         /// Gets or sets the underlying disposable.

@@ -126,19 +126,6 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Gets a value indicating whether <paramref name="fieldRef" /> has been disposed.
-        /// </summary>
-        /// <returns>true if <paramref name="fieldRef" /> has been disposed.</returns>
-        /// <returns>false if <paramref name="fieldRef" /> has not been disposed.</returns>
-        internal static bool GetIsDisposed([NotNullIfNotNull("fieldRef")] /*in*/ ref IDisposable? fieldRef)
-        {
-            // We use a sentinel value to indicate we've been disposed. This sentinel never leaks
-            // to the outside world (see the Disposable property getter), so no-one can ever assign
-            // this value to us manually.
-            return Volatile.Read(ref fieldRef) == BooleanDisposable.True;
-        }
-
-        /// <summary>
         /// Disposes <paramref name="fieldRef" />. 
         /// </summary>
         internal static void Dispose([NotNullIfNotNull("fieldRef")] ref IDisposable? fieldRef)
