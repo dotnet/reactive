@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 index,
-                (source, index, observer) => source.SubscribeSafeAsync(AsyncObserver.ElementAt(observer, index)));
+                static (source, index, observer) => source.SubscribeSafeAsync(AsyncObserver.ElementAt(observer, index)));
         }
     }
 

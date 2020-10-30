@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 handler,
-                async (source, handler, observer) =>
+                static async (source, handler, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.Catch(observer, handler);
 
@@ -44,7 +44,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 handler,
-                async (source, handler, observer) =>
+                static async (source, handler, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.Catch(observer, handler);
 
@@ -64,7 +64,7 @@ namespace System.Reactive.Linq
             return Create(
                 first,
                 second,
-                async (first, second, observer) =>
+                static async (first, second, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.Catch(observer, second);
 

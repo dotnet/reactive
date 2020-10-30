@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
             return Create(
                 first,
                 second,
-                async (first, second, observer) =>
+                static async (first, second, observer) =>
                 {
                     var (sink, inner) = AsyncObserver.Concat(observer, second);
 

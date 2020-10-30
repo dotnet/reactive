@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 defaultValue,
-                (source, defaultValue, observer) => source.SubscribeSafeAsync(AsyncObserver.DefaultIfEmpty(observer, defaultValue)));
+                static (source, defaultValue, observer) => source.SubscribeSafeAsync(AsyncObserver.DefaultIfEmpty(observer, defaultValue)));
         }
     }
 

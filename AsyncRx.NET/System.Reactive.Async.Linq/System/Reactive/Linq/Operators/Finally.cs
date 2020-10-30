@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 finallyAction,
-                async (source, finallyAction, observer) =>
+                static async (source, finallyAction, observer) =>
                 {
                     var subscription = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
 
@@ -47,7 +47,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 finallyAction,
-                async (source, finallyAction, observer) =>
+                static async (source, finallyAction, observer) =>
                 {
                     var subscription = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
 

@@ -31,7 +31,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 (value, scheduler),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var d = new CompositeAsyncDisposable();
 
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 values,
-                (source, values, observer) => source.SubscribeSafeAsync(AsyncObserver.Append(observer, values)));
+                static (source, values, observer) => source.SubscribeSafeAsync(AsyncObserver.Append(observer, values)));
         }
 
         public static IAsyncObservable<TSource> Append<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, params TSource[] values)
@@ -72,7 +72,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 (scheduler, values),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var d = new CompositeAsyncDisposable();
 
@@ -98,7 +98,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 values,
-                (source, values, observer) => source.SubscribeSafeAsync(AsyncObserver.Append(observer, values)));
+                static (source, values, observer) => source.SubscribeSafeAsync(AsyncObserver.Append(observer, values)));
         }
 
         public static IAsyncObservable<TSource> Append<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, IEnumerable<TSource> values)
@@ -113,7 +113,7 @@ namespace System.Reactive.Linq
             return Create(
                 source,
                 (scheduler, values),
-                async (source, state, observer) =>
+                static async (source, state, observer) =>
                 {
                     var d = new CompositeAsyncDisposable();
 
