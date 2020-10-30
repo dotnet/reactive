@@ -7,21 +7,14 @@ namespace System.Reactive.Disposables
     /// <summary>
     /// Represents a disposable resource whose underlying disposable resource can be swapped for another disposable resource.
     /// </summary>
-    public sealed class MultipleAssignmentDisposable : ICancelable
+    internal struct MultipleAssignmentDisposableValue : ICancelable
     {
-        private MultipleAssignmentDisposableValue _current;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MultipleAssignmentDisposable"/> class with no current underlying disposable.
-        /// </summary>
-        public MultipleAssignmentDisposable()
-        {
-        }
+        private IDisposable? _current;
 
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed => _current.IsDisposed;
+        public bool IsDisposed => Disposables.Disposable.GetIsDisposed(ref _current);
 
         /// <summary>
         /// Gets or sets the underlying disposable. After disposal, the result of getting this property is undefined.
@@ -29,8 +22,8 @@ namespace System.Reactive.Disposables
         /// <remarks>If the <see cref="MultipleAssignmentDisposable"/> has already been disposed, assignment to this property causes immediate disposal of the given disposable object.</remarks>
         public IDisposable? Disposable
         {
-            get => _current.Disposable;
-            set => _current.Disposable = value;
+            get => Disposables.Disposable.GetValueOrDefault(ref _current);
+            set => Disposables.Disposable.TrySetMultiple(ref _current, value);
         }
 
         /// <summary>
@@ -38,7 +31,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-            _current.Dispose();
+            Disposables.Disposable.Dispose(ref _current);
         }
     }
 }
