@@ -239,7 +239,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly Func<TSource, IObservable<TTimeout>> _timeoutSelector;
             private readonly IObservable<TSource> _other;
 
-            private IDisposable? _sourceDisposable;
+            private SerialDisposableValue _sourceDisposable;
             private IDisposable? _timerDisposable;
             private long _index;
 
@@ -254,14 +254,14 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 SetTimer(parent._firstTimeout, 0L);
 
-                Disposable.TrySetSingle(ref _sourceDisposable, parent._source.SubscribeSafe(this));
+                _sourceDisposable.TrySetFirst(parent._source.SubscribeSafe(this));
             }
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _sourceDisposable);
+                    _sourceDisposable.Dispose();
                     Disposable.Dispose(ref _timerDisposable);
                 }
 
@@ -318,7 +318,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 if (Volatile.Read(ref _index) == idx
                     && Interlocked.CompareExchange(ref _index, long.MaxValue, idx) == idx)
                 {
-                    Disposable.TrySetSerial(ref _sourceDisposable, _other.SubscribeSafe(GetForwarder()));
+                    _sourceDisposable.Disposable = _other.SubscribeSafe(GetForwarder());
                 }
             }
 

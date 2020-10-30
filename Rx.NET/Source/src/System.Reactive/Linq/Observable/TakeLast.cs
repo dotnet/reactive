@@ -41,13 +41,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     _queue = new Queue<TSource>();
                 }
 
-                private IDisposable? _loopDisposable;
+                private MultipleAssignmentDisposableValue _loopDisposable;
 
                 protected override void Dispose(bool disposing)
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _loopDisposable);
+                        _loopDisposable.Dispose();
                     }
 
                     base.Dispose(disposing);
@@ -70,12 +70,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     var longRunning = _loopScheduler.AsLongRunning();
                     if (longRunning != null)
                     {
-                        Disposable.TrySetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, static (@this, c) => @this.Loop(c)));
+                        _loopDisposable.TrySetFirst(longRunning.ScheduleLongRunning(this, static (@this, c) => @this.Loop(c)));
                     }
                     else
                     {
                         var first = _loopScheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
-                        Disposable.TrySetSingle(ref _loopDisposable, first);
+                        _loopDisposable.TrySetFirst(first);
                     }
                 }
 
@@ -86,7 +86,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         ForwardOnNext(_queue.Dequeue());
 
                         var next = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
-                        Disposable.TrySetMultiple(ref _loopDisposable, next);
+                        _loopDisposable.Disposable = next;
                     }
                     else
                     {
@@ -150,7 +150,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _queue = new Queue<Reactive.TimeInterval<TSource>>();
                 }
 
-                private IDisposable? _loopDisposable;
+                private MultipleAssignmentDisposableValue _loopDisposable;
                 private IStopwatch? _watch;
 
                 public void Run(IObservable<TSource> source, IScheduler scheduler)
@@ -163,7 +163,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _loopDisposable);
+                        _loopDisposable.Dispose();
                     }
 
                     base.Dispose(disposing);
@@ -186,12 +186,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     var longRunning = _loopScheduler.AsLongRunning();
                     if (longRunning != null)
                     {
-                        Disposable.TrySetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, static (@this, c) => @this.Loop(c)));
+                        _loopDisposable.TrySetFirst(longRunning.ScheduleLongRunning(this, static (@this, c) => @this.Loop(c)));
                     }
                     else
                     {
                         var first = _loopScheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
-                        Disposable.TrySetSingle(ref _loopDisposable, first);
+                        _loopDisposable.TrySetFirst(first);
                     }
                 }
 
@@ -202,7 +202,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         ForwardOnNext(_queue.Dequeue().Value);
 
                         var next = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
-                        Disposable.TrySetMultiple(ref _loopDisposable, next);
+                        _loopDisposable.Disposable = next;
                     }
                     else
                     {

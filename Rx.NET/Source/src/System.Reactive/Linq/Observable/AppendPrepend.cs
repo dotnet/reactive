@@ -367,7 +367,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Node<TSource>? _appends;
                 private readonly ISchedulerLongRunning _scheduler;
 
-                private IDisposable? _schedulerDisposable;
+                private SerialDisposableValue _schedulerDisposable;
 
                 public _(LongRunning parent, IObserver<TSource> observer)
                     : base(observer)
@@ -387,7 +387,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     else
                     {
                         var disposable = _scheduler.ScheduleLongRunning(this, static (@this, cancel) => @this.PrependValues(cancel));
-                        Disposable.TrySetSingle(ref _schedulerDisposable, disposable);
+                        _schedulerDisposable.TrySetFirst(disposable);
                     }
                 }
 
@@ -400,7 +400,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     else
                     {
                         var disposable = _scheduler.ScheduleLongRunning(this, static (@this, cancel) => @this.AppendValues(cancel));
-                        Disposable.TrySetSerial(ref _schedulerDisposable, disposable);
+                        _schedulerDisposable.Disposable = disposable;
                     }
                 }
 
@@ -408,7 +408,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Disposable.Dispose(ref _schedulerDisposable);
+                        _schedulerDisposable.Dispose();
                     }
 
                     base.Dispose(disposing);
