@@ -8188,7 +8188,7 @@ namespace System.Reactive.Linq
         /// <returns>Sequence containing the last element in the observable sequence, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        public static IQbservable<TSource> LastOrDefaultAsync<TSource>(this IQbservable<TSource> source)
+        public static IQbservable<TSource?> LastOrDefaultAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -8215,7 +8215,7 @@ namespace System.Reactive.Linq
         /// <returns>Sequence containing the last element in the observable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
-        public static IQbservable<TSource> LastOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
+        public static IQbservable<TSource?> LastOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

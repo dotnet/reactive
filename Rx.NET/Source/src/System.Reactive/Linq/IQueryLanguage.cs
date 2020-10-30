@@ -59,8 +59,8 @@ namespace System.Reactive.Linq
         IObservable<bool> IsEmpty<TSource>(IObservable<TSource> source);
         IObservable<TSource> LastAsync<TSource>(IObservable<TSource> source);
         IObservable<TSource> LastAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
-        IObservable<TSource> LastOrDefaultAsync<TSource>(IObservable<TSource> source);
-        IObservable<TSource> LastOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
+        IObservable<TSource?> LastOrDefaultAsync<TSource>(IObservable<TSource> source);
+        IObservable<TSource?> LastOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<long> LongCount<TSource>(IObservable<TSource> source);
         IObservable<long> LongCount<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<TSource> Max<TSource>(IObservable<TSource> source);

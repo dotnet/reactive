@@ -1190,8 +1190,8 @@ namespace System.Reactive.Linq
         [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         [return: System.Diagnostics.CodeAnalysis.MaybeNull]
         public static TSource LastOrDefault<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
-        public static System.IObservable<TSource> LastOrDefaultAsync<TSource>(this System.IObservable<TSource> source) { }
-        public static System.IObservable<TSource> LastOrDefaultAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
+        public static System.IObservable<TSource?> LastOrDefaultAsync<TSource>(this System.IObservable<TSource> source) { }
+        public static System.IObservable<TSource?> LastOrDefaultAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.Collections.Generic.IEnumerable<TSource> Latest<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<long> LongCount<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<long> LongCount<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
@@ -2038,8 +2038,8 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TResult> Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(this System.Reactive.Linq.IQbservable<TLeft> left, System.IObservable<TRight> right, System.Linq.Expressions.Expression<System.Func<TLeft, System.IObservable<TLeftDuration>>> leftDurationSelector, System.Linq.Expressions.Expression<System.Func<TRight, System.IObservable<TRightDuration>>> rightDurationSelector, System.Linq.Expressions.Expression<System.Func<TLeft, TRight, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<TSource> LastAsync<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
         public static System.Reactive.Linq.IQbservable<TSource> LastAsync<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, bool>> predicate) { }
-        public static System.Reactive.Linq.IQbservable<TSource> LastOrDefaultAsync<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
-        public static System.Reactive.Linq.IQbservable<TSource> LastOrDefaultAsync<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, bool>> predicate) { }
+        public static System.Reactive.Linq.IQbservable<TSource?> LastOrDefaultAsync<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
+        public static System.Reactive.Linq.IQbservable<TSource?> LastOrDefaultAsync<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, bool>> predicate) { }
         public static System.Linq.IQueryable<TSource> Latest<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
         public static System.Reactive.Linq.IQbservable<long> LongCount<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
         public static System.Reactive.Linq.IQbservable<long> LongCount<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, bool>> predicate) { }

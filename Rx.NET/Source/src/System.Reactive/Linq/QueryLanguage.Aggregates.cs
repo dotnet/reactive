@@ -256,12 +256,12 @@ namespace System.Reactive.Linq
 
         #region + LastOrDefaultAsync +
 
-        public virtual IObservable<TSource> LastOrDefaultAsync<TSource>(IObservable<TSource> source)
+        public virtual IObservable<TSource?> LastOrDefaultAsync<TSource>(IObservable<TSource> source)
         {
             return new LastOrDefaultAsync<TSource>.Sequence(source);
         }
 
-        public virtual IObservable<TSource> LastOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
+        public virtual IObservable<TSource?> LastOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             return new LastOrDefaultAsync<TSource>.Predicate(source, predicate);
         }
