@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
             var parent = new MainObserver(observer, _source, new RedoSerializedObserver<object>(completeSignals));
 
             var d = redo.SubscribeSafe(parent.HandlerConsumer);
-            parent.HandlerUpstream.Disposable = d;
+            parent._handlerUpstream.Disposable = d;
 
             parent.HandlerNext();
 
@@ -62,7 +62,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal readonly HandlerObserver HandlerConsumer;
 
-            internal SingleAssignmentDisposableValue HandlerUpstream;
+            internal SingleAssignmentDisposableValue _handlerUpstream;
 
             private IDisposable? _upstream;
             private int _trampoline;
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 if (disposing)
                 {
                     Disposable.Dispose(ref _upstream);
-                    HandlerUpstream.Dispose();
+                    _handlerUpstream.Dispose();
                 }
 
                 base.Dispose(disposing);
