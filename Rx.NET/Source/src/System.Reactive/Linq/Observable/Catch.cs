@@ -97,18 +97,18 @@ namespace System.Reactive.Linq.ObservableImpl
             }
 
             private bool _once;
-            private IDisposable? _subscription;
+            private SerialDisposableValue _subscription;
 
             public override void Run(IObservable<TSource> source)
             {
-                Disposable.TrySetSingle(ref _subscription, source.SubscribeSafe(this));
+                _subscription.TrySetFirst(source.SubscribeSafe(this));
             }
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    Disposable.Dispose(ref _subscription);
+                    _subscription.Dispose();
                 }
 
                 base.Dispose(disposing);
@@ -130,7 +130,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     Volatile.Write(ref _once, true);
-                    Disposable.TrySetSerial(ref _subscription, result.SubscribeSafe(this));
+                    _subscription.Disposable = result.SubscribeSafe(this);
                 }
                 else
                 {

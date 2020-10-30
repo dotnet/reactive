@@ -32,6 +32,8 @@ namespace System.Reactive.Disposables
             set => Disposables.Disposable.TrySetSerial(ref _current, value);
         }
 
+        public bool TrySetFirst(IDisposable disposable) => Disposables.Disposable.TrySetSingle(ref _current, disposable) == TrySetSingleResult.Success;
+
         /// <summary>
         /// Disposes the underlying disposable as well as all future replacements.
         /// </summary>

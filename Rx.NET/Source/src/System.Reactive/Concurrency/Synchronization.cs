@@ -47,24 +47,23 @@ namespace System.Reactive.Concurrency
         {
             private sealed class Subscription : IDisposable
             {
-                private IDisposable _cancel;
+                private SerialDisposableValue _cancel;
 
                 public Subscription(IObservable<TSource> source, IScheduler scheduler, IObserver<TSource> observer)
                 {
-                    Disposable.TrySetSingle(
-                        ref _cancel,
+                    _cancel.TrySetFirst(
                         scheduler.Schedule(
                             (@this: this, source, observer),
                             (closureScheduler, state) =>
                             {
-                                Disposable.TrySetSerial(ref state.@this._cancel, new ScheduledDisposable(closureScheduler, state.source.SubscribeSafe(state.observer)));
+                                state.@this._cancel.Disposable = new ScheduledDisposable(closureScheduler, state.source.SubscribeSafe(state.observer));
                                 return Disposable.Empty;
                             }));
                 }
 
                 public void Dispose()
                 {
-                    Disposable.Dispose(ref _cancel);
+                    _cancel.Dispose();
                 }
             }
 
