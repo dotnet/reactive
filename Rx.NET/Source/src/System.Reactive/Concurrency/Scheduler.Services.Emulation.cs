@@ -367,7 +367,7 @@ namespace System.Reactive.Concurrency
             private const int Suspended = 2;
             private const int Disposed = 3;
 
-            private IDisposable? _task;
+            private SingleAssignmentDisposableValue _task;
 
             public IDisposable Start()
             {
@@ -377,13 +377,13 @@ namespace System.Reactive.Concurrency
                 _nextDue = _period;
                 _runState = Running;
 
-                Disposable.SetSingle(ref _task, _scheduler.Schedule(this, _nextDue, static (@this, a) => @this.Tick(a)));
+                _task.Disposable = _scheduler.Schedule(this, _nextDue, static (@this, a) => @this.Tick(a));
                 return this;
             }
 
             void IDisposable.Dispose()
             {
-                Disposable.Dispose(ref _task);
+                _task.Dispose();
                 Cancel();
             }
 
