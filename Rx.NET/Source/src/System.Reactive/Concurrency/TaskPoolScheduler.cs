@@ -78,7 +78,7 @@ namespace System.Reactive.Concurrency
             private readonly TaskPoolScheduler _scheduler;
             private readonly Func<IScheduler, TState, IDisposable> _action;
 
-            private IDisposable _cancel;
+            private MultipleAssignmentDisposableValue _cancel;
 
             public SlowlyScheduledWorkItem(TaskPoolScheduler scheduler, TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
             {
@@ -87,16 +87,16 @@ namespace System.Reactive.Concurrency
                 _scheduler = scheduler;
 
                 var ct = new CancellationDisposable();
-                Disposable.SetSingle(ref _cancel, ct);
+                _cancel.Disposable = ct;
 
                 TaskHelpers.Delay(dueTime, ct.Token).ContinueWith(
                     (_, thisObject) =>
                     {
                         var @this = (SlowlyScheduledWorkItem<TState>)thisObject!;
 
-                        if (!Disposable.GetIsDisposed(ref @this._cancel))
+                        if (!@this._cancel.IsDisposed)
                         {
-                            Disposable.TrySetMultiple(ref @this._cancel, @this._action(@this._scheduler, @this._state));
+                            @this._cancel.Disposable = @this._action(@this._scheduler, @this._state);
                         }
                     },
                     this,
@@ -107,7 +107,7 @@ namespace System.Reactive.Concurrency
 
             public void Dispose()
             {
-                Disposable.Dispose(ref _cancel);
+                _cancel.Dispose();
             }
         }
 

@@ -12,13 +12,6 @@ namespace System.Reactive.Disposables
     {
         private IDisposable? _current;
 
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="SingleAssignmentDisposable"/> class.
-        ///// </summary>
-        //public SingleAssignmentDisposableValue()
-        //{
-        //}
-
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
