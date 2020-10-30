@@ -70,7 +70,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var longRunning = _loopScheduler.AsLongRunning();
                     if (longRunning != null)
                     {
-                        Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, static (@this, c) => @this.Loop(c)));
+                        Disposable.TrySetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, static (@this, c) => @this.Loop(c)));
                     }
                     else
                     {
@@ -186,7 +186,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var longRunning = _loopScheduler.AsLongRunning();
                     if (longRunning != null)
                     {
-                        Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, static (@this, c) => @this.Loop(c)));
+                        Disposable.TrySetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, static (@this, c) => @this.Loop(c)));
                     }
                     else
                     {

@@ -43,26 +43,6 @@ namespace System.Reactive.Disposables
                 : current;
         }
 
-        /// <summary>
-        /// Assigns <paramref name="value" /> to <paramref name="fieldRef" />.
-        /// </summary>
-        /// <returns>true if <paramref name="fieldRef" /> was assigned to <paramref name="value" /> and has not
-        /// been assigned before.</returns>
-        /// <returns>false if <paramref name="fieldRef" /> has been already disposed.</returns>
-        /// <exception cref="InvalidOperationException"><paramref name="fieldRef" /> has already been assigned a value.</exception>
-        internal static bool SetSingle([NotNullIfNotNull("value")] ref IDisposable? fieldRef, IDisposable? value)
-        {
-            var result = TrySetSingle(ref fieldRef, value);
-
-            if (result == TrySetSingleResult.AlreadyAssigned)
-            {
-                throw new InvalidOperationException(Strings_Core.DISPOSABLE_ALREADY_ASSIGNED);
-            }
-
-            return result == TrySetSingleResult.Success;
-        }
-
-        /// <summary>
         /// Tries to assign <paramref name="value" /> to <paramref name="fieldRef" />.
         /// </summary>
         /// <returns>A <see cref="TrySetSingleResult"/> value indicating the outcome of the operation.</returns>

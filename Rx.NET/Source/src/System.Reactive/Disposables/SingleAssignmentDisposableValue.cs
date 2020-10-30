@@ -24,7 +24,15 @@ namespace System.Reactive.Disposables
         public IDisposable? Disposable
         {
             get => Disposables.Disposable.GetValueOrDefault(ref _current);
-            set => Disposables.Disposable.SetSingle(ref _current, value);
+            set
+            {
+                var result = Disposables.Disposable.TrySetSingle(ref _current, value);
+
+                if (result == TrySetSingleResult.AlreadyAssigned)
+                {
+                    throw new InvalidOperationException(Strings_Core.DISPOSABLE_ALREADY_ASSIGNED);
+                }
+            }
         }
 
         /// <summary>
