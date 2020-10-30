@@ -12755,7 +12755,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence contains more than one element.</exception>
-        public static IQbservable<TSource> SingleOrDefaultAsync<TSource>(this IQbservable<TSource> source)
+        public static IQbservable<TSource?> SingleOrDefaultAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

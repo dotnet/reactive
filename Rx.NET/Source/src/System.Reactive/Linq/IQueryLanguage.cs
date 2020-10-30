@@ -121,8 +121,8 @@ namespace System.Reactive.Linq
         IObservable<bool> SequenceEqual<TSource>(IObservable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer);
         IObservable<TSource> SingleAsync<TSource>(IObservable<TSource> source);
         IObservable<TSource> SingleAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
-        IObservable<TSource> SingleOrDefaultAsync<TSource>(IObservable<TSource> source);
-        IObservable<TSource> SingleOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
+        IObservable<TSource?> SingleOrDefaultAsync<TSource>(IObservable<TSource> source);
+        IObservable<TSource?> SingleOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<double> Sum(IObservable<double> source);
         IObservable<float> Sum(IObservable<float> source);
         IObservable<decimal> Sum(IObservable<decimal> source);

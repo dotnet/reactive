@@ -602,12 +602,12 @@ namespace System.Reactive.Linq
 
         #region + SingleOrDefaultAsync +
 
-        public virtual IObservable<TSource> SingleOrDefaultAsync<TSource>(IObservable<TSource> source)
+        public virtual IObservable<TSource?> SingleOrDefaultAsync<TSource>(IObservable<TSource> source)
         {
             return new SingleOrDefaultAsync<TSource>.Sequence(source);
         }
 
-        public virtual IObservable<TSource> SingleOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
+        public virtual IObservable<TSource?> SingleOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             return new SingleOrDefaultAsync<TSource>.Predicate(source, predicate);
         }

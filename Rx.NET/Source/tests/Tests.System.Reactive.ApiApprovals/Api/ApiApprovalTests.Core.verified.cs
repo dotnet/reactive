@@ -1359,8 +1359,8 @@ namespace System.Reactive.Linq
         [System.Obsolete(@"This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.")]
         [return: System.Diagnostics.CodeAnalysis.MaybeNull]
         public static TSource SingleOrDefault<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
-        public static System.IObservable<TSource> SingleOrDefaultAsync<TSource>(this System.IObservable<TSource> source) { }
-        public static System.IObservable<TSource> SingleOrDefaultAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
+        public static System.IObservable<TSource?> SingleOrDefaultAsync<TSource>(this System.IObservable<TSource> source) { }
+        public static System.IObservable<TSource?> SingleOrDefaultAsync<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.IObservable<TSource> Skip<TSource>(this System.IObservable<TSource> source, int count) { }
         public static System.IObservable<TSource> Skip<TSource>(this System.IObservable<TSource> source, System.TimeSpan duration) { }
         public static System.IObservable<TSource> Skip<TSource>(this System.IObservable<TSource> source, System.TimeSpan duration, System.Reactive.Concurrency.IScheduler scheduler) { }
@@ -2183,7 +2183,7 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<bool> SequenceEqual<TSource>(this System.Reactive.Linq.IQbservable<TSource> first, System.IObservable<TSource> second, System.Collections.Generic.IEqualityComparer<TSource> comparer) { }
         public static System.Reactive.Linq.IQbservable<TSource> SingleAsync<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
         public static System.Reactive.Linq.IQbservable<TSource> SingleAsync<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, bool>> predicate) { }
-        public static System.Reactive.Linq.IQbservable<TSource> SingleOrDefaultAsync<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
+        public static System.Reactive.Linq.IQbservable<TSource?> SingleOrDefaultAsync<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
         public static System.Reactive.Linq.IQbservable<TSource> SingleOrDefaultAsync<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, bool>> predicate) { }
         public static System.Reactive.Linq.IQbservable<TSource> Skip<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, int count) { }
         public static System.Reactive.Linq.IQbservable<TSource> Skip<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.TimeSpan duration) { }
