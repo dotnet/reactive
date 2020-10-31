@@ -6,7 +6,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class FirstOrDefaultAsync<TSource>
     {
-        internal sealed class Sequence : Producer<TSource, Sequence._>
+        internal sealed class Sequence : Producer<TSource?, Sequence._>
         {
             private readonly IObservable<TSource> _source;
 
@@ -15,13 +15,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+            protected override _ CreateSink(IObserver<TSource?> observer) => new _(observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : IdentitySink<TSource>
+            internal sealed class _ : Sink<TSource, TSource?>
             {
-                public _(IObserver<TSource> observer)
+                public _(IObserver<TSource?> observer)
                     : base(observer)
                 {
                 }
@@ -34,13 +34,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    ForwardOnNext(default!);
+                    ForwardOnNext(default);
                     ForwardOnCompleted();
                 }
             }
         }
 
-        internal sealed class Predicate : Producer<TSource, Predicate._>
+        internal sealed class Predicate : Producer<TSource?, Predicate._>
         {
             private readonly IObservable<TSource> _source;
             private readonly Func<TSource, bool> _predicate;
@@ -51,15 +51,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 _predicate = predicate;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(_predicate, observer);
+            protected override _ CreateSink(IObserver<TSource?> observer) => new _(_predicate, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : IdentitySink<TSource>
+            internal sealed class _ : Sink<TSource, TSource?>
             {
                 private readonly Func<TSource, bool> _predicate;
 
-                public _(Func<TSource, bool> predicate, IObserver<TSource> observer)
+                public _(Func<TSource, bool> predicate, IObserver<TSource?> observer)
                     : base(observer)
                 {
                     _predicate = predicate;
@@ -88,7 +88,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    ForwardOnNext(default!);
+                    ForwardOnNext(default);
                     ForwardOnCompleted();
                 }
             }

@@ -51,16 +51,16 @@ namespace System.Reactive.Linq
         IObservable<int> Count<TSource>(IObservable<TSource> source);
         IObservable<int> Count<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<TSource> ElementAt<TSource>(IObservable<TSource> source, int index);
-        IObservable<TSource> ElementAtOrDefault<TSource>(IObservable<TSource> source, int index);
+        IObservable<TSource?> ElementAtOrDefault<TSource>(IObservable<TSource> source, int index);
         IObservable<TSource> FirstAsync<TSource>(IObservable<TSource> source);
         IObservable<TSource> FirstAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
-        IObservable<TSource> FirstOrDefaultAsync<TSource>(IObservable<TSource> source);
-        IObservable<TSource> FirstOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
+        IObservable<TSource?> FirstOrDefaultAsync<TSource>(IObservable<TSource> source);
+        IObservable<TSource?> FirstOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<bool> IsEmpty<TSource>(IObservable<TSource> source);
         IObservable<TSource> LastAsync<TSource>(IObservable<TSource> source);
         IObservable<TSource> LastAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
-        IObservable<TSource> LastOrDefaultAsync<TSource>(IObservable<TSource> source);
-        IObservable<TSource> LastOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
+        IObservable<TSource?> LastOrDefaultAsync<TSource>(IObservable<TSource> source);
+        IObservable<TSource?> LastOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<long> LongCount<TSource>(IObservable<TSource> source);
         IObservable<long> LongCount<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<TSource> Max<TSource>(IObservable<TSource> source);
@@ -121,8 +121,8 @@ namespace System.Reactive.Linq
         IObservable<bool> SequenceEqual<TSource>(IObservable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer);
         IObservable<TSource> SingleAsync<TSource>(IObservable<TSource> source);
         IObservable<TSource> SingleAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
-        IObservable<TSource> SingleOrDefaultAsync<TSource>(IObservable<TSource> source);
-        IObservable<TSource> SingleOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
+        IObservable<TSource?> SingleOrDefaultAsync<TSource>(IObservable<TSource> source);
+        IObservable<TSource?> SingleOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<double> Sum(IObservable<double> source);
         IObservable<float> Sum(IObservable<float> source);
         IObservable<decimal> Sum(IObservable<decimal> source);
@@ -584,7 +584,7 @@ namespace System.Reactive.Linq
         #region * StandardSequenceOperators *
 
         IObservable<TResult> Cast<TResult>(IObservable<object> source);
-        IObservable<TSource> DefaultIfEmpty<TSource>(IObservable<TSource> source);
+        IObservable<TSource?> DefaultIfEmpty<TSource>(IObservable<TSource> source);
         IObservable<TSource> DefaultIfEmpty<TSource>(IObservable<TSource> source, TSource defaultValue);
         IObservable<TSource> Distinct<TSource>(IObservable<TSource> source);
         IObservable<TSource> Distinct<TSource>(IObservable<TSource> source, IEqualityComparer<TSource> comparer);

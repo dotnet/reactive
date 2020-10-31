@@ -2,7 +2,7 @@
  * WARNING: Auto-generated file (merged on 06/13/2018)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
-
+#nullable enable
 #pragma warning disable 1591
 
 using System.Collections.Generic;
@@ -3493,7 +3493,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that contains the default value for the TSource type if the source is empty; otherwise, the elements of the source itself.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        public static IQbservable<TSource> DefaultIfEmpty<TSource>(this IQbservable<TSource> source)
+        public static IQbservable<TSource?> DefaultIfEmpty<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -4551,7 +4551,7 @@ namespace System.Reactive.Linq
         /// <paramref name="source" /> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="index" /> is less than zero.</exception>
-        public static IQbservable<TSource> ElementAtOrDefault<TSource>(this IQbservable<TSource> source, int index)
+        public static IQbservable<TSource?> ElementAtOrDefault<TSource>(this IQbservable<TSource> source, int index)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -4778,7 +4778,7 @@ namespace System.Reactive.Linq
         /// <returns>Sequence containing the first element in the observable sequence, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        public static IQbservable<TSource> FirstOrDefaultAsync<TSource>(this IQbservable<TSource> source)
+        public static IQbservable<TSource?> FirstOrDefaultAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -4805,7 +4805,7 @@ namespace System.Reactive.Linq
         /// <returns>Sequence containing the first element in the observable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
-        public static IQbservable<TSource> FirstOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
+        public static IQbservable<TSource?> FirstOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -8188,7 +8188,7 @@ namespace System.Reactive.Linq
         /// <returns>Sequence containing the last element in the observable sequence, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        public static IQbservable<TSource> LastOrDefaultAsync<TSource>(this IQbservable<TSource> source)
+        public static IQbservable<TSource?> LastOrDefaultAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -8215,7 +8215,7 @@ namespace System.Reactive.Linq
         /// <returns>Sequence containing the last element in the observable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
-        public static IQbservable<TSource> LastOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
+        public static IQbservable<TSource?> LastOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -12755,7 +12755,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence contains more than one element.</exception>
-        public static IQbservable<TSource> SingleOrDefaultAsync<TSource>(this IQbservable<TSource> source)
+        public static IQbservable<TSource?> SingleOrDefaultAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

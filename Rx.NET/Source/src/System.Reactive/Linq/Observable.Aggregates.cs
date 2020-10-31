@@ -755,7 +755,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that produces the element at the specified position in the source sequence, or a default value if the index is outside the bounds of the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than zero.</exception>
-        public static IObservable<TSource> ElementAtOrDefault<TSource>(this IObservable<TSource> source, int index)
+        public static IObservable<TSource?> ElementAtOrDefault<TSource>(this IObservable<TSource> source, int index)
         {
             if (source == null)
             {
@@ -827,7 +827,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source observable sequence.</param>
         /// <returns>Sequence containing the first element in the observable sequence, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IObservable<TSource> FirstOrDefaultAsync<TSource>(this IObservable<TSource> source)
+        public static IObservable<TSource?> FirstOrDefaultAsync<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
             {
@@ -845,7 +845,7 @@ namespace System.Reactive.Linq
         /// <param name="predicate">A predicate function to evaluate for elements in the source sequence.</param>
         /// <returns>Sequence containing the first element in the observable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
-        public static IObservable<TSource> FirstOrDefaultAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
+        public static IObservable<TSource?> FirstOrDefaultAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
             {
@@ -938,7 +938,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source observable sequence.</param>
         /// <returns>Sequence containing the last element in the observable sequence, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IObservable<TSource> LastOrDefaultAsync<TSource>(this IObservable<TSource> source)
+        public static IObservable<TSource?> LastOrDefaultAsync<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
             {
@@ -956,7 +956,7 @@ namespace System.Reactive.Linq
         /// <param name="predicate">A predicate function to evaluate for elements in the source sequence.</param>
         /// <returns>Sequence containing the last element in the observable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
-        public static IObservable<TSource> LastOrDefaultAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
+        public static IObservable<TSource?> LastOrDefaultAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
             {
@@ -2332,7 +2332,7 @@ namespace System.Reactive.Linq
         /// <returns>Sequence containing the single element in the observable sequence, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence contains more than one element.</exception>
-        public static IObservable<TSource> SingleOrDefaultAsync<TSource>(this IObservable<TSource> source)
+        public static IObservable<TSource?> SingleOrDefaultAsync<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
             {
@@ -2351,7 +2351,7 @@ namespace System.Reactive.Linq
         /// <returns>Sequence containing the single element in the observable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The sequence contains more than one element that satisfies the condition in the predicate.</exception>
-        public static IObservable<TSource> SingleOrDefaultAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
+        public static IObservable<TSource?> SingleOrDefaultAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
             {

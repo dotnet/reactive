@@ -24,7 +24,7 @@ namespace System.Reactive.Linq
 
         #region + DefaultIfEmpty +
 
-        public virtual IObservable<TSource> DefaultIfEmpty<TSource>(IObservable<TSource> source)
+        public virtual IObservable<TSource?> DefaultIfEmpty<TSource>(IObservable<TSource> source)
         {
             return new DefaultIfEmpty<TSource>(source, default!);
         }
