@@ -1102,14 +1102,14 @@ namespace System.Linq
         
         private static MethodInfo? ElementAtOrDefaultAsync__TSource__3__0(Type TSource) =>
             (s_ElementAtOrDefaultAsync__TSource__3__0 ??
-            (s_ElementAtOrDefaultAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, int, CancellationToken, ValueTask<object>>(ElementAtOrDefaultAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+            (s_ElementAtOrDefaultAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, int, CancellationToken, ValueTask<object?>>(ElementAtOrDefaultAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
-        public static ValueTask<TSource> ElementAtOrDefaultAsync<TSource>(this IAsyncQueryable<TSource> source, int index, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource?> ElementAtOrDefaultAsync<TSource>(this IAsyncQueryable<TSource> source, int index, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.Provider.ExecuteAsync<TSource>(Expression.Call(ElementAtOrDefaultAsync__TSource__3__0(typeof(TSource)), source.Expression, Expression.Constant(index, typeof(int)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<TSource?>(Expression.Call(ElementAtOrDefaultAsync__TSource__3__0(typeof(TSource)), source.Expression, Expression.Constant(index, typeof(int)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
         }
 
         private static MethodInfo? s_Except__TSource__2__0;
