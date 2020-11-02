@@ -19,20 +19,20 @@ namespace System.Linq
         /// <returns>Sequence containing the single element in the async-enumerable sequence, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence contains more than one element.</exception>
-        public static ValueTask<TSource> SingleOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource?> SingleOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+            static async ValueTask<TSource?> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
             {
                 if (source is IList<TSource> list)
                 {
                     return list.Count switch
                     {
-                        0 => default!,
+                        0 => default,
                         1 => list[0],
                         _ => throw Error.MoreThanOneElement(),
                     };
@@ -42,7 +42,7 @@ namespace System.Linq
                 {
                     if (!await e.MoveNextAsync())
                     {
-                        return default!;
+                        return default;
                     }
 
                     var result = e.Current;
@@ -67,7 +67,7 @@ namespace System.Linq
         /// <returns>Sequence containing the single element in the async-enumerable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The sequence contains more than one element that satisfies the condition in the predicate.</exception>
-        public static ValueTask<TSource> SingleOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource?> SingleOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -76,7 +76,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+            static async ValueTask<TSource?> Core(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
             {
                 await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
@@ -99,11 +99,11 @@ namespace System.Linq
                     }
                 }
 
-                return default!;
+                return default;
             }
         }
 
-        internal static ValueTask<TSource> SingleOrDefaultAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+        internal static ValueTask<TSource?> SingleOrDefaultAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -112,7 +112,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+            static async ValueTask<TSource?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
             {
                 await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
@@ -135,12 +135,12 @@ namespace System.Linq
                     }
                 }
 
-                return default!;
+                return default;
             }
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<TSource> SingleOrDefaultAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+        internal static ValueTask<TSource?> SingleOrDefaultAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -149,7 +149,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+            static async ValueTask<TSource?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
             {
                 await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
@@ -172,7 +172,7 @@ namespace System.Linq
                     }
                 }
 
-                return default!;
+                return default;
             }
         }
 #endif
