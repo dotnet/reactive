@@ -1210,62 +1210,62 @@ namespace System.Linq
         
         private static MethodInfo? FirstOrDefaultAsync__TSource__2__0(Type TSource) =>
             (s_FirstOrDefaultAsync__TSource__2__0 ??
-            (s_FirstOrDefaultAsync__TSource__2__0 = new Func<IAsyncQueryable<object>, CancellationToken, ValueTask<object>>(FirstOrDefaultAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+            (s_FirstOrDefaultAsync__TSource__2__0 = new Func<IAsyncQueryable<object>, CancellationToken, ValueTask<object?>>(FirstOrDefaultAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
-        public static ValueTask<TSource> FirstOrDefaultAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource?> FirstOrDefaultAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.Provider.ExecuteAsync<TSource>(Expression.Call(FirstOrDefaultAsync__TSource__2__0(typeof(TSource)), source.Expression, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<TSource?>(Expression.Call(FirstOrDefaultAsync__TSource__2__0(typeof(TSource)), source.Expression, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
         }
 
         private static MethodInfo? s_FirstOrDefaultAsync__TSource__3__0;
         
         private static MethodInfo? FirstOrDefaultAsync__TSource__3__0(Type TSource) =>
             (s_FirstOrDefaultAsync__TSource__3__0 ??
-            (s_FirstOrDefaultAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, bool>>, CancellationToken, ValueTask<object>>(FirstOrDefaultAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+            (s_FirstOrDefaultAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, bool>>, CancellationToken, ValueTask<object?>>(FirstOrDefaultAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
-        public static ValueTask<TSource> FirstOrDefaultAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource?> FirstOrDefaultAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Provider.ExecuteAsync<TSource>(Expression.Call(FirstOrDefaultAsync__TSource__3__0(typeof(TSource)), source.Expression, predicate, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<TSource?>(Expression.Call(FirstOrDefaultAsync__TSource__3__0(typeof(TSource)), source.Expression, predicate, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
         }
 
         private static MethodInfo? s_FirstOrDefaultAwaitAsync__TSource__3__0;
         
         private static MethodInfo? FirstOrDefaultAwaitAsync__TSource__3__0(Type TSource) =>
             (s_FirstOrDefaultAwaitAsync__TSource__3__0 ??
-            (s_FirstOrDefaultAwaitAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<bool>>>, CancellationToken, ValueTask<object>>(FirstOrDefaultAwaitAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+            (s_FirstOrDefaultAwaitAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<bool>>>, CancellationToken, ValueTask<object?>>(FirstOrDefaultAwaitAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
-        public static ValueTask<TSource> FirstOrDefaultAwaitAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<bool>>> predicate, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource?> FirstOrDefaultAwaitAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<bool>>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Provider.ExecuteAsync<TSource>(Expression.Call(FirstOrDefaultAwaitAsync__TSource__3__0(typeof(TSource)), source.Expression, predicate, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<TSource?>(Expression.Call(FirstOrDefaultAwaitAsync__TSource__3__0(typeof(TSource)), source.Expression, predicate, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
         }
 
         private static MethodInfo? s_FirstOrDefaultAwaitWithCancellationAsync__TSource__3__0;
         
         private static MethodInfo? FirstOrDefaultAwaitWithCancellationAsync__TSource__3__0(Type TSource) =>
             (s_FirstOrDefaultAwaitWithCancellationAsync__TSource__3__0 ??
-            (s_FirstOrDefaultAwaitWithCancellationAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<bool>>>, CancellationToken, ValueTask<object>>(FirstOrDefaultAwaitWithCancellationAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+            (s_FirstOrDefaultAwaitWithCancellationAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<bool>>>, CancellationToken, ValueTask<object?>>(FirstOrDefaultAwaitWithCancellationAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
-        public static ValueTask<TSource> FirstOrDefaultAwaitWithCancellationAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<bool>>> predicate, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource?> FirstOrDefaultAwaitWithCancellationAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<bool>>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Provider.ExecuteAsync<TSource>(Expression.Call(FirstOrDefaultAwaitWithCancellationAsync__TSource__3__0(typeof(TSource)), source.Expression, predicate, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<TSource?>(Expression.Call(FirstOrDefaultAwaitWithCancellationAsync__TSource__3__0(typeof(TSource)), source.Expression, predicate, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
         }
 
         private static MethodInfo? s_GroupBy__TSource_TKey__2__0;
