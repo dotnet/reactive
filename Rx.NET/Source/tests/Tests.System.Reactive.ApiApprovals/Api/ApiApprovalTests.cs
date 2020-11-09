@@ -23,7 +23,7 @@ namespace ReactiveTests.Tests.Api
         {
             verifySettings = new VerifySettings();
             verifySettings.UseExtension("cs");
-            verifySettings.OnVerifyMismatch(DiffPlexReporter.Report);
+            verifySettings.OnVerifyMismatch((filePair, message) => DiffPlexReporter.Report(filePair.Received, filePair.Verified, message));
         }
 
         [Fact]
