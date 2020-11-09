@@ -40,7 +40,7 @@ stages:
         $branch = "release/5.0.1xx"
         $scriptPath = Join-Path $env:AGENT_TOOLSDIRECTORY dotnet-install.ps1
         Invoke-WebRequest -OutFile $scriptPath https://raw.githubusercontent.com/dotnet/install-scripts/master/src/dotnet-install.ps1
-        &"$scriptPath" -Channel $branch
+        &"$scriptPath" -Channel $branch -Architecture x64
 
         $configFile = Join-Path $env:AGENT_TOOLSDIRECTORY NuGet-darc.config
         # Get the darc feeds needed
@@ -71,7 +71,7 @@ stages:
         dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet5/nuget/v3/index.json -n dotnet5        
 
       displayName: Intall .NET 5.0 SDK
-      
+
     - task: UseDotNet@2
       displayName: .NET Core 3.1 runtime
       inputs:
