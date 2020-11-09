@@ -38,9 +38,9 @@ stages:
     #     includePreviewVersions: true
     - pwsh: |
         $branch = "release/5.0.1xx"
-        $scriptPath = Join-Path $env:AGENT_TOOLSDIRECTORY dotnet-install.ps1
-        Invoke-WebRequest -OutFile $scriptPath https://raw.githubusercontent.com/dotnet/install-scripts/master/src/dotnet-install.ps1
-        &"$scriptPath" -Channel $branch -Architecture x64
+        $scriptPath = Join-Path $env:AGENT_TOOLSDIRECTORY dotnet-install.sh
+        Invoke-WebRequest -OutFile $scriptPath https://raw.githubusercontent.com/dotnet/install-scripts/master/src/dotnet-install.sh
+        &"$scriptPath" /channel $branch /architecture x64
 
         $configFile = Join-Path $env:AGENT_TOOLSDIRECTORY NuGet-darc.config
         # Get the darc feeds needed
