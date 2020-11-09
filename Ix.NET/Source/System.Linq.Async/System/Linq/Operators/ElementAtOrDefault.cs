@@ -20,14 +20,14 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence that produces the element at the specified position in the source sequence, or a default value if the index is outside the bounds of the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than zero.</exception>
-        public static ValueTask<TSource> ElementAtOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource?> ElementAtOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
             return Core(source, index, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
+            static async ValueTask<TSource?> Core(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
             {
                 if (source is IAsyncPartition<TSource> p)
                 {
@@ -62,7 +62,7 @@ namespace System.Linq
                     }
                 }
 
-                return default!;
+                return default;
             }
         }
     }
