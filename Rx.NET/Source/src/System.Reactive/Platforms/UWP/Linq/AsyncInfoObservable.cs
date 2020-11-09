@@ -85,7 +85,7 @@ namespace System.Reactive.Linq
 
             return AsyncInfo.Run<TProgress>((ct, progress) =>
             {
-                return Observable.Create<TSource>(observer =>
+                return Observable.Create<TSource?>(observer =>
                 {
                     var obs = Observer.Synchronize(observer);
 
