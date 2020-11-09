@@ -40,7 +40,7 @@ stages:
         $branch = "release/5.0.1xx"
         $scriptPath = Join-Path $env:AGENT_TOOLSDIRECTORY dotnet-install.sh
         Invoke-WebRequest -OutFile $scriptPath https://raw.githubusercontent.com/dotnet/install-scripts/master/src/dotnet-install.sh
-        &"$scriptPath" /channel $branch /architecture x64
+        bash "$scriptPath" /channel $branch /architecture x64
 
         $configFile = Join-Path $env:AGENT_TOOLSDIRECTORY NuGet-darc.config
         # Get the darc feeds needed
