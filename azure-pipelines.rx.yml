@@ -38,7 +38,7 @@ stages:
     #     version: 5.0.x
     #     includePreviewVersions: true
     #     performMultiLevelLookup: true
-    - pwsh: |
+    - powershell: |
         $branch = "release/5.0.1xx"
         $scriptPath = Join-Path $env:AGENT_TOOLSDIRECTORY dotnet-install.ps1
         Invoke-WebRequest -OutFile $scriptPath https://raw.githubusercontent.com/dotnet/install-scripts/master/src/dotnet-install.ps1
@@ -72,7 +72,7 @@ stages:
 
         dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet5/nuget/v3/index.json -n dotnet5        
 
-      displayName: Intall .NET 5.0 SDK
+      displayName: Install .NET 5.0 SDK
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -230,8 +230,7 @@ stages:
       displayName: Run 2.1 Tests on Linux
 
   - job: WindowsDesktop    
-    pool:
-      vmImage: windows-latest
+    pool: vs2019-preview
 
     variables:
       BuildConfiguration: Release
@@ -244,7 +243,7 @@ stages:
     #     version: 5.0.x
     #     includePreviewVersions: true
     #     performMultiLevelLookup: true
-    - pwsh: |
+    - powershell: |
         $branch = "release/5.0.1xx"
         $scriptPath = Join-Path $env:AGENT_TOOLSDIRECTORY dotnet-install.ps1
         Invoke-WebRequest -OutFile $scriptPath https://raw.githubusercontent.com/dotnet/install-scripts/master/src/dotnet-install.ps1
@@ -278,7 +277,7 @@ stages:
 
         dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet5/nuget/v3/index.json -n dotnet5        
 
-      displayName: Intall .NET 5.0 SDK
+      displayName: Install .NET 5.0 SDK
 
     - task: DotNetCoreCLI@2
       inputs:
