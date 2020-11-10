@@ -32,48 +32,13 @@ stages:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
     steps:
-    # - task: UseDotNet@2
-    #   displayName: Use .NET Core 5.0.x SDK
-    #   inputs:
-    #     version: 5.0.x
-    #     includePreviewVersions: true
-    #     performMultiLevelLookup: true
-    - powershell: |
-        $branch = "release/5.0.1xx"
-        $scriptPath = Join-Path $env:AGENT_TOOLSDIRECTORY dotnet-install.ps1
-        Invoke-WebRequest -OutFile $scriptPath https://raw.githubusercontent.com/dotnet/install-scripts/master/src/dotnet-install.ps1
-        &"$scriptPath" -Channel $branch
-
-        $configFile = Join-Path $env:AGENT_TOOLSDIRECTORY NuGet-darc.config
-        # Get the darc feeds needed
-        Invoke-WebRequest -OutFile $configFile "https://raw.githubusercontent.com/dotnet/installer/$branch/NuGet.config"
-
-        [xml]$nugetConfig = Get-Content $configFile
-        $darcNodes = $nugetConfig.SelectNodes("/configuration/packageSources/add[starts-with(@key, 'darc-')]")
-        
-        $installationPath = Join-Path $env:AGENT_TOOLSDIRECTORY dotnet
-
-        Write-Host "##vso[task.setvariable variable=DOTNET_ROOT]$installationPath"
-
-        # Enable multi-level lookup to fall back to the built-in SDK's for older versions. Set to 0 to disable
-        Write-Host "##vso[task.setvariable variable=DOTNET_MULTILEVEL_LOOKUP]1"
-
-        # Make sure the new path is propagated back to the main host process 
-        Write-Host "##vso[task.setvariable variable=PATH]$env:PATH"
-
-        # Add the nightly NuGet feeds to the nuget config starting with the darc nodes
-        foreach ($feed in $darcNodes) {
-          $key = $feed.attributes['key'].value
-          $value = $feed.attributes['value'].value
-
-          Write-Host "Adding DARC feed '$key': $value"
-          dotnet nuget add source $value -n $key
-        }
-
-        dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet5/nuget/v3/index.json -n dotnet5        
-
-      displayName: Install .NET 5.0 SDK
-
+    - task: UseDotNet@2
+      displayName: Use .NET Core 5.0.x SDK
+      inputs:
+        version: 5.0.x
+        includePreviewVersions: true
+        performMultiLevelLookup: true
+   
     - task: DotNetCoreCLI@2
       inputs:
         command: custom
@@ -238,46 +203,11 @@ stages:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
     steps:
-    # - task: UseDotNet@2
-    #   inputs:
-    #     version: 5.0.x
-    #     includePreviewVersions: true
-    #     performMultiLevelLookup: true
-    - powershell: |
-        $branch = "release/5.0.1xx"
-        $scriptPath = Join-Path $env:AGENT_TOOLSDIRECTORY dotnet-install.ps1
-        Invoke-WebRequest -OutFile $scriptPath https://raw.githubusercontent.com/dotnet/install-scripts/master/src/dotnet-install.ps1
-        &"$scriptPath" -Channel $branch
-
-        $configFile = Join-Path $env:AGENT_TOOLSDIRECTORY NuGet-darc.config
-        # Get the darc feeds needed
-        Invoke-WebRequest -OutFile $configFile "https://raw.githubusercontent.com/dotnet/installer/$branch/NuGet.config"
-
-        [xml]$nugetConfig = Get-Content $configFile
-        $darcNodes = $nugetConfig.SelectNodes("/configuration/packageSources/add[starts-with(@key, 'darc-')]")
-        
-        $installationPath = Join-Path $env:AGENT_TOOLSDIRECTORY dotnet
-
-        Write-Host "##vso[task.setvariable variable=DOTNET_ROOT]$installationPath"
-
-        # Enable multi-level lookup to fall back to the built-in SDK's for older versions. Set to 0 to disable
-        Write-Host "##vso[task.setvariable variable=DOTNET_MULTILEVEL_LOOKUP]1"
-
-        # Make sure the new path is propagated back to the main host process 
-        Write-Host "##vso[task.setvariable variable=PATH]$env:PATH"
-
-        # Add the nightly NuGet feeds to the nuget config starting with the darc nodes
-        foreach ($feed in $darcNodes) {
-          $key = $feed.attributes['key'].value
-          $value = $feed.attributes['value'].value
-
-          Write-Host "Adding DARC feed '$key': $value"
-          dotnet nuget add source $value -n $key
-        }
-
-        dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet5/nuget/v3/index.json -n dotnet5        
-
-      displayName: Install .NET 5.0 SDK
+    - task: UseDotNet@2
+      inputs:
+        version: 5.0.x
+        includePreviewVersions: true
+        performMultiLevelLookup: true
 
     - task: DotNetCoreCLI@2
       inputs:
