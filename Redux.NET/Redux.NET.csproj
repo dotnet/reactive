@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageId>Redux.NET</PackageId>
+    <Version>1.0.0</Version>
+    <PackageTags>NETCore;NGRX;State;Store;Reducers;Selectors;Effects</PackageTags>
+    <Description>Reactive libraries for Redux.NET</Description>
+    <Authors>SujenK</Authors>
+    <Company>Hyperyx</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DeepCloner" Version="0.10.2" />
+  </ItemGroup>
+</Project>
