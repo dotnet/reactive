@@ -97,8 +97,19 @@ namespace Redux.NET
                 var attr = method.GetCustomAttributes(typeof(EffectAttribute), true).FirstOrDefault() as EffectAttribute;
                 if (attr.Actions.Contains(action.GetType()))
                 {
-                    var effect = serviceProvider.GetService(method.DeclaringType);
-                    dynamic awaitable = method.Invoke(effect, null);
+                    var constructors = method.DeclaringType.GetConstructors();
+                    var firstConstrutor = constructors.FirstOrDefault();
+                    var parameters = new List<object>();
+
+                    foreach (var param in firstConstrutor.GetParameters())
+                    {
+                        var service = this.serviceProvider.GetService(param.ParameterType);
+                        parameters.Add(service);
+                    }
+
+                    var obj = Activator.CreateInstance(method.DeclaringType, parameters.ToArray());
+
+                    dynamic awaitable = method.Invoke(obj, null);
                     await awaitable;
                 }
             }
