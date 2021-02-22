@@ -75,9 +75,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (_hasValue && _id == currentid)
                     {
                         ForwardOnNext(_value!);
-                    }
 
-                    _hasValue = false;
+                        _hasValue = false;
+                    }
                 }
             }
 
