@@ -191,10 +191,7 @@ namespace System.Linq
                 }
                 finally
                 {
-                    if (_buffer != null)
-                    {
-                        _buffer.Done(i + 1);
-                    }
+                    _buffer?.Done(i + 1);
                 }
             }
         }
