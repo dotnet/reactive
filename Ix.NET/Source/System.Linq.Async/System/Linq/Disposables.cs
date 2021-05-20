@@ -47,10 +47,7 @@ namespace System.Linq
                 d1.Dispose();
 
                 var d2 = Interlocked.Exchange(ref _d2, null);
-                if (d2 != null)
-                {
-                    d2.Dispose();
-                }
+                d2?.Dispose();
             }
         }
     }
