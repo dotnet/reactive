@@ -231,10 +231,7 @@ namespace System.Reactive.Concurrency
                         throw new InvalidOperationException(); // REVIEW: No support for blocking.
                     }
 
-                    if (_error != null)
-                    {
-                        _error.Throw();
-                    }
+                    _error?.Throw();
                 }
 
                 public void OnCompleted(Action continuation)
