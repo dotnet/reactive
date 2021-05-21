@@ -291,10 +291,7 @@ namespace System.Linq
                         }
                     }
 
-                    if (list != null)
-                    {
-                        list.Add(expression);
-                    }
+                    list?.Add(expression);
                 }
 
                 //
