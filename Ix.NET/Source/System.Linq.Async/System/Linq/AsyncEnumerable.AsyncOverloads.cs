@@ -11,7 +11,6 @@ namespace System.Linq
     partial class AsyncEnumerable
     {
 #if SUPPORT_FLAT_ASYNC_API
-        public static ValueTask<long> LongCountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => LongCountAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<long> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<long?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<float> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
@@ -77,7 +76,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static ValueTask<long> LongCountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => LongCountAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<long> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<long?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<float> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
@@ -143,18 +141,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, CancellationToken, ValueTask<TResult>> selector) => ZipAwaitWithCancellationCore<TFirst, TSecond, TResult>(first, second, selector);
 #endif
 #else
-        /// <summary>
-        /// Returns an async-enumerable sequence containing a <see cref="long" /> that represents the number of elements in the specified async-enumerable sequence that satisfy a condition.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence that contains elements to be counted.</param>
-        /// <param name="predicate">An asynchronous predicate to test each element for a condition.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>An async-enumerable sequence containing a single element with a number that represents how many elements in the input sequence satisfy the condition in the predicate function.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        public static ValueTask<long> LongCountAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => LongCountAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
-
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="long"/> value.
         /// </summary>
@@ -910,7 +896,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> ZipAwait<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static ValueTask<long> LongCountAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => LongCountAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<long> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<long?> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<float> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
