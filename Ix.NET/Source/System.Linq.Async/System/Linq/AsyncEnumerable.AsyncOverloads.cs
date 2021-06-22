@@ -11,8 +11,6 @@ namespace System.Linq
     partial class AsyncEnumerable
     {
 #if SUPPORT_FLAT_ASYNC_API
-        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> action, CancellationToken cancellationToken = default) => ForEachAwaitAsyncCore<TSource>(source, action, cancellationToken);
-        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task> action, CancellationToken cancellationToken = default) => ForEachAwaitAsyncCore<TSource>(source, action, cancellationToken);
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => GroupByAwaitCore<TSource, TKey>(source, keySelector);
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer) => GroupByAwaitCore<TSource, TKey>(source, keySelector, comparer);
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector) => GroupByAwaitCore<TSource, TKey, TElement>(source, keySelector, elementSelector);
@@ -93,8 +91,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> action, CancellationToken cancellationToken) => ForEachAwaitWithCancellationAsyncCore<TSource>(source, action, cancellationToken);
-        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, Task> action, CancellationToken cancellationToken) => ForEachAwaitWithCancellationAsyncCore<TSource>(source, action, cancellationToken);
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) => GroupByAwaitWithCancellationCore<TSource, TKey>(source, keySelector);
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer) => GroupByAwaitWithCancellationCore<TSource, TKey>(source, keySelector, comparer);
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector) => GroupByAwaitWithCancellationCore<TSource, TKey, TElement>(source, keySelector, elementSelector);
@@ -175,28 +171,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, CancellationToken, ValueTask<TResult>> selector) => ZipAwaitWithCancellationCore<TFirst, TSecond, TResult>(first, second, selector);
 #endif
 #else
-        /// <summary>
-        /// Invokes and awaits an asynchronous action on each element in the source sequence, and returns a task that is signaled when the sequence terminates.
-        /// </summary>
-        /// <typeparam name="TSource">Type of elements in the sequence.</typeparam>
-        /// <param name="source">Source sequence.</param>
-        /// <param name="action">Asynchronous action to invoke and await for each element in the source sequence.</param>
-        /// <param name="cancellationToken">Optional cancellation token for cancelling the sequence at any time.</param>
-        /// <returns>Task that signals the termination of the sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
-        public static Task ForEachAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> action, CancellationToken cancellationToken = default) => ForEachAwaitAsyncCore<TSource>(source, action, cancellationToken);
-
-        /// <summary>
-        /// Invokes and awaits an asynchronous action on each element in the source sequence, incorporating the element's index, and returns a task that is signaled when the sequence terminates.
-        /// </summary>
-        /// <typeparam name="TSource">Type of elements in the sequence.</typeparam>
-        /// <param name="source">Source sequence.</param>
-        /// <param name="action">Asynchronous action to invoke and await for each element in the source sequence; the second parameter represents the index of the element.</param>
-        /// <param name="cancellationToken">Optional cancellation token for cancelling the sequence at any time.</param>
-        /// <returns>Task that signals the termination of the sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
-        public static Task ForEachAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task> action, CancellationToken cancellationToken = default) => ForEachAwaitAsyncCore<TSource>(source, action, cancellationToken);
-
         /// <summary>
         /// Groups the elements of an async-enumerable sequence according to a specified key selector function.
         /// </summary>
@@ -1099,8 +1073,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> ZipAwait<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static Task ForEachAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> action, CancellationToken cancellationToken) => ForEachAwaitWithCancellationAsyncCore<TSource>(source, action, cancellationToken);
-        public static Task ForEachAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, Task> action, CancellationToken cancellationToken) => ForEachAwaitWithCancellationAsyncCore<TSource>(source, action, cancellationToken);
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupByAwaitWithCancellation<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) => GroupByAwaitWithCancellationCore<TSource, TKey>(source, keySelector);
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupByAwaitWithCancellation<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer) => GroupByAwaitWithCancellationCore<TSource, TKey>(source, keySelector, comparer);
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupByAwaitWithCancellation<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector) => GroupByAwaitWithCancellationCore<TSource, TKey, TElement>(source, keySelector, elementSelector);
