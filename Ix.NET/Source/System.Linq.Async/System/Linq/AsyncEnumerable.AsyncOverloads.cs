@@ -11,10 +11,6 @@ namespace System.Linq
     partial class AsyncEnumerable
     {
 #if SUPPORT_FLAT_ASYNC_API
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitCore<TSource, TResult>(source, selector);
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitCore<TSource, TResult>(source, selector);
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector) => SelectManyAwaitCore<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector) => SelectManyAwaitCore<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         public static ValueTask<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => SingleAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<TSource?> SingleOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => SingleOrDefaultAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
         public static IAsyncEnumerable<TSource> SkipWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate) => SkipWhileAwaitCore<TSource>(source, predicate);
@@ -44,10 +40,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitWithCancellationCore<TSource, TResult>(source, selector);
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitWithCancellationCore<TSource, TResult>(source, selector);
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, CancellationToken, ValueTask<TResult>> resultSelector) => SelectManyAwaitWithCancellationCore<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, CancellationToken, ValueTask<TResult>> resultSelector) => SelectManyAwaitWithCancellationCore<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         public static ValueTask<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => SingleAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<TSource?> SingleOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => SingleOrDefaultAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static IAsyncEnumerable<TSource> SkipWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate) => SkipWhileAwaitWithCancellationCore<TSource>(source, predicate);
@@ -77,55 +69,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, CancellationToken, ValueTask<TResult>> selector) => ZipAwaitWithCancellationCore<TFirst, TSecond, TResult>(first, second, selector);
 #endif
 #else
-        /// <summary>
-        /// Projects each element of an async-enumerable sequence into an async-enumerable sequence and merges the resulting async-enumerable sequences into one async-enumerable sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <typeparam name="TResult">The type of elements in the projected inner sequences and the merged result sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence of elements to project.</param>
-        /// <param name="selector">An asynchronous selector function to apply to each element of the source sequence.</param>
-        /// <returns>An async-enumerable sequence whose elements are the result of invoking the one-to-many transform function on each element of the source sequence and awaiting the result.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        public static IAsyncEnumerable<TResult> SelectManyAwait<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitCore<TSource, TResult>(source, selector);
-
-        /// <summary>
-        /// Projects each element of an async-enumerable sequence into an async-enumerable sequence by incorporating the element's index and merges the resulting async-enumerable sequences into an async-enumerable sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <typeparam name="TResult">The type of elements in the projected inner sequences and the merged result sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence of elements to project.</param>
-        /// <param name="selector">An asynchronous selector function to apply to each element; the second parameter represents the index of the element.</param>
-        /// <returns>An async-enumerable sequence who's elements are the result of invoking the one-to-many transform function on each element of the source sequence and awaiting the result.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        public static IAsyncEnumerable<TResult> SelectManyAwait<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitCore<TSource, TResult>(source, selector);
-
-        /// <summary>
-        /// Projects each element of an async-enumerable sequence to an async-enumerable sequence by awaiting the result of a transform function, invokes the result selector for each of the source elements and each of the corrasponding inner-sequence's elements and awaits the result, and merges the results into one async-enumerable sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <typeparam name="TCollection">The type of elements in the projected intermediate sequences.</typeparam>
-        /// <typeparam name="TResult">The type of elements in the result sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence of elements to project.</param>
-        /// <param name="collectionSelector">An asynchronous transform function to apply to each source element.</param>
-        /// <param name="resultSelector">An asynchronous transform function to apply to each element of the intermediate sequence.</param>
-        /// <returns>An async-enumerable sequence whose elements are the result of invoking the one-to-many transform function <paramref name="collectionSelector"/> on each element of the input sequence, awaiting the result, applying <paramref name="resultSelector"/> to each element of the intermediate sequences along with their corrasponding source element and awaiting the result.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="collectionSelector"/>, or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
-        public static IAsyncEnumerable<TResult> SelectManyAwait<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector) => SelectManyAwaitCore<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
-
-        /// <summary>
-        /// Projects each element of an async-enumerable sequence to an async-enumerable sequence by awaiting the result of a transform function that incorporates each element's index,
-        /// invokes the result selector for the source element and each of the corrasponding inner-sequence's elements and awaits the result, and merges the results into one async-enumerable sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <typeparam name="TCollection">The type of elements in the projected intermediate sequences.</typeparam>
-        /// <typeparam name="TResult">The type of elements in the result sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence of elements to project.</param>
-        /// <param name="collectionSelector">An asynchronous transform function to apply to each source element; the second parameter represents the index of the element.</param>
-        /// <param name="resultSelector">An asynchronous transform function to apply to each element of the intermediate sequence.</param>
-        /// <returns>An async-enumerable sequence whose elements are the result of invoking the one-to-many transform function <paramref name="collectionSelector"/> on each element of the input sequence, awaiting the result, applying <paramref name="resultSelector"/> to each element of the intermediate sequences olong with their corrasponding source element and awaiting the result.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="collectionSelector"/>, or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
-        public static IAsyncEnumerable<TResult> SelectManyAwait<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector) => SelectManyAwaitCore<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
-
         /// <summary>
         /// Returns the only element of an async-enumerable sequence that satisfies the condition in the asynchronous predicate, and reports an exception if there is not exactly one element in the async-enumerable sequence that matches the predicate.
         /// </summary>
@@ -462,10 +405,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> ZipAwait<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static IAsyncEnumerable<TResult> SelectManyAwaitWithCancellation<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitWithCancellationCore<TSource, TResult>(source, selector);
-        public static IAsyncEnumerable<TResult> SelectManyAwaitWithCancellation<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitWithCancellationCore<TSource, TResult>(source, selector);
-        public static IAsyncEnumerable<TResult> SelectManyAwaitWithCancellation<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, CancellationToken, ValueTask<TResult>> resultSelector) => SelectManyAwaitWithCancellationCore<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
-        public static IAsyncEnumerable<TResult> SelectManyAwaitWithCancellation<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, CancellationToken, ValueTask<TResult>> resultSelector) => SelectManyAwaitWithCancellationCore<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         public static ValueTask<TSource> SingleAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => SingleAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<TSource?> SingleOrDefaultAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => SingleOrDefaultAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static IAsyncEnumerable<TSource> SkipWhileAwaitWithCancellation<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate) => SkipWhileAwaitWithCancellationCore<TSource>(source, predicate);
