@@ -2471,7 +2471,18 @@ namespace System.Linq
             }
         }
 
-        internal static ValueTask<int> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="int"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [GenerateAsyncOverload]
+        private static ValueTask<int> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -2508,7 +2519,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<int> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default)
+        [GenerateAsyncOverload]
+        private static ValueTask<int> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -2652,7 +2664,18 @@ namespace System.Linq
             }
         }
 
-        internal static ValueTask<int?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Int}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [GenerateAsyncOverload]
+        private static ValueTask<int?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -2704,7 +2727,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<int?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
+        [GenerateAsyncOverload]
+        private static ValueTask<int?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -2833,7 +2857,18 @@ namespace System.Linq
             }
         }
 
-        internal static ValueTask<long> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="long"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [GenerateAsyncOverload]
+        private static ValueTask<long> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -2870,7 +2905,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<long> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default)
+        [GenerateAsyncOverload]
+        private static ValueTask<long> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -3014,7 +3050,18 @@ namespace System.Linq
             }
         }
 
-        internal static ValueTask<long?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Long}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [GenerateAsyncOverload]
+        private static ValueTask<long?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -3066,7 +3113,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<long?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
+        [GenerateAsyncOverload]
+        private static ValueTask<long?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -3227,7 +3275,18 @@ namespace System.Linq
             }
         }
 
-        internal static ValueTask<float> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="float"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [GenerateAsyncOverload]
+        private static ValueTask<float> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -3280,7 +3339,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<float> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default)
+        [GenerateAsyncOverload]
+        private static ValueTask<float> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -3472,7 +3532,18 @@ namespace System.Linq
             }
         }
 
-        internal static ValueTask<float?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Float}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [GenerateAsyncOverload]
+        private static ValueTask<float?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -3540,7 +3611,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<float?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
+        [GenerateAsyncOverload]
+        private static ValueTask<float?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -3717,7 +3789,18 @@ namespace System.Linq
             }
         }
 
-        internal static ValueTask<double> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="double"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [GenerateAsyncOverload]
+        private static ValueTask<double> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -3770,7 +3853,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<double> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken = default)
+        [GenerateAsyncOverload]
+        private static ValueTask<double> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -3962,7 +4046,18 @@ namespace System.Linq
             }
         }
 
-        internal static ValueTask<double?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Double}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [GenerateAsyncOverload]
+        private static ValueTask<double?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -4030,7 +4125,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<double?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
+        [GenerateAsyncOverload]
+        private static ValueTask<double?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -4175,7 +4271,18 @@ namespace System.Linq
             }
         }
 
-        internal static ValueTask<decimal> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="decimal"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [GenerateAsyncOverload]
+        private static ValueTask<decimal> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -4212,7 +4319,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<decimal> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
+[GenerateAsyncOverload]
+        private static ValueTask<decimal> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -4352,7 +4460,18 @@ namespace System.Linq
             }
         }
 
-        internal static ValueTask<decimal?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Decimal}"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [GenerateAsyncOverload]
+        private static ValueTask<decimal?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -4402,7 +4521,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<decimal?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
+        [GenerateAsyncOverload]
+        private static ValueTask<decimal?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
