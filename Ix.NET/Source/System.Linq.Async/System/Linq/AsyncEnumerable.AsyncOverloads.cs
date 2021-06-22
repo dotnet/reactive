@@ -11,10 +11,6 @@ namespace System.Linq
     partial class AsyncEnumerable
     {
 #if SUPPORT_FLAT_ASYNC_API
-        public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => OrderByAwaitCore<TSource, TKey>(source, keySelector);
-        public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => OrderByAwaitCore<TSource, TKey>(source, keySelector, comparer);
-        public static IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => OrderByDescendingAwaitCore<TSource, TKey>(source, keySelector);
-        public static IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => OrderByDescendingAwaitCore<TSource, TKey>(source, keySelector, comparer);
         public static IAsyncEnumerable<TResult> Select<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector) => SelectAwaitCore<TSource, TResult>(source, selector);
         public static IAsyncEnumerable<TResult> Select<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector) => SelectAwaitCore<TSource, TResult>(source, selector);
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitCore<TSource, TResult>(source, selector);
@@ -37,10 +33,6 @@ namespace System.Linq
         public static ValueTask<int?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default) => SumAwaitAsyncCore<TSource>(source, selector, cancellationToken);
         public static IAsyncEnumerable<TSource> TakeWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate) => TakeWhileAwaitCore<TSource>(source, predicate);
         public static IAsyncEnumerable<TSource> TakeWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate) => TakeWhileAwaitCore<TSource>(source, predicate);
-        public static IOrderedAsyncEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => ThenByAwaitCore<TSource, TKey>(source, keySelector);
-        public static IOrderedAsyncEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => ThenByAwaitCore<TSource, TKey>(source, keySelector, comparer);
-        public static IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => ThenByDescendingAwaitCore<TSource, TKey>(source, keySelector);
-        public static IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => ThenByDescendingAwaitCore<TSource, TKey>(source, keySelector, comparer);
         public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) where TKey : notnull => ToDictionaryAwaitAsyncCore<TSource, TKey>(source, keySelector, cancellationToken);
         public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default) where TKey : notnull => ToDictionaryAwaitAsyncCore<TSource, TKey>(source, keySelector, comparer, cancellationToken);
         public static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) where TKey : notnull => ToDictionaryAwaitAsyncCore<TSource, TKey, TElement>(source, keySelector, elementSelector, cancellationToken);
@@ -54,10 +46,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) => OrderByAwaitWithCancellationCore<TSource, TKey>(source, keySelector);
-        public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => OrderByAwaitWithCancellationCore<TSource, TKey>(source, keySelector, comparer);
-        public static IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) => OrderByDescendingAwaitWithCancellationCore<TSource, TKey>(source, keySelector);
-        public static IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => OrderByDescendingAwaitWithCancellationCore<TSource, TKey>(source, keySelector, comparer);
         public static IAsyncEnumerable<TResult> Select<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector) => SelectAwaitWithCancellationCore<TSource, TResult>(source, selector);
         public static IAsyncEnumerable<TResult> Select<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<TResult>> selector) => SelectAwaitWithCancellationCore<TSource, TResult>(source, selector);
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitWithCancellationCore<TSource, TResult>(source, selector);
@@ -80,10 +68,6 @@ namespace System.Linq
         public static ValueTask<decimal> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => SumAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static IAsyncEnumerable<TSource> TakeWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate) => TakeWhileAwaitWithCancellationCore<TSource>(source, predicate);
         public static IAsyncEnumerable<TSource> TakeWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate) => TakeWhileAwaitWithCancellationCore<TSource>(source, predicate);
-        public static IOrderedAsyncEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) => ThenByAwaitWithCancellationCore<TSource, TKey>(source, keySelector);
-        public static IOrderedAsyncEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => ThenByAwaitWithCancellationCore<TSource, TKey>(source, keySelector, comparer);
-        public static IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) => ThenByDescendingAwaitWithCancellationCore<TSource, TKey>(source, keySelector);
-        public static IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => ThenByDescendingAwaitWithCancellationCore<TSource, TKey>(source, keySelector, comparer);
         public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) where TKey : notnull => ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey>(source, keySelector, cancellationToken);
         public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default) where TKey : notnull => ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey>(source, keySelector, comparer, cancellationToken);
         public static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) where TKey : notnull => ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey, TElement>(source, keySelector, elementSelector, cancellationToken);
@@ -97,52 +81,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, CancellationToken, ValueTask<TResult>> selector) => ZipAwaitWithCancellationCore<TFirst, TSecond, TResult>(first, second, selector);
 #endif
 #else
-        /// <summary>
-        /// Sorts the elements of a sequence in ascending order according to a key obtained by invoking a transform function on each element and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
-        /// <typeparam name="TKey">The type of the key returned by keySelector.</typeparam>
-        /// <param name="source">An async-enumerable sequence of values to order.</param>
-        /// <param name="keySelector">An asynchronous function to extract a key from an element.</param>
-        /// <returns>An ordered async-enumerable sequence whose elements are sorted according to a key.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
-        public static IOrderedAsyncEnumerable<TSource> OrderByAwait<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => OrderByAwaitCore<TSource, TKey>(source, keySelector);
-
-        /// <summary>
-        /// Sorts the elements of a sequence in ascending order by using a specified comparer. The keys are obtained by invoking the transform function on each element and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
-        /// <typeparam name="TKey">The type of the key returned by keySelector.</typeparam>
-        /// <param name="source">An async-enumerable sequence of values to order.</param>
-        /// <param name="keySelector">An asynchronous function to extract a key from an element.</param>
-        /// <param name="comparer">A comparer to compare keys.</param>
-        /// <returns>An ordered async-enumerable sequence whose elements are sorted according to a key.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
-        public static IOrderedAsyncEnumerable<TSource> OrderByAwait<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => OrderByAwaitCore<TSource, TKey>(source, keySelector, comparer);
-
-        /// <summary>
-        /// Sorts the elements of a sequence in descending order according to a key obtained by invoking a transform function on each element and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
-        /// <typeparam name="TKey">The type of the key returned by keySelector.</typeparam>
-        /// <param name="source">An async-enumerable sequence of values to order.</param>
-        /// <param name="keySelector">An asynchronous function to extract a key from an element.</param>
-        /// <returns>An ordered async-enumerable sequence whose elements are sorted in descending order according to a key.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
-        public static IOrderedAsyncEnumerable<TSource> OrderByDescendingAwait<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => OrderByDescendingAwaitCore<TSource, TKey>(source, keySelector);
-
-        /// <summary>
-        /// Sorts the elements of a sequence in descending order by using a specified comparer. The keys are obtained by invoking the transform function on each element and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
-        /// <typeparam name="TKey">The type of the key returned by keySelector.</typeparam>
-        /// <param name="source">An async-enumerable sequence of values to order.</param>
-        /// <param name="keySelector">An asynchronous function to extract a key from an element.</param>
-        /// <param name="comparer">A comparer to compare keys.</param>
-        /// <returns>An ordered async-enumerable sequence whose elements are sorted in descending order according to a key.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
-        public static IOrderedAsyncEnumerable<TSource> OrderByDescendingAwait<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => OrderByDescendingAwaitCore<TSource, TKey>(source, keySelector, comparer);
-
         /// <summary>
         /// Projects each element of an async-enumerable sequence into a new form by applying an asynchronous selector function to each member of the source sequence and awaiting the result.
         /// </summary>
@@ -401,52 +339,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> TakeWhileAwait<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate) => TakeWhileAwaitCore<TSource>(source, predicate);
 
         /// <summary>
-        /// Performs a subsequent ordering of the elements in a sequence in ascending order according to a key obtained by invoking a transform function on each element and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
-        /// <typeparam name="TKey">The type of the key returned by keySelector.</typeparam>
-        /// <param name="source">An ordered async-enumerable sequence that contains elements to sort.</param>
-        /// <param name="keySelector">An asynchronous function to extract a key from each element.</param>
-        /// <returns>An ordered async-enumerable whose elements are sorted according to a key.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
-        public static IOrderedAsyncEnumerable<TSource> ThenByAwait<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => ThenByAwaitCore<TSource, TKey>(source, keySelector);
-
-        /// <summary>
-        /// Performs a subsequent ordering of the elements in a sequence in ascending order by using a specified comparer. The keys are obtained by invoking a transform function on each element and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
-        /// <typeparam name="TKey">The type of the key returned by keySelector.</typeparam>
-        /// <param name="source">An ordered async-enumerable sequence that contains elements to sort.</param>
-        /// <param name="keySelector">An asynchronous function to extract a key from each element.</param>
-        /// <param name="comparer">A comparer to compare keys.</param>
-        /// <returns>An ordered async-enumerable whose elements are sorted according to a key.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
-        public static IOrderedAsyncEnumerable<TSource> ThenByAwait<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => ThenByAwaitCore<TSource, TKey>(source, keySelector, comparer);
-
-        /// <summary>
-        /// Performs a subsequent ordering of the elements in a sequence in descending order, according to a key obtained by invoking a transform function on each element and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
-        /// <typeparam name="TKey">The type of the key returned by keySelector.</typeparam>
-        /// <param name="source">An ordered async-enumerable sequence that contains elements to sort.</param>
-        /// <param name="keySelector">An asynchronous function to extract a key from each element.</param>
-        /// <returns>An ordered async-enumerable sequence whose elements are sorted in descending order according to a key.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
-        public static IOrderedAsyncEnumerable<TSource> ThenByDescendingAwait<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) => ThenByDescendingAwaitCore<TSource, TKey>(source, keySelector);
-
-        /// <summary>
-        /// Performs a subsequent ordering of the elements in a sequence in descending order by using a specified comparer. The keys are obtained by invoking a transform function on each element and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
-        /// <typeparam name="TKey">The type of the key returned by keySelector.</typeparam>
-        /// <param name="source">An ordered async-enumerable sequence that contains elements to sort.</param>
-        /// <param name="keySelector">An asynchronous function to extract a key from each element.</param>
-        /// <param name="comparer">A comparer to compare keys.</param>
-        /// <returns>An ordered async-enumerable sequence whose elements are sorted in descending order according to a key.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
-        public static IOrderedAsyncEnumerable<TSource> ThenByDescendingAwait<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => ThenByDescendingAwaitCore<TSource, TKey>(source, keySelector, comparer);
-
-        /// <summary>
         /// Creates a dictionary from an async-enumerable sequence by invoking a key-selector function on each element and awaiting the result.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
@@ -596,10 +488,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> ZipAwait<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static IOrderedAsyncEnumerable<TSource> OrderByAwaitWithCancellation<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) => OrderByAwaitWithCancellationCore<TSource, TKey>(source, keySelector);
-        public static IOrderedAsyncEnumerable<TSource> OrderByAwaitWithCancellation<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => OrderByAwaitWithCancellationCore<TSource, TKey>(source, keySelector, comparer);
-        public static IOrderedAsyncEnumerable<TSource> OrderByDescendingAwaitWithCancellation<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) => OrderByDescendingAwaitWithCancellationCore<TSource, TKey>(source, keySelector);
-        public static IOrderedAsyncEnumerable<TSource> OrderByDescendingAwaitWithCancellation<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => OrderByDescendingAwaitWithCancellationCore<TSource, TKey>(source, keySelector, comparer);
         public static IAsyncEnumerable<TResult> SelectAwaitWithCancellation<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector) => SelectAwaitWithCancellationCore<TSource, TResult>(source, selector);
         public static IAsyncEnumerable<TResult> SelectAwaitWithCancellation<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<TResult>> selector) => SelectAwaitWithCancellationCore<TSource, TResult>(source, selector);
         public static IAsyncEnumerable<TResult> SelectManyAwaitWithCancellation<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TResult>>> selector) => SelectManyAwaitWithCancellationCore<TSource, TResult>(source, selector);
@@ -622,10 +510,6 @@ namespace System.Linq
         public static ValueTask<decimal> SumAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => SumAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static IAsyncEnumerable<TSource> TakeWhileAwaitWithCancellation<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate) => TakeWhileAwaitWithCancellationCore<TSource>(source, predicate);
         public static IAsyncEnumerable<TSource> TakeWhileAwaitWithCancellation<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate) => TakeWhileAwaitWithCancellationCore<TSource>(source, predicate);
-        public static IOrderedAsyncEnumerable<TSource> ThenByAwaitWithCancellation<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) => ThenByAwaitWithCancellationCore<TSource, TKey>(source, keySelector);
-        public static IOrderedAsyncEnumerable<TSource> ThenByAwaitWithCancellation<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => ThenByAwaitWithCancellationCore<TSource, TKey>(source, keySelector, comparer);
-        public static IOrderedAsyncEnumerable<TSource> ThenByDescendingAwaitWithCancellation<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) => ThenByDescendingAwaitWithCancellationCore<TSource, TKey>(source, keySelector);
-        public static IOrderedAsyncEnumerable<TSource> ThenByDescendingAwaitWithCancellation<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) => ThenByDescendingAwaitWithCancellationCore<TSource, TKey>(source, keySelector, comparer);
         public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitWithCancellationAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) where TKey : notnull => ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey>(source, keySelector, cancellationToken);
         public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitWithCancellationAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default) where TKey : notnull => ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey>(source, keySelector, comparer, cancellationToken);
         public static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitWithCancellationAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) where TKey : notnull => ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey, TElement>(source, keySelector, elementSelector, cancellationToken);
