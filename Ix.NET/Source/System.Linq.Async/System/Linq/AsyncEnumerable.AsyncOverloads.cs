@@ -11,17 +11,6 @@ namespace System.Linq
     partial class AsyncEnumerable
     {
 #if SUPPORT_FLAT_ASYNC_API
-        public static ValueTask<long> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<long?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<float> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<float?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<double> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<double?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<decimal> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<decimal?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<TResult> MaxAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource, TResult>(source, selector, cancellationToken);
-        public static ValueTask<int> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<int?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<double> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<double?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<decimal> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => MinAwaitAsyncCore<TSource>(source, selector, cancellationToken);
@@ -76,17 +65,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static ValueTask<long> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<long?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<float> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<float?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<double> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<double?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<decimal> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<decimal?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<TResult> MaxAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource, TResult>(source, selector, cancellationToken);
-        public static ValueTask<int> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<int?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<double> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken = default) => MinAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<double?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken = default) => MinAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<decimal> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => MinAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
@@ -141,129 +119,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, CancellationToken, ValueTask<TResult>> selector) => ZipAwaitWithCancellationCore<TFirst, TSecond, TResult>(first, second, selector);
 #endif
 #else
-        /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="long"/> value.
-        /// </summary>
-        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
-        /// <param name="source">The source sequence.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        public static ValueTask<long> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-
-        /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Long}"/> value.
-        /// </summary>
-        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
-        /// <param name="source">The source sequence.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        public static ValueTask<long?> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-
-        /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="float"/> value.
-        /// </summary>
-        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
-        /// <param name="source">The source sequence.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        public static ValueTask<float> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-
-        /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Float}"/> value.
-        /// </summary>
-        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
-        /// <param name="source">The source sequence.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        public static ValueTask<float?> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-
-        /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="double"/> value.
-        /// </summary>
-        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
-        /// <param name="source">The source sequence.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        public static ValueTask<double> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-
-        /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Double}"/> value.
-        /// </summary>
-        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
-        /// <param name="source">The source sequence.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        public static ValueTask<double?> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-
-        /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="decimal"/> value.
-        /// </summary>
-        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
-        /// <param name="source">The source sequence.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        public static ValueTask<decimal> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-
-        /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Decimal}"/> value.
-        /// </summary>
-        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
-        /// <param name="source">The source sequence.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        public static ValueTask<decimal?> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-
-        /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum value.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <typeparam name="TResult">The type of the objects derived from the elements in the source sequence to determine the maximum of.</typeparam>
-        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing a single element with the value that corresponds to the maximum element in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        public static ValueTask<TResult> MaxAwaitAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource, TResult>(source, selector, cancellationToken);
-
-        /// <summary>
-        /// Returns the maximum <see cref="int"/> value in an async-enumerable sequence.
-        /// </summary>
-        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
-        /// <param name="source">The source sequence.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        public static ValueTask<int> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-
-        /// <summary>
-        /// Returns the maximum <see cref="Nullable{Int}"/> value in an async-enumerable sequence.
-        /// </summary>
-        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
-        /// <param name="source">The source sequence.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        public static ValueTask<int?> MaxAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default) => MaxAwaitAsyncCore<TSource>(source, selector, cancellationToken);
-
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="double"/> value.
         /// </summary>
@@ -896,17 +751,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> ZipAwait<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static ValueTask<long> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<long?> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<float> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<float?> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<double> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<double?> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<decimal> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<decimal?> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<TResult> MaxAwaitWithCancellationAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource, TResult>(source, selector, cancellationToken);
-        public static ValueTask<int> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
-        public static ValueTask<int?> MaxAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken = default) => MaxAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<double> MinAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken = default) => MinAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<double?> MinAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken = default) => MinAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<decimal> MinAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default) => MinAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
