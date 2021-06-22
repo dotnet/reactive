@@ -11,7 +11,6 @@ namespace System.Linq
     partial class AsyncEnumerable
     {
 #if SUPPORT_FLAT_ASYNC_API
-        public static ValueTask<TSource> FirstAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => FirstAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<TSource?> FirstOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => FirstOrDefaultAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> action, CancellationToken cancellationToken = default) => ForEachAwaitAsyncCore<TSource>(source, action, cancellationToken);
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task> action, CancellationToken cancellationToken = default) => ForEachAwaitAsyncCore<TSource>(source, action, cancellationToken);
@@ -95,7 +94,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static ValueTask<TSource> FirstAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => FirstAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<TSource?> FirstOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => FirstOrDefaultAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> action, CancellationToken cancellationToken) => ForEachAwaitWithCancellationAsyncCore<TSource>(source, action, cancellationToken);
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, Task> action, CancellationToken cancellationToken) => ForEachAwaitWithCancellationAsyncCore<TSource>(source, action, cancellationToken);
@@ -179,18 +177,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, CancellationToken, ValueTask<TResult>> selector) => ZipAwaitWithCancellationCore<TFirst, TSecond, TResult>(first, second, selector);
 #endif
 #else
-        /// <summary>
-        /// Returns the first element of an async-enumerable sequence that satisfies the condition in the predicate.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the sequence.</typeparam>
-        /// <param name="source">Source async-enumerable sequence.</param>
-        /// <param name="predicate">An asynchronous predicate that will be invoked and awaited for each element in the sequence.</param>
-        /// <param name="cancellationToken">An optional cancellation token for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the first element in the sequence that satisfies the predicate.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
-        /// <exception cref="InvalidOperationException">No element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
-        public static ValueTask<TSource> FirstAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => FirstAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
-
         /// <summary>
         /// Returns the first element of an async-enumerable sequence that satisfies the condition in the predicate, or a default value if no element satisfies the condition in the predicate.
         /// </summary>
@@ -1126,7 +1112,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> ZipAwait<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static ValueTask<TSource> FirstAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => FirstAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<TSource?> FirstOrDefaultAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => FirstOrDefaultAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static Task ForEachAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> action, CancellationToken cancellationToken) => ForEachAwaitWithCancellationAsyncCore<TSource>(source, action, cancellationToken);
         public static Task ForEachAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, Task> action, CancellationToken cancellationToken) => ForEachAwaitWithCancellationAsyncCore<TSource>(source, action, cancellationToken);
