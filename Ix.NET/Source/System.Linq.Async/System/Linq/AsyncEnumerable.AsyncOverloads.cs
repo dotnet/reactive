@@ -11,7 +11,6 @@ namespace System.Linq
     partial class AsyncEnumerable
     {
 #if SUPPORT_FLAT_ASYNC_API
-        public static ValueTask<bool> AnyAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => AnyAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<double> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<double> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<float> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
@@ -107,7 +106,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static ValueTask<bool> AnyAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => AnyAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<double> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default) => AverageAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<double> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default) => AverageAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<float> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default) => AverageAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
@@ -203,18 +201,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, CancellationToken, ValueTask<TResult>> selector) => ZipAwaitWithCancellationCore<TFirst, TSecond, TResult>(first, second, selector);
 #endif
 #else
-        /// <summary>
-        /// Determines whether any element in an async-enumerable sequence satisfies a condition.
-        /// </summary>
-        /// <typeparam name="TSource">The type of element in the sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence whose elements to apply the predicate to.</param>
-        /// <param name="predicate">An asynchronous predicate to apply to each element of the source sequence.</param>
-        /// <param name="cancellationToken">An optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing a value indicating whether any elements in the source sequence pass the test in the specified predicate.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        public static ValueTask<bool> AnyAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => AnyAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
-
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="int"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
         /// </summary>
@@ -960,7 +946,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing the elements in the source sequence starting at the first element that does not pass the test specified by the predicate.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         public static IAsyncEnumerable<TSource> SkipWhileAwait<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate) => SkipWhileAwaitCore<TSource>(source, predicate);
-        
+
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Long}"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
         /// </summary>
@@ -1298,7 +1284,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> ZipAwait<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static ValueTask<bool> AnyAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => AnyAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<double> AverageAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default) => AverageAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<double> AverageAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default) => AverageAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
         public static ValueTask<float> AverageAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default) => AverageAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
