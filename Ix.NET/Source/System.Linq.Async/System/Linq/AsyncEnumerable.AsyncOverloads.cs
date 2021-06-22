@@ -11,9 +11,6 @@ namespace System.Linq
     partial class AsyncEnumerable
     {
 #if SUPPORT_FLAT_ASYNC_API
-        public static ValueTask<TSource> AggregateAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator, CancellationToken cancellationToken = default) => AggregateAwaitAsyncCore<TSource>(source, accumulator, cancellationToken);
-        public static ValueTask<TAccumulate> AggregateAsync<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, CancellationToken cancellationToken = default) => AggregateAwaitAsyncCore<TSource, TAccumulate>(source, seed, accumulator, cancellationToken);
-        public static ValueTask<TResult> AggregateAsync<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, Func<TAccumulate, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken = default) => AggregateAwaitAsyncCore<TSource, TAccumulate, TResult>(source, seed, accumulator, resultSelector, cancellationToken);
         public static ValueTask<bool> AllAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => AllAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<bool> AnyAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => AnyAwaitAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<double> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default) => AverageAwaitAsyncCore<TSource>(source, selector, cancellationToken);
@@ -111,9 +108,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static ValueTask<TSource> AggregateAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, CancellationToken, ValueTask<TSource>> accumulator, CancellationToken cancellationToken = default) => AggregateAwaitWithCancellationAsyncCore<TSource>(source, accumulator, cancellationToken);
-        public static ValueTask<TAccumulate> AggregateAsync<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, CancellationToken, ValueTask<TAccumulate>> accumulator, CancellationToken cancellationToken = default) => AggregateAwaitWithCancellationAsyncCore<TSource, TAccumulate>(source, seed, accumulator, cancellationToken);
-        public static ValueTask<TResult> AggregateAsync<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, CancellationToken, ValueTask<TAccumulate>> accumulator, Func<TAccumulate, CancellationToken, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken = default) => AggregateAwaitWithCancellationAsyncCore<TSource, TAccumulate, TResult>(source, seed, accumulator, resultSelector, cancellationToken);
         public static ValueTask<bool> AllAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => AllAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<bool> AnyAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => AnyAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<double> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default) => AverageAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
@@ -211,49 +205,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, CancellationToken, ValueTask<TResult>> selector) => ZipAwaitWithCancellationCore<TFirst, TSecond, TResult>(first, second, selector);
 #endif
 #else
-        /// <summary>
-        /// Applies an accumulator function over an async-enumerable sequence, returning the result of the aggregation as a single element in the result sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence to aggregate over.</param>
-        /// <param name="accumulator">An asynchronous accumulator function to be invoked and awaited on each element.</param>
-        /// <param name="cancellationToken">An optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the final accumulator value.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="accumulator"/> is <see langword="null"/>.</exception>
-        /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        public static ValueTask<TSource> AggregateAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator, CancellationToken cancellationToken = default) => AggregateAwaitAsyncCore<TSource>(source, accumulator, cancellationToken);
-
-        /// <summary>
-        /// Applies an accumulator function over an async-enumerable sequence, returning the result of the aggregation as a single element in the result sequence. The specified seed value is used as the initial accumulator value.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <typeparam name="TAccumulate">The type of the result of aggregation.</typeparam>
-        /// <param name="source">An async-enumerable sequence to aggregate over.</param>
-        /// <param name="seed">The initial accumulator value.</param>
-        /// <param name="accumulator">An asynchronous accumulator function to be invoked and awaited on each element.</param>
-        /// <param name="cancellationToken">An optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the final accumulator value.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="accumulator"/> is <see langword="null"/>.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        public static ValueTask<TAccumulate> AggregateAwaitAsync<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, CancellationToken cancellationToken = default) => AggregateAwaitAsyncCore<TSource, TAccumulate>(source, seed, accumulator, cancellationToken);
-
-        /// <summary>
-        /// Applies an accumulator function over an async-enumerable sequence, returning the result of the aggregation as a single element in the result sequence. The specified seed value is used as the initial accumulator value,
-        /// and the specified result selector is used to select the result value.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <typeparam name="TAccumulate">The type of the accumulator value.</typeparam>
-        /// <typeparam name="TResult">The type of the resulting value.</typeparam>
-        /// <param name="source">An async-enumerable sequence to aggregate over.</param>
-        /// <param name="seed">The initial accumulator value.</param>
-        /// <param name="accumulator">An asynchronous accumulator function to be invoked and awaited on each element.</param>
-        /// <param name="resultSelector">An asynchronous transform function to transform the final accumulator value into the result value.</param>
-        /// <param name="cancellationToken">An optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the value obtained by applying the result selector to the final accumulator value.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="accumulator"/> or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
-        public static ValueTask<TResult> AggregateAwaitAsync<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, Func<TAccumulate, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken = default) => AggregateAwaitAsyncCore<TSource, TAccumulate, TResult>(source, seed, accumulator, resultSelector, cancellationToken);
-
         /// <summary>
         /// Determines whether all elements in an async-enumerable sequence satisfy a condition.
         /// </summary>
@@ -1361,9 +1312,6 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> ZipAwait<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector) => ZipAwaitCore<TFirst, TSecond, TResult>(first, second, selector);
 
 #if !NO_DEEP_CANCELLATION
-        public static ValueTask<TSource> AggregateAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, CancellationToken, ValueTask<TSource>> accumulator, CancellationToken cancellationToken = default) => AggregateAwaitWithCancellationAsyncCore<TSource>(source, accumulator, cancellationToken);
-        public static ValueTask<TAccumulate> AggregateAwaitWithCancellationAsync<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, CancellationToken, ValueTask<TAccumulate>> accumulator, CancellationToken cancellationToken = default) => AggregateAwaitWithCancellationAsyncCore<TSource, TAccumulate>(source, seed, accumulator, cancellationToken);
-        public static ValueTask<TResult> AggregateAwaitWithCancellationAsync<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, CancellationToken, ValueTask<TAccumulate>> accumulator, Func<TAccumulate, CancellationToken, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken = default) => AggregateAwaitWithCancellationAsyncCore<TSource, TAccumulate, TResult>(source, seed, accumulator, resultSelector, cancellationToken);
         public static ValueTask<bool> AllAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => AllAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<bool> AnyAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default) => AnyAwaitWithCancellationAsyncCore<TSource>(source, predicate, cancellationToken);
         public static ValueTask<double> AverageAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default) => AverageAwaitWithCancellationAsyncCore<TSource>(source, selector, cancellationToken);
