@@ -19,7 +19,7 @@ namespace System.Linq.Async.SourceGenerator
             "{\n" +
             "    [AttributeUsage(AttributeTargets.Method)]\n" +
             "    [Conditional(\"COMPILE_TIME_ONLY\")]\n" +
-            "    public sealed class GenerateAsyncOverloadAttribute : Attribute { }\n" +
+            "    internal sealed class GenerateAsyncOverloadAttribute : Attribute { }\n" +
             "}\n";
 
         public void Initialize(GeneratorInitializationContext context)
