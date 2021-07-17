@@ -1,7 +1,4 @@
 {
-"sdk": {
-    "version": "5.0.100-preview"
-  },
   "msbuild-sdks": {
     "MSBuild.Sdk.Extras": "3.0.23"
   }
