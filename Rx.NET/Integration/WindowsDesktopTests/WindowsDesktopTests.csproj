@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5.0;net5.0-windows10.0.19041</TargetFrameworks>
+    <TargetFrameworks>net5.0;net5.0-windows10.0.19041</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Tests.System.Reactive</AssemblyName>
@@ -8,7 +8,6 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Source\ReactiveX.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
     <UseWPF >true</UseWPF>
@@ -29,11 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />    
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
-    <PackageReference Include="System.Reactive" Version="4.2.0-preview.63" />
-    <PackageReference Include="Microsoft.Reactive.Testing" Version="4.2.0-preview.63" />
-    <PackageReference Include="System.Reactive.Observable.Aliases" Version="4.2.0-preview.63" />
+    <PackageReference Include="System.Reactive" Version="5.1.0-preview*" />
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="5.1.0-preview*" />
+    <PackageReference Include="System.Reactive.Observable.Aliases" Version="5.1.0-preview*" />
   </ItemGroup>
 </Project>
