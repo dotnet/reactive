@@ -154,24 +154,8 @@ stages:
       inputs:
         command: custom
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        custom: add
-        arguments: package System.Reactive -v $(NBGV_NuGetPackageVersion) -s $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
-
-    - task: DotNetCoreCLI@2
-      displayName: Update Aliases
-      inputs:
-        command: custom
-        projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        custom: add
-        arguments: package System.Reactive.Observable.Aliases -v $(NBGV_NuGetPackageVersion) -s $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
-
-    - task: DotNetCoreCLI@2
-      displayName: Update Testing
-      inputs:
-        command: custom
-        projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        custom: add
-        arguments: package Microsoft.Reactive.Testing -v $(NBGV_NuGetPackageVersion) -s $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
+        custom: restore
+        arguments: --configfile $(System.DefaultWorkingDirectory)/Rx.NET/Integration/NuGet.Config
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -231,24 +215,8 @@ stages:
       inputs:
         command: custom
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/WindowsDesktopTests/WindowsDesktopTests.csproj
-        custom: add
-        arguments: package System.Reactive -v $(NBGV_NuGetPackageVersion) -s $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
-
-    - task: DotNetCoreCLI@2
-      displayName: Update Aliases
-      inputs:
-        command: custom
-        projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/WindowsDesktopTests/WindowsDesktopTests.csproj
-        custom: add
-        arguments: package System.Reactive.Observable.Aliases -v $(NBGV_NuGetPackageVersion) -s $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
-
-    - task: DotNetCoreCLI@2
-      displayName: Update Testing
-      inputs:
-        command: custom
-        projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/WindowsDesktopTests/WindowsDesktopTests.csproj
-        custom: add
-        arguments: package Microsoft.Reactive.Testing -v $(NBGV_NuGetPackageVersion) -s $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
+        custom: restore
+        arguments: --configfile $(System.DefaultWorkingDirectory)/Rx.NET/Integration/NuGet.Config
 
     - task: DotNetCoreCLI@2
       inputs:
