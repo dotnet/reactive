@@ -13,8 +13,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests.Api
 {
-    public class ApiApprovalTests :
-        VerifyBase
+    public class ApiApprovalTests : VerifyBase
     {
         private readonly VerifySettings verifySettings;
 
@@ -23,7 +22,8 @@ namespace ReactiveTests.Tests.Api
         {
             verifySettings = new VerifySettings();
             verifySettings.UseExtension("cs");
-            verifySettings.OnVerifyMismatch((filePair, message) => DiffPlexReporter.Report(filePair.Received, filePair.Verified, message));
+
+            VerifierSettings.OnVerifyMismatch((filePair, message) => DiffPlexReporter.Report(filePair.Received, filePair.Verified, message));
         }
 
         [Fact]
