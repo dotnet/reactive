@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,8 +16,8 @@ namespace Tests
         [Fact]
         public async Task ToImmutableList_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableListAsync<int>(default).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableListAsync<int>(default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableListAsyncEnumerableExtensions.ToImmutableListAsync<int>(default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableListAsyncEnumerableExtensions.ToImmutableListAsync<int>(default, CancellationToken.None).AsTask());
         }
 
         [Fact]

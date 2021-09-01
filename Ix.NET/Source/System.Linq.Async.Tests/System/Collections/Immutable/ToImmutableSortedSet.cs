@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,10 +17,10 @@ namespace Tests
         [Fact]
         public async Task ToImmutableSortedSet_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedSetAsync<int>(default).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedSetAsync<int>(default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedSetAsyncEnumerableExtensions.ToImmutableSortedSetAsync<int>(default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedSetAsyncEnumerableExtensions.ToImmutableSortedSetAsync<int>(default, CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedSetAsync(default, Comparer<int>.Default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedSetAsyncEnumerableExtensions.ToImmutableSortedSetAsync(default, Comparer<int>.Default, CancellationToken.None).AsTask());
         }
 
         [Fact]

@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,8 +17,8 @@ namespace Tests
         [Fact]
         public async Task ToImmutableArray_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableArrayAsync<int>(default).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableArrayAsync<int>(default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableArrayAsyncEnumerableExtensions.ToImmutableArrayAsync<int>(default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableArrayAsyncEnumerableExtensions.ToImmutableArrayAsync<int>(default, CancellationToken.None).AsTask());
         }
 
         [Fact]

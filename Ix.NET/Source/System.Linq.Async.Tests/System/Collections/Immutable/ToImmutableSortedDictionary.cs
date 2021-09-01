@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,21 +17,21 @@ namespace Tests
         [Fact]
         public async Task ToImmutableSortedDictionary_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedDictionaryAsync<int, int, int>(default, x => 0, x => 0).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedDictionaryAsync<int, int, int>(Return42, default, x => 0).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedDictionaryAsync<int, int, int>(Return42, x => 0, default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedDictionaryAsyncEnumerableExtensions.ToImmutableSortedDictionaryAsync<int, int, int>(default, x => 0, x => 0).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedDictionaryAsyncEnumerableExtensions.ToImmutableSortedDictionaryAsync<int, int, int>(Return42, default, x => 0).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedDictionaryAsyncEnumerableExtensions.ToImmutableSortedDictionaryAsync<int, int, int>(Return42, x => 0, default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedDictionaryAsync<int, int, int>(default, x => 0, x => 0, Comparer<int>.Default).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedDictionaryAsync(Return42, default, x => 0, Comparer<int>.Default).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedDictionaryAsync<int, int, int>(Return42, x => 0, default, Comparer<int>.Default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedDictionaryAsyncEnumerableExtensions.ToImmutableSortedDictionaryAsync<int, int, int>(default, x => 0, x => 0, Comparer<int>.Default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedDictionaryAsyncEnumerableExtensions.ToImmutableSortedDictionaryAsync(Return42, default, x => 0, Comparer<int>.Default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedDictionaryAsyncEnumerableExtensions.ToImmutableSortedDictionaryAsync<int, int, int>(Return42, x => 0, default, Comparer<int>.Default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedDictionaryAsync<int, int, int>(default, x => 0, x => 0, CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedDictionaryAsync<int, int, int>(Return42, default, x => 0, CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedDictionaryAsync<int, int, int>(Return42, x => 0, default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedDictionaryAsyncEnumerableExtensions.ToImmutableSortedDictionaryAsync<int, int, int>(default, x => 0, x => 0, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedDictionaryAsyncEnumerableExtensions.ToImmutableSortedDictionaryAsync<int, int, int>(Return42, default, x => 0, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedDictionaryAsyncEnumerableExtensions.ToImmutableSortedDictionaryAsync<int, int, int>(Return42, x => 0, default, CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedDictionaryAsync<int, int, int>(default, x => 0, x => 0, Comparer<int>.Default, CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedDictionaryAsync(Return42, default, x => 0, Comparer<int>.Default, CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableSortedDictionaryAsync<int, int, int>(Return42, x => 0, default, Comparer<int>.Default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedDictionaryAsyncEnumerableExtensions.ToImmutableSortedDictionaryAsync<int, int, int>(default, x => 0, x => 0, Comparer<int>.Default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedDictionaryAsyncEnumerableExtensions.ToImmutableSortedDictionaryAsync(Return42, default, x => 0, Comparer<int>.Default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableSortedDictionaryAsyncEnumerableExtensions.ToImmutableSortedDictionaryAsync<int, int, int>(Return42, x => 0, default, Comparer<int>.Default, CancellationToken.None).AsTask());
         }
 
         [Fact]

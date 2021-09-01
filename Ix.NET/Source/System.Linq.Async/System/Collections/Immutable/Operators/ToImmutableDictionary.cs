@@ -3,14 +3,14 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Collections.Immutable;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static System.Linq.FunctionalHelpers;
 
-namespace System.Linq
+namespace System.Collections.Immutable
 {
-    public static partial class AsyncEnumerable
+    public static class ImmutableDictionaryAsyncEnumerableExtensions
     {
         /// <summary>
         /// Creates an immutable dictionary from an async-enumerable sequence according to a specified key selector function.

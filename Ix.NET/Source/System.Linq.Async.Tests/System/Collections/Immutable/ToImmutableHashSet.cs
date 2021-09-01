@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,10 +17,10 @@ namespace Tests
         [Fact]
         public async Task ToImmutableHashSet_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableHashSetAsync<int>(default).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableHashSetAsync<int>(default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableHashSetAsyncEnumerableExtensions.ToImmutableHashSetAsync<int>(default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableHashSetAsyncEnumerableExtensions.ToImmutableHashSetAsync<int>(default, CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToImmutableHashSetAsync(default, EqualityComparer<int>.Default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ImmutableHashSetAsyncEnumerableExtensions.ToImmutableHashSetAsync(default, EqualityComparer<int>.Default, CancellationToken.None).AsTask());
         }
 
         [Fact]
