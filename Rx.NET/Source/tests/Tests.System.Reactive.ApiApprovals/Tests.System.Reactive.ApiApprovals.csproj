@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageReference Include="Verify.Xunit" Version="11.24.0" />
+    <PackageReference Include="Verify.Xunit" Version="11.25.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
     <PackageReference Include="DiffPlex" Version="1.7.0" />
