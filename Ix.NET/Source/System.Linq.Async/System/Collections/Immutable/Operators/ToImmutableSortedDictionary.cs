@@ -10,7 +10,7 @@ using static System.Linq.FunctionalHelpers;
 
 namespace System.Collections.Immutable
 {
-    public static class ImmutableSortedDictionaryAsyncEnumerableExtensions
+    public static partial class ImmutableSortedDictionaryAsyncEnumerableExtensions
     {
         /// <summary>
         /// Creates an immutable sorted dictionary from an async-enumerable sequence according to a specified key selector function, and an element selector function.
