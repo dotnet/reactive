@@ -681,6 +681,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     private readonly _ _parent;
                     private readonly TSource _value;
+                    private bool _once;
 
                     public DelayObserver(_ parent, TSource value)
                     {
@@ -690,12 +691,16 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     public override void OnNext(TDelay value)
                     {
-                        lock (_parent._gate)
+                        if (!_once)
                         {
-                            _parent.ForwardOnNext(_value);
+                            _once = true;
+                            lock (_parent._gate)
+                            {
+                                _parent.ForwardOnNext(_value);
 
-                            _parent._delays.Remove(this);
-                            _parent.CheckDone();
+                                _parent._delays.Remove(this);
+                                _parent.CheckDone();
+                            }
                         }
                     }
 
@@ -709,12 +714,15 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     public override void OnCompleted()
                     {
-                        lock (_parent._gate)
+                        if (!_once)
                         {
-                            _parent.ForwardOnNext(_value);
+                            lock (_parent._gate)
+                            {
+                                _parent.ForwardOnNext(_value);
 
-                            _parent._delays.Remove(this);
-                            _parent.CheckDone();
+                                _parent._delays.Remove(this);
+                                _parent.CheckDone();
+                            }
                         }
                     }
                 }

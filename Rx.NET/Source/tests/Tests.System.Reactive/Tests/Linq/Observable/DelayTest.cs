@@ -1406,6 +1406,18 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        public void Delay_Duration_Selector_Immediately()
+        {
+            var list = new List<int>();
+
+            Observable.Range(1, 5)
+                .Delay(_ => Observable.Return(1))
+                .Subscribe(list.Add);
+
+            Assert.Equal(new List<int>() { 1, 2, 3, 4, 5 }, list);
+        }
+
+        [Fact]
         public void Delay_Duration_InnerDone()
         {
             var scheduler = new TestScheduler();
