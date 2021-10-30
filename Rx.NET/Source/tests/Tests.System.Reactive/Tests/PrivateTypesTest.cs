@@ -5,7 +5,6 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reflection;
 using Microsoft.Reactive.Testing;
 using Xunit;
 
@@ -144,22 +143,21 @@ namespace ReactiveTests.Tests
 
     internal class EitherBase
     {
-        protected object _value;
+        protected object ProxyValue;
 
         public override bool Equals(object obj)
         {
-            var equ = _value.GetType().GetMethods().Where(m => m.Name == "Equals" && m.GetParameters()[0].ParameterType == typeof(object)).Single();
-            return (bool)equ.Invoke(_value, new object[] { obj is EitherBase ? ((EitherBase)obj)._value : obj });
+            return ProxyValue.Equals(obj is EitherBase ? ((EitherBase)obj).ProxyValue : obj);
         }
 
         public override int GetHashCode()
         {
-            return (int)_value.GetType().GetMethod(nameof(GetHashCode)).Invoke(_value, null);
+            return (int)ProxyValue.GetType().GetMethod(nameof(GetHashCode)).Invoke(ProxyValue, null);
         }
 
         public override string ToString()
         {
-            return (string)_value.GetType().GetMethod(nameof(ToString)).Invoke(_value, null);
+            return (string)ProxyValue.GetType().GetMethod(nameof(ToString)).Invoke(ProxyValue, null);
         }
     }
 
@@ -167,30 +165,39 @@ namespace ReactiveTests.Tests
     {
         public static Either<TLeft, TRight> CreateLeft(TLeft value)
         {
-            var tpe = typeof(Observable).GetTypeInfo().Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
-            var mth = tpe.GetMethod(nameof(CreateLeft));
-            var res = mth.Invoke(null, new object[] { value });
-            return new Left(res);
+            return new Left(System.Reactive.Either<TLeft, TRight>.CreateLeft(value));
         }
 
         public static Either<TLeft, TRight> CreateRight(TRight value)
         {
-            var tpe = typeof(Observable).GetTypeInfo().Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
-            var mth = tpe.GetMethod(nameof(CreateRight));
-            var res = mth.Invoke(null, new object[] { value });
-            return new Right(res);
+            return new Right(System.Reactive.Either<TLeft, TRight>.CreateRight(value));
         }
 
         public TResult Switch<TResult>(Func<TLeft, TResult> caseLeft, Func<TRight, TResult> caseRight)
         {
-            var mth = _value.GetType().GetMethods().Where(m => m.Name == nameof(Switch) && m.ReturnType != typeof(void)).Single().MakeGenericMethod(typeof(TResult));
-            return (TResult)mth.Invoke(_value, new object[] { caseLeft, caseRight });
+            return ProxyValue switch
+            {
+                System.Reactive.Either<TLeft, TRight>.Left left => left.Switch(caseLeft, caseRight),
+                System.Reactive.Either<TLeft, TRight>.Right right => right.Switch(caseLeft, caseRight),
+                _ => throw new InvalidOperationException($"This instance was created using an unsupported type {ProxyValue.GetType()} for a {nameof(ProxyValue)}"),
+            };
         }
 
         public void Switch(Action<TLeft> caseLeft, Action<TRight> caseRight)
         {
-            var mth = _value.GetType().GetMethods().Where(m => m.Name == nameof(Switch) && m.ReturnType == typeof(void)).Single();
-            mth.Invoke(_value, new object[] { caseLeft, caseRight });
+            switch (ProxyValue)
+            {
+                case System.Reactive.Either<TLeft, TRight>.Left left:
+                    left.Switch(caseLeft, caseRight);
+                    break;
+
+                case System.Reactive.Either<TLeft, TRight>.Right right:
+                    right.Switch(caseLeft, caseRight);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"This instance was created using an unsupported type {ProxyValue.GetType()} for a {nameof(ProxyValue)}");
+            }
         }
 
         public sealed class Left : Either<TLeft, TRight>, IEquatable<Left>
@@ -199,19 +206,19 @@ namespace ReactiveTests.Tests
             {
                 get
                 {
-                    return (TLeft)_value.GetType().GetProperty(nameof(Value)).GetValue(_value, null);
+                    return (TLeft)ProxyValue.GetType().GetProperty(nameof(Value)).GetValue(ProxyValue, null);
                 }
             }
 
-            public Left(object value)
+            public Left(System.Reactive.Either<TLeft, TRight> value)
             {
-                _value = value;
+                ProxyValue = value;
             }
 
             public bool Equals(Left other)
             {
-                var equ = _value.GetType().GetMethods().Where(m => m.Name == nameof(Equals) && m.GetParameters()[0].ParameterType != typeof(object)).Single();
-                return (bool)equ.Invoke(_value, new object[] { other?._value });
+                var equ = ProxyValue.GetType().GetMethods().Where(m => m.Name == nameof(Equals) && m.GetParameters()[0].ParameterType != typeof(object)).Single();
+                return (bool)equ.Invoke(ProxyValue, new object[] { other?.ProxyValue });
             }
         }
 
@@ -221,19 +228,19 @@ namespace ReactiveTests.Tests
             {
                 get
                 {
-                    return (TRight)_value.GetType().GetProperty(nameof(Value)).GetValue(_value, null);
+                    return (TRight)ProxyValue.GetType().GetProperty(nameof(Value)).GetValue(ProxyValue, null);
                 }
             }
 
-            public Right(object value)
+            public Right(System.Reactive.Either<TLeft, TRight> value)
             {
-                _value = value;
+                ProxyValue = value;
             }
 
             public bool Equals(Right other)
             {
-                var equ = _value.GetType().GetMethods().Where(m => m.Name == nameof(Equals) && m.GetParameters()[0].ParameterType != typeof(object)).Single();
-                return (bool)equ.Invoke(_value, new object[] { other?._value });
+                var equ = ProxyValue.GetType().GetMethods().Where(m => m.Name == nameof(Equals) && m.GetParameters()[0].ParameterType != typeof(object)).Single();
+                return (bool)equ.Invoke(ProxyValue, new object[] { other?.ProxyValue });
             }
         }
     }
