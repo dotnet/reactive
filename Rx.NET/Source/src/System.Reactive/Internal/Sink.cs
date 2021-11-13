@@ -97,7 +97,7 @@ namespace System.Reactive
 
         public IObserver<TTarget> GetForwarder() => new _(this);
 
-        private sealed class _ : IObserver<TTarget>
+        private struct _ : IObserver<TTarget>
         {
             private readonly Sink<TSource, TTarget> _forward;
 
