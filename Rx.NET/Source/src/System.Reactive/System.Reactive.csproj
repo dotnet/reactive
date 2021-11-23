@@ -20,7 +20,6 @@
     <FrameworkReference Update="Microsoft.WindowsDesktop.App" PrivateAssets="all" />
   </ItemGroup>
 
-
   <ItemGroup>
     <Compile Remove="Platforms\**\*.*" />
     <EmbeddedResource Remove="Platforms\**\*.*" />
@@ -33,11 +32,6 @@
     </None>
     <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />
     <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />
-  </ItemGroup>
-
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
   </ItemGroup>
 
   <!-- UWP -->
