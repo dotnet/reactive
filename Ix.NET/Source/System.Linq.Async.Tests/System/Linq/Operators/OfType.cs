@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
-// See the LICENSE file in the project root for more information. 
+// See the LICENSE file in the project root for more information.
 
 using System;
 using System.Linq;
@@ -37,6 +37,18 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, "bar");
+            await HasNextAsync(e, "foo");
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task OfType_NotNullObject()
+        {
+            var xs = new object?[] { 42, null, "foo", null }.ToAsyncEnumerable();
+            var ys = xs.OfType<object>();
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, 42);
             await HasNextAsync(e, "foo");
             await NoNextAsync(e);
         }

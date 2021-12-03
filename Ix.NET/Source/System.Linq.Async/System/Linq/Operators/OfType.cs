@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
-// See the LICENSE file in the project root for more information. 
+// See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
 using System.Threading;
@@ -25,14 +25,14 @@ namespace System.Linq
         /// <param name="source">The async-enumerable sequence that contains the elements to be filtered.</param>
         /// <returns>An async-enumerable sequence that contains elements from the input sequence of type TResult.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IAsyncEnumerable<TResult> OfType<TResult>(this IAsyncEnumerable<object> source)
+        public static IAsyncEnumerable<TResult> OfType<TResult>(this IAsyncEnumerable<object?> source)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
             return Core(source);
 
-            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<object> source, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
+            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<object?> source, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 await foreach (var obj in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
