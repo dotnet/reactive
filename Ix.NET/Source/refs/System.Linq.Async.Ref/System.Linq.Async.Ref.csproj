@@ -16,6 +16,8 @@
       <!-- Remove all the properties set by ReferenceAssemblyProjectReference, because they cause build failures. -->
       <GlobalPropertiesToRemove>ExtrasIsReferenceAssembly;AssemblyName;Version;AssemblyTitle</GlobalPropertiesToRemove>
     </ProjectReference>
+    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.1'"
+                      Include="System.Collections.Immutable" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
