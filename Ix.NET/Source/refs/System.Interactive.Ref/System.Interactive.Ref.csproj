@@ -5,7 +5,7 @@
     <AssemblyTitle>Interactive Extensions - Main Library</AssemblyTitle>
     <AssemblyName>System.Interactive</AssemblyName>
     <Authors>Microsoft</Authors>
-    <TargetFrameworks>netstandard1.0;netcoreapp2.1;netstandard2.1;net6.0</TargetFrameworks>
+    <TargetFrameworks>net4.8;netstandard2.1;net6.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
   </PropertyGroup>
 

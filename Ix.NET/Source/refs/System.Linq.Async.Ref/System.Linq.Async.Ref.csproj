@@ -4,14 +4,15 @@
     <Description>LINQ Standard Query Operators used to express queries over asynchronous enumerable sequences.</Description>
     <AssemblyTitle>System.Linq.Async</AssemblyTitle>
     <Authors>Microsoft</Authors>
-    <TargetFrameworks>net461;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
     <PackageTags>Enumerable;Asynchronous;LINQ</PackageTags>
     <AssemblyName>System.Linq.Async</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.1' and '$(TargetFramework)' != 'netstandard2.1' " 
+    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.1' and '$(TargetFramework)' != 'netstandard2.1' and '$(TargetFramework)' != 'net6.0'" 
                       Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+    
     <ProjectReference Include="..\..\System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj"
                       OutputItemType="Analyzer" ReferenceOutputAssembly="false" Private="false">
       <!-- Remove all the properties set by ReferenceAssemblyProjectReference, because they cause build failures. -->

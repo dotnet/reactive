@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
     <Title>System.Linq.Async</Title>    
     <PackageTags>LINQ;async;streams;query</PackageTags>
     <Description>Provides support for Language-Integrated Query (LINQ) over IAsyncEnumerable&lt;T&gt; sequences.</Description>  
