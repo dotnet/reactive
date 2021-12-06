@@ -10,7 +10,6 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-#if HAS_VALUETUPLE
         public static IAsyncEnumerable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second)
         {
             if (first == null)
@@ -31,7 +30,6 @@ namespace System.Linq
                 }
             }
         }
-#endif
 
         /// <summary>
         /// Merges two async-enumerable sequences into one async-enumerable sequence by combining their elements in a pairwise fashion.

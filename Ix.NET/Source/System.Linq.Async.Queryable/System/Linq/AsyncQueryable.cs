@@ -34,7 +34,6 @@ namespace System.Linq
             return new AsyncEnumerableQuery<TElement>(source);
         }
 
-#if HAS_VALUETUPLE
         private static MethodInfo? s_Zip__TFirst_TSecond__2__0;
         
         private static MethodInfo Zip__TFirst_TSecond__2__0(Type TFirst, Type TSecond) =>
@@ -50,7 +49,6 @@ namespace System.Linq
 
             return first.Provider.CreateQuery<(TFirst, TSecond)>(Expression.Call(Zip__TFirst_TSecond__2__0(typeof(TFirst), typeof(TSecond)), first.Expression, GetSourceExpression(second)));
         }
-#endif
 
         private static Expression GetSourceExpression<TSource>(IAsyncEnumerable<TSource> source)
         {

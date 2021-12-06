@@ -1,31 +1,9 @@
 ﻿<Project>
 
   <!-- This props all need to be set in targets as they depend on the values set earlier -->
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
-    <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_CODE_COVERAGE_ATTRIBUTE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.4'">
-    <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
-    <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_TASK_FROMEXCEPTION</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'netstandard2.1' or '$(TargetFramework)' == 'netstandard2.0'">
-    <DefineConstants>$(DefineConstants);HAS_VALUETUPLE</DefineConstants>
-  </PropertyGroup>
 
   <PropertyGroup>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
   </PropertyGroup>
-
-  <!-- Remove once coverlet supports this built-in -->
-  <Target Name="CoverletGetPathMap"
-          DependsOnTargets="InitializeSourceRootMappedPaths"
-          Returns="@(_LocalTopLevelSourceRoot)"
-          Condition="'$(DeterministicSourcePaths)' == 'true'">
-    <ItemGroup>
-      <_LocalTopLevelSourceRoot Include="@(SourceRoot)" Condition="'%(SourceRoot.NestedRoot)' == ''"/>
-    </ItemGroup>
-  </Target>
 
 </Project>

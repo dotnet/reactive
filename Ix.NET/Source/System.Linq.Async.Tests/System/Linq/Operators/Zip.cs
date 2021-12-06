@@ -302,7 +302,6 @@ namespace Tests
         }
 #endif
 
-#if HAS_VALUETUPLE
          [Fact]
         public void Zip_Tuple_Null()
         {
@@ -385,6 +384,5 @@ namespace Tests
 
             await SequenceIdentity(res);
         }
-#endif
     }
 }

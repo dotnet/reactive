@@ -9,6 +9,9 @@ using BenchmarkDotNet.Attributes;
 
 namespace Benchmarks.System.Interactive
 {
+
+#if !NET6_0_OR_GREATER
+
     [MemoryDiagnoser]
     public class MinMaxBenchmark
     {
@@ -43,4 +46,5 @@ namespace Benchmarks.System.Interactive
             Volatile.Write(ref _listStore, Enumerable.Range(1, N).MaxBy(v => -v, _comparer));
         }
     }
+#endif
 }
