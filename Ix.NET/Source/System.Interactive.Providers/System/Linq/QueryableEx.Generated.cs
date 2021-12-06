@@ -67,8 +67,8 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static TSource Min<TSource>(IEnumerable<TSource> source, IComparer<TSource> comparer)
         {
-#if NET6_0
-            return Enumerable.Min(source, comparer);
+#if REFERENCE_ASSEMBLY
+            return default;
                     
 #else
             return EnumerableEx.Min(source, comparer);
@@ -105,7 +105,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IList<TSource> MinBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.MinBy(source, keySelector);
+#endif
         }
 #pragma warning restore 1591
 
@@ -142,11 +146,8 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IList<TSource> MinBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
-#if NET6_0
-            return new List<TSource>()
-            {
-                Enumerable.MinBy(source, keySelector, comparer)
-            };
+#if REFERENCE_ASSEMBLY
+            return default;
 #else
             return EnumerableEx.MinBy(source, keySelector, comparer);
 #endif
@@ -181,8 +182,8 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static TSource Max<TSource>(IEnumerable<TSource> source, IComparer<TSource> comparer)
         {
-#if NET6_0
-            return Enumerable.Max(source, comparer);
+#if REFERENCE_ASSEMBLY
+            return default;
 #else
             return EnumerableEx.Max(source, comparer);
 #endif
@@ -218,7 +219,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IList<TSource> MaxBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.MaxBy(source, keySelector);
+#endif
         }
 #pragma warning restore 1591
 
@@ -255,11 +260,8 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IList<TSource> MaxBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
-#if NET6_0
-            return new List<TSource>
-            {
-                Enumerable.MaxBy(source, keySelector, comparer)
-            };
+#if REFERENCE_ASSEMBLY
+            return default;
 #else
             return EnumerableEx.MaxBy(source, keySelector, comparer);
 #endif
@@ -284,11 +286,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Share<TSource, TResult>(default(IQueryable<TSource>), default(Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
-#endif
                     source.Expression,
                     selector
                 )
@@ -1948,7 +1946,7 @@ namespace System.Linq
         public static IEnumerable<TSource> TakeLast<TSource>(IEnumerable<TSource> source, int count)
         {
 #if REFERENCE_ASSEMBLY
-            return Enumerable.TakeLast(source, count);
+            return default;
 #else
             return EnumerableEx.TakeLast(source, count);
 #endif
@@ -1982,7 +1980,7 @@ namespace System.Linq
         public static IEnumerable<TSource> SkipLast<TSource>(IEnumerable<TSource> source, int count)
         {
 #if REFERENCE_ASSEMBLY
-            return null;
+            return default;
 #else
             return EnumerableEx.SkipLast(source, count);
 #endif
