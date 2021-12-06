@@ -11,6 +11,7 @@ namespace Tests
 {
     public class MaxBy : Tests
     {
+#if !NET6_0_OR_GREATER
         [Fact]
         public void MaxBy_Arguments()
         {
@@ -33,5 +34,6 @@ namespace Tests
         {
             AssertThrows<InvalidOperationException>(() => Enumerable.Empty<int>().MaxBy(x => x));
         }
+#endif
     }
 }

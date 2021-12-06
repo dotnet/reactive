@@ -11,6 +11,7 @@ namespace Tests
 {
     public class Max : Tests
     {
+#if !NET6_0_OR_GREATER
         [Fact]
         public void Max_Arguments()
         {
@@ -31,5 +32,6 @@ namespace Tests
                 return Comparer<int>.Default.Compare(x % 7, y % 7);
             }
         }
+#endif
     }
 }

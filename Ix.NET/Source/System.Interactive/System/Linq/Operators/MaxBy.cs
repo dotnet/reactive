@@ -8,6 +8,7 @@ namespace System.Linq
 {
     public static partial class EnumerableEx
     {
+#if !(REFERENCE_ASSEMBLY && (NET6_0))
         /// <summary>
         /// Returns the elements with the maximum key value by using the default comparer to compare key values.
         /// </summary>
@@ -80,5 +81,6 @@ namespace System.Linq
 
             return result;
         }
+#endif
     }
 }

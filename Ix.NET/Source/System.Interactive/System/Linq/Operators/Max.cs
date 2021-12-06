@@ -8,6 +8,8 @@ namespace System.Linq
 {
     public static partial class EnumerableEx
     {
+
+#if !(REFERENCE_ASSEMBLY && (NET6_0))
         /// <summary>
         /// Returns the maximum value in the enumerable sequence by using the specified comparer to compare values.
         /// </summary>
@@ -24,5 +26,6 @@ namespace System.Linq
 
             return MaxBy(source, x => x, comparer).First();
         }
+#endif
     }
 }

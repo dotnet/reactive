@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\System.Interactive\System.Interactive.csproj" />
-    <ReferenceAssemblyProjectReference Include="..\refs\System.Interactive.Providers.Ref\System.Interactive.Providers.Ref.csproj" />
+    <ReferenceAssemblyProjectReference Include="..\refs\System.Interactive.Providers.Ref\System.Interactive.Providers.Ref.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">

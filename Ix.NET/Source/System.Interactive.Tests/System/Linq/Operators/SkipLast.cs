@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Tests
 {
-#if !NETCOREAPP2_1
+#if !NETCOREAPP2_1_OR_GREATER
     public class SkipLast : Tests
     {
         [Fact]
