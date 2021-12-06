@@ -25,11 +25,7 @@ namespace System.Linq
             return source.Provider.Execute<bool>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.IsEmpty<TSource>(default(IQueryable<TSource>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression
                 )
             );
@@ -60,11 +56,7 @@ namespace System.Linq
             return source.Provider.Execute<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Min<TSource>(default(IQueryable<TSource>), default(IComparer<TSource>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     Expression.Constant(comparer, typeof(IComparer<TSource>))
                 )
@@ -75,7 +67,12 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static TSource Min<TSource>(IEnumerable<TSource> source, IComparer<TSource> comparer)
         {
+#if NET6_0
+            return Enumerable.Min(source, comparer);
+                    
+#else
             return EnumerableEx.Min(source, comparer);
+#endif
         }
 #pragma warning restore 1591
 
@@ -97,11 +94,7 @@ namespace System.Linq
             return source.Provider.Execute<IList<TSource>>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.MinBy<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
-#endif
                     source.Expression,
                     keySelector
                 )
@@ -137,11 +130,7 @@ namespace System.Linq
             return source.Provider.Execute<IList<TSource>>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.MinBy<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
-#endif
                     source.Expression,
                     keySelector,
                     Expression.Constant(comparer, typeof(IComparer<TKey>))
@@ -153,7 +142,14 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IList<TSource> MinBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
+#if NET6_0
+            return new List<TSource>()
+            {
+                Enumerable.MinBy(source, keySelector, comparer)
+            };
+#else
             return EnumerableEx.MinBy(source, keySelector, comparer);
+#endif
         }
 #pragma warning restore 1591
 
@@ -174,11 +170,7 @@ namespace System.Linq
             return source.Provider.Execute<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Max<TSource>(default(IQueryable<TSource>), default(IComparer<TSource>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     Expression.Constant(comparer, typeof(IComparer<TSource>))
                 )
@@ -189,7 +181,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static TSource Max<TSource>(IEnumerable<TSource> source, IComparer<TSource> comparer)
         {
+#if NET6_0
+            return Enumerable.Max(source, comparer);
+#else
             return EnumerableEx.Max(source, comparer);
+#endif
         }
 #pragma warning restore 1591
 
@@ -211,11 +207,7 @@ namespace System.Linq
             return source.Provider.Execute<IList<TSource>>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.MaxBy<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
-#endif
                     source.Expression,
                     keySelector
                 )
@@ -251,11 +243,7 @@ namespace System.Linq
             return source.Provider.Execute<IList<TSource>>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.MaxBy<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
-#endif
                     source.Expression,
                     keySelector,
                     Expression.Constant(comparer, typeof(IComparer<TKey>))
@@ -267,7 +255,14 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IList<TSource> MaxBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
+#if NET6_0
+            return new List<TSource>
+            {
+                Enumerable.MaxBy(source, keySelector, comparer)
+            };
+#else
             return EnumerableEx.MaxBy(source, keySelector, comparer);
+#endif
         }
 #pragma warning restore 1591
 
@@ -326,11 +321,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Publish<TSource, TResult>(default(IQueryable<TSource>), default(Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
-#endif
                     source.Expression,
                     selector
                 )
@@ -363,11 +354,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Memoize<TSource, TResult>(default(IQueryable<TSource>), default(Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
-#endif
                     source.Expression,
                     selector
                 )
@@ -401,11 +388,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Memoize<TSource, TResult>(default(IQueryable<TSource>), default(int), default(Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
-#endif
                     source.Expression,
                     Expression.Constant(readerCount, typeof(int)),
                     selector
@@ -438,11 +421,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Create<TResult>(default(IQueryProvider), default(Expression<Func<IEnumerator<TResult>>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     getEnumerator
                 )
@@ -472,11 +451,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Return<TResult>(default(IQueryProvider), default(TResult))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     Expression.Constant(value, typeof(TResult))
                 )
@@ -508,11 +483,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Throw<TResult>(default(IQueryProvider), default(Exception))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     Expression.Constant(exception, typeof(Exception))
                 )
@@ -544,11 +515,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Defer<TResult>(default(IQueryProvider), default(Expression<Func<IEnumerable<TResult>>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     enumerableFactory
                 )
@@ -588,11 +555,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Generate<TState, TResult>(default(IQueryProvider), default(TState), default(Expression<Func<TState, bool>>), default(Expression<Func<TState, TState>>), default(Expression<Func<TState, TResult>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TState), typeof(TResult)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     Expression.Constant(initialState),
                     condition,
@@ -631,11 +594,7 @@ namespace System.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Using<TSource, TResource>(default(IQueryProvider), default(Expression<Func<TResource>>), default(Expression<Func<TResource, IEnumerable<TSource>>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResource)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     resourceFactory,
                     enumerableFactory
@@ -666,11 +625,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Repeat<TResult>(default(IQueryProvider), default(TResult))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     Expression.Constant(value, typeof(TResult))
                 )
@@ -704,11 +659,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Catch<TSource, TException>(default(IQueryable<TSource>), default(Expression<Func<TException, IEnumerable<TSource>>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TException)),
-#endif
                     source.Expression,
                     handler
                 )
@@ -738,11 +689,7 @@ namespace System.Linq
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Catch<TSource>(default(IQueryable<IEnumerable<TSource>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     sources.Expression
                 )
             );
@@ -773,11 +720,7 @@ namespace System.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Catch<TSource>(default(IQueryProvider), default(IEnumerable<TSource>[]))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     GetSourceExpression(sources)
                 )
@@ -809,11 +752,7 @@ namespace System.Linq
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Catch<TSource>(default(IQueryable<TSource>), default(IEnumerable<TSource>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -845,11 +784,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Finally<TSource>(default(IQueryable<TSource>), default(Expression<Action>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     finallyAction
                 )
@@ -881,11 +816,7 @@ namespace System.Linq
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.OnErrorResumeNext<TSource>(default(IQueryable<TSource>), default(IEnumerable<TSource>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -917,11 +848,7 @@ namespace System.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.OnErrorResumeNext<TSource>(default(IQueryProvider), default(IEnumerable<TSource>[]))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     GetSourceExpression(sources)
                 )
@@ -950,11 +877,7 @@ namespace System.Linq
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.OnErrorResumeNext<TSource>(default(IQueryable<IEnumerable<TSource>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     sources.Expression
                 )
             );
@@ -982,11 +905,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Retry<TSource>(default(IQueryable<TSource>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression
                 )
             );
@@ -1015,11 +934,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Retry<TSource>(default(IQueryable<TSource>), default(int))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     Expression.Constant(retryCount, typeof(int))
                 )
@@ -1054,11 +969,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.While<TResult>(default(IQueryProvider), default(Expression<Func<bool>>), default(IEnumerable<TResult>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     condition,
                     GetSourceExpression(source)
@@ -1097,11 +1008,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.If<TResult>(default(IQueryProvider), default(Expression<Func<bool>>), default(IEnumerable<TResult>), default(IEnumerable<TResult>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     condition,
                     GetSourceExpression(thenSource),
@@ -1138,11 +1045,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.If<TResult>(default(IQueryProvider), default(Expression<Func<bool>>), default(IEnumerable<TResult>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     condition,
                     GetSourceExpression(thenSource)
@@ -1175,11 +1078,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.DoWhile<TResult>(default(IQueryable<TResult>), default(Expression<Func<bool>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
-#endif
                     source.Expression,
                     condition
                 )
@@ -1215,11 +1114,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Case<TValue, TResult>(default(IQueryProvider), default(Expression<Func<TValue>>), default(IDictionary<TValue, IEnumerable<TResult>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TValue), typeof(TResult)),
-#endif
                     selector,
                     Expression.Constant(sources, typeof(IDictionary<TValue, IEnumerable<TResult>>))
                 )
@@ -1258,11 +1153,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Case<TValue, TResult>(default(IQueryProvider), default(Expression<Func<TValue>>), default(IDictionary<TValue, IEnumerable<TResult>>), default(IEnumerable<TResult>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TValue), typeof(TResult)),
-#endif
                     selector,
                     Expression.Constant(sources, typeof(IDictionary<TValue, IEnumerable<TResult>>))
                 )
@@ -1298,11 +1189,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.For<TSource, TResult>(default(IQueryProvider), default(IEnumerable<TSource>), default(Expression<Func<TSource, IEnumerable<TResult>>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
-#endif
                     GetSourceExpression(source),
                     resultSelector
                 )
@@ -1331,11 +1218,7 @@ namespace System.Linq
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Concat<TSource>(default(IQueryable<IEnumerable<TSource>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     GetSourceExpression(sources)
                 )
             );
@@ -1366,11 +1249,7 @@ namespace System.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Concat<TSource>(default(IQueryProvider), default(IEnumerable<TSource>[]))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     GetSourceExpression(sources)
                 )
@@ -1403,11 +1282,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TOther>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.SelectMany<TSource, TOther>(default(IQueryable<TSource>), default(IEnumerable<TOther>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TOther)),
-#endif
                     source.Expression,
                     GetSourceExpression(other)
                 )
@@ -1437,11 +1312,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Hide<TSource>(default(IQueryable<TSource>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression
                 )
             );
@@ -1472,11 +1343,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Do<TSource>(default(IQueryable<TSource>), default(Expression<Action<TSource>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     onNext
                 )
@@ -1511,11 +1378,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Do<TSource>(default(IQueryable<TSource>), default(Expression<Action<TSource>>), default(Expression<Action>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     onNext,
                     onCompleted
@@ -1551,11 +1414,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Do<TSource>(default(IQueryable<TSource>), default(Expression<Action<TSource>>), default(Expression<Action<Exception>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     onNext,
                     onError
@@ -1594,11 +1453,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Do<TSource>(default(IQueryable<TSource>), default(Expression<Action<TSource>>), default(Expression<Action<Exception>>), default(Expression<Action>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     onNext,
                     onError,
@@ -1632,11 +1487,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Do<TSource>(default(IQueryable<TSource>), default(IObserver<TSource>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     Expression.Constant(observer, typeof(IObserver<TSource>))
                 )
@@ -1666,11 +1517,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Buffer<TSource>(default(IQueryable<TSource>), default(int))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     Expression.Constant(count, typeof(int))
                 )
@@ -1701,11 +1548,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Buffer<TSource>(default(IQueryable<TSource>), default(int), default(int))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     Expression.Constant(count, typeof(int)),
                     Expression.Constant(skip, typeof(int))
@@ -1735,11 +1578,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.IgnoreElements<TSource>(default(IQueryable<TSource>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression
                 )
             );
@@ -1771,11 +1610,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Distinct<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
-#endif
                     source.Expression,
                     keySelector
                 )
@@ -1811,11 +1646,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Distinct<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IEqualityComparer<TKey>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
-#endif
                     source.Expression,
                     keySelector,
                     Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))
@@ -1845,11 +1676,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.DistinctUntilChanged<TSource>(default(IQueryable<TSource>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression
                 )
             );
@@ -1880,11 +1707,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.DistinctUntilChanged<TSource>(default(IQueryable<TSource>), default(IEqualityComparer<TSource>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     Expression.Constant(comparer, typeof(IEqualityComparer<TSource>))
                 )
@@ -1917,11 +1740,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.DistinctUntilChanged<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
-#endif
                     source.Expression,
                     keySelector
                 )
@@ -1957,11 +1776,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.DistinctUntilChanged<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IEqualityComparer<TKey>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
-#endif
                     source.Expression,
                     keySelector,
                     Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))
@@ -1994,11 +1809,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Expand<TSource>(default(IQueryable<TSource>), default(Expression<Func<TSource, IEnumerable<TSource>>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     selector
                 )
@@ -2028,11 +1839,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.StartWith<TSource>(default(IQueryable<TSource>), default(TSource[]))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     Expression.Constant(values, typeof(TSource[]))
                 )
@@ -2066,11 +1873,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TAccumulate>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Scan<TSource, TAccumulate>(default(IQueryable<TSource>), default(TAccumulate), default(Expression<Func<TAccumulate, TSource, TAccumulate>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TAccumulate)),
-#endif
                     source.Expression,
                     Expression.Constant(seed, typeof(TAccumulate)),
                     accumulator
@@ -2103,11 +1906,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Scan<TSource>(default(IQueryable<TSource>), default(Expression<Func<TSource, TSource, TSource>>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     accumulator
                 )
@@ -2137,11 +1936,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.TakeLast<TSource>(default(IQueryable<TSource>), default(int))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     Expression.Constant(count, typeof(int))
                 )
@@ -2153,7 +1948,7 @@ namespace System.Linq
         public static IEnumerable<TSource> TakeLast<TSource>(IEnumerable<TSource> source, int count)
         {
 #if REFERENCE_ASSEMBLY
-            return null;
+            return Enumerable.TakeLast(source, count);
 #else
             return EnumerableEx.TakeLast(source, count);
 #endif
@@ -2175,11 +1970,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.SkipLast<TSource>(default(IQueryable<TSource>), default(int))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     Expression.Constant(count, typeof(int))
                 )
@@ -2212,11 +2003,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Repeat<TSource>(default(IQueryable<TSource>))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression
                 )
             );
@@ -2245,11 +2032,7 @@ namespace System.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Repeat<TSource>(default(IQueryable<TSource>), default(int))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
                     source.Expression,
                     Expression.Constant(count, typeof(int))
                 )
@@ -2278,11 +2061,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Empty<TResult>(default(IQueryProvider))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider))
                 )
             );
@@ -2311,11 +2090,7 @@ namespace System.Linq
             return provider.CreateQuery<int>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Range(default(IQueryProvider), default(int), default(int))),
-#else
                     (MethodInfo)MethodInfo.GetCurrentMethod(),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     Expression.Constant(start, typeof(int)),
                     Expression.Constant(count, typeof(int))
@@ -2347,11 +2122,7 @@ namespace System.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Repeat<TResult>(default(IQueryProvider), default(TResult), default(int))),
-#else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
-#endif
                     Expression.Constant(provider, typeof(IQueryProvider)),
                     Expression.Constant(element, typeof(TResult)),
                     Expression.Constant(count, typeof(int))

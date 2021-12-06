@@ -20,8 +20,11 @@ namespace Benchmarks.System.Interactive
                 typeof(BufferCountBenchmark),
                 typeof(IgnoreElementsBenchmark),
                 typeof(DeferBenchmark),
-                typeof(RetryBenchmark),
+                typeof(RetryBenchmark)
+#if !NET6_0_OR_GREATER
+                ,
                 typeof(MinMaxBenchmark)
+#endif
             });
 
             switcher.Run();
