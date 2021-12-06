@@ -6,6 +6,7 @@
     <Authors>Microsoft</Authors>
     <TargetFrameworks>net461;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <PackageTags>Enumerable;Asynchronous;LINQ</PackageTags>
+    <AssemblyName>System.Linq.Async</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
