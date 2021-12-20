@@ -8,7 +8,7 @@ namespace System.Linq
 {
     public static partial class EnumerableEx
     {
-#if !(REFERENCE_ASSEMBLY && (NET6_0))
+#if !(REFERENCE_ASSEMBLY && (NET6_0_OR_GREATER))
         /// <summary>
         /// Returns the elements with the maximum key value by using the default comparer to compare key values.
         /// </summary>

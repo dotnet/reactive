@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
 
-#if !(REFERENCE_ASSEMBLY && (NET6_0))
+#if !(REFERENCE_ASSEMBLY && (NET6_0_OR_GREATER))
         /// <summary>
         /// Returns the maximum value in the enumerable sequence by using the specified comparer to compare values.
         /// </summary>
