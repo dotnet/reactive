@@ -8,7 +8,7 @@ namespace System.Linq
 {
     public static partial class EnumerableEx
     {
-#if !(REFERENCE_ASSEMBLY && (NETCOREAPP2_1 || NETSTANDARD2_1 ))
+#if !(REFERENCE_ASSEMBLY && (NETCOREAPP2_1_OR_GREATER || NETSTANDARD2_1_OR_GREATER ))
         /// <summary>
         /// Returns a specified number of contiguous elements from the end of the sequence.
         /// </summary>
