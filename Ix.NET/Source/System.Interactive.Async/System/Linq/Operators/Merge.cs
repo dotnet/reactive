@@ -14,7 +14,7 @@ namespace System.Linq
         /// Merges elements from all of the specified async-enumerable sequences into a single async-enumerable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
-        /// <param name="sources">Observable sequences.</param>
+        /// <param name="sources">Async-enumerable sequences.</param>
         /// <returns>The async-enumerable sequence that merges the elements of the async-enumerable sequences.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Merge<TSource>(params IAsyncEnumerable<TSource>[] sources)
@@ -337,7 +337,7 @@ namespace System.Linq
         /// Merges elements from all inner async-enumerable sequences into a single async-enumerable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
-        /// <param name="sources">Observable sequence of inner async-enumerable sequences.</param>
+        /// <param name="sources">Async-enumerable sequence of inner async-enumerable sequences.</param>
         /// <returns>The async-enumerable sequence that merges the elements of the inner sequences.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Merge<TSource>(this IAsyncEnumerable<IAsyncEnumerable<TSource>> sources)
