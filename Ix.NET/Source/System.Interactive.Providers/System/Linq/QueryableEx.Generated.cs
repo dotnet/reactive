@@ -108,7 +108,7 @@ namespace System.Linq
 #if REFERENCE_ASSEMBLY
             return default;
 #else
-            return EnumerableEx.MinBy(source, keySelector);
+            return EnumerableEx.MinByWithTies(source, keySelector);
 #endif
         }
 #pragma warning restore 1591
@@ -142,6 +142,35 @@ namespace System.Linq
             );
         }
 
+        /// <summary>
+        /// Returns the elements with the minimum key value by using the specified comparer to compare key values.
+        /// </summary>
+        /// <typeparam name="TSource">Source sequence element type.</typeparam>
+        /// <typeparam name="TKey">Key type.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="keySelector">Key selector used to extract the key for each element in the sequence.</param>
+        /// <param name="comparer">Comparer used to determine the minimum key value.</param>
+        /// <returns>List with the elements that share the same minimum key value.</returns>
+        public static IList<TSource> MinByWithTies<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
+
+            return source.Provider.Execute<IList<TSource>>(
+                Expression.Call(
+                    null,
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    source.Expression,
+                    keySelector,
+                    Expression.Constant(comparer, typeof(IComparer<TKey>))
+                )
+            );
+        }
+
 #pragma warning disable 1591
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IList<TSource> MinBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
@@ -149,7 +178,17 @@ namespace System.Linq
 #if REFERENCE_ASSEMBLY
             return default;
 #else
-            return EnumerableEx.MinBy(source, keySelector, comparer);
+            return EnumerableEx.MinByWithTies(source, keySelector, comparer);
+#endif
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static IList<TSource> MinByWithTies<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
+            return EnumerableEx.MinByWithTies(source, keySelector, comparer);
 #endif
         }
 #pragma warning restore 1591
@@ -215,6 +254,31 @@ namespace System.Linq
             );
         }
 
+        /// <summary>
+        /// Returns the elements with the maximum key value by using the default comparer to compare key values.
+        /// </summary>
+        /// <typeparam name="TSource">Source sequence element type.</typeparam>
+        /// <typeparam name="TKey">Key type.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="keySelector">Key selector used to extract the key for each element in the sequence.</param>
+        /// <returns>List with the elements that share the same maximum key value.</returns>
+        public static IList<TSource> MaxByWithTies<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.Execute<IList<TSource>>(
+                Expression.Call(
+                    null,
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    source.Expression,
+                    keySelector
+                )
+            );
+        }
+
 #pragma warning disable 1591
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IList<TSource> MaxBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
@@ -222,10 +286,22 @@ namespace System.Linq
 #if REFERENCE_ASSEMBLY
             return default;
 #else
-            return EnumerableEx.MaxBy(source, keySelector);
+            return EnumerableEx.MaxByWithTies(source, keySelector);
+#endif
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static IList<TSource> MaxByWithTies<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
+            return EnumerableEx.MaxByWithTies(source, keySelector);
 #endif
         }
 #pragma warning restore 1591
+
+
 
         /// <summary>
         /// Returns the elements with the minimum key value by using the specified comparer to compare key values.
@@ -263,7 +339,7 @@ namespace System.Linq
 #if REFERENCE_ASSEMBLY
             return default;
 #else
-            return EnumerableEx.MaxBy(source, keySelector, comparer);
+            return EnumerableEx.MaxByWithTies(source, keySelector, comparer);
 #endif
         }
 #pragma warning restore 1591
