@@ -19,7 +19,7 @@ namespace System.Linq
 
         public bool Equals(Maybe<T> other) => HasValue == other.HasValue && EqualityComparer<T>.Default.Equals(Value, other.Value);
         public override bool Equals(object? other) => other is Maybe<T> m && Equals(m);
-        public override int GetHashCode() => HasValue ? EqualityComparer<T>.Default.GetHashCode(Value) : 0;
+        public override int GetHashCode() => HasValue ? EqualityComparer<T>.Default.GetHashCode(Value!) : 0;
 
         public static bool operator ==(Maybe<T> first, Maybe<T> second) => first.Equals(second);
         public static bool operator !=(Maybe<T> first, Maybe<T> second) => !first.Equals(second);

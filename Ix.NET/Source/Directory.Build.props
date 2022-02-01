@@ -4,7 +4,7 @@
     <MinClientVersion>2.12</MinClientVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Authors>.NET Foundation and Contributors</Authors>
-    <PackageIconUrl>https://raw.githubusercontent.com/dotnet/reactive/0f837d11385cfaf575861ccc5a5fbcafb22d888f/Rx.NET/Resources/Artwork/Logo.png</PackageIconUrl>
+    <PackageIcon>Logo.png</PackageIcon>
     <PackageProjectUrl>https://github.com/dotnet/reactive</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -27,6 +27,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.255" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\Rx.NET\Resources\Artwork\Logo.png" Pack="true" PackagePath="\" Visible="false"  />
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">

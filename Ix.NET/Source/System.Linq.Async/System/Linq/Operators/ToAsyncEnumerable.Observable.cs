@@ -85,7 +85,7 @@ namespace System.Linq
                         {
                             var completed = Volatile.Read(ref _completed);
 
-                            if (_values!.TryDequeue(out _current))
+                            if (_values!.TryDequeue(out _current!))
                             {
                                 return true;
                             }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28606.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32131.331
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{87534290-A7A6-47A4-9A3A-D0D21A9AD1D4}"
 EndProject
@@ -13,7 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.build.props = Directory.build.props
 		Directory.build.targets = Directory.build.targets
 		global.json = global.json
-		NuGet.Config = NuGet.Config
 		version.json = version.json
 	EndProjectSection
 EndProject
@@ -62,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks.System.Interacti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Linq.Async.Ref", "refs\System.Linq.Async.Ref\System.Linq.Async.Ref.csproj", "{1754B36C-D0DB-4E5D-8C30-1F116046DC0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Linq.Async.SourceGenerator", "System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj", "{5C26D649-5ED4-49EE-AFBD-8FA8F12C4AE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Linq.Async.SourceGenerator", "System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj", "{5C26D649-5ED4-49EE-AFBD-8FA8F12C4AE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
