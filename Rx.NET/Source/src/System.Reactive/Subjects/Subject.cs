@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
-// See the LICENSE file in the project root for more information. 
+// See the LICENSE file in the project root for more information.
 
 using System.Reactive.Disposables;
 using System.Threading;
@@ -77,7 +77,7 @@ namespace System.Reactive.Subjects
                 {
                     foreach (var observer in observers)
                     {
-                        observer.Observer?.OnCompleted();
+                        observer.Observer.OnCompleted();
                     }
 
                     break;
@@ -119,7 +119,7 @@ namespace System.Reactive.Subjects
                 {
                     foreach (var observer in observers)
                     {
-                        observer.Observer?.OnError(error);
+                        observer.Observer.OnError(error);
                     }
 
                     break;
@@ -144,7 +144,7 @@ namespace System.Reactive.Subjects
 
             foreach (var observer in observers)
             {
-                observer.Observer?.OnNext(value);
+                observer.Observer.OnNext(value);
             }
         }
 
@@ -255,7 +255,7 @@ namespace System.Reactive.Subjects
         private sealed class SubjectDisposable : IDisposable
         {
             private Subject<T> _subject;
-            private volatile IObserver<T>? _observer;
+            private volatile IObserver<T> _observer;
 
             public SubjectDisposable(Subject<T> subject, IObserver<T> observer)
             {
@@ -263,11 +263,11 @@ namespace System.Reactive.Subjects
                 _observer = observer;
             }
 
-            public IObserver<T>? Observer => _observer;
+            public IObserver<T> Observer => _observer;
 
             public void Dispose()
             {
-                var observer = Interlocked.Exchange(ref _observer, null);
+                var observer = Interlocked.Exchange(ref _observer, null!);
                 if (observer == null)
                 {
                     return;
