@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -281,6 +282,48 @@ namespace Tests
             // Assert.True(subscribed);
 
             await AssertThrowsAsync(e.MoveNextAsync(), ex);
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable_Observable_Throw_ActiveException()
+        {
+            // No inlining as we're asserting that this function must be mentioned in the exception stacktrace
+            [MethodImpl(MethodImplOptions.NoInlining)]
+            void ThrowsException()
+            {
+                throw new Exception("Bang!");
+            }
+
+            var subscribed = false;
+
+            var xs = new MyObservable<int>(obs =>
+            {
+                subscribed = true;
+
+                try
+                {
+                    ThrowsException();
+                }
+                catch (Exception ex)
+                {
+                    // `ex` is active at this point as it has been thrown.
+                    // Therefore the stack trace should be captured by ToAsyncEnumerable.
+                    // See 'Remarks' at https://docs.microsoft.com/en-us/dotnet/api/system.runtime.exceptionservices.exceptiondispatchinfo.capture
+                    obs.OnError(ex);
+                }
+
+                return new MyDisposable(() => { });
+            }).ToAsyncEnumerable();
+
+            Assert.False(subscribed);
+
+            var e = xs.GetAsyncEnumerator();
+
+            // NB: Breaking change to align with lazy nature of async iterators.
+            // Assert.True(subscribed);
+
+            var actual = await AssertThrowsAsync<Exception>(e.MoveNextAsync().AsTask());
+            Assert.Contains(nameof(ThrowsException), actual.StackTrace);
         }
 
         [Fact]
