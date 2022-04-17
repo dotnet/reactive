@@ -566,7 +566,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TSignal">The arbitrary element type signaled by the handler observable.</typeparam>
         /// <param name="source">Observable sequence to keep repeating when it successfully terminates.</param>
-        /// <param name="handler">The function that is called for each observer and takes an observable sequence objects.
+        /// <param name="handler">The function that is called for each observer and takes an observable sequence of objects.
         /// It should return an observable of arbitrary items that should signal that arbitrary item in
         /// response to receiving the completion signal from the source observable. If this observable signals
         /// a terminal event, the sequence is terminated with that signal instead.</param>
