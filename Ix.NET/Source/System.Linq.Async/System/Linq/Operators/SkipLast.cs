@@ -45,27 +45,14 @@ namespace System.Linq
 
             static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, int count, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
-                var queue = new Queue<TSource>();
+                var q = new Queue<TSource>();
 
-                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                while (await e.MoveNextAsync())
+                await foreach (var x in source.WithCancellation(cancellationToken))
                 {
-                    if (queue.Count == count)
-                    {
-                        do
-                        {
-                            if (queue.Count > 0)
-                                yield return queue.Dequeue();
-                            queue.Enqueue(e.Current);
-                        }
-                        while (await e.MoveNextAsync());
-                        break;
-                    }
-                    else
-                    {
-                        queue.Enqueue(e.Current);
-                    }
+                    q.Enqueue(x);
+
+                    if (q.Count > count)
+                        yield return q.Dequeue();
                 }
             }
         }

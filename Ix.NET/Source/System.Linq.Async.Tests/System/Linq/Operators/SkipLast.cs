@@ -70,7 +70,8 @@ namespace Tests
             var ys = xs.SkipLast(0);
 
             Assert.NotSame(xs, ys);
-            await NoNextAsync(ys.GetAsyncEnumerator());
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, 1);
         }
 
         private async IAsyncEnumerable<int> Xs()
