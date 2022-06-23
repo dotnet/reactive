@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
-// See the LICENSE file in the project root for more information. 
+// See the LICENSE file in the project root for more information.
 
 using System;
 using System.Collections.Generic;
@@ -64,12 +64,13 @@ namespace Tests
         }
 
         [Fact]
-        public void SkipLast_Zero_NoAlias()
+        public async Task SkipLast_Zero_NoAlias()
         {
             var xs = Xs();
             var ys = xs.SkipLast(0);
 
             Assert.NotSame(xs, ys);
+            await NoNextAsync(ys.GetAsyncEnumerator());
         }
 
         private async IAsyncEnumerable<int> Xs()
