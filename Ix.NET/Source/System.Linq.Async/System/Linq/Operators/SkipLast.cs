@@ -47,7 +47,7 @@ namespace System.Linq
             {
                 var q = new Queue<TSource>();
 
-                await foreach (var x in source.WithCancellation(cancellationToken))
+                await foreach (var x in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     q.Enqueue(x);
 
