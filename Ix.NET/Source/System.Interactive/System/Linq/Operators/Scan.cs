@@ -54,6 +54,8 @@ namespace System.Linq
         {
             var acc = seed;
 
+            yield return acc;
+
             foreach (var item in source)
             {
                 acc = accumulator(acc, item);
@@ -73,10 +75,11 @@ namespace System.Linq
                 {
                     hasSeed = true;
                     acc = item;
-                    continue;
                 }
-
-                acc = accumulator(acc, item);
+                else
+                {
+                    acc = accumulator(acc, item);
+                }
 
                 yield return acc;
             }
