@@ -38,21 +38,34 @@ namespace System.Linq
                     return source;
                 }
 
-                count = 0;
+                return source.Wrap();
             }
 
             return Core(source, count);
 
-            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, int count, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, int count,
+                [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
-                var q = new Queue<TSource>();
+                var queue = new Queue<TSource>();
 
-                await foreach (var x in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                while (await e.MoveNextAsync())
                 {
-                    q.Enqueue(x);
+                    if (queue.Count == count)
+                    {
+                        do
+                        {
+                            yield return queue.Dequeue();
+                            queue.Enqueue(e.Current);
+                        } while (await e.MoveNextAsync());
 
-                    if (q.Count > count)
-                        yield return q.Dequeue();
+                        break;
+                    }
+                    else
+                    {
+                        queue.Enqueue(e.Current);
+                    }
                 }
             }
         }
