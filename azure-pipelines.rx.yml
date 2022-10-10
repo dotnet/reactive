@@ -34,7 +34,7 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 6.x SDK
+      displayName: Use .NET 6.0.x SDK
       inputs:
         version: 6.x
 
