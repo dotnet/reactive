@@ -186,7 +186,7 @@
     <None Include="build\_._" PackagePath="lib\netcoreapp3.1" Pack="true" />
     <None Include="build\_._" PackagePath="build\net5.0;build\net5.0-windows10.0.19041" Pack="true" />
     <None Include="build\_._" PackagePath="buildTransitive\net5.0;buildTransitive\net5.0-windows10.0.19041" Pack="true" />
-    <None Include="build\_._" PackagePath="build\net6.0" Pack="true" />
+    <None Include="build\_._" PackagePath="build\net6.0;build\net6.0-windows10.0.19041" Pack="true" />
     <None Include="build\_._" PackagePath="buildTransitive\net6.0" Pack="true" />
     <None Include="build\System.Reactive.targets" PackagePath="buildTransitive\netcoreapp3.1" Pack="true" />
     <None Include="build\System.Reactive.targets" PackagePath="build\netcoreapp3.1" Pack="true" />
