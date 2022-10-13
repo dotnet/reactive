@@ -34,15 +34,11 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET 6.0.x SDK
+      displayName: Use .NET Core 5.0.x SDK
       inputs:
-        version: 6.0.x
-
-    - task: UseDotNet@2
-      displayName: .NET Core 3.1 runtime
-      inputs:
-        version: '3.1.x'
-        packageType: runtime
+        version: 5.0.x
+        includePreviewVersions: true
+        performMultiLevelLookup: true
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -123,10 +119,6 @@ stages:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
     steps:
-    - task: UseDotNet@2
-      inputs:
-        version: 6.0.x
-
     - task: UseDotNet@2
       inputs:
         version: 5.0.x
