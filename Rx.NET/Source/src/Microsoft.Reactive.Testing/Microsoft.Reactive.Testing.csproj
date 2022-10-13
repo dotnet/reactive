@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net472;uap10.0.16299;netstandard2.0;net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net472;uap10.0.16299;netstandard2.0;net5.0</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <Description>Reactive Extensions Testing Library containing interfaces and classes providing functionality to test applications and libraries built using Reactive Extensions.</Description>    
     <AssemblyTitle>Microsoft.Reactive.Testing - Testing Helper Library</AssemblyTitle>    
