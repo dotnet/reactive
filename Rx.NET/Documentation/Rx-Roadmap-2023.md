@@ -166,7 +166,7 @@ A more detailed description of how this first step would be achieved can be foun
 
 ### Rx.Async
 
-We want to make preview builds of Rx.Async available as soon as possible. We don't know of any technical reason to tie this to the release described in the preceding section. In the long run we expect that we would want Rx.NET and Rx.NET.Async releases to be synchronized. (So each new Rx.NET release would simply include packages with the async version.) But since Rx.Async is currently in a preview state, we don't need to unify things yet—it would be better to make `alpha` builds available as soon as possible. So the work to do this could proceed concurrently with the work described in the preceding section.
+We want to make preview builds of Rx.Async available as soon as possible. We don't know of any technical reason to tie this to the release described in the preceding section. In the long run we expect that we are likely to new want Rx.NET and Rx.NET.Async releases as older TFMs go out of support, and we will probably keep major version numbers in sync to make it clear that these two libraries are in the same era. But aside from that, there's no reason to tie releases of these two libraries tightly together. (Bugfixes and new functionality are likely to be released independently for each library.) Moreover, since Rx.Async is currently in a preview state, we wouldn't want to unify things yet even if that were a long term goal—it would be better to make `alpha` builds available as soon as possible. So the work to do this could proceed concurrently with the work described in the preceding section.
 
 ### V.next.next (v6.0?)
 
