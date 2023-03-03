@@ -69,18 +69,12 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly MethodInfo _addMethod;
             private readonly MethodInfo _removeMethod;
             private readonly Func<TSender, TEventArgs, TResult> _getResult;
-#if HAS_WINRT
             private readonly bool _isWinRT;
-#endif
 
             public Handler(object? target, Type delegateType, MethodInfo addMethod, MethodInfo removeMethod, Func<TSender, TEventArgs, TResult> getResult, bool isWinRT, IScheduler scheduler)
                 : base(scheduler)
             {
-#if HAS_WINRT
                 _isWinRT = isWinRT;
-#else
-                System.Diagnostics.Debug.Assert(!isWinRT);
-#endif
                 _target = target;
                 _delegateType = delegateType;
                 _addMethod = addMethod;
@@ -100,13 +94,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 try
                 {
-#if HAS_WINRT
                     if (_isWinRT)
                     {
                         removeHandler = AddHandlerCoreWinRT(handler);
                     }
                     else
-#endif
                     {
                         removeHandler = AddHandlerCore(handler);
                     }
@@ -147,13 +139,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 return () => _removeMethod.Invoke(_target, new object[] { handler });
             }
 
-#if HAS_WINRT
             private Action AddHandlerCoreWinRT(Delegate handler)
             {
                 var token = _addMethod.Invoke(_target, new object[] { handler });
                 return () => _removeMethod.Invoke(_target, new[] { token });
             }
-#endif
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;netstandard2.0;net472;uap10.0.16299;net5.0;net5.0-windows10.0.19041</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net472;uap10.0.16299;net6.0;net6.0-windows10.0.19041</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
@@ -10,15 +10,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' or $(TargetFramework.StartsWith('net5.0-windows'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <IncludeBuildOutput Condition="'$(TargetFramework)' == 'netcoreapp3.1'">false</IncludeBuildOutput>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <FrameworkReference Update="Microsoft.WindowsDesktop.App" PrivateAssets="all" />
-  </ItemGroup>
 
 
   <ItemGroup>
@@ -36,23 +31,13 @@
   </ItemGroup>
 
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
-  </ItemGroup>
-
   <!-- UWP -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    <PackageReference Include="System.ComponentModel" Version="4.3.0" />
-    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
-  </ItemGroup>
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net5.0-windows'))">
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
     <Compile Include="Platforms\UWP\**\*.cs" />
   </ItemGroup>
 
   <!-- Windows includes for Desktop and UWP -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or '$(TargetFramework)' == 'netcoreapp3.1' or $(TargetFramework.StartsWith('net5.0-windows'))">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
     <Compile Include="Platforms\Windows\**\*.cs" />
     <EmbeddedResource Include="Platforms\Windows\**\*.resx" />
   </ItemGroup>
@@ -64,7 +49,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'netcoreapp3.1' or $(TargetFramework.StartsWith('net5.0-windows'))">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
     <Compile Include="Platforms\Desktop\**\*.cs" />
   </ItemGroup>
 
@@ -159,36 +144,10 @@
     </None>
   </ItemGroup>
 
-  <PropertyGroup>
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);RemoveNetCoreApp3FromNuGet</TargetsForTfmSpecificBuildOutput>
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddNetCore3ToNuGet</TargetsForTfmSpecificContentInPackage>
-  </PropertyGroup>
-
-  <!-- We remove the output from the nuget so it doesn't wind up in the \lib folder -->
-  <Target Name="RemoveNetCoreApp3FromNuGet" DependsOnTargets="BuiltProjectOutputGroup;DocumentationProjectOutputGroup" Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <ItemGroup>
-      <!-- Before clearing the output groups, add them to None for packing -->
-      <ItemsToAddToNuGet Include="@(BuiltProjectOutputGroupOutput);@(DocumentationProjectOutputGroupOutput)" PackagePath="build\netcoreapp3.1" />
-
-      <BuiltProjectOutputGroupOutput Remove="@(BuiltProjectOutputGroupOutput)" />
-      <DocumentationProjectOutputGroupOutput Remove="@(DocumentationProjectOutputGroupOutput)" />
-    </ItemGroup>
-  </Target>
-
-  <Target Name="AddNetCore3ToNuGet" Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <ItemGroup>
-      <!-- Add the removed build output to the build\netcoreapp3.0 folder -->
-      <TfmSpecificPackageFileWithRecursiveDir Include="@(ItemsToAddToNuGet)" PackagePath="build\netcoreapp3.1" />
-    </ItemGroup>
-  </Target>
-
   <ItemGroup>
-    <None Include="build\_._" PackagePath="lib\netcoreapp3.1" Pack="true" />
-    <None Include="build\_._" PackagePath="build\net5.0;build\net5.0-windows10.0.19041" Pack="true" />
-    <None Include="build\_._" PackagePath="buildTransitive\net5.0;buildTransitive\net5.0-windows10.0.19041" Pack="true" />
-    <None Include="build\System.Reactive.targets" PackagePath="buildTransitive\netcoreapp3.1" Pack="true" />
-    <None Include="build\System.Reactive.targets" PackagePath="build\netcoreapp3.1" Pack="true" />
-	<None Include="build\System.Reactive.net5.0-windows.targets" PackagePath="build\net5.0-windows7\$(PackageId).targets;buildTransitive\net5.0-windows7\$(PackageId).targets" Pack="true" />
+    <None Include="build\_._" PackagePath="build\net6.0;build\net6.0-windows10.0.19041" Pack="true" />
+    <None Include="build\_._" PackagePath="buildTransitive\net6.0;buildTransitive\net6.0-windows10.0.19041" Pack="true" />
+    <None Include="build\System.Reactive.net6.0-windows.targets" PackagePath="build\net6.0-windows7\$(PackageId).targets;buildTransitive\net6.0-windows7\$(PackageId).targets" Pack="true" />
     <None Include="Linq\QbservableEx.NAry.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
