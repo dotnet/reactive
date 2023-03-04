@@ -24,7 +24,7 @@ stages:
 - stage: Build
   jobs:
   - job: Build
-    pool: vs2019-preview
+    pool: windows-latest
 
     variables:
       BuildConfiguration: Release
