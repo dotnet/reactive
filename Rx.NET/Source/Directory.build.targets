@@ -9,7 +9,7 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
     <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_WPF;HAS_WINRT;HAS_DISPATCHER;HAS_REMOTING;DESKTOPCLR;NO_NULLABLE_ATTRIBUTES</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.18362'">
     <DefineConstants>$(DefineConstants);HAS_WINRT;WINDOWS;HAS_OS_XAML;LEGACY_WINRT;NO_NULLABLE_ATTRIBUTES</DefineConstants>
     <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
   </PropertyGroup>
@@ -20,7 +20,7 @@
     <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'uap10.0.16299' or '$(TargetFramework)' == 'netstandard2.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'uap10.0.18362' or '$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
   </ItemGroup>
 
