@@ -4,9 +4,9 @@ As of February 2023, `System.Reactive` (aka Rx.NET, Rx for short in this documen
 
 ## Proposal in brief
 
-* an initial [V.next](#vnext-v51) (called either V5.1 or 6.0, TBD) bringing the build process and TFMs up to date (dropping out-of-support targets such as `netcoreapp3.1` and `net5.0` and replacing them with the current LTS equivalent such as `net6.0`)
+* an initial V.next which we plan to release as [v6.0](#rx-v60) bringing the build process and TFMs up to date (dropping out-of-support targets such as `netcoreapp3.1` and `net5.0` and replacing them with the current LTS equivalent such as `net6.0`) and adding automated testing on .NET 6 and .NET 7
 * work in parallel on an `alpha`-labeled release of NuGet packages for [`System.Reactive.Async`](#rxasync)
-* a [V.next.next](#vnextnext-v60) (called either V6.0 or V7.0, TBD) addressing code bloat and related issues experienced by some UI frameworks
+* a V.next.next which we plan to release as [v7.0](#rx-v70) addressing code bloat and related issues experienced by some UI frameworks
 * an initiative to triage the backlog of issues, and determine which issues should be addressed in each of the releases described above
 
 We intend that in November 2023, Rx.NET will work against the mainstream .NET runtimes in support at that point, including .NET 8.0. In the longer run, our target platform support policy will be informed by the lifecycle policies of the various runtimes as illustrated in this diagram:
@@ -139,7 +139,7 @@ We need to decide whether we should try to solve all of the problems in one step
 
 The issues around UI framework dependencies are arguably trickier, because fixing these will necessarily be more disruptive. Fixing the code bloat problems will mean ensuring that projects targeting some Windows-specific TFM won't automatically get the WPF and Windows Forms support just because they use Rx. This seems like it would need to be a breaking change (unless we moved all of Rx into some completely new NuGet packages, and turned the existing `System.Reactive` package into a façade offered only for backwards compatibility). Moreover, there are various subtle issues surrounding this, and we would need to be certain that we were not causing any regressions. For example, we would need to be certain that we were not re-introducing the old bug (https://github.com/dotnet/reactive/issues/97) in which plug-in hosts (notably Visual Studio) could load different plug-ins that had different opinions over whether to load the `netstandard2.0` or the `net4x` flavour or Rx, resulting in unresolvable conflicts and runtime errors. We would also need to avoid re-tracing the steps that caused the problems in https://github.com/dotnet/reactive/issues/199#issuecomment-266138120. We don't want to delay everything else while we test strategies for this problem. Moreover, there are now numerous .NET frameworks (including, but not limited to Avalonia, Unity, Xamarin, WinUI) that we would want to be confident of working well with. So although we want to resolve these particular problems as soon as possible, we think this will take time, and don't want to delay the other goals.
 
-### V.next (v5.1?)
+### Rx v6.0
 The first priority has to be to update the build so that it is possible to work on Rx with current development tools. We can't fix the other issues if we can't work on Rx. This will entail removing older, unsupported targets. So the next drop is likely to target:
 
 * `net6.0` (with test projects also targeting `net7.0`)
@@ -164,11 +164,13 @@ Since we want to get this release done quickly, we don't want to make it depende
 
 A more detailed description of how this first step would be achieved can be found in [ADR 0001-net7.0-era-tooling-update](./adr/0001-net7.0-era-tooling-update.md).
 
+Note that it is an unfortunate coincidence that the version number for this release, v6.0, makes it sound like it is somehow connected with .NET 6. We are in fact support .NET 7 in this release too. (There is no need for a `.net7.0` TFM, because the `net6.0` target will run perfectly well on .NET 7, and there is no .NET 7-specific functionality that this release will be using.) We are bumping the major version number because we are dropping support for some old TFMs, which seems like a sufficiently major change to warrant a new major version number. (There is no intention to make any breaking changes other than dropping support for runtimes which are themselves out of support.)
+
 ### Rx.Async
 
 We want to make preview builds of Rx.Async available as soon as possible. We don't know of any technical reason to tie this to the release described in the preceding section. In the long run we expect that we are likely to new want Rx.NET and Rx.NET.Async releases as older TFMs go out of support, and we will probably keep major version numbers in sync to make it clear that these two libraries are in the same era. But aside from that, there's no reason to tie releases of these two libraries tightly together. (Bugfixes and new functionality are likely to be released independently for each library.) Moreover, since Rx.Async is currently in a preview state, we wouldn't want to unify things yet even if that were a long term goal—it would be better to make `alpha` builds available as soon as possible. So the work to do this could proceed concurrently with the work described in the preceding section.
 
-### V.next.next (v6.0?)
+### Rx v7.0
 
 This is the release in which we would want to address the code bloat problems experienced by Avalonia and other UI frameworks. We believe this will entail moving all UI-framework-specific code out into separate components. (This would be only a partial unwinding of the [great unification](https://github.com/dotnet/reactive/issues/199)—we would not be reinstating the separation into interfaces, core, etc.)
 
