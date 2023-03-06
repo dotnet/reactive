@@ -7,14 +7,15 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class IfTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void If_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.If(null, DummyObservable<int>.Instance, DummyObservable<int>.Instance));
@@ -25,7 +26,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.If(DummyFunc<bool>.Instance, DummyObservable<int>.Instance, default(IScheduler)));
         }
 
-        [Fact]
+        [TestMethod]
         public void If_True()
         {
             var scheduler = new TestScheduler();
@@ -58,7 +59,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void If_False()
         {
             var scheduler = new TestScheduler();
@@ -91,7 +92,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void If_Throw()
         {
             var scheduler = new TestScheduler();
@@ -123,7 +124,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void If_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -154,14 +155,14 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void If_Default_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.If(null, DummyObservable<int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.If<int>(DummyFunc<bool>.Instance, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void If_Default_Completed()
         {
             var scheduler = new TestScheduler();
@@ -190,7 +191,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void If_Default_Error()
         {
             var scheduler = new TestScheduler();
@@ -221,7 +222,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void If_Default_Never()
         {
             var scheduler = new TestScheduler();
@@ -248,7 +249,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void If_Default_Other()
         {
             var scheduler = new TestScheduler();
@@ -274,7 +275,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void If_Default_Scheduler()
         {
             var scheduler = new TestScheduler();

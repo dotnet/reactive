@@ -9,14 +9,17 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SelectTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Select_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Select(DummyFunc<int, int>.Instance));
@@ -24,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Select(DummyFunc<int, int>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Select_Throws()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() =>
@@ -51,7 +54,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Create(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Select(x => x).Subscribe());
         }
 
-        [Fact]
+        [TestMethod]
         public void Select_DisposeInsideSelector()
         {
             var scheduler = new TestScheduler();
@@ -95,7 +98,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Select_Completed()
         {
             var scheduler = new TestScheduler();
@@ -137,7 +140,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(4, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Select_NotCompleted()
         {
             var scheduler = new TestScheduler();
@@ -174,7 +177,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(4, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Select_Error()
         {
             var scheduler = new TestScheduler();
@@ -218,7 +221,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(4, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Select_SelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -265,7 +268,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectWithIndex_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Select(DummyFunc<int, int, int>.Instance));
@@ -273,7 +276,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Select(DummyFunc<int, int, int>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectWithIndex_Throws()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() =>
@@ -300,7 +303,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Create(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Select((x, index) => x).Subscribe());
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectWithIndex_DisposeInsideSelector()
         {
             var scheduler = new TestScheduler();
@@ -344,7 +347,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectWithIndex_Completed()
         {
             var scheduler = new TestScheduler();
@@ -386,7 +389,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(4, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectWithIndex_NotCompleted()
         {
             var scheduler = new TestScheduler();
@@ -423,7 +426,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(4, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectWithIndex_Error()
         {
             var scheduler = new TestScheduler();
@@ -466,7 +469,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(4, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectWithIndex_SelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -513,7 +516,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Select_Select1()
         {
             var scheduler = new TestScheduler();
@@ -544,7 +547,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Select_Select2()
         {
             var scheduler = new TestScheduler();
@@ -575,7 +578,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Select_Select3()
         {
             var scheduler = new TestScheduler();
@@ -606,7 +609,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Select_Select4()
         {
             var scheduler = new TestScheduler();

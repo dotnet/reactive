@@ -10,10 +10,13 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class RefCountTest : ReactiveTest
     {
         private sealed class DematerializingConnectableObservable<T> : IConnectableObservable<T>
@@ -36,7 +39,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RefCount<int>(null));
@@ -46,7 +49,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.RefCount(Observable.Never<int>().Publish(), -2));
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCount_ConnectsOnFirst()
         {
             var scheduler = new TestScheduler();
@@ -78,7 +81,7 @@ namespace ReactiveTests.Tests
             Assert.True(subject.Disposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCount_NotConnected()
         {
             var disconnected = false;
@@ -122,7 +125,7 @@ namespace ReactiveTests.Tests
             Assert.True(disconnected);
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCount_OnError()
         {
             var ex = new Exception();
@@ -134,7 +137,7 @@ namespace ReactiveTests.Tests
             res.Subscribe(_ => { Assert.True(false); }, ex_ => { Assert.Same(ex, ex_); }, () => { Assert.True(false); });
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCount_Publish()
         {
             var scheduler = new TestScheduler();
@@ -204,7 +207,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCount_can_connect_again_if_previous_subscription_terminated_synchronously()
         {
             var seen = 0;
@@ -242,7 +245,7 @@ namespace ReactiveTests.Tests
             }
         }
         
-        [Fact]
+        [TestMethod]
         public void LazyRefCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RefCount<int>(null, TimeSpan.FromSeconds(2)));
@@ -257,7 +260,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.RefCount(Observable.Never<int>().Publish(), -1, TimeSpan.FromSeconds(2), Scheduler.Default));
         }
 
-        [Fact]
+        [TestMethod]
         public void LazyRefCount_ConnectsOnFirst()
         {
             var scheduler = new TestScheduler();
@@ -289,7 +292,7 @@ namespace ReactiveTests.Tests
             Assert.True(subject.Disposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void LazyRefCount_NotConnected()
         {
             var scheduler = new TestScheduler();
@@ -341,7 +344,7 @@ namespace ReactiveTests.Tests
             Assert.True(disconnected);
         }
 
-        [Fact]
+        [TestMethod]
         public void LazyRefCount_OnError()
         {
             var ex = new Exception();
@@ -353,7 +356,7 @@ namespace ReactiveTests.Tests
             res.Subscribe(_ => throw new Exception(), ex_ => { Assert.Same(ex, ex_); }, () => throw new Exception());
         }
 
-        [Fact]
+        [TestMethod]
         public void LazyRefCount_Publish()
         {
             var scheduler = new TestScheduler();
@@ -426,7 +429,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCount_source_already_completed_synchronously()
         {
             var subscribed = 0;
@@ -451,7 +454,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, unsubscribed);
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCount_minObservers_not_connected_Eager()
         {
             int connected = 0;
@@ -470,7 +473,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, connected);
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCount_minObservers_connected_Eager()
         {
             var connected = 0;
@@ -501,7 +504,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(expected, list2);
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCount_minObservers_not_connected_Lazy()
         {
             int connected = 0;
@@ -520,7 +523,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, connected);
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCount_minObservers_connected_Lazy()
         {
             var connected = 0;

@@ -13,14 +13,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ConcatTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Concat_ArgumentChecking()
         {
             var xs = DummyObservable<int>.Instance;
@@ -35,7 +38,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Concat(null, xs));
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_DefaultScheduler()
         {
             var evt = new ManualResetEvent(false);
@@ -51,7 +54,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(6, sum);
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_IEofIO_DefaultScheduler()
         {
             var evt = new ManualResetEvent(false);
@@ -69,7 +72,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(6, sum);
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_IEofIO_GetEnumeratorThrows()
         {
             var ex = new Exception();
@@ -87,7 +90,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_IEofIO()
         {
             var scheduler = new TestScheduler();
@@ -143,7 +146,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_EmptyEmpty()
         {
             var scheduler = new TestScheduler();
@@ -175,7 +178,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_EmptyNever()
         {
             var scheduler = new TestScheduler();
@@ -205,7 +208,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_NeverEmpty()
         {
             var scheduler = new TestScheduler();
@@ -234,7 +237,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_NeverNever()
         {
             var scheduler = new TestScheduler();
@@ -262,7 +265,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_EmptyThrow()
         {
             var scheduler = new TestScheduler();
@@ -296,7 +299,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_ThrowEmpty()
         {
             var scheduler = new TestScheduler();
@@ -329,7 +332,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_ThrowThrow()
         {
             var scheduler = new TestScheduler();
@@ -362,7 +365,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_ReturnEmpty()
         {
             var scheduler = new TestScheduler();
@@ -396,7 +399,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_EmptyReturn()
         {
             var scheduler = new TestScheduler();
@@ -430,7 +433,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_ReturnNever()
         {
             var scheduler = new TestScheduler();
@@ -462,7 +465,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_NeverReturn()
         {
             var scheduler = new TestScheduler();
@@ -492,7 +495,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_ReturnReturn()
         {
             var scheduler = new TestScheduler();
@@ -530,7 +533,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_ThrowReturn()
         {
             var scheduler = new TestScheduler();
@@ -564,7 +567,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_ReturnThrow()
         {
             var scheduler = new TestScheduler();
@@ -600,7 +603,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_SomeDataSomeData()
         {
             var scheduler = new TestScheduler();
@@ -642,7 +645,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_EnumerableThrows()
         {
             var scheduler = new TestScheduler();
@@ -682,7 +685,7 @@ namespace ReactiveTests.Tests
             throw ex;
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_EnumerableTiming()
         {
             var scheduler = new TestScheduler();
@@ -751,7 +754,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_Enumerable_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -801,7 +804,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_Optimization_DeferEvalTiming()
         {
             var scheduler = new TestScheduler();
@@ -849,7 +852,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(230, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Concat_Optimization_DeferExceptionPropagation()
         {
             var scheduler = new TestScheduler();
@@ -883,7 +886,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void Concat_TailRecursive1()
         {
             var create = 0L;
@@ -920,7 +923,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD && !NETCOREAPP1_1 && !NETCOREAPP1_0
-        [Fact]
+        [TestMethod]
         public void Concat_TailRecursive2()
         {
             IObservable<int> f(int x) => Observable.Defer(() => Observable.Return(x, ThreadPoolScheduler.Instance).Concat(f(x + 1)));
@@ -932,7 +935,7 @@ namespace ReactiveTests.Tests
 #endif
 #endif
 
-        [Fact]
+        [TestMethod]
         public void Concat_Task()
         {
             var tss = Observable.Concat(new[] { Task.Factory.StartNew(() => 1), Task.Factory.StartNew(() => 2), Task.Factory.StartNew(() => 3) }.ToObservable());

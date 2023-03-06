@@ -8,14 +8,16 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class SynchronizationContextSchedulerTest
     {
-        [Fact]
+        [TestMethod]
         public void SynchronizationContext_ArgumentChecking()
         {
             var ms = new MySync();
@@ -28,7 +30,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => s.Schedule(42, TimeSpan.Zero, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void SynchronizationContext_Now()
         {
             var ms = new MySync();
@@ -38,7 +40,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.Seconds < 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void SynchronizationContext_ScheduleAction()
         {
             var ms = new MySync();
@@ -50,7 +52,7 @@ namespace ReactiveTests.Tests
             Assert.True(ran);
         }
 
-        [Fact]
+        [TestMethod]
         public void SynchronizationContext_ScheduleAction_TimeSpan()
         {
             var ms = new MySync();
@@ -63,7 +65,7 @@ namespace ReactiveTests.Tests
             Assert.True(ms.Count == 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void SynchronizationContext_ScheduleAction_DateTimeOffset()
         {
             var ms = new MySync();
@@ -76,7 +78,7 @@ namespace ReactiveTests.Tests
             Assert.True(ms.Count >= 1); // Can be > 1 in case of timer queue retry operations.
         }
 
-        [Fact]
+        [TestMethod]
         public void SynchronizationContext_ScheduleActionError()
         {
             var ms = new MySync();
@@ -97,7 +99,7 @@ namespace ReactiveTests.Tests
             Assert.True(ms.Count == 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void SynchronizationContext_ScheduleActionDue()
         {
             var ms = new MySync();
@@ -144,7 +146,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void SynchronizationContext_StartedCompleted()
         {
             var ms = new MySync();
@@ -158,7 +160,7 @@ namespace ReactiveTests.Tests
             Assert.True(ms.Completed == 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void SynchronizationContext_DontPost_Different()
         {
             var ms = new MySync();
@@ -171,7 +173,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void SynchronizationContext_DontPost_Same()
         {
             var count = 0;
@@ -196,7 +198,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void SynchronizationContext_AlwaysPost_Different()
         {
             var ms = new MySync();
@@ -209,7 +211,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void SynchronizationContext_AlwaysPost_Same()
         {
             var count = 0;

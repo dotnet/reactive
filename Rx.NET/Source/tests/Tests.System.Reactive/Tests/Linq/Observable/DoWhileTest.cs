@@ -6,21 +6,22 @@ using System;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class DoWhileTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void DoWhile_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DoWhile(DummyObservable<int>.Instance, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DoWhile(default(IObservable<int>), DummyFunc<bool>.Instance));
         }
 
-        [Fact]
+        [TestMethod]
         public void DoWhile_AlwaysFalse()
         {
             var scheduler = new TestScheduler();
@@ -48,7 +49,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DoWhile_AlwaysTrue()
         {
             var scheduler = new TestScheduler();
@@ -86,7 +87,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DoWhile_AlwaysTrue_Throw()
         {
             var scheduler = new TestScheduler();
@@ -108,7 +109,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DoWhile_AlwaysTrue_Infinite()
         {
             var scheduler = new TestScheduler();
@@ -128,7 +129,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DoWhile_SometimesTrue()
         {
             var scheduler = new TestScheduler();
@@ -168,7 +169,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DoWhile_SometimesThrows()
         {
             var scheduler = new TestScheduler();

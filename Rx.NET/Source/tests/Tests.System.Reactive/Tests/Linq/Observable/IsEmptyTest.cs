@@ -5,20 +5,21 @@
 using System;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class IsEmptyTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void IsEmpty_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.IsEmpty(default(IObservable<int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void IsEmpty_Empty()
         {
             var scheduler = new TestScheduler();
@@ -42,7 +43,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void IsEmpty_Return()
         {
             var scheduler = new TestScheduler();
@@ -67,7 +68,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void IsEmpty_Throw()
         {
             var ex = new Exception();
@@ -92,7 +93,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void IsEmpty_Never()
         {
             var ex = new Exception();

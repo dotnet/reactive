@@ -11,14 +11,17 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class CatchTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Catch_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int>(null));
@@ -29,7 +32,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int, Exception>(DummyObservable<int>.Instance, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_IEofIO_GetEnumeratorThrows()
         {
             var ex = new Exception();
@@ -47,7 +50,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_IEofIO()
         {
             var scheduler = new TestScheduler();
@@ -103,7 +106,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_NoErrors()
         {
             var scheduler = new TestScheduler();
@@ -138,7 +141,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Never()
         {
             var scheduler = new TestScheduler();
@@ -167,7 +170,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Empty()
         {
             var scheduler = new TestScheduler();
@@ -198,7 +201,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Return()
         {
             var scheduler = new TestScheduler();
@@ -231,7 +234,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Error()
         {
             var scheduler = new TestScheduler();
@@ -270,7 +273,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Error_Never()
         {
             var scheduler = new TestScheduler();
@@ -306,7 +309,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Error_Error()
         {
             var scheduler = new TestScheduler();
@@ -345,7 +348,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Multiple()
         {
             var scheduler = new TestScheduler();
@@ -392,7 +395,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_ErrorSpecific_Caught()
         {
             var scheduler = new TestScheduler();
@@ -435,7 +438,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_ErrorSpecific_Uncaught()
         {
             var scheduler = new TestScheduler();
@@ -476,7 +479,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_HandlerThrows()
         {
             var scheduler = new TestScheduler();
@@ -510,7 +513,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Nested_OuterCatches()
         {
             var scheduler = new TestScheduler();
@@ -563,7 +566,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Nested_InnerCatches()
         {
             var scheduler = new TestScheduler();
@@ -616,7 +619,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_ThrowFromNestedCatch()
         {
             var scheduler = new TestScheduler();
@@ -672,7 +675,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_DefaultScheduler_Binary()
         {
             var evt = new ManualResetEvent(false);
@@ -688,7 +691,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, res);
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_DefaultScheduler_Nary()
         {
             var evt = new ManualResetEvent(false);
@@ -704,7 +707,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, res);
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_DefaultScheduler_NaryEnumerable()
         {
             var evt = new ManualResetEvent(false);
@@ -722,7 +725,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, res);
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_EmptyIterator()
         {
             var scheduler = new TestScheduler();
@@ -736,7 +739,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_IteratorThrows()
         {
             var scheduler = new TestScheduler();
@@ -763,7 +766,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_EnumerableThrows()
         {
             var scheduler = new TestScheduler();
@@ -803,7 +806,7 @@ namespace ReactiveTests.Tests
             throw ex;
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_EnumerableTiming()
         {
             var scheduler = new TestScheduler();
@@ -868,7 +871,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Enumerable_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -919,7 +922,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void Catch_TailRecursive1()
         {
             var create = 0L;
@@ -956,7 +959,7 @@ namespace ReactiveTests.Tests
         }
 
 #if HAS_STACKTRACE && !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Catch_TailRecursive2()
         {
             var f = default(Func<int, IObservable<int>>);
@@ -969,7 +972,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void Catch_TailRecursive3()
         {
             var ex = new Exception();

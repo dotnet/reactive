@@ -7,14 +7,17 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class StartTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Start_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Start(null));
@@ -28,7 +31,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void Start_Action()
         {
             var done = false;
@@ -36,7 +39,7 @@ namespace ReactiveTests.Tests
             Assert.True(done, "done");
         }
 
-        [Fact]
+        [TestMethod]
         public void Start_Action2()
         {
             var scheduler = new TestScheduler();
@@ -55,7 +58,7 @@ namespace ReactiveTests.Tests
             Assert.True(done, "done");
         }
 
-        [Fact]
+        [TestMethod]
         public void Start_ActionError()
         {
             var ex = new Exception();
@@ -67,7 +70,7 @@ namespace ReactiveTests.Tests
             }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Start_Func()
         {
             var res = Observable.Start(() => 1).ToEnumerable();
@@ -77,7 +80,7 @@ namespace ReactiveTests.Tests
             }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Start_Func2()
         {
             var scheduler = new TestScheduler();
@@ -92,7 +95,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Start_FuncError()
         {
             var ex = new Exception();

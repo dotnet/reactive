@@ -11,15 +11,18 @@ using System.Reactive.Subjects;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class TakeTest : ReactiveTest
     {
         #region + Count +
 
-        [Fact]
+        [TestMethod]
         public void Take_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Take(0));
@@ -31,7 +34,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => DummyObservable<int>.Instance.Take(-1, Scheduler.Immediate));
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Complete_After()
         {
             var scheduler = new TestScheduler();
@@ -89,7 +92,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Complete_Same()
         {
             var scheduler = new TestScheduler();
@@ -147,7 +150,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Complete_Before()
         {
             var scheduler = new TestScheduler();
@@ -198,7 +201,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Error_After()
         {
             var scheduler = new TestScheduler();
@@ -258,7 +261,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Error_Same()
         {
             var scheduler = new TestScheduler();
@@ -316,7 +319,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Error_Before()
         {
             var scheduler = new TestScheduler();
@@ -360,7 +363,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Dispose_Before()
         {
             var scheduler = new TestScheduler();
@@ -402,7 +405,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Dispose_After()
         {
             var scheduler = new TestScheduler();
@@ -446,7 +449,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_0_Scheduler()
         {
             var scheduler = new TestScheduler();
@@ -470,7 +473,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_0_DefaultScheduler()
         {
             var scheduler = new TestScheduler();
@@ -494,7 +497,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Non0_Scheduler()
         {
             var scheduler = new TestScheduler();
@@ -520,7 +523,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Take1()
         {
             var scheduler = new TestScheduler();
@@ -555,7 +558,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Take2()
         {
             var scheduler = new TestScheduler();
@@ -590,7 +593,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_DecrementsCountFirst()
         {
             var k = new BehaviorSubject<bool>(true);
@@ -605,7 +608,7 @@ namespace ReactiveTests.Tests
 
         #region + Timed +
 
-        [Fact]
+        [TestMethod]
         public void Take_Timed_ArgumentChecking()
         {
             var xs = Observable.Return(42);
@@ -618,7 +621,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Take(xs, TimeSpan.FromSeconds(-1), Scheduler.Default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Zero()
         {
             var scheduler = new TestScheduler();
@@ -642,7 +645,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Some()
         {
             var scheduler = new TestScheduler();
@@ -669,7 +672,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Late()
         {
             var scheduler = new TestScheduler();
@@ -695,7 +698,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Error()
         {
             var scheduler = new TestScheduler();
@@ -719,7 +722,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Never()
         {
             var scheduler = new TestScheduler();
@@ -742,7 +745,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Twice1()
         {
             var scheduler = new TestScheduler();
@@ -775,7 +778,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Twice2()
         {
             var scheduler = new TestScheduler();
@@ -808,7 +811,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Take_Default()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);

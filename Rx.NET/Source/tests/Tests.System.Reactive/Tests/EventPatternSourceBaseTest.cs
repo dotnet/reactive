@@ -6,14 +6,14 @@ using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class EventPatternSourceBaseTest
     {
-        [Fact]
+        [TestMethod]
         public void ArgumentChecking()
         {
             var xs = Observable.Empty<EventPattern<object, EventArgs>>();

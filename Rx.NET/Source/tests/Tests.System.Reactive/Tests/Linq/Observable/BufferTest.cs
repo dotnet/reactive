@@ -9,15 +9,16 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class BufferTest : ReactiveTest
     {
         #region + Boundary +
 
-        [Fact]
+        [TestMethod]
         public void Buffer_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Buffer(default(IObservable<int>), DummyFunc<IObservable<int>>.Instance));
@@ -29,7 +30,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Buffer(DummyObservable<int>.Instance, default(IObservable<int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Closings_Basic()
         {
             var scheduler = new TestScheduler();
@@ -66,7 +67,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Closings_InnerSubscriptions()
         {
             var scheduler = new TestScheduler();
@@ -139,7 +140,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Closings_Empty()
         {
             var scheduler = new TestScheduler();
@@ -177,7 +178,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Closings_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -212,7 +213,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Closings_Error()
         {
             var scheduler = new TestScheduler();
@@ -250,7 +251,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Closings_Throw()
         {
             var scheduler = new TestScheduler();
@@ -284,7 +285,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Closings_WindowClose_Error()
         {
             var scheduler = new TestScheduler();
@@ -318,7 +319,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_OpeningClosings_Basic()
         {
             var scheduler = new TestScheduler();
@@ -372,7 +373,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Boundaries_Simple()
         {
             var scheduler = new TestScheduler();
@@ -423,7 +424,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Boundaries_OnCompletedBoundaries()
         {
             var scheduler = new TestScheduler();
@@ -470,7 +471,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Boundaries_OnErrorSource()
         {
             var ex = new Exception();
@@ -515,7 +516,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Boundaries_OnErrorBoundaries()
         {
             var ex = new Exception();
@@ -567,7 +568,7 @@ namespace ReactiveTests.Tests
 
         #region + Count +
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Single_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -580,7 +581,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Buffer(someObservable, 0, 1));
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Count_PartialWindow()
         {
             var scheduler = new TestScheduler();
@@ -608,7 +609,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Count_FullWindows()
         {
             var scheduler = new TestScheduler();
@@ -637,7 +638,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Count_FullAndPartialWindows()
         {
             var scheduler = new TestScheduler();
@@ -666,7 +667,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Count_Error()
         {
             var scheduler = new TestScheduler();
@@ -695,7 +696,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Count_Skip_Less()
         {
             var scheduler = new TestScheduler();
@@ -726,7 +727,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Count_Skip_More()
         {
             var scheduler = new TestScheduler();
@@ -755,7 +756,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Buffer(default(IObservable<int>), 1, 1));
@@ -765,7 +766,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Buffer(DummyObservable<int>.Instance, 0));
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithCount_Basic()
         {
             var scheduler = new TestScheduler();
@@ -800,7 +801,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithCount_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -832,7 +833,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithCount_Error()
         {
             var scheduler = new TestScheduler();
@@ -868,7 +869,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithCount_Default()
         {
             Observable.Range(1, 10).Buffer(3).Skip(1).First().AssertEqual(4, 5, 6);
@@ -879,7 +880,7 @@ namespace ReactiveTests.Tests
 
         #region + Time +
 
-        [Fact]
+        [TestMethod]
         public void Buffer_Time_ArgumentChecking()
         {
             var scheduler = new TestScheduler();
@@ -893,7 +894,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Buffer(default(IObservable<int>), TimeSpan.Zero, TimeSpan.Zero, scheduler));
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTime_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Buffer(default(IObservable<int>), TimeSpan.FromTicks(1), TimeSpan.FromTicks(1), DummyScheduler.Instance));
@@ -910,7 +911,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Buffer(DummyObservable<int>.Instance, TimeSpan.FromTicks(-1)));
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTime_Basic1()
         {
             var scheduler = new TestScheduler();
@@ -947,7 +948,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTime_Basic2()
         {
             var scheduler = new TestScheduler();
@@ -982,7 +983,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTime_Error()
         {
             var scheduler = new TestScheduler();
@@ -1020,7 +1021,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTime_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -1052,7 +1053,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTime_Basic_Same()
         {
             var scheduler = new TestScheduler();
@@ -1087,7 +1088,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTime_Basic_Same_Periodic()
         {
             var scheduler = new PeriodicTestScheduler();
@@ -1128,7 +1129,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTime_Basic_Same_Periodic_Error()
         {
             var ex = new Exception();
@@ -1169,14 +1170,14 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTime_Default()
         {
             Observable.Range(0, 10).Buffer(TimeSpan.FromDays(1), TimeSpan.FromDays(1)).First().AssertEqual(Enumerable.Range(0, 10));
             Observable.Range(0, 10).Buffer(TimeSpan.FromDays(1)).First().AssertEqual(Enumerable.Range(0, 10));
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTimeOrCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Buffer(default(IObservable<int>), TimeSpan.FromTicks(1), 1, DummyScheduler.Instance));
@@ -1188,7 +1189,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Buffer(DummyObservable<int>.Instance, TimeSpan.FromTicks(1), 0));
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTimeOrCount_Basic()
         {
             var scheduler = new TestScheduler();
@@ -1226,7 +1227,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTimeOrCount_Error()
         {
             var scheduler = new TestScheduler();
@@ -1265,7 +1266,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTimeOrCount_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -1299,13 +1300,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTimeOrCount_Default()
         {
             Observable.Range(1, 10, DefaultScheduler.Instance).Buffer(TimeSpan.FromDays(1), 3).Skip(1).First().AssertEqual(4, 5, 6);
         }
 
-        [Fact]
+        [TestMethod]
         public void BufferWithTime_TickWhileOnCompleted()
         {
             var scheduler = new TestScheduler();

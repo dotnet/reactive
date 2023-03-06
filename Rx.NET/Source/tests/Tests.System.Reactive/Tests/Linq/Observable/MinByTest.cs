@@ -8,14 +8,15 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class MinByTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void MinBy_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MinBy(default(IObservable<int>), x => x));
@@ -25,7 +26,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MinBy(DummyObservable<int>.Instance, x => x, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_Empty()
         {
             var scheduler = new TestScheduler();
@@ -49,7 +50,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_Return()
         {
             var scheduler = new TestScheduler();
@@ -76,7 +77,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_Some()
         {
             var scheduler = new TestScheduler();
@@ -105,7 +106,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_Multiple()
         {
             var scheduler = new TestScheduler();
@@ -138,7 +139,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_Throw()
         {
             var ex = new Exception();
@@ -163,7 +164,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_Never()
         {
             var ex = new Exception();
@@ -186,7 +187,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_Comparer_Empty()
         {
             var scheduler = new TestScheduler();
@@ -210,7 +211,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_Comparer_Return()
         {
             var scheduler = new TestScheduler();
@@ -237,7 +238,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_Comparer_Some()
         {
             var scheduler = new TestScheduler();
@@ -266,7 +267,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_Comparer_Throw()
         {
             var ex = new Exception();
@@ -291,7 +292,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_Comparer_Never()
         {
             var ex = new Exception();
@@ -314,7 +315,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_SelectorThrows()
         {
             var ex = new Exception();
@@ -342,7 +343,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinBy_ComparerThrows()
         {
             var ex = new Exception();

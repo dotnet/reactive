@@ -6,21 +6,22 @@ using System;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class WhileTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void While_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.While(default, DummyObservable<int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.While(DummyFunc<bool>.Instance, default(IObservable<int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void While_AlwaysFalse()
         {
             var scheduler = new TestScheduler();
@@ -43,7 +44,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void While_AlwaysTrue()
         {
             var scheduler = new TestScheduler();
@@ -81,7 +82,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void While_AlwaysTrue_Throw()
         {
             var scheduler = new TestScheduler();
@@ -103,7 +104,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void While_AlwaysTrue_Infinite()
         {
             var scheduler = new TestScheduler();
@@ -123,7 +124,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void While_SometimesTrue()
         {
             var scheduler = new TestScheduler();
@@ -163,7 +164,7 @@ namespace ReactiveTests.Tests
             throw ex;
         }
 
-        [Fact]
+        [TestMethod]
         public void While_SometimesThrows()
         {
             var scheduler = new TestScheduler();
@@ -202,7 +203,7 @@ namespace ReactiveTests.Tests
 
         #region General tests for loops
 #if HAS_STACKTRACE
-        [Fact]
+        [TestMethod]
         public void LoopTest1()
         {
             var loop = Observable.Defer(() =>
@@ -232,7 +233,7 @@ namespace ReactiveTests.Tests
             Assert.True(std.Distinct().Count() == 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void LoopTest2()
         {
             var n = 0;

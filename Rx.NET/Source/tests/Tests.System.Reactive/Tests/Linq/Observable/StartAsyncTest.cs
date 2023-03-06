@@ -10,10 +10,13 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class StartAsyncTest : ReactiveTest
     {
 
@@ -28,7 +31,7 @@ namespace ReactiveTests.Tests
 
         #region Func
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_Func_ArgumentChecking()
         {
             var s = Scheduler.Immediate;
@@ -43,7 +46,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(ct => _doneTask, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_Func_Success()
         {
             var n = 42;
@@ -63,7 +66,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, i);
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_Func_Throw_Synchronous()
         {
             var ex = new Exception();
@@ -76,7 +79,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_Func_Throw_Asynchronous()
         {
             var ex = new Exception();
@@ -91,7 +94,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_FuncWithCancel_Success()
         {
             var n = 42;
@@ -110,7 +113,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, i);
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_FuncWithCancel_Throw_Synchronous()
         {
             var ex = new Exception();
@@ -123,7 +126,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_FuncWithCancel_Throw_Asynchronous()
         {
             var ex = new Exception();
@@ -135,7 +138,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_FuncWithCancel_Cancel()
         {
             var N = 10;
@@ -180,7 +183,7 @@ namespace ReactiveTests.Tests
         }
 
 #if DESKTOPCLR
-        [Fact]
+        [TestMethod]
         public void StartAsync_Func_Scheduler1()
         {
             var tcs = new TaskCompletionSource<int>();
@@ -205,7 +208,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_Func_Scheduler2()
         {
             var tcs = new TaskCompletionSource<int>();
@@ -235,7 +238,7 @@ namespace ReactiveTests.Tests
 
         #region Action
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_Action_ArgumentChecking()
         {
             var s = Scheduler.Immediate;
@@ -249,7 +252,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(ct => (Task)_doneTask, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_Action_Success()
         {
             var i = 0;
@@ -266,7 +269,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, i);
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_Action_Throw_Synchronous()
         {
             var ex = new Exception();
@@ -279,7 +282,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_Action_Throw_Asynchronous()
         {
             var ex = new Exception();
@@ -291,7 +294,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_ActionWithCancel_Success()
         {
             var i = 0;
@@ -308,7 +311,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, i);
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_ActionWithCancel_Throw_Synchronous()
         {
             var ex = new Exception();
@@ -321,7 +324,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_ActionWithCancel_Throw_Asynchronous()
         {
             var ex = new Exception();
@@ -333,7 +336,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_ActionWithCancel_Cancel()
         {
             var N = 10;
@@ -378,7 +381,7 @@ namespace ReactiveTests.Tests
         }
 
 #if DESKTOPCLR
-        [Fact]
+        [TestMethod]
         public void StartAsync_Action_Scheduler1()
         {
             var tcs = new TaskCompletionSource<int>();
@@ -400,7 +403,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
         }
 
-        [Fact]
+        [TestMethod]
         public void StartAsync_Action_Scheduler2()
         {
             var tcs = new TaskCompletionSource<int>();

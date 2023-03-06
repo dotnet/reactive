@@ -10,19 +10,21 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 #if STRESS
 using ReactiveTests.Stress.Schedulers;
 #endif
 
+using Assert = Xunit.Assert;
+
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class EventLoopSchedulerTest
     {
         private static readonly TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ArgumentChecking()
         {
             using var el = new EventLoopScheduler();
@@ -37,7 +39,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => el.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_Now()
         {
             using var el = new EventLoopScheduler();
@@ -46,7 +48,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.Seconds < 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_DisposeWithInFlightActions()
         {
             using (var scheduler = new EventLoopScheduler())
@@ -59,7 +61,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleAction()
         {
             var ran = false;
@@ -75,7 +77,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void EventLoop_DifferentThread()
         {
             var id = default(int);
@@ -91,7 +93,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleOrderedActions()
         {
             var results = new List<int>();
@@ -107,7 +109,7 @@ namespace ReactiveTests.Tests
             results.AssertEqual(0, 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_SchedulerDisposed()
         {
             var d = 0;
@@ -156,7 +158,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(2, d);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleTimeOrderedActions()
         {
             var results = new List<int>();
@@ -173,7 +175,7 @@ namespace ReactiveTests.Tests
             results.AssertEqual(1, 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleOrderedAndTimedActions()
         {
             var results = new List<int>();
@@ -190,7 +192,7 @@ namespace ReactiveTests.Tests
             results.AssertEqual(1, 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleTimeOrderedInFlightActions()
         {
             var results = new List<int>();
@@ -212,7 +214,7 @@ namespace ReactiveTests.Tests
             results.AssertEqual(0, 1, 2);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleTimeAndOrderedInFlightActions()
         {
             var results = new List<int>();
@@ -235,7 +237,7 @@ namespace ReactiveTests.Tests
             results.AssertEqual(0, 4, 1, 2);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleActionNested()
         {
             var ran = false;
@@ -250,7 +252,8 @@ namespace ReactiveTests.Tests
             Assert.True(ran);
         }
 
-        [Fact(Skip = "")]
+        [TestMethod]
+        [Ignore("")]
         public void EventLoop_ScheduleActionDue()
         {
             var ran = false;
@@ -269,7 +272,8 @@ namespace ReactiveTests.Tests
             Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
         }
 
-        [Fact(Skip = "")]
+        [TestMethod]
+        [Ignore("")]
         public void EventLoop_ScheduleActionDueNested()
         {
             var ran = false;
@@ -296,7 +300,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void Stopwatch()
         {
             using var el = new EventLoopScheduler();
@@ -304,7 +308,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_Immediate()
         {
             var M = 1000;
@@ -335,7 +339,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_TimeCollisions()
         {
             var M = 1000;
@@ -366,7 +370,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_Spread()
         {
             var M = 1000;
@@ -397,7 +401,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_Periodic()
         {
             var n = 0;
@@ -424,7 +428,7 @@ namespace ReactiveTests.Tests
         }
 
 #if STRESS
-        [Fact]
+        [TestMethod]
         public void EventLoop_Stress()
         {
             EventLoop.NoSemaphoreFullException();
@@ -432,7 +436,7 @@ namespace ReactiveTests.Tests
 #endif
 
 #if DESKTOPCLR
-        [Fact]
+        [TestMethod]
         public void EventLoop_CorrectWorkStealing()
         {
             const int workItemCount = 100;

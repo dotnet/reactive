@@ -14,7 +14,7 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
@@ -22,6 +22,7 @@ namespace ReactiveTests.Tests
     /// Check if the Observable operator methods perform the proper
     /// argument validations en-masse with reflective checks.
     /// </summary>
+    [TestClass]
     public class ArgumentValidationTest
     {
         #region + Default values for the generic types +
@@ -81,7 +82,7 @@ namespace ReactiveTests.Tests
 
                 { "IEnumerable`1[IObservable`1[Int32]]", new[] { Observable.Return(1) } },
 
-                { "SynchronizationContext", SynchronizationContext.Current },
+                { "SynchronizationContext", SynchronizationContext.Current ?? new SynchronizationContext() },
 
                 { "IEqualityComparer`1[Int32]", EqualityComparer<int>.Default },
 
@@ -269,13 +270,13 @@ namespace ReactiveTests.Tests
 
         #endregion
 
-        [Fact]
+        [TestMethod]
         public void Verify_Observable()
         {
             VerifyClass(typeof(Observable));
         }
 
-        [Fact]
+        [TestMethod]
         public void Verify_ObservableEx()
         {
             VerifyClass(typeof(ObservableEx));

@@ -6,14 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class AndTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void And_ArgumentChecking()
         {
             var someObservable = Observable.Return(1);
@@ -36,7 +37,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And<int>(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void And2()
         {
             var scheduler = new TestScheduler();
@@ -62,7 +63,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And2Error()
         {
             var ex = new Exception();
@@ -101,7 +102,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And3()
         {
             var scheduler = new TestScheduler();
@@ -127,7 +128,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And3Error()
         {
             var ex = new Exception();
@@ -166,7 +167,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And4()
         {
             var scheduler = new TestScheduler();
@@ -192,7 +193,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And4Error()
         {
             var ex = new Exception();
@@ -231,7 +232,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And5()
         {
             var scheduler = new TestScheduler();
@@ -257,7 +258,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And5Error()
         {
             var ex = new Exception();
@@ -296,7 +297,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And6()
         {
             var scheduler = new TestScheduler();
@@ -322,7 +323,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And6Error()
         {
             var ex = new Exception();
@@ -361,7 +362,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And7()
         {
             var scheduler = new TestScheduler();
@@ -387,7 +388,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And7Error()
         {
             var ex = new Exception();
@@ -426,7 +427,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And8()
         {
             var scheduler = new TestScheduler();
@@ -452,7 +453,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And8Error()
         {
             var ex = new Exception();
@@ -491,7 +492,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And9()
         {
             var scheduler = new TestScheduler();
@@ -517,7 +518,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And9Error()
         {
             var ex = new Exception();
@@ -556,7 +557,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And10()
         {
             var scheduler = new TestScheduler();
@@ -582,7 +583,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And10Error()
         {
             var ex = new Exception();
@@ -621,7 +622,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And11()
         {
             var scheduler = new TestScheduler();
@@ -647,7 +648,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And11Error()
         {
             var ex = new Exception();
@@ -686,7 +687,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And12()
         {
             var scheduler = new TestScheduler();
@@ -712,7 +713,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And12Error()
         {
             var ex = new Exception();
@@ -751,7 +752,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And13()
         {
             var scheduler = new TestScheduler();
@@ -777,7 +778,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And13Error()
         {
             var ex = new Exception();
@@ -816,7 +817,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And14()
         {
             var scheduler = new TestScheduler();
@@ -842,7 +843,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And14Error()
         {
             var ex = new Exception();
@@ -881,7 +882,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And15()
         {
             var scheduler = new TestScheduler();
@@ -907,7 +908,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And15Error()
         {
             var ex = new Exception();
@@ -946,7 +947,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void And16()
         {
             var scheduler = new TestScheduler();
@@ -972,7 +973,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void And16Error()
         {
             var ex = new Exception();

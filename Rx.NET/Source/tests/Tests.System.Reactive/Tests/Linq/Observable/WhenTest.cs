@@ -8,21 +8,24 @@ using System.Linq;
 using System.Reactive.Joins;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class WhenTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void When_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.When<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.When((IEnumerable<Plan<int>>)null));
         }
 
-        [Fact]
+        [TestMethod]
         public void WhenMultipleDataSymmetric()
         {
             var scheduler = new TestScheduler();
@@ -55,7 +58,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WhenMultipleDataAsymmetric()
         {
             var scheduler = new TestScheduler();
@@ -86,7 +89,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WhenEmptyEmpty()
         {
             var scheduler = new TestScheduler();
@@ -110,7 +113,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WhenNeverNever()
         {
             var scheduler = new TestScheduler();
@@ -128,7 +131,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WhenThrowNonEmpty()
         {
             var ex = new Exception();
@@ -153,7 +156,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ComplicatedWhen()
         {
             var scheduler = new TestScheduler();
@@ -196,7 +199,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void When_PlansIteratorThrows()
         {
             var ex = new Exception();
@@ -216,7 +219,7 @@ namespace ReactiveTests.Tests
             yield break;
         }
 
-        [Fact]
+        [TestMethod]
         public void SameSource()
         {
             var source = Observable.Range(1, 5);

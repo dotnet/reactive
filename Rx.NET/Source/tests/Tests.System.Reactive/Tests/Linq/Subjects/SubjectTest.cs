@@ -10,26 +10,28 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public partial class SubjectTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Subscribe_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new Subject<int>().Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new Subject<int>().OnError(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Infinite()
         {
             var scheduler = new TestScheduler();
@@ -93,7 +95,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Finite()
         {
             var scheduler = new TestScheduler();
@@ -156,7 +158,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Error()
         {
             var scheduler = new TestScheduler();
@@ -221,7 +223,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Canceled()
         {
             var scheduler = new TestScheduler();
@@ -272,7 +274,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Dispose()
         {
             var scheduler = new TestScheduler();
@@ -293,7 +295,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PreComplete()
         {
             var scheduler = new TestScheduler();
@@ -309,7 +311,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SubjectDisposed()
         {
             var scheduler = new TestScheduler();
@@ -364,7 +366,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Subject_Create_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int, int>(null, Observable.Return(42)));
@@ -374,7 +376,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create(Observer.Create<int>(x => { }), null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Subject_Create1()
         {
             var _x = default(int);
@@ -402,7 +404,7 @@ namespace ReactiveTests.Tests
             Assert.False(done); // already cut off
         }
 
-        [Fact]
+        [TestMethod]
         public void Subject_Create2()
         {
             var _x = default(int);
@@ -430,7 +432,7 @@ namespace ReactiveTests.Tests
             Assert.False(done); // already cut off
         }
 
-        [Fact]
+        [TestMethod]
         public void Subject_Synchronize_ArgumentChecking()
         {
             var s = new Subject<int>();
@@ -445,7 +447,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Subject_Synchronize1()
         {
             var N = 10;
@@ -472,7 +474,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(Enumerable.Range(0, N).Sum(), y);
         }
 
-        [Fact]
+        [TestMethod]
         public void Subject_Synchronize2()
         {
             var N = 10;
@@ -501,7 +503,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void HasObservers()
         {
             var s = new Subject<int>();
@@ -526,7 +528,7 @@ namespace ReactiveTests.Tests
             Assert.False(s.HasObservers);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_Dispose1()
         {
             var s = new Subject<int>();
@@ -546,7 +548,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_Dispose2()
         {
             var s = new Subject<int>();
@@ -566,7 +568,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_Dispose3()
         {
             var s = new Subject<int>();
@@ -578,7 +580,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_OnCompleted()
         {
             var s = new Subject<int>();
@@ -594,7 +596,7 @@ namespace ReactiveTests.Tests
             Assert.False(s.HasObservers);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_OnError()
         {
             var s = new Subject<int>();

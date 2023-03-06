@@ -3,14 +3,16 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class UnitTest
     {
-        [Fact]
+        [TestMethod]
         public void Unit()
         {
             var u1 = new Unit();

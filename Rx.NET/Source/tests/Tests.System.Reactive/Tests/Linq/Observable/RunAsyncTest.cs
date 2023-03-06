@@ -9,13 +9,16 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class RunAsyncTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void RunAsync_ArgumentChecking()
         {
             var ct = CancellationToken.None;
@@ -24,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RunAsync<int>(default, ct));
         }
 
-        [Fact]
+        [TestMethod]
         public void RunAsync_Simple()
         {
             SynchronizationContext.SetSynchronizationContext(null);
@@ -53,7 +56,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RunAsync_Cancelled()
         {
             SynchronizationContext.SetSynchronizationContext(null);
@@ -91,7 +94,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RunAsync_Cancel()
         {
             SynchronizationContext.SetSynchronizationContext(null);
@@ -130,7 +133,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RunAsync_Connectable()
         {
             SynchronizationContext.SetSynchronizationContext(null);
@@ -165,7 +168,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(42, result);
         }
 
-        [Fact]
+        [TestMethod]
         public void RunAsync_Connectable_Cancelled()
         {
             SynchronizationContext.SetSynchronizationContext(null);
@@ -210,7 +213,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(200, t);
         }
 
-        [Fact]
+        [TestMethod]
         public void RunAsync_Connectable_Cancel()
         {
             SynchronizationContext.SetSynchronizationContext(null);

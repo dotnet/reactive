@@ -7,15 +7,18 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
 #pragma warning disable IDE0039 // Use local function
+    [TestClass]
     public class ManySelectTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ManySelect_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.ManySelect(null, DummyFunc<IObservable<int>, int>.Instance, DummyScheduler.Instance));
@@ -25,7 +28,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.ManySelect<int, int>(DummyObservable<int>.Instance, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ManySelect_Law_1()
         {
             var xs = Observable.Range(1, 0);
@@ -36,7 +39,7 @@ namespace ReactiveTests.Tests
             Assert.True(left.SequenceEqual(right).First());
         }
 
-        [Fact]
+        [TestMethod]
         public void ManySelect_Law_2()
         {
             var xs = Observable.Range(1, 10);
@@ -48,7 +51,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(left, right);
         }
 
-        [Fact]
+        [TestMethod]
         public void ManySelect_Law_3()
         {
             var xs = Observable.Range(1, 10);
@@ -61,7 +64,7 @@ namespace ReactiveTests.Tests
             Assert.True(left.SequenceEqual(right).First());
         }
 
-        [Fact]
+        [TestMethod]
         public void ManySelect_Basic()
         {
             var scheduler = new TestScheduler();
@@ -90,7 +93,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ManySelect_Error()
         {
             var scheduler = new TestScheduler();

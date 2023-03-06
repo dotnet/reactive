@@ -1,15 +1,18 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
 using System.Reactive;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class PriorityQueueTest
     {
-        [Fact]
+        [TestMethod]
         public void Enqueue_dequeue()
         {
             var q = new PriorityQueue<int>();
@@ -28,7 +31,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Enqueue_all_dequeue_all()
         {
             var q = new PriorityQueue<int>();
@@ -51,7 +54,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, q.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void Reverse_Enqueue_all_dequeue_all()
         {
             var q = new PriorityQueue<int>();
@@ -74,7 +77,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, q.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void Remove_from_middle()
         {
             var q = new PriorityQueue<int>();
@@ -97,7 +100,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Repro_329()
         {
             var queue = new PriorityQueue<int>();

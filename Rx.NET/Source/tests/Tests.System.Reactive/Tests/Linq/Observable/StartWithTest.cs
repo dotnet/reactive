@@ -7,14 +7,15 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class StartWithTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void StartWith_ArgumentChecking()
         {
             var values = (IEnumerable<int>)new[] { 1, 2, 3 };
@@ -37,7 +38,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, scheduler, default(IEnumerable<int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void StartWith()
         {
             var scheduler = new TestScheduler();
@@ -59,7 +60,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void StartWith_Scheduler()
         {
             var scheduler = new TestScheduler();
@@ -83,7 +84,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void StartWith_Enumerable()
         {
             var scheduler = new TestScheduler();
@@ -108,7 +109,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void StartWith_Enumerable_Scheduler()
         {
             var scheduler = new TestScheduler();

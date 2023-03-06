@@ -8,13 +8,16 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class PublishTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Publish_Cold_Zip()
         {
             var scheduler = new TestScheduler();
@@ -49,7 +52,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Publish_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -59,7 +62,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Publish<int, int>(someObservable, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Publish_Basic()
         {
             var scheduler = new TestScheduler();
@@ -116,7 +119,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Publish_Error()
         {
             var scheduler = new TestScheduler();
@@ -173,7 +176,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Publish_Complete()
         {
             var scheduler = new TestScheduler();
@@ -228,7 +231,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Publish_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -281,7 +284,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Publish_MultipleConnections()
         {
             var xs = Observable.Never<int>();
@@ -302,7 +305,7 @@ namespace ReactiveTests.Tests
             connection3.Dispose();
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishLambda_Zip_Complete()
         {
             var scheduler = new TestScheduler();
@@ -348,7 +351,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishLambda_Zip_Error()
         {
             var scheduler = new TestScheduler();
@@ -396,7 +399,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishLambda_Zip_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -440,7 +443,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishWithInitialValue_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -450,7 +453,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Publish(someObservable, default(Func<IObservable<int>, IObservable<int>>), 1));
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishWithInitialValue_SanityCheck()
         {
             var someObservable = Observable.Empty<int>();
@@ -458,7 +461,7 @@ namespace ReactiveTests.Tests
             Observable.Publish(Observable.Range(1, 10), x => x, 0).AssertEqual(Observable.Range(0, 11));
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishWithInitialValue_Basic()
         {
             var scheduler = new TestScheduler();
@@ -516,7 +519,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishWithInitialValue_Error()
         {
             var scheduler = new TestScheduler();
@@ -574,7 +577,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishWithInitialValue_Complete()
         {
             var scheduler = new TestScheduler();
@@ -630,7 +633,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishWithInitialValue_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -684,7 +687,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishWithInitialValue_MultipleConnections()
         {
             var xs = Observable.Never<int>();
@@ -705,7 +708,7 @@ namespace ReactiveTests.Tests
             connection3.Dispose();
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishWithInitialValueLambda_Zip_Complete()
         {
             var scheduler = new TestScheduler();
@@ -752,7 +755,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishWithInitialValueLambda_Zip_Error()
         {
             var scheduler = new TestScheduler();
@@ -801,7 +804,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishWithInitialValueLambda_Zip_Dispose()
         {
             var scheduler = new TestScheduler();

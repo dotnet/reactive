@@ -8,14 +8,17 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class CollectTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Collect_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -30,7 +33,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, (x, y) => x, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Collect_Regular1()
         {
             var scheduler = new TestScheduler();
@@ -84,7 +87,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(res[6], new int[] { }.Sum());
         }
 
-        [Fact]
+        [TestMethod]
         public void Collect_Regular2()
         {
             var scheduler = new TestScheduler();
@@ -128,7 +131,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(res[1], new int[] { 6, 7, 8 }.Sum());
         }
 
-        [Fact]
+        [TestMethod]
         public void Collect_InitialCollectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -166,7 +169,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex_, ex);
         }
 
-        [Fact]
+        [TestMethod]
         public void Collect_SecondCollectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -218,7 +221,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex_, ex);
         }
 
-        [Fact]
+        [TestMethod]
         public void Collect_NewCollectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -259,7 +262,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex_, ex);
         }
 
-        [Fact]
+        [TestMethod]
         public void Collect_MergeThrows()
         {
             var scheduler = new TestScheduler();

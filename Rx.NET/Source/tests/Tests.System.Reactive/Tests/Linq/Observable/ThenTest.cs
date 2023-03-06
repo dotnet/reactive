@@ -6,14 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ThenTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Then_ArgumentChecking()
         {
             var someObservable = Observable.Return(1);
@@ -37,7 +38,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).Then<int>(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Then1()
         {
             var scheduler = new TestScheduler();
@@ -57,7 +58,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then1Error()
         {
             var ex = new Exception();
@@ -77,7 +78,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then1Throws()
         {
             var ex = new Exception();
@@ -98,7 +99,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then2Throws()
         {
             var scheduler = new TestScheduler();
@@ -124,7 +125,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then3Throws()
         {
             var scheduler = new TestScheduler();
@@ -150,7 +151,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then4Throws()
         {
             var scheduler = new TestScheduler();
@@ -176,7 +177,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then5Throws()
         {
             var scheduler = new TestScheduler();
@@ -202,7 +203,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then6Throws()
         {
             var scheduler = new TestScheduler();
@@ -228,7 +229,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then7Throws()
         {
             var scheduler = new TestScheduler();
@@ -254,7 +255,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then8Throws()
         {
             var scheduler = new TestScheduler();
@@ -280,7 +281,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then9Throws()
         {
             var scheduler = new TestScheduler();
@@ -306,7 +307,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then10Throws()
         {
             var scheduler = new TestScheduler();
@@ -332,7 +333,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then11Throws()
         {
             var scheduler = new TestScheduler();
@@ -358,7 +359,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then12Throws()
         {
             var scheduler = new TestScheduler();
@@ -384,7 +385,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then13Throws()
         {
             var scheduler = new TestScheduler();
@@ -410,7 +411,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then14Throws()
         {
             var scheduler = new TestScheduler();
@@ -436,7 +437,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then15Throws()
         {
             var scheduler = new TestScheduler();
@@ -462,7 +463,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Then16Throws()
         {
             var scheduler = new TestScheduler();

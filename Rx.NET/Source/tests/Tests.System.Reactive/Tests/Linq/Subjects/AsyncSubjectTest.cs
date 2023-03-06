@@ -8,26 +8,28 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public partial class AsyncSubjectTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Subscribe_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new AsyncSubject<int>().Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new AsyncSubject<int>().OnError(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Infinite()
         {
             var scheduler = new TestScheduler();
@@ -84,7 +86,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Finite()
         {
             var scheduler = new TestScheduler();
@@ -144,7 +146,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Error()
         {
             var scheduler = new TestScheduler();
@@ -204,7 +206,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Canceled()
         {
             var scheduler = new TestScheduler();
@@ -255,7 +257,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SubjectDisposed()
         {
             var scheduler = new TestScheduler();
@@ -304,14 +306,14 @@ namespace ReactiveTests.Tests
 
 
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Await_Blocking()
         {
             var s = new AsyncSubject<int>();
             GetResult_BlockingImpl(s.GetAwaiter());
         }
 
-        [Fact]
+        [TestMethod]
         public void Await_Throw()
         {
             var s = new AsyncSubject<int>();
@@ -319,7 +321,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void GetResult_Empty()
         {
             var s = new AsyncSubject<int>();
@@ -328,7 +330,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void GetResult_Blocking()
         {
             GetResult_BlockingImpl(new AsyncSubject<int>());
@@ -358,7 +360,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsCompleted);
         }
 
-        [Fact]
+        [TestMethod]
         public void GetResult_Blocking_Throw()
         {
             GetResult_Blocking_ThrowImpl(new AsyncSubject<int>());
@@ -401,7 +403,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void GetResult_Context()
         {
             var x = new AsyncSubject<int>();
@@ -439,7 +441,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers()
         {
             var s = new AsyncSubject<int>();
@@ -464,7 +466,7 @@ namespace ReactiveTests.Tests
             Assert.False(s.HasObservers);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_Dispose1()
         {
             var s = new AsyncSubject<int>();
@@ -484,7 +486,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_Dispose2()
         {
             var s = new AsyncSubject<int>();
@@ -504,7 +506,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_Dispose3()
         {
             var s = new AsyncSubject<int>();
@@ -516,7 +518,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_OnCompleted()
         {
             var s = new AsyncSubject<int>();
@@ -532,7 +534,7 @@ namespace ReactiveTests.Tests
             Assert.False(s.HasObservers);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_OnError()
         {
             var s = new AsyncSubject<int>();

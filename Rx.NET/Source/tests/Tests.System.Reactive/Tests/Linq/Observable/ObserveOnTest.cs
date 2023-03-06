@@ -12,7 +12,7 @@ using System.Reactive.Subjects;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #if HAS_DISPATCHER
 using System.Windows.Threading;
@@ -22,13 +22,16 @@ using System.Windows.Threading;
 using System.Windows.Forms;
 #endif
 
+using Assert = Xunit.Assert;
+
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ObserveOnTest : TestBase
     {
         #region + TestBase +
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -54,7 +57,7 @@ namespace ReactiveTests.Tests
         }
 
 #if HAS_WINFORMS
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Control()
         {
             bool okay = true;
@@ -75,7 +78,7 @@ namespace ReactiveTests.Tests
             Assert.True(okay);
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_ControlScheduler()
         {
             bool okay = true;
@@ -97,7 +100,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 #if HAS_DISPATCHER
-        [Fact]
+        [TestMethod]
         [Asynchronous]
         public void ObserveOn_Dispatcher()
         {
@@ -118,7 +121,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         [Asynchronous]
         public void ObserveOn_DispatcherScheduler()
         {
@@ -139,7 +142,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         [Asynchronous]
         public void ObserveOn_CurrentDispatcher()
         {
@@ -163,7 +166,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         [Asynchronous]
         public void ObserveOn_Error()
         {
@@ -200,18 +203,19 @@ namespace ReactiveTests.Tests
 
     }
 
+    [TestClass]
     public class ObserveOnReactiveTest : ReactiveTest
     {
         private static TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Scheduler_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn(default(IObservable<int>), DummyScheduler.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn(DummyObservable<int>.Instance, default(IScheduler)));
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Scheduler_Completed()
         {
             var scheduler = new TestScheduler();
@@ -254,7 +258,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Scheduler_Error()
         {
             var scheduler = new TestScheduler();
@@ -298,7 +302,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Scheduler_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -328,7 +332,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Scheduler_SameTime()
         {
             var scheduler = new TestScheduler();
@@ -352,7 +356,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Scheduler_OnNextThrows()
         {
             var e = new ManualResetEvent(false);
@@ -414,7 +418,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_Simple()
         {
             var started = default(ManualResetEvent);
@@ -438,7 +442,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(new[] { 1, 2, 3 }));
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_Error()
         {
             var started = default(ManualResetEvent);
@@ -465,7 +469,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_TimeVariance()
         {
             var started = default(ManualResetEvent);
@@ -498,7 +502,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_HoldUpDuringDispatchAndFail()
         {
             var started = default(ManualResetEvent);
@@ -531,7 +535,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_Cancel()
         {
             var started = default(ManualResetEvent);
@@ -563,7 +567,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.Count > 0 && !lst.Contains(4));
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_OnNextThrows()
         {
             var started = default(ManualResetEvent);
@@ -596,7 +600,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_SynchronizationContext_Simple()
         {
             var scheduler = new TestScheduler();
@@ -628,7 +632,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_EventLoop_Long()
         {
             using var _scheduler1 = new EventLoopScheduler();
@@ -642,7 +646,7 @@ namespace ReactiveTests.Tests
             Assert.True(cde.Wait(MaxWaitTime), "Timeout!");
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_SameThread()
         {
             var scheduler = TaskPoolScheduler.Default;
@@ -666,7 +670,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, threads.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_DisableOptimizations()
         {
             var scheduler = TaskPoolScheduler.Default.DisableOptimizations();

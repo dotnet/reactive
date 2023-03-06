@@ -7,14 +7,16 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests
 {
-
+    [TestClass]
     public class ScheduledItemTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(default, 42, (x, y) => Disposable.Empty, DateTimeOffset.Now));
@@ -25,7 +27,7 @@ namespace ReactiveTests
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, (x, y) => Disposable.Empty, DateTimeOffset.Now, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Inequalities()
         {
             var si1 = new SI(42);
@@ -79,7 +81,7 @@ namespace ReactiveTests
             Assert.False(si5 <= si4);
         }
 
-        [Fact]
+        [TestMethod]
         public void Equalities()
         {
             var si1 = new SI2(42, 123);

@@ -7,14 +7,17 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class TakeWhileTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).TakeWhile(DummyFunc<int, bool>.Instance));
@@ -24,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.TakeWhile(default(Func<int, int, bool>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_Complete_Before()
         {
             var scheduler = new TestScheduler();
@@ -70,7 +73,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(4, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_Complete_After()
         {
             var scheduler = new TestScheduler();
@@ -116,7 +119,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(6, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_Error_Before()
         {
             var scheduler = new TestScheduler();
@@ -161,7 +164,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(2, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_Error_After()
         {
             var scheduler = new TestScheduler();
@@ -207,7 +210,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(6, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_Dispose_Before()
         {
             var scheduler = new TestScheduler();
@@ -251,7 +254,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_Dispose_After()
         {
             var scheduler = new TestScheduler();
@@ -298,7 +301,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(6, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_Zero()
         {
             var scheduler = new TestScheduler();
@@ -341,7 +344,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_Throw()
         {
             var scheduler = new TestScheduler();
@@ -390,7 +393,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_Index1()
         {
             var scheduler = new TestScheduler();
@@ -429,7 +432,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_Index2()
         {
             var scheduler = new TestScheduler();
@@ -467,7 +470,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_Index_Throw()
         {
             var scheduler = new TestScheduler();
@@ -507,7 +510,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeWhile_Index_SelectorThrows()
         {
             var scheduler = new TestScheduler();

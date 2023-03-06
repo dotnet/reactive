@@ -6,13 +6,16 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class AppendPrependTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void AppendPrepend()
         {
             var scheduler = new TestScheduler();
@@ -35,7 +38,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PrependAppend()
         {
             var scheduler = new TestScheduler();
@@ -58,7 +61,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AppendPrepend_Scheduler()
         {
             var scheduler = new TestScheduler();
@@ -81,7 +84,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PrependAppend_Scheduler()
         {
             var scheduler = new TestScheduler();
@@ -104,7 +107,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AppendPrepend_Many()
         {
             var scheduler = new TestScheduler();
@@ -131,7 +134,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PrependAppend_Many()
         {
             var scheduler = new TestScheduler();
@@ -158,7 +161,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AppendPrepend_Many_Scheduler()
         {
             var scheduler = new TestScheduler();
@@ -190,7 +193,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PrependAppend_Many_Scheduler()
         {
             var scheduler = new TestScheduler();
@@ -222,7 +225,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AppendPrepend_Mixed()
         {
             var scheduler = new TestScheduler();
@@ -249,7 +252,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AppendPrepend_Mixed_Scheduler()
         {
             var scheduler = new TestScheduler();
@@ -281,7 +284,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AppendPrepend_MixedSchedulers()
         {
             var scheduler = new TestScheduler();
@@ -313,7 +316,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AppendPrepend_SchedulerRecursive()
         {
             using var scheduler = new EventLoopScheduler();
@@ -333,7 +336,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void AppendPrepend_SchedulerLongRunning()
         {
             var scheduler = NewThreadScheduler.Default;

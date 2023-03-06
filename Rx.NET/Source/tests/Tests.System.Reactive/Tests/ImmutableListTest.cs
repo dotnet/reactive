@@ -5,16 +5,18 @@
 #if SIGNED
 using System.Linq;
 using System.Reactive;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
 #if SIGNED
-
+    [TestClass]
     public class ImmutableListTest
     {
-        [Fact]
+        [TestMethod]
         public void ImmutableList_Basics()
         {
             var list = ImmutableList<int>.Empty;
@@ -52,7 +54,7 @@ namespace ReactiveTests.Tests
             Assert.True(list.Data.SequenceEqual(new int[] { }));
         }
 
-        [Fact]
+        [TestMethod]
         public void ImmutableList_Nulls()
         {
             var list = ImmutableList<string>.Empty;

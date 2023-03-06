@@ -8,20 +8,23 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ChunkifyTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Chunkify_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Chunkify(default(IObservable<int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Chunkify_Regular1()
         {
             var scheduler = new TestScheduler();
@@ -75,7 +78,7 @@ namespace ReactiveTests.Tests
             Assert.True(res[6].SequenceEqual(new int[] { }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Chunkify_Regular2()
         {
             var scheduler = new TestScheduler();
@@ -119,7 +122,7 @@ namespace ReactiveTests.Tests
             Assert.True(res[1].SequenceEqual(new int[] { 6, 7, 8 }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Chunkify_Error()
         {
             var ex = new Exception();

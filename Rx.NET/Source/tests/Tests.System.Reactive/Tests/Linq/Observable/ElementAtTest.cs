@@ -7,21 +7,22 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ElementAtTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ElementAt_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ElementAt(default(IObservable<int>), 2));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.ElementAt(DummyObservable<int>.Instance, -1));
         }
 
-        [Fact]
+        [TestMethod]
         public void ElementAt_First()
         {
             var scheduler = new TestScheduler();
@@ -47,7 +48,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ElementAt_Other()
         {
             var scheduler = new TestScheduler();
@@ -73,7 +74,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ElementAt_OutOfRange()
         {
             var scheduler = new TestScheduler();
@@ -94,7 +95,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ElementAt_Error()
         {
             var scheduler = new TestScheduler();

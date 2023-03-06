@@ -11,15 +11,18 @@ using System.Reactive.Linq;
 using System.Text;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class GroupByUntilTest : ReactiveTest
     {
         #region + GroupByUntil +
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(default, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, EqualityComparer<int>.Default));
@@ -43,7 +46,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, default(Func<IGroupedObservable<int, int>, IObservable<int>>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_WithKeyComparer()
         {
             var scheduler = new TestScheduler();
@@ -102,7 +105,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(12, keyInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Outer_Complete()
         {
             var scheduler = new TestScheduler();
@@ -168,7 +171,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(12, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Outer_Error()
         {
             var scheduler = new TestScheduler();
@@ -235,7 +238,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(12, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Outer_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -299,7 +302,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(5, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Outer_KeyThrow()
         {
             var scheduler = new TestScheduler();
@@ -371,7 +374,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(9, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Outer_EleThrow()
         {
             var scheduler = new TestScheduler();
@@ -443,7 +446,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(10, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Outer_ComparerEqualsThrow()
         {
             var scheduler = new TestScheduler();
@@ -506,7 +509,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Outer_ComparerGetHashCodeThrow()
         {
             var scheduler = new TestScheduler();
@@ -571,7 +574,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(7, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_Complete()
         {
             var scheduler = new TestScheduler();
@@ -657,7 +660,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_Complete_All()
         {
             var scheduler = new TestScheduler();
@@ -751,7 +754,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_Error()
         {
             var scheduler = new TestScheduler();
@@ -839,7 +842,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -921,7 +924,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_KeyThrow()
         {
             var scheduler = new TestScheduler();
@@ -1012,7 +1015,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_EleThrow()
         {
             var scheduler = new TestScheduler();
@@ -1107,7 +1110,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_Comparer_EqualsThrow()
         {
             var scheduler = new TestScheduler();
@@ -1192,7 +1195,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_Comparer_GetHashCodeThrow()
         {
             var scheduler = new TestScheduler();
@@ -1277,7 +1280,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Outer_Independence()
         {
             var scheduler = new TestScheduler();
@@ -1362,7 +1365,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_Independence()
         {
             var scheduler = new TestScheduler();
@@ -1460,7 +1463,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_Multiple_Independence()
         {
             var scheduler = new TestScheduler();
@@ -1554,7 +1557,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_Escape_Complete()
         {
             var scheduler = new TestScheduler();
@@ -1600,7 +1603,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_Escape_Error()
         {
             var scheduler = new TestScheduler();
@@ -1648,7 +1651,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Inner_Escape_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -1694,7 +1697,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Default()
         {
             var scheduler = new TestScheduler();
@@ -1757,7 +1760,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(12, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_DurationSelector_Throws()
         {
             var scheduler = new TestScheduler();
@@ -1781,7 +1784,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_NullKeys_Simple_Never()
         {
             var scheduler = new TestScheduler();
@@ -1809,7 +1812,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_NullKeys_Simple_Expire1()
         {
             var scheduler = new TestScheduler();
@@ -1840,7 +1843,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_NullKeys_Simple_Expire2()
         {
             var scheduler = new TestScheduler();
@@ -1871,7 +1874,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_NullKeys_Error()
         {
             var scheduler = new TestScheduler();
@@ -1911,7 +1914,7 @@ namespace ReactiveTests.Tests
 
         private const int _groupByUntilCapacity = 1024;
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(default, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity, EqualityComparer<int>.Default));
@@ -1940,7 +1943,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, -1));
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_WithKeyComparer()
         {
             var scheduler = new TestScheduler();
@@ -2000,7 +2003,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(12, keyInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Outer_Complete()
         {
             var scheduler = new TestScheduler();
@@ -2067,7 +2070,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(12, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Outer_Error()
         {
             var scheduler = new TestScheduler();
@@ -2135,7 +2138,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(12, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Outer_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -2200,7 +2203,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(5, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Outer_KeyThrow()
         {
             var scheduler = new TestScheduler();
@@ -2273,7 +2276,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(9, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Outer_EleThrow()
         {
             var scheduler = new TestScheduler();
@@ -2346,7 +2349,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(10, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Outer_ComparerEqualsThrow()
         {
             var scheduler = new TestScheduler();
@@ -2410,7 +2413,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Outer_ComparerGetHashCodeThrow()
         {
             var scheduler = new TestScheduler();
@@ -2476,7 +2479,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(7, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_Complete()
         {
             var scheduler = new TestScheduler();
@@ -2562,7 +2565,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_Complete_All()
         {
             var scheduler = new TestScheduler();
@@ -2656,7 +2659,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_Error()
         {
             var scheduler = new TestScheduler();
@@ -2744,7 +2747,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -2826,7 +2829,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_KeyThrow()
         {
             var scheduler = new TestScheduler();
@@ -2917,7 +2920,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_EleThrow()
         {
             var scheduler = new TestScheduler();
@@ -3012,7 +3015,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_Comparer_EqualsThrow()
         {
             var scheduler = new TestScheduler();
@@ -3097,7 +3100,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_Comparer_GetHashCodeThrow()
         {
             var scheduler = new TestScheduler();
@@ -3182,7 +3185,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Outer_Independence()
         {
             var scheduler = new TestScheduler();
@@ -3267,7 +3270,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_Independence()
         {
             var scheduler = new TestScheduler();
@@ -3365,7 +3368,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_Multiple_Independence()
         {
             var scheduler = new TestScheduler();
@@ -3459,7 +3462,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_Escape_Complete()
         {
             var scheduler = new TestScheduler();
@@ -3505,7 +3508,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_Escape_Error()
         {
             var scheduler = new TestScheduler();
@@ -3553,7 +3556,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Inner_Escape_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -3599,7 +3602,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_Default()
         {
             var scheduler = new TestScheduler();
@@ -3663,7 +3666,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(12, eleInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_DurationSelector_Throws()
         {
             var scheduler = new TestScheduler();
@@ -3687,7 +3690,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_NullKeys_Simple_Never()
         {
             var scheduler = new TestScheduler();
@@ -3715,7 +3718,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_NullKeys_Simple_Expire1()
         {
             var scheduler = new TestScheduler();
@@ -3746,7 +3749,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_NullKeys_Simple_Expire2()
         {
             var scheduler = new TestScheduler();
@@ -3777,7 +3780,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupByUntil_Capacity_NullKeys_Error()
         {
             var scheduler = new TestScheduler();

@@ -8,14 +8,15 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ContainsTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Contains_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Contains(default, 42));
@@ -23,7 +24,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Contains(DummyObservable<int>.Instance, 42, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_Empty()
         {
             var scheduler = new TestScheduler();
@@ -47,7 +48,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_ReturnPositive()
         {
             var scheduler = new TestScheduler();
@@ -72,7 +73,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_ReturnNegative()
         {
             var scheduler = new TestScheduler();
@@ -97,7 +98,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_SomePositive()
         {
             var scheduler = new TestScheduler();
@@ -124,7 +125,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_SomeNegative()
         {
             var scheduler = new TestScheduler();
@@ -151,7 +152,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_Throw()
         {
             var ex = new Exception();
@@ -176,7 +177,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_Never()
         {
             var ex = new Exception();
@@ -199,7 +200,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_ComparerThrows()
         {
             var ex = new Exception();
@@ -237,7 +238,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_ComparerContainsValue()
         {
             var ex = new Exception();
@@ -266,7 +267,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_ComparerDoesNotContainValue()
         {
             var ex = new Exception();

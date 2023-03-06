@@ -9,61 +9,63 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public partial class ListObservableTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Ctor_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new ListObservable<int>(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Subscribe_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new ListObservable<int>(Observable.Never<int>()).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Value_None()
         {
             var o = new ListObservable<int>(Observable.Empty<int>());
             ReactiveAssert.Throws<InvalidOperationException>(() => { var t = o.Value; });
         }
 
-        [Fact]
+        [TestMethod]
         public void Value_Some()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
             Assert.Equal(9, o.Value);
         }
 
-        [Fact]
+        [TestMethod]
         public void IndexOf_None()
         {
             var o = new ListObservable<int>(Observable.Empty<int>());
             Assert.Equal(-1, o.IndexOf(0));
         }
 
-        [Fact]
+        [TestMethod]
         public void IndexOf_Some_NotFound()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
             Assert.Equal(-1, o.IndexOf(100));
         }
 
-        [Fact]
+        [TestMethod]
         public void IndexOf_Some_Found()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
             Assert.Equal(3, o.IndexOf(3));
         }
 
-        [Fact]
+        [TestMethod]
         public void RemoveAt_Some_NotFound()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -71,7 +73,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void RemoveAt_Some_Found()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -79,7 +81,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual(0, 1, 2, 4, 5, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void Insert_Invalid()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -87,7 +89,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void Insert_Invalid_2()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -95,7 +97,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void Insert_Beginning()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -103,7 +105,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void Insert_Middle()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -111,7 +113,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual(0, 1, 2, -1, 3, 4, 5, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void Change_Beginning()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10))
@@ -121,7 +123,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual(-1, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void Change_Middle()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10))
@@ -131,7 +133,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual(0, 1, 2, 3, 4, -1, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void Change_End()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10))
@@ -141,14 +143,14 @@ namespace ReactiveTests.Tests
             o.AssertEqual(0, 1, 2, 3, 4, 5, 6, 7, 8, -1);
         }
 
-        [Fact]
+        [TestMethod]
         public void Change_Error()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => o[100] = -1);
         }
 
-        [Fact]
+        [TestMethod]
         public void Insert_End()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -156,28 +158,28 @@ namespace ReactiveTests.Tests
             o.AssertEqual(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1);
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_None()
         {
             var o = new ListObservable<int>(Observable.Empty<int>());
             Assert.Equal(false, o.Contains(0));
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_Some_NotFound()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
             Assert.Equal(false, o.Contains(100));
         }
 
-        [Fact]
+        [TestMethod]
         public void Contains_Some_Found()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
             Assert.Equal(true, o.Contains(3));
         }
 
-        [Fact]
+        [TestMethod]
         public void Clear()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -185,35 +187,35 @@ namespace ReactiveTests.Tests
             o.AssertEqual();
         }
 
-        [Fact]
+        [TestMethod]
         public void IsReadOnly()
         {
             var o = new ListObservable<int>(Observable.Never<int>());
             Assert.Equal(false, o.IsReadOnly);
         }
 
-        [Fact]
+        [TestMethod]
         public void This_None()
         {
             var o = new ListObservable<int>(Observable.Empty<int>());
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => { var t = o[0]; });
         }
 
-        [Fact]
+        [TestMethod]
         public void This_Some_NotFound()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => { var t = o[100]; });
         }
 
-        [Fact]
+        [TestMethod]
         public void This_Some_Found()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
             Assert.Equal(5, o[5]);
         }
 
-        [Fact]
+        [TestMethod]
         public void CopyTo_RightSize()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -222,7 +224,7 @@ namespace ReactiveTests.Tests
             array.AssertEqual(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void CopyTo_RightSize_Offset()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -230,7 +232,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentException>(() => o.CopyTo(array, 3));
         }
 
-        [Fact]
+        [TestMethod]
         public void CopyTo_Bigger()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -239,7 +241,7 @@ namespace ReactiveTests.Tests
             array.AssertEqual(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void CopyTo_Bigger_Offset()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -248,7 +250,7 @@ namespace ReactiveTests.Tests
             array.AssertEqual(0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void CopyTo_Smaller()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -256,7 +258,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentException>(() => o.CopyTo(array, 0));
         }
 
-        [Fact]
+        [TestMethod]
         public void CopyTo_Smaller_Offset()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -264,7 +266,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentException>(() => o.CopyTo(array, 3));
         }
 
-        [Fact]
+        [TestMethod]
         public void Add_Empty()
         {
             var o = new ListObservable<int>(Observable.Empty<int>())
@@ -274,7 +276,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual(100);
         }
 
-        [Fact]
+        [TestMethod]
         public void Add_Some()
         {
             var o = new ListObservable<int>(Observable.Return(200))
@@ -284,7 +286,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual(200, 100);
         }
 
-        [Fact]
+        [TestMethod]
         public void Remove_None()
         {
             var o = new ListObservable<int>(Observable.Empty<int>());
@@ -292,7 +294,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual();
         }
 
-        [Fact]
+        [TestMethod]
         public void Remove_Some_NotFound()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -300,7 +302,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void Remove_Some_Found()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -308,7 +310,7 @@ namespace ReactiveTests.Tests
             o.AssertEqual(0, 1, 2, 4, 5, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void ForEach()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -322,7 +324,7 @@ namespace ReactiveTests.Tests
             l.AssertEqual(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void ForEach_Old()
         {
             var o = new ListObservable<int>(Observable.Range(0, 10));
@@ -336,7 +338,7 @@ namespace ReactiveTests.Tests
             l.AssertEqual(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         }
 
-        [Fact]
+        [TestMethod]
         public void Subscribe_Never()
         {
             var s = new TestScheduler();
@@ -350,7 +352,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Subscribe_Infinite()
         {
             var s = new TestScheduler();
@@ -365,7 +367,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Subscribe_Error()
         {
             var s = new TestScheduler();
@@ -384,7 +386,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Subscribe_Completed()
         {
             var s = new TestScheduler();
@@ -401,7 +403,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Subscribe_Disposed()
         {
             var s = new TestScheduler();
@@ -417,7 +419,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Subscribe_Disposed_Multi()
         {
             var s = new TestScheduler();

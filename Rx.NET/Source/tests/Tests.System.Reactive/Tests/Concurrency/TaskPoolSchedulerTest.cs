@@ -6,14 +6,16 @@ using System;
 using System.Reactive.Concurrency;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class TaskPoolSchedulerTest
     {
-        [Fact]
+        [TestMethod]
         public void TaskPool_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new TaskPoolScheduler(null));
@@ -24,7 +26,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => TaskPoolScheduler.Default.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskPool_Now()
         {
             var res = TaskPoolScheduler.Default.Now - DateTime.Now;
@@ -32,7 +34,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void TaskPool_ScheduleAction()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -42,7 +44,7 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskPool_ScheduleActionDueNow()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -52,7 +54,7 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskPool_ScheduleActionDue()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -62,7 +64,7 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskPool_ScheduleActionCancel()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -75,7 +77,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void TaskPool_ScheduleLongRunning()
         {
             var n = 0;
@@ -117,14 +119,14 @@ namespace ReactiveTests.Tests
 #endif
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void Stopwatch()
         {
             StopwatchTest.Run(TaskPoolScheduler.Default);
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void TaskPool_Periodic()
         {
             var n = 0;
@@ -147,7 +149,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void TaskPool_Periodic_NonReentrant()
         {
             var n = 0;
@@ -179,7 +181,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void TaskPool_Delay_LargerThanIntMaxValue()
         {
             var dueTime = TimeSpan.FromMilliseconds((double)int.MaxValue + 1);

@@ -7,14 +7,17 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class TimeoutTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Timeout_ArgumentChecking()
         {
             var scheduler = new TestScheduler();
@@ -43,7 +46,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Timeout(someObservable, TimeSpan.FromSeconds(-1), someObservable, scheduler));
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_InTime()
         {
             var scheduler = new TestScheduler();
@@ -76,7 +79,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_DateTimeOffset_TimeoutOccurs_WithDefaultException()
         {
             var scheduler = new TestScheduler();
@@ -98,7 +101,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_TimeSpan_TimeoutOccurs_WithDefaultException()
         {
             var scheduler = new TestScheduler();
@@ -120,31 +123,31 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_TimeSpan_DefaultScheduler()
         {
             Assert.True(Observable.Return(1).Timeout(TimeSpan.FromSeconds(10)).ToEnumerable().Single() == 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_TimeSpan_Observable_DefaultScheduler()
         {
             Assert.True(Observable.Return(1).Timeout(TimeSpan.FromSeconds(10), Observable.Return(2)).ToEnumerable().Single() == 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_DateTimeOffset_DefaultScheduler()
         {
             Assert.True(Observable.Return(1).Timeout(DateTimeOffset.UtcNow + TimeSpan.FromSeconds(10)).ToEnumerable().Single() == 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_DateTimeOffset_Observable_DefaultScheduler()
         {
             Assert.True(Observable.Return(1).Timeout(DateTimeOffset.UtcNow + TimeSpan.FromSeconds(10), Observable.Return(2)).ToEnumerable().Single() == 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_TimeoutOccurs_1()
         {
             var scheduler = new TestScheduler();
@@ -184,7 +187,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_TimeoutOccurs_2()
         {
             var scheduler = new TestScheduler();
@@ -227,7 +230,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_TimeoutOccurs_Never()
         {
             var scheduler = new TestScheduler();
@@ -262,7 +265,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_TimeoutOccurs_Completed()
         {
             var scheduler = new TestScheduler();
@@ -292,7 +295,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_TimeoutOccurs_Error()
         {
             var scheduler = new TestScheduler();
@@ -322,7 +325,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_TimeoutOccurs_NextIsError()
         {
             var ex = new Exception();
@@ -354,7 +357,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_TimeoutNotOccurs_Completed()
         {
             var scheduler = new TestScheduler();
@@ -383,7 +386,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_TimeoutNotOccurs_Error()
         {
             var scheduler = new TestScheduler();
@@ -414,7 +417,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_TimeoutDoesNotOccur()
         {
             var scheduler = new TestScheduler();
@@ -454,7 +457,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_DateTimeOffset_TimeoutOccurs()
         {
             var scheduler = new TestScheduler();
@@ -484,7 +487,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_DateTimeOffset_TimeoutDoesNotOccur_Completed()
         {
             var scheduler = new TestScheduler();
@@ -515,7 +518,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_DateTimeOffset_TimeoutDoesNotOccur_Error()
         {
             var scheduler = new TestScheduler();
@@ -548,7 +551,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_DateTimeOffset_TimeoutOccur_2()
         {
             var scheduler = new TestScheduler();
@@ -583,7 +586,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_DateTimeOffset_TimeoutOccur_3()
         {
             var scheduler = new TestScheduler();
@@ -616,7 +619,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -638,7 +641,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, default(Func<int, IObservable<int>>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_Simple_Never()
         {
             var scheduler = new TestScheduler();
@@ -676,7 +679,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_Simple_TimeoutFirst()
         {
             var scheduler = new TestScheduler();
@@ -715,7 +718,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_Simple_TimeoutFirst_Other()
         {
             var scheduler = new TestScheduler();
@@ -764,7 +767,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_Simple_TimeoutLater()
         {
             var scheduler = new TestScheduler();
@@ -807,7 +810,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_Simple_TimeoutLater_Other()
         {
             var scheduler = new TestScheduler();
@@ -860,7 +863,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_Simple_TimeoutLater_NoFirst()
         {
             var scheduler = new TestScheduler();
@@ -896,7 +899,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_Simple_TimeoutLater_Other_NoFirst()
         {
             var scheduler = new TestScheduler();
@@ -942,7 +945,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_Simple_TimeoutByCompletion()
         {
             var scheduler = new TestScheduler();
@@ -985,7 +988,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_Simple_SelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -1040,7 +1043,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_Simple_InnerThrows()
         {
             var ex = new Exception();
@@ -1085,7 +1088,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_Simple_FirstThrows()
         {
             var ex = new Exception();
@@ -1126,7 +1129,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timeout_Duration_Simple_SourceThrows()
         {
             var ex = new Exception();
