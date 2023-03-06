@@ -4,7 +4,7 @@
 
 using System.Reactive.Disposables;
 
-#if NETCOREAPP2_1 || NET472 || NETCOREAPP3_1 || CSWINRT
+#if NET472 || CSWINRT
 using System.Threading;
 #endif
 #if HAS_DISPATCHER

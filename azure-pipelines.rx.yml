@@ -24,7 +24,8 @@ stages:
 - stage: Build
   jobs:
   - job: Build
-    pool: vs2019-preview
+    pool:
+      vmImage: windows-latest
 
     variables:
       BuildConfiguration: Release
@@ -33,10 +34,9 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 5.0.x SDK
+      displayName: Use .NET Core 7.0.x SDK
       inputs:
-        version: 5.0.x
-        includePreviewVersions: true
+        version: 7.0.x
         performMultiLevelLookup: true
 
     - task: DotNetCoreCLI@2
@@ -120,17 +120,11 @@ stages:
     steps:
     - task: UseDotNet@2
       inputs:
-        version: 5.0.x
-        includePreviewVersions: true
+        version: 7.0.x
 
     - task: UseDotNet@2
       inputs:
-        version: '3.1.x'
-        packageType: runtime
-
-    - task: UseDotNet@2
-      inputs:
-        version: '2.2.x'
+        version: '6.0.x'
         packageType: runtime
 
     - task: DotNetCoreCLI@2
@@ -161,22 +155,15 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f net5.0 --filter "SkipCI!=true"
-      displayName: Run 5.0 Tests on Linux
+        arguments: -c $(BuildConfiguration) -f net7.0 --filter "SkipCI!=true"
+      displayName: Run 7.0 Tests on Linux
 
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f netcoreapp3.1 --filter "SkipCI!=true"
-      displayName: Run 3.1 Tests on Linux
-
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: test
-        projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f netcoreapp2.1 --filter "SkipCI!=true" 
-      displayName: Run 2.1 Tests on Linux
+        arguments: -c $(BuildConfiguration) -f net6.0 --filter "SkipCI!=true"
+      displayName: Run 6.0 Tests on Linux
 
   - job: WindowsDesktop    
     pool:
@@ -190,8 +177,7 @@ stages:
     steps:
     - task: UseDotNet@2
       inputs:
-        version: 5.0.x
-        includePreviewVersions: true
+        version: 7.0.x
         performMultiLevelLookup: true
 
     - task: DotNetCoreCLI@2

@@ -3,7 +3,7 @@
    
   <Target Name="_RXNETWindowsTFMCheck" BeforeTargets="ResolveAssemblyReferences;Build;Rebuild">
     <Error 
-        Text = "The 'System.Reactive' nuget package cannot be used to target '$(TargetFramework)'. Target 'net5.0-windows10.0.19041' or later instead." />
+        Text = "The 'System.Reactive' nuget package cannot be used to target '$(TargetFramework)'. Target 'net6.0-windows10.0.19041' or later instead." />
   </Target>
   
 </Project>
