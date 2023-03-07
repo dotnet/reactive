@@ -253,7 +253,6 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        [Ignore("")]
         public void EventLoop_ScheduleActionDue()
         {
             var ran = false;
@@ -273,7 +272,6 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        [Ignore("")]
         public void EventLoop_ScheduleActionDueNested()
         {
             var ran = false;

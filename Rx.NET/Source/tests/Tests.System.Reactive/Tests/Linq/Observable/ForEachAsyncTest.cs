@@ -510,13 +510,8 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        // idg10: temporarily disabling, because on .NET 6.0 I'm currently always
-        // seeing the OnCompletedHandler win the race, meaning we never hit the
-        // alternate race outcome that this tests for - it just spins in a loop
-        // forever. (Not sure if that's because of the change to MSTest, or
-        // something else I've disturbed on this branch,.
-        //[TestMethod]
-        //[TestCategory("SkipCI")]
+        [TestMethod]
+        [TestCategory("SkipCI")]
         public void ForEachAsync_DisposeThrows()
         {
             //
