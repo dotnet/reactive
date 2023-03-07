@@ -113,6 +113,7 @@
     <Compile Include="..\Tests.System.Reactive\**\*.cs">
       <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Compile>
+    <Compile Remove="..\Tests.System.Reactive\Tests\LicenseHeaderTest.cs" />
     <Compile Remove="..\Tests.System.Reactive\bin\**\*" />
     <Compile Remove="..\Tests.System.Reactive\obj\**\*" />
     <Compile Include="App.xaml.cs">
