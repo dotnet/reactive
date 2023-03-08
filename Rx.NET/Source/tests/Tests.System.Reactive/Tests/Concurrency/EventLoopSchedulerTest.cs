@@ -240,35 +240,53 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void EventLoop_ScheduleActionNested()
         {
-            var ran = false;
-            using var el = new EventLoopScheduler();
-            var gate = new Semaphore(0, 1);
-            el.Schedule(() => el.Schedule(() =>
+            // See https://github.com/dotnet/reactive/issues/1885
+            SynchronizationContext ctx = SynchronizationContext.Current;
+            try
             {
-                ran = true;
-                gate.Release();
-            }));
-            Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
-            Assert.True(ran);
+                var ran = false;
+                using var el = new EventLoopScheduler();
+                var gate = new Semaphore(0, 1);
+                el.Schedule(() => el.Schedule(() =>
+                {
+                    ran = true;
+                    gate.Release();
+                }));
+                Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
+                Assert.True(ran);
+            }
+            finally
+            {
+                SynchronizationContext.SetSynchronizationContext(ctx);
+            }
         }
 
         [TestMethod]
         public void EventLoop_ScheduleActionDue()
         {
-            var ran = false;
-            using var el = new EventLoopScheduler();
-            var sw = new Stopwatch();
-            var gate = new Semaphore(0, 1);
-            sw.Start();
-            el.Schedule(TimeSpan.FromSeconds(0.2), () =>
+            // See https://github.com/dotnet/reactive/issues/1885
+            SynchronizationContext ctx = SynchronizationContext.Current;
+            try
             {
-                ran = true;
-                sw.Stop();
-                gate.Release();
-            });
-            Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
-            Assert.True(ran, "ran");
-            Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
+                var ran = false;
+                using var el = new EventLoopScheduler();
+                var sw = new Stopwatch();
+                var gate = new Semaphore(0, 1);
+                sw.Start();
+                el.Schedule(TimeSpan.FromSeconds(0.2), () =>
+                {
+                    ran = true;
+                    sw.Stop();
+                    gate.Release();
+                });
+                Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
+                Assert.True(ran, "ran");
+                Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
+            }
+            finally
+            {
+                SynchronizationContext.SetSynchronizationContext(ctx);
+            }
         }
 
         [TestMethod]

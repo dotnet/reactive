@@ -65,6 +65,7 @@ namespace Tests.System.Reactive.Tests
             // SynchronizationContext. For now, we're providing a context to reproduce what was
             // happening under xUnit, so that this test continues to exercise the same code paths
             // it did before.
+            // See https://github.com/dotnet/reactive/issues/1885
             SynchronizationContext ctx = SynchronizationContext.Current;
             try
             {
