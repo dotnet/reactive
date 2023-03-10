@@ -30,7 +30,7 @@ One viable option is to just accept that a lot of developers don't have a suffic
 
 Starting with Rx v6.0.0, Rx's version numbers are not coupled to .NET versions. (They might happen to align from time to time, but such coincidences will be of no technical significance.)
 
-Rx v6.0.0 will support `.net6.0` and `.net7.0`. (It might not have any `net7.0` TFMs, but it will be fully tested on and explicitly supported on `.net8.0`.)
+Rx v6.0.0 will support .NET 6 and .NET 7. (It might not have any `net7.0` TFMs, but it will be fully tested on and explicitly supported on .NET 7.)
 
 If breaking changes become necessary, Rx's major version number will be bumped according to normal semantic versioning rules. Likewise, if new functionality is added in a backwards compatible way, the minor version number will be bumped. Bug fixes that do not change the API surface area will bump only the third part of the version number, e.g. v6.0.1 would denote a package with the same API surface area as v6.0.0, but with a bug being fixed.
 
