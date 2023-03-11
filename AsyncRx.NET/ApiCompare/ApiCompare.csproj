@@ -3,6 +3,9 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <!-- You wouldn't think we'd need this with an Exe, but it seems this is getting published as a package without this! -->
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
