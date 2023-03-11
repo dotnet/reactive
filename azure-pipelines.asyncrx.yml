@@ -71,6 +71,10 @@ stages:
       artifact: config
       displayName: Publish signing config
 
+    - publish: $(Build.ArtifactStagingDirectory)\artifacts
+      displayName: Publish artifacts
+      artifact: BuildPackages
+
 # Rx.NET has an IntegrationTests stage. Consider this once we have tests
 
 - stage: CodeSign
