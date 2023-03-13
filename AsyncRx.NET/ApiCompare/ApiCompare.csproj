@@ -6,6 +6,7 @@
 
     <!-- You wouldn't think we'd need this with an Exe, but it seems this is getting published as a package without this! -->
     <IsPackable>false</IsPackable>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
