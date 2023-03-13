@@ -1,0 +1,117 @@
+trigger:
+  branches:
+    include:
+      - main
+      - rel/*
+  paths:
+    include:
+      - AsyncRx.NET/*
+      - .editorconfig
+      - azure-pipelines.asyncrx.yml
+
+pr:
+  branches:
+    include:
+    - main
+    - rel/*
+  paths:
+    include:
+      - AsyncRx.NET/*
+      - .editorconfig
+      - azure-pipelines.asyncrx.yml
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: windows-latest
+
+    variables:
+      BuildConfiguration: Release
+      BuildPlatform: Any CPU
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+    steps:
+    - task: UseDotNet@2
+      displayName: Use .NET Core 7.0.x SDK
+      inputs:
+        version: 7.0.x
+        performMultiLevelLookup: true
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: custom
+        custom: tool
+        arguments: install --tool-path . nbgv
+      displayName: Install NBGV tool
+
+    - script: nbgv cloud -a -p AsyncRx.NET
+      displayName: Set Version
+
+    - task: MSBuild@1
+      displayName: Build AsyncRx.NET.sln
+      inputs:
+        solution: AsyncRx.NET/AsyncRx.NET.sln
+        msbuildArguments: /restore /t:build /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
+        configuration: $(BuildConfiguration)
+        maximumCpuCount: false
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: custom
+        custom: tool
+        arguments: install --tool-path . dotnet-reportgenerator-globaltool
+      displayName: Install ReportGenerator tool
+
+    # Normally we'd run tests here, but AsyncRx.NET doesn't have any yet!
+    # Once we're ready to stablize, we'd also add API surface area tests too
+  
+    - publish:  AsyncRx.NET/build
+      artifact: config
+      displayName: Publish signing config
+
+    - publish: $(Build.ArtifactStagingDirectory)\artifacts
+      displayName: Publish artifacts
+      artifact: BuildPackages
+
+# Rx.NET has an IntegrationTests stage. Consider this once we have tests
+
+- stage: CodeSign
+  # In Rx, the condition includes:
+  #   succeeded('IntegrationTests')
+  condition: not(eq(variables['build.reason'], 'PullRequest'))
+  jobs:
+  - deployment: CodeSign
+    displayName: Code Signing
+    pool:
+      vmImage: windows-latest
+    environment: Code Sign
+    variables:
+    - group: SignClient Credentials
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: custom
+              custom: tool
+              arguments: install --tool-path . SignClient
+            displayName: Install SignTool tool
+
+          - pwsh: |
+              .\SignClient "Sign" `
+              --baseDirectory "$(Pipeline.Workspace)\BuildPackages" `
+              --input "**/*.nupkg" `
+              --config "$(Pipeline.Workspace)\config\signclient.json" `
+              --user "$(SignClientUser)" `
+              --secret "$(SignClientSecret)" `
+              --name "Rx.NET" `
+              --description "Rx.NET" `
+              --descriptionUrl "https://github.com/dotnet/reactive"
+            displayName: Sign packages
+
+          - publish: $(Pipeline.Workspace)/BuildPackages
+            displayName: Publish Signed Packages
+            artifact: SignedPackages
