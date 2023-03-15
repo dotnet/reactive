@@ -9,15 +9,8 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 <#
-var types = new[]
-{
-    new { source = typeof(int),     target = typeof(double)  },
-    new { source = typeof(long),    target = typeof(double)  },
-    new { source = typeof(float),   target = typeof(float)   },
-    new { source = typeof(double),  target = typeof(double)  },
-    new { source = typeof(decimal), target = typeof(decimal) },
-};
-var name = "Average";
+var types = new[] { typeof(int), typeof(long), typeof(float), typeof(double), typeof(decimal) };
+var name = "Sum";
 #>
 using System.Threading.Tasks;
 
@@ -28,45 +21,41 @@ namespace System.Reactive.Linq
 <#
 foreach (var t in types)
 {
-    var sourceType = t.source;
-    var targetType = t.target;
-
     foreach (var n in new[] { false, true })
     {
-        var sourceTypeName = n ? sourceType.Name + "?" : sourceType.Name;
-        var targetTypeName = n ? targetType.Name + "?" : targetType.Name;
-        var methodName = n ? "Nullable" + sourceType.Name : sourceType.Name;
+        var typeName = n ? t.Name + "?" : t.Name;
+        var methodName = n ? "Nullable" + t.Name : t.Name;
 
 #>
-        public static IAsyncObservable<<#=targetTypeName#>> <#=name#>(this IAsyncObservable<<#=sourceTypeName#>> source)
+        public static IAsyncObservable<<#=typeName#>> <#=name#>(this IAsyncObservable<<#=typeName#>> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<<#=sourceTypeName#>, <#=targetTypeName#>>(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer)));
+            return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer)));
         }
 
-        public static IAsyncObservable<<#=targetTypeName#>> <#=name#><TSource>(this IAsyncObservable<TSource> source, Func<TSource, <#=sourceTypeName#>> selector)
+        public static IAsyncObservable<<#=typeName#>> <#=name#><TSource>(this IAsyncObservable<TSource> source, Func<TSource, <#=typeName#>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<<#=targetTypeName#>>.From(
+            return CreateAsyncObservable<<#=typeName#>>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));
         }
 
-        public static IAsyncObservable<<#=targetTypeName#>> <#=name#><TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<<#=sourceTypeName#>>> selector)
+        public static IAsyncObservable<<#=typeName#>> <#=name#><TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<<#=typeName#>>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<<#=targetTypeName#>>.From(
+            return CreateAsyncObservable<<#=typeName#>>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));
@@ -83,17 +72,13 @@ foreach (var t in types)
 <#
 foreach (var t in types)
 {
-    var sourceType = t.source;
-    var targetType = t.target;
-
     foreach (var n in new[] { false, true })
     {
-        var sourceTypeName = n ? sourceType.Name + "?" : sourceType.Name;
-        var targetTypeName = n ? targetType.Name + "?" : targetType.Name;
-        var methodName = n ? "Nullable" + sourceType.Name : sourceType.Name;
+        var typeName = n ? t.Name + "?" : t.Name;
+        var methodName = n ? "Nullable" + t.Name : t.Name;
 
 #>
-        public static IAsyncObserver<TSource> <#=name#><#=methodName#><TSource>(IAsyncObserver<<#=targetTypeName#>> observer, Func<TSource, <#=sourceTypeName#>> selector)
+        public static IAsyncObserver<TSource> <#=name#><#=methodName#><TSource>(IAsyncObserver<<#=typeName#>> observer, Func<TSource, <#=typeName#>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -103,7 +88,7 @@ foreach (var t in types)
             return Select(<#=name#><#=methodName#>(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> <#=name#><#=methodName#><TSource>(IAsyncObserver<<#=targetTypeName#>> observer, Func<TSource, ValueTask<<#=sourceTypeName#>>> selector)
+        public static IAsyncObserver<TSource> <#=name#><#=methodName#><TSource>(IAsyncObserver<<#=typeName#>> observer, Func<TSource, ValueTask<<#=typeName#>>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

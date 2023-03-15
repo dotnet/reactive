@@ -10,7 +10,7 @@
 <#@ output extension=".cs" #>
 <#
 var types = new[] { typeof(int), typeof(long), typeof(float), typeof(double), typeof(decimal) };
-var name = "Sum";
+var name = "Min";
 #>
 using System.Threading.Tasks;
 
@@ -42,7 +42,7 @@ foreach (var t in types)
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<<#=typeName#>>.From(
+            return CreateAsyncObservable<<#=typeName#>>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));
@@ -55,7 +55,7 @@ foreach (var t in types)
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Build<<#=typeName#>>.From(
+            return CreateAsyncObservable<<#=typeName#>>.From(
                 source,
                 selector,
                 static (source, selector, observer) => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));

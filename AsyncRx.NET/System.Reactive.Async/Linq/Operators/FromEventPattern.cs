@@ -24,7 +24,11 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return FromEvent<EventHandler, object, EventArgs>(action => new EventHandler((o, e) => action(o, e)), addHandler, removeHandler, scheduler).Select(t => new EventPattern<object>(t.arg1, t.arg2));
+            return FromEvent<EventHandler, object, EventArgs>(
+                action => new EventHandler((o, e) => action(o, e)),
+                addHandler,
+                removeHandler,
+                scheduler).Select(t => new EventPattern<object>(t.arg1, t.arg2));
         }
 
         public static IAsyncObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler) => FromEventPattern<TDelegate, TEventArgs>(addHandler, removeHandler, GetSchedulerForCurrentContext());
