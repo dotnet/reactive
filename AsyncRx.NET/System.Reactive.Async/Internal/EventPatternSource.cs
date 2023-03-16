@@ -4,7 +4,7 @@
 
 namespace System.Reactive
 {
-    internal sealed class EventPatternSource<TEventArgs> : EventPatternSourceBase<object, TEventArgs>, IEventPatternSource<TEventArgs>
+    internal sealed class EventPatternSource<TEventArgs> : EventPatternSourceBaseInternal<object, TEventArgs>, IEventPatternSource<TEventArgs>
     {
         public EventPatternSource(IAsyncObservable<EventPattern<object, TEventArgs>> source, Action<Action<object, TEventArgs>, /*object,*/ EventPattern<object, TEventArgs>> invokeHandler)
             : base(source, invokeHandler)

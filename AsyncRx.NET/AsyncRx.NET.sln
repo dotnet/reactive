@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground", "Playground\Pl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiCompare", "ApiCompare\ApiCompare.csproj", "{84F35A01-ECC4-4635-B702-77F6B18FD54C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Async.Interfaces", "System.Reactive.Async.Interfaces\System.Reactive.Async.Interfaces.csproj", "{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,18 +59,6 @@ Global
 		{84F35A01-ECC4-4635-B702-77F6B18FD54C}.Release|x64.Build.0 = Release|Any CPU
 		{84F35A01-ECC4-4635-B702-77F6B18FD54C}.Release|x86.ActiveCfg = Release|Any CPU
 		{84F35A01-ECC4-4635-B702-77F6B18FD54C}.Release|x86.Build.0 = Release|Any CPU
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}.Debug|x64.Build.0 = Debug|Any CPU
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}.Debug|x86.Build.0 = Debug|Any CPU
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}.Release|x64.ActiveCfg = Release|Any CPU
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}.Release|x64.Build.0 = Release|Any CPU
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}.Release|x86.ActiveCfg = Release|Any CPU
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,7 +67,6 @@ Global
 		{AEDF2B02-F301-4AC6-9DBC-2744746D816A} = {1D64A210-F73A-4F91-9598-4C51865D105D}
 		{3B83795B-9870-43FA-82AF-95A44CF0194F} = {7D5B343C-B34D-481C-8774-B6BB14BC1B22}
 		{84F35A01-ECC4-4635-B702-77F6B18FD54C} = {7D5B343C-B34D-481C-8774-B6BB14BC1B22}
-		{B66081C4-2DE2-451C-AE3B-6D2A8B9BE0EE} = {1D64A210-F73A-4F91-9598-4C51865D105D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {836C3B9A-682A-4E6F-8053-92BFC9D29D89}

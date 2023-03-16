@@ -11,14 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\System.Reactive.Async.Interfaces\System.Reactive.Async.Interfaces.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\System.Reactive.Async.Interfaces\System.Reactive.Async.Interfaces.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Joins\ActiveAsyncPlan.Generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
