@@ -10,7 +10,7 @@ namespace System.Threading
     public sealed class AsyncQueueLock : IAsyncDisposable
     {
         private readonly Queue<Func<ValueTask>> _queue = new Queue<Func<ValueTask>>();
-        private readonly AsyncLock _gate = new AsyncLock();
+        private readonly AsyncGate _gate = new AsyncGate();
 
         private bool _isAcquired;
         private bool _hasFaulted;

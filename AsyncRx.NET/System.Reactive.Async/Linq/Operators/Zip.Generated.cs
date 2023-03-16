@@ -1819,7 +1819,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -1913,7 +1913,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -2007,7 +2007,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -2103,7 +2103,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -2199,7 +2199,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -2297,7 +2297,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -2395,7 +2395,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -2495,7 +2495,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -2595,7 +2595,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -2697,7 +2697,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -2799,7 +2799,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -2903,7 +2903,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -3007,7 +3007,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -3113,7 +3113,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -3219,7 +3219,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -3327,7 +3327,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -3435,7 +3435,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -3545,7 +3545,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -3655,7 +3655,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -3767,7 +3767,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -3879,7 +3879,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -3993,7 +3993,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -4107,7 +4107,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -4223,7 +4223,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -4339,7 +4339,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -4457,7 +4457,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -4575,7 +4575,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();
@@ -4695,7 +4695,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var values1 = new Queue<T1>();
             var values2 = new Queue<T2>();

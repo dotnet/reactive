@@ -44,7 +44,7 @@ namespace System.Reactive.Linq
 
             var semaphore = new SemaphoreSlim(0);
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var queue = new Queue<TSource>();
             var error = default(Exception);

@@ -34,7 +34,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var isStopped = false;
             var hasLatest = false;

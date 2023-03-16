@@ -609,7 +609,7 @@ namespace System.Reactive.Linq
                     groups = new ConcurrentDictionary<TKey, IAsyncSubject<TElement>>(Environment.ProcessorCount * 4, capacity, comparer);
                 }
 
-                var gate = new AsyncLock();
+                var gate = new AsyncGate();
 
                 var nullGate = new object();
                 var nullGroup = default(IAsyncSubject<TElement>);

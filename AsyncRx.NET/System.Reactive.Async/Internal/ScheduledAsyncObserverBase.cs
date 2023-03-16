@@ -12,7 +12,7 @@ namespace System.Reactive
     {
         private readonly IAsyncObserver<T> _observer;
 
-        private readonly AsyncLock _lock = new AsyncLock();
+        private readonly AsyncGate _lock = new AsyncGate();
         private readonly Queue<T> _queue = new Queue<T>();
 
         private bool _hasFaulted = false;

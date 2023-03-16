@@ -16,7 +16,7 @@ namespace System.Reactive.Linq
             return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.Synchronize(observer)));
         }
 
-        public static IAsyncObservable<TSource> Synchronize<TSource>(this IAsyncObservable<TSource> source, AsyncLock gate)
+        public static IAsyncObservable<TSource> Synchronize<TSource>(this IAsyncObservable<TSource> source, AsyncGate gate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -37,10 +37,10 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            return Synchronize(observer, new AsyncLock());
+            return Synchronize(observer, new AsyncGate());
         }
 
-        public static IAsyncObserver<TSource> Synchronize<TSource>(IAsyncObserver<TSource> observer, AsyncLock gate)
+        public static IAsyncObserver<TSource> Synchronize<TSource>(IAsyncObserver<TSource> observer, AsyncGate gate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

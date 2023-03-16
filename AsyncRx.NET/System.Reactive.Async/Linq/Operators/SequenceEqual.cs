@@ -84,7 +84,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var queueLeft = new Queue<TSource>();
             var queueRight = new Queue<TSource>();

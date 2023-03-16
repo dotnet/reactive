@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
             return Create<TResult>(async observer =>
             {
                 var externalSubscriptions = new Dictionary<object, IAsyncJoinObserver>();
-                var gate = new AsyncLock();
+                var gate = new AsyncGate();
                 var activePlans = new List<ActiveAsyncPlan>();
 
                 var outputObserver = AsyncObserver.Create<TResult>(

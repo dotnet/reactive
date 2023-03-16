@@ -9,7 +9,7 @@ namespace System.Reactive.Disposables
 {
     public sealed class RefCountAsyncDisposable : IAsyncDisposable
     {
-        private readonly AsyncLock _gate = new AsyncLock();
+        private readonly AsyncGate _gate = new AsyncGate();
         private IAsyncDisposable _disposable;
         private bool _primaryDisposed;
         private int _count;

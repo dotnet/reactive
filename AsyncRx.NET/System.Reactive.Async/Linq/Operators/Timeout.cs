@@ -159,7 +159,7 @@ namespace System.Reactive.Linq
 
             async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
             {
-                var gate = new AsyncLock();
+                var gate = new AsyncGate();
 
                 var switched = false;
                 var id = 0UL;

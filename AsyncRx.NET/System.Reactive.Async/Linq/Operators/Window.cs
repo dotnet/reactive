@@ -296,7 +296,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var window = default(IAsyncSubject<TSource>);
             var d = new CompositeAsyncDisposable();
@@ -382,7 +382,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var d = new CompositeAsyncDisposable();
             var timer = new SerialAsyncDisposable();
@@ -538,7 +538,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var n = 0;
             var window = default(IAsyncSubject<TSource>);
@@ -649,7 +649,7 @@ namespace System.Reactive.Linq
             if (subscription == null)
                 throw new ArgumentNullException(nameof(subscription));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var refCount = new RefCountAsyncDisposable(subscription);
             var window = default(IAsyncSubject<TSource>);
@@ -736,7 +736,7 @@ namespace System.Reactive.Linq
 
             var closeSubscription = new SerialAsyncDisposable();
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
             var queueLock = new AsyncQueueLock();
 
             var refCount = new RefCountAsyncDisposable(subscription);

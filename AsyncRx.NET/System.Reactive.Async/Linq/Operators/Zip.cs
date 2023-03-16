@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var queues = new Queue<TSource>[count];
             var isDone = new bool[count];

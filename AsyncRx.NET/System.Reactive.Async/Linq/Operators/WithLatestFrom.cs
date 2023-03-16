@@ -103,7 +103,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             async ValueTask OnErrorAsync(Exception ex)
             {
@@ -170,7 +170,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             async ValueTask OnErrorAsync(Exception ex)
             {

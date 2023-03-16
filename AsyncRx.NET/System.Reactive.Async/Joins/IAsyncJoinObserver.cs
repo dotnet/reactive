@@ -9,7 +9,7 @@ namespace System.Reactive.Joins
 {
     internal interface IAsyncJoinObserver : IAsyncDisposable
     {
-        Task SubscribeAsync(AsyncLock gate);
+        Task SubscribeAsync(AsyncGate gate);
 
         void Dequeue();
     }

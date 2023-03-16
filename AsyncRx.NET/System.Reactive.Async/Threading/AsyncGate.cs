@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Threading
 {
-    public sealed class AsyncLock
+    public sealed class AsyncGate
     {
         private readonly object _gate = new object();
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
@@ -53,9 +53,9 @@ namespace System.Threading
 
         public struct Releaser : IDisposable
         {
-            private readonly AsyncLock _parent;
+            private readonly AsyncGate _parent;
 
-            public Releaser(AsyncLock parent) => _parent = parent;
+            public Releaser(AsyncGate parent) => _parent = parent;
 
             public void Dispose() => _parent.Release();
         }

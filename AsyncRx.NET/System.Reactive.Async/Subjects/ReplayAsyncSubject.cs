@@ -120,7 +120,7 @@ namespace System.Reactive.Subjects
         private abstract class ReplayBase : IAsyncSubject<T>
         {
             private readonly bool _concurrent;
-            private readonly AsyncLock _lock = new AsyncLock();
+            private readonly AsyncGate _lock = new AsyncGate();
             private readonly List<IScheduledAsyncObserver<T>> _observers = new List<IScheduledAsyncObserver<T>>(); // TODO: immutable array
             private bool _done;
             private Exception _error;

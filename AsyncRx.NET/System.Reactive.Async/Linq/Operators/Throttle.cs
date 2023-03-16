@@ -104,7 +104,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var timer = new SerialAsyncDisposable();
 
@@ -187,7 +187,7 @@ namespace System.Reactive.Linq
             if (throttleSelector == null)
                 throw new ArgumentNullException(nameof(throttleSelector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var throttler = new SerialAsyncDisposable();
 

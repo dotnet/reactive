@@ -12,7 +12,7 @@ namespace System.Reactive.Subjects
     {
         private readonly IAsyncSubject<TSource, TResult> subject;
         private readonly IAsyncObservable<TSource> source;
-        private readonly AsyncLock gate = new AsyncLock();
+        private readonly AsyncGate gate = new AsyncGate();
 
         private Connection connection;
 

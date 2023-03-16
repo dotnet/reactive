@@ -15,7 +15,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
             var count = 0;
             var connectable = default(IAsyncDisposable);
 

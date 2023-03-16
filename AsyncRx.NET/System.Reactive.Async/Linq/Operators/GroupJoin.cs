@@ -57,7 +57,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var group = new CompositeAsyncDisposable(subscriptions);
             var refCount = new RefCountAsyncDisposable(group);

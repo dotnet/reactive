@@ -18,7 +18,7 @@ namespace System.Reactive.Joins
         private readonly List<ActiveAsyncPlan> _activePlans = new List<ActiveAsyncPlan>();
         private readonly SingleAssignmentAsyncDisposable _subscription = new SingleAssignmentAsyncDisposable();
 
-        private AsyncLock _gate;
+        private AsyncGate _gate;
         private bool _isDisposed;
 
         public AsyncJoinObserver(IAsyncObservable<T> source, Func<Exception, ValueTask> onError)
@@ -56,7 +56,7 @@ namespace System.Reactive.Joins
             }
         }
 
-        public async Task SubscribeAsync(AsyncLock gate)
+        public async Task SubscribeAsync(AsyncGate gate)
         {
             _gate = gate;
 

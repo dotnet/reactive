@@ -83,7 +83,7 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var state = AmbState.None;
 
@@ -199,7 +199,7 @@ namespace System.Reactive.Linq
             if (subscriptions == null)
                 throw new ArgumentNullException(nameof(subscriptions));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             var winner = default(int?);
 
