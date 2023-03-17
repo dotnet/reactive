@@ -9,7 +9,7 @@ namespace System.Reactive
 {
     internal sealed class AsyncQueueLockAsyncObserver<T> : AsyncObserverBase<T>
     {
-        private readonly AsyncQueueLock _gate = new AsyncQueueLock();
+        private readonly AsyncQueueLock _gate = new();
         private readonly IAsyncObserver<T> _observer;
 
         public AsyncQueueLockAsyncObserver(IAsyncObserver<T> observer)

@@ -9,7 +9,7 @@ namespace System.Reactive.Disposables
 {
     public sealed class SerialAsyncDisposable : IAsyncDisposable
     {
-        private readonly AsyncGate _gate = new AsyncGate();
+        private readonly AsyncGate _gate = new();
 
         private IAsyncDisposable _disposable;
         private bool _disposed;

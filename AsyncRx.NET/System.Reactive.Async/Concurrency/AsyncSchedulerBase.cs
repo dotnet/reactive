@@ -66,7 +66,7 @@ namespace System.Reactive.Concurrency
 
         private sealed class CancellationAsyncDisposable : IAsyncDisposable
         {
-            private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+            private readonly CancellationTokenSource _cts = new();
 
             public CancellationToken Token => _cts.Token;
 

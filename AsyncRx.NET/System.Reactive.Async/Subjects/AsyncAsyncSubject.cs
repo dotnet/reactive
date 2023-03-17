@@ -13,8 +13,8 @@ namespace System.Reactive.Subjects
 {
     public abstract class AsyncAsyncSubject<T> : IAsyncSubject<T>, INotifyCompletion
     {
-        private readonly object _gate = new object();
-        private readonly List<IAsyncObserver<T>> _observers = new List<IAsyncObserver<T>>();
+        private readonly object _gate = new();
+        private readonly List<IAsyncObserver<T>> _observers = new();
         private bool _hasValue;
         private T _value;
         private bool _done;

@@ -27,7 +27,7 @@ namespace System.Reactive.Concurrency
             _factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-        protected override ValueTask Delay(TimeSpan dueTime, CancellationToken token) => new ValueTask(Task.Delay(dueTime, token));
+        protected override ValueTask Delay(TimeSpan dueTime, CancellationToken token) => new(Task.Delay(dueTime, token));
 
         protected override ValueTask ScheduleAsyncCore(Func<CancellationToken, ValueTask> action, CancellationToken token)
         {

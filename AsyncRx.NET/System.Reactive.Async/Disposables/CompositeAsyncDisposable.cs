@@ -11,7 +11,7 @@ namespace System.Reactive.Disposables
 {
     public sealed class CompositeAsyncDisposable : IAsyncDisposable
     {
-        private readonly AsyncGate _gate = new AsyncGate();
+        private readonly AsyncGate _gate = new();
         private readonly List<IAsyncDisposable> _disposables;
         private bool _disposed;
 

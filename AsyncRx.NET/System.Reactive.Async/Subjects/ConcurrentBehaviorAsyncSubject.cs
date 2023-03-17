@@ -15,10 +15,10 @@ namespace System.Reactive.Subjects
         {
         }
 
-        protected override ValueTask OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers) => new ValueTask(Task.WhenAll(observers.Select(observer => observer.OnCompletedAsync().AsTask())));
+        protected override ValueTask OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers) => new(Task.WhenAll(observers.Select(observer => observer.OnCompletedAsync().AsTask())));
 
-        protected override ValueTask OnErrorAsyncCore(IEnumerable<IAsyncObserver<T>> observers, Exception error) => new ValueTask(Task.WhenAll(observers.Select(observer => observer.OnErrorAsync(error).AsTask())));
+        protected override ValueTask OnErrorAsyncCore(IEnumerable<IAsyncObserver<T>> observers, Exception error) => new(Task.WhenAll(observers.Select(observer => observer.OnErrorAsync(error).AsTask())));
 
-        protected override ValueTask OnNextAsyncCore(IEnumerable<IAsyncObserver<T>> observers, T value) => new ValueTask(Task.WhenAll(observers.Select(observer => observer.OnNextAsync(value).AsTask())));
+        protected override ValueTask OnNextAsyncCore(IEnumerable<IAsyncObserver<T>> observers, T value) => new(Task.WhenAll(observers.Select(observer => observer.OnNextAsync(value).AsTask())));
     }
 }

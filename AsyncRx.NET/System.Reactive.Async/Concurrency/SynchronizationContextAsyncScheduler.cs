@@ -16,7 +16,7 @@ namespace System.Reactive.Concurrency
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        protected override ValueTask Delay(TimeSpan dueTime, CancellationToken token) => new ValueTask(Task.Delay(dueTime, token));
+        protected override ValueTask Delay(TimeSpan dueTime, CancellationToken token) => new(Task.Delay(dueTime, token));
 
         protected override ValueTask ScheduleAsyncCore(Func<CancellationToken, ValueTask> action, CancellationToken token)
         {

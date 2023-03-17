@@ -120,8 +120,8 @@ namespace System.Reactive.Subjects
         private abstract class ReplayBase : IAsyncSubject<T>
         {
             private readonly bool _concurrent;
-            private readonly AsyncGate _lock = new AsyncGate();
-            private readonly List<IScheduledAsyncObserver<T>> _observers = new List<IScheduledAsyncObserver<T>>(); // TODO: immutable array
+            private readonly AsyncGate _lock = new();
+            private readonly List<IScheduledAsyncObserver<T>> _observers = new(); // TODO: immutable array
             private bool _done;
             private Exception _error;
 
@@ -361,7 +361,7 @@ namespace System.Reactive.Subjects
 
         private abstract class ReplayManyBase : ReplayBufferBase
         {
-            protected readonly Queue<T> Values = new Queue<T>();
+            protected readonly Queue<T> Values = new();
 
             public ReplayManyBase(bool concurrent, Func<IAsyncObserver<T>, IScheduledAsyncObserver<T>> createObserver)
                 : base(concurrent, createObserver)
@@ -422,7 +422,7 @@ namespace System.Reactive.Subjects
             private readonly IAsyncScheduler _scheduler;
             private readonly int _bufferSize;
             private readonly TimeSpan _window;
-            private readonly Queue<Timestamped<T>> _values = new Queue<Timestamped<T>>();
+            private readonly Queue<Timestamped<T>> _values = new();
 
             public ReplayTime(bool concurrent, IAsyncScheduler scheduler, int bufferSize, TimeSpan window, Func<IAsyncObserver<T>, IScheduledAsyncObserver<T>> createObserver)
                 : base(concurrent, createObserver)

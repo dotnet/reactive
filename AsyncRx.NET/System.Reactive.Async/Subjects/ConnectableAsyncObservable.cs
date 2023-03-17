@@ -10,53 +10,53 @@ namespace System.Reactive.Subjects
 {
     internal sealed class ConnectableAsyncObservable<TSource, TResult> : IConnectableAsyncObservable<TResult>
     {
-        private readonly IAsyncSubject<TSource, TResult> subject;
-        private readonly IAsyncObservable<TSource> source;
-        private readonly AsyncGate gate = new AsyncGate();
+        private readonly IAsyncSubject<TSource, TResult> _subject;
+        private readonly IAsyncObservable<TSource> _source;
+        private readonly AsyncGate _gate = new();
 
-        private Connection connection;
+        private Connection _connection;
 
         public ConnectableAsyncObservable(IAsyncObservable<TSource> source, IAsyncSubject<TSource, TResult> subject)
         {
-            this.subject = subject;
-            this.source = source.AsAsyncObservable();
+            _subject = subject;
+            _source = source.AsAsyncObservable();
         }
 
         public async ValueTask<IAsyncDisposable> ConnectAsync()
         {
-            using (await gate.LockAsync().ConfigureAwait(false))
+            using (await _gate.LockAsync().ConfigureAwait(false))
             {
-                if (connection == null)
+                if (_connection == null)
                 {
-                    var subscription = await source.SubscribeAsync(subject).ConfigureAwait(false);
-                    connection = new Connection(this, subscription);
+                    var subscription = await _source.SubscribeAsync(_subject).ConfigureAwait(false);
+                    _connection = new Connection(this, subscription);
                 }
 
-                return connection;
+                return _connection;
             }
         }
 
         private sealed class Connection : IAsyncDisposable
         {
-            private readonly ConnectableAsyncObservable<TSource, TResult> parent;
-            private IAsyncDisposable subscription;
+            private readonly ConnectableAsyncObservable<TSource, TResult> _parent;
+            private IAsyncDisposable _subscription;
 
             public Connection(ConnectableAsyncObservable<TSource, TResult> parent, IAsyncDisposable subscription)
             {
-                this.parent = parent;
-                this.subscription = subscription;
+                _parent = parent;
+                _subscription = subscription;
             }
 
             public async ValueTask DisposeAsync()
             {
-                using (await parent.gate.LockAsync().ConfigureAwait(false))
+                using (await _parent._gate.LockAsync().ConfigureAwait(false))
                 {
-                    if (subscription != null)
+                    if (_subscription != null)
                     {
-                        await subscription.DisposeAsync().ConfigureAwait(false);
-                        subscription = null;
+                        await _subscription.DisposeAsync().ConfigureAwait(false);
+                        _subscription = null;
 
-                        parent.connection = null;
+                        _parent._connection = null;
                     }
                 }
             }
@@ -67,7 +67,7 @@ namespace System.Reactive.Subjects
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            return subject.SubscribeAsync(observer);
+            return _subject.SubscribeAsync(observer);
         }
     }
 }

@@ -10,30 +10,30 @@ namespace System.Reactive
 {
     internal sealed class Lookup<K, E> : ILookup<K, E>
     {
-        private readonly Dictionary<K, List<E>> d;
+        private readonly Dictionary<K, List<E>> _d;
 
         public Lookup(IEqualityComparer<K> comparer)
         {
-            d = new Dictionary<K, List<E>>(comparer);
+            _d = new Dictionary<K, List<E>>(comparer);
         }
 
         public void Add(K key, E element)
         {
-            if (!d.TryGetValue(key, out var list))
-                d[key] = list = new List<E>();
+            if (!_d.TryGetValue(key, out var list))
+                _d[key] = list = new List<E>();
 
             list.Add(element);
         }
 
-        public bool Contains(K key) => d.ContainsKey(key);
+        public bool Contains(K key) => _d.ContainsKey(key);
 
-        public int Count => d.Count;
+        public int Count => _d.Count;
 
         public IEnumerable<E> this[K key]
         {
             get
             {
-                if (!d.TryGetValue(key, out var list))
+                if (!_d.TryGetValue(key, out var list))
                     return Enumerable.Empty<E>();
 
                 return Hide(list);
@@ -48,22 +48,22 @@ namespace System.Reactive
 
         public IEnumerator<IGrouping<K, E>> GetEnumerator()
         {
-            foreach (var kv in d)
+            foreach (var kv in _d)
                 yield return new Grouping(kv);
         }
 
         private sealed class Grouping : IGrouping<K, E>
         {
-            private readonly KeyValuePair<K, List<E>> kv;
+            private readonly KeyValuePair<K, List<E>> _kv;
 
             public Grouping(KeyValuePair<K, List<E>> kv)
             {
-                this.kv = kv;
+                _kv = kv;
             }
 
-            public K Key => kv.Key;
+            public K Key => _kv.Key;
 
-            public IEnumerator<E> GetEnumerator() => kv.Value.GetEnumerator();
+            public IEnumerator<E> GetEnumerator() => _kv.Value.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }

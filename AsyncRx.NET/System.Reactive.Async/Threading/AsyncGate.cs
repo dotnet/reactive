@@ -9,9 +9,9 @@ namespace System.Threading
 {
     public sealed class AsyncGate
     {
-        private readonly object _gate = new object();
-        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
-        private readonly AsyncLocal<int> _recursionCount = new AsyncLocal<int>();
+        private readonly object _gate = new();
+        private readonly SemaphoreSlim _semaphore = new(1, 1);
+        private readonly AsyncLocal<int> _recursionCount = new();
 
         public ValueTask<Releaser> LockAsync()
         {
@@ -51,7 +51,7 @@ namespace System.Threading
             }
         }
 
-        public struct Releaser : IDisposable
+        public readonly struct Releaser : IDisposable
         {
             private readonly AsyncGate _parent;
 

@@ -27,7 +27,7 @@ namespace System.Reactive
         private sealed class AutoDetachAsyncObserver : AsyncObserverBase<T>, IAsyncDisposable
         {
             private readonly IAsyncObserver<T> _observer;
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
 
             private IAsyncDisposable _subscription;
             private ValueTask _task;
@@ -62,7 +62,7 @@ namespace System.Reactive
 
             public async ValueTask DisposeAsync()
             {
-                var task = default(ValueTask);
+                ValueTask task;
                 var subscription = default(IAsyncDisposable);
 
                 lock (_gate)
