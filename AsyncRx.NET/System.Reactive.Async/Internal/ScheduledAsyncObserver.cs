@@ -13,7 +13,7 @@ namespace System.Reactive
     {
         private readonly IAsyncScheduler _scheduler;
 
-        private readonly SerialAsyncDisposable _disposable = new SerialAsyncDisposable();
+        private readonly SerialAsyncDisposable _disposable = new();
 
         public ScheduledAsyncObserver(IAsyncObserver<T> observer, IAsyncScheduler scheduler)
             : base(observer)
@@ -23,9 +23,9 @@ namespace System.Reactive
 
         public override ValueTask DisposeAsync() => _disposable.DisposeAsync();
 
-        protected override ValueTaskAwaitable RendezVous(ValueTask task) => new ValueTaskAwaitable(task, continueOnCapturedContext: false, _scheduler, CancellationToken.None);
+        protected override ValueTaskAwaitable RendezVous(ValueTask task) => new(task, continueOnCapturedContext: false, _scheduler, CancellationToken.None);
 
-        protected override ValueTaskAwaitable<R> RendezVous<R>(ValueTask<R> task) => new ValueTaskAwaitable<R>(task, continueOnCapturedContext: false, _scheduler, CancellationToken.None);
+        protected override ValueTaskAwaitable<R> RendezVous<R>(ValueTask<R> task) => new(task, continueOnCapturedContext: false, _scheduler, CancellationToken.None);
 
         protected override async ValueTask ScheduleAsync()
         {

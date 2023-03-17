@@ -15,8 +15,8 @@ namespace System.Reactive.Joins
         private readonly IAsyncObservable<T> _source;
         private readonly Func<Exception, ValueTask> _onError;
 
-        private readonly List<ActiveAsyncPlan> _activePlans = new List<ActiveAsyncPlan>();
-        private readonly SingleAssignmentAsyncDisposable _subscription = new SingleAssignmentAsyncDisposable();
+        private readonly List<ActiveAsyncPlan> _activePlans = new();
+        private readonly SingleAssignmentAsyncDisposable _subscription = new();
 
         private AsyncGate _gate;
         private bool _isDisposed;

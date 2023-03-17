@@ -14,16 +14,9 @@ namespace System.Reactive
 
         public UnsafeAsyncObserver(Func<T, ValueTask> onNextAsync, Func<Exception, ValueTask> onErrorAsync, Func<ValueTask> onCompletedAsync)
         {
-            if (onNextAsync == null)
-                throw new ArgumentNullException(nameof(onNextAsync));
-            if (onErrorAsync == null)
-                throw new ArgumentNullException(nameof(onErrorAsync));
-            if (onCompletedAsync == null)
-                throw new ArgumentNullException(nameof(onCompletedAsync));
-
-            _onNextAsync = onNextAsync;
-            _onErrorAsync = onErrorAsync;
-            _onCompletedAsync = onCompletedAsync;
+            _onNextAsync = onNextAsync ?? throw new ArgumentNullException(nameof(onNextAsync));
+            _onErrorAsync = onErrorAsync ?? throw new ArgumentNullException(nameof(onErrorAsync));
+            _onCompletedAsync = onCompletedAsync ?? throw new ArgumentNullException(nameof(onCompletedAsync));
         }
 
         public ValueTask OnCompletedAsync() => _onCompletedAsync();

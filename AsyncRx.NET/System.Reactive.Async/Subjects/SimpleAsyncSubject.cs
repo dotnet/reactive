@@ -10,8 +10,8 @@ namespace System.Reactive.Subjects
 {
     public abstract class SimpleAsyncSubject<T> : IAsyncSubject<T>
     {
-        private readonly object _gate = new object();
-        private readonly List<IAsyncObserver<T>> _observers = new List<IAsyncObserver<T>>();
+        private readonly object _gate = new();
+        private readonly List<IAsyncObserver<T>> _observers = new();
         private bool _done;
         private Exception _error;
 

@@ -205,7 +205,6 @@ namespace System.Runtime.CompilerServices
         /// }
         /// </code>
         /// </remarks>
-        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
         internal sealed class TaskObservable : IAsyncObservable<T>, INotifyCompletion
         {
             /// <summary>

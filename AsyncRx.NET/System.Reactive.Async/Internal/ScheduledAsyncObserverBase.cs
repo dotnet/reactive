@@ -12,8 +12,8 @@ namespace System.Reactive
     {
         private readonly IAsyncObserver<T> _observer;
 
-        private readonly AsyncGate _lock = new AsyncGate();
-        private readonly Queue<T> _queue = new Queue<T>();
+        private readonly AsyncGate _lock = new();
+        private readonly Queue<T> _queue = new();
 
         private bool _hasFaulted = false;
         private bool _busy = false;

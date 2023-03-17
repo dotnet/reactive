@@ -208,7 +208,7 @@ namespace System.Reactive.Concurrency
                 _token = token;
             }
 
-            public RendezVousAwaiter GetAwaiter() => new RendezVousAwaiter(_scheduler, _token);
+            public RendezVousAwaiter GetAwaiter() => new(_scheduler, _token);
 
             public sealed class RendezVousAwaiter : INotifyCompletion
             {

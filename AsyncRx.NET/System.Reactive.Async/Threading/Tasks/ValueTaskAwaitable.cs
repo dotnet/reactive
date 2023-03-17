@@ -22,7 +22,7 @@ namespace System.Threading.Tasks
             _token = token;
         }
 
-        public ValueTaskAwaiter GetAwaiter() => new ValueTaskAwaiter(_task.ConfigureAwait(_continueOnCapturedContext).GetAwaiter(), _scheduler, _token);
+        public ValueTaskAwaiter GetAwaiter() => new(_task.ConfigureAwait(_continueOnCapturedContext).GetAwaiter(), _scheduler, _token);
 
         public readonly struct ValueTaskAwaiter : INotifyCompletion
         {
@@ -111,7 +111,7 @@ namespace System.Threading.Tasks
             _token = token;
         }
 
-        public ValueTaskAwaiter GetAwaiter() => new ValueTaskAwaiter(_task.ConfigureAwait(_continueOnCapturedContext).GetAwaiter(), _scheduler, _token);
+        public ValueTaskAwaiter GetAwaiter() => new(_task.ConfigureAwait(_continueOnCapturedContext).GetAwaiter(), _scheduler, _token);
 
         public readonly struct ValueTaskAwaiter : INotifyCompletion
         {

@@ -10,7 +10,7 @@ namespace System.Reactive
 {
     internal sealed class FastImmediateAsyncObserver<T> : ScheduledAsyncObserverBase<T>
     {
-        private readonly CancellationAsyncDisposable _disposable = new CancellationAsyncDisposable();
+        private readonly CancellationAsyncDisposable _disposable = new();
 
         public FastImmediateAsyncObserver(IAsyncObserver<T> observer)
             : base(observer)
@@ -19,9 +19,9 @@ namespace System.Reactive
 
         public override ValueTask DisposeAsync() => _disposable.DisposeAsync();
 
-        protected override ValueTaskAwaitable RendezVous(ValueTask task) => new ValueTaskAwaitable(task, continueOnCapturedContext: false, scheduler: null, CancellationToken.None);
+        protected override ValueTaskAwaitable RendezVous(ValueTask task) => new(task, continueOnCapturedContext: false, scheduler: null, CancellationToken.None);
 
-        protected override ValueTaskAwaitable<R> RendezVous<R>(ValueTask<R> task) => new ValueTaskAwaitable<R>(task, continueOnCapturedContext: false, scheduler: null, CancellationToken.None);
+        protected override ValueTaskAwaitable<R> RendezVous<R>(ValueTask<R> task) => new(task, continueOnCapturedContext: false, scheduler: null, CancellationToken.None);
 
         protected override ValueTask ScheduleAsync() => RunAsync(_disposable.Token);
     }

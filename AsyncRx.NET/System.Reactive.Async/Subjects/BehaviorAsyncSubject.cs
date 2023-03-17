@@ -11,8 +11,8 @@ namespace System.Reactive.Subjects
 {
     public abstract class BehaviorAsyncSubject<T> : IAsyncSubject<T>
     {
-        private readonly AsyncGate _gate = new AsyncGate();
-        private readonly List<IAsyncObserver<T>> _observers = new List<IAsyncObserver<T>>();
+        private readonly AsyncGate _gate = new();
+        private readonly List<IAsyncObserver<T>> _observers = new();
         private T _value;
         private bool _done;
         private Exception _error;

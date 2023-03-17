@@ -120,10 +120,7 @@ namespace System.Reactive
                 }
             }
 
-            if (d != null)
-            {
-                d.DisposeAsync().GetAwaiter().GetResult();
-            }
+            d?.DisposeAsync().GetAwaiter().GetResult();
         }
     }
 }

@@ -9,18 +9,18 @@ namespace System.Reactive.Joins
 {
     internal abstract class ActiveAsyncPlan
     {
-        private readonly Dictionary<IAsyncJoinObserver, IAsyncJoinObserver> joinObservers = new Dictionary<IAsyncJoinObserver, IAsyncJoinObserver>();
+        private readonly Dictionary<IAsyncJoinObserver, IAsyncJoinObserver> _joinObservers = new();
 
         internal abstract Task Match();
 
         protected void AddJoinObserver(IAsyncJoinObserver joinObserver)
         {
-            joinObservers.Add(joinObserver, joinObserver);
+            _joinObservers.Add(joinObserver, joinObserver);
         }
 
         protected void Dequeue()
         {
-            foreach (var observer in joinObservers.Values)
+            foreach (var observer in _joinObservers.Values)
             {
                 observer.Dequeue();
             }
