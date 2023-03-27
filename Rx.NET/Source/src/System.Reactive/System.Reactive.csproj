@@ -147,7 +147,6 @@
   <ItemGroup>
     <None Include="build\_._" PackagePath="build\net6.0;build\net6.0-windows10.0.19041" Pack="true" />
     <None Include="build\_._" PackagePath="buildTransitive\net6.0;buildTransitive\net6.0-windows10.0.19041" Pack="true" />
-    <None Include="build\System.Reactive.net6.0-windows.targets" PackagePath="build\net6.0-windows7\$(PackageId).targets;buildTransitive\net6.0-windows7\$(PackageId).targets" Pack="true" />
     <None Include="Linq\QbservableEx.NAry.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
