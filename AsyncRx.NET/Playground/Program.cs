@@ -2,6 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+// The intention is that people will uncomment whichever method call in Main they want to try.
+// The following suppressions prevent warnings due to 'unused' members, and the fact that all of
+// the await statements in Main are commented out to start with
+#pragma warning disable IDE0051, CS1998
+
 using System;
 using System.Linq;
 using System.Reactive;
@@ -12,16 +17,9 @@ using System.Threading.Tasks;
 
 namespace Playground
 {
-    static class Program
+    internal static class Program
     {
-        static void Main()
-        {
-            MainAsync().GetAwaiter().GetResult();
-
-            Console.ReadLine();
-        }
-
-        static async Task MainAsync()
+        private static async Task Main()
         {
             //await AggregateAsync();
             //await AllAsync();
@@ -45,34 +43,36 @@ namespace Playground
             //await TakeUntilAsync();
             //await TimerAsync();
             //await WhileAsync();
+
+            Console.ReadLine();
         }
 
-        static async Task AggregateAsync()
+        private static async Task AggregateAsync()
         {
             await AsyncObservable.Range(0, 10).Aggregate(0, (sum, x) => sum + x).SubscribeAsync(Print<int>());
         }
 
-        static async Task AllAsync()
+        private static async Task AllAsync()
         {
             await AsyncObservable.Range(0, 10).All(x => x < 10).SubscribeAsync(Print<bool>());
         }
 
-        static async Task AnyAsync()
+        private static async Task AnyAsync()
         {
             await AsyncObservable.Range(0, 10).Any(x => x == 5).SubscribeAsync(Print<bool>());
         }
 
-        static async Task AppendAsync()
+        private static async Task AppendAsync()
         {
             await AsyncObservable.Range(0, 10).Append(42).SubscribeAsync(Print<int>());
         }
 
-        static async Task AwaitAsync()
+        private static async Task AwaitAsync()
         {
             Console.WriteLine(await AsyncObservable.Range(0, 10));
         }
 
-        static async Task BufferTimeHoppingAsync()
+        private static async Task BufferTimeHoppingAsync()
         {
             await
                 AsyncObservable
@@ -82,7 +82,7 @@ namespace Playground
                     .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
         }
 
-        static async Task BufferTimeSlidingAsync()
+        private static async Task BufferTimeSlidingAsync()
         {
             await
                 AsyncObservable
@@ -93,7 +93,7 @@ namespace Playground
                     .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
         }
 
-        static async Task CombineLatestAsync()
+        private static async Task CombineLatestAsync()
         {
             await
                 AsyncObservable.CombineLatest(
@@ -104,7 +104,7 @@ namespace Playground
                 .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
         }
 
-        static async Task ConcatAsync()
+        private static async Task ConcatAsync()
         {
             await
                 AsyncObservable.Concat(
@@ -116,7 +116,7 @@ namespace Playground
                 .SubscribeAsync(Print<int>()); // TODO: Use ForEachAsync.
         }
 
-        static async Task DelayAsync()
+        private static async Task DelayAsync()
         {
             await
                 AsyncObservable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))
@@ -127,7 +127,7 @@ namespace Playground
                     .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
         }
 
-        static async Task GroupByAsync()
+        private static async Task GroupByAsync()
         {
             await
                 AsyncObservable.Interval(TimeSpan.FromMilliseconds(250))
@@ -140,7 +140,7 @@ namespace Playground
                     });
         }
 
-        static async Task GroupBySelectManyAsync()
+        private static async Task GroupBySelectManyAsync()
         {
             await
                 AsyncObservable.Interval(TimeSpan.FromMilliseconds(250))
@@ -151,7 +151,7 @@ namespace Playground
                     .SubscribeAsync(Print<string>());
         }
 
-        static async Task MergeAsync()
+        private static async Task MergeAsync()
         {
             var subject = new SequentialSimpleAsyncSubject<IAsyncObservable<int>>();
 
@@ -167,17 +167,17 @@ namespace Playground
             await subject.OnCompletedAsync();
         }
 
-        static async Task PrependAsync()
+        private static async Task PrependAsync()
         {
             await AsyncObservable.Range(0, 10).Prepend(42).SubscribeAsync(Print<int>());
         }
 
-        static async Task RangeAsync()
+        private static async Task RangeAsync()
         {
             await AsyncObservable.Range(0, 10).SubscribeAsync(PrintAsync<int>()); // TODO: Use ForEachAsync.
         }
 
-        static async Task ReplaySubjectAsync()
+        private static async Task ReplaySubjectAsync()
         {
             var sub = new SequentialReplayAsyncSubject<int>(5);
 
@@ -208,12 +208,12 @@ namespace Playground
             await sub.OnNextAsync(47);
         }
 
-        static async Task ReturnAsync()
+        private static async Task ReturnAsync()
         {
             await AsyncObservable.Return(42).SubscribeAsync(Print<int>());
         }
 
-        static async Task SelectManyAsync()
+        private static async Task SelectManyAsync()
         {
             var res = from i in AsyncObservable.Range(0, 10)
                       from j in AsyncObservable.Range(i * 10, 10)
@@ -222,7 +222,7 @@ namespace Playground
             await res.SubscribeAsync(Print<string>());
         }
 
-        static async Task SubjectAsync()
+        private static async Task SubjectAsync()
         {
             var subject = new SequentialSimpleAsyncSubject<int>();
 
@@ -238,24 +238,24 @@ namespace Playground
             await subject.OnCompletedAsync();
         }
 
-        static async Task TakeUntilAsync()
+        private static async Task TakeUntilAsync()
         {
             await AsyncObservable.Range(0, int.MaxValue).TakeUntil(DateTimeOffset.Now.AddSeconds(5)).SubscribeAsync(Print<int>()); // TODO: Use ForEachAsync.
         }
 
-        static async Task TimerAsync()
+        private static async Task TimerAsync()
         {
             await AsyncObservable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)).Take(5).Select(_ => DateTimeOffset.Now).SubscribeAsync(Print<DateTimeOffset>()); // TODO: Use ForEachAsync.
         }
 
-        static async Task WhileAsync()
+        private static async Task WhileAsync()
         {
             var i = 0;
 
             await AsyncObservable.While(() => ++i < 5, AsyncObservable.Range(0, 5)).SubscribeAsync(Print<int>()); // TODO: Use ForEachAsync.
         }
 
-        static IAsyncObserver<T> Print<T>()
+        private static IAsyncObserver<T> Print<T>()
         {
             return AsyncObserver.Create<T>(
                 x =>
@@ -276,7 +276,7 @@ namespace Playground
             );
         }
 
-        static IAsyncObserver<T> PrintAsync<T>()
+        private static IAsyncObserver<T> PrintAsync<T>()
         {
             return AsyncObserver.Create<T>(
                 async x =>

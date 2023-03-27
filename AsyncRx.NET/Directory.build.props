@@ -14,7 +14,6 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <IncludeSymbols>false</IncludeSymbols>
     <IsTestProject>$(MSBuildProjectName.Contains('Tests'))</IsTestProject>
-    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Rx.ruleset</CodeAnalysisRuleSet>
     <GeneratePackageOnBuild Condition=" '$(IsTestProject)' != 'true' and '$(CreatePackage)' == 'true' ">true</GeneratePackageOnBuild>
     <PackageOutputPath>$(MSBuildThisFileDirectory)artifacts</PackageOutputPath>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
