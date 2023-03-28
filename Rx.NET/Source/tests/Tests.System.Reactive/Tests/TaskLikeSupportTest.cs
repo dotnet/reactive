@@ -43,7 +43,13 @@ namespace Tests.System.Reactive.Tests
 #pragma warning restore 1998
 
         [TestMethod]
-        public async Task Basics()
+        public async Task BasicsNoSynchronizationContext()
+        {
+            Assert.Equal(45, await ManOrBoy_Basics());
+        }
+
+        [TestMethod]
+        public async Task BasicsWithSynchronizationContext()
         {
             // We set up a synchronization context for the duration of the test, because this test
             // fails without that. When we were on xUnit, SynchronizationContext.Current was never
