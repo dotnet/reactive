@@ -74,14 +74,14 @@ stages:
       inputs:
         command: test
         projects: Rx.NET/Source/tests/Tests.System.Reactive/*.csproj
-        arguments: -c $(BuildConfiguration) --filter "SkipCI!=true" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
+        arguments: -c $(BuildConfiguration)  -v n --filter "SkipCI!=true" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
       displayName: Run Unit Tests
 
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj
-        arguments: -c $(BuildConfiguration) -v n
+        arguments: -c $(BuildConfiguration)
       displayName: Run Api Approvals Tests
 
     - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Rx.NET/Source/coverlet/reports -reporttypes:"Cobertura"
