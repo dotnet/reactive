@@ -238,7 +238,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        [Ignore] // See https://github.com/dotnet/reactive/issues/1885
+        //[Ignore] // See https://github.com/dotnet/reactive/issues/1885
         public void EventLoop_ScheduleActionNested()
         {
             var ran = false;
@@ -254,7 +254,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        [Ignore] // See https://github.com/dotnet/reactive/issues/1885
+        //[Ignore] // See https://github.com/dotnet/reactive/issues/1885
         public void EventLoop_ScheduleActionDue()
         {
             var ran = false;
