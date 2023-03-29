@@ -42,6 +42,31 @@ namespace Tests.System.Reactive.Tests
         }
 #pragma warning restore 1998
 
+        // We execute the ManOrBoy_Basics tests twice, once without a SynchronizationContext, and
+        // once without. When we were on xUnit, SynchronizationContext.Current was never null
+        // (because they populate it with their AsyncTestSyncContext, apparently to ensure that
+        // async void tests work. MSTest takes the more strict view that async void tests should
+        // not be encouraged. (It has an analyzer to detect these and warn you about them). So
+        // tests in MSTest get the default behaviour (i.e. SynchronizationContext.Current will be
+        // null) unless the test sets one up explicitly.
+        //
+        // The ManOrBoy_Basics tests exercise different code paths depending on the availability of
+        // a SynchronizationContext. AsyncSubject<T>.AwaitObserver.InvokeOnOriginalContext will go
+        // via the context if there is one, and invokes its callback synchronously if not. This is
+        // a significant difference, which is why, now that we can test both ways, we do.
+        //
+        // When we switched to MSTest, this test started failing intermittently. This seems likely
+        // to be indicative of a subtle bug in Rx, because I don't see any obvious reason why this
+        // should be expected to deadlock in the absence of a synchronization context. It doesn't
+        // do so if you run the test in isolation. It only happens when running all the tests, end
+        // even then it often doesn't. Since we modified the build to run tests with "-v n" with
+        // the aim of trying to work out which tests were occasionally locking up, the failures
+        // stopped, so there's some sort of race condition here that's finely balanced enough to
+        // be affected by test settings.) But perhaps not. Maybe there's some subtle reason why you
+        // should never attempt to do what this test is doing without a SynchronizationContext.
+        // Issue https://github.com/dotnet/reactive/issues/1885 is tracking this until we
+        // resolve the root cause.
+
         [TestMethod]
         public async Task BasicsNoSynchronizationContext()
         {
@@ -51,27 +76,6 @@ namespace Tests.System.Reactive.Tests
         [TestMethod]
         public async Task BasicsWithSynchronizationContext()
         {
-            // We set up a synchronization context for the duration of the test, because this test
-            // fails without that. When we were on xUnit, SynchronizationContext.Current was never
-            // null (because they populate it with their AsyncTestSyncContext, apparently to ensure
-            // that async void tests work. But this started failing intermittently when we switched
-            // to MSTest, because that takes the more strict view that async void tests should not
-            // be encouraged. (It has an analyzer to detect these and warn you about them). So
-            // tests in MSTest get the default behaviour, i.e. SynchronizationContext.Current will
-            // be null.
-            // That causes this test to exercise different code paths than it does when there is a
-            // context. AsyncSubject<T>.AwaitObserver.InvokeOnOriginalContext will go via the
-            // context if there is one, and invokes its callback synchronously if not.
-            // It's quite possible that the failure of this test on MSTest is indicative of a
-            // subtle bug in Rx, because I don't see any obvious reason why this should be expected
-            // to deadlock in the absence of a synchronization context. (And it doesn't do so if
-            // you run the test in isolation. It only happens when running all the tests. So
-            // there's some sort of race condition here.) But perhaps not. Maybe there's some
-            // subtle reason why you should never attempt to do what this test is doing without a
-            // SynchronizationContext. For now, we're providing a context to reproduce what was
-            // happening under xUnit, so that this test continues to exercise the same code paths
-            // it did before.
-            // See https://github.com/dotnet/reactive/issues/1885
             SynchronizationContext ctx = SynchronizationContext.Current;
             try
             {
