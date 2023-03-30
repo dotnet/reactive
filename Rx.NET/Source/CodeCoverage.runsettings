@@ -13,4 +13,7 @@
       </DataCollector>
     </DataCollectors>
   </DataCollectionRunSettings>
+  <MSTest>
+    <TestTimeout>120000</TestTimeout>
+  </MSTest>
 </RunSettings>

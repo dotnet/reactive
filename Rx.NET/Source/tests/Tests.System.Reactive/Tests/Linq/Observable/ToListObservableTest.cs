@@ -7,21 +7,24 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ToListObservableTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ToListObservable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).ToListObservable());
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Never<int>().ToListObservable().Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToListObservable_OnNext()
         {
             var scheduler = new TestScheduler();
@@ -41,7 +44,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToListObservable_OnError()
         {
             var scheduler = new TestScheduler();
@@ -72,7 +75,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToListObservable_OnCompleted()
         {
             var scheduler = new TestScheduler();
@@ -99,7 +102,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, s.Value);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToListObservable_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -122,7 +125,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToListObservable_Never()
         {
             var scheduler = new TestScheduler();

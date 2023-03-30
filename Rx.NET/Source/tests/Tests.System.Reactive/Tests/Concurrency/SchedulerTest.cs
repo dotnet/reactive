@@ -11,7 +11,7 @@ using System.Reactive.Linq;
 using System.Reactive.PlatformServices;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Reactive.Testing;
 
 #if HAS_WINFORMS
@@ -20,15 +20,16 @@ using System.Windows.Forms;
 
 using System.Threading.Tasks;
 
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class SchedulerTest : ReactiveTest
     {
         #region IScheduler
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_ArgumentChecks()
         {
             var ms = new MyScheduler();
@@ -50,7 +51,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(ms, 1, TimeSpan.Zero, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Schedulers_ArgumentChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(default(Action)));
@@ -109,7 +110,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(ctx).Schedule(DateTimeOffset.MaxValue, default(Action)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_ScheduleNonRecursive()
         {
             var ms = new MyScheduler();
@@ -118,7 +119,7 @@ namespace ReactiveTests.Tests
             Assert.True(res);
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_ScheduleRecursive()
         {
             var ms = new MyScheduler();
@@ -127,7 +128,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(10, i);
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_Schedule_With_State()
         {
             var ms = new MyScheduler();
@@ -136,7 +137,7 @@ namespace ReactiveTests.Tests
             Assert.True(res);
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_ScheduleWithTimeNonRecursive()
         {
             var now = DateTimeOffset.Now;
@@ -147,7 +148,7 @@ namespace ReactiveTests.Tests
             Assert.True(ms.WaitCycles == 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_ScheduleWithTimeRecursive()
         {
             var now = DateTimeOffset.Now;
@@ -158,7 +159,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(10, i);
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_ScheduleWithTimeSpanNonRecursive()
         {
             var now = DateTimeOffset.Now;
@@ -169,7 +170,7 @@ namespace ReactiveTests.Tests
             Assert.True(ms.WaitCycles == 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_ScheduleWithTimeSpanRecursive()
         {
             var now = DateTimeOffset.Now;
@@ -180,7 +181,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(10, i);
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_StateThreading()
         {
             var lst = new List<int>();
@@ -196,7 +197,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_Builtins()
         {
             // Default
@@ -243,7 +244,7 @@ namespace ReactiveTests.Tests
 #if !NO_PERF
 
 #if !WINDOWS && !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Scheduler_LongRunning_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleLongRunning(null, c => { }));
@@ -257,7 +258,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleLongRunning(ThreadPoolScheduler.Instance, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_Periodic_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.SchedulePeriodic(null, TimeSpan.FromSeconds(1), () => { }));
@@ -274,13 +275,13 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_Stopwatch_Emulation()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.StartStopwatch(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_LongRunning1()
         {
             var s = TaskPoolScheduler.Default;
@@ -304,7 +305,7 @@ namespace ReactiveTests.Tests
             e.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_LongRunning2()
         {
             var s = TaskPoolScheduler.Default;
@@ -336,7 +337,7 @@ namespace ReactiveTests.Tests
 #if !NO_PERF
 
 #if !WINDOWS && !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Scheduler_Periodic1()
         {
             var n = 0;
@@ -354,7 +355,7 @@ namespace ReactiveTests.Tests
             d.Dispose();
         }
 
-        [Fact]
+        [TestMethod]
         public void Scheduler_Periodic2()
         {
             var n = 0;
@@ -376,7 +377,7 @@ namespace ReactiveTests.Tests
 #endif
 
 #if DESKTOPCLR && NET472
-        [Fact]
+        [TestMethod]
         public void Scheduler_Periodic_HostLifecycleManagement()
         {
             var cur = AppDomain.CurrentDomain.BaseDirectory;
@@ -476,7 +477,7 @@ namespace ReactiveTests.Tests
         #region DisableOptimizations
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void DisableOptimizations_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default));
@@ -489,7 +490,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(Scheduler.Default).Schedule(42, DateTimeOffset.Now, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void DisableOptimizations1()
         {
             var s = TaskPoolScheduler.Default;
@@ -525,7 +526,7 @@ namespace ReactiveTests.Tests
             e3.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void DisableOptimizations2()
         {
             var s = TaskPoolScheduler.Default;
@@ -567,7 +568,7 @@ namespace ReactiveTests.Tests
             e2.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void DisableOptimizations3()
         {
             var s = TaskPoolScheduler.Default;
@@ -622,7 +623,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void DisableOptimizations_UnknownService()
         {
             var s = new MyScheduler();
@@ -676,7 +677,7 @@ namespace ReactiveTests.Tests
 
         #region Catch
 
-        [Fact]
+        [TestMethod]
         public void Catch_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(default, _ => true));
@@ -687,7 +688,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(Scheduler.Default, _ => true).Schedule(42, DateTimeOffset.Now, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Builtin_Swallow_Shallow()
         {
             var done = new ManualResetEvent(false);
@@ -702,7 +703,7 @@ namespace ReactiveTests.Tests
             done.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Builtin_Swallow_Recursive()
         {
             var done = new ManualResetEvent(false);
@@ -720,7 +721,7 @@ namespace ReactiveTests.Tests
             done.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Custom_Unhandled()
         {
             var err = default(Exception);
@@ -740,7 +741,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Custom_Rethrow()
         {
             var err = default(Exception);
@@ -754,7 +755,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Custom_LongRunning_Caught()
         {
             var err = default(Exception);
@@ -779,7 +780,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Custom_LongRunning_Rethrow()
         {
             var err = default(Exception);
@@ -803,7 +804,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Custom_Periodic_Regular()
         {
             var scheduler = new MyExceptionScheduler(_ => { })
@@ -830,7 +831,7 @@ namespace ReactiveTests.Tests
             scheduler.PeriodicStopped.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Custom_Periodic_Uncaught1()
         {
             var err = default(Exception);
@@ -854,7 +855,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Custom_Periodic_Uncaught2()
         {
             var err = default(Exception);
@@ -878,7 +879,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void Catch_Custom_Periodic_Caught()
         {
             var err = default(Exception);
@@ -984,7 +985,7 @@ namespace ReactiveTests.Tests
 
         #region Services
 
-        [Fact]
+        [TestMethod]
         public void InvalidService_Null()
         {
             var s = new MySchedulerWithoutServices();
@@ -999,7 +1000,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void DetectServices_Null_1()
         {
             var s = new MyDumbScheduler1();
@@ -1031,7 +1032,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void DetectServices_Null_2()
         {
             var s = new MyDumbScheduler2(new Dictionary<Type, object>());
@@ -1040,7 +1041,7 @@ namespace ReactiveTests.Tests
             Assert.Null(Scheduler.AsStopwatchProvider(s));
         }
 
-        [Fact]
+        [TestMethod]
         public void DetectServices_Found()
         {
             {
@@ -1143,14 +1144,14 @@ namespace ReactiveTests.Tests
 
         #endregion
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_Yield_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Yield(default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Yield(default, CancellationToken.None));
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_Sleep_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default, TimeSpan.Zero));
@@ -1160,7 +1161,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default, DateTimeOffset.MinValue, CancellationToken.None));
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_ScheduleAsync_ArgumentChecking()
         {
             var tcs = new TaskCompletionSource<IDisposable>();
@@ -1213,7 +1214,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, at, d4));
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_ScheduleAsync_Overloads1()
         {
             var tcsI = new TaskCompletionSource<int>();
@@ -1262,7 +1263,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_ScheduleAsync_Overloads2()
         {
             var tcsI = new TaskCompletionSource<int>();
@@ -1311,7 +1312,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_ScheduleAsync_Overloads3()
         {
             var tcsI = new TaskCompletionSource<int>();
@@ -1360,7 +1361,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_ScheduleAsync_NoCancellation1()
         {
             var s = new TestScheduler();
@@ -1394,7 +1395,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_ScheduleAsync_NoCancellation2()
         {
             var s = new TestScheduler();
@@ -1428,7 +1429,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_Awaiters()
         {
             var op = Scheduler.Immediate.Yield();
@@ -1441,7 +1442,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => aw.OnCompleted(() => { }));
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_Yield_Cancel1()
         {
             var cts = new CancellationTokenSource();
@@ -1456,7 +1457,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OperationCanceledException>(() => aw.GetResult());
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_Yield_Cancel2()
         {
             var cts = new CancellationTokenSource();
@@ -1479,7 +1480,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_Sleep_Cancel()
         {
             var cts = new CancellationTokenSource();
@@ -1505,7 +1506,7 @@ namespace ReactiveTests.Tests
 
 #if !NO_SYNCCTX
 
-        [Fact]
+        [TestMethod]
         public void SchedulerAsync_ScheduleAsync_SyncCtx()
         {
             var old = SynchronizationContext.Current;

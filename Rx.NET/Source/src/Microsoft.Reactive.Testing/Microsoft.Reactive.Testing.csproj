@@ -8,12 +8,19 @@
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>    
     <Description>Reactive Extensions (Rx) for .NET - Testing Library</Description>
     <!-- NB: A lot of CA warnings are disabled because of the .cs files included from xunit.assert.source. -->
-    <NoWarn>$(NoWarn);CA1305;CA1307;CA1032;CA1064;CA1822;CA1812</NoWarn>
+    <NoWarn>$(NoWarn);IDE0054;IDE0066;CA1305;CA1307;CA1032;CA1064;CA1822;CA1812;CA1823</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Properties\*.xml" />
-    <PackageReference Include="xunit.assert.source" Version="2.4.1" PrivateAssets="All" /> 
+    <PackageReference Include="xunit.assert.source" Version="2.4.2" PrivateAssets="All" /> 
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+    Workaround for https://github.com/xunit/xunit/issues/2703
+    -->
+    <Compile Remove="$(NuGetPackageRoot)xunit.assert.source\**\contentFiles\cs\**\Asserts\Sdk\IAssertionException.cs" />
   </ItemGroup>
 </Project>

@@ -9,20 +9,23 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class GetEnumeratorTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void GetEnumerator_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GetEnumerator(default(IObservable<int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void GetEnumerator_Regular1()
         {
             var scheduler = new TestScheduler();
@@ -74,7 +77,7 @@ namespace ReactiveTests.Tests
             Assert.True(vals[3].Item1 == 230 && vals[3].Item2 == 7);
         }
 
-        [Fact]
+        [TestMethod]
         public void GetEnumerator_Regular2()
         {
             var scheduler = new TestScheduler();
@@ -126,7 +129,7 @@ namespace ReactiveTests.Tests
             Assert.True(vals[3].Item1 == 180 && vals[3].Item2 == 7);
         }
 
-        [Fact]
+        [TestMethod]
         public void GetEnumerator_Dispose()
         {
             var scheduler = new TestScheduler();

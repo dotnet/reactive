@@ -8,21 +8,24 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SwitchTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Switch_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Switch((IObservable<IObservable<int>>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Switch((IObservable<Task<int>>)null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Switch_Data()
         {
             var scheduler = new TestScheduler();
@@ -109,7 +112,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Switch_InnerThrows()
         {
             var scheduler = new TestScheduler();
@@ -179,7 +182,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Switch_OuterThrows()
         {
             var scheduler = new TestScheduler();
@@ -244,7 +247,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void Switch_NoInner()
         {
             var scheduler = new TestScheduler();
@@ -266,7 +269,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Switch_InnerCompletes()
         {
             var scheduler = new TestScheduler();
@@ -316,7 +319,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void Switch_Task()
         {
             var tss = Observable.Switch(new[] { Task.Factory.StartNew(() => 1), Task.Factory.StartNew(() => 2), Task.Factory.StartNew(() => 3) }.ToObservable());

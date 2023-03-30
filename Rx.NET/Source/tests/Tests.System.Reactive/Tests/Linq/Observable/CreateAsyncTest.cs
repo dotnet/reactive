@@ -12,14 +12,17 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class CreateAsyncTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Create(default(Func<IObserver<int>, Task>)));
@@ -30,7 +33,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Create(default(Func<IObserver<int>, CancellationToken, Task<Action>>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_NullCoalescingAction1()
         {
             var xs = Observable.Create<int>(o =>
@@ -46,7 +49,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(new[] { 42 }));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_NullCoalescingAction2()
         {
             var xs = Observable.Create<int>((o, ct) =>
@@ -62,7 +65,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(new[] { 42 }));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_NullCoalescingDisposable1()
         {
             var xs = Observable.Create<int>(o =>
@@ -78,7 +81,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(new[] { 42 }));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_NullCoalescingDisposable2()
         {
             var xs = Observable.Create<int>((o, ct) =>
@@ -111,7 +114,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Never()
         {
             RunSynchronously(() =>
@@ -155,7 +158,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Completed1()
         {
             RunSynchronously(() =>
@@ -197,7 +200,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Completed2()
         {
             RunSynchronously(() =>
@@ -239,7 +242,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Error1()
         {
             RunSynchronously(() =>
@@ -283,7 +286,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Error2()
         {
             RunSynchronously(() =>
@@ -311,7 +314,7 @@ namespace ReactiveTests.Tests
             throw exception;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Error3()
         {
             RunSynchronously(() =>
@@ -351,7 +354,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Cancel1()
         {
             RunSynchronously(() =>
@@ -393,7 +396,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Cancel2()
         {
             RunSynchronously(() =>
@@ -435,7 +438,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Cancel3()
         {
             RunSynchronously(() =>
@@ -478,7 +481,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Cancel4()
         {
             RunSynchronously(() =>
@@ -529,7 +532,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Task_Simple()
         {
             var xs = Observable.Create<int>(observer =>
@@ -547,7 +550,7 @@ namespace ReactiveTests.Tests
             Assert.True(new[] { 42 }.SequenceEqual(lst));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Task_Token()
         {
             var e = new ManualResetEvent(false);
@@ -571,15 +574,25 @@ namespace ReactiveTests.Tests
             });
 
             var lst = new List<int>();
-            var d = xs.Subscribe(lst.Add);
+            var d = xs.Subscribe(i => { lock (lst) { lst.Add(i); } });
 
             e.WaitOne();
             d.Dispose();
 
-            Assert.True(lst.Take(10).SequenceEqual(Enumerable.Repeat(42, 10)));
+            // Although Dispose will set the _isStopped gate in the AutoDetachObserver that our
+            // observer gets wrapped in, it's possible that the thread we kicked off had just
+            // made one of its calls to observer.OnNext, and that this had just got past the
+            // _isStopped gate when we called Dispose, meaning that it might right now be inside
+            // List<int>.Add. We're synchronizing access to the list to ensure that any such
+            // call has completed by the time we try to inspect the list.
+
+            lock (lst)
+            {
+                Assert.True(lst.Take(10).SequenceEqual(Enumerable.Repeat(42, 10)));
+            }
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_IDisposable_Simple()
         {
             var stopped = new ManualResetEvent(false);
@@ -604,7 +617,7 @@ namespace ReactiveTests.Tests
             Assert.True(new[] { 42 }.SequenceEqual(lst));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_IDisposable_Token()
         {
             var stopped = new ManualResetEvent(false);
@@ -642,7 +655,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.Take(10).SequenceEqual(Enumerable.Repeat(42, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Action_Simple()
         {
             var stopped = new ManualResetEvent(false);
@@ -667,7 +680,7 @@ namespace ReactiveTests.Tests
             Assert.True(new[] { 42 }.SequenceEqual(lst));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Action_Token()
         {
             var stopped = new ManualResetEvent(false);
@@ -706,7 +719,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void CreateWithTaskDisposable_NoPrematureTermination()
         {
             var obs = Observable.Create<int>(async o =>
@@ -725,7 +738,7 @@ namespace ReactiveTests.Tests
             var result = obs.Take(1).Wait();
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateWithTaskAction_NoPrematureTermination()
         {
             var obs = Observable.Create<int>(async o =>

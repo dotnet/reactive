@@ -9,14 +9,16 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class ThreadPoolSchedulerTest
     {
-        [Fact]
+        [TestMethod]
         public void Schedule_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.Schedule(42, default));
@@ -24,14 +26,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.Schedule(42, TimeSpan.Zero, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Get_Now()
         {
             var res = ThreadPoolScheduler.Instance.Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleAction()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -41,7 +43,7 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void ProperRooting_NoGC_SingleShot()
         {
             var cts = new CancellationTokenSource();
@@ -68,7 +70,7 @@ namespace ReactiveTests.Tests
             cts.Cancel();
         }
 
-        [Fact]
+        [TestMethod]
         public void ProperRooting_NoGC_Periodic()
         {
             var cts = new CancellationTokenSource();
@@ -96,7 +98,7 @@ namespace ReactiveTests.Tests
             cts.Cancel();
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleActionDueRelative()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -106,7 +108,7 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleActionDue0()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -116,7 +118,7 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleActionDueAbsolute()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -126,7 +128,7 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleActionCancel()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -140,13 +142,15 @@ namespace ReactiveTests.Tests
 
 #if !NO_PERF
 
-        [Fact]
+#if !WINDOWS_UWP
+
+        [TestMethod]
         public void ScheduleLongRunning_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.ScheduleLongRunning(42, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleLongRunning()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -156,7 +160,7 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleLongRunningCancel()
         {
             var nt = ThreadPoolScheduler.Instance;
@@ -186,7 +190,9 @@ namespace ReactiveTests.Tests
             Assert.True(n >= 10);
         }
 
-        [Fact]
+#endif
+
+        [TestMethod]
         public void Stopwatch()
         {
             var nt = ThreadPoolScheduler.Instance;
@@ -200,24 +206,28 @@ namespace ReactiveTests.Tests
             Assert.True(s1 > s0);
         }
 
-        [Fact]
+        [TestMethod]
         public void Periodic_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.SchedulePeriodic(0, TimeSpan.FromSeconds(1), null));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => ThreadPoolScheduler.Instance.SchedulePeriodic(0, TimeSpan.FromSeconds(-1), _ => _));
         }
 
-        [Fact]
+        [TestMethod]
         public void Periodic_Regular()
         {
             Periodic_Impl(TimeSpan.FromMilliseconds(25));
         }
 
-        [Fact]
+#if !WINDOWS_UWP
+
+        [TestMethod]
         public void Periodic_Zero()
         {
             Periodic_Impl(TimeSpan.Zero);
         }
+
+#endif
 
         private void Periodic_Impl(TimeSpan period)
         {
@@ -270,7 +280,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.Take(10).SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Periodic_NonReentrant()
         {
             var n = 0;
@@ -304,8 +314,8 @@ namespace ReactiveTests.Tests
 #endif
 
 #if DESKTOPCLR
-        [Trait("SkipCI", "true")]
-        [Fact]
+        [TestCategory("SkipCI")]
+        [TestMethod]
         public void No_ThreadPool_Starvation_Dispose()
         {
             ThreadPool.GetAvailableThreads(out var bwt, out var bio);

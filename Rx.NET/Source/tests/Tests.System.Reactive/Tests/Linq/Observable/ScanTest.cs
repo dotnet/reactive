@@ -5,14 +5,15 @@
 using System;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ScanTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Scan_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -23,7 +24,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Scan(someObservable, 0, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Scan_Seed_Never()
         {
             var scheduler = new TestScheduler();
@@ -43,7 +44,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Scan_Seed_Empty()
         {
             var scheduler = new TestScheduler();
@@ -67,7 +68,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Scan_Seed_Return()
         {
             var scheduler = new TestScheduler();
@@ -93,7 +94,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Scan_Seed_Throw()
         {
             var scheduler = new TestScheduler();
@@ -118,7 +119,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Scan_Seed_SomeData()
         {
             var scheduler = new TestScheduler();
@@ -150,7 +151,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Scan_Seed_AccumulatorThrows()
         {
             var scheduler = new TestScheduler();
@@ -181,7 +182,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Scan_NoSeed_Never()
         {
             var scheduler = new TestScheduler();
@@ -200,7 +201,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Scan_NoSeed_Empty()
         {
             var scheduler = new TestScheduler();
@@ -223,7 +224,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Scan_NoSeed_Return()
         {
             var scheduler = new TestScheduler();
@@ -248,7 +249,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Scan_NoSeed_Throw()
         {
             var scheduler = new TestScheduler();
@@ -272,7 +273,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Scan_NoSeed_SomeData()
         {
             var scheduler = new TestScheduler();
@@ -303,7 +304,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Scan_NoSeed_AccumulatorThrows()
         {
             var scheduler = new TestScheduler();

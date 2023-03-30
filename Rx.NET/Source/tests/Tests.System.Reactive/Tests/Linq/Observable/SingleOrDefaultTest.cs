@@ -7,14 +7,17 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SingleOrDefaultTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefault_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SingleOrDefault(default(IObservable<int>)));
@@ -22,26 +25,26 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SingleOrDefault(DummyObservable<int>.Instance, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefault_Empty()
         {
             Assert.Equal(default, Observable.Empty<int>().SingleOrDefault());
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultPredicate_Empty()
         {
             Assert.Equal(default, Observable.Empty<int>().SingleOrDefault(_ => true));
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefault_Return()
         {
             var value = 42;
             Assert.Equal(value, Observable.Return(value).SingleOrDefault());
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefault_Throw()
         {
             var ex = new Exception();
@@ -51,28 +54,28 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.SingleOrDefault());
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefault_Range()
         {
             var value = 42;
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Range(value, 10).SingleOrDefault());
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultPredicate_Range()
         {
             var value = 42;
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Range(value, 10).SingleOrDefault(i => i % 2 == 0));
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefault_Range_ReducesToSingle()
         {
             var value = 42;
             Assert.Equal(45, Observable.Range(value, 10).SingleOrDefault(i => i == 45));
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefault_Range_ReducesToNone()
         {
             var value = 42;

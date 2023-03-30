@@ -9,7 +9,9 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.PlatformServices;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
@@ -23,7 +25,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-
+    [TestClass]
     public class SystemClockTest
     {
         private void Run(CrossAppDomainDelegate a)
@@ -33,7 +35,7 @@ namespace ReactiveTests.Tests
             AppDomain.Unload(domain);
         }
 
-        [Fact]
+        [TestMethod]
         public void PastWork()
         {
             Run(PastWork_Callback);
@@ -65,7 +67,7 @@ namespace ReactiveTests.Tests
             Assert.True(done);
         }
 
-        [Fact]
+        [TestMethod]
         public void ImmediateWork()
         {
             Run(ImmediateWork_Callback);
@@ -97,7 +99,7 @@ namespace ReactiveTests.Tests
             Assert.True(done);
         }
 
-        [Fact]
+        [TestMethod]
         public void ShortTermWork()
         {
             Run(ShortTermWork_Callback);
@@ -130,7 +132,7 @@ namespace ReactiveTests.Tests
             Assert.True(done);
         }
 
-        [Fact]
+        [TestMethod]
         public void ShortTermWork_Dispose()
         {
             Run(ShortTermWork_Dispose_Callback);
@@ -165,7 +167,7 @@ namespace ReactiveTests.Tests
             Assert.False(done);
         }
 
-        [Fact]
+        [TestMethod]
         public void ShortTermWork_InaccurateClock()
         {
             Run(ShortTermWork_InaccurateClock_Callback);
@@ -206,7 +208,7 @@ namespace ReactiveTests.Tests
             Assert.True(done);
         }
 
-        [Fact]
+        [TestMethod]
         public void LongTermWork1()
         {
             Run(LongTermWork1_Callback);
@@ -247,7 +249,7 @@ namespace ReactiveTests.Tests
             Assert.True(done);
         }
 
-        [Fact]
+        [TestMethod]
         public void LongTermWork2()
         {
             Run(LongTermWork2_Callback);
@@ -298,7 +300,7 @@ namespace ReactiveTests.Tests
             Assert.True(done);
         }
 
-        [Fact]
+        [TestMethod]
         public void LongTerm_Multiple()
         {
             Run(LongTerm_Multiple_Callback);
@@ -385,7 +387,7 @@ namespace ReactiveTests.Tests
             Assert.True(done3);
         }
 
-        [Fact]
+        [TestMethod]
         public void LongTerm_Multiple_Dispose()
         {
             Run(LongTerm_Multiple_Dispose_Callback);
@@ -480,7 +482,7 @@ namespace ReactiveTests.Tests
             Assert.False(done3);
         }
 
-        [Fact]
+        [TestMethod]
         public void ClockChanged_FalsePositive()
         {
             Run(ClockChanged_FalsePositive_Callback);
@@ -526,7 +528,7 @@ namespace ReactiveTests.Tests
             Assert.True(done);
         }
 
-        [Fact]
+        [TestMethod]
         public void ClockChanged_Forward1()
         {
             Run(ClockChanged_Forward1_Callback);
@@ -571,7 +573,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, s._queue.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void ClockChanged_Forward2()
         {
             Run(ClockChanged_Forward2_Callback);
@@ -615,7 +617,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, n); // Invoke shouldn't cause double execution of the work.
         }
 
-        [Fact]
+        [TestMethod]
         public void ClockChanged_Backward1()
         {
             Run(ClockChanged_Backward1_Callback);
@@ -668,7 +670,7 @@ namespace ReactiveTests.Tests
             Assert.True(done);
         }
 
-        [Fact]
+        [TestMethod]
         public void ClockChanged_Backward2()
         {
             Run(ClockChanged_Backward2_Callback);
@@ -724,7 +726,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, n); // Invoke shouldn't cause double execution of the work.
         }
 
-        [Fact]
+        [TestMethod]
         public void PeriodicSystemClockChangeMonitor()
         {
             Run(PeriodicSystemClockChangeMonitor_Callback);
@@ -794,7 +796,7 @@ namespace ReactiveTests.Tests
             Assert.Null(cal._action);
         }
 
-        [Fact]
+        [TestMethod]
         public void ClockChanged_RefCounting()
         {
             Run(ClockChanged_RefCounting_Callback);
@@ -905,7 +907,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, scm.N);
         }
 
-        [Fact]
+        [TestMethod]
         public void SystemClockChange_SignalNoInvalidOperationExceptionDueToRemove()
         {
             var local = new RemoveScheduler();

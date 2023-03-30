@@ -9,21 +9,24 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SkipUntilTest : ReactiveTest
     {
         #region + Observable +
-        [Fact]
+        [TestMethod]
         public void SkipUntil_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SkipUntil<int, int>(null, DummyObservable<int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SkipUntil<int, int>(DummyObservable<int>.Instance, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_SomeData_Next()
         {
             var scheduler = new TestScheduler();
@@ -62,7 +65,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_SomeData_Error()
         {
             var scheduler = new TestScheduler();
@@ -100,7 +103,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Error_SomeData()
         {
             var scheduler = new TestScheduler();
@@ -136,7 +139,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_SomeData_Empty()
         {
             var scheduler = new TestScheduler();
@@ -171,7 +174,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Never_Next()
         {
             var scheduler = new TestScheduler();
@@ -202,7 +205,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Never_Error1()
         {
             var scheduler = new TestScheduler();
@@ -235,7 +238,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_SomeData_Error2()
         {
             var scheduler = new TestScheduler();
@@ -273,7 +276,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_SomeData_Never()
         {
             var scheduler = new TestScheduler();
@@ -307,7 +310,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Never_Empty()
         {
             var scheduler = new TestScheduler();
@@ -337,7 +340,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Never_Never()
         {
             var scheduler = new TestScheduler();
@@ -366,7 +369,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_HasCompletedCausesDisposal()
         {
             var scheduler = new TestScheduler();
@@ -394,7 +397,7 @@ namespace ReactiveTests.Tests
             Assert.True(disposed, "disposed");
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Immediate()
         {
             var scheduler = new TestScheduler();
@@ -412,7 +415,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact] // Asserts behaviour considered buggy. A fix is desirable but breaking.
+        [TestMethod] // Asserts behaviour considered buggy. A fix is desirable but breaking.
         public void SkipUntil_Empty_Empty()
         {
             var scheduler = new TestScheduler();
@@ -440,7 +443,7 @@ namespace ReactiveTests.Tests
 
         #region + Timed +
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Timed_ArgumentChecking()
         {
             var xs = Observable.Return(42);
@@ -451,7 +454,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SkipUntil(xs, DateTimeOffset.Now, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Zero()
         {
             var scheduler = new TestScheduler();
@@ -477,7 +480,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Some()
         {
             var scheduler = new TestScheduler();
@@ -502,7 +505,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Late()
         {
             var scheduler = new TestScheduler();
@@ -526,7 +529,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Error()
         {
             var scheduler = new TestScheduler();
@@ -550,7 +553,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Never()
         {
             var scheduler = new TestScheduler();
@@ -572,7 +575,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Twice1()
         {
             var scheduler = new TestScheduler();
@@ -605,7 +608,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Twice2()
         {
             var scheduler = new TestScheduler();
@@ -638,7 +641,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipUntil_Default()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);

@@ -8,21 +8,23 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public partial class ObservableSafetyTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void SubscribeSafe_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe(default, Observer.Create<int>(_ => { })));
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe(Observable.Return(42), default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Safety_Subscription1()
         {
             var ex = new Exception();
@@ -38,7 +40,7 @@ namespace ReactiveTests.Tests
             d.Dispose();
         }
 
-        [Fact]
+        [TestMethod]
         public void Safety_Subscription2()
         {
             var ex = new Exception();
@@ -83,7 +85,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void ObservableBase_ObserverThrows()
         {
             var ex = new Exception();
@@ -122,7 +124,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void ObservableBase_ObserverThrows_CustomObserver()
         {
             var ex = new Exception();
@@ -158,7 +160,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void Producer_ObserverThrows()
         {
             var ex = new Exception();
@@ -211,7 +213,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Producer_ObserverThrows_CustomObserver()
         {
             var ex = new Exception();

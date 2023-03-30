@@ -10,27 +10,29 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class DisposableTests
     {
-        [Fact]
+        [TestMethod]
         public void AnonymousDisposable_Create()
         {
             var d = Disposable.Create(() => { });
             Assert.NotNull(d);
         }
 
-        [Fact]
+        [TestMethod]
         public void AnonymousDisposable_CreateNull()
         {
             Assert.Throws(typeof(ArgumentNullException), () => Disposable.Create(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void AnonymousDisposable_Dispose()
         {
             var disposed = false;
@@ -44,7 +46,7 @@ namespace ReactiveTests.Tests
             Assert.True(c.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void EmptyDisposable()
         {
             var d = Disposable.Empty;
@@ -52,7 +54,7 @@ namespace ReactiveTests.Tests
             d.Dispose();
         }
 
-        [Fact]
+        [TestMethod]
         public void BooleanDisposable()
         {
             var d = new BooleanDisposable();
@@ -63,7 +65,7 @@ namespace ReactiveTests.Tests
             Assert.True(d.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleAssignmentDisposable_SetNull()
         {
             var d = new SingleAssignmentDisposable
@@ -72,7 +74,7 @@ namespace ReactiveTests.Tests
             };
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleAssignmentDisposable_DisposeAfterSet()
         {
             var disposed = false;
@@ -92,7 +94,7 @@ namespace ReactiveTests.Tests
             Assert.True(d.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleAssignmentDisposable_DisposeBeforeSet()
         {
             var disposed = false;
@@ -114,7 +116,7 @@ namespace ReactiveTests.Tests
             Assert.True(disposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleAssignmentDisposable_SetMultipleTimes()
         {
             var d = new SingleAssignmentDisposable
@@ -125,7 +127,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => { d.Disposable = Disposable.Empty; });
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable(default(IDisposable[])));
@@ -133,7 +135,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new CompositeDisposable(-1));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_Contains()
         {
             var d1 = Disposable.Create(() => { });
@@ -147,31 +149,31 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => g.Contains(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_IsReadOnly()
         {
             Assert.False(new CompositeDisposable().IsReadOnly);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_CopyTo_Null()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable().CopyTo(null, 0));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_CopyTo_Negative()
         {
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new CompositeDisposable().CopyTo(new IDisposable[2], -1));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_CopyTo_BeyondEnd()
         {
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new CompositeDisposable().CopyTo(new IDisposable[2], 2));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_CopyTo()
         {
             var d1 = Disposable.Create(() => { });
@@ -184,7 +186,7 @@ namespace ReactiveTests.Tests
             Assert.Same(d2, d[2]);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_ToArray()
         {
             var d1 = Disposable.Create(() => { });
@@ -195,7 +197,7 @@ namespace ReactiveTests.Tests
             Assert.True(g.ToArray().SequenceEqual(new[] { d1, d2 }));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_GetEnumerator()
         {
             var d1 = Disposable.Create(() => { });
@@ -210,7 +212,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(new[] { d1, d2 }));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_GetEnumeratorNonGeneric()
         {
             var d1 = Disposable.Create(() => { });
@@ -225,7 +227,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(new[] { d1, d2 }));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_CollectionInitializer()
         {
             var d1 = Disposable.Create(() => { });
@@ -236,27 +238,27 @@ namespace ReactiveTests.Tests
             Assert.True(g.Contains(d2));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_AddNull_via_params_ctor()
         {
             IDisposable d1 = null;
             ReactiveAssert.Throws<ArgumentException>(() => new CompositeDisposable(d1));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_AddNull_via_IEnum_ctor()
         {
             IEnumerable<IDisposable> values = new IDisposable[] { null };
             ReactiveAssert.Throws<ArgumentException>(() => new CompositeDisposable(values));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_AddNull()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable().Add(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_Add()
         {
             var d1 = Disposable.Create(() => { });
@@ -269,7 +271,7 @@ namespace ReactiveTests.Tests
             Assert.True(g.Contains(d2));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_AddAfterDispose()
         {
             var disp1 = false;
@@ -291,7 +293,7 @@ namespace ReactiveTests.Tests
             Assert.True(g.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_Remove()
         {
             var disp1 = false;
@@ -322,7 +324,7 @@ namespace ReactiveTests.Tests
             Assert.False(disp3);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_Clear()
         {
             var disp1 = false;
@@ -345,7 +347,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, g.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_RemoveOptimizationBehavior()
         {
             var g = new CompositeDisposable();
@@ -393,13 +395,13 @@ namespace ReactiveTests.Tests
             Assert.True(z.SequenceEqual(Enumerable.Range(0, N).Where(i => !(i % 2 == 0 || i % 3 == 0 || i % 5 == 0))));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_RemoveNull()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable().Remove(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_Empty_GetEnumerator()
         {
             var composite = new CompositeDisposable();
@@ -407,7 +409,7 @@ namespace ReactiveTests.Tests
             Assert.False(composite.GetEnumerator().MoveNext());
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_NonCollection_Enumerable_Init()
         {
             var d = new BooleanDisposable();
@@ -424,7 +426,7 @@ namespace ReactiveTests.Tests
             yield return d;
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_Disposed_Is_NoOp()
         {
             var d = new BooleanDisposable();
@@ -444,7 +446,7 @@ namespace ReactiveTests.Tests
             Assert.Null(array[0]);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_CopyTo_Index_Out_Of_Range()
         {
             var d1 = new BooleanDisposable();
@@ -465,7 +467,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_GetEnumerator_Reset()
         {
             var d = new BooleanDisposable();
@@ -484,7 +486,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(d, enumerator.Current);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompositeDisposable_GetEnumerator_Disposed_Entries()
         {
             var d1 = new BooleanDisposable();
@@ -506,13 +508,13 @@ namespace ReactiveTests.Tests
             Assert.False(enumerator.MoveNext());
         }
 
-        [Fact]
+        [TestMethod]
         public void CancellationDisposable_Ctor_Null()
         {
             Assert.Throws<ArgumentNullException>(() => new CancellationDisposable(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void CancellationDisposable_DefaultCtor()
         {
             var c = new CancellationDisposable();
@@ -524,7 +526,7 @@ namespace ReactiveTests.Tests
             Assert.True(c.Token.IsCancellationRequested);
         }
 
-        [Fact]
+        [TestMethod]
         public void CancellationDisposable_TokenCtor()
         {
             var t = new CancellationTokenSource();
@@ -537,19 +539,19 @@ namespace ReactiveTests.Tests
             Assert.True(c.Token.IsCancellationRequested);
         }
 
-        [Fact]
+        [TestMethod]
         public void ContextDisposable_CreateNullContext()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new ContextDisposable(null, Disposable.Empty));
         }
 
-        [Fact]
+        [TestMethod]
         public void ContextDisposable_CreateNullDisposable()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new ContextDisposable(new SynchronizationContext(), null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ContextDisposable()
         {
             var disp = false;
@@ -575,14 +577,14 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void SerialDisposable_Ctor_Prop()
         {
             var m = new SerialDisposable();
             Assert.Null(m.Disposable);
         }
 
-        [Fact]
+        [TestMethod]
         public void SerialDisposable_ReplaceBeforeDispose()
         {
             var disp1 = false;
@@ -601,7 +603,7 @@ namespace ReactiveTests.Tests
             Assert.False(disp2);
         }
 
-        [Fact]
+        [TestMethod]
         public void SerialDisposable_ReplaceAfterDispose()
         {
             var disp1 = false;
@@ -622,7 +624,7 @@ namespace ReactiveTests.Tests
             Assert.True(disp2);
         }
 
-        [Fact]
+        [TestMethod]
         public void SerialDisposable_Dispose()
         {
             var disp = false;
@@ -639,13 +641,13 @@ namespace ReactiveTests.Tests
             //Assert.Null(m.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCountDisposable_Ctor_Null()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new RefCountDisposable(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCountDisposable_SingleReference()
         {
             var d = new BooleanDisposable();
@@ -657,7 +659,7 @@ namespace ReactiveTests.Tests
             Assert.True(d.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCountDisposable_RefCounting()
         {
             var d = new BooleanDisposable();
@@ -682,7 +684,7 @@ namespace ReactiveTests.Tests
             d3.Dispose();
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCountDisposable_PrimaryDisposesFirst()
         {
             var d = new BooleanDisposable();
@@ -703,7 +705,7 @@ namespace ReactiveTests.Tests
             Assert.True(d.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void RefCountDisposable_Throw_If_Disposed()
         {
             var d = new BooleanDisposable();
@@ -715,14 +717,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ObjectDisposedException>(() => { r.GetDisposable(); });
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduledDisposable_Null()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledDisposable(null, Disposable.Empty));
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledDisposable(Scheduler.Immediate, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduledDisposable()
         {
             var d = new BooleanDisposable();
@@ -743,7 +745,7 @@ namespace ReactiveTests.Tests
             s.Disposable.Dispose();            // This should be a nop.
         }
 
-        [Fact]
+        [TestMethod]
         public void MultipleAssignmentDisposable()
         {
             var m = new MultipleAssignmentDisposable();
@@ -776,7 +778,7 @@ namespace ReactiveTests.Tests
             Assert.True(m.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void StableCompositeDisposable_ArgumentChecking()
         {
             var d = Disposable.Empty;
@@ -792,7 +794,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentException>(() => StableCompositeDisposable.Create(d, d, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void StableCompositeDisposable_Binary()
         {
             var disp1 = false;
@@ -820,7 +822,7 @@ namespace ReactiveTests.Tests
             Assert.True(d.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void StableCompositeDisposable_Nary1()
         {
             var disp1 = false;
@@ -854,7 +856,7 @@ namespace ReactiveTests.Tests
             Assert.True(d.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void StableCompositeDisposable_Nary2()
         {
             var disp1 = false;

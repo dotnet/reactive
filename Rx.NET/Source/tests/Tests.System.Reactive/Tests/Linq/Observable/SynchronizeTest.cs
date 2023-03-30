@@ -8,13 +8,16 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SynchronizeTest : TestBase
     {
-        [Fact]
+        [TestMethod]
         public void Synchronize_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -26,7 +29,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Synchronize_Range()
         {
             var i = 0;
@@ -54,7 +57,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Synchronize_Throw()
         {
             var ex = new Exception();
@@ -86,7 +89,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, e);
         }
 
-        [Fact]
+        [TestMethod]
         public void Synchronize_BadObservable()
         {
             var o = Observable.Create<int>(obs =>

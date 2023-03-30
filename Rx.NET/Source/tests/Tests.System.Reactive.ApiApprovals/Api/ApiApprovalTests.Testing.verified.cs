@@ -1,4 +1,4 @@
-[assembly: System.CLSCompliant(true)]
+﻿[assembly: System.CLSCompliant(true)]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.7.2", FrameworkDisplayName=".NET Framework 4.7.2")]
 namespace Microsoft.Reactive.Testing
@@ -88,8 +88,8 @@ namespace Microsoft.Reactive.Testing
     {
         public TestScheduler() { }
         protected override long Add(long absolute, long relative) { }
-        public Microsoft.Reactive.Testing.ITestableObservable<T> CreateColdObservable<T>(params Microsoft.Reactive.Testing.Recorded<>[] messages) { }
-        public Microsoft.Reactive.Testing.ITestableObservable<T> CreateHotObservable<T>(params Microsoft.Reactive.Testing.Recorded<>[] messages) { }
+        public Microsoft.Reactive.Testing.ITestableObservable<T> CreateColdObservable<T>(params Microsoft.Reactive.Testing.Recorded<System.Reactive.Notification<T>>[] messages) { }
+        public Microsoft.Reactive.Testing.ITestableObservable<T> CreateHotObservable<T>(params Microsoft.Reactive.Testing.Recorded<System.Reactive.Notification<T>>[] messages) { }
         public Microsoft.Reactive.Testing.ITestableObserver<T> CreateObserver<T>() { }
         public override System.IDisposable ScheduleAbsolute<TState>(TState state, long dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
         public Microsoft.Reactive.Testing.ITestableObserver<T> Start<T>(System.Func<System.IObservable<T>> create) { }

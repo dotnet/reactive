@@ -25,7 +25,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;HAS_TPL46;NO_REMOTING;NO_THREAD;WINDOWS;USE_TIMER_SELF_ROOT</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;HAS_TPL46;NO_REMOTING;WINDOWS;USE_TIMER_SELF_ROOT</DefineConstants>
     <NoWarn>;2008;0618</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -35,7 +35,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;HAS_TPL46;NO_REMOTING;NO_THREAD;WINDOWS;USE_TIMER_SELF_ROOT</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;HAS_TPL46;NO_REMOTING;WINDOWS;USE_TIMER_SELF_ROOT</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008;0618</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -94,10 +94,11 @@
   <PropertyGroup>
     <NoWarn>$(NoWarn);IDE0003;IDE0016;IDE0017;IDE0018;IDE0019;IDE0020;IDE0031;IDE0032;IDE0034;IDE0037;IDE0038;IDE0039;IDE0040;IDE0044;IDE0051;IDE0052;IDE0056;IDE0057;IDE0059;IDE0060;IDE0062;IDE0063;IDE0071;IDE0074;IDE0075;IDE0076;IDE0077;IDE0079;IDE0083;IDE0090;IDE0180;IDE1006;IDE1056</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.13" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.devices" Version="2.5.25" />
+    <SDKReference Include="TestPlatform.Universal, Version=$(UnitTestPlatformVersion)" />
   </ItemGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
@@ -112,6 +113,7 @@
     <Compile Include="..\Tests.System.Reactive\**\*.cs">
       <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Compile>
+    <Compile Remove="..\Tests.System.Reactive\Tests\LicenseHeaderTest.cs" />
     <Compile Remove="..\Tests.System.Reactive\bin\**\*" />
     <Compile Remove="..\Tests.System.Reactive\obj\**\*" />
     <Compile Include="App.xaml.cs">
@@ -133,6 +135,12 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.14" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
+    <PackageReference Include="xunit.assert" Version="2.4.2" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

@@ -6,14 +6,17 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Observable.Aliases;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
 
+    [TestClass]
     public partial class AliasesTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Qbservable_Aliases()
         {
             var xs = Observable.Return(1).AsQbservable();

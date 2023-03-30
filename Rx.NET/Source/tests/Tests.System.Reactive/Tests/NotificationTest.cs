@@ -6,22 +6,24 @@ using System;
 using System.Reactive;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class NotificationTest : ReactiveTest
     {
         #region ToObservable
 
-        [Fact]
+        [TestMethod]
         public void ToObservable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Notification.CreateOnNext(1).ToObservable(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToObservable_Empty()
         {
             var scheduler = new TestScheduler();
@@ -35,7 +37,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToObservable_Return()
         {
             var scheduler = new TestScheduler();
@@ -50,7 +52,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToObservable_Throw()
         {
             var ex = new Exception();
@@ -66,7 +68,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToObservable_CurrentThread()
         {
             var evt = new ManualResetEvent(false);
@@ -81,7 +83,7 @@ namespace ReactiveTests.Tests
 
         #endregion
 
-        [Fact]
+        [TestMethod]
         public void Notifications_Equality()
         {
             var n = Notification.CreateOnNext(42);
@@ -101,7 +103,7 @@ namespace ReactiveTests.Tests
             Assert.True(c1.Equals(c2));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnNext_CtorAndProps()
         {
             var n = Notification.CreateOnNext(42);
@@ -111,7 +113,7 @@ namespace ReactiveTests.Tests
             Assert.Null(n.Exception);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnNext_Equality()
         {
             var n1 = Notification.CreateOnNext(42);
@@ -141,7 +143,7 @@ namespace ReactiveTests.Tests
             Assert.False(!(null != n1));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnNext_GetHashCode()
         {
             var n1 = Notification.CreateOnNext(42);
@@ -151,7 +153,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(n1.GetHashCode(), n2.GetHashCode());
         }
 
-        [Fact]
+        [TestMethod]
         public void OnNext_ToString()
         {
             var n1 = Notification.CreateOnNext(42);
@@ -159,7 +161,7 @@ namespace ReactiveTests.Tests
             Assert.True(n1.ToString().Contains(42.ToString()));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnNext_AcceptObserver()
         {
             var con = new CheckOnNextObserver();
@@ -189,7 +191,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void OnNext_AcceptObserverWithResult()
         {
             var n1 = Notification.CreateOnNext(42);
@@ -198,14 +200,14 @@ namespace ReactiveTests.Tests
             Assert.Equal("OK", res);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnNext_AcceptObserverWithResult_Null()
         {
             var n1 = Notification.CreateOnNext(42);
             ReactiveAssert.Throws<ArgumentNullException>(() => n1.Accept(default(IObserver<int, string>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnNext_AcceptAction()
         {
             var obs = false;
@@ -216,7 +218,7 @@ namespace ReactiveTests.Tests
             Assert.True(obs);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnNext_Accept_ArgumentChecking()
         {
             var n = Notification.CreateOnNext(42);
@@ -232,7 +234,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => "", ex => "", default));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnNext_AcceptActionWithResult()
         {
             var n1 = Notification.CreateOnNext(42);
@@ -241,13 +243,13 @@ namespace ReactiveTests.Tests
             Assert.Equal("OK", res);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_CtorNull()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Notification.CreateOnError<int>(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_Accept_ArgumentChecking()
         {
             var n = Notification.CreateOnError<int>(new Exception());
@@ -263,7 +265,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => "", ex => "", default));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_CtorAndProps()
         {
             var e = new Exception();
@@ -283,7 +285,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_Equality()
         {
             var ex1 = new Exception();
@@ -316,7 +318,7 @@ namespace ReactiveTests.Tests
             Assert.False(!(null != n1));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_GetHashCode()
         {
             var ex = new Exception();
@@ -328,7 +330,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(n1.GetHashCode(), n2.GetHashCode());
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_ToString()
         {
             var ex = new Exception();
@@ -338,7 +340,7 @@ namespace ReactiveTests.Tests
             Assert.True(n1.ToString().Contains(ex.GetType().Name)); // CHECK, no message?
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_AcceptObserver()
         {
             var ex = new Exception();
@@ -371,7 +373,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_AcceptObserverWithResult()
         {
             var ex = new Exception();
@@ -382,14 +384,14 @@ namespace ReactiveTests.Tests
             Assert.Equal("OK", res);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_AcceptObserverWithResult_Null()
         {
             var n1 = Notification.CreateOnError<int>(new Exception());
             ReactiveAssert.Throws<ArgumentNullException>(() => n1.Accept(default(IObserver<int, string>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_AcceptAction()
         {
             var ex = new Exception();
@@ -402,7 +404,7 @@ namespace ReactiveTests.Tests
             Assert.True(obs);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_AcceptActionWithResult()
         {
             var ex = new Exception();
@@ -413,7 +415,7 @@ namespace ReactiveTests.Tests
             Assert.Equal("OK", res);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnCompleted_CtorAndProps()
         {
             var n = Notification.CreateOnCompleted<int>();
@@ -435,7 +437,7 @@ namespace ReactiveTests.Tests
             Assert.True(ok);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnCompleted_Accept_ArgumentChecking()
         {
             var n = Notification.CreateOnCompleted<int>();
@@ -451,7 +453,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => "", ex => "", default));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnCompleted_Equality()
         {
             var n1 = Notification.CreateOnCompleted<int>();
@@ -478,7 +480,7 @@ namespace ReactiveTests.Tests
             Assert.False(!(null != n1));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnCompleted_GetHashCode()
         {
             var n1 = Notification.CreateOnCompleted<int>();
@@ -488,14 +490,14 @@ namespace ReactiveTests.Tests
             Assert.Equal(n1.GetHashCode(), n2.GetHashCode());
         }
 
-        [Fact]
+        [TestMethod]
         public void OnCompleted_ToString()
         {
             var n1 = Notification.CreateOnCompleted<int>();
             Assert.True(n1.ToString().Contains("OnCompleted"));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnCompleted_AcceptObserver()
         {
             var obs = new CheckOnCompletedObserver();
@@ -526,7 +528,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void OnCompleted_AcceptObserverWithResult()
         {
             var n1 = Notification.CreateOnCompleted<int>();
@@ -535,14 +537,14 @@ namespace ReactiveTests.Tests
             Assert.Equal("OK", res);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnCompleted_AcceptObserverWithResult_Null()
         {
             var n1 = Notification.CreateOnCompleted<int>();
             ReactiveAssert.Throws<ArgumentNullException>(() => n1.Accept(default(IObserver<int, string>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnCompleted_AcceptAction()
         {
             var obs = false;
@@ -553,7 +555,7 @@ namespace ReactiveTests.Tests
             Assert.True(obs);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnCompleted_AcceptActionWithResult()
         {
             var n1 = Notification.CreateOnCompleted<int>();

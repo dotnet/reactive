@@ -8,13 +8,16 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class AutoConnectTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void AutoConnect_Basic()
         {
             var called = 0;
@@ -40,7 +43,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(new List<int>() { 1, 2, 3, 4, 5 }, list);
         }
 
-        [Fact]
+        [TestMethod]
         public void AutoConnect_Immediately()
         {
             var called = 0;
@@ -66,7 +69,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(new List<int>() { 1, 2, 3, 4, 5 }, list);
         }
 
-        [Fact]
+        [TestMethod]
         public void AutoConnect_TwoConsumers()
         {
             var called = 0;
@@ -101,7 +104,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(new List<int>() { 1, 2, 3, 4, 5 }, list);
         }
 
-        [Fact]
+        [TestMethod]
         public void AutoConnect_Dispose()
         {
             var subject = new Subject<int>();

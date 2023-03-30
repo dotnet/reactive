@@ -7,21 +7,22 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class RetryTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Retry<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Retry().Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_Basic()
         {
             var scheduler = new TestScheduler();
@@ -49,7 +50,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_Infinite()
         {
             var scheduler = new TestScheduler();
@@ -75,7 +76,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_Error()
         {
             var scheduler = new TestScheduler();
@@ -114,7 +115,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_Throws1()
         {
             var scheduler1 = new TestScheduler();
@@ -126,7 +127,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => scheduler1.Start());
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_Throws2()
         {
             var scheduler2 = new TestScheduler();
@@ -140,7 +141,7 @@ namespace ReactiveTests.Tests
             scheduler2.Start();
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_Throws3()
         {
             var scheduler3 = new TestScheduler();
@@ -156,7 +157,7 @@ namespace ReactiveTests.Tests
          * BREAKING CHANGE v2.0 > v1.x - The code below will loop endlessly, trying to repeat the failing subscription,
          *                               whose exception is propagated through OnError starting from v2.0.
          * 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_Throws4()
         {
             var xss = Observable.Create<int>(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Retry();
@@ -165,14 +166,14 @@ namespace ReactiveTests.Tests
         }
          */
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_Default_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Retry<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Retry().Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_RetryCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Retry<int>(null, 0));
@@ -180,7 +181,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Retry(0).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_RetryCount_Basic()
         {
             var scheduler = new TestScheduler();
@@ -218,7 +219,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_RetryCount_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -248,7 +249,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_RetryCount_Infinite()
         {
             var scheduler = new TestScheduler();
@@ -274,7 +275,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_RetryCount_Completed()
         {
             var scheduler = new TestScheduler();
@@ -302,7 +303,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_RetryCount_Throws()
         {
             var scheduler1 = new TestScheduler();
@@ -336,7 +337,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => xss.Subscribe());
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_RetryCount_Default_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Retry<int>(default, 0));
@@ -344,7 +345,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Retry(0).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Retry_Observable_RetryCount_Default()
         {
             Observable.Range(1, 3).Retry(3).AssertEqual(Observable.Range(1, 3).Retry(3));

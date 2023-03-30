@@ -10,20 +10,23 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class MostRecentTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void MostRecent_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MostRecent(default, 1));
         }
 
-        [Fact]
+        [TestMethod]
         public void MostRecent1()
         {
             var evt = new AutoResetEvent(false);
@@ -68,7 +71,7 @@ namespace ReactiveTests.Tests
             Assert.False(res.MoveNext());
         }
 
-        [Fact]
+        [TestMethod]
         public void MostRecent2()
         {
             var scheduler = new TestScheduler();
@@ -157,7 +160,7 @@ namespace ReactiveTests.Tests
             o2.AssertEqual(0, 6, 6, 7);
         }
 
-        [Fact]
+        [TestMethod]
         public void MostRecent_Error()
         {
             var ex = new Exception();

@@ -10,11 +10,13 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class VirtualSchedulerTest
     {
         private class VirtualSchedulerTestScheduler : VirtualTimeScheduler<string, char>
@@ -44,14 +46,14 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Virtual_Now()
         {
             var res = new VirtualSchedulerTestScheduler().Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Virtual_ScheduleAction()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -63,7 +65,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void Virtual_ScheduleActionError()
         {
             var ex = new Exception();
@@ -81,14 +83,14 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Virtual_InitialAndComparer_Now()
         {
             var s = new VirtualSchedulerTestScheduler("Bar", Comparer<string>.Default);
             Assert.Equal(3, s.Now.Ticks);
         }
 
-        [Fact]
+        [TestMethod]
         public void Virtual_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler("", null));
@@ -104,7 +106,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleRelative(new VirtualSchedulerTestScheduler(), 'a', default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Historical_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler(DateTime.Now, default));
@@ -113,7 +115,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Virtual_ScheduleActionDue()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -125,8 +127,8 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
-        [Trait("SkipCI", "true")]
+        [TestMethod]
+        [TestCategory("SkipCI")]
         public void Virtual_ThreadSafety()
         {
             for (var i = 0; i < 10; i++)

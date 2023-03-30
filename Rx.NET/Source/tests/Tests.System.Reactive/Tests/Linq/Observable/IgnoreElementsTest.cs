@@ -5,20 +5,21 @@
 using System;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class IgnoreElementsTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void IgnoreElements_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.IgnoreElements<int>(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void IgnoreElements_IgnoreElements()
         {
             var scheduler = new TestScheduler();
@@ -44,7 +45,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void IgnoreElements_Basic()
         {
             var scheduler = new TestScheduler();
@@ -73,7 +74,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void IgnoreElements_Completed()
         {
             var scheduler = new TestScheduler();
@@ -104,7 +105,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void IgnoreElements_Error()
         {
             var scheduler = new TestScheduler();

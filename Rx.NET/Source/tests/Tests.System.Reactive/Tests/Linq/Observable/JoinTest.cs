@@ -9,14 +9,17 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class JoinTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Join(null, DummyObservable<int>.Instance, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, int, int>.Instance));
@@ -27,7 +30,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Join(DummyObservable<int>.Instance, DummyObservable<int>.Instance, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, int, int>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Normal_I()
         {
             var scheduler = new TestScheduler();
@@ -110,7 +113,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 900);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Normal_II()
         {
             var scheduler = new TestScheduler();
@@ -191,7 +194,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 910);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Normal_III()
         {
             var scheduler = new TestScheduler();
@@ -274,7 +277,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 900);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Normal_IV()
         {
             var scheduler = new TestScheduler();
@@ -349,7 +352,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 980);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Normal_V()
         {
             var scheduler = new TestScheduler();
@@ -430,7 +433,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 922);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Normal_VI()
         {
             var scheduler = new TestScheduler();
@@ -512,7 +515,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 900);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Normal_VII()
         {
             var scheduler = new TestScheduler();
@@ -581,7 +584,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 713);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Error_I()
         {
             var scheduler = new TestScheduler();
@@ -639,7 +642,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 310);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Error_II()
         {
             var scheduler = new TestScheduler();
@@ -710,7 +713,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 722);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Error_III()
         {
             var scheduler = new TestScheduler();
@@ -786,7 +789,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 725);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Error_IV()
         {
             var scheduler = new TestScheduler();
@@ -859,7 +862,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 721);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Error_V()
         {
             var scheduler = new TestScheduler();
@@ -915,7 +918,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 210);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Error_VI()
         {
             var scheduler = new TestScheduler();
@@ -971,7 +974,7 @@ namespace ReactiveTests.Tests
             AssertDurations(xs, xsd, 215);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Error_VII()
         {
             var scheduler = new TestScheduler();
@@ -1029,7 +1032,7 @@ namespace ReactiveTests.Tests
             AssertDurations(ys, ysd, 215);
         }
 
-        [Fact]
+        [TestMethod]
         public void JoinOp_Error_VIII()
         {
             var scheduler = new TestScheduler();

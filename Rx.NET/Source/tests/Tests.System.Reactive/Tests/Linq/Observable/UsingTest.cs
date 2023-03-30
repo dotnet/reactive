@@ -8,14 +8,17 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class UsingTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Using_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using(null, DummyFunc<IDisposable, IObservable<int>>.Instance));
@@ -24,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using(() => DummyDisposable.Instance, d => DummyObservable<int>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Using_Null()
         {
             var scheduler = new TestScheduler();
@@ -72,7 +75,7 @@ namespace ReactiveTests.Tests
             Assert.Null(disposable);
         }
 
-        [Fact]
+        [TestMethod]
         public void Using_Complete()
         {
             var scheduler = new TestScheduler();
@@ -123,7 +126,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Using_Error()
         {
             var scheduler = new TestScheduler();
@@ -175,7 +178,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Using_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -225,7 +228,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Using_ThrowResourceSelector()
         {
             var scheduler = new TestScheduler();
@@ -257,7 +260,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, disposeInvoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Using_ThrowResourceUsage()
         {
             var scheduler = new TestScheduler();
@@ -297,7 +300,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Using_NestedCompleted()
         {
             var order = "";
@@ -312,7 +315,7 @@ namespace ReactiveTests.Tests
             Assert.Equal("1234", order);
         }
 
-        [Fact]
+        [TestMethod]
         public void Using_NestedDisposed()
         {
             var order = "";

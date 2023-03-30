@@ -9,14 +9,15 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class MulticastTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Multicast_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Multicast(null, new Subject<int>()));
@@ -26,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Multicast<int, int, int>(DummyObservable<int>.Instance, () => new Subject<int>(), null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Multicast_Hot_1()
         {
             var scheduler = new TestScheduler();
@@ -68,7 +69,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Multicast_Hot_2()
         {
             var scheduler = new TestScheduler();
@@ -110,7 +111,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Multicast_Hot_3()
         {
             var scheduler = new TestScheduler();
@@ -156,7 +157,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Multicast_Hot_4()
         {
             var scheduler = new TestScheduler();
@@ -204,7 +205,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Multicast_Hot_5()
         {
             var scheduler = new TestScheduler();
@@ -245,7 +246,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Multicast_Hot_6()
         {
             var scheduler = new TestScheduler();
@@ -284,7 +285,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Multicast_Cold_Completed()
         {
             var scheduler = new TestScheduler();
@@ -319,7 +320,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Multicast_Cold_Error()
         {
             var scheduler = new TestScheduler();
@@ -356,7 +357,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Multicast_Cold_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -389,7 +390,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Multicast_Cold_Zip()
         {
             var scheduler = new TestScheduler();
@@ -424,7 +425,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Multicast_SubjectSelectorThrows()
         {
             var ex = new Exception();
@@ -449,7 +450,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Multicast_SelectorThrows()
         {
             var ex = new Exception();

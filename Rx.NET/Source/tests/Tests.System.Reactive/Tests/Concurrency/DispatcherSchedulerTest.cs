@@ -10,20 +10,22 @@ using System.Reactive.Disposables;
 using System.Threading;
 using System.Windows.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-    
+    [TestClass]
     public class DispatcherSchedulerTest : TestBase
     {
-        [Fact]
+        [TestMethod]
         public void Ctor_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new DispatcherScheduler(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Current()
         {
             using (DispatcherHelpers.RunTest(out var d))
@@ -40,7 +42,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Current_None()
         {
             var e = default(Exception);
@@ -63,7 +65,7 @@ namespace ReactiveTests.Tests
             Assert.True(e != null && e is InvalidOperationException);
         }
 
-        [Fact]
+        [TestMethod]
         public void Dispatcher()
         {
             using (DispatcherHelpers.RunTest(out var disp))
@@ -72,7 +74,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Now()
         {
             using (DispatcherHelpers.RunTest(out var disp))
@@ -82,7 +84,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Schedule_ArgumentChecking()
         {
             using (DispatcherHelpers.RunTest(out var disp))
@@ -94,7 +96,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         [Asynchronous]
         public void Schedule()
         {
@@ -113,7 +115,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleError()
         {
             using (DispatcherHelpers.RunTest(out var disp))
@@ -138,13 +140,13 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleRelative()
         {
             ScheduleRelative_(TimeSpan.FromSeconds(0.2));
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleRelative_Zero()
         {
             ScheduleRelative_(TimeSpan.Zero);
@@ -175,7 +177,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleRelative_Cancel()
         {
             using (DispatcherHelpers.RunTest(out var disp))
@@ -212,7 +214,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulePeriodic_ArgumentChecking()
         {
             using (DispatcherHelpers.RunTest(out var disp))
@@ -224,7 +226,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulePeriodic()
         {
             using (DispatcherHelpers.RunTest(out var disp))

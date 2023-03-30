@@ -11,14 +11,17 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class RangeTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Range_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Range(0, 0, null));
@@ -26,7 +29,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Range(int.MaxValue, 2, DummyScheduler.Instance));
         }
 
-        [Fact]
+        [TestMethod]
         public void Range_Zero()
         {
             var scheduler = new TestScheduler();
@@ -40,7 +43,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Range_One()
         {
             var scheduler = new TestScheduler();
@@ -55,7 +58,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Range_Five()
         {
             var scheduler = new TestScheduler();
@@ -74,7 +77,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Range_Boundaries()
         {
             var scheduler = new TestScheduler();
@@ -89,7 +92,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Range_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -106,14 +109,14 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Range_Default_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Range(0, -1));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Range(int.MaxValue, 2));
         }
 
-        [Fact]
+        [TestMethod]
         public void Range_Default()
         {
             for (var i = 0; i < 100; i++)
@@ -123,7 +126,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void Range_LongRunning1()
         {
             var start = default(ManualResetEvent);
@@ -142,7 +145,7 @@ namespace ReactiveTests.Tests
             Assert.True(done);
         }
 
-        [Fact]
+        [TestMethod]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Range_LongRunning2()
         {
@@ -168,7 +171,7 @@ namespace ReactiveTests.Tests
             Assert.True(true);
         }
 
-        [Fact]
+        [TestMethod]
         public void Range_LongRunning_Empty()
         {
             var start = default(ManualResetEvent);
@@ -183,7 +186,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(Enumerable.Range(5, 0)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Range_LongRunning_Regular()
         {
             var start = default(ManualResetEvent);
@@ -198,7 +201,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(Enumerable.Range(5, 17)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Range_LongRunning_Boundaries()
         {
             var start = default(ManualResetEvent);

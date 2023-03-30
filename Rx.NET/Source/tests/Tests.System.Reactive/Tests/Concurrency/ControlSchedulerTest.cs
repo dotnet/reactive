@@ -10,35 +10,37 @@ using System.Reactive.Disposables;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Reactive.Testing;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-    
+    [TestClass]
     public class ControlSchedulerTest
     {
-        [Fact]
+        [TestMethod]
         public void Ctor_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new ControlScheduler(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Control()
         {
             var lbl = new Label();
             Assert.Same(lbl, new ControlScheduler(lbl).Control);
         }
 
-        [Fact]
+        [TestMethod]
         public void Now()
         {
             var res = new ControlScheduler(new Label()).Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void Schedule_ArgumentChecking()
         {
             var s = new ControlScheduler(new Label());
@@ -47,7 +49,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => s.Schedule(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Schedule()
         {
             using (WinFormsTestUtils.RunTest(out var lbl))
@@ -65,7 +67,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleError()
         {
             using (WinFormsTestUtils.RunTest(out var lbl))
@@ -90,13 +92,13 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleRelative()
         {
             ScheduleRelative_(TimeSpan.FromSeconds(0.1));
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleRelative_Zero()
         {
             ScheduleRelative_(TimeSpan.Zero);
@@ -129,7 +131,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleRelative_Nested()
         {
             using (WinFormsTestUtils.RunTest(out var lbl))
@@ -160,7 +162,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleRelative_Cancel()
         {
             using (WinFormsTestUtils.RunTest(out var lbl))
@@ -198,7 +200,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulePeriodic_ArgumentChecking()
         {
             var s = new ControlScheduler(new Label());
@@ -207,7 +209,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => s.SchedulePeriodic(42, TimeSpan.FromMilliseconds(1).Subtract(TimeSpan.FromTicks(1)), x => x));
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulePeriodic()
         {
             using (WinFormsTestUtils.RunTest(out var lbl))
@@ -249,7 +251,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void SchedulePeriodic_Nested()
         {
             using (WinFormsTestUtils.RunTest(out var lbl))

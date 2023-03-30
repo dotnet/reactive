@@ -10,23 +10,26 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
     #region + Count +
 
+    [TestClass]
     public class SkipLastTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SkipLast<int>(null, 0));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.SkipLast(DummyObservable<int>.Instance, -1));
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Zero_Completed()
         {
             var scheduler = new TestScheduler();
@@ -65,7 +68,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Zero_Error()
         {
             var scheduler = new TestScheduler();
@@ -106,7 +109,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Zero_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -143,7 +146,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_One_Completed()
         {
             var scheduler = new TestScheduler();
@@ -181,7 +184,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_One_Error()
         {
             var scheduler = new TestScheduler();
@@ -221,7 +224,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_One_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -257,7 +260,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Three_Completed()
         {
             var scheduler = new TestScheduler();
@@ -293,7 +296,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Three_Error()
         {
             var scheduler = new TestScheduler();
@@ -331,7 +334,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Three_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -369,7 +372,7 @@ namespace ReactiveTests.Tests
 
         #region + Timed +
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Timed_ArgumentChecking()
         {
             var xs = Observable.Return(42);
@@ -382,7 +385,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.SkipLast(xs, TimeSpan.FromSeconds(-1), Scheduler.Default));
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Zero1()
         {
             var scheduler = new TestScheduler();
@@ -408,7 +411,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Zero2()
         {
             var scheduler = new TestScheduler();
@@ -436,7 +439,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Some1()
         {
             var scheduler = new TestScheduler();
@@ -461,7 +464,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Some2()
         {
             var scheduler = new TestScheduler();
@@ -497,7 +500,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_All()
         {
             var scheduler = new TestScheduler();
@@ -521,7 +524,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Error()
         {
             var scheduler = new TestScheduler();
@@ -545,7 +548,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Never()
         {
             var scheduler = new TestScheduler();
@@ -567,7 +570,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Default1()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);
@@ -587,7 +590,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.Count == 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Default2()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);
@@ -607,7 +610,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.Count == 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Default3()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);
@@ -627,7 +630,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipLast_Default4()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);

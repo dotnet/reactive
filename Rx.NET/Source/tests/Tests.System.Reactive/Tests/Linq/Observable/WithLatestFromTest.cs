@@ -6,14 +6,15 @@ using System;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class WithLatestFromTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void WithLatestFrom_ArgumentChecking()
         {
             var someObservable = DummyObservable<int>.Instance;
@@ -23,7 +24,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.WithLatestFrom<int, int, int>(someObservable, default, (_, __) => 0));
         }
 
-        [Fact]
+        [TestMethod]
         public void WithLatestFrom_Simple1()
         {
             var scheduler = new TestScheduler();
@@ -73,7 +74,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WithLatestFrom_Simple2()
         {
             var scheduler = new TestScheduler();
@@ -116,7 +117,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WithLatestFrom_Simple3()
         {
             var scheduler = new TestScheduler();
@@ -160,7 +161,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WithLatestFrom_Error1()
         {
             var scheduler = new TestScheduler();
@@ -212,7 +213,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WithLatestFrom_Error2()
         {
             var scheduler = new TestScheduler();
@@ -256,7 +257,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WithLatestFrom_Error3()
         {
             var scheduler = new TestScheduler();
@@ -306,7 +307,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WithLatestFrom_immediate()
         {
             var scheduler = new TestScheduler();

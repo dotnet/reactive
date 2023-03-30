@@ -8,11 +8,14 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
 #pragma warning disable IDE0039 // Use local function
+    [TestClass]
     public class FromAsyncPatternTest : ReactiveTest
     {
         private readonly Task<int> _doneTask;
@@ -24,7 +27,7 @@ namespace ReactiveTests.Tests
             _doneTask = tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern(null, iar => { }));
@@ -90,7 +93,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, cb, o) => null, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern0()
         {
             var x = new Result();
@@ -102,7 +105,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction0()
         {
             var x = new Result();
@@ -114,7 +117,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern0_Error()
         {
             var x = new Result();
@@ -127,7 +130,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern0_ErrorBegin()
         {
             var x = new Result();
@@ -140,7 +143,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern1()
         {
             var x = new Result();
@@ -157,7 +160,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction1()
         {
             var x = new Result();
@@ -174,7 +177,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern1_Error()
         {
             var x = new Result();
@@ -187,7 +190,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern1_ErrorBegin()
         {
             var x = new Result();
@@ -200,7 +203,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern2()
         {
             var x = new Result();
@@ -218,7 +221,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction2()
         {
             var x = new Result();
@@ -236,7 +239,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern2_Error()
         {
             var x = new Result();
@@ -249,7 +252,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern2_ErrorBegin()
         {
             var x = new Result();
@@ -262,7 +265,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern3()
         {
             var x = new Result();
@@ -280,7 +283,7 @@ namespace ReactiveTests.Tests
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4).Materialize().ToEnumerable().ToArray();
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction3()
         {
             var x = new Result();
@@ -299,7 +302,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern3_Error()
         {
             var x = new Result();
@@ -312,7 +315,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern3_ErrorBegin()
         {
             var x = new Result();
@@ -325,7 +328,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern4()
         {
             var x = new Result();
@@ -345,7 +348,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction4()
         {
             var x = new Result();
@@ -365,7 +368,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern4_Error()
         {
             var x = new Result();
@@ -378,7 +381,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern4_ErrorBegin()
         {
             var x = new Result();
@@ -391,7 +394,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern5()
         {
             var x = new Result();
@@ -412,7 +415,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction5()
         {
             var x = new Result();
@@ -433,7 +436,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern5_Error()
         {
             var x = new Result();
@@ -446,7 +449,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern5_ErrorBegin()
         {
             var x = new Result();
@@ -459,7 +462,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern6()
         {
             var x = new Result();
@@ -481,7 +484,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction6()
         {
             var x = new Result();
@@ -503,7 +506,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern6_Error()
         {
             var x = new Result();
@@ -516,7 +519,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern6_ErrorBegin()
         {
             var x = new Result();
@@ -529,7 +532,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern7()
         {
             var x = new Result();
@@ -552,7 +555,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction7()
         {
             var x = new Result();
@@ -575,7 +578,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern7_Error()
         {
             var x = new Result();
@@ -588,7 +591,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern7_ErrorBegin()
         {
             var x = new Result();
@@ -601,7 +604,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern8()
         {
             var x = new Result();
@@ -625,7 +628,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction8()
         {
             var x = new Result();
@@ -649,7 +652,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern8_Error()
         {
             var x = new Result();
@@ -662,7 +665,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern8_ErrorBegin()
         {
             var x = new Result();
@@ -675,7 +678,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern9()
         {
             var x = new Result();
@@ -700,7 +703,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction9()
         {
             var x = new Result();
@@ -725,7 +728,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern9_Error()
         {
             var x = new Result();
@@ -738,7 +741,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern9_ErrorBegin()
         {
             var x = new Result();
@@ -751,7 +754,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern10()
         {
             var x = new Result();
@@ -777,7 +780,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction10()
         {
             var x = new Result();
@@ -803,7 +806,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern10_Error()
         {
             var x = new Result();
@@ -816,7 +819,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern10_ErrorBegin()
         {
             var x = new Result();
@@ -829,7 +832,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern11()
         {
             var x = new Result();
@@ -856,7 +859,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction11()
         {
             var x = new Result();
@@ -883,7 +886,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern11_Error()
         {
             var x = new Result();
@@ -896,7 +899,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern11_ErrorBegin()
         {
             var x = new Result();
@@ -909,7 +912,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern12()
         {
             var x = new Result();
@@ -937,7 +940,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction12()
         {
             var x = new Result();
@@ -965,7 +968,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern12_Error()
         {
             var x = new Result();
@@ -978,7 +981,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern12_ErrorBegin()
         {
             var x = new Result();
@@ -991,7 +994,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern13()
         {
             var x = new Result();
@@ -1020,7 +1023,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction13()
         {
             var x = new Result();
@@ -1049,7 +1052,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern13_Error()
         {
             var x = new Result();
@@ -1062,7 +1065,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern13_ErrorBegin()
         {
             var x = new Result();
@@ -1075,7 +1078,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern14()
         {
             var x = new Result();
@@ -1105,7 +1108,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPatternAction14()
         {
             var x = new Result();
@@ -1135,7 +1138,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern14_Error()
         {
             var x = new Result();
@@ -1148,7 +1151,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromAsyncPattern14_ErrorBegin()
         {
             var x = new Result();

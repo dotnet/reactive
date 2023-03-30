@@ -15,42 +15,44 @@ namespace ReactiveTests.Tests.Api
 {
     public class ApiApprovalTests : VerifyBase
     {
-        private readonly VerifySettings verifySettings;
+        static ApiApprovalTests()
+        {
+            VerifierSettings.OnVerifyMismatch((filePair, message) => DiffPlexReporter.Report(filePair.ReceivedPath, filePair.VerifiedPath, message));
+        }
 
         public ApiApprovalTests()
             : base()
         {
-            verifySettings = new VerifySettings();
-            verifySettings.UseExtension("cs");
-
-            VerifierSettings.OnVerifyMismatch((filePair, message) => DiffPlexReporter.Report(filePair.Received, filePair.Verified, message));
         }
 
         [Fact]
         public Task Core()
         {
             var publicApi = GeneratePublicApi(typeof(System.Reactive.Unit).Assembly);
-            return Verify(publicApi, verifySettings);
+            return Verify(publicApi, "cs");
         }
 
         [Fact]
         public Task Aliases()
         {
             var publicApi = GeneratePublicApi(typeof(System.Reactive.Observable.Aliases.QueryLanguage).Assembly);
-            return Verify(publicApi, verifySettings);
+            return Verify(publicApi, "cs");
         }
 
         [Fact]
         public Task Testing()
         {
             var publicApi = GeneratePublicApi(typeof(Microsoft.Reactive.Testing.TestScheduler).Assembly);
-            return Verify(publicApi, verifySettings);
+            return Verify(publicApi, "cs");
         }
 
         private string GeneratePublicApi(Assembly assembly)
         {
-            var namespacePrefixWhitelist = new[] { "System", "Microsoft" };
-            return Filter(ApiGenerator.GeneratePublicApi(assembly, whitelistedNamespacePrefixes: namespacePrefixWhitelist));
+            ApiGeneratorOptions options = new()
+            {
+                AllowNamespacePrefixes = new[] { "System", "Microsoft" }
+            };
+            return Filter(ApiGenerator.GeneratePublicApi(assembly, options));
         }
 
         private static string Filter(string text)

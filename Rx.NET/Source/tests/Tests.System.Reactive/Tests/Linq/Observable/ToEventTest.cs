@@ -9,14 +9,17 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ToEventTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ToEvent_ArgumentChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToEvent(default));
@@ -24,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToEvent(default(IObservable<EventPattern<EventArgs>>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEvent_Unit()
         {
             var src = new Subject<Unit>();
@@ -52,7 +55,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(2, num);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEvent_NonUnit()
         {
             var src = new Subject<int>();
@@ -76,7 +79,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(new[] { 1, 2 }));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEvent_FromEvent()
         {
             var src = new Subject<int>();

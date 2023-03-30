@@ -6,14 +6,17 @@ using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class FinallyTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Finally_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -22,7 +25,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Finally(someObservable, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Finally_Never()
         {
             var scheduler = new TestScheduler();
@@ -38,7 +41,7 @@ namespace ReactiveTests.Tests
             Assert.True(invoked); // due to unsubscribe; see 1356
         }
 
-        [Fact]
+        [TestMethod]
         public void Finally_OnlyCalledOnce_Never()
         {
             var invokeCount = 0;
@@ -50,7 +53,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, invokeCount);
         }
 
-        [Fact]
+        [TestMethod]
         public void Finally_OnlyCalledOnce_Empty()
         {
             var invokeCount = 0;
@@ -62,7 +65,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, invokeCount);
         }
 
-        [Fact]
+        [TestMethod]
         public void Finally_Empty()
         {
             var scheduler = new TestScheduler();
@@ -88,7 +91,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Finally_Return()
         {
             var scheduler = new TestScheduler();
@@ -116,7 +119,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Finally_Throw()
         {
             var scheduler = new TestScheduler();
@@ -143,7 +146,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Finally_DisposeOrder_Empty()
         {
             var order = "";
@@ -157,7 +160,7 @@ namespace ReactiveTests.Tests
             Assert.Equal("123", order);
         }
 
-        [Fact]
+        [TestMethod]
         public void Finally_DisposeOrder_Return()
         {
             var order = "";
@@ -171,7 +174,7 @@ namespace ReactiveTests.Tests
             Assert.Equal("123", order);
         }
 
-        [Fact]
+        [TestMethod]
         public void Finally_DisposeOrder_Never()
         {
             var order = "";

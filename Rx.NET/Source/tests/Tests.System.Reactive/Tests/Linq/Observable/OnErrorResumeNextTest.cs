@@ -10,14 +10,17 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class OnErrorResumeNextTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_ArgumentChecking()
         {
             var xs = DummyObservable<int>.Instance;
@@ -30,7 +33,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.OnErrorResumeNext(xs, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_IEofIO_GetEnumeratorThrows()
         {
             var ex = new Exception();
@@ -48,7 +51,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_IEofIO()
         {
             var scheduler = new TestScheduler();
@@ -104,7 +107,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_NoErrors()
         {
             var scheduler = new TestScheduler();
@@ -141,7 +144,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_Error()
         {
             var scheduler = new TestScheduler();
@@ -178,7 +181,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_ErrorMultiple()
         {
             var scheduler = new TestScheduler();
@@ -221,7 +224,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_EmptyReturnThrowAndMore()
         {
             var scheduler = new TestScheduler();
@@ -284,7 +287,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_LastIsntSpecial()
         {
             var scheduler = new TestScheduler();
@@ -319,7 +322,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_SingleSourceDoesntThrow()
         {
             var scheduler = new TestScheduler();
@@ -343,7 +346,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_EndWithNever()
         {
             var scheduler = new TestScheduler();
@@ -377,7 +380,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_StartWithNever()
         {
             var scheduler = new TestScheduler();
@@ -409,7 +412,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_DefaultScheduler_Binary()
         {
             var evt = new ManualResetEvent(false);
@@ -424,7 +427,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, sum);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_DefaultScheduler_Nary()
         {
             var evt = new ManualResetEvent(false);
@@ -439,7 +442,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(6, sum);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_DefaultScheduler_NaryEnumerable()
         {
             var evt = new ManualResetEvent(false);
@@ -456,7 +459,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(6, sum);
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_IteratorThrows()
         {
             var scheduler = new TestScheduler();
@@ -471,7 +474,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_EnumerableThrows()
         {
             var scheduler = new TestScheduler();
@@ -511,7 +514,7 @@ namespace ReactiveTests.Tests
             throw ex;
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_EnumerableTiming()
         {
             var scheduler = new TestScheduler();
@@ -580,7 +583,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_Enumerable_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -631,7 +634,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_TailRecursive1()
         {
             var create = 0L;
@@ -668,7 +671,7 @@ namespace ReactiveTests.Tests
         }
 
 #if HAS_STACKTRACE && !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_TailRecursive2()
         {
             var f = default(Func<int, IObservable<int>>);
@@ -681,7 +684,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void OnErrorResumeNext_TailRecursive3()
         {
             var ex = new Exception();

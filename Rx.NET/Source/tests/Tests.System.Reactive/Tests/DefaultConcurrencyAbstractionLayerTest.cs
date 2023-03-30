@@ -8,11 +8,13 @@ using System.Reactive.Concurrency;
 using System.Reactive.PlatformServices;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     [Serializable]
     public class DefaultConcurrencyAbstractionLayerTest
     {
@@ -31,7 +33,7 @@ namespace ReactiveTests.Tests
             _domain.DoCallBack(a);
         }
 
-        [Fact]
+        [TestMethod]
         public void Sleep()
         {
             var ran = new MarshalByRefCell<bool>();
@@ -49,7 +51,7 @@ namespace ReactiveTests.Tests
             Assert.True(ran.Value);
         }
 
-        [Fact]
+        [TestMethod]
         public void QueueUserWorkItem()
         {
             var e = new MarshalByRefCell<ManualResetEvent> { Value = new ManualResetEvent(false) };
@@ -67,7 +69,7 @@ namespace ReactiveTests.Tests
             e.Value.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void StartTimer()
         {
             var e = new MarshalByRefCell<ManualResetEvent> { Value = new ManualResetEvent(false) };
@@ -85,7 +87,7 @@ namespace ReactiveTests.Tests
             e.Value.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void StartTimer_Cancel()
         {
             Run(StartTimer_Cancel_Callback);
@@ -99,7 +101,7 @@ namespace ReactiveTests.Tests
             }).Dispose();
         }
 
-        [Fact]
+        [TestMethod]
         public void StartPeriodicTimer()
         {
             var e = new MarshalByRefCell<ManualResetEvent> { Value = new ManualResetEvent(false) };
@@ -123,7 +125,7 @@ namespace ReactiveTests.Tests
             e.Value.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void StartPeriodicTimer_Cancel()
         {
             Run(StartPeriodicTimer_Cancel_Callback);
@@ -137,7 +139,7 @@ namespace ReactiveTests.Tests
             }).Dispose();
         }
 
-        [Fact]
+        [TestMethod]
         public void StartPeriodicTimer_Fast()
         {
             var e = new MarshalByRefCell<ManualResetEvent> { Value = new ManualResetEvent(false) };
@@ -161,7 +163,7 @@ namespace ReactiveTests.Tests
             e.Value.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void StartPeriodicTimer_Fast_Cancel()
         {
             var e = new MarshalByRefCell<ManualResetEvent> { Value = new ManualResetEvent(false) };
@@ -208,7 +210,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(newValue, value);
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateThread()
         {
             var e = new MarshalByRefCell<ManualResetEvent> { Value = new ManualResetEvent(false) };
@@ -283,7 +285,7 @@ namespace ReactiveTests.Tests
             Assert.True(string.IsNullOrEmpty(r.Value));
         }
 
-        [Fact]
+        [TestMethod]
         public void Cant_Locate_Scheduler()
         {
 
@@ -314,7 +316,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void Stopwatch()
         {
             var e = new MarshalByRefCell<bool>();
@@ -337,7 +339,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void EnsureLoaded()
         {
             Assert.True(EnlightenmentProvider.EnsureLoaded());

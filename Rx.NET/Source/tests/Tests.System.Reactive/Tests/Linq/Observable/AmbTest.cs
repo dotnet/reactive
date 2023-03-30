@@ -8,14 +8,17 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class AmbTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Amb_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Amb((IObservable<int>[])null));
@@ -24,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Amb(DummyObservable<int>.Instance, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_Never2()
         {
             var scheduler = new TestScheduler();
@@ -53,7 +56,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_Never3()
         {
             var scheduler = new TestScheduler();
@@ -90,7 +93,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_Never3_Params()
         {
             var scheduler = new TestScheduler();
@@ -127,7 +130,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_NeverEmpty()
         {
             var scheduler = new TestScheduler();
@@ -158,7 +161,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_EmptyNever()
         {
             var scheduler = new TestScheduler();
@@ -189,7 +192,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_RegularShouldDisposeLoser()
         {
             var scheduler = new TestScheduler();
@@ -224,7 +227,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_WinnerThrows()
         {
             var scheduler = new TestScheduler();
@@ -261,7 +264,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_LoserThrows()
         {
             var scheduler = new TestScheduler();
@@ -298,7 +301,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_ThrowsBeforeElectionLeft()
         {
             var scheduler = new TestScheduler();
@@ -333,7 +336,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_ThrowsBeforeElectionRight()
         {
             var scheduler = new TestScheduler();
@@ -368,7 +371,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_Many_Array_OnNext()
         {
             var scheduler = new TestScheduler();
@@ -413,7 +416,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_Many_Array_OnError()
         {
             var scheduler = new TestScheduler();
@@ -455,7 +458,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_Many_Array_OnCompleted()
         {
             var scheduler = new TestScheduler();
@@ -500,7 +503,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void Amb_Many_Enumerable_OnNext()
         {
             var scheduler = new TestScheduler();
@@ -545,7 +548,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_Many_Enumerable_OnError()
         {
             var scheduler = new TestScheduler();
@@ -587,7 +590,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_Many_Enumerable_OnCompleted()
         {
             var scheduler = new TestScheduler();
@@ -632,7 +635,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void Amb_Many_Enumerable_Many_Sources()
         {
             for (var i = 0; i < 32; i++)
@@ -657,7 +660,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Amb_Many_Enumerable_Many_Sources_NoStackOverflow()
         {
             for (var i = 0; i < 100; i++)

@@ -6,13 +6,14 @@ using System;
 using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class AppendTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Append_ArgumentChecking()
         {
             var scheduler = new TestScheduler();
@@ -24,7 +25,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Append(someObservable, 1, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Append()
         {
             var scheduler = new TestScheduler();
@@ -46,7 +47,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Append_Null()
         {
             var scheduler = new TestScheduler();
@@ -68,7 +69,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Append_Scheduler()
         {
             var scheduler = new TestScheduler();
@@ -90,7 +91,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Append_Many()
         {
             var scheduler = new TestScheduler();
@@ -114,7 +115,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Append_Many_Take()
         {
             var scheduler = new TestScheduler();
@@ -136,7 +137,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Append_Many_Scheduler()
         {
             var scheduler = new TestScheduler();
@@ -160,7 +161,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Append_Many_Take_Scheduler()
         {
             var scheduler = new TestScheduler();

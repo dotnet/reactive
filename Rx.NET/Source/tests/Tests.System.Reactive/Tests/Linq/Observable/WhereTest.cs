@@ -9,14 +9,17 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class WhereTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Where_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Where(DummyFunc<int, bool>.Instance));
@@ -43,7 +46,7 @@ namespace ReactiveTests.Tests
             return true;
         }
 
-        [Fact]
+        [TestMethod]
         public void Where_Complete()
         {
             var scheduler = new TestScheduler();
@@ -91,7 +94,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(9, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Where_True()
         {
             var scheduler = new TestScheduler();
@@ -141,7 +144,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(9, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Where_False()
         {
             var scheduler = new TestScheduler();
@@ -182,7 +185,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(9, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Where_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -226,7 +229,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(5, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Where_Error()
         {
             var scheduler = new TestScheduler();
@@ -276,7 +279,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(9, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Where_Throw()
         {
             var scheduler = new TestScheduler();
@@ -328,7 +331,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(4, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Where_DisposeInPredicate()
         {
             var scheduler = new TestScheduler();
@@ -388,7 +391,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(6, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void WhereWhereOptimization_Regular()
         {
             var scheduler = new TestScheduler();
@@ -421,7 +424,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WhereWhereOptimization_SecondPredicateThrows()
         {
             var scheduler = new TestScheduler();
@@ -462,7 +465,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WhereIndex_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Where(DummyFunc<int, int, bool>.Instance));
@@ -470,7 +473,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Where(DummyFunc<int, int, bool>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void WhereIndex_Complete()
         {
             var scheduler = new TestScheduler();
@@ -516,7 +519,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(9, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void WhereIndex_True()
         {
             var scheduler = new TestScheduler();
@@ -566,7 +569,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(9, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void WhereIndex_False()
         {
             var scheduler = new TestScheduler();
@@ -607,7 +610,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(9, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void WhereIndex_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -650,7 +653,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(5, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void WhereIndex_Error()
         {
             var scheduler = new TestScheduler();
@@ -697,7 +700,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(9, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void WhereIndex_Throw()
         {
             var scheduler = new TestScheduler();
@@ -748,7 +751,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(4, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void WhereIndex_DisposeInPredicate()
         {
             var scheduler = new TestScheduler();
@@ -808,7 +811,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(6, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void Where_Where1()
         {
             var scheduler = new TestScheduler();
@@ -839,7 +842,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Where_Where2()
         {
             var scheduler = new TestScheduler();
@@ -870,7 +873,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Where_Where3()
         {
             var scheduler = new TestScheduler();
@@ -901,7 +904,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Where_Where4()
         {
             var scheduler = new TestScheduler();

@@ -12,14 +12,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public partial class ReplaySubjectTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Subscribe_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new ReplaySubject<int>().Subscribe(null));
@@ -28,7 +30,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new ReplaySubject<int>(DummyScheduler.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new ReplaySubject<int>().OnError(null));
@@ -37,7 +39,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new ReplaySubject<int>(DummyScheduler.Instance).OnError(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Constructor_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new ReplaySubject<int>(-1));
@@ -64,7 +66,7 @@ namespace ReactiveTests.Tests
             new ReplaySubject<int>(0, TimeSpan.Zero, DummyScheduler.Instance);
         }
 
-        [Fact]
+        [TestMethod]
         public void Infinite_ReplayByTime()
         {
             var scheduler = new TestScheduler();
@@ -132,7 +134,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Infinite_ReplayOne()
         {
             var scheduler = new TestScheduler();
@@ -207,7 +209,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Infinite_ReplayMany()
         {
             var scheduler = new TestScheduler();
@@ -279,7 +281,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Infinite_ReplayAll()
         {
             var scheduler = new TestScheduler();
@@ -356,7 +358,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Infinite2()
         {
             var scheduler = new TestScheduler();
@@ -427,7 +429,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Finite_ReplayByTime()
         {
             var scheduler = new TestScheduler();
@@ -492,7 +494,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Finite_ReplayOne()
         {
             var scheduler = new TestScheduler();
@@ -557,7 +559,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Finite_ReplayMany()
         {
             var scheduler = new TestScheduler();
@@ -627,7 +629,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Finite_ReplayAll()
         {
             var scheduler = new TestScheduler();
@@ -699,7 +701,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Error_ReplayByTime()
         {
             var scheduler = new TestScheduler();
@@ -767,7 +769,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Error_ReplayOne()
         {
             var scheduler = new TestScheduler();
@@ -834,7 +836,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Error_ReplayMany()
         {
             var scheduler = new TestScheduler();
@@ -906,7 +908,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Error_ReplayAll()
         {
             var scheduler = new TestScheduler();
@@ -980,7 +982,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Canceled_ReplayByTime()
         {
             var scheduler = new TestScheduler();
@@ -1031,7 +1033,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Canceled_ReplayOne()
         {
             var scheduler = new TestScheduler();
@@ -1082,7 +1084,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Canceled_ReplayMany()
         {
             var scheduler = new TestScheduler();
@@ -1133,7 +1135,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Canceled_ReplayAll()
         {
             var scheduler = new TestScheduler();
@@ -1184,7 +1186,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SubjectDisposed()
         {
             var scheduler = new TestScheduler();
@@ -1245,7 +1247,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SubjectDisposed_ReplayOne()
         {
             var scheduler = new TestScheduler();
@@ -1303,7 +1305,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SubjectDisposed_ReplayMany()
         {
             var scheduler = new TestScheduler();
@@ -1364,7 +1366,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SubjectDisposed_ReplayAll()
         {
             var scheduler = new TestScheduler();
@@ -1431,7 +1433,7 @@ namespace ReactiveTests.Tests
         // I think it may have to do with calling Trim() on Subscription (as well as in the OnNext calls). -LC
         //
 
-        [Fact]
+        [TestMethod]
         public void ReplaySubjectDiesOut()
         {
             //
@@ -1494,7 +1496,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers()
         {
             HasObserversImpl(new ReplaySubject<int>());
@@ -1526,7 +1528,7 @@ namespace ReactiveTests.Tests
             Assert.False(s.HasObservers);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_Dispose1()
         {
             HasObservers_Dispose1Impl(new ReplaySubject<int>());
@@ -1553,7 +1555,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_Dispose2()
         {
             HasObservers_Dispose2Impl(new ReplaySubject<int>());
@@ -1580,7 +1582,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_Dispose3()
         {
             HasObservers_Dispose3Impl(new ReplaySubject<int>());
@@ -1599,7 +1601,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_OnCompleted()
         {
             HasObservers_OnCompletedImpl(new ReplaySubject<int>());
@@ -1622,7 +1624,7 @@ namespace ReactiveTests.Tests
             Assert.False(s.HasObservers);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_OnError()
         {
             HasObservers_OnErrorImpl(new ReplaySubject<int>());
@@ -1645,7 +1647,7 @@ namespace ReactiveTests.Tests
             Assert.False(s.HasObservers);
         }
 
-        [Fact]
+        [TestMethod]
         public void Completed_to_late_subscriber_ReplayAll()
         {
             var s = new ReplaySubject<int>();
@@ -1664,7 +1666,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(NotificationKind.OnCompleted, observer.Messages[2].Value.Kind);
         }
 
-        [Fact]
+        [TestMethod]
         public void Completed_to_late_subscriber_ReplayOne()
         {
             var s = new ReplaySubject<int>(1);
@@ -1682,7 +1684,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(NotificationKind.OnCompleted, observer.Messages[1].Value.Kind);
         }
 
-        [Fact]
+        [TestMethod]
         public void Completed_to_late_subscriber_ReplayMany()
         {
             var s = new ReplaySubject<int>(2);
@@ -1702,7 +1704,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(NotificationKind.OnCompleted, observer.Messages[2].Value.Kind);
         }
 
-        [Fact]
+        [TestMethod]
         public void Completed_to_late_subscriber_ReplayByTime()
         {
             var s = new ReplaySubject<int>(TimeSpan.FromMinutes(1));
@@ -1723,7 +1725,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(NotificationKind.OnCompleted, observer.Messages[3].Value.Kind);
         }
 
-        [Fact]
+        [TestMethod]
         public void Errored_to_late_subscriber_ReplayAll()
         {
             var expectedException = new Exception("Test");
@@ -1744,7 +1746,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(expectedException, observer.Messages[2].Value.Exception);
         }
 
-        [Fact]
+        [TestMethod]
         public void Errored_to_late_subscriber_ReplayOne()
         {
             var expectedException = new Exception("Test");
@@ -1764,7 +1766,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(expectedException, observer.Messages[1].Value.Exception);
         }
 
-        [Fact]
+        [TestMethod]
         public void Errored_to_late_subscriber_ReplayMany()
         {
             var expectedException = new Exception("Test");
@@ -1786,7 +1788,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(expectedException, observer.Messages[2].Value.Exception);
         }
 
-        [Fact]
+        [TestMethod]
         public void Errored_to_late_subscriber_ReplayByTime()
         {
             var expectedException = new Exception("Test");
@@ -1809,7 +1811,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(expectedException, observer.Messages[3].Value.Exception);
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplaySubject_Reentrant()
         {
             var r = new ReplaySubject<int>(4);
@@ -1846,7 +1848,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_INTERNALSTEST
-        [Fact]
+        [TestMethod]
         public void FastImmediateObserver_Simple1()
         {
             var res = FastImmediateObserverTest(fio =>
@@ -1867,7 +1869,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void FastImmediateObserver_Simple2()
         {
             var ex = new Exception();
@@ -1890,7 +1892,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void FastImmediateObserver_Simple3()
         {
             var res = FastImmediateObserverTest(fio =>
@@ -1916,7 +1918,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void FastImmediateObserver_Fault()
         {
             var xs = new List<int>();
@@ -1944,7 +1946,7 @@ namespace ReactiveTests.Tests
             Assert.True(xs.Count == 2);
         }
 
-        [Fact]
+        [TestMethod]
         public void FastImmediateObserver_Ownership1()
         {
             var xs = new List<int>();
@@ -1980,7 +1982,7 @@ namespace ReactiveTests.Tests
             Assert.True(xs.Count == ts.Length * N);
         }
 
-        [Fact]
+        [TestMethod]
         public void FastImmediateObserver_Ownership2()
         {
             var cd = new CountdownEvent(3);

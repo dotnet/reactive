@@ -8,14 +8,15 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class DistinctTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Distinct_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Distinct(default(IObservable<int>)));
@@ -28,7 +29,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Distinct(DummyObservable<int>.Instance, x => x, default(EqualityComparer<int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Distinct_DefaultComparer_AllDistinct()
         {
             var scheduler = new TestScheduler();
@@ -60,7 +61,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Distinct_DefaultComparer_SomeDuplicates()
         {
             var scheduler = new TestScheduler();
@@ -90,7 +91,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Distinct_CustomComparer_AllDistinct()
         {
             var scheduler = new TestScheduler();
@@ -122,7 +123,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Distinct_CustomComparer_SomeDuplicates()
         {
             var scheduler = new TestScheduler();
@@ -172,7 +173,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Distinct_KeySelector_DefaultComparer_AllDistinct()
         {
             var scheduler = new TestScheduler();
@@ -204,7 +205,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Distinct_KeySelector_DefaultComparer_SomeDuplicates()
         {
             var scheduler = new TestScheduler();
@@ -234,7 +235,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Distinct_KeySelector_CustomComparer_AllDistinct()
         {
             var scheduler = new TestScheduler();
@@ -266,7 +267,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Distinct_KeySelector_CustomComparer_SomeDuplicates()
         {
             var scheduler = new TestScheduler();
@@ -296,7 +297,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Distinct_KeySelector_Throws()
         {
             var scheduler = new TestScheduler();
@@ -327,7 +328,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Distinct_CustomComparer_Throws()
         {
             var scheduler = new TestScheduler();
@@ -386,7 +387,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Distinct_Throw()
         {
             var scheduler = new TestScheduler();
@@ -416,7 +417,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Distinct_Null()
         {
             var scheduler = new TestScheduler();

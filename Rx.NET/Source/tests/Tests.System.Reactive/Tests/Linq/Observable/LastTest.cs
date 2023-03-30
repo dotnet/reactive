@@ -7,14 +7,17 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class LastTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Last_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Last(default(IObservable<int>)));
@@ -22,26 +25,26 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Last(DummyObservable<int>.Instance, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Last_Empty()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Empty<int>().Last());
         }
 
-        [Fact]
+        [TestMethod]
         public void LastPredicate_Empty()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Empty<int>().Last(_ => true));
         }
 
-        [Fact]
+        [TestMethod]
         public void Last_Return()
         {
             var value = 42;
             Assert.Equal(value, Observable.Return(value).Last());
         }
 
-        [Fact]
+        [TestMethod]
         public void Last_Throw()
         {
             var ex = new Exception();
@@ -51,14 +54,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Last());
         }
 
-        [Fact]
+        [TestMethod]
         public void Last_Range()
         {
             var value = 42;
             Assert.Equal(value, Observable.Range(value - 9, 10).Last());
         }
 
-        [Fact]
+        [TestMethod]
         public void LastPredicate_Range()
         {
             var value = 42;

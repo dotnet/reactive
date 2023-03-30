@@ -7,14 +7,16 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public partial class PrivateTypesTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void EitherValueRoundtrip()
         {
             {
@@ -29,7 +31,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EitherEqualsEquatable()
         {
             {
@@ -54,7 +56,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EitherEqualsObject()
         {
             {
@@ -79,7 +81,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EitherGetHashCode()
         {
             {
@@ -94,7 +96,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EitherToString()
         {
             {
@@ -107,7 +109,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EitherSwitchFunc()
         {
             {
@@ -122,7 +124,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EitherSwitchAction()
         {
             {

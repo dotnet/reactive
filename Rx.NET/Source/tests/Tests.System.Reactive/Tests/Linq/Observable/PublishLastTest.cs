@@ -8,14 +8,17 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class PublishLastTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void PublishLast_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -26,7 +29,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.PublishLast<int, int>(someObservable, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishLast_Basic()
         {
             var scheduler = new TestScheduler();
@@ -78,7 +81,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishLast_Error()
         {
             var scheduler = new TestScheduler();
@@ -129,7 +132,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishLast_Complete()
         {
             var scheduler = new TestScheduler();
@@ -179,7 +182,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishLast_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -231,7 +234,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishLast_MultipleConnections()
         {
             var xs = Observable.Never<int>();
@@ -252,7 +255,7 @@ namespace ReactiveTests.Tests
             connection3.Dispose();
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishLastLambda_Zip_Complete()
         {
             var scheduler = new TestScheduler();
@@ -288,7 +291,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishLastLambda_Zip_Error()
         {
             var scheduler = new TestScheduler();
@@ -325,7 +328,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void PublishLastLambda_Zip_Dispose()
         {
             var scheduler = new TestScheduler();

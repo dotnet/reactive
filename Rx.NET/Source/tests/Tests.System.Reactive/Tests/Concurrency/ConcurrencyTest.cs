@@ -5,14 +5,16 @@
 using System;
 using System.Reactive.Concurrency;
 using System.Threading;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class ConcurrencyTest
     {
-        [Fact]
+        [TestMethod]
         public void CurrentScheduler_EnsureTrampoline()
         {
             const int concurrency = 100;
@@ -59,7 +61,7 @@ namespace ReactiveTests.Tests
             Assert.True(passed);
         }
 
-        [Fact]
+        [TestMethod]
         public void CurrentScheduler_Schedule()
         {
             const int concurrency = 100;

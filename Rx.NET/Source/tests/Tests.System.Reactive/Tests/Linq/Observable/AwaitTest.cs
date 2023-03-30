@@ -9,13 +9,16 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class AwaitTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Await_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GetAwaiter(default(IObservable<int>)));
@@ -24,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GetAwaiter(Observable.Empty<int>()).OnCompleted(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Await()
         {
             SynchronizationContext.SetSynchronizationContext(null);
@@ -57,7 +60,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Await_Connectable()
         {
             SynchronizationContext.SetSynchronizationContext(null);
@@ -92,7 +95,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(42, result);
         }
 
-        [Fact]
+        [TestMethod]
         public void Await_Error()
         {
             SynchronizationContext.SetSynchronizationContext(null);
@@ -125,7 +128,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Await_Never()
         {
             SynchronizationContext.SetSynchronizationContext(null);
@@ -157,7 +160,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Await_Empty()
         {
             SynchronizationContext.SetSynchronizationContext(null);

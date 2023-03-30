@@ -11,14 +11,17 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class CreateTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Create_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Create(default(Func<IObserver<int>, Action>)));
@@ -37,7 +40,7 @@ namespace ReactiveTests.Tests
             }).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Create_NullCoalescingAction()
         {
             var xs = Observable.Create<int>(o =>
@@ -53,7 +56,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(new[] { 42 }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Create_Next()
         {
             var scheduler = new TestScheduler();
@@ -73,7 +76,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Create_Completed()
         {
             var scheduler = new TestScheduler();
@@ -94,7 +97,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Create_Error()
         {
             var scheduler = new TestScheduler();
@@ -117,14 +120,14 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Create_Exception()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() =>
                 Observable.Create(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Subscribe());
         }
 
-        [Fact]
+        [TestMethod]
         public void Create_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -177,7 +180,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Create_ObserverThrows()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() =>
@@ -200,7 +203,7 @@ namespace ReactiveTests.Tests
                 }).Subscribe(x => { }, ex => { }, () => { throw new InvalidOperationException(); }));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateWithDisposable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Create(default(Func<IObserver<int>, IDisposable>)));
@@ -212,7 +215,7 @@ namespace ReactiveTests.Tests
             }).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateWithDisposable_NullCoalescingAction()
         {
             var xs = Observable.Create<int>(o =>
@@ -228,7 +231,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(new[] { 42 }));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateWithDisposable_Next()
         {
             var scheduler = new TestScheduler();
@@ -248,7 +251,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateWithDisposable_Completed()
         {
             var scheduler = new TestScheduler();
@@ -269,7 +272,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateWithDisposable_Error()
         {
             var scheduler = new TestScheduler();
@@ -292,14 +295,14 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateWithDisposable_Exception()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() =>
                 Observable.Create(new Func<IObserver<int>, IDisposable>(o => { throw new InvalidOperationException(); })).Subscribe());
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateWithDisposable_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -352,7 +355,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateWithDisposable_ObserverThrows()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() =>
@@ -375,7 +378,7 @@ namespace ReactiveTests.Tests
                 }).Subscribe(x => { }, ex => { }, () => { throw new InvalidOperationException(); }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Iterate_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create<int>(default));
@@ -397,7 +400,7 @@ namespace ReactiveTests.Tests
             observer.OnNext(4);
         }
 
-        [Fact]
+        [TestMethod]
         public void Iterate_Complete()
         {
             var scheduler = new TestScheduler();
@@ -461,7 +464,7 @@ namespace ReactiveTests.Tests
             observer.OnNext(4);
         }
 
-        [Fact]
+        [TestMethod]
         public void Iterate_Complete_Implicit()
         {
             var scheduler = new TestScheduler();
@@ -533,7 +536,7 @@ namespace ReactiveTests.Tests
             observer.OnCompleted();
         }
 
-        [Fact]
+        [TestMethod]
         public void Iterate_Iterator_Throw()
         {
             var scheduler = new TestScheduler();
@@ -602,7 +605,7 @@ namespace ReactiveTests.Tests
             observer.OnCompleted();
         }
 
-        [Fact]
+        [TestMethod]
         public void Iterate_Iterator_Error()
         {
             var scheduler = new TestScheduler();
@@ -666,7 +669,7 @@ namespace ReactiveTests.Tests
             observer.OnNext(4);
         }
 
-        [Fact]
+        [TestMethod]
         public void Iterate_Complete_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -719,7 +722,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void IteratorScenario()
         {
             var xs = ObservableEx.Create<int>(o => _IteratorScenario(100, 1000, o));
@@ -740,7 +743,7 @@ namespace ReactiveTests.Tests
             results.OnNext(ys.Value);
         }
 
-        [Fact]
+        [TestMethod]
         public void Iterate_Void_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create(default));
@@ -756,7 +759,7 @@ namespace ReactiveTests.Tests
             yield return zs.Select(x => new object());
         }
 
-        [Fact]
+        [TestMethod]
         public void Iterate_Void_Complete()
         {
             var scheduler = new TestScheduler();
@@ -812,7 +815,7 @@ namespace ReactiveTests.Tests
             yield return zs.Select(x => new object());
         }
 
-        [Fact]
+        [TestMethod]
         public void Iterate_Void_Complete_Implicit()
         {
             var scheduler = new TestScheduler();
@@ -873,7 +876,7 @@ namespace ReactiveTests.Tests
             yield return zs.Select(x => new object());
         }
 
-        [Fact]
+        [TestMethod]
         public void Iterate_Void_Iterator_Throw()
         {
             var scheduler = new TestScheduler();
@@ -930,7 +933,7 @@ namespace ReactiveTests.Tests
             yield return zs.Select(x => new object());
         }
 
-        [Fact]
+        [TestMethod]
         public void Iterate_Void_Complete_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -980,7 +983,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Iterate_Void_Func_Throw()
         {
             var scheduler = new TestScheduler();
@@ -1003,7 +1006,7 @@ namespace ReactiveTests.Tests
             yield return ys;
         }
 
-        [Fact]
+        [TestMethod]
         public void IteratorScenario_Void()
         {
             var xs = ObservableEx.Create(() => _IteratorScenario_Void(100, 1000));

@@ -7,14 +7,17 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class TimestampTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Timestamp_ArgumentChecking()
         {
             var scheduler = new TestScheduler();
@@ -25,7 +28,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timestamp(someObservable, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Timestamp_Regular()
         {
             var scheduler = new TestScheduler();
@@ -58,7 +61,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timestamp_Empty()
         {
             var scheduler = new TestScheduler();
@@ -81,7 +84,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timestamp_Error()
         {
             var scheduler = new TestScheduler();
@@ -106,7 +109,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timestamp_Never()
         {
             var scheduler = new TestScheduler();
@@ -127,7 +130,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Timestamp_DefaultScheduler()
         {
             Assert.True(Observable.Return(1).Timestamp().Count().First() == 1);

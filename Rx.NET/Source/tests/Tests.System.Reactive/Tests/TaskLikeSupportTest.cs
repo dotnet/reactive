@@ -5,14 +5,18 @@
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace Tests.System.Reactive.Tests
 {
+    [TestClass]
     public class TaskLikeSupportTest
     {
-        [Fact]
+        [TestMethod]
         public async Task Return()
         {
             Assert.Equal(42, await ManOrBoy_Return());
@@ -25,7 +29,7 @@ namespace Tests.System.Reactive.Tests
         }
 #pragma warning restore 1998
 
-        [Fact]
+        [TestMethod]
         public async Task Throw()
         {
             await Assert.ThrowsAsync<DivideByZeroException>(async () => await ManOrBoy_Throw(42, 0));
@@ -38,10 +42,53 @@ namespace Tests.System.Reactive.Tests
         }
 #pragma warning restore 1998
 
-        [Fact]
-        public async Task Basics()
+        // We execute the ManOrBoy_Basics tests twice, once without a SynchronizationContext, and
+        // once with one. When we were on xUnit, SynchronizationContext.Current was never null
+        // because xUnit populates it with their AsyncTestSyncContext, apparently to ensure that
+        // async void tests work. MSTest takes the more strict view that async void tests should
+        // not be encouraged. (It has an analyzer to detect these and warn you about them). So
+        // tests in MSTest get the default behaviour (i.e. SynchronizationContext.Current will be
+        // null) unless the test sets one up explicitly.
+        //
+        // The ManOrBoy_Basics tests exercise different code paths depending on the availability of
+        // a SynchronizationContext. AsyncSubject<T>.AwaitObserver.InvokeOnOriginalContext will go
+        // via the context if there is one, and invokes its callback synchronously if not. This is
+        // a significant difference, which is why, now that we can test both ways, we do.
+        //
+        // When we switched to MSTest, and before we had added the tests to run both with and
+        // without the SynchronizationContext (meaning we only tested without one) this test
+        // started failing intermittently. This seems likely to be indicative of a subtle bug in
+        // Rx, because there doesn't seem to be any obvious reason why this should be expected to
+        // deadlock in the absence of a synchronization context. It doesn't fail if you run the
+        // test in isolation. It only happens when running all the tests, and even then it often
+        // doesn't. Since we modified the build to apply a default timeout to all tests with the
+        // aim of trying to work out which tests were occasionally locking up, the failures have
+        // not yet recurred, suggesting that there's some sort of race condition here that's finely
+        // balanced enough to be affected by test settings. Maybe there's some subtle reason why
+        // you should never attempt to do what this test is doing without a
+        // SynchronizationContext, but if so, it's unclear what that might be.
+        // Issue https://github.com/dotnet/reactive/issues/1885 is tracking this until we
+        // resolve the root cause of the occasional failures.
+
+        [TestMethod]
+        public async Task BasicsNoSynchronizationContext()
         {
             Assert.Equal(45, await ManOrBoy_Basics());
+        }
+
+        [TestMethod]
+        public async Task BasicsWithSynchronizationContext()
+        {
+            SynchronizationContext ctx = SynchronizationContext.Current;
+            try
+            {
+                SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
+                Assert.Equal(45, await ManOrBoy_Basics());
+            }
+            finally
+            {
+                SynchronizationContext.SetSynchronizationContext(ctx);
+            }
         }
 
 #pragma warning disable 1998

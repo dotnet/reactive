@@ -8,17 +8,18 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
 #pragma warning disable IDE0039 // Use local function
+    [TestClass]
     public class CombineLatestTest : ReactiveTest
     {
 
         #region ArgumentChecking
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest<int, int, int>(DummyObservable<int>.Instance, DummyObservable<int>.Instance, null));
@@ -26,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest<int, int, int>(DummyObservable<int>.Instance, null, (_, __) => 0));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ArgumentCheckingHighArity()
         {
             var xs = DummyObservable<int>.Instance;
@@ -187,7 +188,7 @@ namespace ReactiveTests.Tests
 
         #region Never
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_NeverN()
         {
             var scheduler = new TestScheduler();
@@ -209,7 +210,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never2()
         {
             var scheduler = new TestScheduler();
@@ -230,7 +231,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never3()
         {
             var scheduler = new TestScheduler();
@@ -252,7 +253,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never4()
         {
             var scheduler = new TestScheduler();
@@ -275,7 +276,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never5()
         {
             var scheduler = new TestScheduler();
@@ -299,7 +300,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never6()
         {
             var scheduler = new TestScheduler();
@@ -324,7 +325,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never7()
         {
             var scheduler = new TestScheduler();
@@ -350,7 +351,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never8()
         {
             var scheduler = new TestScheduler();
@@ -377,7 +378,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never9()
         {
             var scheduler = new TestScheduler();
@@ -405,7 +406,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never10()
         {
             var scheduler = new TestScheduler();
@@ -434,7 +435,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never11()
         {
             var scheduler = new TestScheduler();
@@ -464,7 +465,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never12()
         {
             var scheduler = new TestScheduler();
@@ -495,7 +496,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never13()
         {
             var scheduler = new TestScheduler();
@@ -527,7 +528,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never14()
         {
             var scheduler = new TestScheduler();
@@ -560,7 +561,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never15()
         {
             var scheduler = new TestScheduler();
@@ -594,7 +595,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Never16()
         {
             var scheduler = new TestScheduler();
@@ -633,7 +634,7 @@ namespace ReactiveTests.Tests
 
         #region Never/Empty
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_NeverEmpty()
         {
             var scheduler = new TestScheduler();
@@ -663,7 +664,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_EmptyNever()
         {
             var scheduler = new TestScheduler();
@@ -697,7 +698,7 @@ namespace ReactiveTests.Tests
 
         #region Empty
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_EmptyN()
         {
             var scheduler = new TestScheduler();
@@ -721,7 +722,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty2()
         {
             var scheduler = new TestScheduler();
@@ -744,7 +745,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty3()
         {
             var scheduler = new TestScheduler();
@@ -768,7 +769,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty4()
         {
             var scheduler = new TestScheduler();
@@ -793,7 +794,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty5()
         {
             var scheduler = new TestScheduler();
@@ -819,7 +820,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty6()
         {
             var scheduler = new TestScheduler();
@@ -846,7 +847,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty7()
         {
             var scheduler = new TestScheduler();
@@ -874,7 +875,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty8()
         {
             var scheduler = new TestScheduler();
@@ -903,7 +904,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty9()
         {
             var scheduler = new TestScheduler();
@@ -933,7 +934,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty10()
         {
             var scheduler = new TestScheduler();
@@ -964,7 +965,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty11()
         {
             var scheduler = new TestScheduler();
@@ -996,7 +997,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty12()
         {
             var scheduler = new TestScheduler();
@@ -1029,7 +1030,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty13()
         {
             var scheduler = new TestScheduler();
@@ -1063,7 +1064,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty14()
         {
             var scheduler = new TestScheduler();
@@ -1098,7 +1099,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty15()
         {
             var scheduler = new TestScheduler();
@@ -1134,7 +1135,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Empty16()
         {
             var scheduler = new TestScheduler();
@@ -1175,7 +1176,7 @@ namespace ReactiveTests.Tests
 
         #region Empty/Return
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_EmptyReturn()
         {
             var scheduler = new TestScheduler();
@@ -1208,7 +1209,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ReturnEmpty()
         {
             var scheduler = new TestScheduler();
@@ -1245,7 +1246,7 @@ namespace ReactiveTests.Tests
 
         #region Never/Return
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_NeverReturn()
         {
             var scheduler = new TestScheduler();
@@ -1276,7 +1277,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ReturnNever()
         {
             var scheduler = new TestScheduler();
@@ -1311,7 +1312,7 @@ namespace ReactiveTests.Tests
 
         #region Return/Return
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ReturnReturn()
         {
             var scheduler = new TestScheduler();
@@ -1350,7 +1351,7 @@ namespace ReactiveTests.Tests
 
         #region Empty/Error
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_EmptyError()
         {
             var scheduler = new TestScheduler();
@@ -1384,7 +1385,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ErrorEmpty()
         {
             var scheduler = new TestScheduler();
@@ -1422,7 +1423,7 @@ namespace ReactiveTests.Tests
 
         #region Return/Throw
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ReturnThrow()
         {
             var scheduler = new TestScheduler();
@@ -1457,7 +1458,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ThrowReturn()
         {
             var scheduler = new TestScheduler();
@@ -1496,7 +1497,7 @@ namespace ReactiveTests.Tests
 
         #region Throw/Throw
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ThrowThrow()
         {
             var scheduler = new TestScheduler();
@@ -1531,7 +1532,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ErrorThrow()
         {
             var scheduler = new TestScheduler();
@@ -1567,7 +1568,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ThrowError()
         {
             var scheduler = new TestScheduler();
@@ -1607,7 +1608,7 @@ namespace ReactiveTests.Tests
 
         #region Never/Throw
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_NeverThrow()
         {
             var scheduler = new TestScheduler();
@@ -1640,7 +1641,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ThrowNever()
         {
             var scheduler = new TestScheduler();
@@ -1677,7 +1678,7 @@ namespace ReactiveTests.Tests
 
         #region Some/Throw
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SomeThrow()
         {
             var scheduler = new TestScheduler();
@@ -1712,7 +1713,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ThrowSome()
         {
             var scheduler = new TestScheduler();
@@ -1751,7 +1752,7 @@ namespace ReactiveTests.Tests
 
         #region ThrowAfterCompleted
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ThrowAfterCompleteLeft()
         {
             var scheduler = new TestScheduler();
@@ -1786,7 +1787,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ThrowAfterCompleteRight()
         {
             var scheduler = new TestScheduler();
@@ -1825,7 +1826,7 @@ namespace ReactiveTests.Tests
 
         #region Basics
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_InterleavedWithTail()
         {
             var scheduler = new TestScheduler();
@@ -1868,7 +1869,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Consecutive()
         {
             var scheduler = new TestScheduler();
@@ -1906,7 +1907,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ConsecutiveEndWithErrorLeft()
         {
             var scheduler = new TestScheduler();
@@ -1944,7 +1945,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_ConsecutiveEndWithErrorRight()
         {
             var scheduler = new TestScheduler();
@@ -1988,7 +1989,7 @@ namespace ReactiveTests.Tests
 
         #region SelectorThrows
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -2024,7 +2025,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrowsN()
         {
             var scheduler = new TestScheduler();
@@ -2051,7 +2052,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows2()
         {
             var scheduler = new TestScheduler();
@@ -2077,7 +2078,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows3()
         {
             var scheduler = new TestScheduler();
@@ -2104,7 +2105,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows4()
         {
             var scheduler = new TestScheduler();
@@ -2132,7 +2133,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows5()
         {
             var scheduler = new TestScheduler();
@@ -2161,7 +2162,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows6()
         {
             var scheduler = new TestScheduler();
@@ -2191,7 +2192,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows7()
         {
             var scheduler = new TestScheduler();
@@ -2222,7 +2223,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows8()
         {
             var scheduler = new TestScheduler();
@@ -2254,7 +2255,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows9()
         {
             var scheduler = new TestScheduler();
@@ -2287,7 +2288,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows10()
         {
             var scheduler = new TestScheduler();
@@ -2321,7 +2322,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows11()
         {
             var scheduler = new TestScheduler();
@@ -2356,7 +2357,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows12()
         {
             var scheduler = new TestScheduler();
@@ -2392,7 +2393,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows13()
         {
             var scheduler = new TestScheduler();
@@ -2429,7 +2430,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows14()
         {
             var scheduler = new TestScheduler();
@@ -2467,7 +2468,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows15()
         {
             var scheduler = new TestScheduler();
@@ -2506,7 +2507,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_SelectorThrows16()
         {
             var scheduler = new TestScheduler();
@@ -2550,7 +2551,7 @@ namespace ReactiveTests.Tests
 
         #region AllEmptyButOne
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombineN()
         {
             var scheduler = new TestScheduler();
@@ -2577,7 +2578,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine2()
         {
             var scheduler = new TestScheduler();
@@ -2603,7 +2604,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine3()
         {
             var scheduler = new TestScheduler();
@@ -2630,7 +2631,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine4()
         {
             var scheduler = new TestScheduler();
@@ -2658,7 +2659,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine5()
         {
             var scheduler = new TestScheduler();
@@ -2687,7 +2688,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine6()
         {
             var scheduler = new TestScheduler();
@@ -2717,7 +2718,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine7()
         {
             var scheduler = new TestScheduler();
@@ -2748,7 +2749,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine8()
         {
             var scheduler = new TestScheduler();
@@ -2780,7 +2781,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine9()
         {
             var scheduler = new TestScheduler();
@@ -2813,7 +2814,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine10()
         {
             var scheduler = new TestScheduler();
@@ -2847,7 +2848,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine11()
         {
             var scheduler = new TestScheduler();
@@ -2882,7 +2883,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine12()
         {
             var scheduler = new TestScheduler();
@@ -2918,7 +2919,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine13()
         {
             var scheduler = new TestScheduler();
@@ -2955,7 +2956,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine14()
         {
             var scheduler = new TestScheduler();
@@ -2993,7 +2994,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine15()
         {
             var scheduler = new TestScheduler();
@@ -3032,7 +3033,7 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_WillNeverBeAbleToCombine16()
         {
             var scheduler = new TestScheduler();
@@ -3076,7 +3077,7 @@ namespace ReactiveTests.Tests
 
         #region Typical
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_TypicalN()
         {
             var scheduler = new TestScheduler();
@@ -3103,7 +3104,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical2()
         {
             var scheduler = new TestScheduler();
@@ -3128,7 +3129,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical3()
         {
             var scheduler = new TestScheduler();
@@ -3155,7 +3156,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical4()
         {
             var scheduler = new TestScheduler();
@@ -3184,7 +3185,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical5()
         {
             var scheduler = new TestScheduler();
@@ -3215,7 +3216,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical6()
         {
             var scheduler = new TestScheduler();
@@ -3248,7 +3249,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical7()
         {
             var scheduler = new TestScheduler();
@@ -3283,7 +3284,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical8()
         {
             var scheduler = new TestScheduler();
@@ -3320,7 +3321,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical9()
         {
             var scheduler = new TestScheduler();
@@ -3359,7 +3360,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical10()
         {
             var scheduler = new TestScheduler();
@@ -3400,7 +3401,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical11()
         {
             var scheduler = new TestScheduler();
@@ -3443,7 +3444,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical12()
         {
             var scheduler = new TestScheduler();
@@ -3488,7 +3489,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical13()
         {
             var scheduler = new TestScheduler();
@@ -3535,7 +3536,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical14()
         {
             var scheduler = new TestScheduler();
@@ -3584,7 +3585,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical15()
         {
             var scheduler = new TestScheduler();
@@ -3635,7 +3636,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_Typical16()
         {
             var scheduler = new TestScheduler();
@@ -3692,7 +3693,7 @@ namespace ReactiveTests.Tests
 
         #region NAry
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_List_Regular()
         {
             var scheduler = new TestScheduler();
@@ -3714,7 +3715,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_NAry_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(default(IEnumerable<IObservable<int>>)));
@@ -3723,7 +3724,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(default(IObservable<int>[])));
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_NAry_Symmetric()
         {
             var scheduler = new TestScheduler();
@@ -3757,7 +3758,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_NAry_Symmetric_Selector()
         {
             var scheduler = new TestScheduler();
@@ -3791,7 +3792,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_NAry_Asymmetric()
         {
             var scheduler = new TestScheduler();
@@ -3828,7 +3829,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_NAry_Asymmetric_Selector()
         {
             var scheduler = new TestScheduler();
@@ -3865,7 +3866,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_NAry_Error()
         {
             var ex = new Exception();
@@ -3899,7 +3900,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_NAry_Error_Selector()
         {
             var ex = new Exception();
@@ -3937,7 +3938,7 @@ namespace ReactiveTests.Tests
 
         #region AtLeastOneThrows
 
-        [Fact]
+        [TestMethod]
         public void CombineLatest_AtLeastOneThrows4()
         {
             var ex = new Exception();

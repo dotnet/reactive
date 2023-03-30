@@ -74,14 +74,14 @@ stages:
       inputs:
         command: test
         projects: Rx.NET/Source/tests/Tests.System.Reactive/*.csproj
-        arguments: -c $(BuildConfiguration) --filter "SkipCI!=true" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
+        arguments: -c $(BuildConfiguration) --filter "TestCategory!=SkipCI" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
       displayName: Run Unit Tests
 
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj
-        arguments: -c $(BuildConfiguration) 
+        arguments: -c $(BuildConfiguration)
       displayName: Run Api Approvals Tests
 
     - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Rx.NET/Source/coverlet/reports -reporttypes:"Cobertura"
@@ -155,14 +155,14 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f net7.0 --filter "SkipCI!=true"
+        arguments: -c $(BuildConfiguration) -f net7.0 --filter "TestCategory!=SkipCI"
       displayName: Run 7.0 Tests on Linux
 
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f net6.0 --filter "SkipCI!=true"
+        arguments: -c $(BuildConfiguration) -f net6.0 --filter "TestCategory!=SkipCI"
       displayName: Run 6.0 Tests on Linux
 
   - job: WindowsDesktop    
@@ -208,7 +208,7 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/WindowsDesktopTests/WindowsDesktopTests.csproj
-        arguments: -c $(BuildConfiguration) --filter "SkipCI!=true"
+        arguments: -c $(BuildConfiguration) --filter "TestCategory!=SkipCI"
       displayName: Run Tests on Window Desktop
 
 - stage: CodeSign

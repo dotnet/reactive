@@ -7,13 +7,14 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class RetryWhenTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void RetryWhen_Observable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RetryWhen<int, Exception>(null, v => v));
@@ -21,7 +22,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.RetryWhen(v => v).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void RetryWhen_Observable_Basic()
         {
             var scheduler = new TestScheduler();
@@ -49,7 +50,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RetryWhen_Observable_Handler_Completes()
         {
             var scheduler = new TestScheduler();
@@ -80,7 +81,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void RetryWhen_Observable_Handler_Throws()
         {
             var scheduler = new TestScheduler();
@@ -96,7 +97,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RetryWhen_Observable_Handler_Errors()
         {
             var scheduler = new TestScheduler();
@@ -127,7 +128,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RetryWhen_Observable_RetryCount_Basic()
         {
             var scheduler = new TestScheduler();
@@ -177,7 +178,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RetryWhen_Observable_RetryCount_Delayed()
         {
             var scheduler = new TestScheduler();

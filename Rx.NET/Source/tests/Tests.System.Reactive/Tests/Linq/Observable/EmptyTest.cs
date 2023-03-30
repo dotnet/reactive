@@ -8,14 +8,17 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class EmptyTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Empty_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Empty<int>(null));
@@ -23,7 +26,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Empty<int>(DummyScheduler.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Empty_Basic()
         {
             var scheduler = new TestScheduler();
@@ -37,7 +40,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Empty_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -51,7 +54,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Empty_ObserverThrows()
         {
             var scheduler1 = new TestScheduler();
@@ -63,13 +66,13 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => scheduler1.Start());
         }
 
-        [Fact]
+        [TestMethod]
         public void Empty_DefaultScheduler()
         {
             Observable.Empty<int>().AssertEqual(Observable.Empty<int>(DefaultScheduler.Instance));
         }
 
-        [Fact]
+        [TestMethod]
         public void Empty_Basic_Witness1()
         {
             var scheduler = new TestScheduler();
@@ -83,7 +86,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Empty_Basic_Witness2()
         {
             var e = new ManualResetEvent(false);

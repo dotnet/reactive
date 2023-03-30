@@ -7,14 +7,17 @@ using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
 #if !NO_THREAD
+    [TestClass]
     public class NewThreadSchedulerTest
     {
-        [Fact]
+        [TestMethod]
         public void NewThread_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new NewThreadScheduler(null));
@@ -26,14 +29,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => NewThreadScheduler.Default.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
         }
 
-        [Fact]
+        [TestMethod]
         public void NewThread_Now()
         {
             var res = NewThreadScheduler.Default.Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void NewThread_ScheduleAction()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -43,7 +46,7 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void NewThread_ScheduleActionDue()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -55,14 +58,14 @@ namespace ReactiveTests.Tests
 #endif
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void Stopwatch()
         {
             StopwatchTest.Run(NewThreadScheduler.Default);
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void NewThread_Periodic()
         {
             var n = 0;
@@ -85,7 +88,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void NewThread_Periodic_NonReentrant()
         {
             var n = 0;

@@ -6,20 +6,21 @@ using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class DematerializeTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Dematerialize_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Dematerialize<int>(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Dematerialize_Range1()
         {
             var scheduler = new TestScheduler();
@@ -45,7 +46,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Dematerialize_Range2()
         {
             var scheduler = new TestScheduler();
@@ -71,7 +72,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Dematerialize_Error1()
         {
             var scheduler = new TestScheduler();
@@ -99,7 +100,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Dematerialize_Error2()
         {
             var scheduler = new TestScheduler();
@@ -127,7 +128,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Materialize_Dematerialize_Never()
         {
             var scheduler = new TestScheduler();
@@ -142,7 +143,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Materialize_Dematerialize_Empty()
         {
             var scheduler = new TestScheduler();
@@ -165,7 +166,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Materialize_Dematerialize_Return()
         {
             var scheduler = new TestScheduler();
@@ -190,7 +191,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Materialize_Dematerialize_Throw()
         {
             var scheduler = new TestScheduler();

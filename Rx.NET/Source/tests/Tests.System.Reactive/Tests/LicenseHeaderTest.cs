@@ -4,7 +4,9 @@
 
 using System.IO;
 using System.Text;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace Tests.System.Reactive.Tests
 {
@@ -12,6 +14,7 @@ namespace Tests.System.Reactive.Tests
     /// Verify that main classes and unit tests have a license header
     /// in the source files.
     /// </summary>
+    [TestClass]
     public class LicenseHeaderTest
     {
         private static readonly bool FixHeaders = true;
@@ -22,7 +25,7 @@ namespace Tests.System.Reactive.Tests
             ""
         };
 
-        [Fact]
+        [TestMethod]
         public void ScanFiles()
         {
             var dir = Directory.GetCurrentDirectory();
