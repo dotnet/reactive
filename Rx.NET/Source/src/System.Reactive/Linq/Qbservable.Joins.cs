@@ -45,7 +45,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => And<TLeft, TRight>(default, default)),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TLeft), typeof(TRight)),
+#pragma warning restore IL2060
 #endif
                     left.Expression,
                     GetSourceExpression(right)
@@ -80,7 +82,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Then<TSource, TResult>(default, default)),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+#pragma warning restore IL2060
 #endif
                     source.Expression,
                     selector
@@ -114,7 +118,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => When<TResult>(default, default)),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+#pragma warning restore IL2060
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.NewArrayInit(
@@ -151,7 +157,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => When(default, default(IEnumerable<QueryablePlan<TResult>>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+#pragma warning restore IL2060
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(plans, typeof(IEnumerable<QueryablePlan<TResult>>))

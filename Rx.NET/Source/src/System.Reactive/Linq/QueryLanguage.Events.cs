@@ -7,6 +7,8 @@ using System.Threading;
 
 namespace System.Reactive.Linq
 {
+    using System.Diagnostics.CodeAnalysis;
+
     using ObservableImpl;
 
     //
@@ -133,11 +135,17 @@ namespace System.Reactive.Linq
 
         #region Instance events
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public virtual IObservable<EventPattern<object>> FromEventPattern(object target, string eventName)
         {
             return FromEventPattern_(target, eventName, GetSchedulerForCurrentContext());
         }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public virtual IObservable<EventPattern<object>> FromEventPattern(object target, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_(target, eventName, scheduler);
@@ -145,6 +153,9 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         private static IObservable<EventPattern<object>> FromEventPattern_(object target, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<object, object, EventPattern<object>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<object>(sender, args), scheduler);
@@ -152,11 +163,17 @@ namespace System.Reactive.Linq
 
         #endregion
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName)
         {
             return FromEventPattern_<TEventArgs>(target, eventName, GetSchedulerForCurrentContext());
         }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<TEventArgs>(target, eventName, scheduler);
@@ -164,6 +181,9 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(object target, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<object, TEventArgs, EventPattern<TEventArgs>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<TEventArgs>(sender, args), scheduler);
@@ -171,11 +191,17 @@ namespace System.Reactive.Linq
 
         #endregion
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName)
         {
             return FromEventPattern_<TSender, TEventArgs>(target, eventName, GetSchedulerForCurrentContext());
         }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<TSender, TEventArgs>(target, eventName, scheduler);
@@ -183,6 +209,9 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<TSender, TEventArgs, EventPattern<TSender, TEventArgs>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<TSender, TEventArgs>(sender, args), scheduler);
@@ -194,11 +223,17 @@ namespace System.Reactive.Linq
 
         #region Static events
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public virtual IObservable<EventPattern<object>> FromEventPattern(Type type, string eventName)
         {
             return FromEventPattern_(type, eventName, GetSchedulerForCurrentContext());
         }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public virtual IObservable<EventPattern<object>> FromEventPattern(Type type, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_(type, eventName, scheduler);
@@ -206,6 +241,9 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         private static IObservable<EventPattern<object>> FromEventPattern_(Type type, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<object, object, EventPattern<object>>(type, null, eventName, (sender, args) => new EventPattern<object>(sender, args), scheduler);
@@ -213,11 +251,17 @@ namespace System.Reactive.Linq
 
         #endregion
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName)
         {
             return FromEventPattern_<TEventArgs>(type, eventName, GetSchedulerForCurrentContext());
         }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<TEventArgs>(type, eventName, scheduler);
@@ -225,6 +269,9 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(Type type, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<object, TEventArgs, EventPattern<TEventArgs>>(type, null, eventName, (sender, args) => new EventPattern<TEventArgs>(sender, args), scheduler);
@@ -232,11 +279,17 @@ namespace System.Reactive.Linq
 
         #endregion
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName)
         {
             return FromEventPattern_<TSender, TEventArgs>(type, eventName, GetSchedulerForCurrentContext());
         }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<TSender, TEventArgs>(type, eventName, scheduler);
@@ -244,6 +297,9 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<TSender, TEventArgs, EventPattern<TSender, TEventArgs>>(type, null, eventName, static (sender, args) => new EventPattern<TSender, TEventArgs>(sender, args), scheduler);
@@ -255,6 +311,9 @@ namespace System.Reactive.Linq
 
         #region Helper methods
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         private static IObservable<TResult> FromEventPattern_<TSender, TEventArgs, TResult>(Type targetType, object? target, string eventName, Func<TSender, TEventArgs, TResult> getResult, IScheduler scheduler)
         {
             ReflectionUtils.GetEventMethods<TSender, TEventArgs>(targetType, target, eventName, out var addMethod, out var removeMethod, out var delegateType, out var isWinRT);

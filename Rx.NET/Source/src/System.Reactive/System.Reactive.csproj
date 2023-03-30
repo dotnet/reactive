@@ -10,6 +10,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0')) or $(TargetFramework.StartsWith('net7.0'))">
+    <IsTrimmable>true</IsTrimmable>
+  </PropertyGroup>
+
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>

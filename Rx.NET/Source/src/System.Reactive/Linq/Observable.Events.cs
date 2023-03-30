@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Concurrency;
 using System.Threading;
 
@@ -538,6 +539,9 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="ToEventPattern"/>
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static IObservable<EventPattern<object>> FromEventPattern(object target, string eventName)
         {
             if (target == null)
@@ -581,6 +585,9 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="ToEventPattern"/>
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static IObservable<EventPattern<object>> FromEventPattern(object target, string eventName, IScheduler scheduler)
         {
             if (target == null)
@@ -633,6 +640,9 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="ToEventPattern"/>
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName)
         {
             if (target == null)
@@ -677,6 +687,9 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="ToEventPattern"/>
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName, IScheduler scheduler)
         {
             if (target == null)
@@ -730,6 +743,9 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="ToEventPattern"/>
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName)
         {
             if (target == null)
@@ -775,6 +791,9 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="ToEventPattern"/>
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler)
         {
             if (target == null)
@@ -830,6 +849,9 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="ToEventPattern"/>
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static IObservable<EventPattern<object>> FromEventPattern(Type type, string eventName)
         {
             if (type == null)
@@ -873,6 +895,9 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="ToEventPattern"/>
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static IObservable<EventPattern<object>> FromEventPattern(Type type, string eventName, IScheduler scheduler)
         {
             if (type == null)
@@ -925,6 +950,9 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="ToEventPattern"/>
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName)
         {
             if (type == null)
@@ -969,6 +997,9 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="ToEventPattern"/>
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName, IScheduler scheduler)
         {
             if (type == null)
@@ -1022,6 +1053,9 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="ToEventPattern"/>
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName)
         {
             if (type == null)
@@ -1067,6 +1101,9 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="ToEventPattern"/>
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler)
         {
             if (type == null)

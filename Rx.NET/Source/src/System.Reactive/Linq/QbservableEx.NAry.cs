@@ -35,12 +35,14 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond)),
 #endif
                     first.Expression,
                     GetSourceExpression(second)
                 )
             );
+#pragma warning restore IL2060 // Call to 'System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed. It's not possible to guarantee the availability of requirements of the generic method.
         }
 
         /// <summary>
@@ -69,7 +71,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -108,7 +112,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -152,7 +158,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -201,7 +209,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -255,7 +265,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -314,7 +326,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -378,7 +392,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -447,7 +463,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -521,7 +539,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth), typeof(TEleventh)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -600,7 +620,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth), typeof(TEleventh), typeof(TTwelfth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -684,7 +706,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth), typeof(TEleventh), typeof(TTwelfth), typeof(TThirteenth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -773,7 +797,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth), typeof(TEleventh), typeof(TTwelfth), typeof(TThirteenth), typeof(TFourteenth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -867,7 +893,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth), typeof(TEleventh), typeof(TTwelfth), typeof(TThirteenth), typeof(TFourteenth), typeof(TFifteenth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -966,7 +994,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth, TSixteenth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth), typeof(TEleventh), typeof(TTwelfth), typeof(TThirteenth), typeof(TFourteenth), typeof(TFifteenth), typeof(TSixteenth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1010,7 +1040,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second)
@@ -1044,7 +1076,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1083,7 +1117,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1127,7 +1163,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth, TFifth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1176,7 +1214,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1230,7 +1270,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1289,7 +1331,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1353,7 +1397,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1422,7 +1468,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1496,7 +1544,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth), typeof(TEleventh)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1575,7 +1625,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth), typeof(TEleventh), typeof(TTwelfth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1659,7 +1711,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth), typeof(TEleventh), typeof(TTwelfth), typeof(TThirteenth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1748,7 +1802,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth), typeof(TEleventh), typeof(TTwelfth), typeof(TThirteenth), typeof(TFourteenth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1842,7 +1898,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth), typeof(TEleventh), typeof(TTwelfth), typeof(TThirteenth), typeof(TFourteenth), typeof(TFifteenth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
@@ -1941,7 +1999,9 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth, TSixteenth>(default(IQbservable<TSource1>), default(IObservable<TSource2>))),
 #else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth), typeof(TNinth), typeof(TTenth), typeof(TEleventh), typeof(TTwelfth), typeof(TThirteenth), typeof(TFourteenth), typeof(TFifteenth), typeof(TSixteenth)),
+#pragma warning restore IL2060
 #endif
                     first.Expression,
                     GetSourceExpression(second),
