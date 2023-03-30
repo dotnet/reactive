@@ -142,6 +142,8 @@ namespace ReactiveTests.Tests
 
 #if !NO_PERF
 
+#if !WINDOWS_UWP
+
         [TestMethod]
         public void ScheduleLongRunning_ArgumentChecking()
         {
@@ -188,6 +190,8 @@ namespace ReactiveTests.Tests
             Assert.True(n >= 10);
         }
 
+#endif
+
         [TestMethod]
         public void Stopwatch()
         {
@@ -215,11 +219,15 @@ namespace ReactiveTests.Tests
             Periodic_Impl(TimeSpan.FromMilliseconds(25));
         }
 
+#if !WINDOWS_UWP
+
         [TestMethod]
         public void Periodic_Zero()
         {
             Periodic_Impl(TimeSpan.Zero);
         }
+
+#endif
 
         private void Periodic_Impl(TimeSpan period)
         {
