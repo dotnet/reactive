@@ -20,6 +20,11 @@ namespace ReactiveTests.Tests.Api
             VerifierSettings.OnVerifyMismatch((filePair, message) => DiffPlexReporter.Report(filePair.ReceivedPath, filePair.VerifiedPath, message));
         }
 
+        public ApiApprovalTests()
+            : base()
+        {
+        }
+
         [Fact]
         public Task Core()
         {
