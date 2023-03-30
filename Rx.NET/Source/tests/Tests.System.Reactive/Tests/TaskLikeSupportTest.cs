@@ -43,7 +43,7 @@ namespace Tests.System.Reactive.Tests
 #pragma warning restore 1998
 
         // We execute the ManOrBoy_Basics tests twice, once without a SynchronizationContext, and
-        // once without. When we were on xUnit, SynchronizationContext.Current was never null
+        // once with one. When we were on xUnit, SynchronizationContext.Current was never null
         // because xUnit populates it with their AsyncTestSyncContext, apparently to ensure that
         // async void tests work. MSTest takes the more strict view that async void tests should
         // not be encouraged. (It has an analyzer to detect these and warn you about them). So
