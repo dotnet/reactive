@@ -4,8 +4,13 @@
 
 #pragma warning disable 1591
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace System.Reactive.Linq
 {
+#if HAS_TRIMMABILITY_ATTRIBUTES
+    [RequiresUnreferencedCode(Constants_Core.AsQueryableTrimIncompatibilityMessage)]
+#endif
     public static partial class Qbservable
     {
 #pragma warning disable IDE1006 // Naming Styles: 3rd party code is known to reflect for this specific field name

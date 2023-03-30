@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 
@@ -19,6 +20,9 @@ namespace System.Reactive
             return method.CreateDelegate(delegateType, o);
         }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+    [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         public static void GetEventMethods<TSender, TEventArgs>(Type targetType, object? target, string eventName, out MethodInfo addMethod, out MethodInfo removeMethod, out Type delegateType, out bool isWinRT)
         {
             EventInfo? e;

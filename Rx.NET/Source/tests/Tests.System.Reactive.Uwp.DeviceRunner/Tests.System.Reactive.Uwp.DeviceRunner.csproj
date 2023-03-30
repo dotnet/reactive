@@ -21,6 +21,7 @@
     <PackageCertificateThumbprint>8570A5641EDE61A2AB21E12809E9E0376A041E8C</PackageCertificateThumbprint>
     <SignAssembly>false</SignAssembly>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>

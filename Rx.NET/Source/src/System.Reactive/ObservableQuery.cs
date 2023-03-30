@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,6 +13,9 @@ using System.Reflection;
 
 namespace System.Reactive
 {
+#if HAS_TRIMMABILITY_ATTRIBUTES
+    [RequiresUnreferencedCode(Constants_Core.AsQueryableTrimIncompatibilityMessage)]
+#endif
     internal class ObservableQueryProvider : IQbservableProvider, IQueryProvider
     {
         public IQbservable<TResult> CreateQuery<TResult>(Expression expression)
@@ -91,6 +95,9 @@ namespace System.Reactive
         }
     }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+    [RequiresUnreferencedCode(Constants_Core.AsQueryableTrimIncompatibilityMessage)]
+#endif
     internal class ObservableQuery
     {
         protected object? _source;
@@ -112,6 +119,9 @@ namespace System.Reactive
         public Expression Expression => _expression;
     }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+    [RequiresUnreferencedCode(Constants_Core.AsQueryableTrimIncompatibilityMessage)]
+#endif
     internal class ObservableQuery<TSource> : ObservableQuery, IQbservable<TSource>
     {
         internal ObservableQuery(IObservable<TSource> source)
@@ -159,6 +169,9 @@ namespace System.Reactive
             return _expression.ToString();
         }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.AsQueryableTrimIncompatibilityMessage)]
+#endif
         private class ObservableRewriter : ExpressionVisitor
         {
             protected override Expression VisitConstant(ConstantExpression/*!*/ node)
