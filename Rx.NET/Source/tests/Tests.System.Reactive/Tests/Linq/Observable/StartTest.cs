@@ -6,6 +6,8 @@ using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading;
+
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -68,6 +70,32 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new[] {
                 Notification.CreateOnError<Unit>(ex)
             }));
+        }
+
+        [TestMethod]
+        public void Start_ActionErrorAfterUnsubscribeDoesNotThrow()
+        {
+            var ex = new Exception();
+            using Barrier gate = new(2);
+
+            var sub = Observable.Start(
+                () =>
+                {
+                    // 1: action running
+                    gate.SignalAndWait();
+                    // 2: unsubscribe Dispose returned
+                    gate.SignalAndWait();
+                    throw ex;
+                })
+                .Subscribe();
+
+            // 1: action running
+            gate.SignalAndWait();
+
+            sub.Dispose();
+
+            // 2: unsubscribe Dispose returned
+            gate.SignalAndWait();
         }
 
         [TestMethod]

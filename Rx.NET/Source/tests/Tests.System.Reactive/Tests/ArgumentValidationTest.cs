@@ -67,6 +67,7 @@ namespace ReactiveTests.Tests
                 { "Object", new object() },
                 { "Exception", new Exception() },
                 { "String", "String" },
+                { "Boolean", false },
 
                 { "IDictionary`2[Int32, IObservable`1[Int32]]", new Dictionary<int, IObservable<int>>() },
 

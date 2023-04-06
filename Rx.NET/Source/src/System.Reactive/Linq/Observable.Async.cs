@@ -1038,6 +1038,29 @@ namespace System.Reactive.Linq
         /// </remarks>
         public static IObservable<TResult> StartAsync<TResult>(Func<Task<TResult>> functionAsync)
         {
+            return StartAsync(functionAsync, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous function, surfacing the result through an observable sequence.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to run.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="functionAsync"/> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item><description>The function is started immediately, not during the subscription of the resulting sequence.</description></item>
+        /// <item><description>Multiple subscriptions to the resulting sequence can observe the function's result.</description></item>
+        /// </list>
+        /// </remarks>
+        public static IObservable<TResult> StartAsync<TResult>(Func<Task<TResult>> functionAsync, bool ignoreExceptionsAfterUnsubscribe)
+        {
             if (functionAsync == null)
             {
                 throw new ArgumentNullException(nameof(functionAsync));
@@ -1061,6 +1084,30 @@ namespace System.Reactive.Linq
         /// </list>
         /// </remarks>
         public static IObservable<TResult> StartAsync<TResult>(Func<Task<TResult>> functionAsync, IScheduler scheduler)
+        {
+            return StartAsync(functionAsync, scheduler, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous function, surfacing the result through an observable sequence.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to run.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="functionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item><description>The function is started immediately, not during the subscription of the resulting sequence.</description></item>
+        /// <item><description>Multiple subscriptions to the resulting sequence can observe the function's result.</description></item>
+        /// </list>
+        /// </remarks>
+        public static IObservable<TResult> StartAsync<TResult>(Func<Task<TResult>> functionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
             if (functionAsync == null)
             {
@@ -1098,6 +1145,37 @@ namespace System.Reactive.Linq
         /// </remarks>
         public static IObservable<TResult> StartAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync)
         {
+            return StartAsync(functionAsync, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous function, surfacing the result through an observable sequence.
+        /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to run.</param>
+        /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="functionAsync"/> is null.</exception>
+        /// <remarks>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <list type="bullet">
+        /// <item><description>The function is started immediately, not during the subscription of the resulting sequence.</description></item>
+        /// <item><description>Multiple subscriptions to the resulting sequence can observe the function's result.</description></item>
+        /// <item><description>
+        /// If any subscription to the resulting sequence is disposed, the CancellationToken is set. The observer associated to the disposed
+        /// subscription won't see the TaskCanceledException, but other observers will. You can protect against this using the Catch operator.
+        /// Be careful when handing out the resulting sequence because of this behavior. The most common use is to have a single subscription
+        /// to the resulting sequence, which controls the CancellationToken state. Alternatively, you can control subscription behavior using
+        /// multicast operators.
+        /// </description></item>
+        /// </list>
+        /// </remarks>
+        public static IObservable<TResult> StartAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, bool ignoreExceptionsAfterUnsubscribe)
+        {
             if (functionAsync == null)
             {
                 throw new ArgumentNullException(nameof(functionAsync));
@@ -1129,6 +1207,38 @@ namespace System.Reactive.Linq
         /// </list>
         /// </remarks>
         public static IObservable<TResult> StartAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler)
+        {
+            return StartAsync(functionAsync, scheduler, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous function, surfacing the result through an observable sequence.
+        /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to run.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="functionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item><description>The function is started immediately, not during the subscription of the resulting sequence.</description></item>
+        /// <item><description>Multiple subscriptions to the resulting sequence can observe the function's result.</description></item>
+        /// <item><description>
+        /// If any subscription to the resulting sequence is disposed, the CancellationToken is set. The observer associated to the disposed
+        /// subscription won't see the TaskCanceledException, but other observers will. You can protect against this using the Catch operator.
+        /// Be careful when handing out the resulting sequence because of this behavior. The most common use is to have a single subscription
+        /// to the resulting sequence, which controls the CancellationToken state. Alternatively, you can control subscription behavior using
+        /// multicast operators.
+        /// </description></item>
+        /// </list>
+        /// </remarks>
+        public static IObservable<TResult> StartAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
             if (functionAsync == null)
             {
@@ -1211,6 +1321,28 @@ namespace System.Reactive.Linq
         /// </remarks>
         public static IObservable<Unit> StartAsync(Func<Task> actionAsync)
         {
+            return StartAsync(actionAsync, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous action, surfacing the result through an observable sequence.
+        /// </summary>
+        /// <param name="actionAsync">Asynchronous action to run.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item><description>The action is started immediately, not during the subscription of the resulting sequence.</description></item>
+        /// <item><description>Multiple subscriptions to the resulting sequence can observe the action's outcome.</description></item>
+        /// </list>
+        /// </remarks>
+        public static IObservable<Unit> StartAsync(Func<Task> actionAsync, bool ignoreExceptionsAfterUnsubscribe)
+        {
             if (actionAsync == null)
             {
                 throw new ArgumentNullException(nameof(actionAsync));
@@ -1233,6 +1365,29 @@ namespace System.Reactive.Linq
         /// </list>
         /// </remarks>
         public static IObservable<Unit> StartAsync(Func<Task> actionAsync, IScheduler scheduler)
+        {
+            return StartAsync(actionAsync, scheduler, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous action, surfacing the result through an observable sequence.
+        /// </summary>
+        /// <param name="actionAsync">Asynchronous action to run.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item><description>The action is started immediately, not during the subscription of the resulting sequence.</description></item>
+        /// <item><description>Multiple subscriptions to the resulting sequence can observe the action's outcome.</description></item>
+        /// </list>
+        /// </remarks>
+        public static IObservable<Unit> StartAsync(Func<Task> actionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
             if (actionAsync == null)
             {
@@ -1269,6 +1424,36 @@ namespace System.Reactive.Linq
         /// </remarks>
         public static IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync)
         {
+            return StartAsync(actionAsync, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous action, surfacing the result through an observable sequence.
+        /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
+        /// </summary>
+        /// <param name="actionAsync">Asynchronous action to run.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item><description>The action is started immediately, not during the subscription of the resulting sequence.</description></item>
+        /// <item><description>Multiple subscriptions to the resulting sequence can observe the action's outcome.</description></item>
+        /// <item><description>
+        /// If any subscription to the resulting sequence is disposed, the CancellationToken is set. The observer associated to the disposed
+        /// subscription won't see the TaskCanceledException, but other observers will. You can protect against this using the Catch operator.
+        /// Be careful when handing out the resulting sequence because of this behavior. The most common use is to have a single subscription
+        /// to the resulting sequence, which controls the CancellationToken state. Alternatively, you can control subscription behavior using
+        /// multicast operators.
+        /// </description></item>
+        /// </list>
+        /// </remarks>
+        public static IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, bool ignoreExceptionsAfterUnsubscribe)
+        {
             if (actionAsync == null)
             {
                 throw new ArgumentNullException(nameof(actionAsync));
@@ -1299,6 +1484,37 @@ namespace System.Reactive.Linq
         /// </list>
         /// </remarks>
         public static IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler)
+        {
+            return StartAsync(actionAsync, scheduler, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous action, surfacing the result through an observable sequence.
+        /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
+        /// </summary>
+        /// <param name="actionAsync">Asynchronous action to run.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item><description>The action is started immediately, not during the subscription of the resulting sequence.</description></item>
+        /// <item><description>Multiple subscriptions to the resulting sequence can observe the action's outcome.</description></item>
+        /// <item><description>
+        /// If any subscription to the resulting sequence is disposed, the CancellationToken is set. The observer associated to the disposed
+        /// subscription won't see the TaskCanceledException, but other observers will. You can protect against this using the Catch operator.
+        /// Be careful when handing out the resulting sequence because of this behavior. The most common use is to have a single subscription
+        /// to the resulting sequence, which controls the CancellationToken state. Alternatively, you can control subscription behavior using
+        /// multicast operators.
+        /// </description></item>
+        /// </list>
+        /// </remarks>
+        public static IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
             if (actionAsync == null)
             {
@@ -1331,6 +1547,23 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="functionAsync"/> is null.</exception>
         public static IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync)
         {
+            return FromAsync(functionAsync, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to convert.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="functionAsync"/> is null.</exception>
+        public static IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, bool ignoreExceptionsAfterUnsubscribe)
+        {
             if (functionAsync == null)
             {
                 throw new ArgumentNullException(nameof(functionAsync));
@@ -1348,6 +1581,24 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="functionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
         public static IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, IScheduler scheduler)
+        {
+            return FromAsync(functionAsync, scheduler, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to convert.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="functionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
+        public static IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
             if (functionAsync == null)
             {
@@ -1373,6 +1624,25 @@ namespace System.Reactive.Linq
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
         public static IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync)
         {
+            return FromAsync(functionAsync, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to convert.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="functionAsync"/> is null.</exception>
+        /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
+        public static IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, bool ignoreExceptionsAfterUnsubscribe)
+        {
             if (functionAsync == null)
             {
                 throw new ArgumentNullException(nameof(functionAsync));
@@ -1392,6 +1662,26 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="functionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
         public static IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler)
+        {
+            return FromAsync(functionAsync, scheduler, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to convert.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="functionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
+        /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
+        public static IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
             if (functionAsync == null)
             {
@@ -1418,6 +1708,22 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null.</exception>
         public static IObservable<Unit> FromAsync(Func<Task> actionAsync)
         {
+            return FromAsync(actionAsync, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// </summary>
+        /// <param name="actionAsync">Asynchronous action to convert.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null.</exception>
+        public static IObservable<Unit> FromAsync(Func<Task> actionAsync, bool ignoreExceptionsAfterUnsubscribe)
+        {
             if (actionAsync == null)
             {
                 throw new ArgumentNullException(nameof(actionAsync));
@@ -1434,6 +1740,23 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
         public static IObservable<Unit> FromAsync(Func<Task> actionAsync, IScheduler scheduler)
+        {
+            return FromAsync(actionAsync, scheduler, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// </summary>
+        /// <param name="actionAsync">Asynchronous action to convert.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
+        public static IObservable<Unit> FromAsync(Func<Task> actionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
             if (actionAsync == null)
             {
@@ -1458,6 +1781,24 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null.</exception>
         public static IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync)
         {
+            return FromAsync(actionAsync, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
+        /// </summary>
+        /// <param name="actionAsync">Asynchronous action to convert.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null.</exception>
+        public static IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, bool ignoreExceptionsAfterUnsubscribe)
+        {
             if (actionAsync == null)
             {
                 throw new ArgumentNullException(nameof(actionAsync));
@@ -1476,6 +1817,25 @@ namespace System.Reactive.Linq
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
         /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
         public static IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler)
+        {
+            return FromAsync(actionAsync, scheduler, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
+        /// </summary>
+        /// <param name="actionAsync">Asynchronous action to convert.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
+        public static IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
             if (actionAsync == null)
             {

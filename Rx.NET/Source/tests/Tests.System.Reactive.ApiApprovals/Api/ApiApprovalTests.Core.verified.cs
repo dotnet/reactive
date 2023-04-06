@@ -1049,11 +1049,15 @@ namespace System.Reactive.Linq
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync) { }
         public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync) { }
         public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe) { }
         [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<System.IObservable<System.Reactive.Unit>> FromAsyncPattern(System.Func<System.AsyncCallback, object?, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
         [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
@@ -1379,11 +1383,15 @@ namespace System.Reactive.Linq
         public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync) { }
         public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync) { }
         public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.IObservable<TSource> StartWith<TSource>(this System.IObservable<TSource> source, System.Collections.Generic.IEnumerable<TSource> values) { }
         public static System.IObservable<TSource> StartWith<TSource>(this System.IObservable<TSource> source, params TSource[] values) { }
         public static System.IObservable<TSource> StartWith<TSource>(this System.IObservable<TSource> source, System.Reactive.Concurrency.IScheduler scheduler, System.Collections.Generic.IEnumerable<TSource> values) { }
