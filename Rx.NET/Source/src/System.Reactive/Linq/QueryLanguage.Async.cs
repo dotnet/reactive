@@ -660,15 +660,15 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync)
         {
-            return StartAsyncImpl(functionAsync, null);
+            return StartAsyncImpl(functionAsync, new TaskObservationOptions(null, ignoreExceptionsAfterUnsubscribe: false));
         }
 
-        public virtual IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, IScheduler scheduler)
+        public virtual IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, TaskObservationOptions options)
         {
-            return StartAsyncImpl(functionAsync, scheduler);
+            return StartAsyncImpl(functionAsync, options);
         }
 
-        private IObservable<TSource> StartAsyncImpl<TSource>(Func<Task<TSource>> functionAsync, IScheduler? scheduler)
+        private IObservable<TSource> StartAsyncImpl<TSource>(Func<Task<TSource>> functionAsync, TaskObservationOptions options)
         {
             Task<TSource> task;
             try
@@ -680,25 +680,20 @@ namespace System.Reactive.Linq
                 return Throw<TSource>(exception);
             }
 
-            if (scheduler != null)
-            {
-                return task.ToObservable(scheduler);
-            }
-            
-            return task.ToObservable();
+            return task.ToObservable(options);
         }
 
         public virtual IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync)
         {
-            return StartAsyncImpl(functionAsync, null);
+            return StartAsyncImpl(functionAsync, new TaskObservationOptions(null, false));
         }
 
-        public virtual IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, IScheduler scheduler)
+        public virtual IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, TaskObservationOptions options)
         {
-            return StartAsyncImpl(functionAsync, scheduler);
+            return StartAsyncImpl(functionAsync, options);
         }
 
-        private IObservable<TSource> StartAsyncImpl<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, IScheduler? scheduler)
+        private IObservable<TSource> StartAsyncImpl<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, TaskObservationOptions options)
         {
             var cancellable = new CancellationDisposable();
 
@@ -712,16 +707,7 @@ namespace System.Reactive.Linq
                 return Throw<TSource>(exception);
             }
 
-            IObservable<TSource> result;
-
-            if (scheduler != null)
-            {
-                result = task.ToObservable(scheduler);
-            }
-            else
-            {
-                result = task.ToObservable();
-            }
+            IObservable<TSource> result = task.ToObservable(options);
 
             return new StartAsyncObservable<TSource>(cancellable, result);
         }
@@ -763,15 +749,15 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<Unit> StartAsync(Func<Task> actionAsync)
         {
-            return StartAsyncImpl(actionAsync, null);
+            return StartAsyncImpl(actionAsync, new TaskObservationOptions(null, ignoreExceptionsAfterUnsubscribe: false));
         }
 
-        public virtual IObservable<Unit> StartAsync(Func<Task> actionAsync, IScheduler scheduler)
+        public virtual IObservable<Unit> StartAsync(Func<Task> actionAsync, TaskObservationOptions options)
         {
-            return StartAsyncImpl(actionAsync, scheduler);
+            return StartAsyncImpl(actionAsync, options);
         }
 
-        private IObservable<Unit> StartAsyncImpl(Func<Task> actionAsync, IScheduler? scheduler)
+        private IObservable<Unit> StartAsyncImpl(Func<Task> actionAsync, TaskObservationOptions options)
         {
             Task task;
             try
@@ -783,25 +769,20 @@ namespace System.Reactive.Linq
                 return Throw<Unit>(exception);
             }
 
-            if (scheduler != null)
-            {
-                return task.ToObservable(scheduler);
-            }
-            
-            return task.ToObservable();
+            return task.ToObservable(options);
         }
 
         public virtual IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync)
         {
-            return StartAsyncImpl(actionAsync, null);
+            return StartAsyncImpl(actionAsync, new TaskObservationOptions(null, ignoreExceptionsAfterUnsubscribe: false));
         }
 
-        public virtual IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler)
+        public virtual IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, TaskObservationOptions options)
         {
-            return StartAsyncImpl(actionAsync, scheduler);
+            return StartAsyncImpl(actionAsync, options);
         }
 
-        private IObservable<Unit> StartAsyncImpl(Func<CancellationToken, Task> actionAsync, IScheduler? scheduler)
+        private IObservable<Unit> StartAsyncImpl(Func<CancellationToken, Task> actionAsync, TaskObservationOptions options)
         {
             var cancellable = new CancellationDisposable();
 
@@ -815,16 +796,7 @@ namespace System.Reactive.Linq
                 return Throw<Unit>(exception);
             }
 
-            IObservable<Unit> result;
-
-            if (scheduler != null)
-            {
-                result = task.ToObservable(scheduler);
-            }
-            else
-            {
-                result = task.ToObservable();
-            }
+            IObservable<Unit> result = task.ToObservable(options);
 
             return new StartAsyncObservable<Unit>(cancellable, result);
         }
@@ -847,14 +819,14 @@ namespace System.Reactive.Linq
             return Defer(() => StartAsync(functionAsync));
         }
 
-        public virtual IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, IScheduler scheduler)
+        public virtual IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, TaskObservationOptions options)
         {
-            return Defer(() => StartAsync(functionAsync, scheduler));
+            return Defer(() => StartAsync(functionAsync, options));
         }
 
-        public virtual IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler)
+        public virtual IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, TaskObservationOptions options)
         {
-            return Defer(() => StartAsync(functionAsync, scheduler));
+            return Defer(() => StartAsync(functionAsync, options));
         }
 
         #endregion
@@ -871,14 +843,14 @@ namespace System.Reactive.Linq
             return Defer(() => StartAsync(actionAsync));
         }
 
-        public virtual IObservable<Unit> FromAsync(Func<Task> actionAsync, IScheduler scheduler)
+        public virtual IObservable<Unit> FromAsync(Func<Task> actionAsync, TaskObservationOptions options)
         {
-            return Defer(() => StartAsync(actionAsync, scheduler));
+            return Defer(() => StartAsync(actionAsync, options));
         }
 
-        public virtual IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler)
+        public virtual IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, TaskObservationOptions options)
         {
-            return Defer(() => StartAsync(actionAsync, scheduler));
+            return Defer(() => StartAsync(actionAsync, options));
         }
 
         #endregion

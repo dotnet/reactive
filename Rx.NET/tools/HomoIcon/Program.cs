@@ -153,26 +153,24 @@ namespace HomoIconize
  */
 ");
             WriteLine(
-@"#pragma warning disable 1591
+@"#nullable enable
+#pragma warning disable 1591
 ");
 
             WriteLine(
-@"using System;
-using System.Reactive.Concurrency;
-using System.Collections.Generic;");
+@"using System.Collections.Generic;");
 
             if (exludeFromCodeCoverage)
                 WriteLine("using System.Diagnostics.CodeAnalysis;");
 
             WriteLine(
-@"using System.Reactive.Joins;
-using System.Linq;
+@"using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive.Concurrency;
+using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Subjects;
 ");
             WriteLine(
 @"namespace System.Reactive.Linq
@@ -425,9 +423,9 @@ using System.Reactive.Subjects;
                     WriteLine("InfoOf(() => " + typeName + "." + name + g + "(" + string.Join(", ", ptps.Select(pt => "default(" + pt + ")")) + "))" + cma);
                     WriteLine("#else", true);
                     if (!m.IsGenericMethod)
-                        WriteLine("(MethodInfo)MethodInfo.GetCurrentMethod()" + cma);
+                        WriteLine("(MethodInfo)MethodInfo.GetCurrentMethod()!" + cma);
                     else
-                        WriteLine("((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(" + string.Join(", ", m.GetGenericArguments().Select(ga => "typeof(" + ga.Name + ")").ToArray()) + ")" + cma);
+                        WriteLine("((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(" + string.Join(", ", m.GetGenericArguments().Select(ga => "typeof(" + ga.Name + ")").ToArray()) + ")" + cma);
                     WriteLine("#endif", true);
                     for (int j = 0; j < args.Count; j++)
                         WriteLine(args[j] + (j < args.Count - 1 ? "," : ""));
@@ -614,9 +612,9 @@ using System.Reactive.Subjects;
                         WriteLine("var m = InfoOf(() => " + typeName + ".ToAsync" + genArgss + "(" + string.Join(", ", aprs.Select(pt => "default(" + pt + ")")) + "));");
                         WriteLine("#else", true);
                         if (genArgs.Length == 0)
-                            WriteLine("var m = (MethodInfo)MethodInfo.GetCurrentMethod();");
+                            WriteLine("var m = (MethodInfo)MethodInfo.GetCurrentMethod()!;");
                         else
-                            WriteLine("var m = ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(" + string.Join(", ", genArgs.Select(a => "typeof(" + a + ")").ToArray()) + ");");
+                            WriteLine("var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(" + string.Join(", ", genArgs.Select(a => "typeof(" + a + ")").ToArray()) + ");");
                         WriteLine("#endif", true);
 
                         WriteLine("return (" + string.Join(", ", lamPars) + ") => provider.CreateQuery<" + ret + ">(");
@@ -724,7 +722,7 @@ using System.Reactive.Subjects;
                     WriteLine("[Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]");
                     WriteLine("#endif", true);
 
-                    WriteLine("public static " + retType + " FromAsyncPattern" + genArgss + "(this IQbservableProvider provider, " + begType + " begin, " + endType + "end)");
+                    WriteLine("public static " + retType + " FromAsyncPattern" + genArgss + "(this IQbservableProvider provider, " + begType + " begin, " + endType + " end)");
                     WriteLine("{");
 
                     Indent();
@@ -751,9 +749,9 @@ using System.Reactive.Subjects;
                     WriteLine("var m = InfoOf(() => " + typeName + ".FromAsyncPattern" + genArgss + "(" + string.Join(", ", aprs.Select(pt => "default(" + pt + ")")) + "));");
                     WriteLine("#else", true);
                     if (genArgs.Length == 0)
-                        WriteLine("var m = (MethodInfo)MethodInfo.GetCurrentMethod();");
+                        WriteLine("var m = (MethodInfo)MethodInfo.GetCurrentMethod()!;");
                     else
-                        WriteLine("var m = ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(" + string.Join(", ", genArgs.Select(a => "typeof(" + a + ")").ToArray()) + ");");
+                        WriteLine("var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(" + string.Join(", ", genArgs.Select(a => "typeof(" + a + ")").ToArray()) + ");");
                     WriteLine("#endif", true);
 
                     WriteLine("return (" + string.Join(", ", lamPars) + ") => provider.CreateQuery<" + ret + ">(");

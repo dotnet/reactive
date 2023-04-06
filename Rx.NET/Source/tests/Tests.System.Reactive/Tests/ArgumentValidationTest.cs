@@ -67,6 +67,7 @@ namespace ReactiveTests.Tests
                 { "Object", new object() },
                 { "Exception", new Exception() },
                 { "String", "String" },
+                { "Boolean", false },
 
                 { "IDictionary`2[Int32, IObservable`1[Int32]]", new Dictionary<int, IObservable<int>>() },
 
@@ -91,6 +92,8 @@ namespace ReactiveTests.Tests
                 { "IObserver`1[Int32]", Observer.Create<int>(v => { }) },
 
                 { "CancellationToken", new CancellationToken() },
+
+                { "TaskObservationOptions", new TaskObservationOptions() },
 
                 { "Action", new Action(() => { }) },
 
