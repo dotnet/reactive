@@ -1066,7 +1066,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(functionAsync));
             }
 
-            return s_impl.StartAsync(functionAsync);
+            return s_impl.StartAsync(functionAsync, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -1119,7 +1119,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.StartAsync(functionAsync, scheduler);
+            return s_impl.StartAsync(functionAsync, scheduler, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -1181,7 +1181,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(functionAsync));
             }
 
-            return s_impl.StartAsync(functionAsync);
+            return s_impl.StartAsync(functionAsync, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -1250,7 +1250,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.StartAsync(functionAsync, scheduler);
+            return s_impl.StartAsync(functionAsync, scheduler, ignoreExceptionsAfterUnsubscribe);
         }
 
         #endregion
@@ -1348,7 +1348,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(actionAsync));
             }
 
-            return s_impl.StartAsync(actionAsync);
+            return s_impl.StartAsync(actionAsync, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -1399,7 +1399,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.StartAsync(actionAsync, scheduler);
+            return s_impl.StartAsync(actionAsync, scheduler, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -1459,7 +1459,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(actionAsync));
             }
 
-            return s_impl.StartAsync(actionAsync);
+            return s_impl.StartAsync(actionAsync, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -1526,7 +1526,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.StartAsync(actionAsync, scheduler);
+            return s_impl.StartAsync(actionAsync, scheduler, ignoreExceptionsAfterUnsubscribe);
         }
 
         #endregion
@@ -1569,7 +1569,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(functionAsync));
             }
 
-            return s_impl.FromAsync(functionAsync);
+            return s_impl.FromAsync(functionAsync, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -1610,7 +1610,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.FromAsync(functionAsync, scheduler);
+            return s_impl.FromAsync(functionAsync, scheduler, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -1648,7 +1648,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(functionAsync));
             }
 
-            return s_impl.FromAsync(functionAsync);
+            return s_impl.FromAsync(functionAsync, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -1693,7 +1693,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.FromAsync(functionAsync, scheduler);
+            return s_impl.FromAsync(functionAsync, scheduler, ignoreExceptionsAfterUnsubscribe);
         }
 
         #endregion
@@ -1729,7 +1729,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(actionAsync));
             }
 
-            return s_impl.FromAsync(actionAsync);
+            return s_impl.FromAsync(actionAsync, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -1768,7 +1768,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.FromAsync(actionAsync, scheduler);
+            return s_impl.FromAsync(actionAsync, scheduler, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -1804,7 +1804,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(actionAsync));
             }
 
-            return s_impl.FromAsync(actionAsync);
+            return s_impl.FromAsync(actionAsync, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -1847,7 +1847,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.FromAsync(actionAsync, scheduler);
+            return s_impl.FromAsync(actionAsync, scheduler, ignoreExceptionsAfterUnsubscribe);
         }
 
         #endregion

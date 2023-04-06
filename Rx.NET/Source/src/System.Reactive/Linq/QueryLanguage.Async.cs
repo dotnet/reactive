@@ -658,17 +658,17 @@ namespace System.Reactive.Linq
             return ToAsync(function, scheduler)();
         }
 
-        public virtual IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync)
+        public virtual IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return StartAsyncImpl(functionAsync, null);
+            return StartAsyncImpl(functionAsync, null, ignoreExceptionsAfterUnsubscribe);
         }
 
-        public virtual IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, IScheduler scheduler)
+        public virtual IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return StartAsyncImpl(functionAsync, scheduler);
+            return StartAsyncImpl(functionAsync, scheduler, ignoreExceptionsAfterUnsubscribe);
         }
 
-        private IObservable<TSource> StartAsyncImpl<TSource>(Func<Task<TSource>> functionAsync, IScheduler? scheduler)
+        private IObservable<TSource> StartAsyncImpl<TSource>(Func<Task<TSource>> functionAsync, IScheduler? scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
             Task<TSource> task;
             try
@@ -682,23 +682,23 @@ namespace System.Reactive.Linq
 
             if (scheduler != null)
             {
-                return task.ToObservable(scheduler);
+                return task.ToObservable(scheduler, ignoreExceptionsAfterUnsubscribe);
             }
             
-            return task.ToObservable();
+            return task.ToObservable(ignoreExceptionsAfterUnsubscribe);
         }
 
-        public virtual IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync)
+        public virtual IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return StartAsyncImpl(functionAsync, null);
+            return StartAsyncImpl(functionAsync, null, ignoreExceptionsAfterUnsubscribe);
         }
 
-        public virtual IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, IScheduler scheduler)
+        public virtual IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return StartAsyncImpl(functionAsync, scheduler);
+            return StartAsyncImpl(functionAsync, scheduler, ignoreExceptionsAfterUnsubscribe);
         }
 
-        private IObservable<TSource> StartAsyncImpl<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, IScheduler? scheduler)
+        private IObservable<TSource> StartAsyncImpl<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, IScheduler? scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
             var cancellable = new CancellationDisposable();
 
@@ -716,11 +716,11 @@ namespace System.Reactive.Linq
 
             if (scheduler != null)
             {
-                result = task.ToObservable(scheduler);
+                result = task.ToObservable(scheduler, ignoreExceptionsAfterUnsubscribe);
             }
             else
             {
-                result = task.ToObservable();
+                result = task.ToObservable(ignoreExceptionsAfterUnsubscribe);
             }
 
             return new StartAsyncObservable<TSource>(cancellable, result);
@@ -761,17 +761,17 @@ namespace System.Reactive.Linq
             return ToAsync(action, scheduler)();
         }
 
-        public virtual IObservable<Unit> StartAsync(Func<Task> actionAsync)
+        public virtual IObservable<Unit> StartAsync(Func<Task> actionAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return StartAsyncImpl(actionAsync, null);
+            return StartAsyncImpl(actionAsync, null, ignoreExceptionsAfterUnsubscribe);
         }
 
-        public virtual IObservable<Unit> StartAsync(Func<Task> actionAsync, IScheduler scheduler)
+        public virtual IObservable<Unit> StartAsync(Func<Task> actionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return StartAsyncImpl(actionAsync, scheduler);
+            return StartAsyncImpl(actionAsync, scheduler, ignoreExceptionsAfterUnsubscribe);
         }
 
-        private IObservable<Unit> StartAsyncImpl(Func<Task> actionAsync, IScheduler? scheduler)
+        private IObservable<Unit> StartAsyncImpl(Func<Task> actionAsync, IScheduler? scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
             Task task;
             try
@@ -785,23 +785,23 @@ namespace System.Reactive.Linq
 
             if (scheduler != null)
             {
-                return task.ToObservable(scheduler);
+                return task.ToObservable(scheduler, ignoreExceptionsAfterUnsubscribe);
             }
             
-            return task.ToObservable();
+            return task.ToObservable(ignoreExceptionsAfterUnsubscribe);
         }
 
-        public virtual IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync)
+        public virtual IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return StartAsyncImpl(actionAsync, null);
+            return StartAsyncImpl(actionAsync, null, ignoreExceptionsAfterUnsubscribe);
         }
 
-        public virtual IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler)
+        public virtual IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return StartAsyncImpl(actionAsync, scheduler);
+            return StartAsyncImpl(actionAsync, scheduler, ignoreExceptionsAfterUnsubscribe);
         }
 
-        private IObservable<Unit> StartAsyncImpl(Func<CancellationToken, Task> actionAsync, IScheduler? scheduler)
+        private IObservable<Unit> StartAsyncImpl(Func<CancellationToken, Task> actionAsync, IScheduler? scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
             var cancellable = new CancellationDisposable();
 
@@ -819,11 +819,11 @@ namespace System.Reactive.Linq
 
             if (scheduler != null)
             {
-                result = task.ToObservable(scheduler);
+                result = task.ToObservable(scheduler, ignoreExceptionsAfterUnsubscribe);
             }
             else
             {
-                result = task.ToObservable();
+                result = task.ToObservable(ignoreExceptionsAfterUnsubscribe);
             }
 
             return new StartAsyncObservable<Unit>(cancellable, result);
@@ -837,48 +837,48 @@ namespace System.Reactive.Linq
 
         #region Func
 
-        public virtual IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync)
+        public virtual IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(functionAsync));
+            return Defer(() => StartAsync(functionAsync, ignoreExceptionsAfterUnsubscribe));
         }
 
-        public virtual IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync)
+        public virtual IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(functionAsync));
+            return Defer(() => StartAsync(functionAsync, ignoreExceptionsAfterUnsubscribe));
         }
 
-        public virtual IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, IScheduler scheduler)
+        public virtual IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(functionAsync, scheduler));
+            return Defer(() => StartAsync(functionAsync, scheduler, ignoreExceptionsAfterUnsubscribe));
         }
 
-        public virtual IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler)
+        public virtual IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(functionAsync, scheduler));
+            return Defer(() => StartAsync(functionAsync, scheduler, ignoreExceptionsAfterUnsubscribe));
         }
 
         #endregion
 
         #region Action
 
-        public virtual IObservable<Unit> FromAsync(Func<Task> actionAsync)
+        public virtual IObservable<Unit> FromAsync(Func<Task> actionAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(actionAsync));
+            return Defer(() => StartAsync(actionAsync, ignoreExceptionsAfterUnsubscribe));
         }
 
-        public virtual IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync)
+        public virtual IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(actionAsync));
+            return Defer(() => StartAsync(actionAsync, ignoreExceptionsAfterUnsubscribe));
         }
 
-        public virtual IObservable<Unit> FromAsync(Func<Task> actionAsync, IScheduler scheduler)
+        public virtual IObservable<Unit> FromAsync(Func<Task> actionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(actionAsync, scheduler));
+            return Defer(() => StartAsync(actionAsync, scheduler, ignoreExceptionsAfterUnsubscribe));
         }
 
-        public virtual IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler)
+        public virtual IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(actionAsync, scheduler));
+            return Defer(() => StartAsync(actionAsync, scheduler, ignoreExceptionsAfterUnsubscribe));
         }
 
         #endregion
