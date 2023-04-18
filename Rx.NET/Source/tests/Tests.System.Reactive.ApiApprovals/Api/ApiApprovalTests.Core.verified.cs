@@ -635,7 +635,7 @@ namespace System.Reactive.Disposables
         public bool IsDisposed { get; }
         public void Dispose() { }
     }
-    public struct SingleAssignmentDisposableValue : System.IDisposable, System.Reactive.Disposables.ICancelable
+    public struct SingleAssignmentDisposableValue
     {
         public System.IDisposable? Disposable { get; set; }
         public bool IsDisposed { get; }
