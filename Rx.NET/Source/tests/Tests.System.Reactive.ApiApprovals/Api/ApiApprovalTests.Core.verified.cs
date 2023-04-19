@@ -487,7 +487,7 @@ namespace System.Reactive.Concurrency
         public override System.IDisposable Schedule<TState>(TState state, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
         public override System.IDisposable Schedule<TState>(TState state, System.TimeSpan dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
     }
-    public readonly struct TaskObservationOptions
+    public sealed class TaskObservationOptions
     {
         public TaskObservationOptions(System.Reactive.Concurrency.IScheduler? scheduler, bool ignoreExceptionsAfterUnsubscribe) { }
         public bool IgnoreExceptionsAfterUnsubscribe { get; }

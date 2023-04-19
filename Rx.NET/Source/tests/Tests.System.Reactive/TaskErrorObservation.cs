@@ -83,8 +83,8 @@ namespace Tests.System.Reactive
 
         public void AssertExceptionReportedAsUnobserved()
         {
-            int start = Environment.TickCount;
-            bool firstIteration = true;
+            var start = Environment.TickCount;
+            var firstIteration = true;
             while (!_exceptionReportedAsUnobserved.Wait(TimeSpan.FromSeconds(firstIteration ? 0 : 0.001)) &&
                 ((Environment.TickCount - start) < 5000))
             {
@@ -108,8 +108,8 @@ namespace Tests.System.Reactive
                 throw new InvalidOperationException("Test did not supply task to " + nameof(TaskErrorObservation));
             }
 
-            int start = Environment.TickCount;
-            bool firstIteration = true;
+            var start = Environment.TickCount;
+            var firstIteration = true;
             do
             {
                 // We try to get away without sleeping, to enable tests to run as quickly as

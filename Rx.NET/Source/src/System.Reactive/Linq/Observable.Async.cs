@@ -1062,12 +1062,17 @@ namespace System.Reactive.Linq
         /// </remarks>
         public static IObservable<TResult> StartAsync<TResult>(Func<Task<TResult>> functionAsync, IScheduler scheduler)
         {
+            if (functionAsync == null)
+            {
+                throw new ArgumentNullException(nameof(functionAsync));
+            }
+
             if (scheduler == null)
             {
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return StartAsync(functionAsync, new TaskObservationOptions(scheduler, ignoreExceptionsAfterUnsubscribe: false));
+            return s_impl.StartAsync(functionAsync, new TaskObservationOptions.Value(scheduler, ignoreExceptionsAfterUnsubscribe: false));
         }
 
         /// <summary>
@@ -1091,7 +1096,12 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(functionAsync));
             }
 
-            return s_impl.StartAsync(functionAsync, options);
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            return s_impl.StartAsync(functionAsync, options.ToValue());
         }
 
         /// <summary>
@@ -1149,12 +1159,17 @@ namespace System.Reactive.Linq
         /// </remarks>
         public static IObservable<TResult> StartAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler)
         {
-             if (scheduler == null)
+            if (functionAsync == null)
+            {
+                throw new ArgumentNullException(nameof(functionAsync));
+            }
+
+            if (scheduler == null)
             {
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-           return StartAsync(functionAsync, new TaskObservationOptions(scheduler, ignoreExceptionsAfterUnsubscribe: false));
+           return s_impl.StartAsync(functionAsync, new TaskObservationOptions.Value(scheduler, ignoreExceptionsAfterUnsubscribe: false));
         }
 
         /// <summary>
@@ -1185,8 +1200,12 @@ namespace System.Reactive.Linq
             {
                 throw new ArgumentNullException(nameof(functionAsync));
             }
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
 
-            return s_impl.StartAsync(functionAsync, options);
+            return s_impl.StartAsync(functionAsync, options.ToValue());
         }
 
         #endregion
@@ -1280,12 +1299,17 @@ namespace System.Reactive.Linq
         /// </remarks>
         public static IObservable<Unit> StartAsync(Func<Task> actionAsync, IScheduler scheduler)
         {
+            if (actionAsync == null)
+            {
+                throw new ArgumentNullException(nameof(actionAsync));
+            }
+
             if (scheduler == null)
             {
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return StartAsync(actionAsync, new TaskObservationOptions(scheduler, ignoreExceptionsAfterUnsubscribe: false));
+            return s_impl.StartAsync(actionAsync, new TaskObservationOptions.Value(scheduler, ignoreExceptionsAfterUnsubscribe: false));
         }
 
         /// <summary>
@@ -1308,7 +1332,12 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(actionAsync));
             }
 
-            return s_impl.StartAsync(actionAsync, options);
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            return s_impl.StartAsync(actionAsync, options.ToValue());
         }
 
         /// <summary>
@@ -1364,12 +1393,17 @@ namespace System.Reactive.Linq
         /// </remarks>
         public static IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler)
         {
+            if (actionAsync == null)
+            {
+                throw new ArgumentNullException(nameof(actionAsync));
+            }
+
             if (scheduler == null)
             {
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return StartAsync(actionAsync, new TaskObservationOptions(scheduler, ignoreExceptionsAfterUnsubscribe: false));
+            return s_impl.StartAsync(actionAsync, new TaskObservationOptions.Value(scheduler, ignoreExceptionsAfterUnsubscribe: false));
         }
 
         /// <summary>
@@ -1400,7 +1434,12 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(actionAsync));
             }
 
-            return s_impl.StartAsync(actionAsync, options);
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            return s_impl.StartAsync(actionAsync, options.ToValue());
         }
 
         #endregion
@@ -1449,7 +1488,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.FromAsync(functionAsync, new TaskObservationOptions(scheduler, ignoreExceptionsAfterUnsubscribe: false));
+            return s_impl.FromAsync(functionAsync, new TaskObservationOptions.Value(scheduler, ignoreExceptionsAfterUnsubscribe: false));
         }
 
         /// <summary>
@@ -1467,7 +1506,12 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(functionAsync));
             }
 
-            return s_impl.FromAsync(functionAsync, options);
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            return s_impl.FromAsync(functionAsync, options.ToValue());
         }
 
         /// <summary>
@@ -1501,12 +1545,17 @@ namespace System.Reactive.Linq
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
         public static IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler)
         {
+            if (functionAsync == null)
+            {
+                throw new ArgumentNullException(nameof(functionAsync));
+            }
+
             if (scheduler == null)
             {
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-           return FromAsync(functionAsync, new TaskObservationOptions(scheduler, ignoreExceptionsAfterUnsubscribe: false));
+            return s_impl.FromAsync(functionAsync, new TaskObservationOptions.Value(scheduler, ignoreExceptionsAfterUnsubscribe: false));
         }
 
         /// <summary>
@@ -1526,7 +1575,12 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(functionAsync));
             }
 
-            return s_impl.FromAsync(functionAsync, options);
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            return s_impl.FromAsync(functionAsync, options.ToValue());
         }
 
         #endregion
@@ -1558,12 +1612,17 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
         public static IObservable<Unit> FromAsync(Func<Task> actionAsync, IScheduler scheduler)
         {
+            if (actionAsync == null)
+            {
+                throw new ArgumentNullException(nameof(actionAsync));
+            }
+
             if (scheduler == null)
             {
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return FromAsync(actionAsync, new TaskObservationOptions(scheduler, ignoreExceptionsAfterUnsubscribe: false));
+            return s_impl.FromAsync(actionAsync, new TaskObservationOptions.Value(scheduler, ignoreExceptionsAfterUnsubscribe: false));
         }
 
         /// <summary>
@@ -1580,7 +1639,12 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(actionAsync));
             }
 
-            return s_impl.FromAsync(actionAsync, options);
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            return s_impl.FromAsync(actionAsync, options.ToValue());
         }
 
         /// <summary>
@@ -1612,12 +1676,17 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="actionAsync"/> is null or <paramref name="scheduler"/> is null.</exception>
         public static IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler)
         {
+            if (actionAsync == null)
+            {
+                throw new ArgumentNullException(nameof(actionAsync));
+            }
+
             if (scheduler == null)
             {
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return FromAsync(actionAsync, new TaskObservationOptions(scheduler, ignoreExceptionsAfterUnsubscribe: false));
+            return s_impl.FromAsync(actionAsync, new TaskObservationOptions.Value(scheduler, ignoreExceptionsAfterUnsubscribe: false));
         }
 
         /// <summary>
@@ -1636,7 +1705,12 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(actionAsync));
             }
 
-            return s_impl.FromAsync(actionAsync, options);
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            return s_impl.FromAsync(actionAsync, options.ToValue());
         }
 
         #endregion

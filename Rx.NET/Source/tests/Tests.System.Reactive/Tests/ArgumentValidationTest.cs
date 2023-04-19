@@ -93,7 +93,7 @@ namespace ReactiveTests.Tests
 
                 { "CancellationToken", new CancellationToken() },
 
-                { "TaskObservationOptions", new TaskObservationOptions() },
+                { "TaskObservationOptions", new TaskObservationOptions(null, false) },
 
                 { "Action", new Action(() => { }) },
 

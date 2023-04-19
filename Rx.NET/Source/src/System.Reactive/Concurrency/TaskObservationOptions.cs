@@ -50,7 +50,7 @@ namespace System.Reactive.Concurrency
     /// truly unavoidable.)
     /// </para>
     /// </remarks>
-    public readonly struct TaskObservationOptions
+    public sealed class TaskObservationOptions
     {
         public TaskObservationOptions(
             IScheduler? scheduler,
@@ -84,5 +84,49 @@ namespace System.Reactive.Concurrency
         /// they will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
         /// </remarks>
         public bool IgnoreExceptionsAfterUnsubscribe { get; }
+
+        internal Value ToValue() => new Value(this.Scheduler, this.IgnoreExceptionsAfterUnsubscribe);
+
+        /// <summary>
+        /// Value-type representation.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The public API surface area for <see cref="TaskObservationOptions"/> is a class because
+        /// using a value type would run into various issues. The type might appear in expression
+        /// trees due to use of <see cref="System.Reactive.Linq.IQbservable{T}"/>, which limits us
+        /// to a fairly old subset of C#. It means we can't use the <c>in</c> modifier on
+        /// parameters, which in turn prevents us from passing options by reference, increasing the
+        /// overhead of each method call. Also, options types such as this aren't normally value
+        /// types, so it would be a curious design choice.
+        /// </para>
+        /// <para>
+        /// The downside of using a class is that it entails an extra allocation. Since the feature
+        /// for which this is designed (the ability to swallow unhandled exceptions thrown by tasks
+        /// after unsubscription) is one we don't expect most applications to use, that shouldn't
+        /// be a problem. However, to accommodate this feature, common code paths shared by various
+        /// overloads need the information that a <see cref="TaskObservationOptions"/> holds. The
+        /// easy approach would be to construct an instance of this type in overloads that don't
+        /// take one as an argument. But that would be impose an additional allocation on code that
+        /// doesn't want this new feature.
+        /// </para>
+        /// <para>
+        /// So although we can't use a value type with <c>in</c> in public APIs dues to constraints
+        /// on expression trees, we can do so internally. This type is a value-typed version of
+        /// <see cref="TaskObservationOptions"/> enabling us to share code paths without forcing
+        /// new allocations on existing code.
+        /// </para>
+        /// </remarks>
+        internal readonly struct Value
+        {
+            internal Value(IScheduler? scheduler, bool ignoreExceptionsAfterUnsubscribe)
+            {
+                Scheduler = scheduler;
+                IgnoreExceptionsAfterUnsubscribe = ignoreExceptionsAfterUnsubscribe;
+            }
+
+            public IScheduler? Scheduler { get; }
+            public bool IgnoreExceptionsAfterUnsubscribe { get; }
+        }
     }
 }

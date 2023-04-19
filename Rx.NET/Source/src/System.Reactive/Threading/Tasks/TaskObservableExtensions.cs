@@ -160,8 +160,24 @@ namespace System.Reactive.Threading.Tasks
                 throw new ArgumentNullException(nameof(task));
             }
 
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             return ToObservableImpl(task, options.Scheduler, options.IgnoreExceptionsAfterUnsubscribe);
         }
+
+        internal static IObservable<Unit> ToObservable(this Task task, TaskObservationOptions.Value options)
+        {
+            if (task == null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            return ToObservableImpl(task, options.Scheduler, options.IgnoreExceptionsAfterUnsubscribe);
+        }
+
 
         private static IObservable<Unit> ToObservableImpl(Task task, IScheduler? scheduler, bool ignoreExceptionsAfterUnsubscribe)
         {
@@ -264,6 +280,21 @@ namespace System.Reactive.Threading.Tasks
         /// <exception cref="ArgumentNullException"><paramref name="task"/> is <c>null</c>.</exception>
         /// <remarks>If the specified task object supports cancellation, consider using <see cref="Observable.FromAsync{TResult}(Func{CancellationToken, Task{TResult}})"/> instead.</remarks>
         public static IObservable<TResult> ToObservable<TResult>(this Task<TResult> task, TaskObservationOptions options)
+        {
+            if (task == null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            return ToObservableImpl(task, options.Scheduler, options.IgnoreExceptionsAfterUnsubscribe);
+        }
+
+        internal static IObservable<TResult> ToObservable<TResult>(this Task<TResult> task, TaskObservationOptions.Value options)
         {
             if (task == null)
             {

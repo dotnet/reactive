@@ -4981,6 +4981,8 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(provider));
             if (actionAsync == null)
                 throw new ArgumentNullException(nameof(actionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -5078,6 +5080,8 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(provider));
             if (actionAsync == null)
                 throw new ArgumentNullException(nameof(actionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -5207,6 +5211,8 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -5241,6 +5247,8 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -13622,6 +13630,8 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(provider));
             if (actionAsync == null)
                 throw new ArgumentNullException(nameof(actionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -13765,6 +13775,8 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(provider));
             if (actionAsync == null)
                 throw new ArgumentNullException(nameof(actionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -13960,6 +13972,8 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -14002,6 +14016,8 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(

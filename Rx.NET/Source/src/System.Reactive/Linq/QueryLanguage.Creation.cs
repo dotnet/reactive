@@ -301,12 +301,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TValue> Defer<TValue>(Func<Task<IObservable<TValue>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(observableFactoryAsync, new TaskObservationOptions(null, ignoreExceptionsAfterUnsubscribe)).Merge());
+            return Defer(() => StartAsync(observableFactoryAsync, new TaskObservationOptions.Value(null, ignoreExceptionsAfterUnsubscribe)).Merge());
         }
 
         public virtual IObservable<TValue> Defer<TValue>(Func<CancellationToken, Task<IObservable<TValue>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(observableFactoryAsync, new TaskObservationOptions(null, ignoreExceptionsAfterUnsubscribe)).Merge());
+            return Defer(() => StartAsync(observableFactoryAsync, new TaskObservationOptions.Value(null, ignoreExceptionsAfterUnsubscribe)).Merge());
         }
 
         #endregion

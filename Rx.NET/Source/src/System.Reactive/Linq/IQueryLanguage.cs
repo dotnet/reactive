@@ -195,25 +195,25 @@ namespace System.Reactive.Linq
 
         IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync);
         IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync);
-        IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, TaskObservationOptions options);
-        IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, TaskObservationOptions options);
+        IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, in TaskObservationOptions.Value options);
+        IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, in TaskObservationOptions.Value options);
 
         IObservable<Unit> Start(Action action);
         IObservable<Unit> Start(Action action, IScheduler scheduler);
 
         IObservable<Unit> StartAsync(Func<Task> actionAsync);
         IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync);
-        IObservable<Unit> StartAsync(Func<Task> actionAsync, TaskObservationOptions options);
-        IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, TaskObservationOptions options);
+        IObservable<Unit> StartAsync(Func<Task> actionAsync, in TaskObservationOptions.Value options);
+        IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, in TaskObservationOptions.Value options);
 
         IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync);
         IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync);
         IObservable<Unit> FromAsync(Func<Task> actionAsync);
         IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync);
-        IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, TaskObservationOptions options);
-        IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, TaskObservationOptions options);
-        IObservable<Unit> FromAsync(Func<Task> actionAsync, TaskObservationOptions options);
-        IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, TaskObservationOptions options);
+        IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, TaskObservationOptions.Value options);
+        IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, TaskObservationOptions.Value options);
+        IObservable<Unit> FromAsync(Func<Task> actionAsync, TaskObservationOptions.Value options);
+        IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, TaskObservationOptions.Value options);
 
         Func<IObservable<TResult>> ToAsync<TResult>(Func<TResult> function);
         Func<IObservable<TResult>> ToAsync<TResult>(Func<TResult> function, IScheduler scheduler);
