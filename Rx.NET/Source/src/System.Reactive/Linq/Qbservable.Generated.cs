@@ -1,5 +1,5 @@
 ﻿/*
- * WARNING: Auto-generated file (merged on 06/13/2018)
+ * WARNING: Auto-generated file (merged on 04/19/2023)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 #nullable enable
@@ -3601,6 +3601,43 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
+        /// Returns an observable sequence that starts the specified asynchronous factory function whenever a new observer subscribes.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type of the elements in the sequence returned by the factory function, and in the resulting sequence.</typeparam>
+        /// <param name="observableFactoryAsync">Asynchronous factory function to start for each observer that subscribes to the resulting sequence.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="E:System.Threading.Tasks.TaskScheduler.UnobservedTaskException" />.
+        /// </param>
+        /// <returns>An observable sequence whose observers trigger the given asynchronous observable factory function to be started.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="observableFactoryAsync" /> is null.</exception>
+        /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
+        public static IQbservable<TResult> Defer<TResult>(this IQbservableProvider provider, Expression<Func<Task<IObservable<TResult>>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (observableFactoryAsync == null)
+                throw new ArgumentNullException(nameof(observableFactoryAsync));
+
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Defer<TResult>(default(IQbservableProvider), default(Expression<Func<Task<IObservable<TResult>>>>), default(bool))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    observableFactoryAsync,
+                    Expression.Constant(ignoreExceptionsAfterUnsubscribe, typeof(bool))
+                )
+            );
+        }
+
+        /// <summary>
         /// Returns an observable sequence that starts the specified cancellable asynchronous factory function whenever a new observer subscribes.
         /// The CancellationToken passed to the asynchronous factory function is tied to the returned disposable subscription, allowing best-effort cancellation.
         /// </summary>
@@ -3629,6 +3666,45 @@ namespace System.Reactive.Linq
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     observableFactoryAsync
+                )
+            );
+        }
+
+        /// <summary>
+        /// Returns an observable sequence that starts the specified cancellable asynchronous factory function whenever a new observer subscribes.
+        /// The CancellationToken passed to the asynchronous factory function is tied to the returned disposable subscription, allowing best-effort cancellation.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type of the elements in the sequence returned by the factory function, and in the resulting sequence.</typeparam>
+        /// <param name="observableFactoryAsync">Asynchronous factory function to start for each observer that subscribes to the resulting sequence.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="E:System.Threading.Tasks.TaskScheduler.UnobservedTaskException" />.
+        /// </param>
+        /// <returns>An observable sequence whose observers trigger the given asynchronous observable factory function to be started.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="observableFactoryAsync" /> is null.</exception>
+        /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
+        /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous observable factory function will be signaled.</remarks>
+        public static IQbservable<TResult> DeferAsync<TResult>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<IObservable<TResult>>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (observableFactoryAsync == null)
+                throw new ArgumentNullException(nameof(observableFactoryAsync));
+
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.DeferAsync<TResult>(default(IQbservableProvider), default(Expression<Func<CancellationToken, Task<IObservable<TResult>>>>), default(bool))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    observableFactoryAsync,
+                    Expression.Constant(ignoreExceptionsAfterUnsubscribe, typeof(bool))
                 )
             );
         }
@@ -4862,7 +4938,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// </summary>
         /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="actionAsync">Asynchronous action to convert.</param>
@@ -4891,7 +4967,40 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <param name="actionAsync">Asynchronous action to convert.</param>
+        /// <param name="options">Controls how the tasks's progress is observed.</param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="actionAsync" /> is null.</exception>
+        public static IQbservable<Unit> FromAsync(this IQbservableProvider provider, Expression<Func<Task>> actionAsync, TaskObservationOptions options)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (actionAsync == null)
+                throw new ArgumentNullException(nameof(actionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
+            return provider.CreateQuery<Unit>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.FromAsync(default(IQbservableProvider), default(Expression<Func<Task>>), default(TaskObservationOptions))),
+#else
+                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    actionAsync,
+                    Expression.Constant(options, typeof(TaskObservationOptions))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// </summary>
         /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="actionAsync">Asynchronous action to convert.</param>
@@ -4924,7 +5033,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
         /// </summary>
         /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
@@ -4955,7 +5064,42 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <param name="actionAsync">Asynchronous action to convert.</param>
+        /// <param name="options">Controls how the tasks's progress is observed.</param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="actionAsync" /> is null.</exception>
+        public static IQbservable<Unit> FromAsync(this IQbservableProvider provider, Expression<Func<CancellationToken, Task>> actionAsync, TaskObservationOptions options)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (actionAsync == null)
+                throw new ArgumentNullException(nameof(actionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
+            return provider.CreateQuery<Unit>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.FromAsync(default(IQbservableProvider), default(Expression<Func<CancellationToken, Task>>), default(TaskObservationOptions))),
+#else
+                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    actionAsync,
+                    Expression.Constant(options, typeof(TaskObservationOptions))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Converts an asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
         /// </summary>
         /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
@@ -4990,7 +5134,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// </summary>
         /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
@@ -5020,7 +5164,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
         /// </summary>
         /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
@@ -5052,7 +5196,77 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to convert.</param>
+        /// <param name="options">Controls how the tasks's progress is observed.</param>
+        /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="functionAsync" /> is null.</exception>
+        public static IQbservable<TResult> FromAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, TaskObservationOptions options)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (functionAsync == null)
+                throw new ArgumentNullException(nameof(functionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.FromAsync<TResult>(default(IQbservableProvider), default(Expression<Func<Task<TResult>>>), default(TaskObservationOptions))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    functionAsync,
+                    Expression.Constant(options, typeof(TaskObservationOptions))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to convert.</param>
+        /// <param name="options">Controls how the tasks's progress is observed.</param>
+        /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="functionAsync" /> is null.</exception>
+        /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
+        public static IQbservable<TResult> FromAsync<TResult>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<TResult>>> functionAsync, TaskObservationOptions options)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (functionAsync == null)
+                throw new ArgumentNullException(nameof(functionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.FromAsync<TResult>(default(IQbservableProvider), default(Expression<Func<CancellationToken, Task<TResult>>>), default(TaskObservationOptions))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    functionAsync,
+                    Expression.Constant(options, typeof(TaskObservationOptions))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// </summary>
         /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
@@ -5086,7 +5300,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// Converts an asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
         /// </summary>
         /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
@@ -11175,7 +11389,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TSignal">The arbitrary element type signaled by the handler observable.</typeparam>
         /// <param name="source">Observable sequence to keep repeating when it successfully terminates.</param>
-        /// <param name="handler">The function that is called for each observer and takes an observable sequence objects.
+        /// <param name="handler">The function that is called for each observer and takes an observable sequence of objects.
         /// It should return an observable of arbitrary items that should signal that arbitrary item in
         /// response to receiving the completion signal from the source observable. If this observable signals
         /// a terminal event, the sequence is terminated with that signal instead.</param>
@@ -13396,6 +13610,49 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="actionAsync">Asynchronous action to run.</param>
+        /// <param name="options">Controls how the tasks's progress is observed.</param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="actionAsync" /> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>The action is started immediately, not during the subscription of the resulting sequence.</description>
+        /// </item>
+        /// <item>
+        /// <description>Multiple subscriptions to the resulting sequence can observe the action's outcome.</description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public static IQbservable<Unit> StartAsync(this IQbservableProvider provider, Expression<Func<Task>> actionAsync, TaskObservationOptions options)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (actionAsync == null)
+                throw new ArgumentNullException(nameof(actionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
+            return provider.CreateQuery<Unit>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.StartAsync(default(IQbservableProvider), default(Expression<Func<Task>>), default(TaskObservationOptions))),
+#else
+                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    actionAsync,
+                    Expression.Constant(options, typeof(TaskObservationOptions))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous action, surfacing the result through an observable sequence.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <param name="actionAsync">Asynchronous action to run.</param>
         /// <param name="scheduler">Scheduler on which to notify observers.</param>
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
         /// <exception cref="ArgumentNullException">
@@ -13479,6 +13736,59 @@ namespace System.Reactive.Linq
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync
+                )
+            );
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous action, surfacing the result through an observable sequence.
+        /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <param name="actionAsync">Asynchronous action to run.</param>
+        /// <param name="options">Controls how the tasks's progress is observed.</param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="actionAsync" /> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>The action is started immediately, not during the subscription of the resulting sequence.</description>
+        /// </item>
+        /// <item>
+        /// <description>Multiple subscriptions to the resulting sequence can observe the action's outcome.</description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// If any subscription to the resulting sequence is disposed, the CancellationToken is set. The observer associated to the disposed
+        /// subscription won't see the TaskCanceledException, but other observers will. You can protect against this using the Catch operator.
+        /// Be careful when handing out the resulting sequence because of this behavior. The most common use is to have a single subscription
+        /// to the resulting sequence, which controls the CancellationToken state. Alternatively, you can control subscription behavior using
+        /// multicast operators.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public static IQbservable<Unit> StartAsync(this IQbservableProvider provider, Expression<Func<CancellationToken, Task>> actionAsync, TaskObservationOptions options)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (actionAsync == null)
+                throw new ArgumentNullException(nameof(actionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
+            return provider.CreateQuery<Unit>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.StartAsync(default(IQbservableProvider), default(Expression<Func<CancellationToken, Task>>), default(TaskObservationOptions))),
+#else
+                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    actionAsync,
+                    Expression.Constant(options, typeof(TaskObservationOptions))
                 )
             );
         }
@@ -13628,14 +13938,68 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
+        /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
         /// </summary>
         /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
         /// <param name="functionAsync">Asynchronous function to run.</param>
-        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <param name="options">Controls how the tasks's progress is observed.</param>
         /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="functionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
+        /// <paramref name="functionAsync" /> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>The function is started immediately, not during the subscription of the resulting sequence.</description>
+        /// </item>
+        /// <item>
+        /// <description>Multiple subscriptions to the resulting sequence can observe the function's result.</description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// If any subscription to the resulting sequence is disposed, the CancellationToken is set. The observer associated to the disposed
+        /// subscription won't see the TaskCanceledException, but other observers will. You can protect against this using the Catch operator.
+        /// Be careful when handing out the resulting sequence because of this behavior. The most common use is to have a single subscription
+        /// to the resulting sequence, which controls the CancellationToken state. Alternatively, you can control subscription behavior using
+        /// multicast operators.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<TResult>>> functionAsync, TaskObservationOptions options)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (functionAsync == null)
+                throw new ArgumentNullException(nameof(functionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.StartAsync<TResult>(default(IQbservableProvider), default(Expression<Func<CancellationToken, Task<TResult>>>), default(TaskObservationOptions))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    functionAsync,
+                    Expression.Constant(options, typeof(TaskObservationOptions))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous function, surfacing the result through an observable sequence.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to run.</param>
+        /// <param name="options">Controls how the tasks's progress is observed.</param>
+        /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="functionAsync" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
         /// <item>
@@ -13646,26 +14010,26 @@ namespace System.Reactive.Linq
         /// </item>
         /// </list>
         /// </remarks>
-        public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, IScheduler scheduler)
+        public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, TaskObservationOptions options)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.StartAsync<TResult>(default(IQbservableProvider), default(Expression<Func<Task<TResult>>>), default(IScheduler))),
+                    InfoOf(() => Qbservable.StartAsync<TResult>(default(IQbservableProvider), default(Expression<Func<Task<TResult>>>), default(TaskObservationOptions))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync,
-                    Expression.Constant(scheduler, typeof(IScheduler))
+                    Expression.Constant(options, typeof(TaskObservationOptions))
                 )
             );
         }
@@ -13714,6 +14078,50 @@ namespace System.Reactive.Linq
                     null,
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.StartAsync<TResult>(default(IQbservableProvider), default(Expression<Func<CancellationToken, Task<TResult>>>), default(IScheduler))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    functionAsync,
+                    Expression.Constant(scheduler, typeof(IScheduler))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous function, surfacing the result through an observable sequence.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to run.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="functionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>The function is started immediately, not during the subscription of the resulting sequence.</description>
+        /// </item>
+        /// <item>
+        /// <description>Multiple subscriptions to the resulting sequence can observe the function's result.</description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, IScheduler scheduler)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (functionAsync == null)
+                throw new ArgumentNullException(nameof(functionAsync));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.StartAsync<TResult>(default(IQbservableProvider), default(Expression<Func<Task<TResult>>>), default(IScheduler))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
 #endif

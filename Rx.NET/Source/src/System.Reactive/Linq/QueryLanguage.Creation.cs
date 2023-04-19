@@ -299,14 +299,14 @@ namespace System.Reactive.Linq
 
         #region + DeferAsync +
 
-        public virtual IObservable<TValue> Defer<TValue>(Func<Task<IObservable<TValue>>> observableFactoryAsync)
+        public virtual IObservable<TValue> Defer<TValue>(Func<Task<IObservable<TValue>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(observableFactoryAsync).Merge());
+            return Defer(() => StartAsync(observableFactoryAsync, new TaskObservationOptions.Value(null, ignoreExceptionsAfterUnsubscribe)).Merge());
         }
 
-        public virtual IObservable<TValue> Defer<TValue>(Func<CancellationToken, Task<IObservable<TValue>>> observableFactoryAsync)
+        public virtual IObservable<TValue> Defer<TValue>(Func<CancellationToken, Task<IObservable<TValue>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(observableFactoryAsync).Merge());
+            return Defer(() => StartAsync(observableFactoryAsync, new TaskObservationOptions.Value(null, ignoreExceptionsAfterUnsubscribe)).Merge());
         }
 
         #endregion

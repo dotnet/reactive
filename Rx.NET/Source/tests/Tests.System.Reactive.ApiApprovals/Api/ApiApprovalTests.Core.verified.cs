@@ -487,6 +487,12 @@ namespace System.Reactive.Concurrency
         public override System.IDisposable Schedule<TState>(TState state, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
         public override System.IDisposable Schedule<TState>(TState state, System.TimeSpan dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
     }
+    public sealed class TaskObservationOptions
+    {
+        public TaskObservationOptions(System.Reactive.Concurrency.IScheduler? scheduler, bool ignoreExceptionsAfterUnsubscribe) { }
+        public bool IgnoreExceptionsAfterUnsubscribe { get; }
+        public System.Reactive.Concurrency.IScheduler? Scheduler { get; }
+    }
     public sealed class TaskPoolScheduler : System.Reactive.Concurrency.LocalScheduler, System.Reactive.Concurrency.ISchedulerLongRunning, System.Reactive.Concurrency.ISchedulerPeriodic
     {
         public TaskPoolScheduler(System.Threading.Tasks.TaskFactory taskFactory) { }
@@ -990,7 +996,9 @@ namespace System.Reactive.Linq
         public static System.IObservable<TSource> DefaultIfEmpty<TSource>(this System.IObservable<TSource> source, TSource defaultValue) { }
         public static System.IObservable<TResult> Defer<TResult>(System.Func<System.IObservable<TResult>> observableFactory) { }
         public static System.IObservable<TResult> Defer<TResult>(System.Func<System.Threading.Tasks.Task<System.IObservable<TResult>>> observableFactoryAsync) { }
+        public static System.IObservable<TResult> Defer<TResult>(System.Func<System.Threading.Tasks.Task<System.IObservable<TResult>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.IObservable<TResult> DeferAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>> observableFactoryAsync) { }
+        public static System.IObservable<TResult> DeferAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.IObservable<TSource> Delay<TSource>(this System.IObservable<TSource> source, System.DateTimeOffset dueTime) { }
         public static System.IObservable<TSource> Delay<TSource>(this System.IObservable<TSource> source, System.TimeSpan dueTime) { }
         public static System.IObservable<TSource> Delay<TSource>(this System.IObservable<TSource> source, System.DateTimeOffset dueTime, System.Reactive.Concurrency.IScheduler scheduler) { }
@@ -1049,11 +1057,15 @@ namespace System.Reactive.Linq
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync) { }
         public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync) { }
         public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<System.IObservable<System.Reactive.Unit>> FromAsyncPattern(System.Func<System.AsyncCallback, object?, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
         [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
@@ -1379,11 +1391,15 @@ namespace System.Reactive.Linq
         public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync) { }
         public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync) { }
         public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<TSource> StartWith<TSource>(this System.IObservable<TSource> source, System.Collections.Generic.IEnumerable<TSource> values) { }
         public static System.IObservable<TSource> StartWith<TSource>(this System.IObservable<TSource> source, params TSource[] values) { }
         public static System.IObservable<TSource> StartWith<TSource>(this System.IObservable<TSource> source, System.Reactive.Concurrency.IScheduler scheduler, System.Collections.Generic.IEnumerable<TSource> values) { }
@@ -1899,7 +1915,9 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TSource> DefaultIfEmpty<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, TSource defaultValue) { }
         public static System.Reactive.Linq.IQbservable<TResult> Defer<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.IObservable<TResult>>> observableFactory) { }
         public static System.Reactive.Linq.IQbservable<TResult> Defer<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<System.IObservable<TResult>>>> observableFactoryAsync) { }
+        public static System.Reactive.Linq.IQbservable<TResult> Defer<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<System.IObservable<TResult>>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.Reactive.Linq.IQbservable<TResult> DeferAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>>> observableFactoryAsync) { }
+        public static System.Reactive.Linq.IQbservable<TResult> DeferAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.Reactive.Linq.IQbservable<TSource> Delay<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.DateTimeOffset dueTime) { }
         public static System.Reactive.Linq.IQbservable<TSource> Delay<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.TimeSpan dueTime) { }
         public static System.Reactive.Linq.IQbservable<TSource> Delay<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.DateTimeOffset dueTime, System.Reactive.Concurrency.IScheduler scheduler) { }
@@ -1940,11 +1958,15 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> FromAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task>> actionAsync) { }
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> FromAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task>> actionAsync) { }
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> FromAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> FromAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> FromAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> FromAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<TResult> FromAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<TResult>>> functionAsync) { }
         public static System.Reactive.Linq.IQbservable<TResult> FromAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>>> functionAsync) { }
         public static System.Reactive.Linq.IQbservable<TResult> FromAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<TResult> FromAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<TResult> FromAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<TResult> FromAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Func<System.Reactive.Linq.IQbservable<System.Reactive.Unit>> FromAsyncPattern(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.AsyncCallback, object, System.IAsyncResult>> begin, System.Linq.Expressions.Expression<System.Action<System.IAsyncResult>> end) { }
         public static System.Func<System.Reactive.Linq.IQbservable<TResult>> FromAsyncPattern<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.AsyncCallback, object, System.IAsyncResult>> begin, System.Linq.Expressions.Expression<System.Func<System.IAsyncResult, TResult>> end) { }
         public static System.Func<TArg1, System.Reactive.Linq.IQbservable<System.Reactive.Unit>> FromAsyncPattern<TArg1>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<TArg1, System.AsyncCallback, object, System.IAsyncResult>> begin, System.Linq.Expressions.Expression<System.Action<System.IAsyncResult>> end) { }
@@ -2203,11 +2225,15 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> StartAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task>> actionAsync) { }
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> StartAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task>> actionAsync) { }
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> StartAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> StartAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> StartAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> StartAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<TResult> StartAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<TResult>>> functionAsync) { }
         public static System.Reactive.Linq.IQbservable<TResult> StartAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>>> functionAsync) { }
         public static System.Reactive.Linq.IQbservable<TResult> StartAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<TResult> StartAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<TResult> StartAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<TResult> StartAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<TSource> StartWith<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Collections.Generic.IEnumerable<TSource> values) { }
         public static System.Reactive.Linq.IQbservable<TSource> StartWith<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, params TSource[] values) { }
         public static System.Reactive.Linq.IQbservable<TSource> StartWith<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Reactive.Concurrency.IScheduler scheduler, System.Collections.Generic.IEnumerable<TSource> values) { }
@@ -3121,8 +3147,10 @@ namespace System.Reactive.Threading.Tasks
     {
         public static System.IObservable<System.Reactive.Unit> ToObservable(this System.Threading.Tasks.Task task) { }
         public static System.IObservable<System.Reactive.Unit> ToObservable(this System.Threading.Tasks.Task task, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> ToObservable(this System.Threading.Tasks.Task task, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<TResult> ToObservable<TResult>(this System.Threading.Tasks.Task<TResult> task) { }
         public static System.IObservable<TResult> ToObservable<TResult>(this System.Threading.Tasks.Task<TResult> task, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> ToObservable<TResult>(this System.Threading.Tasks.Task<TResult> task, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Threading.Tasks.Task<TResult> ToTask<TResult>(this System.IObservable<TResult> observable) { }
         public static System.Threading.Tasks.Task<TResult> ToTask<TResult>(this System.IObservable<TResult> observable, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Threading.Tasks.Task<TResult> ToTask<TResult>(this System.IObservable<TResult> observable, System.Threading.CancellationToken cancellationToken) { }
