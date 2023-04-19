@@ -50,7 +50,7 @@ namespace System.Reactive.Concurrency
     /// truly unavoidable.)
     /// </para>
     /// </remarks>
-    public struct TaskObservationOptions
+    public readonly struct TaskObservationOptions
     {
         public TaskObservationOptions(
             IScheduler? scheduler,
