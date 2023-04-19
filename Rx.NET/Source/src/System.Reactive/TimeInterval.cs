@@ -12,9 +12,7 @@ namespace System.Reactive
     /// The time interval can represent the time it took to produce the value, the interval relative to a previous value, the value's delivery time relative to a base, etc.
     /// </summary>
     /// <typeparam name="T">The type of the value being annotated with time interval information.</typeparam>
-#if !NO_SERIALIZABLE
     [Serializable]
-#endif
     public readonly struct TimeInterval<T> : IEquatable<TimeInterval<T>>
     {
         /// <summary>

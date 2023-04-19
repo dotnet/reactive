@@ -304,8 +304,6 @@ namespace ReactiveTests.Tests
             );
         }
 
-
-#if !NO_THREAD
         [TestMethod]
         public void Await_Blocking()
         {
@@ -319,7 +317,6 @@ namespace ReactiveTests.Tests
             var s = new AsyncSubject<int>();
             GetResult_Blocking_ThrowImpl(s.GetAwaiter());
         }
-#endif
 
         [TestMethod]
         public void GetResult_Empty()
@@ -329,7 +326,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => s.GetResult());
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void GetResult_Blocking()
         {
@@ -401,7 +397,6 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, y);
             Assert.True(s.IsCompleted);
         }
-#endif
 
         [TestMethod]
         public void GetResult_Context()

@@ -446,7 +446,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Synchronize(s, null));
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void Subject_Synchronize1()
         {
@@ -501,7 +500,6 @@ namespace ReactiveTests.Tests
 
             Assert.Equal(Enumerable.Range(0, N).Sum(), y);
         }
-#endif
 
         [TestMethod]
         public void HasObservers()

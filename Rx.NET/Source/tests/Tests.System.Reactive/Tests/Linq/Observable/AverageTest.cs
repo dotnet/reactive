@@ -1287,7 +1287,6 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-#if !NO_THREAD
         [TestMethod]
         public void Average_InjectOverflow_Int32()
         {
@@ -1387,8 +1386,7 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
-#endif
-#if !CRIPPLED_REFLECTION || NETCOREAPP1_1 || NETCOREAPP1_0
+
         private class OverflowInjection<T> : IObservable<T>
         {
             private readonly IObservable<T> _source;
@@ -1408,7 +1406,6 @@ namespace ReactiveTests.Tests
                 return _source.Subscribe(observer);
             }
         }
-#endif
 #endif
 
         [TestMethod]

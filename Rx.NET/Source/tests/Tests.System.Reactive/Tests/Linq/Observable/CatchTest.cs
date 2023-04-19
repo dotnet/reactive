@@ -958,7 +958,7 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(expected);
         }
 
-#if HAS_STACKTRACE && !NO_THREAD
+#if HAS_STACKTRACE
         [TestMethod]
         public void Catch_TailRecursive2()
         {

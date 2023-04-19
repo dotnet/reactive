@@ -145,7 +145,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF && !NO_THREAD
+#if !NO_PERF
         [TestMethod]
         public void Count_InjectOverflow()
         {
@@ -442,7 +442,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF && !NO_THREAD && !CRIPPLED_REFLECTION
+#if !NO_PERF
 
         [TestMethod]
         public void Count_Predicate_InjectOverflow()
@@ -457,7 +457,6 @@ namespace ReactiveTests.Tests
 
     }
 
-#if !CRIPPLED_REFLECTION || NETCOREAPP1_1 || NETCOREAPP1_0
     internal class OverflowInjection<T> : IObservable<T>
     {
         private readonly IObservable<T> _source;
@@ -477,5 +476,4 @@ namespace ReactiveTests.Tests
             return _source.Subscribe(observer);
         }
     }
-#endif
 }

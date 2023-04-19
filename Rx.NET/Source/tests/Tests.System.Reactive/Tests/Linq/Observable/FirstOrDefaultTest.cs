@@ -64,7 +64,6 @@ namespace ReactiveTests.Tests
             Assert.Equal(value, Observable.Range(value, 10).FirstOrDefault());
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void FirstOrDefault_NoDoubleSet()
         {
@@ -97,7 +96,6 @@ namespace ReactiveTests.Tests
 
             o.Done();
         }
-#endif
 
         private class O : IObservable<int>
         {

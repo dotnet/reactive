@@ -29,7 +29,6 @@ namespace System.Reactive.Concurrency
         /// </summary>
         public static NewThreadScheduler Default => Instance.Value;
 
-#if !NO_THREAD
         /// <summary>
         /// Creates an object that schedules each unit of work on a separate thread.
         /// </summary>
@@ -37,10 +36,6 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="threadFactory"/> is <c>null</c>.</exception>
         public NewThreadScheduler(Func<ThreadStart, Thread> threadFactory)
         {
-#else
-        private NewThreadScheduler(Func<ThreadStart, Thread> threadFactory)
-        {
-#endif
             _threadFactory = threadFactory ?? throw new ArgumentNullException(nameof(threadFactory));
         }
 

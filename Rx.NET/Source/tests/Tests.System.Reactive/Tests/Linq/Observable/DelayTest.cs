@@ -447,7 +447,6 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void Delay_TimeSpan_Real_Simple1()
         {
@@ -459,7 +458,6 @@ namespace ReactiveTests.Tests
         {
             Delay_TimeSpan_Real_Simple1_Impl(ThreadPoolScheduler.Instance);
         }
-#endif
 
         private void Delay_TimeSpan_Real_Simple1_Impl(IScheduler scheduler)
         {
@@ -483,7 +481,6 @@ namespace ReactiveTests.Tests
             Assert.True(new[] { 1, 2, 3 }.SequenceEqual(lst));
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void Delay_TimeSpan_Real_Error1()
         {
@@ -495,7 +492,6 @@ namespace ReactiveTests.Tests
         {
             Delay_TimeSpan_Real_Error1_Impl(ThreadPoolScheduler.Instance);
         }
-#endif
 
         private void Delay_TimeSpan_Real_Error1_Impl(IScheduler scheduler)
         {
@@ -521,7 +517,6 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void Delay_TimeSpan_Real_Error2()
         {
@@ -533,7 +528,6 @@ namespace ReactiveTests.Tests
         {
             Delay_TimeSpan_Real_Error2_Impl(ThreadPoolScheduler.Instance);
         }
-#endif
 
         private void Delay_TimeSpan_Real_Error2_Impl(IScheduler scheduler)
         {
@@ -560,7 +554,6 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void Delay_TimeSpan_Real_Error3()
         {
@@ -572,7 +565,6 @@ namespace ReactiveTests.Tests
         {
             Delay_TimeSpan_Real_Error3_Impl(ThreadPoolScheduler.Instance);
         }
-#endif
 
         private void Delay_TimeSpan_Real_Error3_Impl(IScheduler scheduler)
         {

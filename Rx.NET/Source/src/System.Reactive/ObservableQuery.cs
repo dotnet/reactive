@@ -194,11 +194,7 @@ namespace System.Reactive
             {
                 var method = node.Method;
                 var declaringType = method.DeclaringType;
-#if (CRIPPLED_REFLECTION && HAS_WINRT)
-                var baseType = declaringType?.GetTypeInfo().BaseType;
-#else
                 var baseType = declaringType?.BaseType;
-#endif
                 if (baseType == typeof(QueryablePattern))
                 {
                     if (method.Name == "Then")
@@ -386,20 +382,11 @@ namespace System.Reactive
                 {
                     targetType = method.DeclaringType!; // NB: These methods were found from a declaring type.
 
-#if (CRIPPLED_REFLECTION && HAS_WINRT)
-                    var typeInfo = targetType.GetTypeInfo();
-                    if (typeInfo.IsDefined(typeof(LocalQueryMethodImplementationTypeAttribute), false))
-                    {
-                        var mapping = (LocalQueryMethodImplementationTypeAttribute)typeInfo.GetCustomAttributes(typeof(LocalQueryMethodImplementationTypeAttribute), false).Single();
-                        targetType = mapping.TargetType;
-                    }
-#else
                     if (targetType.IsDefined(typeof(LocalQueryMethodImplementationTypeAttribute), false))
                     {
                         var mapping = (LocalQueryMethodImplementationTypeAttribute)targetType.GetCustomAttributes(typeof(LocalQueryMethodImplementationTypeAttribute), false)[0];
                         targetType = mapping.TargetType;
                     }
-#endif
 
                     methods = GetMethods(targetType);
                 }
@@ -439,11 +426,7 @@ namespace System.Reactive
 
             private static ILookup<string, MethodInfo> GetMethods(Type type)
             {
-#if !(CRIPPLED_REFLECTION && HAS_WINRT)
-                return type.GetMethods(BindingFlags.Static | BindingFlags.Public).ToLookup(m => m.Name);
-#else
                 return type.GetTypeInfo().DeclaredMethods.Where(m => m.IsStatic && m.IsPublic).ToLookup(m => m.Name);
-#endif
             }
 
             private static bool ArgsMatch(MethodInfo method, IList<Expression> arguments, Type[]? typeArgs)

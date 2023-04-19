@@ -734,7 +734,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.NotifyOn(new MyObserver(), default(SynchronizationContext)));
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void NotifyOn_Scheduler_OnCompleted()
         {
@@ -799,7 +798,6 @@ namespace ReactiveTests.Tests
             e.WaitOne();
             Assert.Equal(N, c);
         }
-#endif
 
         [TestMethod]
         public void NotifyOn_SyncCtx()

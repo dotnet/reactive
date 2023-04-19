@@ -114,10 +114,6 @@ namespace System.Reactive
             }
         }
 
-#if (CRIPPLED_REFLECTION && HAS_WINRT)
-        public static MethodInfo GetMethod(this Type type, string name) => type.GetTypeInfo().GetDeclaredMethod(name);
-#endif
-
         /// <summary>
         /// Determine whether a type represents a WinRT event registration token
         /// (https://learn.microsoft.com/en-us/uwp/api/windows.foundation.eventregistrationtoken).

@@ -146,7 +146,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF && !NO_THREAD
+#if !NO_PERF
         [TestMethod]
         public void LongCount_InjectOverflow()
         {
@@ -443,7 +443,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF && !NO_THREAD && !CRIPPLED_REFLECTION
+#if !NO_PERF
         [TestMethod]
         public void LongCount_Predicate_InjectOverflow()
         {

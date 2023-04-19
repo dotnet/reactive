@@ -14,9 +14,7 @@ namespace Microsoft.Reactive.Testing
     /// </summary>
     /// <typeparam name="T">Type of the value.</typeparam>
     [DebuggerDisplay("{Value}@{Time}")]
-#if !NO_SERIALIZABLE
     [Serializable]
-#endif
     public readonly struct Recorded<T> : IEquatable<Recorded<T>>
     {
         // NB: Keep these fields for compat with serialized state.
