@@ -24,7 +24,7 @@ namespace System.Reactive.Concurrency
     /// had already finished by the time it was observed) or they happen later.
     /// </para>
     /// <para>
-    /// The <see cref="IgnoreExceptionsAfterUnsubscribe"/> property determines how to deal tasks
+    /// The <see cref="IgnoreExceptionsAfterUnsubscribe"/> property determines how to deal with tasks
     /// that fail after unsubscription (i.e., if an application calls <see cref="IObservable{T}.Subscribe(IObserver{T})"/>
     /// on an observable wrapping, then calls Dispose on the result before that task completes, and
     /// the task subsequently enters a faulted state). Overloads that don't take a <see cref="TaskObservationOptions"/>
