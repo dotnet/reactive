@@ -112,7 +112,6 @@ namespace ReactiveTests.Tests
             Assert.Null(xs as ISubject<int, int>);
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void Bug_1286()
         {
@@ -127,7 +126,6 @@ namespace ReactiveTests.Tests
             //if the first doesn't this one always
             disp.Dispose();
         }
-#endif
 
         [TestMethod]
         public void Bug_1287()
@@ -138,7 +136,6 @@ namespace ReactiveTests.Tests
             Assert.True(flag);
         }
 
-#if !NO_THREAD
         private static IEnumerable<int> Bug_1333_Enumerable(AsyncSubject<IDisposable> s, Semaphore sema)
         {
             var d = s.First();
@@ -159,7 +156,6 @@ namespace ReactiveTests.Tests
             d.OnCompleted();
             sema.WaitOne();
         }
-#endif
 
         [TestMethod]
         public void Bug_1295_Completed()

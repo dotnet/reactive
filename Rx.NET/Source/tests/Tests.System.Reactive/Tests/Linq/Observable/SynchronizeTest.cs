@@ -28,7 +28,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Synchronize(someObservable, null));
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void Synchronize_Range()
         {
@@ -127,7 +126,5 @@ namespace ReactiveTests.Tests
 
             Assert.Equal(Enumerable.Range(0, 200).Sum(), sum);
         }
-#endif
-
     }
 }

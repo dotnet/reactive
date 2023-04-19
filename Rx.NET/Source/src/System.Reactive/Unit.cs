@@ -7,9 +7,7 @@ namespace System.Reactive
     /// <summary>
     /// Represents a type with a single value. This type is often used to denote the successful completion of a void-returning method (C#) or a Sub procedure (Visual Basic).
     /// </summary>
-#if !NO_SERIALIZABLE
     [Serializable]
-#endif
     public readonly struct Unit : IEquatable<Unit>
     {
         /// <summary>

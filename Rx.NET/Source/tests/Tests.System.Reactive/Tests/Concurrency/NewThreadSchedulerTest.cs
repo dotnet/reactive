@@ -13,7 +13,6 @@ using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-#if !NO_THREAD
     [TestClass]
     public class NewThreadSchedulerTest
     {
@@ -35,7 +34,7 @@ namespace ReactiveTests.Tests
             var res = NewThreadScheduler.Default.Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
-#if !NO_THREAD
+
         [TestMethod]
         public void NewThread_ScheduleAction()
         {
@@ -55,7 +54,6 @@ namespace ReactiveTests.Tests
             nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
-#endif
 
 #if !NO_PERF
         [TestMethod]
@@ -87,7 +85,6 @@ namespace ReactiveTests.Tests
             d.Dispose();
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void NewThread_Periodic_NonReentrant()
         {
@@ -118,7 +115,5 @@ namespace ReactiveTests.Tests
 
             Assert.False(fail);
         }
-#endif
     }
-#endif
 }

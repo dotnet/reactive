@@ -1872,7 +1872,6 @@ namespace ReactiveTests.Tests
             Assert.Equal("***", res2);
         }
 
-#if !CRIPPLED_REFLECTION
         [TestMethod]
         public void Qbservable_Extensibility_Constructor()
         {
@@ -1894,7 +1893,6 @@ namespace ReactiveTests.Tests
 
             Assert.True(false);
         }
-#endif
 
         [TestMethod]
         public void Qbservable_HigherOrder()
@@ -1906,7 +1904,6 @@ namespace ReactiveTests.Tests
 
     public static class MyExt
     {
-#if !CRIPPLED_REFLECTION
         public static IQbservable<R> Foo<T, R>(this IQbservable<T> source, Expression<Func<T, R>> f)
         {
             return source.Provider.CreateQuery<R>(
@@ -1917,13 +1914,12 @@ namespace ReactiveTests.Tests
                 )
             );
         }
-#endif
 
         public static IObservable<R> Foo<T, R>(this IObservable<T> source, Func<T, R> f)
         {
             return source.Select(f);
         }
-#if !CRIPPLED_REFLECTION
+
         public static IQbservable<string> Bar(this IQbservable<int> source)
         {
             return source.Provider.CreateQuery<string>(
@@ -1934,13 +1930,11 @@ namespace ReactiveTests.Tests
             );
         }
 
-#endif
         public static IObservable<string> Bar(this IObservable<int> source)
         {
             return source.Select(x => new string('*', x));
         }
 
-#if !CRIPPLED_REFLECTION
         public static IQbservable<T> Qux<T>(this IQbservableProvider provider, T value)
         {
             return provider.CreateQuery<T>(
@@ -1951,14 +1945,12 @@ namespace ReactiveTests.Tests
                 )
             );
         }
-#endif
 
         public static IObservable<T> Qux<T>(T value)
         {
             return Observable.Return(value);
         }
 
-#if !CRIPPLED_REFLECTION
         public static IQbservable<R> Baz<T, R>(this IQbservable<T> source, Expression<Func<T, R>> f)
         {
             return source.Provider.CreateQuery<R>(
@@ -1969,7 +1961,6 @@ namespace ReactiveTests.Tests
                 )
             );
         }
-#endif
     }
 
     internal class MyQbservable<T> : IQbservable<T>

@@ -135,7 +135,6 @@ namespace ReactiveTests.Tests
             Assert.True(res.Count == res.Distinct().Count());
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void Next_Error()
         {
@@ -171,7 +170,5 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws(ex, () => res.MoveNext());
         }
-#endif
-
     }
 }

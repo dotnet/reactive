@@ -12,9 +12,7 @@ namespace Microsoft.Reactive.Testing
     /// Records information about subscriptions to and unsubscriptions from observable sequences.
     /// </summary>
     [DebuggerDisplay("({Subscribe}, {Unsubscribe})")]
-#if !NO_SERIALIZABLE
     [Serializable]
-#endif
     public readonly struct Subscription : IEquatable<Subscription>
     {
         /// <summary>

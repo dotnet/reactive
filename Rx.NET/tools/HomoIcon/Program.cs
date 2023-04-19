@@ -419,14 +419,10 @@ using System.Threading.Tasks;
                     Indent();
                     WriteLine("null,");
                     var cma = args.Count > 0 ? "," : "";
-                    WriteLine("#if CRIPPLED_REFLECTION", true);
-                    WriteLine("InfoOf(() => " + typeName + "." + name + g + "(" + string.Join(", ", ptps.Select(pt => "default(" + pt + ")")) + "))" + cma);
-                    WriteLine("#else", true);
                     if (!m.IsGenericMethod)
                         WriteLine("(MethodInfo)MethodInfo.GetCurrentMethod()!" + cma);
                     else
                         WriteLine("((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(" + string.Join(", ", m.GetGenericArguments().Select(ga => "typeof(" + ga.Name + ")").ToArray()) + ")" + cma);
-                    WriteLine("#endif", true);
                     for (int j = 0; j < args.Count; j++)
                         WriteLine(args[j] + (j < args.Count - 1 ? "," : ""));
                     Outdent();
@@ -605,17 +601,10 @@ using System.Threading.Tasks;
                         }
 
                         WriteLine("");
-                        WriteLine("#if CRIPPLED_REFLECTION", true);
-                        var aprs = new List<string> { "IQbservableProvider", actType };
-                        if (withScheduler)
-                            aprs.Add("IScheduler");
-                        WriteLine("var m = InfoOf(() => " + typeName + ".ToAsync" + genArgss + "(" + string.Join(", ", aprs.Select(pt => "default(" + pt + ")")) + "));");
-                        WriteLine("#else", true);
                         if (genArgs.Length == 0)
                             WriteLine("var m = (MethodInfo)MethodInfo.GetCurrentMethod()!;");
                         else
                             WriteLine("var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(" + string.Join(", ", genArgs.Select(a => "typeof(" + a + ")").ToArray()) + ");");
-                        WriteLine("#endif", true);
 
                         WriteLine("return (" + string.Join(", ", lamPars) + ") => provider.CreateQuery<" + ret + ">(");
                         Indent();
@@ -744,15 +733,10 @@ using System.Threading.Tasks;
 
                     WriteLine("");
 
-                    WriteLine("#if CRIPPLED_REFLECTION", true);
-                    var aprs = new List<string> { "IQbservableProvider", begType, endType };
-                    WriteLine("var m = InfoOf(() => " + typeName + ".FromAsyncPattern" + genArgss + "(" + string.Join(", ", aprs.Select(pt => "default(" + pt + ")")) + "));");
-                    WriteLine("#else", true);
                     if (genArgs.Length == 0)
                         WriteLine("var m = (MethodInfo)MethodInfo.GetCurrentMethod()!;");
                     else
                         WriteLine("var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(" + string.Join(", ", genArgs.Select(a => "typeof(" + a + ")").ToArray()) + ");");
-                    WriteLine("#endif", true);
 
                     WriteLine("return (" + string.Join(", ", lamPars) + ") => provider.CreateQuery<" + ret + ">(");
                     Indent();

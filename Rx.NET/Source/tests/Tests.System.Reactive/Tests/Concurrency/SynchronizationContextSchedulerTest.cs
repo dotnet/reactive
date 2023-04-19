@@ -172,7 +172,6 @@ namespace ReactiveTests.Tests
             Assert.True(ran);
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void SynchronizationContext_DontPost_Same()
         {
@@ -196,7 +195,6 @@ namespace ReactiveTests.Tests
             Assert.True(count == 0 /* no post */);
             Assert.True(ran);
         }
-#endif
 
         [TestMethod]
         public void SynchronizationContext_AlwaysPost_Different()
@@ -210,7 +208,6 @@ namespace ReactiveTests.Tests
             Assert.True(ran);
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void SynchronizationContext_AlwaysPost_Same()
         {
@@ -234,6 +231,5 @@ namespace ReactiveTests.Tests
             Assert.True(count == 1 /* post */);
             Assert.True(ran);
         }
-#endif
     }
 }

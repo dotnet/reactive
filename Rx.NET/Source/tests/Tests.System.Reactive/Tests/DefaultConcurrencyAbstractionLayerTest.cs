@@ -260,7 +260,6 @@ namespace ReactiveTests.Tests
                 }
 
                 state.Value.Set();
-#if !NO_THREAD
                 var w = new ManualResetEvent(false);
 
                 var d = slr.ScheduleLongRunning(cancel =>
@@ -276,9 +275,6 @@ namespace ReactiveTests.Tests
                 Thread.Sleep(50);
                 d.Dispose();
                 w.WaitOne();
-#else
-                state.Value.Set();
-#endif
             });
 
             e.Value.WaitOne();

@@ -33,7 +33,6 @@ namespace ReactiveTests.Tests
             Assert.True(res.Seconds < 1);
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void TaskPool_ScheduleAction()
         {
@@ -116,7 +115,6 @@ namespace ReactiveTests.Tests
             Assert.True(n >= 0);
         }
 #endif
-#endif
 
 #if !NO_PERF
         [TestMethod]
@@ -148,7 +146,6 @@ namespace ReactiveTests.Tests
             d.Dispose();
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void TaskPool_Periodic_NonReentrant()
         {
@@ -179,7 +176,6 @@ namespace ReactiveTests.Tests
 
             Assert.False(fail);
         }
-#endif
 
         [TestMethod]
         public void TaskPool_Delay_LargerThanIntMaxValue()

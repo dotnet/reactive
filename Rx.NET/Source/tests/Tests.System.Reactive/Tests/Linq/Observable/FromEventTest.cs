@@ -240,7 +240,7 @@ namespace ReactiveTests.Tests
             Assert.True(snd.SequenceEqual(new[] { 43, 44 }));
             Assert.True(thd.SequenceEqual(new[] { 44, 45 }));
         }
-#if !NO_THREAD
+
         [TestMethod]
         public void FromEvent_SynchronizationContext()
         {
@@ -337,7 +337,6 @@ namespace ReactiveTests.Tests
             t.Start();
             t.Join();
         }
-#endif
 
         [TestMethod]
         public void FromEvent_Scheduler1()

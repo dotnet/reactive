@@ -22,8 +22,9 @@ namespace ReactiveTests.Tests
         {
             var res = Scheduler.Immediate.Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
+
         }
-#if !NO_THREAD
+
         [TestMethod]
         public void Immediate_ScheduleAction()
         {
@@ -32,7 +33,6 @@ namespace ReactiveTests.Tests
             Scheduler.Immediate.Schedule(() => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
             Assert.True(ran);
         }
-#endif
 
         [TestMethod]
         public void Immediate_ScheduleActionError()
@@ -146,7 +146,6 @@ namespace ReactiveTests.Tests
             });
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void Immediate_ScheduleActionDue()
         {
@@ -155,6 +154,5 @@ namespace ReactiveTests.Tests
             Scheduler.Immediate.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
             Assert.True(ran, "ran");
         }
-#endif
     }
 }

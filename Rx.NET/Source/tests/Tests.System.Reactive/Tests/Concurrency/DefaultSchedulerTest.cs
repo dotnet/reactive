@@ -31,7 +31,7 @@ namespace ReactiveTests.Tests
             var res = DefaultScheduler.Instance.Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
-#if !NO_THREAD
+
         [TestMethod]
         public void ScheduleAction()
         {
@@ -94,7 +94,6 @@ namespace ReactiveTests.Tests
 
             Assert.False(fail);
         }
-#endif
 #if DESKTOPCLR
         [TestCategory("SkipCI")]
         [TestMethod]

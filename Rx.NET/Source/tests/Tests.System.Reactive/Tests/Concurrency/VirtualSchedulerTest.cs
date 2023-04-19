@@ -52,7 +52,7 @@ namespace ReactiveTests.Tests
             var res = new VirtualSchedulerTestScheduler().Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
-#if !NO_THREAD
+
         [TestMethod]
         public void Virtual_ScheduleAction()
         {
@@ -63,7 +63,6 @@ namespace ReactiveTests.Tests
             scheduler.Start();
             Assert.True(ran);
         }
-#endif
 
         [TestMethod]
         public void Virtual_ScheduleActionError()
@@ -114,7 +113,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler().ScheduleRelative(42, TimeSpan.FromSeconds(1), default));
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void Virtual_ScheduleActionDue()
         {
@@ -125,7 +123,6 @@ namespace ReactiveTests.Tests
             scheduler.Start();
             Assert.True(ran, "ran");
         }
-#endif
 
         [TestMethod]
         [TestCategory("SkipCI")]

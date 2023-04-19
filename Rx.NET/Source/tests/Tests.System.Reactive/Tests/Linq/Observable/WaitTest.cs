@@ -22,7 +22,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Wait(default(IObservable<int>)));
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void Wait_Return()
         {
@@ -31,7 +30,6 @@ namespace ReactiveTests.Tests
             var res = xs.Wait();
             Assert.Equal(x, res);
         }
-#endif
 
         [TestMethod]
         public void Wait_Empty()
@@ -49,7 +47,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Wait());
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void Wait_Range()
         {
@@ -58,7 +55,5 @@ namespace ReactiveTests.Tests
             var res = xs.Wait();
             Assert.Equal(n, res);
         }
-#endif
-
     }
 }

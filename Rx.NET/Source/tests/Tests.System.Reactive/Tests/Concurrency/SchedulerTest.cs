@@ -220,14 +220,12 @@ namespace ReactiveTests.Tests
                 e.WaitOne();
             }
 
-#if !NO_THREAD
             // NewThread
             {
                 var e = new ManualResetEvent(false);
                 Scheduler.NewThread.Schedule(() => e.Set());
                 e.WaitOne();
             }
-#endif
 
             // TaskPool
             {
@@ -243,7 +241,7 @@ namespace ReactiveTests.Tests
 
 #if !NO_PERF
 
-#if !WINDOWS && !NO_THREAD
+#if !WINDOWS
         [TestMethod]
         public void Scheduler_LongRunning_ArgumentChecking()
         {
@@ -336,7 +334,7 @@ namespace ReactiveTests.Tests
 
 #if !NO_PERF
 
-#if !WINDOWS && !NO_THREAD
+#if !WINDOWS
         [TestMethod]
         public void Scheduler_Periodic1()
         {
@@ -482,7 +480,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default, new Type[0]));
-#if !WINDOWS && !NO_THREAD
+#if !WINDOWS
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(ThreadPoolScheduler.Instance, default));
 #endif
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(Scheduler.Default).Schedule(42, default));
@@ -1504,8 +1502,6 @@ namespace ReactiveTests.Tests
             e.WaitOne();
         }
 
-#if !NO_SYNCCTX
-
         [TestMethod]
         public void SchedulerAsync_ScheduleAsync_SyncCtx()
         {
@@ -1567,8 +1563,5 @@ namespace ReactiveTests.Tests
                 d(state);
             }
         }
-
-#endif
-
     }
 }

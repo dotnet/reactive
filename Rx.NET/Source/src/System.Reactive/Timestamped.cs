@@ -12,9 +12,7 @@ namespace System.Reactive
     /// The timestamp typically represents the time the value was received, using an IScheduler's clock to obtain the current time.
     /// </summary>
     /// <typeparam name="T">The type of the value being timestamped.</typeparam>
-#if !NO_SERIALIZABLE
     [Serializable]
-#endif
     [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Timestamped", Justification = "Reviewed and agreed upon.")]
     public readonly struct Timestamped<T> : IEquatable<Timestamped<T>>
     {

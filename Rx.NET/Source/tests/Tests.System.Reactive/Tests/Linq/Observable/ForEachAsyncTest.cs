@@ -509,7 +509,6 @@ namespace ReactiveTests.Tests
             }
         }
 
-#if !NO_THREAD
         [TestMethod]
         [TestCategory("SkipCI")]
         public void ForEachAsync_DisposeThrows()
@@ -593,7 +592,5 @@ namespace ReactiveTests.Tests
                 Assert.Same(ex, err.InnerExceptions[0]);
             }
         }
-#endif
-
     }
 }

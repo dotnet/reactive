@@ -86,7 +86,6 @@ namespace System.Reactive.Concurrency
         {
         }
 
-#if !NO_THREAD
         /// <summary>
         /// Creates an object that schedules units of work on a designated thread, using the specified factory to control thread creation options.
         /// </summary>
@@ -94,10 +93,6 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="threadFactory"/> is <c>null</c>.</exception>
         public EventLoopScheduler(Func<ThreadStart, Thread> threadFactory)
         {
-#else
-        internal EventLoopScheduler(Func<ThreadStart, Thread> threadFactory)
-        {
-#endif
             _threadFactory = threadFactory ?? throw new ArgumentNullException(nameof(threadFactory));
             _stopwatch = ConcurrencyAbstractionLayer.Current.StartStopwatch();
 

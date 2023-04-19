@@ -922,7 +922,6 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(expected);
         }
 
-#if !NO_THREAD && !NETCOREAPP1_1 && !NETCOREAPP1_0
         [TestMethod]
         public void Concat_TailRecursive2()
         {
@@ -932,7 +931,6 @@ namespace ReactiveTests.Tests
 
             Assert.True(lst.Last() - lst.First() < 10);
         }
-#endif
 #endif
 
         [TestMethod]

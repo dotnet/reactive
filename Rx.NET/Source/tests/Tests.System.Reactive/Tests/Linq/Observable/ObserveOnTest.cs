@@ -60,7 +60,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void ObserveOn_Control()
         {
-            bool okay = true;
+            var okay = true;
 
             using (WinFormsTestUtils.RunTest(out var lbl))
             {
@@ -81,7 +81,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void ObserveOn_ControlScheduler()
         {
-            bool okay = true;
+            var okay = true;
 
             using (WinFormsTestUtils.RunTest(out var lbl))
             {
@@ -108,7 +108,7 @@ namespace ReactiveTests.Tests
             {
                 RunAsync(evt =>
                 {
-                    bool okay = true;
+                    var okay = true;
                     Observable.Range(0, 10, NewThreadScheduler.Default).ObserveOn(dispatcher).Subscribe(x =>
                     {
                         okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
@@ -129,7 +129,7 @@ namespace ReactiveTests.Tests
             {
                 RunAsync(evt =>
                 {
-                    bool okay = true;
+                    var okay = true;
                     Observable.Range(0, 10, NewThreadScheduler.Default).ObserveOn(new DispatcherScheduler(dispatcher)).Subscribe(x =>
                     {
                         okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
@@ -150,7 +150,7 @@ namespace ReactiveTests.Tests
             {
                 RunAsync(evt =>
                 {
-                    bool okay = true;
+                    var okay = true;
                     dispatcher.BeginInvoke(new Action(() =>
                     {
                         Observable.Range(0, 10, NewThreadScheduler.Default).ObserveOnDispatcher().Subscribe(x =>
@@ -175,7 +175,7 @@ namespace ReactiveTests.Tests
                 RunAsync(evt =>
                 {
                     var ex = new Exception();
-                    bool okay = true;
+                    var okay = true;
 
                     dispatcher.BeginInvoke(new Action(() =>
                     {
@@ -468,7 +468,6 @@ namespace ReactiveTests.Tests
             Assert.Same(ex_, err);
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void ObserveOn_LongRunning_TimeVariance()
         {
@@ -500,7 +499,6 @@ namespace ReactiveTests.Tests
 
             end.WaitOne();
         }
-#endif
 
         [TestMethod]
         public void ObserveOn_LongRunning_HoldUpDuringDispatchAndFail()

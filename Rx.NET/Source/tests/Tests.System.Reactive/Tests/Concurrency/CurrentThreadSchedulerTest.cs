@@ -31,7 +31,6 @@ namespace ReactiveTests.Tests
             Assert.True(res.Seconds < 1);
         }
 
-#if !NO_THREAD
         [TestMethod]
         public void CurrentThread_ScheduleAction()
         {
@@ -40,7 +39,6 @@ namespace ReactiveTests.Tests
             Scheduler.CurrentThread.Schedule(() => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
             Assert.True(ran);
         }
-#endif
 
         [TestMethod]
         public void CurrentThread_ScheduleActionError()
@@ -57,7 +55,7 @@ namespace ReactiveTests.Tests
                 Assert.Same(e, ex);
             }
         }
-#if !NO_THREAD
+
         [TestMethod]
         public void CurrentThread_ScheduleActionNested()
         {
@@ -110,7 +108,7 @@ namespace ReactiveTests.Tests
             });
             Assert.True(ran, "ran");
         }
-#endif
+
         [TestMethod]
         public void CurrentThread_EnsureTrampoline()
         {
