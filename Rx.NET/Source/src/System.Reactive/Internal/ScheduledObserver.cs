@@ -204,7 +204,7 @@ namespace System.Reactive
 
         private void Run(object? state, Action<object?> recurse)
         {
-            T next;
+            T? next;
 
             while (!_queue.TryDequeue(out next))
             {

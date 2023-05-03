@@ -26,10 +26,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                TResult result;
+                TResult? result;
                 try
                 {
-                    result = (TResult)(object?)value;
+                    result = (TResult?)(object?)value;
                 }
                 catch (Exception exception)
                 {

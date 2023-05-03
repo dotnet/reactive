@@ -344,7 +344,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     bool hasNext;
-                    TSecond right = default;
+                    TSecond? right = default;
                     var wasDisposed = false;
 
                     try
