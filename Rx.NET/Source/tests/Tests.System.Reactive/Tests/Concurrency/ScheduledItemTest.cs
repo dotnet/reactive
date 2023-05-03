@@ -19,12 +19,14 @@ namespace ReactiveTests
         [TestMethod]
         public void ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(default, 42, (x, y) => Disposable.Empty, DateTimeOffset.Now));
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, default, DateTimeOffset.Now));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(default, 42, (x, y) => Disposable.Empty, DateTimeOffset.Now, Comparer<DateTimeOffset>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, default, DateTimeOffset.Now, Comparer<DateTimeOffset>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, (x, y) => Disposable.Empty, DateTimeOffset.Now, default));
+#pragma warning restore CA1806
         }
 
         [TestMethod]

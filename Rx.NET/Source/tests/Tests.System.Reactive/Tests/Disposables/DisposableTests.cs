@@ -130,9 +130,11 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void CompositeDisposable_ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable(default(IDisposable[])));
             ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable(default(IEnumerable<IDisposable>)));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new CompositeDisposable(-1));
+#pragma warning restore CA1806
         }
 
         [TestMethod]
@@ -242,14 +244,18 @@ namespace ReactiveTests.Tests
         public void CompositeDisposable_AddNull_via_params_ctor()
         {
             IDisposable d1 = null;
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentException>(() => new CompositeDisposable(d1));
+#pragma warning restore CA1806
         }
 
         [TestMethod]
         public void CompositeDisposable_AddNull_via_IEnum_ctor()
         {
             IEnumerable<IDisposable> values = new IDisposable[] { null };
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentException>(() => new CompositeDisposable(values));
+#pragma warning restore CA1806
         }
 
         [TestMethod]
@@ -542,13 +548,17 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void ContextDisposable_CreateNullContext()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new ContextDisposable(null, Disposable.Empty));
+#pragma warning restore CA1806
         }
 
         [TestMethod]
         public void ContextDisposable_CreateNullDisposable()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new ContextDisposable(new SynchronizationContext(), null));
+#pragma warning restore CA1806
         }
 
         [TestMethod]
@@ -644,7 +654,9 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void RefCountDisposable_Ctor_Null()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new RefCountDisposable(null));
+#pragma warning restore CA1806
         }
 
         [TestMethod]
@@ -720,8 +732,10 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void ScheduledDisposable_Null()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledDisposable(null, Disposable.Empty));
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledDisposable(Scheduler.Immediate, null));
+#pragma warning restore CA1806
         }
 
         [TestMethod]

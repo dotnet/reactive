@@ -21,7 +21,9 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Ctor_ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new ListObservable<int>(null));
+#pragma warning restore CA1806
         }
 
         [TestMethod]

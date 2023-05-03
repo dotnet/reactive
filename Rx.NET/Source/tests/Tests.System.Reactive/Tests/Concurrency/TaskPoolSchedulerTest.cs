@@ -18,7 +18,9 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void TaskPool_ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new TaskPoolScheduler(null));
+#pragma warning restore CA1806
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(42, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(42, DateTimeOffset.Now, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(42, TimeSpan.Zero, default));

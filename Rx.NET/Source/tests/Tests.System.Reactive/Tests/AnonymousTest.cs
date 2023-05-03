@@ -7,6 +7,8 @@ using System.Reactive;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+#pragma warning disable CA1806 // (Unused new instance.) These tests expect the constructor to throw.
+
 namespace ReactiveTests.Tests
 {
     [TestClass]

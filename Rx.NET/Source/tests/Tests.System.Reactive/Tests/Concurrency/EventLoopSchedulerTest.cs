@@ -29,12 +29,14 @@ namespace ReactiveTests.Tests
         {
             using var el = new EventLoopScheduler();
 
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new EventLoopScheduler(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule(42, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule(42, DateTimeOffset.Now, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule(42, TimeSpan.Zero, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => el.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => el.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
+#pragma warning restore CA1806
         }
 
         [TestMethod]

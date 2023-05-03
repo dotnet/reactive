@@ -19,6 +19,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void NewThread_ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new NewThreadScheduler(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(42, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(42, DateTimeOffset.Now, default));
@@ -26,6 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.ScheduleLongRunning(42, default));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => NewThreadScheduler.Default.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
+#pragma warning restore CA1806
         }
 
         [TestMethod]

@@ -383,7 +383,9 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void WithComparer_ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler(DateTimeOffset.Now, null));
+#pragma warning restore CA1806
         }
 
         [TestMethod]
