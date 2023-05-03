@@ -48,5 +48,15 @@ namespace System.Reactive.Disposables
         {
             Disposables.Disposable.Dispose(ref _current);
         }
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj) => false;
+
+        /// <inheritdoc/>
+        public override int GetHashCode() => 0;
+
+        public static bool operator ==(SingleAssignmentDisposableValue left, SingleAssignmentDisposableValue right) => false;
+
+        public static bool operator !=(SingleAssignmentDisposableValue left, SingleAssignmentDisposableValue right) => true;
     }
 }

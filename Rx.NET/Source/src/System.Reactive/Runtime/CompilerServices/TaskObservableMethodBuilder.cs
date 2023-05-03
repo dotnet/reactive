@@ -14,7 +14,9 @@ namespace System.Runtime.CompilerServices
     /// Represents a builder for asynchronous methods that return a task-like <see cref="ITaskObservable{T}"/>.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+#pragma warning disable CA1815 // (Override equals on value types.) Method only meant to be used by await/async generated code, so equality is not required.
     public struct TaskObservableMethodBuilder<T>
+#pragma warning restore CA1815
     {
         /// <summary>
         /// The compiler-generated asynchronous state machine representing the execution flow of the asynchronous

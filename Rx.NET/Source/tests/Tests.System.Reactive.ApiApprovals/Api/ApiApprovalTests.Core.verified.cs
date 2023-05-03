@@ -646,6 +646,10 @@ namespace System.Reactive.Disposables
         public System.IDisposable? Disposable { get; set; }
         public bool IsDisposed { get; }
         public void Dispose() { }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
+        public static bool operator !=(System.Reactive.Disposables.SingleAssignmentDisposableValue left, System.Reactive.Disposables.SingleAssignmentDisposableValue right) { }
+        public static bool operator ==(System.Reactive.Disposables.SingleAssignmentDisposableValue left, System.Reactive.Disposables.SingleAssignmentDisposableValue right) { }
     }
     public abstract class StableCompositeDisposable : System.IDisposable, System.Reactive.Disposables.ICancelable
     {
