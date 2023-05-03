@@ -18,6 +18,7 @@ namespace System.Reactive
         /// </summary>
         [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "By design.")]
         [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly", Justification = "Can't do this for Action<T>.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1003:Use generic event handler instances", Justification = "Can't do this for Action<T>.")]
         event Action<T> OnNext;
     }
 }
