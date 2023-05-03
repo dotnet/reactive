@@ -10,6 +10,7 @@ namespace System.Reactive.Disposables
     /// <summary>
     /// Represents a group of disposable resources that are disposed together.
     /// </summary>
+#pragma warning disable CA1063 // (Overridable IDisposable.) This analyzer wants us to make breaking changes to its public API, which we can't do.
     public abstract class StableCompositeDisposable : ICancelable
     {
         /// <summary>
@@ -202,4 +203,5 @@ namespace System.Reactive.Disposables
             }
         }
     }
+#pragma warning restore CA1063
 }

@@ -8,6 +8,7 @@ namespace System.Reactive.Subjects
     /// Base class for objects that are both an observable sequence as well as an observer.
     /// </summary>
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
+#pragma warning disable CA1063 // (Overridable IDisposable.) This analyzer wants us to make breaking changes to its public API, which we can't do.
     public abstract class SubjectBase<T> : ISubject<T>, IDisposable
     {
         /// <summary>
@@ -51,4 +52,5 @@ namespace System.Reactive.Subjects
         /// <exception cref="ArgumentNullException"><paramref name="observer"/> is <c>null</c>.</exception>
         public abstract IDisposable Subscribe(IObserver<T> observer);
     }
+#pragma warning restore CA1063
 }
