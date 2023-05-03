@@ -31,7 +31,9 @@ namespace System.Runtime.CompilerServices
         /// Creates an instance of the <see cref="TaskObservableMethodBuilder{T}"/> struct.
         /// </summary>
         /// <returns>A new instance of the struct.</returns>
+#pragma warning disable CA1000 // (Do not declare static members on generic types.) Async method builders are required to define a static Create method, and are require to be generic when the async type produces a result.
         public static TaskObservableMethodBuilder<T> Create() => default;
+#pragma warning restore CA1000 // Do not declare static members on generic types
 
         /// <summary>
         /// Begins running the builder with the associated state machine.
