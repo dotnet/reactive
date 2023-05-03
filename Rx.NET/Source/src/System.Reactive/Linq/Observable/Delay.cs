@@ -338,7 +338,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
+#pragma warning disable CA1068 // (CancellationToken parameters must come last.) Method signature determined by ISchedulerLongRunning, so we can't comply with the analyzer rule here.
                 private void DrainQueue(CancellationToken token, ICancelable cancel)
+#pragma warning restore CA1068
                 {
                     while (true)
                     {

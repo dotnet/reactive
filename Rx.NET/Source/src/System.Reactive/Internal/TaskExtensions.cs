@@ -6,7 +6,7 @@ namespace System.Threading.Tasks
 {
     internal static class TaskExtensions
     {
-        public static Task ContinueWithState<TState>(this Task task, Action<Task, TState> continuationAction, TState state, CancellationToken cancellationToken, TaskContinuationOptions continuationOptions)
+        public static Task ContinueWithState<TState>(this Task task, Action<Task, TState> continuationAction, TState state, TaskContinuationOptions continuationOptions, CancellationToken cancellationToken)
         {
             return task.ContinueWith(
                 (t, tupleObject) =>
@@ -34,7 +34,7 @@ namespace System.Threading.Tasks
                 cancellationToken);
         }
 
-        public static Task ContinueWithState<TResult, TState>(this Task<TResult> task, Action<Task<TResult>, TState> continuationAction, TState state, CancellationToken cancellationToken, TaskContinuationOptions continuationOptions)
+        public static Task ContinueWithState<TResult, TState>(this Task<TResult> task, Action<Task<TResult>, TState> continuationAction, TState state, TaskContinuationOptions continuationOptions, CancellationToken cancellationToken)
         {
             return task.ContinueWith(
                 (t, tupleObject) =>

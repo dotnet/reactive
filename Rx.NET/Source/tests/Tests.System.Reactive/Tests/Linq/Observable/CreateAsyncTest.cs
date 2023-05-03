@@ -97,7 +97,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(new[] { 42 }));
         }
 
-        private Task Producer1(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer1(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -122,7 +122,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer1(observer, token, scheduler))
+                    Observable.Create<int>((observer, token) => Producer1(observer, scheduler, token))
                 );
 
                 res.Messages.AssertEqual(
@@ -137,7 +137,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer2(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer2(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -166,7 +166,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer2(observer, token, scheduler))
+                    Observable.Create<int>((observer, token) => Producer2(observer, scheduler, token))
                 );
 
                 res.Messages.AssertEqual(
@@ -179,7 +179,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer3(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer3(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -208,7 +208,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer3(observer, token, scheduler))
+                    Observable.Create<int>((observer, token) => Producer3(observer, scheduler, token))
                 );
 
                 res.Messages.AssertEqual(
@@ -221,7 +221,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer4(IObserver<int> results, CancellationToken token, IScheduler scheduler, Exception exception)
+        private Task Producer4(IObserver<int> results, IScheduler scheduler, Exception exception, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -252,7 +252,7 @@ namespace ReactiveTests.Tests
                 var exception = new Exception();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer4(observer, token, scheduler, exception))
+                    Observable.Create<int>((observer, token) => Producer4(observer, scheduler, exception, token))
                 );
 
                 res.Messages.AssertEqual(
@@ -265,7 +265,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer5(IObserver<int> results, CancellationToken token, IScheduler scheduler, Exception exception)
+        private Task Producer5(IObserver<int> results, IScheduler scheduler, Exception exception, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -296,7 +296,7 @@ namespace ReactiveTests.Tests
                 var exception = new Exception();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer5(observer, token, scheduler, exception))
+                    Observable.Create<int>((observer, token) => Producer5(observer, scheduler, exception, token))
                 );
 
                 res.Messages.AssertEqual(
@@ -309,7 +309,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer6(IObserver<int> results, CancellationToken token, Exception exception)
+        private Task Producer6(IObserver<int> results, Exception exception, CancellationToken token)
         {
             throw exception;
         }
@@ -324,7 +324,7 @@ namespace ReactiveTests.Tests
                 var exception = new InvalidOperationException();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer6(observer, token, exception))
+                    Observable.Create<int>((observer, token) => Producer6(observer, exception, token))
                 );
 
                 res.Messages.AssertEqual(
@@ -333,7 +333,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer7(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer7(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -362,7 +362,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer7(observer, token, scheduler)),
+                    Observable.Create<int>((observer, token) => Producer7(observer, scheduler, token)),
                     650
                 );
 
@@ -375,7 +375,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer8(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer8(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -404,7 +404,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer8(observer, token, scheduler)),
+                    Observable.Create<int>((observer, token) => Producer8(observer, scheduler, token)),
                     650
                 );
 
@@ -417,7 +417,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer9(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer9(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -446,7 +446,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer9(observer, token, scheduler)),
+                    Observable.Create<int>((observer, token) => Producer9(observer, scheduler, token)),
                     750
                 );
 
@@ -460,7 +460,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer10(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer10(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -489,7 +489,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer10(observer, token, scheduler))
+                    Observable.Create<int>((observer, token) => Producer10(observer, scheduler, token))
                 );
 
                 res.Messages.Take(4).AssertEqual(
