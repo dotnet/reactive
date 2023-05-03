@@ -10,7 +10,9 @@ namespace Microsoft.Reactive.Testing
     /// <summary>
     /// Base class to write unit tests for applications and libraries built using Reactive Extensions.
     /// </summary>
+#pragma warning disable CA1052 // (Static holder types should be Static or NotInheritable). Tests inherit from this to bring static members into scope
     public class ReactiveTest
+#pragma warning restore CA1052
     {
         /// <summary>
         /// Default virtual time used for creation of observable sequences in <see cref="ReactiveTest"/>-based unit tests.
