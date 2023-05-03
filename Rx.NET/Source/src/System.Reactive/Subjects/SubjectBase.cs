@@ -36,7 +36,9 @@ namespace System.Reactive.Subjects
         /// </summary>
         /// <param name="error">The exception to send to all currently subscribed observers.</param>
         /// <exception cref="ArgumentNullException"><paramref name="error"/> is <c>null</c>.</exception>
+#pragma warning disable CA1716 // (Identifiers should not match keywords.) This has been the name for years, so the (admittedly small) risk from changing it doesn't seem to offer a meaningful benefit.
         public abstract void OnError(Exception error);
+#pragma warning restore CA1716
 
         /// <summary>
         /// Notifies all subscribed observers about the arrival of the specified element in the sequence.
