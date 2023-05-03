@@ -451,7 +451,9 @@ namespace System.Reactive.Linq
         /// <exception cref="InvalidOperationException">The source sequence contains more than one element. -or- The source sequence is empty.</exception>
         /// <seealso cref="Observable.SingleAsync{TSource}(IObservable{TSource})"/>
         [Obsolete(Constants_Linq.UseAsync)]
+#pragma warning disable CA1720 // (Identifier contains type name.) Single is long-established as a LINQ method name.
         public static TSource Single<TSource>(this IObservable<TSource> source)
+#pragma warning restore CA1720
         {
             if (source == null)
             {
@@ -472,7 +474,9 @@ namespace System.Reactive.Linq
         /// <exception cref="InvalidOperationException">No element satisfies the condition in the predicate. -or- More than one element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
         /// <seealso cref="Observable.SingleAsync{TSource}(IObservable{TSource}, Func{TSource, bool})"/>
         [Obsolete(Constants_Linq.UseAsync)]
+#pragma warning disable CA1720 // (Identifier contains type name.) Single is long-established as a LINQ method name.
         public static TSource Single<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
+#pragma warning restore CA1720
         {
             if (source == null)
             {
