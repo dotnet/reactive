@@ -9,7 +9,7 @@ namespace ReactiveTests
 {
     public class NullErrorObservable<T> : IObservable<T>
     {
-        public static NullErrorObservable<T> Instance = new NullErrorObservable<T>();
+        public static readonly NullErrorObservable<T> Instance = new NullErrorObservable<T>();
 
         private NullErrorObservable()
         {
