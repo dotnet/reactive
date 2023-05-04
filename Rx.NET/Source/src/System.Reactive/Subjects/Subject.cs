@@ -18,8 +18,10 @@ namespace System.Reactive.Subjects
 
         private SubjectDisposable[] _observers;
         private Exception? _exception;
+#pragma warning disable CA1825 // (Avoid zero-length array allocations.) The identity of these arrays matters, so we can't use the shared Array.Empty<T>() instance
         private static readonly SubjectDisposable[] Terminated = new SubjectDisposable[0];
         private static readonly SubjectDisposable[] Disposed = new SubjectDisposable[0];
+#pragma warning restore CA1825
 
         #endregion
 

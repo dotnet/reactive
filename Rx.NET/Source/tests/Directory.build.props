@@ -8,7 +8,11 @@
               there's an argument that it can better reflect intent, but a lot of test code has
               used instance members as a matter of convenience, and the amount of work to change
               that now that the code analyzer picks this up doesn't deliver commensurate benefits.
+    CA1825 - use Array.Empty<T>. There is a performance benefit to this over using new T[0], but
+              arguably a slight downgrade in readability. In test projects, although performance
+              matters, the trade-off between readability and ultimate performance is different,
+              so we don't want this rule.
     -->
-    <NoWarn>$(NoWarn);CA1822</NoWarn>
+    <NoWarn>$(NoWarn);CA1822;CA1825</NoWarn>
   </PropertyGroup> 
 </Project>

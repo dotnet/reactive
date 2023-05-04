@@ -8,7 +8,7 @@
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>    
     <Description>Reactive Extensions (Rx) for .NET - Testing Library</Description>
     <!-- NB: A lot of CA warnings are disabled because of the .cs files included from xunit.assert.source. -->
-    <NoWarn>$(NoWarn);IDE0054;IDE0066;CA1305;CA1307;CA1032;CA1064;CA1822;CA1812;CA1820;CA1823</NoWarn>
+    <NoWarn>$(NoWarn);IDE0054;IDE0066;CA1305;CA1307;CA1032;CA1064;CA1822;CA1812;CA1820;CA1823;CA1825</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
