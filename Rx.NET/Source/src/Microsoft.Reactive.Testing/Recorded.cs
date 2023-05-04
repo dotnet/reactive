@@ -70,7 +70,7 @@ namespace Microsoft.Reactive.Testing
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current <see cref="Recorded{T}"/> value.</param>
         /// <returns>true if the specified System.Object is equal to the current <see cref="Recorded{T}"/> value; otherwise, false.</returns>
-        public override bool Equals(object obj) => obj is Recorded<T> && Equals((Recorded<T>)obj);
+        public override bool Equals(object obj) => obj is Recorded<T> recorded && Equals(recorded);
 
         /// <summary>
         /// Returns the hash code for the current <see cref="Recorded{T}"/> value.

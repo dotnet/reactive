@@ -423,7 +423,7 @@ namespace ReactiveTests.Tests
                     catch (Exception ex)
                     {
                         // reflection wraps the actual exception, let's unwrap it
-                        if (!(ex.InnerException is ArgumentNullException))
+                        if (ex.InnerException is not ArgumentNullException)
                         {
                             throw new Exception("Method threw: " + method + " @ " + i, ex);
                         }

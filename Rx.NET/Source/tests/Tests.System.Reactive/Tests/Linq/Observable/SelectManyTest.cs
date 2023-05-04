@@ -5289,7 +5289,7 @@ namespace ReactiveTests.Tests
             done.WaitOne();
 
             lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
         [TestMethod]
@@ -5313,7 +5313,7 @@ namespace ReactiveTests.Tests
             done.WaitOne();
 
             lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
         [TestMethod]
@@ -5682,7 +5682,7 @@ namespace ReactiveTests.Tests
             done.WaitOne();
 
             lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
         [TestMethod]
@@ -5706,7 +5706,7 @@ namespace ReactiveTests.Tests
             done.WaitOne();
 
             lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
         [TestMethod]
@@ -6221,7 +6221,7 @@ namespace ReactiveTests.Tests
             done.WaitOne();
 
             lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
         [TestMethod]
@@ -6245,7 +6245,7 @@ namespace ReactiveTests.Tests
             done.WaitOne();
 
             lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
         [TestMethod]
@@ -6614,7 +6614,7 @@ namespace ReactiveTests.Tests
             done.WaitOne();
 
             lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
         [TestMethod]
@@ -6638,7 +6638,7 @@ namespace ReactiveTests.Tests
             done.WaitOne();
 
             lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
         [TestMethod]

@@ -72,7 +72,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current <see cref="Timestamped{T}" />.</param>
         /// <returns><c>true</c> if the specified System.Object is equal to the current <see cref="Timestamped{T}" />; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object? obj) => obj is Timestamped<T> && Equals((Timestamped<T>)obj);
+        public override bool Equals(object? obj) => obj is Timestamped<T> timestamped && Equals(timestamped);
 
         /// <summary>
         /// Returns the hash code for the current <see cref="Timestamped{T}" /> value.

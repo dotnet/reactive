@@ -46,7 +46,7 @@ namespace System.Reactive
             //
             //   observable.AsQbservable().<operators>.ToEnumerable().AsQueryable()
             //
-            if (!(expression is MethodCallExpression call) ||
+            if (expression is not MethodCallExpression call ||
                 call.Method.DeclaringType != typeof(Qbservable) ||
                 call.Method.Name != nameof(Qbservable.ToQueryable))
             {

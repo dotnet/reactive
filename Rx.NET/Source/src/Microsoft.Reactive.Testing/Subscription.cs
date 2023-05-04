@@ -83,7 +83,7 @@ namespace Microsoft.Reactive.Testing
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current Subscription value.</param>
         /// <returns>true if the specified System.Object is equal to the current Subscription value; otherwise, false.</returns>
-        public override bool Equals(object obj) => obj is Subscription && Equals((Subscription)obj);
+        public override bool Equals(object obj) => obj is Subscription subscription && Equals(subscription);
 
         /// <summary>
         /// Returns the hash code for the current Subscription value.

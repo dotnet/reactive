@@ -151,7 +151,7 @@ namespace ReactiveTests.Tests
         public override bool Equals(object obj)
         {
             var equ = _value.GetType().GetMethods().Where(m => m.Name == "Equals" && m.GetParameters()[0].ParameterType == typeof(object)).Single();
-            return (bool)equ.Invoke(_value, new object[] { obj is EitherBase ? ((EitherBase)obj)._value : obj });
+            return (bool)equ.Invoke(_value, new object[] { obj is EitherBase eitherBase ? eitherBase._value : obj });
         }
 
         public override int GetHashCode()
