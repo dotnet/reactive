@@ -12,7 +12,9 @@
               arguably a slight downgrade in readability. In test projects, although performance
               matters, the trade-off between readability and ultimate performance is different,
               so we don't want this rule.
+    CA1845 - use span-based string.Concat and AsSpan instead of Substring. This is a performance-
+              oriented suggestion, and will have minimal impact on test execution time.
     -->
-    <NoWarn>$(NoWarn);CA1822;CA1825</NoWarn>
+    <NoWarn>$(NoWarn);CA1822;CA1825;CA1845</NoWarn>
   </PropertyGroup> 
 </Project>
