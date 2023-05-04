@@ -36,7 +36,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 
                 if (redo == null)
                 {
+#pragma warning disable CA2201 // (Do not raise reserved exception types.) Backwards compatibility prevents us from complying.
                     throw new NullReferenceException("The handler returned a null IObservable");
+#pragma warning restore CA2201
                 }
             }
             catch (Exception ex)
