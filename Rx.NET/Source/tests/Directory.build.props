@@ -2,5 +2,13 @@
   <Import Project="..\Directory.build.props" />
   <PropertyGroup>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)..\Test.ruleset</CodeAnalysisRuleSet>
+    <!--
+    Diagnostics of limited value in test projects
+    CA1822 - use static where possible. There can be performance reasons to do this, and sometimes
+              there's an argument that it can better reflect intent, but a lot of test code has
+              used instance members as a matter of convenience, and the amount of work to change
+              that now that the code analyzer picks this up doesn't deliver commensurate benefits.
+    -->
+    <NoWarn>$(NoWarn);CA1822</NoWarn>
   </PropertyGroup> 
 </Project>
