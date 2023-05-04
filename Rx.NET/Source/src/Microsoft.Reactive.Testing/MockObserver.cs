@@ -15,7 +15,7 @@ namespace Microsoft.Reactive.Testing
 
         public MockObserver(TestScheduler scheduler)
         {
-            this._scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
+            _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             _messages = new List<Recorded<Notification<T>>>();
         }
 

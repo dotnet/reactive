@@ -17,7 +17,7 @@ namespace ReactiveTests
         public MockEnumerable(TestScheduler scheduler, IEnumerable<T> underlyingEnumerable)
         {
             Scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
-            this._underlyingEnumerable = underlyingEnumerable ?? throw new ArgumentNullException(nameof(underlyingEnumerable));
+            _underlyingEnumerable = underlyingEnumerable ?? throw new ArgumentNullException(nameof(underlyingEnumerable));
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -40,9 +40,9 @@ namespace ReactiveTests
 
             public MockEnumerator(TestScheduler scheduler, List<Subscription> subscriptions, IEnumerator<T> enumerator)
             {
-                this._subscriptions = subscriptions;
-                this._enumerator = enumerator;
-                this._scheduler = scheduler;
+                _subscriptions = subscriptions;
+                _enumerator = enumerator;
+                _scheduler = scheduler;
 
                 _index = subscriptions.Count;
                 subscriptions.Add(new Subscription(scheduler.Clock));

@@ -65,7 +65,7 @@ namespace Tests.System.Reactive
                     _taskWeakReference = new(t);
                     return t;
                 },
-                this.Exception);
+                Exception);
         }
 
         public IDisposable SuscribeWithoutKeepingSourceReachable<T>(
@@ -152,7 +152,7 @@ namespace Tests.System.Reactive
 
         private void HandleUnobservedException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            if (e.Exception.InnerException == this.Exception)
+            if (e.Exception.InnerException == Exception)
             {
                 e.SetObserved();
                 _exceptionReportedAsUnobserved.Set();

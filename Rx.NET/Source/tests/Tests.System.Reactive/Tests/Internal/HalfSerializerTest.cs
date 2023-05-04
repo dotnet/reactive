@@ -168,8 +168,8 @@ namespace ReactiveTests.Tests
 
             public ReentrantConsumer(HalfSerializerTest parent, bool errorReenter)
             {
-                this._parent = parent;
-                this._errorReenter = errorReenter;
+                _parent = parent;
+                _errorReenter = errorReenter;
             }
 
             public void ForwardOnCompleted()

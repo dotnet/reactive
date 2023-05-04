@@ -3492,9 +3492,9 @@ namespace ReactiveTests.Tests
 
         public GroupByComparer(TestScheduler scheduler, ushort equalsThrowsAfter, ushort getHashCodeThrowsAfter)
         {
-            this._scheduler = scheduler;
-            this._equalsThrowsAfter = equalsThrowsAfter;
-            this._getHashCodeThrowsAfter = getHashCodeThrowsAfter;
+            _scheduler = scheduler;
+            _equalsThrowsAfter = equalsThrowsAfter;
+            _getHashCodeThrowsAfter = getHashCodeThrowsAfter;
         }
 
         public GroupByComparer(TestScheduler scheduler)
