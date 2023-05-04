@@ -392,13 +392,13 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => fe.M1(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(fe, "E1").Select(evt => new { Sender = evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(fe, "E1").Select(evt => (evt.Sender, EventArgs: (object)evt.EventArgs))
             );
 
             results.Messages.AssertEqual(
-                OnNext(250, new { Sender = (object)fe, EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 3 } }),
-                OnNext(350, new { Sender = (object)fe, EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 4 } }),
-                OnNext(450, new { Sender = (object)fe, EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 5 } })
+                OnNext(250, (Sender: (object)fe, EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 3 })),
+                OnNext(350, (Sender: (object)fe, EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 4 })),
+                OnNext(450, (Sender: (object)fe, EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 5 }))
             );
         }
 
@@ -417,13 +417,13 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => fe.M2(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(fe, "E2").Select(evt => new { Sender = evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(fe, "E2").Select(evt => (evt.Sender, EventArgs: (object)evt.EventArgs))
             );
 
             results.Messages.AssertEqual(
-                OnNext(250, new { Sender = (object)fe, EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 3 } }),
-                OnNext(350, new { Sender = (object)fe, EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 4 } }),
-                OnNext(450, new { Sender = (object)fe, EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 5 } })
+                OnNext(250, (Sender: (object)fe, EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 3 })),
+                OnNext(350, (Sender: (object)fe, EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 4 })),
+                OnNext(450, (Sender: (object)fe, EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 5 }))
             );
         }
 
@@ -442,13 +442,13 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => fe.M2(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern<object, FromEventPattern.TestEventArgs>(fe, "E2").Select(evt => new { Sender = evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern<object, FromEventPattern.TestEventArgs>(fe, "E2").Select(evt => (evt.Sender, EventArgs: (object)evt.EventArgs))
             );
 
             results.Messages.AssertEqual(
-                OnNext(250, new { Sender = (object)fe, EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 3 } }),
-                OnNext(350, new { Sender = (object)fe, EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 4 } }),
-                OnNext(450, new { Sender = (object)fe, EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 5 } })
+                OnNext(250, (Sender: (object)fe, EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 3 })),
+                OnNext(350, (Sender: (object)fe, EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 4 })),
+                OnNext(450, (Sender: (object)fe, EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 5 }))
             );
         }
 
@@ -467,13 +467,13 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => fe.M3(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(fe, "E3").Select(evt => new { Sender = evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(fe, "E3").Select(evt => (evt.Sender, EventArgs: (object)evt.EventArgs))
             );
 
             results.Messages.AssertEqual(
-                OnNext(250, new { Sender = (object)fe, EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 3 } }),
-                OnNext(350, new { Sender = (object)fe, EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 4 } }),
-                OnNext(450, new { Sender = (object)fe, EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 5 } })
+                OnNext(250, (Sender: (object)fe, EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 3 })),
+                OnNext(350, (Sender: (object)fe, EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 4 })),
+                OnNext(450, (Sender: (object)fe, EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 5 }))
             );
         }
 
@@ -552,13 +552,13 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => FromEventPattern.M6(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(typeof(FromEventPattern), "E6").Select(evt => new { Sender = evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(typeof(FromEventPattern), "E6").Select(evt => (evt.Sender, EventArgs: (object)evt.EventArgs))
             );
 
             results.Messages.AssertEqual(
-                OnNext(250, new { Sender = default(object), EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 3 } }),
-                OnNext(350, new { Sender = default(object), EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 4 } }),
-                OnNext(450, new { Sender = default(object), EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 5 } })
+                OnNext(250, (Sender: default(object), EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 3 })),
+                OnNext(350, (Sender: default(object), EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 4 })),
+                OnNext(450, (Sender: default(object), EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 5 }))
             );
         }
 
@@ -575,13 +575,13 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => FromEventPattern.M6(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern<object, FromEventPattern.TestEventArgs>(typeof(FromEventPattern), "E6").Select(evt => new { Sender = evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern<object, FromEventPattern.TestEventArgs>(typeof(FromEventPattern), "E6").Select(evt => (evt.Sender, EventArgs: (object)evt.EventArgs))
             );
 
             results.Messages.AssertEqual(
-                OnNext(250, new { Sender = default(object), EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 3 } }),
-                OnNext(350, new { Sender = default(object), EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 4 } }),
-                OnNext(450, new { Sender = default(object), EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 5 } })
+                OnNext(250, (Sender: default(object), EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 3 })),
+                OnNext(350, (Sender: default(object), EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 4 })),
+                OnNext(450, (Sender: default(object), EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 5 }))
             );
         }
 
@@ -598,13 +598,13 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => FromEventPattern.M6(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern(typeof(FromEventPattern), "E6").Select(evt => new { Sender = evt.Sender, EventArgs = evt.EventArgs })
+                Observable.FromEventPattern(typeof(FromEventPattern), "E6").Select(evt => (evt.Sender, evt.EventArgs))
             );
 
             results.Messages.AssertEqual(
-                OnNext(250, new { Sender = default(object), EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 3 } }),
-                OnNext(350, new { Sender = default(object), EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 4 } }),
-                OnNext(450, new { Sender = default(object), EventArgs = (object)new FromEventPattern.TestEventArgs { Id = 5 } })
+                OnNext(250, (Sender: default(object), EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 3 })),
+                OnNext(350, (Sender: default(object), EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 4 })),
+                OnNext(450, (Sender: default(object), EventArgs: (object)new FromEventPattern.TestEventArgs { Id = 5 }))
             );
         }
 
