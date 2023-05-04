@@ -393,7 +393,7 @@ namespace ReactiveTests.Tests
             var xs = Observable.StartAsync(ct =>
             {
                 i++;
-                return Task.Factory.StartNew(() => { });
+                return Task.Factory.StartNew(() => { }, CancellationToken.None); // Not forwarding ct because we always want this task to run to completion in this test.
             });
 
             Assert.Equal(Unit.Default, xs.Single());
@@ -422,7 +422,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
 
             var xs = Observable.StartAsync(ct =>
-                Task.Factory.StartNew(() => { throw ex; })
+                Task.Factory.StartNew(() => { throw ex; }, CancellationToken.None) // Not forwarding ct because we always want this task to run and then fail in this test
             );
 
             ReactiveAssert.Throws(ex, () => xs.Single());
@@ -454,7 +454,8 @@ namespace ReactiveTests.Tests
                         {
                             f.Set();
                         }
-                    })
+                    },
+                    CancellationToken.None) // Not forwarding ct because we are testing the case where the task is already running by the time cancellation is detected
                 );
 
                 e.WaitOne();

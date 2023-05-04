@@ -570,7 +570,8 @@ namespace ReactiveTests.Tests
 
                         observer.OnNext(42);
                     }
-                });
+                },
+                CancellationToken.None);
             });
 
             var lst = new List<int>();
