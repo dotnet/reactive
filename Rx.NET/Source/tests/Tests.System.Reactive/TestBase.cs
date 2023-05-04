@@ -19,7 +19,7 @@ namespace ReactiveTests
 
     public class Waiter
     {
-        private ManualResetEvent _evt = new(false);
+        private readonly ManualResetEvent _evt = new(false);
 
         public void Set()
         {

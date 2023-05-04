@@ -1125,7 +1125,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(new TaskCanceledException(task).CancellationToken, cts.Token);
         }
 
-        sealed class OneshotScheduler : IScheduler
+        private sealed class OneshotScheduler : IScheduler
         {
             public DateTimeOffset Now => DateTimeOffset.Now;
 
@@ -1158,7 +1158,7 @@ namespace ReactiveTests.Tests
 
             public bool HasTask => _task != null;
 
-            sealed class Work<TState> : IDisposable
+            private sealed class Work<TState> : IDisposable
             {
                 internal TState State;
                 internal Func<IScheduler, TState, IDisposable> Action;

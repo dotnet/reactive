@@ -32,7 +32,7 @@ namespace ReactiveTests.Tests
         /// as strings generated via <see cref="TypeNameOf(Type)"/>,
         /// mapped to a value.
         /// </summary>
-        private static Dictionary<string, object> _defaultValues;
+        private static readonly Dictionary<string, object> _defaultValues;
 
         /// <summary>
         /// Prepare the default instances for various types used

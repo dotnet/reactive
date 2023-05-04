@@ -18,7 +18,7 @@ namespace ReactiveTests.Tests
     [Serializable]
     public class DefaultConcurrencyAbstractionLayerTest
     {
-        private AppDomain _domain;
+        private readonly AppDomain _domain;
 
         public DefaultConcurrencyAbstractionLayerTest()
         {

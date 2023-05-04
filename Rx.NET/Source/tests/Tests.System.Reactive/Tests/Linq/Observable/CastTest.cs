@@ -146,7 +146,7 @@ namespace ReactiveTests.Tests
 
     internal class A : IEquatable<A>
     {
-        private int _id;
+        private readonly int _id;
 
         public A(int id)
         {
@@ -200,7 +200,7 @@ namespace ReactiveTests.Tests
 
     internal class E : IEquatable<E>
     {
-        private int _id;
+        private readonly int _id;
 
         public E(int id)
         {

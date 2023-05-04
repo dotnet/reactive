@@ -14,8 +14,9 @@ namespace System.Reactive.Linq
     public static partial class Qbservable
     {
 #pragma warning disable IDE1006 // Naming Styles: 3rd party code is known to reflect for this specific field name
+#pragma warning disable IDE0044 // Make readonly: since 3rd party code reflects for this, we shouldn't pretend it won't change
         private static IQbservableProvider? s_provider;
-#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE1006, IDE0044 // Naming Styles, Make readonly
 
         /// <summary>
         /// Gets the local query provider which will retarget Qbservable-based queries to the corresponding Observable-based query for in-memory execution upon subscription.

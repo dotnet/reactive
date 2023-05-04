@@ -12,7 +12,7 @@ namespace ReactiveTests
     {
         public readonly TestScheduler Scheduler;
         public readonly List<Subscription> Subscriptions = new();
-        private IEnumerable<T> _underlyingEnumerable;
+        private readonly IEnumerable<T> _underlyingEnumerable;
 
         public MockEnumerable(TestScheduler scheduler, IEnumerable<T> underlyingEnumerable)
         {
@@ -33,8 +33,8 @@ namespace ReactiveTests
         private class MockEnumerator : IEnumerator<T>
         {
             private readonly List<Subscription> _subscriptions;
-            private IEnumerator<T> _enumerator;
-            private TestScheduler _scheduler;
+            private readonly IEnumerator<T> _enumerator;
+            private readonly TestScheduler _scheduler;
             private readonly int _index;
             private bool _disposed;
 

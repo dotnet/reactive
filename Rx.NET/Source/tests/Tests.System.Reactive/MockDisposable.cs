@@ -11,7 +11,7 @@ namespace ReactiveTests
 #pragma warning disable CA1816 // (Overridable IDisposable.) This is a specialized base type, and it would be inappropriate to encourage anyone to build derived types that do more in Dispose.
     public class MockDisposable : List<long>, IDisposable
     {
-        private TestScheduler _scheduler;
+        private readonly TestScheduler _scheduler;
 
         public MockDisposable(TestScheduler scheduler)
         {

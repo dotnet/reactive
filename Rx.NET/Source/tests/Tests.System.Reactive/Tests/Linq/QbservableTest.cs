@@ -27,8 +27,8 @@ namespace ReactiveTests.Tests
     public class QbservableTest
     {
         private readonly IQbservable<int> _qbNull = null;
-        private IQbservable<int> _qbMy = new MyQbservable<int>();
-        private IQbservableProvider _qbp = new MyQbservableProvider();
+        private readonly IQbservable<int> _qbMy = new MyQbservable<int>();
+        private readonly IQbservableProvider _qbp = new MyQbservableProvider();
 
         [TestMethod]
         public void LocalQueryMethodImplementationTypeAttribute()

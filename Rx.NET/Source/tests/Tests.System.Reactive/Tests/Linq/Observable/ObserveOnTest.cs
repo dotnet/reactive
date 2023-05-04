@@ -208,7 +208,7 @@ namespace ReactiveTests.Tests
     [TestClass]
     public class ObserveOnReactiveTest : ReactiveTest
     {
-        private static TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
+        private static readonly TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
 
         [TestMethod]
         public void ObserveOn_Scheduler_ArgumentChecking()
@@ -382,7 +382,7 @@ namespace ReactiveTests.Tests
         private class MyScheduler : IScheduler
         {
             internal Exception _exception;
-            private ManualResetEvent _evt;
+            private readonly ManualResetEvent _evt;
 
             public MyScheduler(ManualResetEvent e)
             {
@@ -697,7 +697,7 @@ namespace ReactiveTests.Tests
 
     internal class MyCtx : SynchronizationContext
     {
-        private IScheduler _scheduler;
+        private readonly IScheduler _scheduler;
 
         public MyCtx(IScheduler scheduler)
         {

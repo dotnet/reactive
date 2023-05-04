@@ -35,7 +35,7 @@ namespace Benchmarks.System.Reactive
         }
 
 
-        static readonly IObservable<int> _prependObservable = Observable.Empty<int>().Prepend(0);
+        private static readonly IObservable<int> _prependObservable = Observable.Empty<int>().Prepend(0);
         [Benchmark]
         public void Prepend_Subscribe()
         {
@@ -60,7 +60,7 @@ namespace Benchmarks.System.Reactive
                 .StartWith(0);
         }
 
-        static readonly IObservable<int> _startWithObservable = Observable.Empty<int>().StartWith(0);
+        private static readonly IObservable<int> _startWithObservable = Observable.Empty<int>().StartWith(0);
         [Benchmark]
         public void StartWith_Subscribe()
         {

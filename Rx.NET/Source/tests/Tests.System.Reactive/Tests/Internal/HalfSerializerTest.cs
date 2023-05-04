@@ -16,7 +16,7 @@ namespace ReactiveTests.Tests
     {
         private int _wip;
         private Exception _error;
-        private Consumer _consumer = new();
+        private readonly Consumer _consumer = new();
 
         [TestMethod]
         public void HalfSerializer_OnNext()

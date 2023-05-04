@@ -11,7 +11,7 @@ namespace ReactiveTests.Tests
 {
     internal class MySubject : ISubject<int>
     {
-        private Dictionary<int, IDisposable> _disposeOn = new();
+        private readonly Dictionary<int, IDisposable> _disposeOn = new();
 
         public void DisposeOn(int value, IDisposable disposable)
         {

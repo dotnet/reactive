@@ -277,7 +277,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _resultSelector = resultSelector;
                 }
 
-                int _enumerationInProgress;
+                private int _enumerationInProgress;
 
                 private IEnumerator<TSecond>? _rightEnumerator;
 

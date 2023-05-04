@@ -3483,7 +3483,7 @@ namespace ReactiveTests.Tests
 
     internal class GroupByComparer : IEqualityComparer<string>
     {
-        private TestScheduler _scheduler;
+        private readonly TestScheduler _scheduler;
         private readonly int _equalsThrowsAfter;
         private readonly ushort _getHashCodeThrowsAfter;
 

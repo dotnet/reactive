@@ -2066,7 +2066,7 @@ namespace ReactiveTests.Tests
 
         private class CurrentThrowsEnumerable<T> : IEnumerable<T>
         {
-            private IEnumerable<T> _e;
+            private readonly IEnumerable<T> _e;
             private readonly Exception _ex;
 
             public CurrentThrowsEnumerable(IEnumerable<T> e, Exception ex)
@@ -2087,7 +2087,7 @@ namespace ReactiveTests.Tests
 
             private class Enumerator : IEnumerator<T>
             {
-                private IEnumerator<T> _e;
+                private readonly IEnumerator<T> _e;
                 private readonly Exception _ex;
 
                 public Enumerator(IEnumerator<T> e, Exception ex)
@@ -2181,7 +2181,7 @@ namespace ReactiveTests.Tests
 
         private class MoveNextThrowsEnumerable<T> : IEnumerable<T>
         {
-            private IEnumerable<T> _e;
+            private readonly IEnumerable<T> _e;
             private readonly Exception _ex;
 
             public MoveNextThrowsEnumerable(IEnumerable<T> e, Exception ex)
@@ -2202,7 +2202,7 @@ namespace ReactiveTests.Tests
 
             private class Enumerator : IEnumerator<T>
             {
-                private IEnumerator<T> _e;
+                private readonly IEnumerator<T> _e;
                 private readonly Exception _ex;
 
                 public Enumerator(IEnumerator<T> e, Exception ex)
