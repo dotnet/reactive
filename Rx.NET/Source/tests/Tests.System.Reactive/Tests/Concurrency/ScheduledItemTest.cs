@@ -126,12 +126,9 @@ namespace ReactiveTests
 
         private class SI2 : ScheduledItem<int>
         {
-            private readonly int _value;
-
             public SI2(int dueTime, int value)
                 : base(dueTime, Comparer<int>.Default)
             {
-                _value = value;
             }
 
             protected override IDisposable InvokeCore()
