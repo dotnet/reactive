@@ -140,10 +140,7 @@ namespace System.Reactive.Linq
             private void Unregister()
             {
                 var lease = (ILease)RemotingServices.GetLifetimeService(this);
-                if (lease != null)
-                {
-                    lease.Unregister(this);
-                }
+                lease?.Unregister(this);
             }
 
             [SecurityCritical]
@@ -211,10 +208,7 @@ namespace System.Reactive.Linq
                 private void Unregister()
                 {
                     var lease = (ILease)RemotingServices.GetLifetimeService(this);
-                    if (lease != null)
-                    {
-                        lease.Unregister(this);
-                    }
+                    lease?.Unregister(this);
                 }
 
                 [SecurityCritical]
