@@ -20,7 +20,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(_value, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(_value, observer);
 
             protected override void Run(_ sink) => sink.Run(_scheduler);
 
@@ -75,7 +75,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(_value, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(_value, observer);
 
             protected override void Run(_ sink) => sink.Run(_scheduler);
 
@@ -120,7 +120,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _repeatCount = repeatCount;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(_value, _repeatCount, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(_value, _repeatCount, observer);
 
             protected override void Run(_ sink) => sink.Run(_scheduler);
 
@@ -192,7 +192,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _repeatCount = repeatCount;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(_value, _repeatCount, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(_value, _repeatCount, observer);
 
             protected override void Run(_ sink) => sink.Run(_scheduler);
 

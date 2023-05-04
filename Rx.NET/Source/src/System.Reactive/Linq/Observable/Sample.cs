@@ -18,13 +18,13 @@ namespace System.Reactive.Linq.ObservableImpl
             _sampler = sampler;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
 
             public _(IObserver<TSource> observer)
                 : base(observer)
@@ -165,13 +165,13 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
 
             public _(IObserver<TSource> observer)
                 : base(observer)

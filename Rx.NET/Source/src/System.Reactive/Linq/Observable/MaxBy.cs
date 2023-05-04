@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(this, observer);
+        protected override _ CreateSink(IObserver<IList<TSource>> observer) => new(this, observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 

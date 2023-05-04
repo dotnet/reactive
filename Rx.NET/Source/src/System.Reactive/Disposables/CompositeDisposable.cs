@@ -14,7 +14,7 @@ namespace System.Reactive.Disposables
     [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Backward compat + ideally want to get rid of the ICollection nature of the type.")]
     public sealed class CompositeDisposable : ICollection<IDisposable>, ICancelable
     {
-        private readonly object _gate = new object();
+        private readonly object _gate = new();
         private bool _disposed;
         private List<IDisposable?> _disposables;
         private int _count;
@@ -387,7 +387,7 @@ namespace System.Reactive.Disposables
         /// method to avoid allocation on disposed or empty composites.
         /// </summary>
         private static readonly CompositeEnumerator EmptyEnumerator =
-            new CompositeEnumerator(Array.Empty<IDisposable?>());
+            new(Array.Empty<IDisposable?>());
 
         /// <summary>
         /// An enumerator for an array of disposables.

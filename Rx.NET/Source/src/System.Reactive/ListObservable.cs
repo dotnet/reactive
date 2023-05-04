@@ -21,8 +21,8 @@ namespace System.Reactive
     public class ListObservable<T> : IList<T>, IObservable<object>
     {
         private readonly IDisposable _subscription;
-        private readonly AsyncSubject<object> _subject = new AsyncSubject<object>();
-        private readonly List<T> _results = new List<T>();
+        private readonly AsyncSubject<object> _subject = new();
+        private readonly List<T> _results = new();
 
         /// <summary>
         /// Constructs an object that retains the values of source and signals the end of the sequence.

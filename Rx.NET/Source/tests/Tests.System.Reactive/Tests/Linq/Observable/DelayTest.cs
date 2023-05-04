@@ -1727,8 +1727,8 @@ namespace ReactiveTests.Tests
                 throw new NotImplementedException();
             }
 
-            private ManualResetEvent _event = new ManualResetEvent(false);
-            private ManualResetEvent _done = new ManualResetEvent(false);
+            private ManualResetEvent _event = new(false);
+            private ManualResetEvent _done = new(false);
 
             public ManualResetEvent Event { get { return _event; } }
             public ManualResetEvent Done { get { return _done; } }

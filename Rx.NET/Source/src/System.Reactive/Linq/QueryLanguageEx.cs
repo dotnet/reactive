@@ -486,7 +486,7 @@ namespace System.Reactive.Linq
         private class ChainObservable<T> : ISubject<IObservable<T>, T>
         {
             private readonly T _head;
-            private readonly AsyncSubject<IObservable<T>> _tail = new AsyncSubject<IObservable<T>>();
+            private readonly AsyncSubject<IObservable<T>> _tail = new();
 
             public ChainObservable(T head)
             {

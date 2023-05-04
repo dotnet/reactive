@@ -15,13 +15,13 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_sources);
 
         internal sealed class _ : Sink<IObservable<TSource>, TSource>
         {
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
 
             public _(IObserver<TSource> observer)
                 : base(observer)

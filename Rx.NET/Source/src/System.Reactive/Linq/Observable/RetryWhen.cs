@@ -164,7 +164,7 @@ namespace System.Reactive.Linq.ObservableImpl
     internal sealed class RedoSerializedObserver<X> : IObserver<X>
     {
 #pragma warning disable CA2201 // (Do not raise reserved exception types.) This is a sentinel, and is not thrown, so there's no need for it to be anything else.
-        private static readonly Exception SignaledIndicator = new Exception();
+        private static readonly Exception SignaledIndicator = new();
 #pragma warning restore CA2201
 
         private readonly IObserver<X> _downstream;

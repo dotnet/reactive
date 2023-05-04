@@ -74,7 +74,7 @@ namespace System.Reactive.Concurrency
     "\\}")]
     public class HistoricalScheduler : HistoricalSchedulerBase
     {
-        private readonly SchedulerQueue<DateTimeOffset> _queue = new SchedulerQueue<DateTimeOffset>();
+        private readonly SchedulerQueue<DateTimeOffset> _queue = new();
 
         /// <summary>
         /// Creates a new historical scheduler with the minimum value of <see cref="DateTimeOffset"/> as the initial clock value.

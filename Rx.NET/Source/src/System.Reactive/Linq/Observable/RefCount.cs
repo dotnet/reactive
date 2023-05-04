@@ -15,7 +15,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly IConnectableObservable<TSource> _source;
 
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
 
             /// <summary>
             /// Contains the current active connection's state or null
@@ -32,7 +32,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _minObservers = minObservers;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer, this);
+            protected override _ CreateSink(IObserver<TSource> observer) => new(observer, this);
 
             protected override void Run(_ sink) => sink.Run();
 
@@ -156,7 +156,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _minObservers = minObservers;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+            protected override _ CreateSink(IObserver<TSource> observer) => new(observer);
 
             protected override void Run(_ sink) => sink.Run(this);
 

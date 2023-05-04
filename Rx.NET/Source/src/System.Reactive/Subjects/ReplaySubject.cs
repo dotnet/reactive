@@ -215,7 +215,7 @@ namespace System.Reactive.Subjects
 
         private abstract class ReplayBase : SubjectBase<T>
         {
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
 
             private ImmutableList<IScheduledObserver<T>> _observers;
 
@@ -698,7 +698,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Gate to control ownership transfer and protect data structures.
         /// </summary>
-        private readonly object _gate = new object();
+        private readonly object _gate = new();
 
         /// <summary>
         /// Observer to forward notifications to.
@@ -708,7 +708,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Queue to enqueue OnNext notifications into.
         /// </summary>
-        private Queue<T> _queue = new Queue<T>();
+        private Queue<T> _queue = new();
 
         /// <summary>
         /// Standby queue to swap out for _queue when transferring ownership. This allows to reuse

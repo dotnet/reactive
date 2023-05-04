@@ -79,7 +79,7 @@ namespace Tests.System.Reactive.Tests
         [TestMethod]
         public async Task BasicsWithSynchronizationContext()
         {
-            SynchronizationContext ctx = SynchronizationContext.Current;
+            var ctx = SynchronizationContext.Current;
             try
             {
                 SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());

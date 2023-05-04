@@ -754,7 +754,9 @@ namespace ReactiveTests.Tests
                     o.OnNext(x);
                 });
 
+#pragma warning disable IDE0039 // (Use local function.) We are testing for a returned Action, and want to be explicit about that.
                 Action a = () => d.Dispose();
+#pragma warning restore IDE0039
                 return a;
             });
 

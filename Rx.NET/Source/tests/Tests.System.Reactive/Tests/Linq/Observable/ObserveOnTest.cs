@@ -36,6 +36,7 @@ namespace ReactiveTests.Tests
         {
             var someObservable = Observable.Empty<int>();
 
+#pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overloads being tested.
 #if HAS_WINFORMS
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(default(IObservable<int>), new ControlScheduler(new Label())));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(someObservable, default(ControlScheduler)));
@@ -52,6 +53,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.ObserveOn<int>(someObservable, default(Dispatcher)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.ObserveOnDispatcher<int>(default(IObservable<int>)));
 #endif
+#pragma warning restore IDE0034
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(default, new SynchronizationContext()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn(someObservable, default(SynchronizationContext)));
         }

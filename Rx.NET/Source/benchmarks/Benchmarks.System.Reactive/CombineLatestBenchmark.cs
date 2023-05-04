@@ -10,7 +10,7 @@ namespace Benchmarks.System.Reactive
     [MemoryDiagnoser]
     public class CombineLatestBenchmark
     {
-        private CombineLatestTest _zipTest = new CombineLatestTest();
+        private CombineLatestTest _zipTest = new();
 
         [Benchmark]
         public void CombineLatest_Typical2()

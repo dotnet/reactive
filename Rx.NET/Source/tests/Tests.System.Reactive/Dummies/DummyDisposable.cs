@@ -8,7 +8,7 @@ namespace ReactiveTests.Dummies
 {
     internal class DummyDisposable : IDisposable
     {
-        public static readonly DummyDisposable Instance = new DummyDisposable();
+        public static readonly DummyDisposable Instance = new();
 
         public void Dispose()
         {

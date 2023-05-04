@@ -12,7 +12,7 @@ namespace ReactiveTests.Tests
 {
     internal static class WinFormsTestUtils
     {
-        private static readonly Semaphore s_oneWinForms = new Semaphore(1, 1);
+        private static readonly Semaphore s_oneWinForms = new(1, 1);
 
         public static IDisposable RunTest(out Label label)
         {

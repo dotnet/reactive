@@ -15,7 +15,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_sources);
 

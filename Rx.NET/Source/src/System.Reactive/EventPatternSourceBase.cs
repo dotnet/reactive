@@ -20,7 +20,7 @@ namespace System.Reactive
             private bool _isDone;
             private bool _isAdded;
             private readonly Delegate _handler;
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
             private readonly Action<TSender?, TEventArgs> _invoke;
             private readonly EventPatternSourceBase<TSender, TEventArgs> _sourceBase;
 

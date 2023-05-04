@@ -25,7 +25,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer) => new _(this, observer);
+        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer) => new(this, observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 

@@ -36,6 +36,7 @@ namespace ReactiveTests.Tests
         {
             var someObservable = Observable.Empty<int>();
 
+#pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overload being tested.
 #if HAS_WINFORMS
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default(IObservable<int>), new ControlScheduler(new Label())));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(someObservable, default(ControlScheduler)));
@@ -51,6 +52,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.SubscribeOn<int>(someObservable, default(Dispatcher)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.SubscribeOnDispatcher<int>(default(IObservable<int>)));
 #endif
+#pragma warning restore IDE0034
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default, new SynchronizationContext()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn(someObservable, default(SynchronizationContext)));
         }
@@ -59,7 +61,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void SubscribeOn_Control()
         {
-            bool okay = true;
+            var okay = true;
 
             using (WinFormsTestUtils.RunTest(out var lbl))
             {
@@ -93,7 +95,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void SubscribeOn_ControlScheduler()
         {
-            bool okay = true;
+            var okay = true;
 
             using (WinFormsTestUtils.RunTest(out var lbl))
             {
@@ -136,7 +138,7 @@ namespace ReactiveTests.Tests
                 RunAsync(evt =>
                 {
                     var s = new AsyncSubject<Unit>();
-                    bool okay = true;
+                    var okay = true;
                     var d = Observable.Create<int>(obs =>
                     {
                         okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
@@ -167,7 +169,7 @@ namespace ReactiveTests.Tests
                 RunAsync(evt =>
                 {
                     var s = new AsyncSubject<Unit>();
-                    bool okay = true;
+                    var okay = true;
                     var d = Observable.Create<int>(obs =>
                     {
                         okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
@@ -198,7 +200,7 @@ namespace ReactiveTests.Tests
                 RunAsync(evt =>
                 {
                     var s = new AsyncSubject<Unit>();
-                    bool okay = true;
+                    var okay = true;
 
                     dispatcher.BeginInvoke(new Action(() =>
                     {

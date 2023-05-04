@@ -10,7 +10,7 @@ namespace Benchmarks.System.Reactive
     [MemoryDiagnoser]
     public class ZipBenchmark
     {
-        private ZipTest _zipTest = new ZipTest();
+        private ZipTest _zipTest = new();
 
         [Benchmark]
         public void Zip_NAry_Asymmetric()

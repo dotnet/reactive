@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _dueTime = dueTime;
                 }
 
-                protected override _ CreateSink(IObserver<long> observer) => new _(observer);
+                protected override _ CreateSink(IObserver<long> observer) => new(observer);
 
                 protected override void Run(_ sink) => sink.Run(this, _dueTime);
             }
@@ -44,7 +44,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _dueTime = dueTime;
                 }
 
-                protected override _ CreateSink(IObserver<long> observer) => new _(observer);
+                protected override _ CreateSink(IObserver<long> observer) => new(observer);
 
                 protected override void Run(_ sink) => sink.Run(this, _dueTime);
             }
@@ -95,7 +95,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _dueTime = dueTime;
                 }
 
-                protected override _ CreateSink(IObserver<long> observer) => new _(_period, observer);
+                protected override _ CreateSink(IObserver<long> observer) => new(_period, observer);
 
                 protected override void Run(_ sink) => sink.Run(this, _dueTime);
             }
@@ -110,7 +110,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _dueTime = dueTime;
                 }
 
-                protected override _ CreateSink(IObserver<long> observer) => new _(_period, observer);
+                protected override _ CreateSink(IObserver<long> observer) => new(_period, observer);
 
                 protected override void Run(_ sink) => sink.Run(this, _dueTime);
             }

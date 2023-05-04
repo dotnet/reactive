@@ -15,7 +15,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
             }
 
-            protected override _ CreateSink(IObserver<int> observer) => new _(observer);
+            protected override _ CreateSink(IObserver<int> observer) => new(observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
@@ -62,7 +62,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _predicate = predicate;
             }
 
-            protected override _ CreateSink(IObserver<int> observer) => new _(_predicate, observer);
+            protected override _ CreateSink(IObserver<int> observer) => new(_predicate, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 

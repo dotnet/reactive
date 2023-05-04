@@ -12,7 +12,7 @@ namespace System.Reactive.Disposables
         // Keep internal! This is used as sentinel in other IDisposable implementations to detect disposal and
         // should never be exposed to user code in order to prevent users from swapping in the sentinel. Have
         // a look at the code in e.g. SingleAssignmentDisposable for usage patterns.
-        internal static readonly BooleanDisposable True = new BooleanDisposable(true);
+        internal static readonly BooleanDisposable True = new(true);
 
         private volatile bool _isDisposed;
 

@@ -3487,8 +3487,8 @@ namespace ReactiveTests.Tests
         private readonly int _equalsThrowsAfter;
         private readonly ushort _getHashCodeThrowsAfter;
 
-        public Exception HashCodeException = new Exception();
-        public Exception EqualsException = new Exception();
+        public Exception HashCodeException = new();
+        public Exception EqualsException = new();
 
         public GroupByComparer(TestScheduler scheduler, ushort equalsThrowsAfter, ushort getHashCodeThrowsAfter)
         {

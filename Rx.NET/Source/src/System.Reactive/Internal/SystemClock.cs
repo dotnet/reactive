@@ -19,9 +19,9 @@ namespace System.Reactive.PlatformServices
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class SystemClock
     {
-        private static readonly Lazy<ISystemClock> ServiceSystemClock = new Lazy<ISystemClock>(InitializeSystemClock);
-        private static readonly Lazy<INotifySystemClockChanged> ServiceSystemClockChanged = new Lazy<INotifySystemClockChanged>(InitializeSystemClockChanged);
-        internal static readonly HashSet<WeakReference<LocalScheduler>> SystemClockChanged = new HashSet<WeakReference<LocalScheduler>>();
+        private static readonly Lazy<ISystemClock> ServiceSystemClock = new(InitializeSystemClock);
+        private static readonly Lazy<INotifySystemClockChanged> ServiceSystemClockChanged = new(InitializeSystemClockChanged);
+        internal static readonly HashSet<WeakReference<LocalScheduler>> SystemClockChanged = new();
         private static IDisposable? _systemClockChangedHandlerCollector;
 
         private static int _refCount;

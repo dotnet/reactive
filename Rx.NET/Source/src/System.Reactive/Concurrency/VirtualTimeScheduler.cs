@@ -366,7 +366,7 @@ namespace System.Reactive.Concurrency
     public abstract class VirtualTimeScheduler<TAbsolute, TRelative> : VirtualTimeSchedulerBase<TAbsolute, TRelative>
         where TAbsolute : IComparable<TAbsolute>
     {
-        private readonly SchedulerQueue<TAbsolute> _queue = new SchedulerQueue<TAbsolute>();
+        private readonly SchedulerQueue<TAbsolute> _queue = new();
 
         /// <summary>
         /// Creates a new virtual time scheduler with the default value of TAbsolute as the initial clock value.

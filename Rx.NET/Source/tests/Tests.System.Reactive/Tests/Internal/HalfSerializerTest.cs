@@ -16,7 +16,7 @@ namespace ReactiveTests.Tests
     {
         private int _wip;
         private Exception _error;
-        private Consumer _consumer = new Consumer();
+        private Consumer _consumer = new();
 
         [TestMethod]
         public void HalfSerializer_OnNext()
@@ -138,7 +138,7 @@ namespace ReactiveTests.Tests
 
         private sealed class Consumer : ISink<int>
         {
-            internal List<int> Items = new List<int>();
+            internal List<int> Items = new();
 
             internal int Done;
             internal Exception Exc;

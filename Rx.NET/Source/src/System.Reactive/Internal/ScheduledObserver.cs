@@ -18,7 +18,7 @@ namespace System.Reactive
         private const int Running = 1;
         private const int Pending = 2;
         private const int Faulted = 9;
-        private readonly ConcurrentQueue<T> _queue = new ConcurrentQueue<T>();
+        private readonly ConcurrentQueue<T> _queue = new();
         private bool _failed;
         private Exception? _error;
         private bool _completed;
@@ -55,7 +55,7 @@ namespace System.Reactive
             }
         }
 
-        private readonly object _dispatcherInitGate = new object();
+        private readonly object _dispatcherInitGate = new();
         private readonly SemaphoreSlim? _dispatcherEvent;
         private readonly IDisposable? _dispatcherEventRelease;
         private IDisposable? _dispatcherJob;

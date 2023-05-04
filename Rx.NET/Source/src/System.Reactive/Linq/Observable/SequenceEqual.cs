@@ -23,7 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _comparer = comparer;
             }
 
-            protected override _ CreateSink(IObserver<bool> observer) => new _(_comparer, observer);
+            protected override _ CreateSink(IObserver<bool> observer) => new(_comparer, observer);
 
             protected override void Run(_ sink) => sink.Run(this);
 
@@ -227,7 +227,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _comparer = comparer;
             }
 
-            protected override _ CreateSink(IObserver<bool> observer) => new _(_comparer, observer);
+            protected override _ CreateSink(IObserver<bool> observer) => new(_comparer, observer);
 
             protected override void Run(_ sink) => sink.Run(this);
 

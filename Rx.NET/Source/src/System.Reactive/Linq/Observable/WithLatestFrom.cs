@@ -19,14 +19,14 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_first, _second);
 
         internal sealed class _ : IdentitySink<TResult>
         {
-            private readonly object _gate = new object();
-            private readonly object _latestGate = new object();
+            private readonly object _gate = new();
+            private readonly object _latestGate = new();
 
             private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 

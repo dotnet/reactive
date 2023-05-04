@@ -24,14 +24,14 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_first, _second);
 
         internal sealed class _ : IdentitySink<TResult>
         {
             private readonly Func<TFirst, TSecond, TResult> _resultSelector;
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
 
             public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer)
                 : base(observer)
@@ -385,13 +385,13 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_sources);
 
         internal sealed class _ : IdentitySink<TResult>
         {
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
             private readonly Func<IList<TSource>, TResult> _resultSelector;
 
             public _(Func<IList<TSource>, TResult> resultSelector, IObserver<TResult> observer)

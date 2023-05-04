@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// </summary>
     public sealed class NewThreadScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
-        private static readonly Lazy<NewThreadScheduler> Instance = new Lazy<NewThreadScheduler>(static () => new NewThreadScheduler());
+        private static readonly Lazy<NewThreadScheduler> Instance = new(static () => new NewThreadScheduler());
 
         private readonly Func<ThreadStart, Thread> _threadFactory;
 
@@ -130,7 +130,7 @@ namespace System.Reactive.Concurrency
             private readonly TimeSpan _period;
             private readonly Func<TState, TState> _action;
 
-            private readonly object _cancel = new object();
+            private readonly object _cancel = new();
             private volatile bool _done;
 
             private TState _state;

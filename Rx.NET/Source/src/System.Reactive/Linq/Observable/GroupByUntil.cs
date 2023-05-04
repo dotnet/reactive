@@ -27,15 +27,15 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer) => new _(this, observer);
+        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer) => new(this, observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : Sink<TSource, IGroupedObservable<TKey, TElement>>
         {
-            private readonly object _gate = new object();
-            private readonly object _nullGate = new object();
-            private readonly CompositeDisposable _groupDisposable = new CompositeDisposable();
+            private readonly object _gate = new();
+            private readonly object _nullGate = new();
+            private readonly CompositeDisposable _groupDisposable = new();
             private readonly RefCountDisposable _refCountDisposable;
             private readonly Map<TKey, ISubject<TElement>> _map;
 

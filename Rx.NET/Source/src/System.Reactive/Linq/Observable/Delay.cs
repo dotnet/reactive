@@ -50,7 +50,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal abstract class S : _
             {
-                protected readonly object _gate = new object();
+                protected readonly object _gate = new();
                 protected SerialDisposableValue _cancelable;
 
                 protected S(TParent parent, IObserver<TSource> observer)
@@ -62,7 +62,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected bool _ready;
                 protected bool _active;
                 protected bool _running;
-                protected Queue<Reactive.TimeInterval<TSource>> _queue = new Queue<Reactive.TimeInterval<TSource>>();
+                protected Queue<Reactive.TimeInterval<TSource>> _queue = new();
 
                 private bool _hasCompleted;
                 private TimeSpan _completeAt;
@@ -261,15 +261,15 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected abstract class L : _
             {
-                protected readonly object _gate = new object();
-                private readonly SemaphoreSlim _evt = new SemaphoreSlim(0);
+                protected readonly object _gate = new();
+                private readonly SemaphoreSlim _evt = new(0);
 
                 protected L(TParent parent, IObserver<TSource> observer)
                     : base(parent, observer)
                 {
                 }
 
-                protected Queue<Reactive.TimeInterval<TSource>> _queue = new Queue<Reactive.TimeInterval<TSource>>();
+                protected Queue<Reactive.TimeInterval<TSource>> _queue = new();
                 protected SerialDisposableValue _cancelable;
                 protected TimeSpan _delay;
 
@@ -597,8 +597,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal abstract class _ : IdentitySink<TSource>
             {
-                private readonly CompositeDisposable _delays = new CompositeDisposable();
-                private readonly object _gate = new object();
+                private readonly CompositeDisposable _delays = new();
+                private readonly object _gate = new();
 
                 private readonly Func<TSource, IObservable<TDelay>> _delaySelector;
 

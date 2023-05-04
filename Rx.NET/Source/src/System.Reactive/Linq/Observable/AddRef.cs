@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _refCount = refCount;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer, _refCount.GetDisposable());
+        protected override _ CreateSink(IObserver<TSource> observer) => new(observer, _refCount.GetDisposable());
 
         protected override void Run(_ sink) => sink.Run(_source);
 

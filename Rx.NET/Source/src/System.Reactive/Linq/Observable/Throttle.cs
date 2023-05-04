@@ -20,13 +20,13 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(this, observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
             private readonly TimeSpan _dueTime;
             private readonly IScheduler _scheduler;
 
@@ -125,13 +125,13 @@ namespace System.Reactive.Linq.ObservableImpl
             _throttleSelector = throttleSelector;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(this, observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
             private readonly Func<TSource, IObservable<TThrottle>> _throttleSelector;
 
             public _(Throttle<TSource, TThrottle> parent, IObserver<TSource> observer)

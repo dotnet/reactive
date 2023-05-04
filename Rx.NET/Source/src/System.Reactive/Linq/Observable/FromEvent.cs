@@ -234,7 +234,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly EventProducer<TDelegate, TArgs> _parent;
             private readonly Subject<TArgs> _subject;
-            private readonly SingleAssignmentDisposable _removeHandler = new SingleAssignmentDisposable();
+            private readonly SingleAssignmentDisposable _removeHandler = new();
 
             private int _count;
 

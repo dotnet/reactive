@@ -18,7 +18,7 @@ namespace System.Reactive
 
     internal static class TimerStubs
     {
-        public static readonly System.Threading.Timer Never = new System.Threading.Timer(static _ => { });
+        public static readonly System.Threading.Timer Never = new(static _ => { });
     }
 }
 

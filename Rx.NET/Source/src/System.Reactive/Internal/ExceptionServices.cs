@@ -10,7 +10,7 @@ namespace System.Reactive
 {
     internal static class ExceptionHelpers
     {
-        private static readonly Lazy<IExceptionServices> Services = new Lazy<IExceptionServices>(Initialize);
+        private static readonly Lazy<IExceptionServices> Services = new(Initialize);
 
         [DoesNotReturn]
         public static void Throw(this Exception exception) => Services.Value.Rethrow(exception);

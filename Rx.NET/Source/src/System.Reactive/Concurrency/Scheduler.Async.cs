@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     {
         private sealed class AsyncInvocation<TState> : IDisposable
         {
-            private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+            private readonly CancellationTokenSource _cts = new();
             private SingleAssignmentDisposableValue _run;
 
             public IDisposable Run(IScheduler self, TState s, Func<IScheduler, TState, CancellationToken, Task<IDisposable>> action)

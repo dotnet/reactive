@@ -4575,7 +4575,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Zip3WithImmediateReturn()
         {
-            int result = 0;
+            var result = 0;
 
             Observable.Zip<int, int, int, int>(
                 Observable.Return(1),

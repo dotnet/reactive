@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_sources);
 
@@ -82,7 +82,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _handler = handler;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(_handler, observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(_handler, observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 

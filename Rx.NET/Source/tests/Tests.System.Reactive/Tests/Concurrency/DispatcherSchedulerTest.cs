@@ -223,7 +223,9 @@ namespace ReactiveTests.Tests
             {
                 var s = new DispatcherScheduler(disp);
 
+#pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overload being tested.
                 ReactiveAssert.Throws<ArgumentNullException>(() => s.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default(Func<int, int>)));
+#pragma warning restore IDE0034
                 ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => s.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), x => x));
             }
         }

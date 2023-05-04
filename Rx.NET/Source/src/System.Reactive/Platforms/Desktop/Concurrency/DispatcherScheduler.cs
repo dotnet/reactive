@@ -20,7 +20,7 @@ namespace System.Reactive.Concurrency
         /// Gets the scheduler that schedules work on the current <see cref="System.Windows.Threading.Dispatcher"/>.
         /// </summary>
         [Obsolete(Constants_WindowsThreading.OBSOLETE_INSTANCE_PROPERTY)]
-        public static DispatcherScheduler Instance => new DispatcherScheduler(System.Windows.Threading.Dispatcher.CurrentDispatcher);
+        public static DispatcherScheduler Instance => new(System.Windows.Threading.Dispatcher.CurrentDispatcher);
 
         /// <summary>
         /// Gets the scheduler that schedules work on the <see cref="System.Windows.Threading.Dispatcher"/> for the current thread.
