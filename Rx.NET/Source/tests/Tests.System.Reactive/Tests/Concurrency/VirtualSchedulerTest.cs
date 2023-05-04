@@ -56,10 +56,10 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Virtual_ScheduleAction()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
             var scheduler = new VirtualSchedulerTestScheduler();
-            scheduler.Schedule(() => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            scheduler.Schedule(() => { Assert.Equal(id, Environment.CurrentManagedThreadId); ran = true; });
             scheduler.Start();
             Assert.True(ran);
         }
@@ -120,10 +120,10 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Virtual_ScheduleActionDue()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
             var scheduler = new VirtualSchedulerTestScheduler();
-            scheduler.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            scheduler.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Environment.CurrentManagedThreadId); ran = true; });
             scheduler.Start();
             Assert.True(ran, "ran");
         }

@@ -34,9 +34,9 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void CurrentThread_ScheduleAction()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
-            Scheduler.CurrentThread.Schedule(() => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            Scheduler.CurrentThread.Schedule(() => { Assert.Equal(id, Environment.CurrentManagedThreadId); ran = true; });
             Assert.True(ran);
         }
 
@@ -59,11 +59,11 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void CurrentThread_ScheduleActionNested()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
             Scheduler.CurrentThread.Schedule(() =>
             {
-                Assert.Equal(id, Thread.CurrentThread.ManagedThreadId);
+                Assert.Equal(id, Environment.CurrentManagedThreadId);
                 Scheduler.CurrentThread.Schedule(() => { ran = true; });
             });
             Assert.True(ran);
@@ -72,11 +72,11 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void CurrentThread_ScheduleActionNested_TimeSpan()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
             Scheduler.CurrentThread.Schedule(() =>
             {
-                Assert.Equal(id, Thread.CurrentThread.ManagedThreadId);
+                Assert.Equal(id, Environment.CurrentManagedThreadId);
                 Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(1), () => { ran = true; });
             });
             Assert.True(ran);
@@ -85,24 +85,24 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void CurrentThread_ScheduleActionDue()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
-            Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Environment.CurrentManagedThreadId); ran = true; });
             Assert.True(ran, "ran");
         }
 
         [TestMethod]
         public void CurrentThread_ScheduleActionDueNested()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
             Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(0.2), () =>
             {
-                Assert.Equal(id, Thread.CurrentThread.ManagedThreadId);
+                Assert.Equal(id, Environment.CurrentManagedThreadId);
 
                 Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(0.2), () =>
                 {
-                    Assert.Equal(id, Thread.CurrentThread.ManagedThreadId);
+                    Assert.Equal(id, Environment.CurrentManagedThreadId);
                     ran = true;
                 });
             });

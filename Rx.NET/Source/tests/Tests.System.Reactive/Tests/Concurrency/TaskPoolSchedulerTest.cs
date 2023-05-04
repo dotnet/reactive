@@ -38,37 +38,37 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void TaskPool_ScheduleAction()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = TaskPoolScheduler.Default;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(() => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(() => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
         [TestMethod]
         public void TaskPool_ScheduleActionDueNow()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = TaskPoolScheduler.Default;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(TimeSpan.Zero, () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(TimeSpan.Zero, () => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
         [TestMethod]
         public void TaskPool_ScheduleActionDue()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = TaskPoolScheduler.Default;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(TimeSpan.FromMilliseconds(1), () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(TimeSpan.FromMilliseconds(1), () => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
         [TestMethod]
         public void TaskPool_ScheduleActionCancel()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = TaskPoolScheduler.Default;
             var set = false;
             var d = nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.True(false); set = true; });

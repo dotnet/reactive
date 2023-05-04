@@ -106,11 +106,11 @@ namespace ReactiveTests.Tests
             {
                 RunAsync(evt =>
                 {
-                    var id = Thread.CurrentThread.ManagedThreadId;
+                    var id = Environment.CurrentManagedThreadId;
                     var sch = new DispatcherScheduler(disp);
                     sch.Schedule(() =>
                     {
-                        Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId);
+                        Assert.NotEqual(id, Environment.CurrentManagedThreadId);
                         evt.Set();
                     });
                 });
@@ -124,7 +124,7 @@ namespace ReactiveTests.Tests
             {
                 var ex = new Exception();
 
-                var id = Thread.CurrentThread.ManagedThreadId;
+                var id = Environment.CurrentManagedThreadId;
                 var evt = new ManualResetEvent(false);
 
                 Exception thrownEx = null;
@@ -160,17 +160,17 @@ namespace ReactiveTests.Tests
             {
                 var evt = new ManualResetEvent(false);
 
-                var id = Thread.CurrentThread.ManagedThreadId;
+                var id = Environment.CurrentManagedThreadId;
 
                 var sch = new DispatcherScheduler(disp);
 
                 sch.Schedule(delay, () =>
                 {
-                    Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId);
+                    Assert.NotEqual(id, Environment.CurrentManagedThreadId);
 
                     sch.Schedule(delay, () =>
                     {
-                        Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId);
+                        Assert.NotEqual(id, Environment.CurrentManagedThreadId);
                         evt.Set();
                     });
                 });
@@ -186,13 +186,13 @@ namespace ReactiveTests.Tests
             {
                 var evt = new ManualResetEvent(false);
                 
-                var id = Thread.CurrentThread.ManagedThreadId;
+                var id = Environment.CurrentManagedThreadId;
 
                 var sch = new DispatcherScheduler(disp);
                 
                 sch.Schedule(TimeSpan.FromSeconds(0.1), () =>
                 {
-                    Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId);
+                    Assert.NotEqual(id, Environment.CurrentManagedThreadId);
 
                     var d = sch.Schedule(TimeSpan.FromSeconds(0.1), () =>
                     {
@@ -207,7 +207,7 @@ namespace ReactiveTests.Tests
 
                     sch.Schedule(TimeSpan.FromSeconds(0.2), () =>
                     {
-                        Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId);
+                        Assert.NotEqual(id, Environment.CurrentManagedThreadId);
                         evt.Set();
                     });
                 });
@@ -235,7 +235,7 @@ namespace ReactiveTests.Tests
             {
                 var evt = new ManualResetEvent(false);
 
-                var id = Thread.CurrentThread.ManagedThreadId;
+                var id = Environment.CurrentManagedThreadId;
 
                 var sch = new DispatcherScheduler(disp);
 
@@ -243,7 +243,7 @@ namespace ReactiveTests.Tests
 
                 d.Disposable = sch.SchedulePeriodic(1, TimeSpan.FromSeconds(0.1), n =>
                 {
-                    Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId);
+                    Assert.NotEqual(id, Environment.CurrentManagedThreadId);
 
                     if (n == 3)
                     {
@@ -251,7 +251,7 @@ namespace ReactiveTests.Tests
 
                         sch.Schedule(TimeSpan.FromSeconds(0.2), () =>
                         {
-                            Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId);
+                            Assert.NotEqual(id, Environment.CurrentManagedThreadId);
                             evt.Set();
                         });
                     }

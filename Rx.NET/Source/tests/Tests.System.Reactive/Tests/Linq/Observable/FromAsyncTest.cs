@@ -272,7 +272,7 @@ namespace ReactiveTests.Tests
             xs.Subscribe(res =>
             {
                 x = res;
-                t = Thread.CurrentThread.ManagedThreadId;
+                t = Environment.CurrentManagedThreadId;
                 e.Set();
             });
 
@@ -281,7 +281,7 @@ namespace ReactiveTests.Tests
             e.WaitOne();
 
             Assert.Equal(42, x);
-            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(Environment.CurrentManagedThreadId, t);
         }
 
         [TestMethod]
@@ -297,7 +297,7 @@ namespace ReactiveTests.Tests
             xs.Subscribe(res =>
             {
                 x = res;
-                t = Thread.CurrentThread.ManagedThreadId;
+                t = Environment.CurrentManagedThreadId;
                 e.Set();
             });
 
@@ -306,7 +306,7 @@ namespace ReactiveTests.Tests
             e.WaitOne();
 
             Assert.Equal(42, x);
-            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(Environment.CurrentManagedThreadId, t);
         }
 #endif
 
@@ -547,7 +547,7 @@ namespace ReactiveTests.Tests
             var xs = Observable.FromAsync(() => (Task)tcs.Task, Scheduler.Immediate);
             xs.Subscribe(res =>
             {
-                t = Thread.CurrentThread.ManagedThreadId;
+                t = Environment.CurrentManagedThreadId;
                 e.Set();
             });
 
@@ -555,7 +555,7 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(Environment.CurrentManagedThreadId, t);
         }
 
         [TestMethod]
@@ -569,7 +569,7 @@ namespace ReactiveTests.Tests
             var xs = Observable.FromAsync(ct => (Task)tcs.Task, Scheduler.Immediate);
             xs.Subscribe(res =>
             {
-                t = Thread.CurrentThread.ManagedThreadId;
+                t = Environment.CurrentManagedThreadId;
                 e.Set();
             });
 
@@ -577,7 +577,7 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(Environment.CurrentManagedThreadId, t);
         }
 #endif
 

@@ -84,11 +84,11 @@ namespace ReactiveTests.Tests
             using var el = new EventLoopScheduler();
             el.Schedule(() =>
             {
-                id = Thread.CurrentThread.ManagedThreadId;
+                id = Environment.CurrentManagedThreadId;
                 gate.Release();
             });
             Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
-            Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, id);
+            Assert.NotEqual(Environment.CurrentManagedThreadId, id);
         }
 
         [TestMethod]
