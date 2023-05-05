@@ -89,7 +89,6 @@ namespace ReactiveTests
             var si1 = new SI2(42, 123);
             var si2 = new SI2(42, 123);
             var si3 = new SI2(42, 321);
-            var si4 = new SI2(43, 123);
 
 #pragma warning disable 1718
             Assert.False(si1 != si1);

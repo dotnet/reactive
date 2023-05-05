@@ -68,7 +68,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void SingleAssignmentDisposable_SetNull()
         {
-            var d = new SingleAssignmentDisposable
+            _ = new SingleAssignmentDisposable
             {
                 Disposable = null
             };

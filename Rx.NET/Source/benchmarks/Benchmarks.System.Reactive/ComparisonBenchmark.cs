@@ -25,7 +25,7 @@ namespace Benchmarks.System.Reactive
         public void ForLoopBaseLine()
         {
             var n = N;
-            for (var i = 0; i < N; i++)
+            for (var i = 0; i < n; i++)
             {
                 Volatile.Write(ref _store, i);
             }
