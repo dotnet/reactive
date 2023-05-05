@@ -1775,7 +1775,7 @@ namespace ReactiveTests.Tests
                         select new { Name = o.Key, Observable = o.ToList(), Qbservable = q.ToList() })
                        .ToList();
 
-            bool filterReturn(Type t)
+            static bool filterReturn(Type t)
             {
                 if (t.GetTypeInfo().IsGenericType)
                 {

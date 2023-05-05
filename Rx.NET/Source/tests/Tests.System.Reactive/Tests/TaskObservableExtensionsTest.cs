@@ -1173,7 +1173,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public async Task ToTask_Scheduler_Dispose_Can_Propagate()
         {
-            async Task asyncMethod()
+            static async Task asyncMethod()
             {
                 await Task.Delay(500);
                 Console.WriteLine("Done");
