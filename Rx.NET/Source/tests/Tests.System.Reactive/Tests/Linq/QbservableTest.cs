@@ -1749,7 +1749,9 @@ namespace ReactiveTests.Tests
             xs.Concat(ys.Provider.Amb(xs)).ForEach(_ => { });
         }
 
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         private void Ignore<T>(IQbservable<T> q)
+#pragma warning restore IDE0060
         {
         }
 

@@ -126,7 +126,7 @@ namespace ReactiveTests
 
         private class SI2 : ScheduledItem<int>
         {
-            public SI2(int dueTime, int value)
+            public SI2(int dueTime, int _)
                 : base(dueTime, Comparer<int>.Default)
             {
             }
