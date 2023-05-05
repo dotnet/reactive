@@ -175,10 +175,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         if (++parent._count == parent._minObservers)
                         {
-                            if (parent._connectableSubscription == null)
-                            {
-                                parent._connectableSubscription = parent._source.Connect();
-                            }
+                            parent._connectableSubscription ??= parent._source.Connect();
 
                             Disposable.TrySetSerial(ref parent._serial, new SingleAssignmentDisposable());
                         }

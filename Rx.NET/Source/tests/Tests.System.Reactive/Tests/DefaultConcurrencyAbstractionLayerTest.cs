@@ -22,10 +22,7 @@ namespace ReactiveTests.Tests
 
         public DefaultConcurrencyAbstractionLayerTest()
         {
-            if (_domain == null)
-            {
-                _domain = AppDomain.CreateDomain("Default_CAL", null, new AppDomainSetup { ApplicationBase = AppDomain.CurrentDomain.BaseDirectory });
-            }
+            _domain ??= AppDomain.CreateDomain("Default_CAL", null, new AppDomainSetup { ApplicationBase = AppDomain.CurrentDomain.BaseDirectory });
         }
 
         private void Run(CrossAppDomainDelegate a)

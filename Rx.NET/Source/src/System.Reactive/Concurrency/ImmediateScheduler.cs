@@ -79,10 +79,7 @@ namespace System.Reactive.Concurrency
 
                 var m = new SingleAssignmentDisposable();
 
-                if (_asyncLock == null)
-                {
-                    _asyncLock = new AsyncLock();
-                }
+                _asyncLock ??= new AsyncLock();
 
                 _asyncLock.Wait(
                     (@this: this, m, action, state),
@@ -118,10 +115,7 @@ namespace System.Reactive.Concurrency
 
                 var m = new SingleAssignmentDisposable();
 
-                if (_asyncLock == null)
-                {
-                    _asyncLock = new AsyncLock();
-                }
+                _asyncLock ??= new AsyncLock();
 
                 _asyncLock.Wait(
                     (@this: this, m, state, action, timer, dueTime),

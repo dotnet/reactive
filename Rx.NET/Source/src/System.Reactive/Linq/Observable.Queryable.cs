@@ -25,10 +25,7 @@ namespace System.Reactive.Linq
         {
             get
             {
-                if (s_provider == null)
-                {
-                    s_provider = new ObservableQueryProvider();
-                }
+                s_provider ??= new ObservableQueryProvider();
 
                 return s_provider;
             }

@@ -811,10 +811,7 @@ namespace System.Reactive.Subjects
                         //
                         if (_queue.Count > 0)
                         {
-                            if (_queue2 == null)
-                            {
-                                _queue2 = new Queue<T>();
-                            }
+                            _queue2 ??= new Queue<T>();
 
                             //
                             // Swap out the current queue for a fresh or recycled one. The standby

@@ -43,10 +43,7 @@ namespace System.Reactive.Concurrency
         {
             get
             {
-                if (_clock == null)
-                {
-                    _clock = ConcurrencyAbstractionLayer.Current.StartStopwatch();
-                }
+                _clock ??= ConcurrencyAbstractionLayer.Current.StartStopwatch();
 
                 return _clock.Elapsed;
             }

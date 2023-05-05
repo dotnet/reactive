@@ -127,10 +127,7 @@ namespace System.Reactive.PlatformServices
                 {
                     if (!handler.TryGetTarget(out _))
                     {
-                        if (remove == null)
-                        {
-                            remove = new HashSet<WeakReference<LocalScheduler>>();
-                        }
+                        remove ??= new HashSet<WeakReference<LocalScheduler>>();
 
                         remove.Add(handler);
                     }
