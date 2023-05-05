@@ -35,7 +35,7 @@
     IDE0057     do this.
     -->
     <!-- Get diagnostics back to the level that the .NET 5.0 SDK had for now. Fix these properly before release. -->
-    <NoWarn>$(NoWarn);CA2213;IDE0056;IDE0057;IDE0075;IDE0076;IDE0077;IDE0079;IDE0270;IDE0280;IDE1006;IDE1056</NoWarn>
+    <NoWarn>$(NoWarn);CA2213;IDE0056;IDE0057;IDE0076;IDE0077;IDE0079;IDE0270;IDE0280;IDE1006;IDE1056</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
