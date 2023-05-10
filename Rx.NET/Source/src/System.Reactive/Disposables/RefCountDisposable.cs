@@ -54,7 +54,6 @@ namespace System.Reactive.Disposables
         /// </summary>
         /// <returns>A dependent disposable contributing to the reference count that manages the underlying disposable's lifetime.</returns>
         /// <exception cref="ObjectDisposedException">This instance has been disposed and is configured to throw in this case by <see cref="RefCountDisposable(IDisposable, bool)"/>.</exception>
-        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Backward compat + non-trivial work for a property getter.")]
         public IDisposable GetDisposable()
         {
             // the current state

@@ -86,9 +86,7 @@ namespace System.Reactive.Concurrency
 
         private static IScheduler Initialize(string name)
         {
-#pragma warning disable CS0618 // Type or member is obsolete
             var res = PlatformEnlightenmentProvider.Current.GetService<IScheduler>(name);
-#pragma warning restore CS0618 // Type or member is obsolete
             if (res == null)
             {
                 throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, Strings_Core.CANT_OBTAIN_SCHEDULER, name));

@@ -1,0 +1,70 @@
+[*.cs]
+# Suppress spurious 'unnecessary suppression' reports.
+#
+# A load of these come from CA1704. We currently can't use this, but want to reinstate it at some
+# point, so we don't want to delete all of the suppression attributes that used to suppress the
+# spurious reports the old StyleCop-era CA1704 analyzer produced. We expect to need most of those
+# attributes if we manage to re-instate CA1704. But since CA1704 is currently not enabled, these
+# suppression attributes would produce an IDE0079 (Remove unnecessary suppression) message. We
+# disable IDE0079 for CA1704 so that we can leave these suppressions in place, ready for when
+# CA1704 might be restored.
+# So why aren't we using CA1704? The CA1704 current analyzer is essentially broken. Microsoft
+# never ported this analyzer into the new world of Roslyn-based code analyzers. This is not
+# obvious because the source for a new CA1704 analyzer does in fact exist, and it's in the same
+# repo as all the supported ones. However, it's deemed to be an unsupported community effort,
+# it lives in its own NuGet package (with the surprisingly generic name of Text.Analyzers).
+# It has two serious flaws:
+#   https://github.com/dotnet/roslyn-analyzers/issues/6024 - it can't be configured to ignore
+#       private symbols
+#   https://github.com/dotnet/roslyn-analyzers/issues/5183 - its definition of 'unmeaningful' is
+#       too broad, and can't be disabled
+# The first issue could perhaps be circumvented by adding a few entries to a custom dictionary, but
+# the second is impossible to work around.  The analyzer describes type arguments of the form `T1`,
+# `T2` etc as 'meaningless' # and there's no way to stop that. This is a significant problem for Rx,
+# because we have quite a lot of methods with large numbers of generic type arguments in which the
+# meaning of those type arguments is entirely up to application code, so there's simply no way for
+# us to give them meaningful names. As with .NET runtime library types like Action<T1, T2, T3> we
+# just use names like T1, T2, T3. The names are deliberately meaningless, because they represent
+# placeholders for application types that will signify whatever the application wants to signify.
+# So there are no better names, and in any case it would technically be a breaking change to
+# rename them. We might be able to deal with this by adding enormous numbers of suppressions, but
+# it would be better for the CA1704 analyzer to be fixed - we aren't the only users for which this
+# is a major issue.
+# We also disable suppression warnings for CA1711. It's currently a mystery why that's being
+# reported as unnecessary on ObservableEx, but it is, so we've squelched it.
+# IL2060 is considered unnecessary on targets that don't support trimming, but we don't want to wrap every
+# single one in a conditional, so we also suppress warnings about unnecessary suppressions on those.
+dotnet_remove_unnecessary_suppression_exclusions = CA1704,CA1711,IL2060
+
+
+# Prevent IDE1006 (Naming rule violation) errors for non-public fields.
+#
+# Unfortunately, the codebase has not historically been entirely consistent with internal naming
+# conventions. Apparently this wasn't noticed by older analyzer tooling, but as of the .NET 7
+# era, the naming rules analyzers are a bit more particular, and cannot be configured in a way
+# that makes them happy with the code as it stands. We could rename all the relevant symbols,
+# but that doesn't seem like an especially good use of time, so for now, we're suppressing
+# diagnostics in certain cases.
+#
+# Static readonly fields
+dotnet_naming_rule.static_readonly_fields_should_be_pascal_case.severity = none
+
+# Internal fields
+dotnet_naming_symbols.internal_field_symbols.applicable_kinds           = field
+dotnet_naming_symbols.internal_field_symbols.applicable_accessibilities = internal
+
+dotnet_naming_rule.internal_instance_fields_must_be_camel_cased_underscore_prefix.symbols  = internal_field_symbols
+dotnet_naming_rule.internal_instance_fields_must_be_camel_cased_underscore_prefix.style    = camel_case_and_prefix_with_underscore_style
+dotnet_naming_rule.internal_instance_fields_must_be_camel_cased_underscore_prefix.severity = none
+
+# Protected fields
+# Annoyingly, a protected field in an internal class cannot be distinguished from a protected field in a public
+# class. That's unfortunate, because the latter are publicly visible, but the former are not, so we don't really
+# want to enforce public naming conventions on them. We generally avoid publicly visible fields, so the majority
+# of protected fields are in fact in internal types, so we use naming conventions appropriate to those.
+dotnet_naming_symbols.protected_field_symbols.applicable_kinds           = field
+dotnet_naming_symbols.protected_field_symbols.applicable_accessibilities = protected
+
+dotnet_naming_rule.protected_instance_fields_must_be_camel_cased_underscore_prefix.symbols  = protected_field_symbols
+dotnet_naming_rule.protected_instance_fields_must_be_camel_cased_underscore_prefix.style    = camel_case_and_prefix_with_underscore_style
+dotnet_naming_rule.protected_instance_fields_must_be_camel_cased_underscore_prefix.severity = none

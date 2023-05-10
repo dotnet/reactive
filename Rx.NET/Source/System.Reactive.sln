@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28407.52
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive", "src\System.Reactive\System.Reactive.csproj", "{01706A0F-8A63-4FD6-AF45-0BC0BED3C0D9}"
 EndProject
@@ -15,6 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.System.Reactive.Uwp.D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{870348D0-C0A0-4352-8A02-E00AB0CCB919}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\.editorconfig = ..\..\.editorconfig
+		src\.editorconfig = src\.editorconfig
+		analyzers.globalconfig = analyzers.globalconfig
 		..\..\azure-pipelines.rx.yml = ..\..\azure-pipelines.rx.yml
 		Directory.build.props = Directory.build.props
 		Directory.build.targets = Directory.build.targets
@@ -25,6 +28,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D324579D-CBE6-4867-8980-D7842C7C45A2}"
+	ProjectSection(SolutionItems) = preProject
+		tests\.editorconfig = tests\.editorconfig
+		tests\Directory.build.props = tests\Directory.build.props
+		tests\Directory.build.targets = tests\Directory.build.targets
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Facades", "Facades", "{A0F39260-B8F8-4FCB-9679-0ED917A22BDF}"
 	ProjectSection(SolutionItems) = preProject

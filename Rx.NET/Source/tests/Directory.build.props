@@ -2,19 +2,24 @@
   <Import Project="..\Directory.build.props" />
   <PropertyGroup>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)..\Test.ruleset</CodeAnalysisRuleSet>
+
+    <!--
+    Test projects are not designed for public consumption so they don't need the analysis rules
+    that enforce .NET Class Library Design Guidelines.
+    -->
+    <AnalysisLevelDesign>None</AnalysisLevelDesign>
+    <AnalysisLevelPerformance>7.0-None</AnalysisLevelPerformance>
+    <AnalysisLevelNaming>7.0-None</AnalysisLevelNaming>
     <!--
     Diagnostics of limited value in test projects
-    CA1822 - use static where possible. There can be performance reasons to do this, and sometimes
-              there's an argument that it can better reflect intent, but a lot of test code has
-              used instance members as a matter of convenience, and the amount of work to change
-              that now that the code analyzer picks this up doesn't deliver commensurate benefits.
-    CA1825 - use Array.Empty<T>. There is a performance benefit to this over using new T[0], but
-              arguably a slight downgrade in readability. In test projects, although performance
-              matters, the trade-off between readability and ultimate performance is different,
-              so we don't want this rule.
-    CA1845 - use span-based string.Concat and AsSpan instead of Substring. This is a performance-
-              oriented suggestion, and will have minimal impact on test execution time.
+    CA2201 - System.Exception not sufficiently specific - tests often need to work with the base Exception type.
+    IDE1006 - naming rules - test projects aren't designed for public consumption.
     -->
-    <NoWarn>$(NoWarn);CA1822;CA1825;CA1845</NoWarn>
-  </PropertyGroup> 
+    <NoWarn>$(NoWarn);CA2201;IDE1006</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <GlobalAnalyzerConfigFiles Remove="$(MSBuildThisFileDirectory)..\analyzers.globalconfig" />
+  </ItemGroup>
+
 </Project>

@@ -19,14 +19,12 @@ namespace System.Reactive.Concurrency
 
         private static IConcurrencyAbstractionLayer Initialize()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
             //
             // NB: For compat reasons, we allow null to leak here. Bad things will happen but we don't want
             //     to trigger an exception earlier than we did before. The only case where this can happen
             //     is when a custom PEP is installed, which is very rare (e.g. debugger, service hosting).
             //
             return PlatformEnlightenmentProvider.Current.GetService<IConcurrencyAbstractionLayer>()!;
-#pragma warning restore CS0618 // Type or member is obsolete
         }
     }
 

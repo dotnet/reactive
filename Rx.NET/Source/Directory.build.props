@@ -13,7 +13,6 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <IncludeSymbols>false</IncludeSymbols>
     <IsTestProject>$(MSBuildProjectName.Contains('Tests'))</IsTestProject>
-    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Rx.ruleset</CodeAnalysisRuleSet>
     <GeneratePackageOnBuild Condition=" '$(IsTestProject)' != 'true' and '$(CreatePackage)' == 'true' ">true</GeneratePackageOnBuild>
     <PackageOutputPath>$(MSBuildThisFileDirectory)artifacts</PackageOutputPath>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -30,12 +29,21 @@
                 Dispose. And there are more subtle cases where disposal is deferred to give threads
                 a chance to shut down. Each of these likely needs individual review:
                 https://github.com/dotnet/reactive/issues/1927
+    CA1001 - types holding disposable fields should implement IDisposable. Related to the above.
 
     IDE0056 - Use of index/range syntax - relevant types not available on all targets, so we can't
     IDE0057     do this.
     -->
     <!-- Get diagnostics back to the level that the .NET 5.0 SDK had for now. Fix these properly before release. -->
-    <NoWarn>$(NoWarn);CA2213;IDE0056;IDE0057;IDE0079;IDE0270;IDE0280;IDE1006;IDE1056</NoWarn>
+    <NoWarn>$(NoWarn);CA1001;CA2213;IDE0056;IDE0057;IDE0270;IDE0280;IDE1056</NoWarn>
+
+    <AnalysisLevelDesign>5.0-default</AnalysisLevelDesign>
+    <AnalysisLevelNaming>5.0-all</AnalysisLevelNaming>
+    <AnalysisLevelPerformance>5.0-all</AnalysisLevelPerformance>
+
+    <!-- Enable analyzers on older targets. -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
@@ -55,5 +63,9 @@
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
     <PackageReference Include="coverlet.collector" Version="3.2.0" />
   </ItemGroup>
+
+<ItemGroup>
+  <GlobalAnalyzerConfigFiles Include="$(MSBuildThisFileDirectory)analyzers.globalconfig" />
+</ItemGroup>
 
 </Project>

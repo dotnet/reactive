@@ -104,7 +104,6 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Creates a new local scheduler.
         /// </summary>
-        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "We can't really lift this into a field initializer, and would end up checking for an initialization flag in every static method anyway (which is roughly what the JIT does in a thread-safe manner).")]
         protected LocalScheduler()
         {
             //

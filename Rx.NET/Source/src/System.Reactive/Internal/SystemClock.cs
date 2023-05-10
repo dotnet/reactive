@@ -73,16 +73,12 @@ namespace System.Reactive.PlatformServices
 
         private static ISystemClock InitializeSystemClock()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
             return PlatformEnlightenmentProvider.Current.GetService<ISystemClock>() ?? new DefaultSystemClock();
-#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         private static INotifySystemClockChanged InitializeSystemClockChanged()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
             return PlatformEnlightenmentProvider.Current.GetService<INotifySystemClockChanged>() ?? new DefaultSystemClockMonitor();
-#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         internal static void Register(LocalScheduler scheduler)

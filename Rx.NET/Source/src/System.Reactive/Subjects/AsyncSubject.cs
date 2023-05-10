@@ -413,7 +413,6 @@ namespace System.Reactive.Subjects
         /// </summary>
         /// <returns>The last element of the subject. Throws an InvalidOperationException if no element was received.</returns>
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
-        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Await pattern for C# and VB compilers.")]
         public T GetResult()
         {
             if (Volatile.Read(ref _observers) != Terminated)

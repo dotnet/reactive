@@ -309,7 +309,6 @@ namespace System.Reactive.Concurrency
         /// Gets the next scheduled item to be executed.
         /// </summary>
         /// <returns>The next scheduled item.</returns>
-        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "By design. Side-effecting operation to retrieve the next element.")]
         protected abstract IScheduledItem<TAbsolute>? GetNext();
 
         object? IServiceProvider.GetService(Type serviceType) => GetService(serviceType);

@@ -17,9 +17,7 @@ namespace System.Reactive
 
         private static IExceptionServices Initialize()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
             return PlatformEnlightenmentProvider.Current.GetService<IExceptionServices>() ?? new DefaultExceptionServices();
-#pragma warning restore CS0618 // Type or member is obsolete
         }
     }
 }

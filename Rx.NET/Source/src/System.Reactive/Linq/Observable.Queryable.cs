@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#pragma warning disable 1591
-
+#if HAS_TRIMMABILITY_ATTRIBUTES
 using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace System.Reactive.Linq
 {
@@ -14,9 +14,8 @@ namespace System.Reactive.Linq
     public static partial class Qbservable
     {
 #pragma warning disable IDE1006 // Naming Styles: 3rd party code is known to reflect for this specific field name
-#pragma warning disable IDE0044 // Make readonly: since 3rd party code reflects for this, we shouldn't pretend it won't change
         private static IQbservableProvider? s_provider;
-#pragma warning restore IDE1006, IDE0044 // Naming Styles, Make readonly
+#pragma warning restore IDE1006 // Naming Styles, Make readonly
 
         /// <summary>
         /// Gets the local query provider which will retarget Qbservable-based queries to the corresponding Observable-based query for in-memory execution upon subscription.
@@ -49,5 +48,3 @@ namespace System.Reactive.Linq
         }
     }
 }
-
-#pragma warning restore 1591

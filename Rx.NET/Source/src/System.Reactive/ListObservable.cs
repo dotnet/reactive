@@ -16,7 +16,6 @@ namespace System.Reactive
     /// Represents an object that retains the elements of the observable sequence and signals the end of the sequence.
     /// </summary>
     /// <typeparam name="T">The type of elements received from the source sequence.</typeparam>
-    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "By design; Observable suffix takes precedence.")]
     [Experimental]
     public class ListObservable<T> : IList<T>, IObservable<object>
     {

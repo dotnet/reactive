@@ -23,9 +23,7 @@ namespace System.Reactive.PlatformServices
         /// </returns>
         public static bool EnsureLoaded()
         {
-#pragma warning disable CS0618
             return PlatformEnlightenmentProvider.Current is CurrentPlatformEnlightenmentProvider;
-#pragma warning restore CS0618
         }
     }
 }
