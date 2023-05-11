@@ -86,13 +86,8 @@ namespace System.Reactive.Concurrency
 
         private static IScheduler Initialize(string name)
         {
-            var res = PlatformEnlightenmentProvider.Current.GetService<IScheduler>(name);
-            if (res == null)
-            {
-                throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, Strings_Core.CANT_OBTAIN_SCHEDULER, name));
-            }
-
-            return res;
+            return PlatformEnlightenmentProvider.Current.GetService<IScheduler>(name)
+                ?? throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, Strings_Core.CANT_OBTAIN_SCHEDULER, name));
         }
     }
 }

@@ -395,11 +395,8 @@ namespace System.Reactive
                 // From all the operators with the method's name, find the one that matches all arguments.
                 //
                 var typeArgs = method.IsGenericMethod ? method.GetGenericArguments() : null;
-                var targetMethod = methods[method.Name].FirstOrDefault(candidateMethod => ArgsMatch(candidateMethod, arguments, typeArgs));
-                if (targetMethod == null)
-                {
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Providers.NO_MATCHING_METHOD_FOUND, method.Name, targetType.Name));
-                }
+                var targetMethod = methods[method.Name].FirstOrDefault(candidateMethod => ArgsMatch(candidateMethod, arguments, typeArgs))
+                    ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Providers.NO_MATCHING_METHOD_FOUND, method.Name, targetType.Name));
 
                 //
                 // Restore generic arguments.

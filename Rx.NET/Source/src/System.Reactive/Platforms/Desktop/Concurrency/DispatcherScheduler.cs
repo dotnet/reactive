@@ -29,12 +29,8 @@ namespace System.Reactive.Concurrency
         {
             get
             {
-                var dispatcher = System.Windows.Threading.Dispatcher.FromThread(Thread.CurrentThread);
-                if (dispatcher == null)
-                {
-                    throw new InvalidOperationException(Strings_WindowsThreading.NO_DISPATCHER_CURRENT_THREAD);
-                }
-
+                var dispatcher = System.Windows.Threading.Dispatcher.FromThread(Thread.CurrentThread)
+                    ?? throw new InvalidOperationException(Strings_WindowsThreading.NO_DISPATCHER_CURRENT_THREAD);
                 return new DispatcherScheduler(dispatcher);
             }
         }
