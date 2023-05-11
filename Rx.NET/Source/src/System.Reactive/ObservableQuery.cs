@@ -316,7 +316,9 @@ namespace System.Reactive
                 //
                 if (method.Name == "When")
                 {
+#pragma warning disable CA1851 // (Possible multiple enumerations of 'IEnumerable'.) Simple fixes could actually make things worse (e.g., by making an unnecessary copy), so unless specific perf issues become apparent here, we will tolerate this.
                     var lastArgument = arguments.Last();
+#pragma warning restore CA1851
                     if (lastArgument.NodeType == ExpressionType.NewArrayInit)
                     {
                         var paramsArray = (NewArrayExpression)lastArgument;
@@ -330,7 +332,9 @@ namespace System.Reactive
                     }
                 }
 
+#pragma warning disable CA1851 // Possible multiple enumerations of 'IEnumerable' collection
                 return arguments.Select(arg => Visit(arg)).ToList();
+#pragma warning restore CA1851
             }
 
             private class Lazy<T>

@@ -1,5 +1,11 @@
 is_global = true
 
+# In .NET SDK 7, these are off by default in .NET Standard but on for everything else
+dotnet_diagnostic.CS0659.severity = warning
+dotnet_diagnostic.CS0661.severity = warning
+# This is off by default in .NET FX but on for everything else
+dotnet_diagnostic.CS1718.severity = warning
+
 dotnet_diagnostic.CA1000.severity = warning
 dotnet_diagnostic.CA1002.severity = warning
 dotnet_diagnostic.CA1003.severity = warning
