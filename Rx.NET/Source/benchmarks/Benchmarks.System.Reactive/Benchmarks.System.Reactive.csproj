@@ -14,8 +14,8 @@
     -->
 
   <PropertyGroup>
-    <AnalysisLevelNaming>5.0-none</AnalysisLevelNaming>
-    <AnalysisLevelPerformance>5.0-none</AnalysisLevelPerformance>
+    <AnalysisLevelNaming>7.0-none</AnalysisLevelNaming>
+    <AnalysisLevelPerformance>7.0-none</AnalysisLevelPerformance>
     <NoWarn>$(NoWarn);IDE1006</NoWarn>
   </PropertyGroup>
 
