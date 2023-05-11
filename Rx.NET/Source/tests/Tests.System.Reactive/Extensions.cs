@@ -34,13 +34,11 @@ namespace ReactiveTests
 
         public static IEnumerable<R> Zip<T1, T2, R>(this IEnumerable<T1> source1, IEnumerable<T2> source2, Func<T1, T2, R> f)
         {
-            using (var e1 = source1.GetEnumerator())
-            using (var e2 = source2.GetEnumerator())
+            using var e1 = source1.GetEnumerator();
+            using var e2 = source2.GetEnumerator();
+            while (e1.MoveNext() && e2.MoveNext())
             {
-                while (e1.MoveNext() && e2.MoveNext())
-                {
-                    yield return f(e1.Current, e2.Current);
-                }
+                yield return f(e1.Current, e2.Current);
             }
         }
     }

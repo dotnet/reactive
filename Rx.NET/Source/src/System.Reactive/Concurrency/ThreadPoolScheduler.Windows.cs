@@ -15,7 +15,7 @@ namespace System.Reactive.Concurrency
     [CLSCompliant(false)]
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerPeriodic
     {
-        private static readonly Lazy<ThreadPoolScheduler> LazyDefault = new Lazy<ThreadPoolScheduler>(static () => new ThreadPoolScheduler());
+        private static readonly Lazy<ThreadPoolScheduler> LazyDefault = new(static () => new ThreadPoolScheduler());
 
         /// <summary>
         /// Constructs a ThreadPoolScheduler that schedules units of work on the Windows ThreadPool.
@@ -161,7 +161,7 @@ namespace System.Reactive.Concurrency
             private Func<TState, TState> _action;
 
             private readonly ThreadPoolTimer _timer;
-            private readonly AsyncLock _gate = new AsyncLock();
+            private readonly AsyncLock _gate = new();
 
             public PeriodicallyScheduledWorkItem(TState state, TimeSpan period, Func<TState, TState> action)
             {

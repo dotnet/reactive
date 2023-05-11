@@ -19,6 +19,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void NewThread_ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new NewThreadScheduler(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(42, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(42, DateTimeOffset.Now, default));
@@ -26,6 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.ScheduleLongRunning(42, default));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => NewThreadScheduler.Default.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
+#pragma warning restore CA1806
         }
 
         [TestMethod]
@@ -38,20 +40,20 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void NewThread_ScheduleAction()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = NewThreadScheduler.Default;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(() => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(() => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
         [TestMethod]
         public void NewThread_ScheduleActionDue()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = NewThreadScheduler.Default;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 

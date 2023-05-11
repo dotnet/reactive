@@ -8,7 +8,7 @@ namespace ReactiveTests.Dummies
 {
     internal class DummyObserver<T> : IObserver<T>
     {
-        public static readonly DummyObserver<T> Instance = new DummyObserver<T>();
+        public static readonly DummyObserver<T> Instance = new();
 
         private DummyObserver()
         {

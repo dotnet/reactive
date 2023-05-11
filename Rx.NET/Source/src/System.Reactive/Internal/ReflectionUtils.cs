@@ -44,23 +44,8 @@ namespace System.Reactive
                 }
             }
 
-            var add = e.GetAddMethod();
-
-            if (add == null)
-            {
-                throw new InvalidOperationException(Strings_Linq.EVENT_MISSING_ADD_METHOD);
-            }
-
-            addMethod = add;
-
-            var remove = e.GetRemoveMethod();
-
-            if (remove == null)
-            {
-                throw new InvalidOperationException(Strings_Linq.EVENT_MISSING_REMOVE_METHOD);
-            }
-
-            removeMethod = remove;
+            addMethod = e.GetAddMethod() ?? throw new InvalidOperationException(Strings_Linq.EVENT_MISSING_ADD_METHOD);
+            removeMethod = e.GetRemoveMethod() ?? throw new InvalidOperationException(Strings_Linq.EVENT_MISSING_REMOVE_METHOD);
 
             var psa = addMethod.GetParameters();
             if (psa.Length != 1)

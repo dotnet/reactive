@@ -18,7 +18,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_exception, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_exception, observer);
 
         protected override void Run(_ sink) => sink.Run(_scheduler);
 

@@ -54,7 +54,7 @@ namespace System.Reactive
         public EventPattern(TSender? sender, TEventArgs e) { }
         public TEventArgs EventArgs { get; }
         public TSender Sender { get; }
-        public void Deconstruct(out TSender sender, out TEventArgs e) { }
+        public void Deconstruct(out TSender? sender, out TEventArgs e) { }
         public bool Equals(System.Reactive.EventPattern<TSender, TEventArgs>? other) { }
         public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
@@ -646,6 +646,10 @@ namespace System.Reactive.Disposables
         public System.IDisposable? Disposable { get; set; }
         public bool IsDisposed { get; }
         public void Dispose() { }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
+        public static bool operator !=(System.Reactive.Disposables.SingleAssignmentDisposableValue left, System.Reactive.Disposables.SingleAssignmentDisposableValue right) { }
+        public static bool operator ==(System.Reactive.Disposables.SingleAssignmentDisposableValue left, System.Reactive.Disposables.SingleAssignmentDisposableValue right) { }
     }
     public abstract class StableCompositeDisposable : System.IDisposable, System.Reactive.Disposables.ICancelable
     {

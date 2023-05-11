@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.Immediate">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class ImmediateScheduler : LocalScheduler
     {
-        private static readonly Lazy<ImmediateScheduler> StaticInstance = new Lazy<ImmediateScheduler>(static () => new ImmediateScheduler());
+        private static readonly Lazy<ImmediateScheduler> StaticInstance = new(static () => new ImmediateScheduler());
 
         private ImmediateScheduler()
         {
@@ -79,10 +79,7 @@ namespace System.Reactive.Concurrency
 
                 var m = new SingleAssignmentDisposable();
 
-                if (_asyncLock == null)
-                {
-                    _asyncLock = new AsyncLock();
-                }
+                _asyncLock ??= new AsyncLock();
 
                 _asyncLock.Wait(
                     (@this: this, m, action, state),
@@ -118,10 +115,7 @@ namespace System.Reactive.Concurrency
 
                 var m = new SingleAssignmentDisposable();
 
-                if (_asyncLock == null)
-                {
-                    _asyncLock = new AsyncLock();
-                }
+                _asyncLock ??= new AsyncLock();
 
                 _asyncLock.Wait(
                     (@this: this, m, state, action, timer, dueTime),

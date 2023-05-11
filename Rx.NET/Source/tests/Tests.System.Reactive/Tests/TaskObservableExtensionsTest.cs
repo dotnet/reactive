@@ -378,7 +378,7 @@ namespace ReactiveTests.Tests
             xs.Subscribe(res =>
             {
                 x = res;
-                t = Thread.CurrentThread.ManagedThreadId;
+                t = Environment.CurrentManagedThreadId;
                 e.Set();
             });
 
@@ -387,7 +387,7 @@ namespace ReactiveTests.Tests
             e.WaitOne();
 
             Assert.Equal(42, x);
-            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(Environment.CurrentManagedThreadId, t);
         }
 #endif
 
@@ -736,7 +736,7 @@ namespace ReactiveTests.Tests
             var xs = ((Task)tcs.Task).ToObservable(Scheduler.Immediate);
             xs.Subscribe(res =>
             {
-                t = Thread.CurrentThread.ManagedThreadId;
+                t = Environment.CurrentManagedThreadId;
                 e.Set();
             });
 
@@ -744,7 +744,7 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(Environment.CurrentManagedThreadId, t);
         }
 #endif
 
@@ -1125,7 +1125,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(new TaskCanceledException(task).CancellationToken, cts.Token);
         }
 
-        sealed class OneshotScheduler : IScheduler
+        private sealed class OneshotScheduler : IScheduler
         {
             public DateTimeOffset Now => DateTimeOffset.Now;
 
@@ -1158,7 +1158,7 @@ namespace ReactiveTests.Tests
 
             public bool HasTask => _task != null;
 
-            sealed class Work<TState> : IDisposable
+            private sealed class Work<TState> : IDisposable
             {
                 internal TState State;
                 internal Func<IScheduler, TState, IDisposable> Action;
@@ -1173,7 +1173,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public async Task ToTask_Scheduler_Dispose_Can_Propagate()
         {
-            async Task asyncMethod()
+            static async Task asyncMethod()
             {
                 await Task.Delay(500);
                 Console.WriteLine("Done");

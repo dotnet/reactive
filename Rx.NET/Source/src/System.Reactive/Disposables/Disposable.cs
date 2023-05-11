@@ -19,7 +19,7 @@ namespace System.Reactive.Disposables
             /// <summary>
             /// Singleton default disposable.
             /// </summary>
-            public static readonly EmptyDisposable Instance = new EmptyDisposable();
+            public static readonly EmptyDisposable Instance = new();
 
             private EmptyDisposable()
             {

@@ -13,7 +13,9 @@ namespace System.Reactive.Linq
     /// Provides a set of static methods for writing queries over observable sequences, allowing translation to a target query language.
     /// </summary>
     [LocalQueryMethodImplementationType(typeof(ObservableEx))]
+#pragma warning disable CA1711 // (Don't use Ex suffix.) This has been a public type for many years, so we can't rename it now.
     public static partial class QbservableEx
+#pragma warning restore CA1711
     {
         internal static Expression GetSourceExpression<TSource>(IObservable<TSource> source)
         {

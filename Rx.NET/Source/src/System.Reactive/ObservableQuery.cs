@@ -46,7 +46,7 @@ namespace System.Reactive
             //
             //   observable.AsQbservable().<operators>.ToEnumerable().AsQueryable()
             //
-            if (!(expression is MethodCallExpression call) ||
+            if (expression is not MethodCallExpression call ||
                 call.Method.DeclaringType != typeof(Qbservable) ||
                 call.Method.Name != nameof(Qbservable.ToQueryable))
             {
@@ -316,7 +316,9 @@ namespace System.Reactive
                 //
                 if (method.Name == "When")
                 {
+#pragma warning disable CA1851 // (Possible multiple enumerations of 'IEnumerable'.) Simple fixes could actually make things worse (e.g., by making an unnecessary copy), so unless specific perf issues become apparent here, we will tolerate this.
                     var lastArgument = arguments.Last();
+#pragma warning restore CA1851
                     if (lastArgument.NodeType == ExpressionType.NewArrayInit)
                     {
                         var paramsArray = (NewArrayExpression)lastArgument;
@@ -330,7 +332,9 @@ namespace System.Reactive
                     }
                 }
 
+#pragma warning disable CA1851 // Possible multiple enumerations of 'IEnumerable' collection
                 return arguments.Select(arg => Visit(arg)).ToList();
+#pragma warning restore CA1851
             }
 
             private class Lazy<T>
@@ -362,7 +366,7 @@ namespace System.Reactive
                 }
             }
 
-            private static readonly Lazy<ILookup<string, MethodInfo>> ObservableMethods = new Lazy<ILookup<string, MethodInfo>>(() => GetMethods(typeof(Observable)));
+            private static readonly Lazy<ILookup<string, MethodInfo>> ObservableMethods = new(() => GetMethods(typeof(Observable)));
 
             private static MethodCallExpression FindObservableMethod(MethodInfo method, IList<Expression> arguments)
             {
@@ -395,11 +399,8 @@ namespace System.Reactive
                 // From all the operators with the method's name, find the one that matches all arguments.
                 //
                 var typeArgs = method.IsGenericMethod ? method.GetGenericArguments() : null;
-                var targetMethod = methods[method.Name].FirstOrDefault(candidateMethod => ArgsMatch(candidateMethod, arguments, typeArgs));
-                if (targetMethod == null)
-                {
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Providers.NO_MATCHING_METHOD_FOUND, method.Name, targetType.Name));
-                }
+                var targetMethod = methods[method.Name].FirstOrDefault(candidateMethod => ArgsMatch(candidateMethod, arguments, typeArgs))
+                    ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Providers.NO_MATCHING_METHOD_FOUND, method.Name, targetType.Name));
 
                 //
                 // Restore generic arguments.

@@ -18,15 +18,6 @@ namespace ReactiveTests.Tests
     [TestClass]
     public class FromAsyncPatternTest : ReactiveTest
     {
-        private readonly Task<int> _doneTask;
-
-        public FromAsyncPatternTest()
-        {
-            var tcs = new TaskCompletionSource<int>();
-            tcs.SetResult(42);
-            _doneTask = tcs.Task;
-        }
-
         [TestMethod]
         public void FromAsyncPattern_ArgumentChecking()
         {

@@ -27,7 +27,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
             protected override void Run(_ sink) => sink.Run(_first, _second);
 
@@ -263,7 +263,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
             protected override void Run(_ sink) => sink.Run(_first, _second);
 
@@ -277,7 +277,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _resultSelector = resultSelector;
                 }
 
-                int _enumerationInProgress;
+                private int _enumerationInProgress;
 
                 private IEnumerator<TSecond>? _rightEnumerator;
 
@@ -344,7 +344,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     bool hasNext;
-                    TSecond right = default;
+                    TSecond? right = default;
                     var wasDisposed = false;
 
                     try
@@ -585,7 +585,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<IList<TSource>> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_sources);
 

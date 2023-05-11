@@ -32,7 +32,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return new Count(_source, _count + count);
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(_count, observer);
+            protected override _ CreateSink(IObserver<TSource> observer) => new(_count, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
@@ -92,7 +92,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return new Time(_source, duration, _scheduler);
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+            protected override _ CreateSink(IObserver<TSource> observer) => new(observer);
 
             protected override void Run(_ sink) => sink.Run(this);
 

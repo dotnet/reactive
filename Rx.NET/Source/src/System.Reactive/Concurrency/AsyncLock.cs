@@ -13,7 +13,7 @@ namespace System.Reactive.Concurrency
     {
         private bool _isAcquired;
         private bool _hasFaulted;
-        private readonly object _guard = new object();
+        private readonly object _guard = new();
         private Queue<(Action<Delegate, object?> action, Delegate @delegate, object? state)>? _queue;
 
         /// <summary>

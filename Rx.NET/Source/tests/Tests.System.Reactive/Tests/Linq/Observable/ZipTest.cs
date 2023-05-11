@@ -4098,9 +4098,9 @@ namespace ReactiveTests.Tests
 
         private class MoveNextDisposeDetectEnumerable : IEnumerable<int>, IEnumerator<int>
         {
-            readonly IDisposable _disposable;
+            private readonly IDisposable _disposable;
 
-            readonly bool _disposeOnMoveNext;
+            private readonly bool _disposeOnMoveNext;
 
             private bool _moveNextRunning;
 
@@ -4575,7 +4575,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Zip3WithImmediateReturn()
         {
-            int result = 0;
+            var result = 0;
 
             Observable.Zip<int, int, int, int>(
                 Observable.Return(1),

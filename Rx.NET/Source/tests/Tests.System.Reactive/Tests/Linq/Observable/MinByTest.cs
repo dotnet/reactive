@@ -373,7 +373,7 @@ namespace ReactiveTests.Tests
 
         private class ReverseComparer<T> : IComparer<T>
         {
-            private IComparer<T> _comparer;
+            private readonly IComparer<T> _comparer;
 
             public ReverseComparer(IComparer<T> comparer)
             {

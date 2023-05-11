@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.CurrentThread">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class CurrentThreadScheduler : LocalScheduler
     {
-        private static readonly Lazy<CurrentThreadScheduler> StaticInstance = new Lazy<CurrentThreadScheduler>(() => new CurrentThreadScheduler());
+        private static readonly Lazy<CurrentThreadScheduler> StaticInstance = new(() => new CurrentThreadScheduler());
 
         private CurrentThreadScheduler()
         {
@@ -43,10 +43,7 @@ namespace System.Reactive.Concurrency
         {
             get
             {
-                if (_clock == null)
-                {
-                    _clock = ConcurrencyAbstractionLayer.Current.StartStopwatch();
-                }
+                _clock ??= ConcurrencyAbstractionLayer.Current.StartStopwatch();
 
                 return _clock.Elapsed;
             }
@@ -55,7 +52,6 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets a value that indicates whether the caller must call a Schedule method.
         /// </summary>
-        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Now marked as obsolete.")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete(Constants_Core.ObsoleteSchedulerequired)] // Preferring static method call over instance method call.
         public bool ScheduleRequired => IsScheduleRequired;

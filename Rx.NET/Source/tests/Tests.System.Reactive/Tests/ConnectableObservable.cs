@@ -10,7 +10,7 @@ namespace ReactiveTests.Tests
 {
     internal class ConnectableObservable<T> : IConnectableObservable<T>
     {
-        private IConnectableObservable<T> _o;
+        private readonly IConnectableObservable<T> _o;
 
         public ConnectableObservable(IObservable<T> o, ISubject<T, T> s)
         {

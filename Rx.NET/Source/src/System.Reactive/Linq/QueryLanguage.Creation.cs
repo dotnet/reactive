@@ -96,7 +96,7 @@ namespace System.Reactive.Linq
                 }
 
                 private readonly IDisposable _subscription;
-                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+                private readonly CancellationTokenSource _cts = new();
 
                 public Subscription(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync, IObserver<TResult> observer)
                 {
@@ -169,7 +169,7 @@ namespace System.Reactive.Linq
                 }
 
                 private readonly TaskDisposeCompletionObserver _observer;
-                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+                private readonly CancellationTokenSource _cts = new();
 
                 public Subscription(Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync, IObserver<TResult> observer)
                 {
@@ -249,7 +249,7 @@ namespace System.Reactive.Linq
                 }
 
                 private readonly TaskDisposeCompletionObserver _observer;
-                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+                private readonly CancellationTokenSource _cts = new();
 
                 public Subscription(Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync, IObserver<TResult> observer)
                 {

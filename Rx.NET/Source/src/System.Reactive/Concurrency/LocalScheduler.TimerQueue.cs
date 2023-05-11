@@ -14,26 +14,26 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gate to protect local scheduler queues.
         /// </summary>
-        private static readonly object Gate = new object();
+        private static readonly object Gate = new();
 
         /// <summary>
         /// Gate to protect queues and to synchronize scheduling decisions and system clock
         /// change management.
         /// </summary>
-        private static readonly object StaticGate = new object();
+        private static readonly object StaticGate = new();
 
         /// <summary>
         /// Long term work queue. Contains work that's due beyond SHORTTERM, computed at the
         /// time of enqueueing.
         /// </summary>
-        private static readonly PriorityQueue<WorkItem/*!*/> LongTerm = new PriorityQueue<WorkItem/*!*/>();
+        private static readonly PriorityQueue<WorkItem/*!*/> LongTerm = new();
 
         /// <summary>
         /// Disposable resource for the long term timer that will reevaluate and dispatch the
         /// first item in the long term queue. A serial disposable is used to make "dispose
         /// current and assign new" logic easier. The disposable itself is never disposed.
         /// </summary>
-        private static readonly SerialDisposable NextLongTermTimer = new SerialDisposable();
+        private static readonly SerialDisposable NextLongTermTimer = new();
 
         /// <summary>
         /// Item at the head of the long term queue for which the current long term timer is
@@ -49,13 +49,13 @@ namespace System.Reactive.Concurrency
         /// items. This queue is kept in order to be able to relocate short term items back
         /// to the long term queue in case a system clock change occurs.
         /// </summary>
-        private readonly PriorityQueue<WorkItem/*!*/> _shortTerm = new PriorityQueue<WorkItem/*!*/>();
+        private readonly PriorityQueue<WorkItem/*!*/> _shortTerm = new();
 
         /// <summary>
         /// Set of disposable handles to all of the current short term work Schedule calls,
         /// allowing those to be cancelled upon a system clock change.
         /// </summary>
-        private readonly HashSet<IDisposable> _shortTermWork = new HashSet<IDisposable>();
+        private readonly HashSet<IDisposable> _shortTermWork = new();
 
         /// <summary>
         /// Threshold where an item is considered to be short term work or gets moved from
@@ -104,7 +104,6 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Creates a new local scheduler.
         /// </summary>
-        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "We can't really lift this into a field initializer, and would end up checking for an initialization flag in every static method anyway (which is roughly what the JIT does in a thread-safe manner).")]
         protected LocalScheduler()
         {
             //

@@ -33,17 +33,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Throttle(someObservable, TimeSpan.FromSeconds(-1), scheduler));
         }
 
-        private IEnumerable<Recorded<Notification<T>>> Generate<T, S>(S seed, Func<S, bool> condition, Func<S, S> iterate, Func<S, Recorded<Notification<T>>> selector, Func<S, Recorded<Notification<T>>> final)
-        {
-            S s;
-            for (s = seed; condition(s); s = iterate(s))
-            {
-                yield return selector(s);
-            }
-
-            yield return final(s);
-        }
-
         [TestMethod]
         public void Throttle_TimeSpan_AllPass()
         {

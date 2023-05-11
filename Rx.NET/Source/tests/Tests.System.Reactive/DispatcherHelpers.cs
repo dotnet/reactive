@@ -15,9 +15,9 @@ using System.Windows.Threading;
 namespace ReactiveTests
 {
 #if HAS_DISPATCHER
-    static class DispatcherHelpers
+    internal static class DispatcherHelpers
     {
-        private static readonly Semaphore s_oneDispatcher = new Semaphore(1, 1);
+        private static readonly Semaphore s_oneDispatcher = new(1, 1);
 
         public static IDisposable RunTest(out DispatcherWrapper wrapper)
         {
@@ -69,16 +69,16 @@ namespace ReactiveTests
 #endif
     }
 
-    class DispatcherWrapper
+    internal class DispatcherWrapper
     {
-        private Dispatcher _dispatcher;
+        private readonly Dispatcher _dispatcher;
 
         public DispatcherWrapper(Dispatcher dispatcher)
         {
             _dispatcher = dispatcher;
         }
 
-        public Dispatcher Dispatcher { get { return _dispatcher; } }
+        public Dispatcher Dispatcher => _dispatcher;
 
         public static implicit operator Dispatcher(DispatcherWrapper wrapper)
         {

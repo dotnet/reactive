@@ -251,12 +251,12 @@ namespace System.Reactive.Linq
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
 
             if (disconnectDelay < TimeSpan.Zero)
             {
-                throw new ArgumentException("Delay cannot be less than zero", "disconnectDelay");
+                throw new ArgumentException("Delay cannot be less than zero", nameof(disconnectDelay));
             }
 
             return s_impl.RefCount(source, disconnectDelay);
@@ -275,17 +275,17 @@ namespace System.Reactive.Linq
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
 
             if (scheduler == null)
             {
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             }
 
             if (disconnectDelay < TimeSpan.Zero)
             {
-                throw new ArgumentException("Delay cannot be less than zero", "disconnectDelay");
+                throw new ArgumentException("Delay cannot be less than zero", nameof(disconnectDelay));
             }
 
             return s_impl.RefCount(source, disconnectDelay, scheduler);
@@ -328,12 +328,12 @@ namespace System.Reactive.Linq
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
 
             if (disconnectDelay < TimeSpan.Zero)
             {
-                throw new ArgumentException("Delay cannot be less than zero", "disconnectDelay");
+                throw new ArgumentException("Delay cannot be less than zero", nameof(disconnectDelay));
             }
             if (minObservers <= 0)
             {
@@ -358,17 +358,17 @@ namespace System.Reactive.Linq
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
 
             if (scheduler == null)
             {
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             }
 
             if (disconnectDelay < TimeSpan.Zero)
             {
-                throw new ArgumentException("Delay cannot be less than zero", "disconnectDelay");
+                throw new ArgumentException("Delay cannot be less than zero", nameof(disconnectDelay));
             }
             if (minObservers <= 0)
             {

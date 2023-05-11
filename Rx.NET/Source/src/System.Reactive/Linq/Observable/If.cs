@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public IObservable<TResult> Eval() => _condition() ? _thenSource : _elseSource;
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
         protected override void Run(_ sink) => sink.Run();
 

@@ -2393,7 +2393,7 @@ namespace ReactiveTests.Tests
 
     internal class ReverseComparer<T> : IComparer<T>
     {
-        private IComparer<T> _comparer;
+        private readonly IComparer<T> _comparer;
 
         public ReverseComparer(IComparer<T> comparer)
         {

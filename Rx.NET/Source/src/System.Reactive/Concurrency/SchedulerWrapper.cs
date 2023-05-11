@@ -69,7 +69,7 @@ namespace System.Reactive.Concurrency
 
         public object? GetService(Type serviceType)
         {
-            if (!(_scheduler is IServiceProvider serviceProvider))
+            if (_scheduler is not IServiceProvider serviceProvider)
             {
                 return null;
             }

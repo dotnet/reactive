@@ -199,7 +199,7 @@ namespace System.Reactive.Concurrency
             private readonly TimeSpan _period;
             private readonly Func<TState, TState> _action;
             private readonly EventLoopScheduler _scheduler;
-            private readonly AsyncLock _gate = new AsyncLock();
+            private readonly AsyncLock _gate = new();
 
             private TState _state;
             private TimeSpan _next;

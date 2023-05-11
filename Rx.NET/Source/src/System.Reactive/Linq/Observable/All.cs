@@ -15,7 +15,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _predicate = predicate;
         }
 
-        protected override _ CreateSink(IObserver<bool> observer) => new _(_predicate, observer);
+        protected override _ CreateSink(IObserver<bool> observer) => new(_predicate, observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 

@@ -186,7 +186,7 @@ namespace ReactiveTests.Tests
 
             var ex = new Exception();
 
-            var results = scheduler.Start(() => Observable.DoWhile(xs, () => ++n < 3 ? true : Throw<bool>(ex)));
+            var results = scheduler.Start(() => Observable.DoWhile(xs, () => ++n < 3 || Throw<bool>(ex)));
 
             results.Messages.AssertEqual(
                 OnNext(250, 1),

@@ -12,7 +12,7 @@
 
 namespace System.Reactive.Linq
 {
-    partial interface IQueryLanguage
+    internal partial interface IQueryLanguage
     {
 <#
 for (int i = 2; i <= 16; i++)
@@ -39,7 +39,7 @@ for (int i = 2; i <= 16; i++)
 #>
     }
 
-    partial interface IQueryLanguageEx
+    internal partial interface IQueryLanguageEx
     {
 <#
 for (int i = 2; i <= 8; i++)

@@ -18,7 +18,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _finallyAction = finallyAction;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(_finallyAction, observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(_finallyAction, observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 

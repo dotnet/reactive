@@ -18,14 +18,11 @@ namespace ReactiveTests.Tests
     [Serializable]
     public class DefaultConcurrencyAbstractionLayerTest
     {
-        private AppDomain _domain;
+        private readonly AppDomain _domain;
 
         public DefaultConcurrencyAbstractionLayerTest()
         {
-            if (_domain == null)
-            {
-                _domain = AppDomain.CreateDomain("Default_CAL", null, new AppDomainSetup { ApplicationBase = AppDomain.CurrentDomain.BaseDirectory });
-            }
+            _domain ??= AppDomain.CreateDomain("Default_CAL", null, new AppDomainSetup { ApplicationBase = AppDomain.CurrentDomain.BaseDirectory });
         }
 
         private void Run(CrossAppDomainDelegate a)

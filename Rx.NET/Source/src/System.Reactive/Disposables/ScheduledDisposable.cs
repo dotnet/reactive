@@ -21,13 +21,8 @@ namespace System.Reactive.Disposables
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="disposable"/> is null.</exception>
         public ScheduledDisposable(IScheduler scheduler, IDisposable disposable)
         {
-            if (disposable == null)
-            {
-                throw new ArgumentNullException(nameof(disposable));
-            }
-
             Scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
-            _disposable.Disposable = disposable;
+            _disposable.Disposable = disposable ?? throw new ArgumentNullException(nameof(disposable));
         }
 
         /// <summary>

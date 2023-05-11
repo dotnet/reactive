@@ -861,7 +861,7 @@ namespace ReactiveTests.Tests
 
         public override bool Equals(object obj)
         {
-            if (!(obj is TimerRun other))
+            if (obj is not TimerRun other)
             {
                 return false;
             }

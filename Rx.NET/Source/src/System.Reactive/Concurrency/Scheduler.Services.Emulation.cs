@@ -335,8 +335,8 @@ namespace System.Reactive.Concurrency
 
             private TState _state;
 
-            private readonly object _gate = new object();
-            private readonly AutoResetEvent _resumeEvent = new AutoResetEvent(false);
+            private readonly object _gate = new();
+            private readonly AutoResetEvent _resumeEvent = new(false);
             private volatile int _runState;
             private IStopwatch? _stopwatch;
             private TimeSpan _nextDue;

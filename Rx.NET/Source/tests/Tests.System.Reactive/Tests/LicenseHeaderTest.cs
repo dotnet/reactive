@@ -41,7 +41,7 @@ namespace Tests.System.Reactive.Tests
 
             if (error.Length != 0)
             {
-                Assert.False(true, $"Files with no license header: {count}\r\n{error.ToString()}");
+                Assert.False(true, $"Files with no license header: {count}\r\n{error}");
             }
         }
 

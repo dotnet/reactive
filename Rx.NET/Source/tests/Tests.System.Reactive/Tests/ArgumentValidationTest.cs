@@ -32,7 +32,7 @@ namespace ReactiveTests.Tests
         /// as strings generated via <see cref="TypeNameOf(Type)"/>,
         /// mapped to a value.
         /// </summary>
-        private static Dictionary<string, object> _defaultValues;
+        private static readonly Dictionary<string, object> _defaultValues;
 
         /// <summary>
         /// Prepare the default instances for various types used
@@ -423,7 +423,7 @@ namespace ReactiveTests.Tests
                     catch (Exception ex)
                     {
                         // reflection wraps the actual exception, let's unwrap it
-                        if (!(ex.InnerException is ArgumentNullException))
+                        if (ex.InnerException is not ArgumentNullException)
                         {
                             throw new Exception("Method threw: " + method + " @ " + i, ex);
                         }

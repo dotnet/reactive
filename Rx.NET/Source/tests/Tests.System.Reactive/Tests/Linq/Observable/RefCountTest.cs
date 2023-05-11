@@ -457,7 +457,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void RefCount_minObservers_not_connected_Eager()
         {
-            int connected = 0;
+            var connected = 0;
             var source = Observable.Defer(() =>
             {
                 connected++;
@@ -507,7 +507,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void RefCount_minObservers_not_connected_Lazy()
         {
-            int connected = 0;
+            var connected = 0;
             var source = Observable.Defer(() =>
             {
                 connected++;

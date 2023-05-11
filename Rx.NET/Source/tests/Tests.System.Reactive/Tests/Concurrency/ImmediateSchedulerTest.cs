@@ -28,9 +28,9 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Immediate_ScheduleAction()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
-            Scheduler.Immediate.Schedule(() => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            Scheduler.Immediate.Schedule(() => { Assert.Equal(id, Environment.CurrentManagedThreadId); ran = true; });
             Assert.True(ran);
         }
 
@@ -149,9 +149,9 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Immediate_ScheduleActionDue()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
-            Scheduler.Immediate.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            Scheduler.Immediate.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Environment.CurrentManagedThreadId); ran = true; });
             Assert.True(ran, "ran");
         }
     }

@@ -155,7 +155,7 @@ namespace System.Reactive.Concurrency
             private Action<object?> _action;
             private SingleAssignmentDisposableValue _timer;
 
-            private static readonly object DisposedState = new object();
+            private static readonly object DisposedState = new();
 
             public Timer(Action<object?> action, object? state, TimeSpan dueTime)
             {

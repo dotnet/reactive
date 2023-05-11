@@ -10,7 +10,9 @@ namespace Microsoft.Reactive.Testing
     /// <summary>
     /// Base class to write unit tests for applications and libraries built using Reactive Extensions.
     /// </summary>
+#pragma warning disable CA1052 // (Static holder types should be Static or NotInheritable). Tests inherit from this to bring static members into scope
     public class ReactiveTest
+#pragma warning restore CA1052
     {
         /// <summary>
         /// Default virtual time used for creation of observable sequences in <see cref="ReactiveTest"/>-based unit tests.
@@ -75,7 +77,9 @@ namespace Microsoft.Reactive.Testing
         /// <param name="ticks">Recorded virtual time the OnCompleted notification occurs.</param>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="T"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>Recorded OnCompleted notification.</returns>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static Recorded<Notification<T>> OnCompleted<T>(long ticks, T witness)
+#pragma warning restore IDE0060
         {
             return new Recorded<Notification<T>>(ticks, Notification.CreateOnCompleted<T>());
         }
@@ -125,7 +129,9 @@ namespace Microsoft.Reactive.Testing
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="T"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>Recorded OnError notification.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="exception"/> is null.</exception>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static Recorded<Notification<T>> OnError<T>(long ticks, Exception exception, T witness)
+#pragma warning restore IDE0060
         {
             if (exception == null)
             {
@@ -144,7 +150,9 @@ namespace Microsoft.Reactive.Testing
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="T"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>Recorded OnError notification with a predicate to assert a given exception.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is null.</exception>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static Recorded<Notification<T>> OnError<T>(long ticks, Func<Exception, bool> predicate, T witness)
+#pragma warning restore IDE0060
         {
             if (predicate == null)
             {

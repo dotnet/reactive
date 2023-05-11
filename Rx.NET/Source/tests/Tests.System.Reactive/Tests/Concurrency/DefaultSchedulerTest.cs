@@ -35,27 +35,27 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void ScheduleAction()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = DefaultScheduler.Instance;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(() => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(() => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
         [TestMethod]
         public void ScheduleActionDue()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = DefaultScheduler.Instance;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
         [TestMethod]
         public void ScheduleActionCancel()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = DefaultScheduler.Instance;
             var set = false;
             var d = nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.True(false); set = true; });

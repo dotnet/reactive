@@ -3483,18 +3483,18 @@ namespace ReactiveTests.Tests
 
     internal class GroupByComparer : IEqualityComparer<string>
     {
-        private TestScheduler _scheduler;
+        private readonly TestScheduler _scheduler;
         private readonly int _equalsThrowsAfter;
         private readonly ushort _getHashCodeThrowsAfter;
 
-        public Exception HashCodeException = new Exception();
-        public Exception EqualsException = new Exception();
+        public Exception HashCodeException = new();
+        public Exception EqualsException = new();
 
         public GroupByComparer(TestScheduler scheduler, ushort equalsThrowsAfter, ushort getHashCodeThrowsAfter)
         {
-            this._scheduler = scheduler;
-            this._equalsThrowsAfter = equalsThrowsAfter;
-            this._getHashCodeThrowsAfter = getHashCodeThrowsAfter;
+            _scheduler = scheduler;
+            _equalsThrowsAfter = equalsThrowsAfter;
+            _getHashCodeThrowsAfter = getHashCodeThrowsAfter;
         }
 
         public GroupByComparer(TestScheduler scheduler)

@@ -9,7 +9,7 @@ namespace ReactiveTests.Dummies
 {
     internal class DummyScheduler : IScheduler
     {
-        public static readonly DummyScheduler Instance = new DummyScheduler();
+        public static readonly DummyScheduler Instance = new();
 
         private DummyScheduler()
         {

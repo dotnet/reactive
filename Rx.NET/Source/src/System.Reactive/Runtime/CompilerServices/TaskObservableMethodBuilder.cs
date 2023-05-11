@@ -14,7 +14,9 @@ namespace System.Runtime.CompilerServices
     /// Represents a builder for asynchronous methods that return a task-like <see cref="ITaskObservable{T}"/>.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+#pragma warning disable CA1815 // (Override equals on value types.) Method only meant to be used by await/async generated code, so equality is not required.
     public struct TaskObservableMethodBuilder<T>
+#pragma warning restore CA1815
     {
         /// <summary>
         /// The compiler-generated asynchronous state machine representing the execution flow of the asynchronous
@@ -31,7 +33,9 @@ namespace System.Runtime.CompilerServices
         /// Creates an instance of the <see cref="TaskObservableMethodBuilder{T}"/> struct.
         /// </summary>
         /// <returns>A new instance of the struct.</returns>
+#pragma warning disable CA1000 // (Do not declare static members on generic types.) Async method builders are required to define a static Create method, and are require to be generic when the async type produces a result.
         public static TaskObservableMethodBuilder<T> Create() => default;
+#pragma warning restore CA1000 // Do not declare static members on generic types
 
         /// <summary>
         /// Begins running the builder with the associated state machine.
@@ -39,7 +43,9 @@ namespace System.Runtime.CompilerServices
         /// <typeparam name="TStateMachine">The type of the state machine.</typeparam>
         /// <param name="stateMachine">The state machine instance, passed by reference.</param>
         /// <exception cref="ArgumentNullException"><paramref name="stateMachine"/> is <c>null</c>.</exception>
+#pragma warning disable CA1045 // (Avoid ref.) Required because this is an async method builder
         public void Start<TStateMachine>(ref TStateMachine stateMachine)
+#pragma warning restore CA1045
             where TStateMachine : IAsyncStateMachine
         {
             if (stateMachine == null)
@@ -118,7 +124,9 @@ namespace System.Runtime.CompilerServices
         /// <typeparam name="TStateMachine">The type of the state machine.</typeparam>
         /// <param name="awaiter">The awaiter.</param>
         /// <param name="stateMachine">The state machine.</param>
+#pragma warning disable CA1045 // (Avoid ref.) Required because this is an async method builder
         public void AwaitOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
+#pragma warning restore CA1045
             where TAwaiter : INotifyCompletion
             where TStateMachine : IAsyncStateMachine
         {
@@ -154,7 +162,9 @@ namespace System.Runtime.CompilerServices
         /// <param name="awaiter">The awaiter.</param>
         /// <param name="stateMachine">The state machine.</param>
         [SecuritySafeCritical]
+#pragma warning disable CA1045 // (Avoid ref.) Required because this is an async method builder
         public void AwaitUnsafeOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
+#pragma warning restore CA1045
             where TAwaiter : ICriticalNotifyCompletion
             where TStateMachine : IAsyncStateMachine
         {

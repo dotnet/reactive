@@ -71,7 +71,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current <see cref="TimeInterval{T}"/>.</param>
         /// <returns><c>true</c> if the specified System.Object is equal to the current <see cref="TimeInterval{T}"/>; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object? obj) => obj is TimeInterval<T> && Equals((TimeInterval<T>)obj);
+        public override bool Equals(object? obj) => obj is TimeInterval<T> interval && Equals(interval);
 
         /// <summary>
         /// Returns the hash code for the current <see cref="TimeInterval{T}"/> value.

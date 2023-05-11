@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#pragma warning disable 1591
-
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -150,5 +148,3 @@ namespace System.Reactive.Linq
         }
     }
 }
-
-#pragma warning restore 1591

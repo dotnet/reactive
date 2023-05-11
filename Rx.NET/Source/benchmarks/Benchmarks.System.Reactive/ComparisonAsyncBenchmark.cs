@@ -18,8 +18,8 @@ namespace Benchmarks.System.Reactive
         public int N;
         private int _store;
 
-        IScheduler _scheduler1;
-        IScheduler _scheduler2;
+        private IScheduler _scheduler1;
+        private IScheduler _scheduler2;
 
         [GlobalSetup]
         public void Setup()

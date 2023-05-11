@@ -64,7 +64,7 @@ dotnet_style_predefined_type_for_member_access = true:suggestion
 dotnet_style_readonly_field = true:warning
 
 # Suggest more modern language features when available
-dotnet_style_object_initializer = true:suggestion
+dotnet_style_object_initializer = true:silent
 dotnet_style_collection_initializer = true:suggestion
 dotnet_style_coalesce_expression = true:suggestion
 dotnet_style_null_propagation = true:suggestion
@@ -74,7 +74,7 @@ dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
 dotnet_style_prefer_conditional_expression_over_return = false
 dotnet_style_prefer_conditional_expression_over_assignment = false
-dotnet_style_prefer_auto_properties = true:suggestion
+dotnet_style_prefer_auto_properties = true:silent
 
 # Parentheses
 dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:silent

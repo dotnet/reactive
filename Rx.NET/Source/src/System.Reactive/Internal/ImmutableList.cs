@@ -6,7 +6,7 @@ namespace System.Reactive
 {
     internal sealed class ImmutableList<T>
     {
-        public static readonly ImmutableList<T> Empty = new ImmutableList<T>();
+        public static readonly ImmutableList<T> Empty = new();
 
         private readonly T[] _data;
 

@@ -25,7 +25,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TSource> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
@@ -142,7 +142,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(_other, observer);
+            protected override _ CreateSink(IObserver<TSource> observer) => new(_other, observer);
 
             protected override void Run(_ sink) => sink.Run(this);
 
@@ -230,7 +230,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _other = other;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(this, observer);
 
         protected override void Run(_ sink) => sink.Run(this);
 

@@ -150,7 +150,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<double> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<double> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
@@ -211,7 +211,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<float> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<float> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
@@ -272,7 +272,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<decimal> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<decimal> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
@@ -333,7 +333,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<int> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<int> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
@@ -394,7 +394,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<long> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<long> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
@@ -455,7 +455,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<double?> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<double?> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
@@ -505,7 +505,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<float?> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<float?> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
@@ -555,7 +555,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<decimal?> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<decimal?> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
@@ -605,7 +605,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<int?> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<int?> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
@@ -655,7 +655,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<long?> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<long?> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 

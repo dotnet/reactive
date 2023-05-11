@@ -48,5 +48,17 @@ namespace System.Reactive.Disposables
         {
             Disposables.Disposable.Dispose(ref _current);
         }
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj) => false;
+
+        /// <inheritdoc/>
+        public override int GetHashCode() => 0;
+
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required part of public API
+        public static bool operator ==(SingleAssignmentDisposableValue left, SingleAssignmentDisposableValue right) => false;
+
+        public static bool operator !=(SingleAssignmentDisposableValue left, SingleAssignmentDisposableValue right) => true;
+#pragma warning restore IDE0060
     }
 }

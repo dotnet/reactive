@@ -2,5 +2,24 @@
   <Import Project="..\Directory.build.props" />
   <PropertyGroup>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)..\Test.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup> 
+
+    <!--
+    Test projects are not designed for public consumption so they don't need the analysis rules
+    that enforce .NET Class Library Design Guidelines.
+    -->
+    <AnalysisLevelDesign>None</AnalysisLevelDesign>
+    <AnalysisLevelPerformance>7.0-None</AnalysisLevelPerformance>
+    <AnalysisLevelNaming>7.0-None</AnalysisLevelNaming>
+    <!--
+    Diagnostics of limited value in test projects
+    CA2201 - System.Exception not sufficiently specific - tests often need to work with the base Exception type.
+    IDE1006 - naming rules - test projects aren't designed for public consumption.
+    -->
+    <NoWarn>$(NoWarn);CA2201;IDE1006</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <GlobalAnalyzerConfigFiles Remove="$(MSBuildThisFileDirectory)..\analyzers.globalconfig" />
+  </ItemGroup>
+
 </Project>

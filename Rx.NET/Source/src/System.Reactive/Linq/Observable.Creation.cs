@@ -295,7 +295,9 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>An observable sequence with no elements.</returns>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static IObservable<TResult> Empty<TResult>(TResult witness)
+#pragma warning restore IDE0060
         {
             return s_impl.Empty<TResult>(); // Pure inference - no specialized target method.
         }
@@ -325,7 +327,9 @@ namespace System.Reactive.Linq
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>An observable sequence with no elements.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static IObservable<TResult> Empty<TResult>(IScheduler scheduler, TResult witness)
+#pragma warning restore IDE0060
         {
             if (scheduler == null)
             {
@@ -427,7 +431,9 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>An observable sequence whose observers will never get called.</returns>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static IObservable<TResult> Never<TResult>(TResult witness)
+#pragma warning restore IDE0060
         {
             return s_impl.Never<TResult>(); // Pure inference - no specialized target method.
         }
@@ -617,7 +623,9 @@ namespace System.Reactive.Linq
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>The observable sequence that terminates exceptionally with the specified exception object.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="exception"/> is null.</exception>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static IObservable<TResult> Throw<TResult>(Exception exception, TResult witness)
+#pragma warning restore IDE0060
         {
             if (exception == null)
             {
@@ -659,7 +667,9 @@ namespace System.Reactive.Linq
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>The observable sequence that terminates exceptionally with the specified exception object.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="exception"/> or <paramref name="scheduler"/> is null.</exception>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static IObservable<TResult> Throw<TResult>(Exception exception, IScheduler scheduler, TResult witness)
+#pragma warning restore IDE0060
         {
             if (exception == null)
             {

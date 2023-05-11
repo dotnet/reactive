@@ -99,7 +99,7 @@ namespace ReactiveTests.Tests
 
         private class O : IObservable<int>
         {
-            private readonly ManualResetEvent _event = new ManualResetEvent(false);
+            private readonly ManualResetEvent _event = new(false);
             private IObserver<int> _observer;
 
             public void Wait()

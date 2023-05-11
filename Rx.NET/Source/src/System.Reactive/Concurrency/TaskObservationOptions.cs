@@ -85,7 +85,7 @@ namespace System.Reactive.Concurrency
         /// </remarks>
         public bool IgnoreExceptionsAfterUnsubscribe { get; }
 
-        internal Value ToValue() => new Value(this.Scheduler, this.IgnoreExceptionsAfterUnsubscribe);
+        internal Value ToValue() => new(Scheduler, IgnoreExceptionsAfterUnsubscribe);
 
         /// <summary>
         /// Value-type representation.

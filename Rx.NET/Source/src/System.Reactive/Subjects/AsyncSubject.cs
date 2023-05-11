@@ -22,15 +22,16 @@ namespace System.Reactive.Subjects
         private bool _hasValue;
         private Exception? _exception;
 
+#pragma warning disable CA1825 // (Avoid zero-length array allocations.) The identity of these arrays matters, so we can't use the shared Array.Empty<T>() instance
         /// <summary>
         /// A pre-allocated empty array indicating the AsyncSubject has terminated.
         /// </summary>
         private static readonly AsyncSubjectDisposable[] Terminated = new AsyncSubjectDisposable[0];
-
         /// <summary>
         /// A pre-allocated empty array indicating the AsyncSubject has been disposed.
         /// </summary>
         private static readonly AsyncSubjectDisposable[] Disposed = new AsyncSubjectDisposable[0];
+#pragma warning restore CA1825
 
         #endregion
 
@@ -412,7 +413,6 @@ namespace System.Reactive.Subjects
         /// </summary>
         /// <returns>The last element of the subject. Throws an InvalidOperationException if no element was received.</returns>
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
-        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Await pattern for C# and VB compilers.")]
         public T GetResult()
         {
             if (Volatile.Read(ref _observers) != Terminated)

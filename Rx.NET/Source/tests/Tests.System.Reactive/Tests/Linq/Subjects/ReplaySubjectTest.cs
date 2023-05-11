@@ -42,6 +42,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Constructor_ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We are just testing whether or not the constructor throws.
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new ReplaySubject<int>(-1));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new ReplaySubject<int>(-1, DummyScheduler.Instance));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new ReplaySubject<int>(-1, TimeSpan.Zero));
@@ -64,6 +65,7 @@ namespace ReactiveTests.Tests
             new ReplaySubject<int>(0, DummyScheduler.Instance);
             new ReplaySubject<int>(TimeSpan.Zero, DummyScheduler.Instance);
             new ReplaySubject<int>(0, TimeSpan.Zero, DummyScheduler.Instance);
+#pragma warning restore CA1806
         }
 
         [TestMethod]

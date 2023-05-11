@@ -27,8 +27,8 @@ namespace ReactiveTests.Tests
     public class QbservableTest
     {
         private readonly IQbservable<int> _qbNull = null;
-        private IQbservable<int> _qbMy = new MyQbservable<int>();
-        private IQbservableProvider _qbp = new MyQbservableProvider();
+        private readonly IQbservable<int> _qbMy = new MyQbservable<int>();
+        private readonly IQbservableProvider _qbp = new MyQbservableProvider();
 
         [TestMethod]
         public void LocalQueryMethodImplementationTypeAttribute()
@@ -1749,7 +1749,9 @@ namespace ReactiveTests.Tests
             xs.Concat(ys.Provider.Amb(xs)).ForEach(_ => { });
         }
 
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         private void Ignore<T>(IQbservable<T> q)
+#pragma warning restore IDE0060
         {
         }
 
@@ -1773,7 +1775,7 @@ namespace ReactiveTests.Tests
                         select new { Name = o.Key, Observable = o.ToList(), Qbservable = q.ToList() })
                        .ToList();
 
-            bool filterReturn(Type t)
+            static bool filterReturn(Type t)
             {
                 if (t.GetTypeInfo().IsGenericType)
                 {

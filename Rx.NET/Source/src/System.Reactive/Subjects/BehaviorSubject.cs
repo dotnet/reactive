@@ -17,7 +17,7 @@ namespace System.Reactive.Subjects
     {
         #region Fields
 
-        private readonly object _gate = new object();
+        private readonly object _gate = new();
 
         private ImmutableList<IObserver<T>> _observers;
         private bool _isStopped;

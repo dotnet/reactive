@@ -8,6 +8,22 @@
     <Configurations>Current Sources;Rx.net 3.1.1;Rx.net 4.0</Configurations>
   </PropertyGroup>
 
+  <!--
+    Test projects are not designed for public consumption so the analysis rules mostly produce
+    false positives.
+    -->
+
+  <PropertyGroup>
+    <AnalysisLevelNaming>7.0-none</AnalysisLevelNaming>
+    <AnalysisLevelPerformance>7.0-none</AnalysisLevelPerformance>
+    <NoWarn>$(NoWarn);IDE1006</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <GlobalAnalyzerConfigFiles Remove="$(MSBuildThisFileDirectory)..\..\analyzers.globalconfig" />
+  </ItemGroup>
+
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rx.net 3.1.1|AnyCPU'">
     <DefineConstants>$(DefineConstants);RX3_1_1</DefineConstants>
   </PropertyGroup>

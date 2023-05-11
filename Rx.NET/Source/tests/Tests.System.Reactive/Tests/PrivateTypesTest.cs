@@ -151,7 +151,7 @@ namespace ReactiveTests.Tests
         public override bool Equals(object obj)
         {
             var equ = _value.GetType().GetMethods().Where(m => m.Name == "Equals" && m.GetParameters()[0].ParameterType == typeof(object)).Single();
-            return (bool)equ.Invoke(_value, new object[] { obj is EitherBase ? ((EitherBase)obj)._value : obj });
+            return (bool)equ.Invoke(_value, new object[] { obj is EitherBase eitherBase ? eitherBase._value : obj });
         }
 
         public override int GetHashCode()
@@ -195,6 +195,7 @@ namespace ReactiveTests.Tests
             mth.Invoke(_value, new object[] { caseLeft, caseRight });
         }
 
+#pragma warning disable CA1067 // (Override Object.Equals(object) when implementing IEquatable<T>) - not required in the tests that use this type
         public sealed class Left : Either<TLeft, TRight>, IEquatable<Left>
         {
             public TLeft Value
@@ -238,5 +239,6 @@ namespace ReactiveTests.Tests
                 return (bool)equ.Invoke(_value, new object[] { other?._value });
             }
         }
+#pragma warning restore CA1067
     }
 }

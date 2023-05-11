@@ -79,7 +79,7 @@ namespace Tests.System.Reactive.Tests
         [TestMethod]
         public async Task BasicsWithSynchronizationContext()
         {
-            SynchronizationContext ctx = SynchronizationContext.Current;
+            var ctx = SynchronizationContext.Current;
             try
             {
                 SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
@@ -91,7 +91,6 @@ namespace Tests.System.Reactive.Tests
             }
         }
 
-#pragma warning disable 1998
         private async ITaskObservable<int> ManOrBoy_Basics()
         {
             var res = 0;
@@ -117,6 +116,5 @@ namespace Tests.System.Reactive.Tests
 
             return res;
         }
-#pragma warning restore 1998
     }
 }

@@ -54,8 +54,8 @@ using System.Threading;
 //
 // The two CodeAnalysis suppressions below are explained by the Justification property (scroll to the right):
 //
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2136:TransparencyAnnotationsShouldNotConflictFxCopRule", Scope = "member", Target = "System.Reactive.Linq.QueryLanguage+RemotableObserver`1.#Unregister()", Justification = "This error only occurs while running FxCop on local builds that don't have NO_CODECOVERAGE set, causing the assembly not to be marked with APTCA (see AssemblyInfo.cs). When APTCA is enabled in official builds, this SecurityTreatAsSafe annotation is required.")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2136:TransparencyAnnotationsShouldNotConflictFxCopRule", Scope = "member", Target = "System.Reactive.Linq.QueryLanguage+RemotableObservable`1+RemotableSubscription.#Unregister()", Justification = "This error only occurs while running FxCop on local builds that don't have NO_CODECOVERAGE set, causing the assembly not to be marked with APTCA (see AssemblyInfo.cs). When APTCA is enabled in official builds, this SecurityTreatAsSafe annotation is required.")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2136:TransparencyAnnotationsShouldNotConflictFxCopRule", Scope = "member", Target = "~M:System.Reactive.Linq.RemotingObservable.RemotableObserver`1.Unregister", Justification = "This error only occurs while running FxCop on local builds that don't have NO_CODECOVERAGE set, causing the assembly not to be marked with APTCA (see AssemblyInfo.cs). When APTCA is enabled in official builds, this SecurityTreatAsSafe annotation is required.")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2136:TransparencyAnnotationsShouldNotConflictFxCopRule", Scope = "member", Target = "~M:System.Reactive.Linq.RemotingObservable.RemotableObservable`1.RemotableSubscription.Unregister", Justification = "This error only occurs while running FxCop on local builds that don't have NO_CODECOVERAGE set, causing the assembly not to be marked with APTCA (see AssemblyInfo.cs). When APTCA is enabled in official builds, this SecurityTreatAsSafe annotation is required.")]
 
 namespace System.Reactive.Linq
 {
@@ -140,10 +140,7 @@ namespace System.Reactive.Linq
             private void Unregister()
             {
                 var lease = (ILease)RemotingServices.GetLifetimeService(this);
-                if (lease != null)
-                {
-                    lease.Unregister(this);
-                }
+                lease?.Unregister(this);
             }
 
             [SecurityCritical]
@@ -211,10 +208,7 @@ namespace System.Reactive.Linq
                 private void Unregister()
                 {
                     var lease = (ILease)RemotingServices.GetLifetimeService(this);
-                    if (lease != null)
-                    {
-                        lease.Unregister(this);
-                    }
+                    lease?.Unregister(this);
                 }
 
                 [SecurityCritical]

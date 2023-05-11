@@ -50,8 +50,8 @@ namespace System.Reactive.Threading.Tasks
                             (task, tuple.observer),
                             static tuple2 => tuple2.task.EmitTaskResult(tuple2.observer)),
                         (scheduler: _scheduler, observer),
-                        cts.Token,
-                        options);
+                        options,
+                        cts.Token);
                 }
 
                 if (_ignoreExceptionsAfterUnsubscribe)
@@ -97,8 +97,8 @@ namespace System.Reactive.Threading.Tasks
                             (task, tuple.observer),
                             static tuple2 => tuple2.task.EmitTaskResult(tuple2.observer)),
                         (scheduler: _scheduler, observer),
-                        cts.Token,
-                        options);
+                        options,
+                        cts.Token);
                 }
 
                 if (_ignoreExceptionsAfterUnsubscribe)
@@ -470,7 +470,9 @@ namespace System.Reactive.Threading.Tasks
         /// <param name="scheduler">The scheduler used for overriding where the task completion signals will be issued.</param>
         /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="observable"/> or <paramref name="scheduler"/> is <c>null</c>.</exception>
+#pragma warning disable CA1068 // (CancellationToken parameters must come last.) Would be a breaking change.
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken, IScheduler scheduler)
+#pragma warning restore CA1068
         {
             return observable.ToTask(cancellationToken, state: null).ContinueOnScheduler(scheduler);
         }
@@ -580,7 +582,9 @@ namespace System.Reactive.Threading.Tasks
         /// <param name="state">The state to use as the underlying task's <see cref="Task.AsyncState"/>.</param>
         /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="observable"/> is <c>null</c>.</exception>
+#pragma warning disable CA1068 // (CancellationToken parameters must come last.) Would be a breaking change.
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken, object? state)
+#pragma warning restore CA1068
         {
             if (observable == null)
             {
@@ -625,7 +629,9 @@ namespace System.Reactive.Threading.Tasks
         /// <param name="scheduler">The scheduler used for overriding where the task completion signals will be issued.</param>
         /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="observable"/> or <paramref name="scheduler"/> is <c>null</c>.</exception>
+#pragma warning disable CA1068 // (CancellationToken parameters must come last.) Would be a breaking change.
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken, object? state, IScheduler scheduler)
+#pragma warning restore CA1068
         {
             return observable.ToTask(cancellationToken, state).ContinueOnScheduler(scheduler);
         }
