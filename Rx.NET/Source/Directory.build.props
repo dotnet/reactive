@@ -31,7 +31,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.119" PrivateAssets="all" />
+    
+    <!--
+    Nerdbank.GitVersioning 3.6.128 injects a reference to a .proj file that doesn't work inside UWP projects,
+    so we make this conditional so it doesn't appear in the test runner.
+    -->
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.128" PrivateAssets="all" Condition="$(TargetPlatformIdentifier) != 'UAP'" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
