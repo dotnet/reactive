@@ -195,6 +195,9 @@ nuget.exe
 *.v3.ncrunchsolution
 /Rx.NET/Source/.NCrunch_*/StoredText
 
-# UWP test packages
-/Rx.NET/Source/tests/**/AppPackages
-/Rx.NET/Source/tests/**/BundleArtifacts
+# Windows Store app package directories and files
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
