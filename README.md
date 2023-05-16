@@ -130,7 +130,7 @@ The people currently maintaining Rx are:
         <img width="150" height="150" src="https://github.com/HowardvanRooijen.png?s=150">
         <br>
         <a href="https://github.com/HowardvanRooijen">Howard van Rooijen</a>
-        <p>London, UK</p>
+        <p>Winchester, UK</p>
         <p><a href="https://endjin.com/who-we-are/our-people/howard-van-rooijen/">Howard's blog on endjin.com</a>
       </td>
   </tbody>
