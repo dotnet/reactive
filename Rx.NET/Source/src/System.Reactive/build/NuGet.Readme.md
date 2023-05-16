@@ -93,4 +93,4 @@ await fileActivityStopped.ForEachAsync(
 
 ## Feedback
 
-You can create issues at the https://github.com/dotnet/interactive repository
+You can create issues at the https://github.com/dotnet/reactive repository
