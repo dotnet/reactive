@@ -7,6 +7,7 @@
     <DefineConstants>$(DefineConstants);PLATFORM_DOTNET;XUNIT_VISIBILITY_INTERNAL</DefineConstants>        
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>    
     <Description>Reactive Extensions (Rx) for .NET - Testing Library</Description>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
     <!-- NB: A lot of CA and IDE warnings are disabled because of the .cs files included from xunit.assert.source. -->
     <NoWarn>$(NoWarn);IDE0054;IDE0066;CA1305;CA1307;CA1032;CA1064;CA1704;CA1822;CA1812;CA1820;CA1823;CA1825;CA1845;CA2249;IDE0016;IDE0018;IDE0019;IDE0020;IDE0031;IDE0039;IDE0044;IDE0059;IDE0074;IDE0270</NoWarn>
   </PropertyGroup>
@@ -22,6 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md"/>
+
     <!--
     Workaround for https://github.com/xunit/xunit/issues/2703
     -->

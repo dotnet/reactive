@@ -194,3 +194,10 @@ nuget.exe
 *.v3.ncrunchproject
 *.v3.ncrunchsolution
 /Rx.NET/Source/.NCrunch_*/StoredText
+
+# Windows Store app package directories and files
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
