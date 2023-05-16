@@ -1,21 +1,24 @@
 ﻿Reactive Extensions
 ======================
 
-This repository contains four libraries:
+This repository contains four libraries which are conceptually related in that they are all concerned with LINQ over sequences of things:
 
-* [Rx.NET](Rx.NET/) ([System.Reactive](https://www.nuget.org/packages/System.Reactive/)): a library for event-driven programming with a composable, declarative model
+* [Reactive Extensions for .NET](Rx.NET/) aka Rx.NET or Rx ([System.Reactive](https://www.nuget.org/packages/System.Reactive/)): a library for event-driven programming with a composable, declarative model
 * [AsyncRx.NET](AsyncRx.NET/) (experimental preview) ([System.Reactive.Async](https://www.nuget.org/packages/System.Reactive.Async)): experimental implementation of Rx for `IAsyncObservable<T>` offering deeper `async`/`await` support
-* [Interactive Extensions for .NET](Ix.NET/) ([System.Interactive](https://www.nuget.org/packages/System.Interactive/)): extended LINQ operators for `IAsyncEnumerable` and `IEnumerable`
+* [Interactive Extensions for .NET](Ix.NET/), aka Ix ([System.Interactive](https://www.nuget.org/packages/System.Interactive/)): extended LINQ operators for `IAsyncEnumerable` and `IEnumerable`
 * [LINQ for `IAsyncEnumerable`](./Ix.NET/Source/System.Linq.Async/) ([System.Linq.Async](https://www.nuget.org/packages/System.Linq.Async/)): implements standard LINQ operators for `IAsyncEnumerable`
 
-These are conceptually related in that they are all concerned with _LINQ over sequences of things_. Each is described in the following sections of this README.
+Each will be described later in this README.
 
-Channel  | Rx | System.Linq.Async | Ix |
--------- | :------------: | :-------------: | :-------------: |
-Build | [![Build Status](https://dev.azure.com/dotnet/Rx.NET/_apis/build/status/Rx.NET-CI?branchName=master)](https://dev.azure.com/dotnet/Rx.NET/_build/latest?definitionId=9) | Built as part of Ix | [![Build Status](https://dev.azure.com/dotnet/Rx.NET/_apis/build/status/Ix.NET-CI?branchName=master)](https://dev.azure.com/dotnet/Rx.NET/_build/latest?definitionId=28)
-NuGet.org | [![#](https://img.shields.io/nuget/v/System.Reactive.svg)](https://www.nuget.org/packages/System.Reactive/) | [![#](https://img.shields.io/nuget/v/System.Linq.Async.svg)](https://www.nuget.org/packages/System.Linq.Async/) | [![#](https://img.shields.io/nuget/v/System.Interactive.svg)](https://www.nuget.org/packages/System.Interactive/)
-NuGet.org preview (if newer than release) | [![#](https://img.shields.io/nuget/vpre/System.Reactive.svg)](https://www.nuget.org/packages/System.Reactive/) | [![#](https://img.shields.io/nuget/vpre/System.Linq.Async.svg)](https://www.nuget.org/packages/System.Linq.Async/) | [![#](https://img.shields.io/nuget/vpre/System.Interactive.svg)](https://www.nuget.org/packages/System.Interactive/)
-[Azure<br>Artifacts](https://dev.azure.com/dotnet/Rx.NET/_packaging?_a=feed&feed=RxNet) | [![System.Reactive package in RxNet feed in Azure Artifacts](https://azpkgsshield.azurevoodoo.net/dotnet/Rx.NET/RxNet/System.Reactive)](https://dev.azure.com/dotnet/Rx.NET/_packaging?_a=package&feed=5afc77bd-23b4-46f8-b725-40ebedab630c&package=3c02dce4-f7e9-43ec-a014-28ea9fc46f82&preferRelease=true) | Built as part of Ix | [![System.Interactive package in RxNet feed in Azure Artifacts](https://azpkgsshield.azurevoodoo.net/dotnet/Rx.NET/RxNet/System.Interactive)](https://dev.azure.com/dotnet/Rx.NET/_packaging?_a=package&feed=5afc77bd-23b4-46f8-b725-40ebedab630c&package=a3311bc0-c6ea-4460-bea8-b65d633e2583&preferRelease=true) 
+## Getting the bits
+
+Channel  | Rx | AsyncRx | Ix | System.Linq.Async
+--- | --- | --- | --- |--- |
+NuGet.org | [![#](https://img.shields.io/nuget/v/System.Reactive.svg)](https://www.nuget.org/packages/System.Reactive/)| [![#](https://img.shields.io/nuget/v/System.Reactive.Async.svg)](https://www.nuget.org/packages/System.Reactive.Async/) | [![#](https://img.shields.io/nuget/v/System.Interactive.svg)](https://www.nuget.org/packages/System.Interactive/) | [![#](https://img.shields.io/nuget/v/System.Linq.Async.svg)](https://www.nuget.org/packages/System.Linq.Async/)
+NuGet.org preview (if newer than release) | [![#](https://img.shields.io/nuget/vpre/System.Reactive.svg)](https://www.nuget.org/packages/System.Reactive/) | [![#](https://img.shields.io/nuget/vpre/System.Reactive.Async.svg)](https://www.nuget.org/packages/System.Reactive.Async/) | [![#](https://img.shields.io/nuget/vpre/System.Interactive.svg)](https://www.nuget.org/packages/System.Interactive/) | [![#](https://img.shields.io/nuget/vpre/System.Linq.Async.svg)](https://www.nuget.org/packages/System.Linq.Async/)
+Build | [![Build Status](https://dev.azure.com/dotnet/Rx.NET/_apis/build/status/Rx.NET-CI?branchName=master)](https://dev.azure.com/dotnet/Rx.NET/_build/latest?definitionId=9) | [![Build Status](https://dev.azure.com/dotnet/Rx.NET/_apis/build/status/AsyncRx.NET-CI?branchName=master)](https://dev.azure.com/dotnet/Rx.NET/_build/latest?definitionId=191) | [![Build Status](https://dev.azure.com/dotnet/Rx.NET/_apis/build/status/Ix.NET-CI?branchName=master)](https://dev.azure.com/dotnet/Rx.NET/_build/latest?definitionId=28) | Built as part of Ix
+[Azure<br>Artifacts](https://dev.azure.com/dotnet/Rx.NET/_packaging?_a=feed&feed=RxNet) | [![System.Reactive package in RxNet feed in Azure Artifacts](https://azpkgsshield.azurevoodoo.net/dotnet/Rx.NET/RxNet/System.Reactive)](https://dev.azure.com/dotnet/Rx.NET/_packaging?_a=package&feed=5afc77bd-23b4-46f8-b725-40ebedab630c&package=3c02dce4-f7e9-43ec-a014-28ea9fc46f82&preferRelease=true) | [![System.Reactive.Async package in RxNet feed in Azure Artifacts](https://azpkgsshield.azurevoodoo.net/dotnet/Rx.NET/RxNet/System.Reactive.Async)](https://dev.azure.com/dotnet/Rx.NET/_packaging?_a=package&feed=5afc77bd-23b4-46f8-b725-40ebedab630c&package=3c02dce4-f7e9-43ec-a014-28ea9fc46f82&preferRelease=true) | [![System.Interactive package in RxNet feed in Azure Artifacts](https://azpkgsshield.azurevoodoo.net/dotnet/Rx.NET/RxNet/System.Interactive)](https://dev.azure.com/dotnet/Rx.NET/_packaging?_a=package&feed=5afc77bd-23b4-46f8-b725-40ebedab630c&package=a3311bc0-c6ea-4460-bea8-b65d633e2583&preferRelease=true) | Built as part of Ix 
+Release history | [ReleaseHistory](Rx.NET/Documentation/ReleaseHistory/) | [ReleaseHistory](Ix.NET/Documentation/ReleaseHistory/)| [ReleaseHistory](Ix.NET/Documentation/ReleaseHistory/)
 
 For nightly builds, configure NuGet to use this feed: `https://pkgs.dev.azure.com/dotnet/Rx.NET/_packaging/RxNet/nuget/v3/index.json`
 
@@ -26,7 +29,7 @@ Catch us in the #rxnet channel over at http://reactiveui.net/slack
 
 ## A Brief Introduction to Rx
 
-In this digital age, live streams of data are ubiquitous. Financial applications depend on a swift response to timely information. Computer networks have always been able to provide extensive information about their health and operation. Delivery vans continuously report their progress. Aircraft provide performance telemetry to detect potential maintenance issues before they become serious problems, and cars are now starting to do the same. Many of us wear or carry devices that track our physical activity and even vital signs. And the improvements in machine learning have enriched the insights that can be derived from the ever-increasing volume and variety of live data.
+In this digital age, live streams of data are ubiquitous. Financial applications depend on a swift response to timely information. Computer networks have always been able to provide extensive information about their health and operation. Utility companies such as water providers have vast numbers of devices monitoring their operations. User interface and game building frameworks report user interactions in great detail. Delivery vans continuously report their progress. Aircraft provide performance telemetry to detect potential maintenance issues before they become serious problems, and cars are now starting to do the same. Many of us wear or carry devices that track our physical activity and even [vital signs](https://www.youtube.com/watch?v=6yjl_h7-WYA&t=2443s). And the improvements in machine learning have enriched the insights that can be derived from the ever-increasing volume and variety of live data.
 
 But despite being so widespread, live information streams have always been something of a second class citizen. Almost all programming languages have some innate way to work with lists of data (e.g., arrays), but these mechanisms tends to presume that the relevant data is already sitting in memory, ready for us to work with it. What's missing is the liveness—the fact that an information source might produce new data at any moment, on its own schedule.
 
@@ -44,7 +47,7 @@ This uses C#'s LINQ feature to filter `trades` down to those entities with a vol
 var bigTrades = trades.Where(trade => trade.Volume > 1_000_000);
 ```
 
-The exact behaviour of these two (equivalent) code snippets depends on what type `trades` has. If it were a `List<Trade>`, then this query would just iterate through the list, and `bigTrades` would be a sequence containing just the matching objects. If `trades` were an object representing a database table (e.g., an [Entity Framework](https://learn.microsoft.com/en-us/ef/core/) [DbSet](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.dbset-1), this would be translated into a database query. But if we're using Rx, `trades` would be an `IObservable<Trade>`, an object reporting live events as they happen. And `bigTrades` would also be an `IObservable<Trade>`, reporting only those trades with a volume over a million. We can provide Rx with a callback to be invoked each time an observable source has something for us:
+The exact behaviour of these two (equivalent) code snippets depends on what type `trades` has. If it were a `IEnumerable<Trade>`, then this query would just iterate through the list, and `bigTrades` would be an enumerable sequence containing just the matching objects. If `trades` were an object representing a database table (e.g., an [Entity Framework](https://learn.microsoft.com/en-us/ef/core/) [DbSet](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.dbset-1), this would be translated into a database query. But if we're using Rx, `trades` would be an `IObservable<Trade>`, an object reporting live events as they happen. And `bigTrades` would also be an `IObservable<Trade>`, reporting only those trades with a volume over a million. We can provide Rx with a callback to be invoked each time an observable source has something for us:
 
 ```cs
 bigTrades.Subscribe(t => Console.WriteLine($"{t.Symbol}: trade with volume {t.Volume}"));
@@ -55,6 +58,9 @@ The two key features of Rx are:
 * a clearly defined way to represent and handle live sequences of data ([`IObservable<T>`](https://learn.microsoft.com/en-us/dotnet/api/system.iobservable-1))
 * a set of operators (such as the `Where` operator just shown) enabling event processing logic to be expressed declaratively
 
+Rx has been particularly successfully applied in user interfaces. (This is also true outside of .NET—[RxJS](https://rxjs.dev/) is a JavaScript spin-off of Rx, and it is very popular in user interface code.) The https://github.com/reactiveui/reactiveui makes deep use of Rx to support .NET UI development.
+
+To learn more, see this [Rx playlist](https://www.youtube.com/playlist?list=PLJt9xcgQpM60Fz20FIXBvj6ku4a7WOLGb).
 
 ## AsyncRx.Net
 
@@ -103,7 +109,8 @@ This project has adopted a code of conduct adapted from the [Contributor Covenan
 
 ## .NET Foundation
 
-System.Reactive is part of the [.NET Foundation](https://www.dotnetfoundation.org/). Other projects that are associated with the foundation include the Microsoft .NET Compiler Platform ("Roslyn") as well as the Microsoft ASP.NET family of projects, Microsoft .NET Core & Xamarin Forms.
+This project is part of the [.NET Foundation](http://www.dotnetfoundation.org/projects) along with other
+projects like [the .NET Runtime](https://github.com/dotnet/runtime/). The .NET Foundation provides this project with DevOps infrastructure to compile, test, sign and package this complex solution which has over 100 million downloads. It also provides conservatorship enabling the project to pass from maintainer to maintainer, enabling continuity for the community.
 
 ## Current Core Team
 
@@ -128,3 +135,9 @@ The people currently maintaining Rx are:
 </table>
 
 Rx has been around for roughly a decade and a half, so we owe a great deal to its creators, and the many people who have worked on it since. See the [AUTHORS.txt](AUTHORS.txt) for a full list.
+
+## Roadmap
+
+We have set out a [roadmap](Rx.NET/Documentation/Rx-Roadmap-2023.md) explaining our medium term plans for ongoing development of Rx. This diagram illustrates our view of the platforms on which Rx is used, and the planned support lifecycles for these various targets:
+
+![The support lifecycle for various .NET platforms, represented as a set of timelines, showing the published plans for widely used versions that are current as of 2023, with a particular focus on which versions will be current as of November 2023. The top section of the diagram shows .NET releases starting with .NET 6.0 being released in November 2021, and shows for each subsequent release occurring in November of each subsequent year, up as far as .NET 13.0 in November 2028. It also shows that even-numbered releases are Long Term Support (LTS for short) releases, supported for 3 years, while odd-numbered releases are supported only for 18 months. The section beneath this shows that .NET Framework versions 4.7.2, 4.8.0, and 4.8.1 will all be in support as of November 2023, and will continue to be in support beyond the timescale covered by this diagram, i.e., beyond November 2028. The section beneath this shows the release plan for MAUI, starting with version 8.0 on November 2023, and subsequent releases at the same time each subsequent year, up to version 13.0 in November 2028. The diagram shows that each of these versions is supported for only 18 months. Beneath this is are two lines showing Xamarin iOS 16.0, and Xamarin Android 13.0 support being active on November 2023, and running for 18 months. Beneath this is a line showing UWP version 10.0.16299 support being active on November 2023, and running beyond the timescale covered by the diagram. Beneath this is a section showing that Unity 2021 was released in 2021, and will go out of support near the end of 2023, and it shows a Unity 2022 release labelled as "Release soon," with a release date somewhere in the middle of 2023. The bottom of the diagram shows the endjin logo, and endjin's corporate motto: "we help small teams achieve big things."](Rx.NET/Documentation/RX-Platform-Support-Roadmap.png ".NET Platform Support Roadmap")
