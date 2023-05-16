@@ -48,15 +48,4 @@
     <files>
       <file src="NuGet.Facades.Readme.md" target="\readme.md"/>
     </files>
-
-
-    
-  <PropertyGroup>
-    <Description>Legacy facade for Reactive Extensions (Rx) for .NET</Description>
-    <PackageReadmeFile>readme.md</PackageReadmeFile>
-  </PropertyGroup>
-
-  <ItemGroup>
-  </ItemGroup>
-
 </package>
