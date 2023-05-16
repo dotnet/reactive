@@ -5,6 +5,7 @@
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>    
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <Description>Reactive Extensions (Rx) provides the aliases Map, FlatMap, and Filter</Description>    
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
@@ -12,4 +13,8 @@
   <ItemGroup>    
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>  
+
+  <ItemGroup>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md"/>
+  </ItemGroup>
 </Project>
