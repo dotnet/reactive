@@ -5,6 +5,7 @@
 ### Breaking changes
 
 * Out-of-support target frameworks (.NET Core 3.1, .NET 5) removed
+* Minimum target platform for UWP apps raised from 10.0.16299.0 to 10.0.18362.0
 
 ### New features
 
