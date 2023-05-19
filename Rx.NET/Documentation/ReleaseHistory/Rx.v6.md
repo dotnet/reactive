@@ -1,6 +1,6 @@
 # Rx Release History v6.0
 
-## v6.0.0-preview
+## v6.0.0
 
 ### Breaking changes
 
