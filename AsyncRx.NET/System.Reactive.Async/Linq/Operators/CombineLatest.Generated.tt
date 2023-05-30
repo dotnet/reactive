@@ -161,7 +161,7 @@ for (var j = 1; j <= i; j++)
 }
 #>
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             return
             (
@@ -248,7 +248,7 @@ for (var j = 1; j <= i; j++)
 }
 #>
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
             return
             (
