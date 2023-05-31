@@ -10,10 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Reactive" Version="6.0.0-preview.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\System.Reactive.Async\System.Reactive.Async.csproj" />
   </ItemGroup>
 

@@ -152,7 +152,7 @@ for (var i = 2; i <= 15; i++)
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
 <#
 for (var j = 1; j <= i; j++)
@@ -258,7 +258,7 @@ for (var j = 1; j <= i; j++)
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncLock();
+            var gate = new AsyncGate();
 
 <#
 for (var j = 1; j <= i; j++)
