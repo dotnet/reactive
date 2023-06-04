@@ -13,7 +13,7 @@ namespace System.Reactive.Subjects
     /// Observers can subscribe to the subject to receive the last (or initial) value and all subsequent notifications.
     /// </summary>
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
-    public sealed class BehaviorSubject<T> : SubjectBase<T>
+    public sealed class BehaviorSubject<T> : SubjectBase<T>, IBehaviorObservable<T>
     {
         #region Fields
 
