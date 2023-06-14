@@ -1,6 +1,10 @@
 # Rx Release History v6.0
 
-## v6.0.0-preview
+## v6.0.1-preview
+
+This release fixes [Issue #1942: "AOT compilation produces single trim analysis warning"](https://github.com/dotnet/reactive/issues/1942)
+
+## v6.0.0
 
 ### Breaking changes
 
