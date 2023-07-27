@@ -43,7 +43,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TSource> DeferAsync<TSource>(Func<CancellationToken, ValueTask<IAsyncObservable<TSource>>> observableFactory) => DeferAsync(observableFactory);
+        public static IAsyncObservable<TSource> DeferAsync<TSource>(Func<CancellationToken, ValueTask<IAsyncObservable<TSource>>> observableFactory) => Defer(observableFactory);
 
         public static IAsyncObservable<TSource> Defer<TSource>(Func<CancellationToken, ValueTask<IAsyncObservable<TSource>>> observableFactory)
         {
