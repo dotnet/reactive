@@ -124,9 +124,9 @@ namespace System.Reactive.Linq
                 var d = await source.SubscribeAsync(o).ConfigureAwait(false);
 
                 await subscription.AssignAsync(d).ConfigureAwait(false);
-            }
 
-            await tcs.Task.ConfigureAwait(false);
+                await tcs.Task.ConfigureAwait(false);
+            }
         }
     }
 }
