@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
     <TargetFrameworks>net472;net6.0;net7.0;net6.0-windows10.0.19041</TargetFrameworks>
@@ -31,7 +31,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
     <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
-    <PackageReference Include="xunit.assert" Version="2.4.2" />
+    <PackageReference Include="xunit.assert" Version="2.5.3" />
     <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
     <ProjectReference Include="..\..\src\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
