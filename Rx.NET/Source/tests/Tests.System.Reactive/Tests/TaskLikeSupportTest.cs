@@ -57,23 +57,28 @@ namespace Tests.System.Reactive.Tests
         //
         // When we switched to MSTest, and before we had added the tests to run both with and
         // without the SynchronizationContext (meaning we only tested without one) this test
-        // started failing intermittently. This seems likely to be indicative of a subtle bug in
-        // Rx, because there doesn't seem to be any obvious reason why this should be expected to
-        // deadlock in the absence of a synchronization context. It doesn't fail if you run the
-        // test in isolation. It only happens when running all the tests, and even then it often
-        // doesn't. Since we modified the build to apply a default timeout to all tests with the
-        // aim of trying to work out which tests were occasionally locking up, the failures have
-        // not yet recurred, suggesting that there's some sort of race condition here that's finely
-        // balanced enough to be affected by test settings. Maybe there's some subtle reason why
-        // you should never attempt to do what this test is doing without a
-        // SynchronizationContext, but if so, it's unclear what that might be.
-        // Issue https://github.com/dotnet/reactive/issues/1885 is tracking this until we
-        // resolve the root cause of the occasional failures.
+        // started failing intermittently. It eventually became apparent that this was because
+        // some test somewhere in the system is setting SynchronizationContext.Current to contain
+        // a WindowsFormsSynchronizationContext. That's why this test explicitly sets it to
+        // null - if a UI-based context is present, the test will hang because it will attempt
+        // to use that context to handle completion but nothing will be running a message loop,
+        // so completion never occurs. (It's intermittent because the order in which tests run
+        // is not deterministic, so sometimes when this test runs, the SynchronizationContext
+        // was already null.)
 
         [TestMethod]
         public async Task BasicsNoSynchronizationContext()
         {
-            Assert.Equal(45, await ManOrBoy_Basics());
+            var ctx = SynchronizationContext.Current;
+            try
+            {
+                SynchronizationContext.SetSynchronizationContext(null);
+                Assert.Equal(45, await ManOrBoy_Basics());
+            }
+            finally
+            {
+                SynchronizationContext.SetSynchronizationContext(ctx);
+            }
         }
 
         [TestMethod]
