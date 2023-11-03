@@ -154,9 +154,9 @@
       <Project>{cb5e4ffa-f510-43f1-b378-b3d7ba7c8396}</Project>
       <Name>System.Reactive.Observable.Aliases</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj">
+    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.Base.csproj">
       <Project>{01706a0f-8a63-4fd6-af45-0bc0bed3c0d9}</Project>
-      <Name>System.Reactive</Name>
+      <Name>System.Reactive.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj">
       <Project>{73078FB5-6038-4674-B4C4-32FD81B88055}</Project>

@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net472;net6.0-windows</TargetFrameworks>
+    <RootNamespace>System.Reactive</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive\System.Reactive.Base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Strings_WindowsThreading.Designer.cs">
+      <DesignTimeSharedInput>true</DesignTimeSharedInput>
+      <DependentUpon>Strings_WindowsThreading.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Strings_WindowsThreading.resx">
+      <GenFilePath>%(RecursiveDir)%(Filename)$(ExtrasDefaultDesignerFileSuffix)$(DefaultLanguageSourceExtension)</GenFilePath>
+      <CustomToolNamespace>System.Reactive</CustomToolNamespace>
+      <_SdkHasLangId>$([System.Text.RegularExpressions.Regex]::IsMatch('%(FileName)', '$(_SdkLangIdRegEx)'))</_SdkHasLangId>
+      <LastGenOutput>Strings_WindowsThreading.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

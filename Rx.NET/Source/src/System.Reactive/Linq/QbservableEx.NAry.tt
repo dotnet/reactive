@@ -15,7 +15,9 @@ using System.Reflection;
 
 namespace System.Reactive.Linq
 {
+#pragma warning disable CA1711 // (Don't use Ex suffix.) This has been a public type for many years, so we can't rename it now.
     public static partial class QbservableEx
+#pragma warning restore CA1711
     {
 <#
 Func<string, string> toUpper = s => char.ToUpper(s[0]) + s.Substring(1);
@@ -69,7 +71,9 @@ for (int j = 1; j <= i; j++)
             return first.Provider.CreateQuery<<#=tuple#>>(
                 Expression.Call(
                     null,
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(<#=typeofGenArgs#>),
+#pragma warning restore IL2060 // Call to 'System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed. It's not possible to guarantee the availability of requirements of the generic method.
                     first.Expression,
 <#
 for (int j = 2; j <= i; j++)
@@ -133,7 +137,9 @@ for (int j = 1; j <= i; j++)
             return first.Provider.CreateQuery<<#=tuple#>>(
                 Expression.Call(
                     null,
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(<#=typeofGenArgs#>),
+#pragma warning restore IL2060 // Call to 'System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed. It's not possible to guarantee the availability of requirements of the generic method.
                     first.Expression,
 <#
 for (int j = 2; j <= i; j++)

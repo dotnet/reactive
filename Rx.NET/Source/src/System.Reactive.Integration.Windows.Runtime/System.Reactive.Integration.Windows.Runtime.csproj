@@ -1,0 +1,21 @@
+<Project Sdk="MSBuild.Sdk.Extras">
+  <PropertyGroup>
+    <TargetFrameworks>uap10.0.18362;net6.0-windows10.0.19041</TargetFrameworks>
+    <RootNamespace>System.Reactive</RootNamespace>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>Reactive Extensions (Rx) for .NET Windows Runtime Integration</Description>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive\System.Reactive.Base.csproj" />
+  </ItemGroup>
+
+</Project>

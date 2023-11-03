@@ -10,11 +10,11 @@
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
   </ItemGroup>  
-  <ItemGroup>    
-    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive\System.Reactive.Base.csproj" />
   </ItemGroup>  
 
   <ItemGroup>
-    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md"/>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
   </ItemGroup>
 </Project>

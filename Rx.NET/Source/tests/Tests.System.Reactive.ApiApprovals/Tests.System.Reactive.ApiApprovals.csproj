@@ -19,9 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
+    <ProjectReference Include="..\..\facades\V6\System.Reactive.Core\System.Reactive.csproj" />
     <ProjectReference Include="..\..\src\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
+    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.Base.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +32,13 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
     <PackageReference Include="DiffPlex" Version="1.7.1" />
     <PackageReference Include="PublicApiGenerator" Version="11.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Api\ApiApprovalTests.LegacySystemReactive.verified.cs">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>%(ParentFile).cs</DependentUpon>
+    </None>
   </ItemGroup>
 
 </Project>

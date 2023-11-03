@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net472;net6.0-windows</TargetFrameworks>
+    <RootNamespace>System.Reactive</RootNamespace>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+    <None Include="Constants.cs" />
+    <Compile Update="Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />
+    <EmbeddedResource Update="Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive\System.Reactive.Base.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net472</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>Legacy facade for Reactive Extensions (Rx) for .NET</Description>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\NuGet.Facades.Readme.md" Pack="true" PackagePath="\readme.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\System.Reactive\System.Reactive.Base.csproj" />
+  </ItemGroup>
+
+</Project>

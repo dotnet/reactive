@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
+using Mono.Cecil;
+
 using PublicApiGenerator;
 using System;
 using System.Linq;
@@ -23,6 +25,18 @@ namespace ReactiveTests.Tests.Api
         public ApiApprovalTests()
             : base()
         {
+        }
+
+        [Fact]
+        public Task LegacySystemReactive()
+        {
+            var facadeAsm = typeof(System.Reactive.Placeholder).Assembly;
+            ModuleDefinition module = ModuleDefinition.ReadModule(facadeAsm.Location);
+            Type[] exportedTypes = module.ExportedTypes
+                //.Where(et => et.IsPublic)
+                .Select(et => facadeAsm.GetType(et.FullName.Replace("/", "+"))).ToArray();
+            var publicApi = GeneratePublicApi(exportedTypes);
+            return Verify(publicApi, "cs");
         }
 
         [Fact]
@@ -50,9 +64,18 @@ namespace ReactiveTests.Tests.Api
         {
             ApiGeneratorOptions options = new()
             {
-                AllowNamespacePrefixes = new[] { "System", "Microsoft" }
+                AllowNamespacePrefixes = new[] { "System", "Microsoft" },
             };
             return Filter(ApiGenerator.GeneratePublicApi(assembly, options));
+        }
+
+        private string GeneratePublicApi(Type[] types)
+        {
+            ApiGeneratorOptions options = new()
+            {
+                AllowNamespacePrefixes = new[] { "System", "Microsoft" },
+            };
+            return Filter(ApiGenerator.GeneratePublicApi(types, options));
         }
 
         private static string Filter(string text)

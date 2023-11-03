@@ -1,0 +1,122 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net6.0;net6.0-windows10.0.19041</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>Legacy facade for Reactive Extensions (Rx) for .NET</Description>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+    TODO: if we're re-instating System.Reactive.Core as the new canonical home, that means getting rid
+    of these funky version numbers - everything needs to be on V7.0.0.0 (or whatever). However, was
+    anything relying on the older version numbers? Do we need to retain this as a facade and introduce
+    a new System.Reactive.MoreCore?
+    In any case, this facade isn't really like the others because the others are all sort of stuck
+    in a v3 timeframe.
+    -->
+    <Compile Remove="..\GlobalAssemblyVersion.cs" />
+    <Compile Include="..\..\..\src\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <PropertyGroup>
+    <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyVersionInfo>true</GenerateAssemblyVersionInfo>
+  </PropertyGroup>
+  
+    <ItemGroup>
+    <Compile Remove="Platforms\**\*.*" />
+    <EmbeddedResource Remove="Platforms\**\*.*" />
+    <!-- Workaround so the files appear in VS -->
+    <None Include="Platforms\**\*.*" />
+    <None Update="Linq\QbservableEx.NAry.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>QbservableEx.NAry.cs</LastGenOutput>
+    </None>
+    <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />
+    <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />
+  </ItemGroup>
+
+
+  <!-- UWP -->
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+    <Compile Include="Platforms\UWP\**\*.cs" />
+  </ItemGroup>
+
+  <!-- Windows includes for Desktop and UWP -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+    <Compile Include="Platforms\Windows\**\*.cs" />
+    <EmbeddedResource Include="Platforms\Windows\**\*.resx" />
+  </ItemGroup>
+
+  <!-- Desktop -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472'">
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+    <Compile Include="Platforms\Desktop\**\*.cs" />
+  </ItemGroup>  
+
+  <ItemGroup>
+    <None Include="..\..\NuGet.Facades.Readme.md" Pack="true" PackagePath="\readme.md" />
+  </ItemGroup>
+
+  
+    <ItemGroup>
+    <Compile Remove="Platforms\**\*.*" />
+    <EmbeddedResource Remove="Platforms\**\*.*" />
+    <!-- Workaround so the files appear in VS -->
+    <None Include="Platforms\**\*.*" />
+    <None Update="Linq\QbservableEx.NAry.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>QbservableEx.NAry.cs</LastGenOutput>
+    </None>
+    <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />
+    <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />
+  </ItemGroup>
+
+
+  <!-- UWP -->
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+    <Compile Include="Platforms\UWP\**\*.cs" />
+  </ItemGroup>
+
+  <!-- Windows includes for Desktop and UWP -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+    <Compile Include="Platforms\Windows\**\*.cs" />
+    <EmbeddedResource Include="Platforms\Windows\**\*.resx" />
+  </ItemGroup>
+
+  <!-- Desktop -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472'">
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+    <Compile Include="Platforms\Desktop\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Platforms\Windows\" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+    <ProjectReference Include="..\..\..\src\System.Reactive.Integration.Windows.Forms\System.Reactive.Integration.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\..\src\System.Reactive.Integration.Wpf\System.Reactive.Integration.Wpf.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.StartsWith('uap10.0'))">
+    <ProjectReference Include="..\..\..\src\System.Reactive.Integration.Uwp\System.Reactive.Integration.Uwp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\System.Reactive\System.Reactive.Base.csproj" />
+  </ItemGroup>
+</Project>
