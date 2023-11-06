@@ -1,6 +1,6 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net6.0;net6.0-windows10.0.19041</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
@@ -166,6 +166,7 @@
   <ItemGroup>
     <Folder Include="Platforms\Desktop\Concurrency\" />
     <Folder Include="Platforms\Desktop\Internal\" />
+    <Folder Include="Platforms\Desktop\Linq\" />
     <Folder Include="Platforms\UWP\" />
     <Folder Include="Platforms\Windows\" />
   </ItemGroup>

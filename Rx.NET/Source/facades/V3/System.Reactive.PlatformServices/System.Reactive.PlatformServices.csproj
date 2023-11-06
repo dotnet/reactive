@@ -1,7 +1,8 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net472;netstandard2.0;uap10.0.18362</TargetFrameworks>
+    <!-- TODO: verify we do get the right platform-specific DLL for the app's chosen target. -->
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>

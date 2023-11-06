@@ -97,7 +97,6 @@ namespace System.Reactive.Linq
                 Expression.Call(
                     null,
                     ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#pragma warning restore IL2060
                     source.Expression,
                     Expression.Constant(lease, typeof(ILease))
                 )

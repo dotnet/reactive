@@ -36,7 +36,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D324579D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Facades", "Facades", "{A0F39260-B8F8-4FCB-9679-0ED917A22BDF}"
 	ProjectSection(SolutionItems) = preProject
-		facades\Directory.build.props = facades\Directory.build.props
 		facades\System.Reactive.Compatibility.nuspec = facades\System.Reactive.Compatibility.nuspec
 	EndProjectSection
 EndProject
@@ -49,6 +48,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "V3", "V3", "{5B89DCA3-A1EA-4344-A693-17884642CEA2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "V6", "V6", "{86913EFB-EAE1-4385-89C0-5729347EB6BF}"
+	ProjectSection(SolutionItems) = preProject
+		facades\V6\.editorconfig = facades\V6\.editorconfig
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Core", "facades\V3\System.Reactive.Core\System.Reactive.Core.csproj", "{B535A8B1-92D2-485C-B590-68ADFB252E67}"
 EndProject
@@ -76,11 +78,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UiIntegration", "UiIntegrat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Integration.Uwp", "src\System.Reactive.Integration.Uwp\System.Reactive.Integration.Uwp.csproj", "{79825277-B81D-447A-BDE3-0096F4FCE7D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Integration.Wpf", "src\System.Reactive.Integration.Wpf\System.Reactive.Integration.Wpf.csproj", "{AE6FC45F-B76F-41B4-993E-9B5BBED2CEA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Integration.Wpf", "src\System.Reactive.Integration.Wpf\System.Reactive.Integration.Wpf.csproj", "{AE6FC45F-B76F-41B4-993E-9B5BBED2CEA8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Integration.Windows.Runtime", "src\System.Reactive.Integration.Windows.Runtime\System.Reactive.Integration.Windows.Runtime.csproj", "{C235F7DA-4EF2-434D-A94E-77C17026EF00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Integration.Windows.Forms", "src\System.Reactive.Integration.Windows.Forms\System.Reactive.Integration.Windows.Forms.csproj", "{E7C4AF16-460E-4397-8CDA-B71386143C55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Integration.Windows.Forms", "src\System.Reactive.Integration.Windows.Forms\System.Reactive.Integration.Windows.Forms.csproj", "{E7C4AF16-460E-4397-8CDA-B71386143C55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

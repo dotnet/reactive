@@ -24,6 +24,9 @@
   <PropertyGroup>
     <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyVersionInfo>true</GenerateAssemblyVersionInfo>
+
+    <!-- TODO: this is here because this isn't purely a facade right now - we have RemotingObservable, because it's not clear where else to put it. -->
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   
     <ItemGroup>

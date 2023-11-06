@@ -114,9 +114,10 @@
 [assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Linq.Qbservable))]
 [assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Linq.QbservableEx))]
 [assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Linq.QueryDebugger))]
-#if HAS_REMOTING
-[assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Linq.RemotingObservable))]
-#endif
+// TODO: where should this live?
+//#if HAS_REMOTING
+//[assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Linq.RemotingObservable))]
+//#endif
 [assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.PlatformServices.CurrentPlatformEnlightenmentProvider))]
 [assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.PlatformServices.DefaultSystemClock))]
 [assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.PlatformServices.EnlightenmentProvider))]

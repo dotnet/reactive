@@ -1,0 +1,3 @@
+[*.cs]
+# TODO: if RemotingObservable moves out of the System.Reactive facade, this will no longer be necessary
+dotnet_remove_unnecessary_suppression_exclusions = CA1704
