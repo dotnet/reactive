@@ -34,9 +34,9 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 7.0.x SDK
+      displayName: Use .NET Core 8.0.x SDK
       inputs:
-        version: 7.0.x
+        version: 8.0.x
         performMultiLevelLookup: true
 
     - task: DotNetCoreCLI@2
@@ -120,7 +120,12 @@ stages:
     steps:
     - task: UseDotNet@2
       inputs:
-        version: 7.0.x
+        version: 8.0.x
+
+    - task: UseDotNet@2
+      inputs:
+        version: '7.0.x'
+        packageType: runtime
 
     - task: UseDotNet@2
       inputs:
@@ -155,6 +160,13 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
+        arguments: -c $(BuildConfiguration) -f net8.0 --filter "TestCategory!=SkipCI"
+      displayName: Run 8.0 Tests on Linux
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: test
+        projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
         arguments: -c $(BuildConfiguration) -f net7.0 --filter "TestCategory!=SkipCI"
       displayName: Run 7.0 Tests on Linux
 
@@ -177,7 +189,7 @@ stages:
     steps:
     - task: UseDotNet@2
       inputs:
-        version: 7.0.x
+        version: 8.0.x
         performMultiLevelLookup: true
 
     - task: DotNetCoreCLI@2
