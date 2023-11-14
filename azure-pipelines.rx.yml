@@ -213,7 +213,6 @@ stages:
       displayName: Use .NET 7.0 SDK
       inputs:
         version: '7.0.x'
-        packageType: runtime
 
     - task: UseDotNet@2
       displayName: Use .NET 6.0 SDK
