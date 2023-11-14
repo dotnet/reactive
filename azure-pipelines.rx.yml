@@ -34,20 +34,25 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 8.0.x SDK
+      displayName: Use .NET 8.0.x SDK
       inputs:
         version: 8.0.x
         performMultiLevelLookup: true
 
+    # We need .NET 7.0 and 6.0 to be able to run all tests.
+    # For .NET 7.0, the runtime package is sufficient because we don't need to build anything.
+    # That doesn't work for 6.0, because we need the desktop framework, and the only way to
+    # get that into a build agent seems to be to install the SDK.
     - task: UseDotNet@2
+      displayName: Use .NET 7.0 runtime
       inputs:
         version: '7.0.x'
         packageType: runtime
 
     - task: UseDotNet@2
+      displayName: Use .NET 6.0 SDK
       inputs:
         version: '6.0.x'
-        packageType: runtime
 
     - task: DotNetCoreCLI@2
       inputs:
