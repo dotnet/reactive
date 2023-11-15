@@ -206,8 +206,16 @@ namespace ReactiveTests.Tests
         public void ToLookup_Hides_Internal_List()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
-            Assert.False(d1["0"] is ICollection<int>);
-            Assert.False(d1["0"] is IList<int>);
+
+            // Up to .NET 7.0, the wrapper returned by LINQ to Objects' Skip (which is
+            // what Rx uses today to hide the list) used not to implement IList or
+            // ICollection. As of .NET 8.0 it does, but we can check we don't have
+            // access to the underlying list by checking that we are unable to modify
+            // it. Before .NET 8.0, these tests succeed because the wrapped list
+            // doesn't implement the interfaces. On .NET 8.0 they succeed because it
+            // provides a read-only implementation of them.
+            Assert.False(d1["0"] is ICollection<int> coll && !coll.IsReadOnly);
+            Assert.False(d1["0"] is IList<int> list && !list.IsReadOnly);
         }
 
         [TestMethod]
