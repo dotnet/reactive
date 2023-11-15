@@ -309,9 +309,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-#pragma warning disable IDE0060 // (Remove unused parameter.) This signature is expected by the test
         private Task Producer6(IObserver<int> results, Exception exception, CancellationToken token)
-#pragma warning restore IDE0060
         {
             throw exception;
         }

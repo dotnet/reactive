@@ -74,9 +74,15 @@
 
     IDE0056 - Use of index/range syntax - relevant types not available on all targets, so we can't
     IDE0057     do this.
+
+    Temporarily disabled .NET SDK 8.0 diagnostics:
+    IDE0290 - primary ctors
+    IDE0028, IDE0300, IDE301, IDE0305 - Collection expressions
+    CA1510 - use ArgumentNullException.ThrowIf (not available on all targets)
+    CA1513 - use ObjectDisposedException.ThrowIf (not available on all targets)
     -->
     <!-- Get diagnostics back to the level that the .NET 5.0 SDK had for now. Fix these properly before release. -->
-    <NoWarn>$(NoWarn);CA1001;CA2213;IDE0056;IDE0057</NoWarn>
+    <NoWarn>$(NoWarn);CA1001;CA2213;CA1510;CA1513;IDE0056;IDE0057;IDE0290;IDE0028;IDE0300;IDE0301;IDE0305</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
