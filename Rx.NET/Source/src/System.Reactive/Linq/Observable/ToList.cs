@@ -21,12 +21,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : Sink<TSource, IList<TSource>>
         {
-            private List<TSource> _list;
+            private List<TSource> _list = [];
 
             public _(IObserver<IList<TSource>> observer)
                 : base(observer)
             {
-                _list = new List<TSource>();
             }
 
             public override void OnNext(TSource value)

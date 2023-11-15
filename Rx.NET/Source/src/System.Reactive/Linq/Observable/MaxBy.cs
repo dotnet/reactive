@@ -29,15 +29,13 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly IComparer<TKey> _comparer;
             private bool _hasValue;
             private TKey? _lastKey;
-            private List<TSource> _list;
+            private List<TSource> _list = [];
 
             public _(MaxBy<TSource, TKey> parent, IObserver<IList<TSource>> observer)
                 : base(observer)
             {
                 _keySelector = parent._keySelector;
                 _comparer = parent._comparer;
-
-                _list = new List<TSource>();
             }
 
             public override void OnNext(TSource value)

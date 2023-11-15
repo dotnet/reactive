@@ -142,7 +142,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private Action AddHandlerCoreWinRT(Delegate handler)
             {
                 var token = _addMethod.Invoke(_target, new object[] { handler });
-                return () => _removeMethod.Invoke(_target, new[] { token });
+                return () => _removeMethod.Invoke(_target, [token]);
             }
         }
     }

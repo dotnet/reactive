@@ -31,9 +31,9 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class _ : IdentitySink<TResult>
         {
             private readonly object _gate = new();
-            private readonly CompositeDisposable _group = new();
-            private readonly SortedDictionary<int, TLeft> _leftMap = new();
-            private readonly SortedDictionary<int, TRight> _rightMap = new();
+            private readonly CompositeDisposable _group = [];
+            private readonly SortedDictionary<int, TLeft> _leftMap = [];
+            private readonly SortedDictionary<int, TRight> _rightMap = [];
 
             private readonly Func<TLeft, IObservable<TLeftDuration>> _leftDurationSelector;
             private readonly Func<TRight, IObservable<TRightDuration>> _rightDurationSelector;

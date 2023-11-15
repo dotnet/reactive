@@ -21,7 +21,7 @@ namespace System.Reactive.PlatformServices
     {
         private static readonly Lazy<ISystemClock> ServiceSystemClock = new(InitializeSystemClock);
         private static readonly Lazy<INotifySystemClockChanged> ServiceSystemClockChanged = new(InitializeSystemClockChanged);
-        internal static readonly HashSet<WeakReference<LocalScheduler>> SystemClockChanged = new();
+        internal static readonly HashSet<WeakReference<LocalScheduler>> SystemClockChanged = [];
         private static IDisposable? _systemClockChangedHandlerCollector;
 
         private static int _refCount;
@@ -123,7 +123,7 @@ namespace System.Reactive.PlatformServices
                 {
                     if (!handler.TryGetTarget(out _))
                     {
-                        remove ??= new HashSet<WeakReference<LocalScheduler>>();
+                        remove ??= [];
 
                         remove.Add(handler);
                     }

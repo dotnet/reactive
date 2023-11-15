@@ -96,7 +96,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, called);
             Assert.Equal(new List<int>() { 1, 2, 3, 4, 5 }, list);
 
-            Assert.Equal(new List<int>() { 1, 2, 3, 4, 5 }, list0);
+            Assert.Equal([1, 2, 3, 4, 5], list0);
 
             list = source.ToList().First();
 
@@ -132,7 +132,7 @@ namespace ReactiveTests.Tests
             subject.OnNext(4);
             subject.OnNext(5);
 
-            Assert.Equal(new List<int>() { 1, 2, 3 }, list);
+            Assert.Equal([1, 2, 3], list);
 
         }
     }

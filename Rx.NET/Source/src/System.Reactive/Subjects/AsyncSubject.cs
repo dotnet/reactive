@@ -40,7 +40,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Creates a subject that can only receive one value and that value is cached for all future observations.
         /// </summary>
-        public AsyncSubject() => _observers = Array.Empty<AsyncSubjectDisposable>();
+        public AsyncSubject() => _observers = [];
 
         #endregion
 
@@ -273,7 +273,7 @@ namespace System.Reactive.Subjects
 
                 if (n == 1)
                 {
-                    b = Array.Empty<AsyncSubjectDisposable>();
+                    b = [];
                 }
                 else
                 {

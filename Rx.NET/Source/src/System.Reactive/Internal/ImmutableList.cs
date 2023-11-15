@@ -10,7 +10,7 @@ namespace System.Reactive
 
         private readonly T[] _data;
 
-        private ImmutableList() => _data = Array.Empty<T>();
+        private ImmutableList() => _data = [];
 
         public ImmutableList(T[] data) => _data = data;
 

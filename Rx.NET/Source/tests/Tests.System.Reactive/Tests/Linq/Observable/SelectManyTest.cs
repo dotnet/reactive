@@ -5193,7 +5193,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43 });
+            lst.OrderBy(x => x).AssertEqual([42, 43]);
         }
 
         [TestMethod]
@@ -5215,7 +5215,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43 });
+            lst.OrderBy(x => x).AssertEqual([42, 43]);
         }
 
         [TestMethod]
@@ -5346,7 +5346,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
         [TestMethod]
@@ -5378,7 +5378,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
         [TestMethod]
@@ -5417,7 +5417,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
         [TestMethod]
@@ -5460,7 +5460,7 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // never observed because xs.OnNext(2) happened after dispose
 
-            lst.AssertEqual(new[] { 42 });
+            lst.AssertEqual([42]);
             Assert.False(done);
             Assert.Equal(2, n);
             Assert.Equal(1, m); // tcss[1] was already finished
@@ -5505,7 +5505,7 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // no-op
 
-            lst.AssertEqual(new[] { 42 });
+            lst.AssertEqual([42]);
             Assert.Same(ex, err);
             Assert.False(done);
             Assert.Equal(2, n);
@@ -5586,7 +5586,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 0, 43 + 1 });
+            lst.OrderBy(x => x).AssertEqual([42 + 0, 43 + 1]);
         }
 
         [TestMethod]
@@ -5608,7 +5608,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 0, 43 + 1 });
+            lst.OrderBy(x => x).AssertEqual([42 + 0, 43 + 1]);
         }
 
         [TestMethod]
@@ -5739,7 +5739,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 1, 43 + 0, 44 + 2 });
+            lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
         }
 
         [TestMethod]
@@ -5771,7 +5771,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 1, 43 + 0, 44 + 2 });
+            lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
         }
 
         [TestMethod]
@@ -5810,7 +5810,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 1, 43 + 0, 44 + 2 });
+            lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
         }
 
         [TestMethod]
@@ -5853,7 +5853,7 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // never observed because xs.OnNext(2) happened after dispose
 
-            lst.AssertEqual(new[] { 42 + 1 });
+            lst.AssertEqual([42 + 1]);
             Assert.False(done);
             Assert.Equal(2, n);
             Assert.Equal(1, m); // tcss[1] was already finished
@@ -5898,7 +5898,7 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // no-op
 
-            lst.AssertEqual(new[] { 42 + 1 });
+            lst.AssertEqual([42 + 1]);
             Assert.Same(ex, err);
             Assert.False(done);
             Assert.Equal(2, n);
@@ -6125,7 +6125,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43 });
+            lst.OrderBy(x => x).AssertEqual([42, 43]);
         }
 
         [TestMethod]
@@ -6147,7 +6147,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43 });
+            lst.OrderBy(x => x).AssertEqual([42, 43]);
         }
 
         [TestMethod]
@@ -6278,7 +6278,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
         [TestMethod]
@@ -6310,7 +6310,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
         [TestMethod]
@@ -6349,7 +6349,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
         [TestMethod]
@@ -6392,7 +6392,7 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // never observed because xs.OnNext(2) happened after dispose
 
-            lst.AssertEqual(new[] { 42 });
+            lst.AssertEqual([42]);
             Assert.False(done);
             Assert.Equal(2, n);
             Assert.Equal(1, m); // tcss[1] was already finished
@@ -6437,7 +6437,7 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // no-op
 
-            lst.AssertEqual(new[] { 42 });
+            lst.AssertEqual([42]);
             Assert.Same(ex, err);
             Assert.False(done);
             Assert.Equal(2, n);
@@ -6518,7 +6518,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 0, 43 + 1 });
+            lst.OrderBy(x => x).AssertEqual([42 + 0, 43 + 1]);
         }
 
         [TestMethod]
@@ -6540,7 +6540,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 0, 43 + 1 });
+            lst.OrderBy(x => x).AssertEqual([42 + 0, 43 + 1]);
         }
 
         [TestMethod]
@@ -6671,7 +6671,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 1, 43 + 0, 44 + 2 });
+            lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
         }
 
         [TestMethod]
@@ -6703,7 +6703,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 1, 43 + 0, 44 + 2 });
+            lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
         }
 
         [TestMethod]
@@ -6742,7 +6742,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 1, 43 + 0, 44 + 2 });
+            lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
         }
 
         [TestMethod]
@@ -6785,7 +6785,7 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // never observed because xs.OnNext(2) happened after dispose
 
-            lst.AssertEqual(new[] { 42 + 1 });
+            lst.AssertEqual([42 + 1]);
             Assert.False(done);
             Assert.Equal(2, n);
             Assert.Equal(1, m); // tcss[1] was already finished
@@ -6830,7 +6830,7 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // no-op
 
-            lst.AssertEqual(new[] { 42 + 1 });
+            lst.AssertEqual([42 + 1]);
             Assert.Same(ex, err);
             Assert.False(done);
             Assert.Equal(2, n);

@@ -388,7 +388,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void ForkJoin_Nary_Immediate()
         {
-            ObservableEx.ForkJoin(Observable.Return(1), Observable.Return(2)).First().AssertEqual(new[] { 1, 2 });
+            ObservableEx.ForkJoin(Observable.Return(1), Observable.Return(2)).First().AssertEqual([1, 2]);
         }
 
         [TestMethod]

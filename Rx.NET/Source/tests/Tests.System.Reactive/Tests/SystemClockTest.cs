@@ -940,7 +940,7 @@ namespace ReactiveTests.Tests
 
         private class MyScheduler : LocalScheduler
         {
-            internal List<ScheduledItem<TimeSpan>> _queue = new();
+            internal List<ScheduledItem<TimeSpan>> _queue = [];
 
             private DateTimeOffset _now;
 
@@ -1026,7 +1026,7 @@ namespace ReactiveTests.Tests
 
         private class MyCAL : IConcurrencyAbstractionLayer
         {
-            internal List<TimeInterval<Work>> _queue = new();
+            internal List<TimeInterval<Work>> _queue = [];
 
             public IDisposable StartTimer(Action<object> action, object state, TimeSpan dueTime)
             {

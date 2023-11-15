@@ -1033,7 +1033,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void DetectServices_Null_2()
         {
-            var s = new MyDumbScheduler2(new Dictionary<Type, object>());
+            var s = new MyDumbScheduler2([]);
             Assert.Null(Scheduler.AsLongRunning(s));
             Assert.Null(Scheduler.AsPeriodic(s));
             Assert.Null(Scheduler.AsStopwatchProvider(s));

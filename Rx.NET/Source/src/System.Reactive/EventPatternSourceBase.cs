@@ -76,7 +76,7 @@ namespace System.Reactive
         }
 
         private readonly IObservable<EventPattern<TSender, TEventArgs>> _source;
-        private readonly Dictionary<Delegate, Stack<IDisposable>> _subscriptions;
+        private readonly Dictionary<Delegate, Stack<IDisposable>> _subscriptions = [];
         private readonly Action<Action<TSender?, TEventArgs>, /*object,*/ EventPattern<TSender, TEventArgs>> _invokeHandler;
 
         /// <summary>
@@ -89,7 +89,6 @@ namespace System.Reactive
         {
             _source = source ?? throw new ArgumentNullException(nameof(source));
             _invokeHandler = invokeHandler ?? throw new ArgumentNullException(nameof(invokeHandler));
-            _subscriptions = new Dictionary<Delegate, Stack<IDisposable>>();
         }
 
         /// <summary>
