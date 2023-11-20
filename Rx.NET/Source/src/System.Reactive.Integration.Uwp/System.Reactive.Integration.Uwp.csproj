@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <Description>Reactive Extensions (Rx) for .NET UWP (Universal Windows Platform) Integration</Description>
-    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <!-- <PackageReadmeFile>readme.md</PackageReadmeFile> -->
   </PropertyGroup>
 
   <ItemGroup>
