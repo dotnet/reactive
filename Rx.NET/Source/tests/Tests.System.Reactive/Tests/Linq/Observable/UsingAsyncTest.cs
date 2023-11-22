@@ -39,7 +39,7 @@ namespace ReactiveTests.Tests
 
             var res = xs.ToEnumerable().ToList();
 
-            Assert.Equal(new List<int> { 42 }, res);
+            Assert.Equal([42], res);
             Assert.True(done.Wait(5000), "done.Wait(5000)");
         }
 

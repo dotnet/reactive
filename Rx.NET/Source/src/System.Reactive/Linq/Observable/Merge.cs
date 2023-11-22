@@ -32,7 +32,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly object _gate = new();
                 private readonly int _maxConcurrent;
                 private readonly Queue<IObservable<TSource>> _q = new();
-                private readonly CompositeDisposable _group = new();
+                private readonly CompositeDisposable _group = [];
 
                 public _(int maxConcurrent, IObserver<TSource> observer)
                     : base(observer)
@@ -165,7 +165,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<IObservable<TSource>, TSource>
             {
                 private readonly object _gate = new();
-                private readonly CompositeDisposable _group = new();
+                private readonly CompositeDisposable _group = [];
 
                 public _(IObserver<TSource> observer)
                     : base(observer)

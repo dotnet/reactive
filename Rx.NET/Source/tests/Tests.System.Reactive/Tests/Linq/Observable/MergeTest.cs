@@ -1739,7 +1739,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43 });
+            lst.OrderBy(x => x).AssertEqual([42, 43]);
         }
 
         [TestMethod]
@@ -1761,7 +1761,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43 });
+            lst.OrderBy(x => x).AssertEqual([42, 43]);
         }
 
         [TestMethod]
@@ -1892,7 +1892,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
         [TestMethod]
@@ -1924,7 +1924,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
         [TestMethod]

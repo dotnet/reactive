@@ -9,12 +9,16 @@ namespace System.Reactive.Concurrency
     internal abstract class SchedulerWrapper : IScheduler, IServiceProvider
     {
         protected readonly IScheduler _scheduler;
-        private readonly ConditionalWeakTable<IScheduler, IScheduler> _cache;
+        private readonly ConditionalWeakTable<IScheduler, IScheduler> _cache =
+#if NET472_OR_GREATER || NETSTANDARD2_0_OR_GREATER
+            new();
+#else
+            [];
+#endif
 
         protected SchedulerWrapper(IScheduler scheduler)
         {
             _scheduler = scheduler;
-            _cache = new ConditionalWeakTable<IScheduler, IScheduler>();
         }
 
         protected SchedulerWrapper(IScheduler scheduler, ConditionalWeakTable<IScheduler, IScheduler> cache)

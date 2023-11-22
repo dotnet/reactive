@@ -436,7 +436,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly object _gate = new();
-                private List<TSource> _list = new();
+                private List<TSource> _list = [];
 
                 public _(IObserver<IList<TSource>> observer)
                     : base(observer)
@@ -465,7 +465,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         ForwardOnNext(_list);
-                        _list = new List<TSource>();
+                        _list = [];
                     }
                 }
 
@@ -521,7 +521,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly Ferry _parent;
                 private readonly object _gate = new();
-                private List<TSource> _s = new();
+                private List<TSource> _s = [];
 
                 public _(Ferry parent, IObserver<IList<TSource>> observer)
                     : base(observer)
@@ -574,7 +574,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         var newId = ++_windowId;
 
                         var res = _s;
-                        _s = new List<TSource>();
+                        _s = [];
                         ForwardOnNext(res);
 
                         CreateTimer(newId);
@@ -598,7 +598,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             newId = ++_windowId;
 
                             var res = _s;
-                            _s = new List<TSource>();
+                            _s = [];
                             ForwardOnNext(res);
                         }
 
@@ -653,7 +653,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly AsyncLock _bufferGate = new();
                 private readonly Func<IObservable<TBufferClosing>> _bufferClosingSelector;
 
-                private List<TSource> _buffer = new();
+                private List<TSource> _buffer = [];
                 private SerialDisposableValue _bufferClosingSerialDisposable;
 
                 public _(Selector parent, IObserver<IList<TSource>> observer)
@@ -706,7 +706,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         var res = _buffer;
-                        _buffer = new List<TSource>();
+                        _buffer = [];
                         ForwardOnNext(res);
                     }
 
@@ -785,7 +785,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly object _gate = new();
 
-                private List<TSource> _buffer = new();
+                private List<TSource> _buffer = [];
                 private SingleAssignmentDisposableValue _boundariesDisposable;
 
                 public _(IObserver<IList<TSource>> observer)
@@ -823,7 +823,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         lock (_parent._gate)
                         {
                             var res = _parent._buffer;
-                            _parent._buffer = new List<TSource>();
+                            _parent._buffer = [];
                             _parent.ForwardOnNext(res);
                         }
                     }

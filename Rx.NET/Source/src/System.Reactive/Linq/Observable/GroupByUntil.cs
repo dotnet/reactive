@@ -35,7 +35,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly object _gate = new();
             private readonly object _nullGate = new();
-            private readonly CompositeDisposable _groupDisposable = new();
+            private readonly CompositeDisposable _groupDisposable = [];
             private readonly RefCountDisposable _refCountDisposable;
             private readonly Map<TKey, ISubject<TElement>> _map;
 

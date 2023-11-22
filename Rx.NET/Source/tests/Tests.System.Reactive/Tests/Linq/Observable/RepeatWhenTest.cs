@@ -502,7 +502,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 xs.RepeatWhen(v =>
                 {
-                    int[] count = { 0 };
+                    int[] count = [0];
                     return v.SelectMany(w =>
                     {
                         var c = ++count[0];

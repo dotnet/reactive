@@ -44,8 +44,9 @@ namespace System.Runtime.CompilerServices
         /// <param name="stateMachine">The state machine instance, passed by reference.</param>
         /// <exception cref="ArgumentNullException"><paramref name="stateMachine"/> is <c>null</c>.</exception>
 #pragma warning disable CA1045 // (Avoid ref.) Required because this is an async method builder
+#pragma warning disable IDE0251 // (Make readonly.) Not part of the standard method builder pattern.
         public void Start<TStateMachine>(ref TStateMachine stateMachine)
-#pragma warning restore CA1045
+#pragma warning restore CA1045, IDE0251
             where TStateMachine : IAsyncStateMachine
         {
             if (stateMachine == null)

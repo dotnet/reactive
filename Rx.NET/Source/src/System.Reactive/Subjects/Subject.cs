@@ -30,7 +30,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Creates a subject.
         /// </summary>
-        public Subject() => _observers = Array.Empty<SubjectDisposable>();
+        public Subject() => _observers = [];
 
         #endregion
 
@@ -237,7 +237,7 @@ namespace System.Reactive.Subjects
 
                 if (n == 1)
                 {
-                    b = Array.Empty<SubjectDisposable>();
+                    b = [];
                 }
                 else
                 {

@@ -32,7 +32,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly object _gate = new();
-                private readonly CompositeDisposable _group = new();
+                private readonly CompositeDisposable _group = [];
 
                 private readonly Func<TSource, IObservable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, TCollection, TResult> _resultSelector;
@@ -193,7 +193,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly object _gate = new();
-                private readonly CompositeDisposable _group = new();
+                private readonly CompositeDisposable _group = [];
 
                 private readonly Func<TSource, int, IObservable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
@@ -850,7 +850,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 protected readonly object _gate = new();
                 private readonly Func<TSource, IObservable<TResult>> _selector;
-                private readonly CompositeDisposable _group = new();
+                private readonly CompositeDisposable _group = [];
 
                 private volatile bool _isStopped;
 
@@ -1081,7 +1081,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal class _ : Sink<TSource, TResult>
             {
                 private readonly object _gate = new();
-                private readonly CompositeDisposable _group = new();
+                private readonly CompositeDisposable _group = [];
 
                 protected readonly Func<TSource, int, IObservable<TResult>> _selector;
 

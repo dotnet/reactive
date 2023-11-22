@@ -19,7 +19,7 @@ namespace System.Reactive.Joins
         private object? _gate;
         private readonly IObservable<T> _source;
         private readonly Action<Exception> _onError;
-        private readonly List<ActivePlan> _activePlans;
+        private readonly List<ActivePlan> _activePlans = [];
         private SingleAssignmentDisposableValue _subscription;
         private bool _isDisposed;
 
@@ -28,7 +28,6 @@ namespace System.Reactive.Joins
             _source = source;
             _onError = onError;
             Queue = new Queue<Notification<T>>();
-            _activePlans = new List<ActivePlan>();
         }
 
         public Queue<Notification<T>> Queue { get; }
