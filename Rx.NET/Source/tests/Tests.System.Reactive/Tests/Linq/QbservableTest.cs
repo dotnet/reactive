@@ -1133,10 +1133,10 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void StartWith_ArgumentNullChecks()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbNull, new[] { 1 }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbNull, [1]));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbMy, default(int[])));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbNull, Scheduler.Immediate, new[] { 1 }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbMy, default, new[] { 1 }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbNull, Scheduler.Immediate, [1]));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbMy, default, [1]));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbMy, Scheduler.Immediate, default));
         }
 

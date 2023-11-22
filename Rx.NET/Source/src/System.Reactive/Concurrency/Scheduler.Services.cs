@@ -10,12 +10,13 @@ namespace System.Reactive.Concurrency
     //
     public static partial class Scheduler
     {
-        internal static Type[] Optimizations = {
+        internal static Type[] Optimizations =
+        [
             typeof(ISchedulerLongRunning),
             typeof(IStopwatchProvider),
             typeof(ISchedulerPeriodic)
             /* update this list if new interface-based optimizations are added */
-        };
+        ];
 
         /// <summary>
         /// Returns the <see cref="ISchedulerLongRunning"/> implementation of the specified scheduler, or <c>null</c> if no such implementation is available.

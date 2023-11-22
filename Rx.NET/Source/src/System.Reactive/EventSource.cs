@@ -9,14 +9,13 @@ namespace System.Reactive
     internal sealed class EventSource<T> : IEventSource<T>
     {
         private readonly IObservable<T> _source;
-        private readonly Dictionary<Delegate, Stack<IDisposable>> _subscriptions;
+        private readonly Dictionary<Delegate, Stack<IDisposable>> _subscriptions = [];
         private readonly Action<Action<T>, /*object,*/ T> _invokeHandler;
 
         public EventSource(IObservable<T> source, Action<Action<T>, /*object,*/ T> invokeHandler)
         {
             _source = source;
             _invokeHandler = invokeHandler;
-            _subscriptions = new Dictionary<Delegate, Stack<IDisposable>>();
         }
 
         public event Action<T> OnNext

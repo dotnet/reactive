@@ -12,8 +12,8 @@ namespace Microsoft.Reactive.Testing
     internal class HotObservable<T> : ITestableObservable<T>
     {
         private readonly TestScheduler _scheduler;
-        private readonly List<IObserver<T>> _observers = new();
-        private readonly List<Subscription> _subscriptions = new();
+        private readonly List<IObserver<T>> _observers = [];
+        private readonly List<Subscription> _subscriptions = [];
         private readonly Recorded<Notification<T>>[] _messages;
 
         public HotObservable(TestScheduler scheduler, params Recorded<Notification<T>>[] messages)

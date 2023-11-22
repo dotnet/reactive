@@ -11,7 +11,7 @@ namespace ReactiveTests
     public class MockEnumerable<T> : IEnumerable<T>
     {
         public readonly TestScheduler Scheduler;
-        public readonly List<Subscription> Subscriptions = new();
+        public readonly List<Subscription> Subscriptions = [];
         private readonly IEnumerable<T> _underlyingEnumerable;
 
         public MockEnumerable(TestScheduler scheduler, IEnumerable<T> underlyingEnumerable)

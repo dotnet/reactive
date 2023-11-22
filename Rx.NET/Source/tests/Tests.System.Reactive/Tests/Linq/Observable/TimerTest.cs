@@ -789,12 +789,7 @@ namespace ReactiveTests.Tests
 
     internal class PeriodicTestScheduler : TestScheduler, ISchedulerPeriodic, IServiceProvider
     {
-        private readonly List<TimerRun> _timers;
-
-        public PeriodicTestScheduler()
-        {
-            _timers = new List<TimerRun>();
-        }
+        private readonly List<TimerRun> _timers = [];
 
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
@@ -838,12 +833,11 @@ namespace ReactiveTests.Tests
         private readonly long _started;
         private long _stopped;
         private bool _hasStopped;
-        private readonly List<long> _ticks;
+        private readonly List<long> _ticks = [];
 
         public TimerRun(long started)
         {
             _started = started;
-            _ticks = new List<long>();
         }
 
         public TimerRun(long started, long stopped)
@@ -851,7 +845,6 @@ namespace ReactiveTests.Tests
             _started = started;
             _stopped = stopped;
             _hasStopped = true;
-            _ticks = new List<long>();
         }
 
         public override int GetHashCode()

@@ -597,7 +597,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal abstract class _ : IdentitySink<TSource>
             {
-                private readonly CompositeDisposable _delays = new();
+                private readonly CompositeDisposable _delays = [];
                 private readonly object _gate = new();
 
                 private readonly Func<TSource, IObservable<TDelay>> _delaySelector;

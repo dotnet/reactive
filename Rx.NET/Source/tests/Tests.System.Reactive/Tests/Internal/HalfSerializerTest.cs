@@ -138,7 +138,7 @@ namespace ReactiveTests.Tests
 
         private sealed class Consumer : ISink<int>
         {
-            internal List<int> Items = new();
+            internal List<int> Items = [];
 
             internal int Done;
             internal Exception Exc;

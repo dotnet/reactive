@@ -1409,7 +1409,7 @@ namespace ReactiveTests.Tests
                 .Delay(_ => Observable.Return(1))
                 .Subscribe(list.Add);
 
-            Assert.Equal(new List<int>() { 1, 2, 3, 4, 5 }, list);
+            Assert.Equal([1, 2, 3, 4, 5], list);
         }
 
         [TestMethod]

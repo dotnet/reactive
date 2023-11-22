@@ -23,7 +23,7 @@ namespace System.Reactive
         {
             if (!_dictionary.TryGetValue(key, out var list))
             {
-                _dictionary[key] = list = new List<E>();
+                _dictionary[key] = list = [];
             }
 
             list.Add(element);

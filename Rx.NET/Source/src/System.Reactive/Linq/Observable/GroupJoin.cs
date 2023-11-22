@@ -32,10 +32,10 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class _ : IdentitySink<TResult>
         {
             private readonly object _gate = new();
-            private readonly CompositeDisposable _group = new();
+            private readonly CompositeDisposable _group = [];
             private readonly RefCountDisposable _refCount;
-            private readonly SortedDictionary<int, IObserver<TRight>> _leftMap;
-            private readonly SortedDictionary<int, TRight> _rightMap;
+            private readonly SortedDictionary<int, IObserver<TRight>> _leftMap = [];
+            private readonly SortedDictionary<int, TRight> _rightMap = [];
 
             private readonly Func<TLeft, IObservable<TLeftDuration>> _leftDurationSelector;
             private readonly Func<TRight, IObservable<TRightDuration>> _rightDurationSelector;
@@ -45,8 +45,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 : base(observer)
             {
                 _refCount = new RefCountDisposable(_group);
-                _leftMap = new SortedDictionary<int, IObserver<TRight>>();
-                _rightMap = new SortedDictionary<int, TRight>();
 
                 _leftDurationSelector = parent._leftDurationSelector;
                 _rightDurationSelector = parent._rightDurationSelector;

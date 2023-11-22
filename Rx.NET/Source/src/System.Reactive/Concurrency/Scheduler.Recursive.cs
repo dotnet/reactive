@@ -175,12 +175,11 @@ namespace System.Reactive.Concurrency
         {
             protected readonly IScheduler Scheduler;
 
-            protected readonly CompositeDisposable Group;
+            protected readonly CompositeDisposable Group = [];
 
             protected InvokeRecBaseState(IScheduler scheduler)
             {
                 Scheduler = scheduler;
-                Group = new CompositeDisposable();
             }
 
             public void Dispose()

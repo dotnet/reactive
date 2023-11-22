@@ -96,7 +96,7 @@ namespace System.Diagnostics.CodeAnalysis
         /// The field or property member that is promised to be not-null.
         /// </param>
 #pragma warning disable CA1019 // Define accessors for attribute arguments - this needs to be identical to the real type
-        public MemberNotNullAttribute(string member) => Members = new[] { member };
+        public MemberNotNullAttribute(string member) => Members = [member];
 #pragma warning restore CA1019
 
         /// <summary>Initializes the attribute with the list of field and property members.</summary>
@@ -125,7 +125,7 @@ namespace System.Diagnostics.CodeAnalysis
 #pragma warning restore CA1019
         {
             ReturnValue = returnValue;
-            Members = new[] { member };
+            Members = [member];
         }
 
         /// <summary>Initializes the attribute with the specified return value condition and list of field and property members.</summary>

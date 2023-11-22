@@ -50,10 +50,10 @@ namespace System.Reactive.Disposables
         }
 
         /// <inheritdoc/>
-        public override bool Equals(object? obj) => false;
+        public override readonly bool Equals(object? obj) => false;
 
         /// <inheritdoc/>
-        public override int GetHashCode() => 0;
+        public override readonly int GetHashCode() => 0;
 
 #pragma warning disable IDE0060 // (Remove unused parameter.) Required part of public API
         public static bool operator ==(SingleAssignmentDisposableValue left, SingleAssignmentDisposableValue right) => false;

@@ -637,7 +637,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    var subscriptions = Interlocked.Exchange(ref _subscriptions, Array.Empty<SingleAssignmentDisposableValue>());
+                    var subscriptions = Interlocked.Exchange(ref _subscriptions, []);
                     if (subscriptions != null && subscriptions != Array.Empty<SingleAssignmentDisposableValue>())
                     {
                         for (var i = 0; i < subscriptions.Length; i++)

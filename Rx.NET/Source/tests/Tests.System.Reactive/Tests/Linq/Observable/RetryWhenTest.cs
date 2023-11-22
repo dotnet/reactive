@@ -145,7 +145,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 xs.RetryWhen(v =>
                 {
-                    int[] count = { 0 };
+                    int[] count = [0];
                     return v.SelectMany(w =>
                     {
                         var c = ++count[0];
@@ -195,7 +195,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 xs.RetryWhen(v =>
                 {
-                    int[] count = { 0 };
+                    int[] count = [0];
                     return v.SelectMany(w =>
                     {
                         var c = ++count[0];

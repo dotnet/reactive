@@ -55,7 +55,7 @@ namespace System.Reactive.Concurrency
         /// Set of disposable handles to all of the current short term work Schedule calls,
         /// allowing those to be cancelled upon a system clock change.
         /// </summary>
-        private readonly HashSet<IDisposable> _shortTermWork = new();
+        private readonly HashSet<IDisposable> _shortTermWork = [];
 
         /// <summary>
         /// Threshold where an item is considered to be short term work or gets moved from
