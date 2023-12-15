@@ -4,7 +4,6 @@ The values from the sequences we consume are not always in the format we need. S
 
 Up until now, we have looked at creation of sequences, transition into sequences, and, the reduction of sequences by filtering. In this chapter we will look at _transforming_ sequences.
 
-
 ## Select
 
 The most straightforward transformation method is `Select`. It allows you provide a function that takes a value of `TSource` and return a value of `TResult`. The signature for `Select` reflects its ability to transform a sequence's elements from one type to another type, i.e. `IObservable<TSource>` to `IObservable<TResult>`.

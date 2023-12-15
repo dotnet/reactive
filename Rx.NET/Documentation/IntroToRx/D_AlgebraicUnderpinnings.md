@@ -6,7 +6,6 @@ The earlier sections of the book have already talked about one formal aspect of 
 
 The `IObserver<T>` grammar is important. Components rely on it to ensure correct operation. Consider the `Where` operator, for example. It provides its own `IObserver<T>` implementation with which it subscribes to the underlying source. This receives items from that source, and then decides which to forward to the observer that subscribed to the `IObservable<T>` presented by `Where`. You could imagine it looking something like this:
 
-
 ```cs
 public class OverSimplifiedWhereObserver<T> : IObserver<T>
 {
@@ -445,7 +444,6 @@ Most Rx operators are actually specializations of the higher order functional co
   - [`Sum`](07_Aggregation.md#sum)
   - [`Min` and `Max`](07_Aggregation.md#min-and-max)
 
-
 ## Amb
 
 The `Amb` method was a new concept to me when I started using Rx. This function was first introduced by [John McCarthy](https://en.wikipedia.org/wiki/John_McCarthy_(computer_scientist)), in his 1961 paper ['A Basis for a Mathematical Theory of Computation'](https://www.cambridge.org/core/journals/journal-of-symbolic-logic/article/abs/john-mccarthy-a-basis-for-a-mathematical-theory-of-computation-preliminary-report-proceedings-of-the-western-joint-computer-conference-papers-presented-at-the-joint-ireaieeacm-computer-conference-los-angeles-calif-may-911-1961-western-joint-computer-conference-1961-pp-225238-john-mccarthy-a-basis-for-a-mathematical-theory-of-computation-computer-programming-and-formal-systems-edited-by-p-braffort-and-d-hirschberg-studies-in-logic-and-the-foundations-of-mathematics-northholland-publishing-company-amsterdam1963-pp-3370/D1AD4E0CDB7FBE099B04BB4DAF24AFFA) in the Proceedings of the Western Joint Computer Conference. (A digital copy of this is hard to find, but a later version was published in [1963](http://www-formal.stanford.edu/jmc/basis1.pdf) in 'Computer Programming and Format Systems'.) It is an abbreviation of the word _Ambiguous_. Rx diverges slightly from normal .NET class library naming conventions here in using this abbreviation, partly because `amb` is the established name for this operator, but also as a tribute to McCarthy, whose work was an inspiration for the design of Rx.
@@ -457,7 +455,6 @@ So in essence, we're supplying a bunch of different ways to process the input, a
 Where it gets slightly more weird (and where Rx departs from the original definition of `amb`) is when more than one of an ambiguous function's constituents produces a result. In McCarthy's theoretical formulation, the ambiguous function effectively produces all of the results as possible outputs. (This is technically known as _nondeterministic_ computation, although that name can be misleading: it makes it sound like the result will be unpredictable. But that's not what we mean by _nondeterministic_ when talking about computation. It is as though the computer evaluating the ambiguous function clones itself, producing a copy for each possible result, continuing to execute every single copy. You could imagine an multithreaded implementation of such a system, where every time an ambiguous function produces multiple possible results, we create that many new threads so as to be able to evaluate all possible outcomes. This is a reasonable mental model for nondeterministic computation, but it's not what actually happens with Rx's `Amb` operator.) In the kinds of theoretical work ambiguous functions were introduced for, the ambiguity often vanishes in the end. There may have been an enormous number of ways in which a computation could have proceeded, but they might all, finally, produce the same result. However, such theoretical concerns are taking us away from what Rx's `Amb` does, and how we might use it in practice.
 
 [Rx's `Amb`](09_CombiningSequences.md#amb) provides the behaviour described in the cases where either none of the inputs produces anything, or exactly one of them does. However, it makes no attempt to support non-deterministic computation, so its handling of the case where multiple constituents are able to produce value is oversimplified, but then McCarthy's `amb` was first and foremost an analytical construct, so any practical implementation of it is always going to fall short.
-
 
 ## Staying inside the monad
 

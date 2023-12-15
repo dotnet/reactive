@@ -19,7 +19,6 @@ This class implements `IDisposable.Dispose` method and also defines a read-only 
 
 The `CancellationDisposable` class offers an integration point between the .NET [cancellation paradigm](https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/task-cancellation) (`CancellationTokenSource`) and the resource management paradigm (`IDisposable`). You can create an instance of the `CancellationDisposable` class by providing a `CancellationTokenSource` to the constructor, or by having the parameterless constructor create one for you. Calling `Dispose` will invoke the `Cancel` method on the `CancellationTokenSource`. There are two properties (`Token` and `IsDisposed`) that `CancellationDisposable` exposes; they are wrappers for the `CancellationTokenSource` properties, respectively `Token` and `IsCancellationRequested`.
 
-
 ## `CompositeDisposable`
 
 The `CompositeDisposable` type allows you to treat many disposable resources as one. You can create an instance of `CompositeDisposable` by passing in a <code>params</code> array of disposable resources. Calling `Dispose` on the `CompositeDisposable` will call dispose on each of these resources in the order they were provided. Additionally, the `CompositeDisposable` class implements `ICollection<IDisposable>`; this allows you to add and remove resources from the collection. After the `CompositeDisposable` has been disposed of, any further resources that are added to this collection will be disposed of instantly. Any item that is removed from the collection is also disposed of, regardless of whether the collection itself has been disposed of. This includes usage of both the `Remove` and `Clear` methods.
@@ -50,11 +49,9 @@ The `SingleAssignmentDisposable` class also exposes `IsDisposed` and `Disposable
 <!-- 
 TODO: we recently made SingleAssignmentDisposableValue public after a request to do so. This also doesn't mention MultipleAssignmentDisposableValue, which has been around for a while.
 
-
 TODO: ICancelable?
 
 TODO: StableCompositeDisposable?
-
 
 TODO: fit this in?
 
@@ -72,7 +69,6 @@ namespace System.Reactive.Disposables
     }
 }
 ```
-
 
 As you can see it exposes two members: `Empty` and `Create`. The `Empty` method allows you get a stub instance of an `IDisposable` that does nothing when `Dispose()` is called. This is useful for when you need to fulfil an interface requirement that returns an `IDisposable` but you have no specific implementation that is relevant.
 

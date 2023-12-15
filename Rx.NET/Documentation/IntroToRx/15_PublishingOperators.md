@@ -223,7 +223,6 @@ Sub4: 3 (11/14/2023 9:15:49 AM)
 
 These last two subscribers receive the value later because they subscribed later, but the `AsyncSubject<T>` created by `PublishLast` is just replaying the final value it received to these late subscribers.
 
-
 ### Replay
 
 The `Replay` operator calls `Multicast` with a [`ReplaySubject<T>`](03_CreatingObservableSequences.md#replaysubject). The effect of this is that any subscribers attached before calling `Connect` just receive all events as the underlying source produces them, but any subscribers attached later effectively get to 'catch up', because the `ReplaySubject<T>` remembers events it has already seen, and replays them to new subscribers.
@@ -278,7 +277,6 @@ They receive them late of course, because they subscribed late. So we see a quic
 The `ReplaySubject<T>` that enables this behaviour will consume memory to store events. As you may recall, this subject type can be configured to store only a limited number of events, or not to hold onto events older than some specified time limit. The `Replay` operator provides overloads that enable you to configure these kinds of limits.
 
 `Replay` also supports the per-subscription-multicast model I showed for the other `Multicast`-based operators in this section.
-
 
 ## RefCount
 
@@ -396,12 +394,10 @@ Sub4: 4 (10/08/2023 16:40:41)
 
 This time, the `Create` callback ran twice. That's because the number of active subscribers dropped to 0, so `RefCount` called `Dispose` to shut things down. When new subscribers came along, it called `Connect` again to start things back up. There are some overloads enabling you to specify a `disconnectDelay`. This tells it to wait for the specified time after the number of subscribers drops to zero before disconnecting, to see if any new subscribers come along. But it will still disconnect if the specified time elapses. If that's not what you want, the next operator might be for you.
 
-
 ## AutoConnect
 
 The `AutoConnect` operator behaves in much the same way as `RefCount`, in that it calls `Connect` on its underlying `IConnectableObservable<T>` when the first subscriber subscribers. The difference is that it doesn't attempt to detect when the number of active subscribers has dropped to zero: once it connects, it remains connected indefinitely, even if it has no subscribers.
 
 Although `AutoConnect` can be convenient, you need to be a little careful, because it can cause leaks: it will never disconnect automatically. It is still possible to tear down the connection it creates: `AutoConnect` accepts an optional argument of type `Action<IDisposable>`. It invokes this when it first connects to the source, passing you the `IDisposable` returned by the source's `Connect` method. You can shut it down by calling `Dispose`.
-
 
 The operators in this chapter can be useful whenever you have a source that is not well suited do dealing with multiple subscribers. It provides various ways to attach multiple subscribers while only triggering a single `Subscribe` to the underlying source.

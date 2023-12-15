@@ -41,7 +41,6 @@ This provides special handling for one particular file, but otherwise rethrows t
 
 You're also free to throw a completely different exception, of course. You can return any `IObservable<T>` you like, as long as its element type is the same as the source's.
 
-
 ### Fallback
 
 The other overloads of `Catch` offer less discriminating behaviour: you can supply one or more additional sequences, and any time the current source fails, the exception will be ignored, and `Catch` will simply move onto the next sequence. Since you will never get to know what the exception is, this mechanism gives you no way of knowing whether the exception that occurred was one you anticipated, or a completely unexpected one, so you will normally want to avoid this form. But for completeness, here's how to use it:
@@ -59,7 +58,6 @@ IObservable<string> settings = Observable.Catch(settingsSource1, settingsSource2
 There's also an overload that accepts an `IEnumerable<IObservable<T>>`.
 
 If any of the sources reaches its end without reporting an exception, `Catch` also immediately reports completion and does not subscribe to any of the subsequent sources. If the very last source reports an exception, `Catch` will have no further sources to fall back on, so in that case it won't catch the exception. It will forward that final exception to its subscriber.
-
 
 ## Finally
 
