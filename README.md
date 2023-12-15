@@ -10,6 +10,10 @@ This repository contains four libraries which are conceptually related in that t
 
 Each will be described later in this README.
 
+For a comprehensive guide to Rx.NET, visit the [Intro to Rx.NET](https://introtorx.com/) site. (The source for Intro to Rx.NET is in this repo's [Rx.NET/Documentation/IntroToRx/](Rx.NET/Documentation/IntroToRx/) folder.)
+
+[![IntroToRx.NET](https://introtorx.com/assets/intro1-00e32fa0.svg)](https://introtorx.com/)
+
 ## Getting the bits
 
 Channel  | Rx | AsyncRx | Ix | System.Linq.Async
