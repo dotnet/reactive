@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="504.81" height="205.48" viewBox="0 0 504.81 205.48">
+  <defs>
+    <style>
+      .c {
+        fill: #f0ff8b;
+      }
+
+      .c, .d, .e, .f, .g, .h, .i, .j {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .k, .l, .m {
+        font-family: Tahoma, Tahoma;
+      }
+
+      .n, .o {
+        font-family: Consolas, Consolas;
+      }
+
+      .o, .l, .p {
+        font-size: 12px;
+      }
+
+      .d {
+        fill: none;
+      }
+
+      .e {
+        fill: #ff8be8;
+      }
+
+      .f {
+        fill: #ff8b8b;
+      }
+
+      .g {
+        fill: #8be2ff;
+      }
+
+      .h {
+        fill: #e3e3e3;
+      }
+
+      .i {
+        fill: #8bffbc;
+      }
+
+      .j {
+        fill: #ffb68b;
+      }
+
+      .m {
+        letter-spacing: -.02em;
+      }
+    </style>
+  </defs>
+  <line id="b" data-name="source line" class="d" x1="30.52" y1="48.3" x2="482.24" y2="48.3"/>
+  <text class="o" transform="translate(28.07 25.48)"><tspan x="0" y="0">source</tspan></text>
+  <text class="p" transform="translate(28.07 102.2)"><tspan class="n" x="0" y="0">outstanding</tspan><tspan class="k" x="72.57" y="0"> </tspan><tspan class="m" x="76.32" y="0">v</tspan><tspan class="k" x="82.07" y="0">alue</tspan></text>
+  <g>
+    <circle class="i" cx="61.2" cy="48.3" r="13.56"/>
+    <text class="l" transform="translate(57.92 51.85)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="g" cx="92.28" cy="48.3" r="13.56"/>
+    <text class="l" transform="translate(89 51.85)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="c" cx="203.84" cy="48.3" r="13.56"/>
+    <text class="l" transform="translate(200.56 51.85)"><tspan x="0" y="0">3</tspan></text>
+  </g>
+  <g>
+    <circle class="f" cx="235.18" cy="48.3" r="13.56"/>
+    <text class="l" transform="translate(231.9 51.85)"><tspan x="0" y="0">4</tspan></text>
+  </g>
+  <g>
+    <circle class="e" cx="280.82" cy="48.3" r="13.56"/>
+    <text class="l" transform="translate(277.54 51.85)"><tspan x="0" y="0">5</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="375.58" cy="48.3" r="13.56"/>
+    <text class="l" transform="translate(372.31 51.85)"><tspan x="0" y="0">6</tspan></text>
+  </g>
+  <line class="d" x1="30.52" y1="34.73" x2="30.52" y2="61.86"/>
+  <polyline class="d" points="469.19 34.73 482.24 48.24 470.14 60.76"/>
+  <line class="d" x1="21.27" y1="117.06" x2="30.52" y2="117.06"/>
+  <line class="d" x1="21.27" y1="155.37" x2="30.52" y2="155.37"/>
+  <line class="d" x1="21.27" y1="193.68" x2="30.52" y2="193.68"/>
+  <polyline class="d" points="30.52 112.21 30.52 193.68 483.57 193.68"/>
+  <text class="l" transform="translate(11.36 197.84)"><tspan x="0" y="0">0</tspan></text>
+  <text class="l" transform="translate(11.36 159.86)"><tspan x="0" y="0">1</tspan></text>
+  <text class="l" transform="translate(11.36 121.38)"><tspan x="0" y="0">2</tspan></text>
+  <polygon class="h" points="30.52 193.68 61.2 193.68 61.2 155.37 92.28 155.37 92.28 116.29 114.28 116.29 114.28 155.37 145.36 155.37 145.36 193.68 203.84 193.68 203.84 155.37 235.18 155.37 235.18 116.29 256.38 116.29 256.38 155.37 280.82 155.37 280.82 116.29 288.26 116.29 288.26 155.37 333.9 155.37 333.9 193.68 375.58 193.68 375.58 154.98 428.67 154.98 428.67 193.68 30.52 193.68"/>
+</svg>

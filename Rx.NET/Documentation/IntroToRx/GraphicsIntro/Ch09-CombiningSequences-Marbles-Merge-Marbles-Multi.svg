@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="433.8" height="177.91" viewBox="0 0 433.8 177.91">
+  <defs>
+    <style>
+      .f {
+        fill: #f0ff8b;
+      }
+
+      .f, .g, .h, .i {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .j {
+        font-family: Consolas, Consolas;
+      }
+
+      .j, .k {
+        font-size: 12px;
+      }
+
+      .g {
+        fill: none;
+      }
+
+      .h {
+        fill: #ff8b8b;
+      }
+
+      .k {
+        font-family: Tahoma, Tahoma;
+      }
+
+      .i {
+        fill: #8bffbc;
+      }
+    </style>
+  </defs>
+  <text class="j" transform="translate(28.07 26.29)"><tspan x="0" y="0">s1:</tspan></text>
+  <text class="j" transform="translate(28.07 68.07)"><tspan x="0" y="0">s2:</tspan></text>
+  <text class="j" transform="translate(28.07 108.79)"><tspan x="0" y="0">s3:</tspan></text>
+  <text class="j" transform="translate(28.07 149.3)"><tspan x="0" y="0">r:</tspan></text>
+  <line id="b" data-name="source line" class="g" x1="64.71" y1="150.27" x2="214.46" y2="150.27"/>
+  <line id="c" data-name="source line" class="g" x1="65.03" y1="24.79" x2="133.48" y2="24.79"/>
+  <line class="g" x1="202.19" y1="88.31" x2="202.19" y2="123.32"/>
+  <line id="d" data-name="source line" class="g" x1="202.51" y1="105.82" x2="215.38" y2="105.82"/>
+  <line class="g" x1="65.03" y1="7.28" x2="65.03" y2="42.29"/>
+  <line class="g" x1="133.48" y1="7.28" x2="133.48" y2="42.29"/>
+  <g>
+    <circle class="i" cx="133.48" cy="24.79" r="13.56"/>
+    <text class="k" transform="translate(130.21 28.34)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="i" cx="133.48" cy="150.27" r="13.56"/>
+    <text class="k" transform="translate(130.21 153.82)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <line class="g" x1="64.71" y1="132.77" x2="64.71" y2="167.78"/>
+  <line class="g" x1="214.89" y1="132.77" x2="214.89" y2="167.78"/>
+  <line id="e" data-name="source line" class="g" x1="64.71" y1="65.3" x2="91.09" y2="65.3"/>
+  <line class="g" x1="91.09" y1="47.8" x2="91.09" y2="82.81"/>
+  <line class="g" x1="64.71" y1="47.8" x2="64.71" y2="82.81"/>
+  <g>
+    <circle class="h" cx="91.09" cy="65.3" r="13.56"/>
+    <text class="k" transform="translate(87.82 68.85)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="91.09" cy="150.27" r="13.56"/>
+    <text class="k" transform="translate(87.82 153.82)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <line class="g" x1="215.38" y1="88.31" x2="215.38" y2="123.32"/>
+  <g>
+    <circle class="f" cx="215.38" cy="105.82" r="13.56"/>
+    <text class="k" transform="translate(212.11 109.36)"><tspan x="0" y="0">3</tspan></text>
+  </g>
+  <g>
+    <circle class="f" cx="214.89" cy="150.27" r="13.56"/>
+    <text class="k" transform="translate(211.61 153.82)"><tspan x="0" y="0">3</tspan></text>
+  </g>
+</svg>

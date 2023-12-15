@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="309.61" height="127.97" viewBox="0 0 309.61 127.97">
+  <defs>
+    <style>
+      .e {
+        font-family: Consolas, Consolas;
+      }
+
+      .e, .f {
+        font-size: 12px;
+      }
+
+      .g {
+        fill: none;
+      }
+
+      .g, .h, .i {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .h {
+        fill: #ff8b8b;
+      }
+
+      .f {
+        font-family: Tahoma, Tahoma;
+      }
+
+      .i {
+        fill: #8bffbc;
+      }
+    </style>
+  </defs>
+  <line class="g" x1="70.94" y1="86.72" x2="70.94" y2="121.73"/>
+  <line id="b" data-name="source line" class="g" x1="71.26" y1="23.2" x2="150.91" y2="23.2"/>
+  <line id="c" data-name="source line" class="g" x1="71.26" y1="104.23" x2="286.51" y2="104.23"/>
+  <text class="e" transform="translate(28.07 25.48)"><tspan x="0" y="0">s1:</tspan></text>
+  <text class="e" transform="translate(28.07 67.26)"><tspan x="0" y="0">s2:</tspan></text>
+  <text class="e" transform="translate(28.07 107.98)"><tspan x="0" y="0">c:</tspan></text>
+  <line class="g" x1="71.26" y1="5.69" x2="71.26" y2="40.7"/>
+  <line class="g" x1="150.91" y1="5.69" x2="150.91" y2="40.7"/>
+  <g>
+    <circle class="i" cx="70.94" cy="23.2" r="13.56"/>
+    <text class="f" transform="translate(67.67 26.75)"><tspan x="0" y="0">0</tspan></text>
+  </g>
+  <g>
+    <circle class="i" cx="101.97" cy="23.2" r="13.56"/>
+    <text class="f" transform="translate(98.69 26.75)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="i" cx="133.22" cy="23.2" r="13.56"/>
+    <text class="f" transform="translate(129.95 26.75)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="i" cx="70.94" cy="104.13" r="13.56"/>
+    <text class="f" transform="translate(67.67 107.67)"><tspan x="0" y="0">0</tspan></text>
+  </g>
+  <g>
+    <circle class="i" cx="101.97" cy="104.13" r="13.56"/>
+    <text class="f" transform="translate(98.69 107.67)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="i" cx="133.22" cy="104.13" r="13.56"/>
+    <text class="f" transform="translate(129.95 107.67)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <line id="d" data-name="source line" class="g" x1="164.47" y1="63.71" x2="288.44" y2="63.71"/>
+  <line class="g" x1="288.68" y1="46.21" x2="288.68" y2="81.22"/>
+  <line class="g" x1="164.47" y1="46.21" x2="164.47" y2="81.22"/>
+  <g>
+    <circle class="h" cx="257.66" cy="63.71" r="13.56"/>
+    <text class="f" transform="translate(254.38 67.26)"><tspan x="0" y="0">8</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="288.68" cy="63.71" r="13.56"/>
+    <text class="f" transform="translate(285.41 67.26)"><tspan x="0" y="0">9</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="164.47" cy="63.71" r="13.56"/>
+    <text class="f" transform="translate(161.2 67.26)"><tspan x="0" y="0">5</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="195.5" cy="63.71" r="13.56"/>
+    <text class="f" transform="translate(192.23 67.26)"><tspan x="0" y="0">6</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="226.53" cy="63.71" r="13.56"/>
+    <text class="f" transform="translate(223.25 67.26)"><tspan x="0" y="0">7</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="257.66" cy="104.23" r="13.56"/>
+    <text class="f" transform="translate(254.38 107.77)"><tspan x="0" y="0">8</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="164.47" cy="104.23" r="13.56"/>
+    <text class="f" transform="translate(161.2 107.77)"><tspan x="0" y="0">5</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="195.5" cy="104.23" r="13.56"/>
+    <text class="f" transform="translate(192.23 107.77)"><tspan x="0" y="0">6</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="226.53" cy="104.23" r="13.56"/>
+    <text class="f" transform="translate(223.25 107.77)"><tspan x="0" y="0">7</tspan></text>
+  </g>
+  <line class="g" x1="288.63" y1="86.72" x2="288.63" y2="121.73"/>
+  <g>
+    <circle class="h" cx="288.68" cy="104.23" r="13.56"/>
+    <text class="f" transform="translate(285.41 107.77)"><tspan x="0" y="0">9</tspan></text>
+  </g>
+</svg>

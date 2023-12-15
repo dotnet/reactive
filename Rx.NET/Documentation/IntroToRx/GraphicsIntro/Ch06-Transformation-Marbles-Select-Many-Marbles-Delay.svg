@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="504.81" height="363.68" viewBox="0 0 504.81 363.68">
+  <defs>
+    <style>
+      .h {
+        fill: #f0ff8b;
+      }
+
+      .h, .i, .j, .k, .l, .m {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .n {
+        font-family: Consolas, Consolas;
+      }
+
+      .n, .o {
+        font-size: 12px;
+      }
+
+      .i {
+        fill: none;
+      }
+
+      .j {
+        fill: #ff8be8;
+      }
+
+      .k {
+        fill: #ff8b8b;
+      }
+
+      .l {
+        fill: #8be2ff;
+      }
+
+      .o {
+        font-family: Tahoma, Tahoma;
+      }
+
+      .m {
+        fill: #8bffbc;
+      }
+    </style>
+  </defs>
+  <line id="b" data-name="source line" class="i" x1="30.52" y1="48.3" x2="278.9" y2="48.3"/>
+  <text class="n" transform="translate(28.07 25.48)"><tspan x="0" y="0">Range(1, 5)</tspan></text>
+  <text class="n" transform="translate(28.07 104.2)"><tspan x="0" y="0">.SelectMany(i =&gt; Observable</tspan><tspan x="0" y="14.4" xml:space="preserve">    .Repeat((char)(i+64), i)</tspan><tspan x="0" y="28.8" xml:space="preserve">    .Delay(TimeSpan.FromMilliseconds(i * 100)))</tspan></text>
+  <line id="c" data-name="source line" class="i" x1="30.52" y1="321.91" x2="463.63" y2="321.91"/>
+  <line class="i" x1="107.42" y1="148.86" x2="107.42" y2="183.87"/>
+  <line class="i" x1="30.52" y1="30.79" x2="30.52" y2="65.8"/>
+  <line class="i" x1="30.52" y1="304.4" x2="30.52" y2="339.41"/>
+  <g>
+    <circle class="m" cx="30.2" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(26.92 51.85)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="l" cx="43.23" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(39.95 51.85)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="56.48" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(53.2 51.85)"><tspan x="0" y="0">3</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="69.73" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(66.46 51.85)"><tspan x="0" y="0">4</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="82.76" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(79.48 51.85)"><tspan x="0" y="0">5</tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="107.42" cy="166.24" r="13.56"/>
+    <text class="o" transform="translate(103.82 169.79)"><tspan x="0" y="0">A</tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="107.42" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(103.82 325.46)"><tspan x="0" y="0">A</tspan></text>
+  </g>
+  <line id="d" data-name="source line" class="i" x1="183.8" y1="191.69" x2="214.88" y2="191.69"/>
+  <line class="i" x1="183.8" y1="174.32" x2="183.8" y2="209.33"/>
+  <g>
+    <circle class="l" cx="183.8" cy="191.69" r="13.56"/>
+    <text class="o" transform="translate(180.27 195.24)"><tspan x="0" y="0">B</tspan></text>
+  </g>
+  <line id="e" data-name="source line" class="i" x1="259.71" y1="212.62" x2="300.68" y2="212.62"/>
+  <line class="i" x1="260.71" y1="195.24" x2="260.71" y2="230.25"/>
+  <g>
+    <circle class="h" cx="260.71" cy="212.62" r="13.56"/>
+    <text class="o" transform="translate(257.1 216.17)"><tspan x="0" y="0">C</tspan></text>
+  </g>
+  <line id="f" data-name="source line" class="i" x1="335.24" y1="238.88" x2="376.94" y2="238.88"/>
+  <line class="i" x1="337.24" y1="221.51" x2="337.24" y2="256.52"/>
+  <g>
+    <circle class="k" cx="337.24" cy="238.88" r="13.56"/>
+    <text class="o" transform="translate(333.17 242.43)"><tspan x="0" y="0">D</tspan></text>
+  </g>
+  <line id="g" data-name="source line" class="i" x1="408.49" y1="269.82" x2="473.69" y2="269.82"/>
+  <line class="i" x1="413.81" y1="252.45" x2="413.81" y2="287.46"/>
+  <g>
+    <circle class="j" cx="413.81" cy="269.82" r="13.56"/>
+    <text class="o" transform="translate(410.44 273.37)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+  <g>
+    <circle class="l" cx="197.88" cy="191.69" r="13.56"/>
+    <text class="o" transform="translate(194.35 195.24)"><tspan x="0" y="0">B</tspan></text>
+  </g>
+  <g>
+    <circle class="l" cx="183.8" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(180.27 325.46)"><tspan x="0" y="0">B</tspan></text>
+  </g>
+  <g>
+    <circle class="l" cx="197.88" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(194.35 325.46)"><tspan x="0" y="0">B</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="273.73" cy="212.62" r="13.56"/>
+    <text class="o" transform="translate(270.13 216.17)"><tspan x="0" y="0">C</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="286.68" cy="212.62" r="13.56"/>
+    <text class="o" transform="translate(283.08 216.17)"><tspan x="0" y="0">C</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="260.71" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(257.1 325.46)"><tspan x="0" y="0">C</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="273.73" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(270.13 325.46)"><tspan x="0" y="0">C</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="286.68" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(283.08 325.46)"><tspan x="0" y="0">C</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="350.22" cy="238.88" r="13.56"/>
+    <text class="o" transform="translate(346.15 242.43)"><tspan x="0" y="0">D</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="363.38" cy="238.88" r="13.56"/>
+    <text class="o" transform="translate(359.31 242.43)"><tspan x="0" y="0">D</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="376.43" cy="238.88" r="13.56"/>
+    <text class="o" transform="translate(372.36 242.43)"><tspan x="0" y="0">D</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="337.24" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(333.17 325.46)"><tspan x="0" y="0">D</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="350.22" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(346.15 325.46)"><tspan x="0" y="0">D</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="363.38" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(359.31 325.46)"><tspan x="0" y="0">D</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="376.43" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(372.36 325.46)"><tspan x="0" y="0">D</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="427.01" cy="269.82" r="13.56"/>
+    <text class="o" transform="translate(423.65 273.37)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="440.07" cy="269.82" r="13.56"/>
+    <text class="o" transform="translate(436.7 273.37)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="452.66" cy="269.82" r="13.56"/>
+    <text class="o" transform="translate(449.29 273.37)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="465.69" cy="269.82" r="13.56"/>
+    <text class="o" transform="translate(462.32 273.37)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="413.81" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(410.44 325.46)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="427.01" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(423.65 325.46)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="440.07" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(436.7 325.46)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="452.66" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(449.29 325.46)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="465.69" cy="321.91" r="13.56"/>
+    <text class="o" transform="translate(462.32 325.46)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+</svg>

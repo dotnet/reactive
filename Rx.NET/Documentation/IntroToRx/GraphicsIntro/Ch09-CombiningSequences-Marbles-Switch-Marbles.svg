@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="380.07" height="256.33" viewBox="0 0 380.07 256.33">
+  <defs>
+    <style>
+      .h {
+        letter-spacing: 0em;
+      }
+
+      .i {
+        fill: #f0ff8b;
+      }
+
+      .i, .j, .k, .l, .m {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .n {
+        font-family: Consolas, Consolas;
+      }
+
+      .n, .o {
+        font-size: 12px;
+      }
+
+      .j {
+        fill: none;
+      }
+
+      .k {
+        fill: #ff8b8b;
+      }
+
+      .l {
+        fill: #8be2ff;
+      }
+
+      .o {
+        font-family: Tahoma, Tahoma;
+      }
+
+      .m {
+        fill: #8bffbc;
+      }
+
+      .p {
+        letter-spacing: 0em;
+      }
+
+      .q {
+        letter-spacing: 0em;
+      }
+    </style>
+  </defs>
+  <text class="n" transform="translate(28.07 26.29)"><tspan x="0" y="0">searchValues:</tspan></text>
+  <text class="n" transform="translate(28.07 68.07)"><tspan x="0" y="0">results (I):</tspan></text>
+  <text class="n" transform="translate(28.07 108.79)"><tspan x="0" y="0">results (In):</tspan></text>
+  <text class="n" transform="translate(28.07 142.87)"><tspan x="0" y="0">results (Int):</tspan></text>
+  <text class="n" transform="translate(28.07 184.39)"><tspan x="0" y="0">results (Intr):</tspan></text>
+  <text class="n" transform="translate(28.07 226.99)"><tspan x="0" y="0">Switch results:</tspan></text>
+  <line id="b" data-name="source line" class="j" x1="149.26" y1="227.96" x2="363.34" y2="227.96"/>
+  <line id="c" data-name="source line" class="j" x1="149.58" y1="24.79" x2="363.34" y2="24.79"/>
+  <line class="j" x1="237.42" y1="126.37" x2="237.42" y2="161.38"/>
+  <line id="d" data-name="source line" class="j" x1="237.74" y1="143.88" x2="322" y2="143.88"/>
+  <line class="j" x1="149.58" y1="7.28" x2="149.58" y2="42.29"/>
+  <g>
+    <circle class="k" cx="218.02" cy="24.79" r="13.56"/>
+    <text class="o" transform="translate(212.47 28.34)"><tspan class="p" x="0" y="0">I</tspan><tspan x="4.42" y="0">n</tspan></text>
+  </g>
+  <g>
+    <circle class="i" cx="250.61" cy="24.79" r="13.56"/>
+    <text class="o" transform="translate(243.05 28.34)"><tspan class="p" x="0" y="0">I</tspan><tspan x="4.42" y="0">nt</tspan></text>
+  </g>
+  <g>
+    <circle class="l" cx="287.06" cy="24.79" r="13.56"/>
+    <text class="o" transform="translate(277.33 28.34)"><tspan class="p" x="0" y="0">I</tspan><tspan x="4.42" y="0">ntr</tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="177.02" cy="24.79" r="13.56"/>
+    <text class="o" transform="translate(174.78 28.34)"><tspan x="0" y="0">I</tspan></text>
+  </g>
+  <line class="j" x1="149.26" y1="210.45" x2="149.26" y2="245.46"/>
+  <line id="e" data-name="source line" class="j" x1="175.64" y1="65.3" x2="228.25" y2="65.3"/>
+  <line class="j" x1="228.25" y1="47.8" x2="228.25" y2="82.81"/>
+  <line class="j" x1="175.64" y1="47.8" x2="175.64" y2="82.81"/>
+  <g>
+    <circle class="m" cx="228.25" cy="65.3" r="13.56"/>
+    <text class="o" transform="translate(218.45 68.85)"><tspan class="q" x="0" y="0">S</tspan><tspan x="6.71" y="0">e</tspan><tspan class="h" x="13.03" y="0">l</tspan><tspan x="15.78" y="0">f</tspan></text>
+  </g>
+  <line id="f" data-name="source line" class="j" x1="282.05" y1="184.39" x2="308.43" y2="184.39"/>
+  <line class="j" x1="308.43" y1="166.89" x2="308.43" y2="201.9"/>
+  <line class="j" x1="282.05" y1="166.89" x2="282.05" y2="201.9"/>
+  <g>
+    <circle class="l" cx="308.43" cy="184.39" r="13.56"/>
+    <text class="o" transform="translate(295.76 187.94)"><tspan x="0" y="0">Start</tspan></text>
+  </g>
+  <g>
+    <circle class="l" cx="308.43" cy="226.99" r="13.56"/>
+    <text class="o" transform="translate(295.76 230.53)"><tspan x="0" y="0">Start</tspan></text>
+  </g>
+  <line id="g" data-name="source line" class="j" x1="218.02" y1="105.82" x2="263.72" y2="105.82"/>
+  <line class="j" x1="264.18" y1="88.31" x2="264.18" y2="123.32"/>
+  <line class="j" x1="218.02" y1="88.31" x2="218.02" y2="123.32"/>
+  <g>
+    <circle class="k" cx="264.18" cy="105.82" r="13.56"/>
+    <text class="o" transform="translate(253.36 109.37)"><tspan class="p" x="0" y="0">I</tspan><tspan x="4.42" y="0">nto</tspan></text>
+  </g>
+  <line class="j" x1="322" y1="126.37" x2="322" y2="161.38"/>
+  <g>
+    <circle class="i" cx="322" cy="143.88" r="13.56"/>
+    <text class="o" transform="translate(315.44 147.43)"><tspan x="0" y="0">42</tspan></text>
+  </g>
+</svg>

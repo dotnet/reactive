@@ -1,0 +1,147 @@
+/* Style Definitions */
+p
+{
+    margin-top: 1em;
+    text-indent: 0em;
+}
+
+.pagebreak
+{
+    page-break-before: always;
+}
+
+.centered
+{
+    text-align: center;
+}
+
+.bottom
+{
+    vertical-align: text-bottom;
+}
+
+.tablehead
+{
+    text-align: center;
+    font-weight: bold;
+}
+
+H1, h1.SectionHeader
+{
+    margin-top: 1em;
+    page-break-before: always;
+    text-align: center;
+}
+H1.toc
+{
+    margin-top: 0em;
+    page-break-before:auto;
+    text-align: left;
+}
+H2
+{
+    margin-top: 1.5em;
+    margin-bottom: 0em;
+}
+H3
+{
+    margin-top: 1em;
+}
+H4
+{
+    margin-top: 1em;
+}
+
+/* marker class for toc generation*/
+.ignoreToc
+{
+}
+
+cite
+{
+    text-align: justify;
+    margin: 1em;
+}
+
+p.comment
+{
+    text-align: justify;
+    font-size: smaller;
+    margin-left: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-right: 0em;
+}
+
+/* Table of Contents Styles */
+ol.toc, ol.toc li
+{
+    text-align: left;
+}
+ol.toc
+{
+    list-style-type: decimal;
+    text-align: left;
+    
+}
+
+
+/* Code styles */
+div.output
+{
+    color: #008000;
+}
+code 
+{
+    color: black;
+    font-size: xx-small;
+    font-family: consolas, "Courier New" , courier, monospace;
+}
+div.csharpcode, div.output, div.marble
+{
+    color: black;
+    font-family: consolas, "Courier New" , courier, monospace;
+    font-size: xx-small; /*Does not seem to actually work. Needs the setting in line. Not sure why.*/
+    background-color: #f4f4f4;
+    text-align: left;
+    margin: 0em;
+    page-break-before: auto;
+    page-break-inside: avoid;
+}
+
+.line
+{
+    color: inherit;
+    text-indent: -1em; /*Ensure first line is not indented by the padding below. This will force wrapped lines to auto indent as you would hope code does*/
+    padding: 0em 0em 0em 1em;
+    text-align: left;
+    display: block;
+    white-space: pre;
+    font-size: xx-small; /*Not sure why the font-size setting in .csharpcode is not being enforced. Setting it here however seems to work great.*/
+}
+.scope
+{
+    margin-left: 1em;
+}
+/* use to wrap key words such as void, string, int, return*/
+.kwrd
+{
+    color: #0000ff;
+    white-space: nowrap;
+}
+/* use to wrap non-primitive type names when used in a signature, after the new keyword or when referenced for a types static members.*/
+.knownType
+{
+    color: #2b91af;
+    white-space: nowrap;
+}
+/*used to wrap comments/remarks*/
+.rem
+{
+    color: #008000;
+}
+/*used to wrap strings*/
+.str
+{
+    color: #A31515;
+}

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="299.49" height="177.91" viewBox="0 0 299.49 177.91">
+  <defs>
+    <style>
+      .f {
+        fill: #f0ff8b;
+      }
+
+      .f, .g, .h, .i {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .j {
+        font-family: Consolas, Consolas;
+      }
+
+      .j, .k {
+        font-size: 12px;
+      }
+
+      .g {
+        fill: none;
+      }
+
+      .h {
+        fill: #ff8b8b;
+      }
+
+      .k {
+        font-family: Tahoma, Tahoma;
+      }
+
+      .i {
+        fill: #8bffbc;
+      }
+    </style>
+  </defs>
+  <line id="b" data-name="source line" class="g" x1="71.26" y1="24.01" x2="275.12" y2="24.01"/>
+  <g>
+    <circle class="i" cx="148.48" cy="24.01" r="13.56"/>
+    <text class="k" transform="translate(145.2 27.56)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="i" cx="212.96" cy="24.01" r="13.56"/>
+    <text class="k" transform="translate(209.69 27.56)"><tspan x="0" y="0">3</tspan></text>
+  </g>
+  <g>
+    <circle class="i" cx="249.96" cy="24.01" r="13.56"/>
+    <text class="k" transform="translate(246.68 27.56)"><tspan x="0" y="0">4</tspan></text>
+  </g>
+  <line class="g" x1="70.94" y1="87.53" x2="70.94" y2="122.54"/>
+  <line id="c" data-name="source line" class="g" x1="71.26" y1="105.03" x2="285.8" y2="105.03"/>
+  <text class="j" transform="translate(28.07 26.29)"><tspan x="0" y="0">s1:</tspan></text>
+  <text class="j" transform="translate(28.07 68.07)"><tspan x="0" y="0">s2:</tspan></text>
+  <text class="j" transform="translate(28.07 108.79)"><tspan x="0" y="0">s3:</tspan></text>
+  <line class="g" x1="71.26" y1="6.5" x2="71.26" y2="41.51"/>
+  <line class="g" x1="275.12" y1="6.5" x2="275.12" y2="41.51"/>
+  <g>
+    <circle class="i" cx="90.71" cy="24.01" r="13.56"/>
+    <text class="k" transform="translate(87.43 27.56)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <line id="d" data-name="source line" class="g" x1="71.26" y1="149.49" x2="275.12" y2="149.49"/>
+  <g>
+    <circle class="i" cx="148.48" cy="149.49" r="13.56"/>
+    <text class="k" transform="translate(145.2 153.04)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="i" cx="212.96" cy="149.49" r="13.56"/>
+    <text class="k" transform="translate(209.69 153.04)"><tspan x="0" y="0">3</tspan></text>
+  </g>
+  <g>
+    <circle class="i" cx="249.96" cy="149.49" r="13.56"/>
+    <text class="k" transform="translate(246.68 153.04)"><tspan x="0" y="0">4</tspan></text>
+  </g>
+  <line class="g" x1="71.26" y1="131.98" x2="71.26" y2="166.99"/>
+  <line class="g" x1="275.12" y1="131.98" x2="275.12" y2="166.99"/>
+  <g>
+    <circle class="i" cx="90.71" cy="149.49" r="13.56"/>
+    <text class="k" transform="translate(87.43 153.04)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="f" cx="131.97" cy="105.03" r="13.56"/>
+    <text class="k" transform="translate(128.69 108.58)"><tspan x="0" y="0">8</tspan></text>
+  </g>
+  <g>
+    <circle class="f" cx="186.75" cy="105.03" r="13.56"/>
+    <text class="k" transform="translate(183.48 108.58)"><tspan x="0" y="0">7</tspan></text>
+  </g>
+  <g>
+    <circle class="f" cx="223.83" cy="105.03" r="13.56"/>
+    <text class="k" transform="translate(220.55 108.58)"><tspan x="0" y="0">6</tspan></text>
+  </g>
+  <line id="e" data-name="source line" class="g" x1="71.26" y1="64.52" x2="195.5" y2="64.52"/>
+  <line class="g" x1="195.5" y1="47.02" x2="195.5" y2="82.03"/>
+  <line class="g" x1="71.26" y1="47.02" x2="71.26" y2="82.03"/>
+  <g>
+    <circle class="h" cx="104.27" cy="64.52" r="13.56"/>
+    <text class="k" transform="translate(97.72 68.07)"><tspan x="0" y="0">99</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="172.2" cy="64.52" r="13.56"/>
+    <text class="k" transform="translate(165.65 68.07)"><tspan x="0" y="0">88</tspan></text>
+  </g>
+  <line class="g" x1="285.8" y1="87.53" x2="285.8" y2="122.54"/>
+  <text class="j" transform="translate(28.07 149.3)"><tspan x="0" y="0">r:</tspan></text>
+</svg>

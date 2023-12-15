@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="767.72" height="562.01" viewBox="0 0 767.72 562.01">
+  <defs>
+    <style>
+      .j {
+        letter-spacing: 0em;
+      }
+
+      .k {
+        fill: #f0ff8b;
+      }
+
+      .k, .l, .m, .n {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .o {
+        font-family: Tahoma, Tahoma;
+      }
+
+      .p {
+        font-family: Consolas, Consolas;
+      }
+
+      .p, .q {
+        font-size: 12px;
+      }
+
+      .l {
+        fill: none;
+      }
+
+      .m {
+        fill: #8be2ff;
+      }
+
+      .r {
+        font-size: 10px;
+      }
+
+      .s {
+        letter-spacing: 0em;
+      }
+
+      .n {
+        fill: #8bffbc;
+      }
+
+      .t {
+        letter-spacing: 0em;
+      }
+
+      .u {
+        letter-spacing: 0em;
+      }
+    </style>
+  </defs>
+  <line id="b" data-name="source line" class="l" x1="61.2" y1="520.39" x2="747.9" y2="520.39"/>
+  <line id="c" data-name="source line" class="l" x1="183.98" y1="447.64" x2="747.9" y2="447.64"/>
+  <line id="d" data-name="source line" class="l" x1="165.94" y1="236.57" x2="747.9" y2="236.57"/>
+  <line class="l" x1="165.94" y1="219.19" x2="165.94" y2="254.2"/>
+  <line id="e" data-name="source line" class="l" x1="114.65" y1="186.3" x2="747.9" y2="186.3"/>
+  <line class="l" x1="104.38" y1="168.92" x2="104.38" y2="203.93"/>
+  <line id="f" data-name="source line" class="l" x1="61.2" y1="139.85" x2="747.9" y2="139.85"/>
+  <line class="l" x1="61.2" y1="122.47" x2="61.2" y2="157.48"/>
+  <line id="g" data-name="source line" class="l" x1="30.52" y1="48.3" x2="747.9" y2="48.3"/>
+  <text class="p" transform="translate(28.07 25.48)"><tspan x="0" y="0">receiverHost.Messages</tspan></text>
+  <text class="p" transform="translate(28.07 304.42)"><tspan x="0" y="0">shipMessages.OfType&lt;IAisMessageType1to3&gt;()</tspan><tspan x="0" y="14.4" xml:space="preserve">    .DistinctUntilChanged(m =&gt; m.NavigationStatus).Skip(1)</tspan></text>
+  <text class="p" transform="translate(28.07 114.86)"><tspan x="0" y="0">perShipObservables</tspan></text>
+  <text class="p" transform="translate(28.07 492.57)"><tspan x="0" y="0">shipStatusChanges</tspan></text>
+  <g>
+    <circle class="n" cx="61.2" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(57.6 51.85)"><tspan class="q"><tspan x="0" y="0">A</tspan></tspan><tspan class="r"><tspan x="-12.86" y="20.4">Moo</tspan><tspan class="u" x="5.71" y="20.4">r</tspan><tspan x="9.26" y="20.4">ed</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="n" cx="270.3" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(266.7 51.85)"><tspan class="q"><tspan x="0" y="0">A</tspan></tspan><tspan class="r"><tspan x="-12.86" y="20.4">Moo</tspan><tspan class="u" x="5.71" y="20.4">r</tspan><tspan x="9.26" y="20.4">ed</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="n" cx="61.2" cy="140.5" r="13.56"/>
+    <text class="o" transform="translate(57.6 144.05)"><tspan class="q"><tspan x="0" y="0">A</tspan></tspan><tspan class="r"><tspan x="-12.86" y="20.4">Moo</tspan><tspan class="u" x="5.71" y="20.4">r</tspan><tspan x="9.26" y="20.4">ed</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="n" cx="270.3" cy="140.5" r="13.56"/>
+    <text class="o" transform="translate(266.7 144.05)"><tspan class="q"><tspan x="0" y="0">A</tspan></tspan><tspan class="r"><tspan x="-12.86" y="20.4">Moo</tspan><tspan class="u" x="5.71" y="20.4">r</tspan><tspan x="9.26" y="20.4">ed</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="n" cx="714.6" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(711 51.85)"><tspan class="q"><tspan x="0" y="0">A</tspan></tspan><tspan class="r"><tspan x="-12.86" y="20.4">Moo</tspan><tspan class="u" x="5.71" y="20.4">r</tspan><tspan x="9.26" y="20.4">ed</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="n" cx="714.6" cy="140.5" r="13.56"/>
+    <text class="o" transform="translate(711 144.05)"><tspan class="q"><tspan x="0" y="0">A</tspan></tspan><tspan class="r"><tspan x="-12.86" y="20.4">Moo</tspan><tspan class="u" x="5.71" y="20.4">r</tspan><tspan x="9.26" y="20.4">ed</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="104.38" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(100.85 51.85)"><tspan class="q"><tspan x="0" y="0">B</tspan></tspan><tspan class="r"><tspan class="t" x="-16.5" y="20.4">A</tspan><tspan x="-10.57" y="20.4">tAnchor</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="417.18" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(413.64 51.85)"><tspan class="q"><tspan x="0" y="0">B</tspan></tspan><tspan class="r"><tspan x="-45.6" y="20.4">Under</tspan><tspan class="s" x="-19.07" y="20.4">w</tspan><tspan class="t" x="-11.74" y="20.4">a</tspan><tspan x="-6.56" y="20.4">yUsingEngine</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="412.18" cy="185.8" r="13.56"/>
+    <text class="o" transform="translate(408.64 189.35)"><tspan class="q"><tspan x="0" y="0">B</tspan></tspan><tspan class="r"><tspan x="-45.6" y="20.4">Under</tspan><tspan class="s" x="-19.07" y="20.4">w</tspan><tspan class="t" x="-11.74" y="20.4">a</tspan><tspan x="-6.56" y="20.4">yUsingEngine</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="645.23" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(641.69 51.85)"><tspan class="q"><tspan x="0" y="0">B</tspan></tspan><tspan class="r"><tspan x="-45.6" y="20.4">Under</tspan><tspan class="s" x="-19.07" y="20.4">w</tspan><tspan class="t" x="-11.74" y="20.4">a</tspan><tspan x="-6.56" y="20.4">yUsingEngine</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="640.23" cy="185.8" r="13.56"/>
+    <text class="o" transform="translate(636.69 189.35)"><tspan class="q"><tspan x="0" y="0">B</tspan></tspan><tspan class="r"><tspan x="-45.6" y="20.4">Under</tspan><tspan class="s" x="-19.07" y="20.4">w</tspan><tspan class="t" x="-11.74" y="20.4">a</tspan><tspan x="-6.56" y="20.4">yUsingEngine</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="227.76" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(224.22 51.85)"><tspan class="q"><tspan x="0" y="0">B</tspan></tspan><tspan class="r"><tspan class="t" x="-16.5" y="20.4">A</tspan><tspan x="-10.57" y="20.4">tAnchor</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="104.38" cy="186.78" r="13.56"/>
+    <text class="o" transform="translate(100.85 190.33)"><tspan class="q"><tspan x="0" y="0">B</tspan></tspan><tspan class="r"><tspan class="t" x="-16.5" y="20.4">A</tspan><tspan x="-10.57" y="20.4">tAnchor</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="227.76" cy="186.78" r="13.56"/>
+    <text class="o" transform="translate(224.22 190.33)"><tspan class="q"><tspan x="0" y="0">B</tspan></tspan><tspan class="r"><tspan class="t" x="-16.5" y="20.4">A</tspan><tspan x="-10.57" y="20.4">tAnchor</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="165.94" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(162.34 51.85)"><tspan class="q"><tspan x="0" y="0">C</tspan></tspan><tspan class="r"><tspan x="-32.81" y="20.4">Under</tspan><tspan class="s" x="-6.28" y="20.4">w</tspan><tspan class="t" x="1.05" y="20.4">a</tspan><tspan x="6.24" y="20.4">ySa</tspan><tspan class="j" x="22.04" y="20.4">il</tspan><tspan x="26.63" y="20.4">ing</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="165.94" cy="236.57" r="13.56"/>
+    <text class="o" transform="translate(162.34 240.12)"><tspan class="q"><tspan x="0" y="0">C</tspan></tspan><tspan class="r"><tspan x="-32.81" y="20.4">Under</tspan><tspan class="s" x="-6.28" y="20.4">w</tspan><tspan class="t" x="1.05" y="20.4">a</tspan><tspan x="6.24" y="20.4">ySa</tspan><tspan class="j" x="22.04" y="20.4">il</tspan><tspan x="26.63" y="20.4">ing</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="328.59" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(324.99 51.85)"><tspan class="q"><tspan x="0" y="0">C</tspan></tspan><tspan class="r"><tspan x="-32.81" y="20.4">Under</tspan><tspan class="s" x="-6.28" y="20.4">w</tspan><tspan class="t" x="1.05" y="20.4">a</tspan><tspan x="6.24" y="20.4">ySa</tspan><tspan class="j" x="22.04" y="20.4">il</tspan><tspan x="26.63" y="20.4">ing</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="555.05" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(551.44 51.85)"><tspan class="q"><tspan x="0" y="0">C</tspan></tspan><tspan class="r"><tspan x="-32.81" y="20.4">Under</tspan><tspan class="s" x="-6.28" y="20.4">w</tspan><tspan class="t" x="1.05" y="20.4">a</tspan><tspan x="6.24" y="20.4">ySa</tspan><tspan class="j" x="22.04" y="20.4">il</tspan><tspan x="26.63" y="20.4">ing</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="555.05" cy="236.07" r="13.56"/>
+    <text class="o" transform="translate(551.44 239.61)"><tspan class="q"><tspan x="0" y="0">C</tspan></tspan><tspan class="r"><tspan x="-32.81" y="20.4">Under</tspan><tspan class="s" x="-6.28" y="20.4">w</tspan><tspan class="t" x="1.05" y="20.4">a</tspan><tspan x="6.24" y="20.4">ySa</tspan><tspan class="j" x="22.04" y="20.4">il</tspan><tspan x="26.63" y="20.4">ing</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="555.05" cy="447.77" r="13.56"/>
+    <text class="o" transform="translate(551.44 451.32)"><tspan class="q"><tspan x="0" y="0">C</tspan></tspan><tspan class="r"><tspan x="-32.81" y="20.4">Under</tspan><tspan class="s" x="-6.28" y="20.4">w</tspan><tspan class="t" x="1.05" y="20.4">a</tspan><tspan x="6.24" y="20.4">ySa</tspan><tspan class="j" x="22.04" y="20.4">il</tspan><tspan x="26.63" y="20.4">ing</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="555.05" cy="520.52" r="13.56"/>
+    <text class="o" transform="translate(551.44 524.07)"><tspan class="q"><tspan x="0" y="0">C</tspan></tspan><tspan class="r"><tspan x="-32.81" y="20.4">Under</tspan><tspan class="s" x="-6.28" y="20.4">w</tspan><tspan class="t" x="1.05" y="20.4">a</tspan><tspan x="6.24" y="20.4">ySa</tspan><tspan class="j" x="22.04" y="20.4">il</tspan><tspan x="26.63" y="20.4">ing</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="492.74" cy="48.3" r="13.56"/>
+    <text class="o" transform="translate(489.14 51.85)"><tspan class="q"><tspan x="0" y="0">C</tspan></tspan><tspan class="r"><tspan class="t" x="-16.43" y="20.4">A</tspan><tspan x="-10.5" y="20.4">tAnchor</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="492.74" cy="236.7" r="13.56"/>
+    <text class="o" transform="translate(489.14 240.24)"><tspan class="q"><tspan x="0" y="0">C</tspan></tspan><tspan class="r"><tspan class="t" x="-16.43" y="20.4">A</tspan><tspan x="-10.5" y="20.4">tAnchor</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="492.74" cy="447.64" r="13.56"/>
+    <text class="o" transform="translate(489.14 451.19)"><tspan class="q"><tspan x="0" y="0">C</tspan></tspan><tspan class="r"><tspan class="t" x="-16.43" y="20.4">A</tspan><tspan x="-10.5" y="20.4">tAnchor</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="492.74" cy="520.52" r="13.56"/>
+    <text class="o" transform="translate(489.14 524.07)"><tspan class="q"><tspan x="0" y="0">C</tspan></tspan><tspan class="r"><tspan class="t" x="-16.43" y="20.4">A</tspan><tspan x="-10.5" y="20.4">tAnchor</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="328.59" cy="236.57" r="13.56"/>
+    <text class="o" transform="translate(324.99 240.12)"><tspan class="q"><tspan x="0" y="0">C</tspan></tspan><tspan class="r"><tspan x="-32.81" y="20.4">Under</tspan><tspan class="s" x="-6.28" y="20.4">w</tspan><tspan class="t" x="1.05" y="20.4">a</tspan><tspan x="6.24" y="20.4">ySa</tspan><tspan class="j" x="22.04" y="20.4">il</tspan><tspan x="26.63" y="20.4">ing</tspan></tspan></text>
+  </g>
+  <line class="l" x1="30.52" y1="34.73" x2="30.52" y2="61.86"/>
+  <polyline class="l" points="734.84 34.73 747.9 48.24 735.79 60.76"/>
+  <polyline class="l" points="734.84 126.38 747.9 139.89 735.79 152.41"/>
+  <polyline class="l" points="734.84 172.79 747.9 186.29 735.79 198.81"/>
+  <polyline class="l" points="734.84 223.05 747.9 236.56 735.79 249.08"/>
+  <line class="l" x1="183.98" y1="430.27" x2="183.98" y2="465.28"/>
+  <line id="h" data-name="source line" class="l" x1="114.65" y1="397.38" x2="747.9" y2="397.38"/>
+  <line class="l" x1="114.65" y1="380" x2="114.65" y2="415.01"/>
+  <line id="i" data-name="source line" class="l" x1="61.2" y1="350.92" x2="747.9" y2="350.92"/>
+  <line class="l" x1="61.2" y1="333.55" x2="61.2" y2="368.56"/>
+  <g>
+    <circle class="m" cx="412.18" cy="396.88" r="13.56"/>
+    <text class="o" transform="translate(408.64 400.42)"><tspan class="q"><tspan x="0" y="0">B</tspan></tspan><tspan class="r"><tspan x="-45.6" y="20.4">Under</tspan><tspan class="s" x="-19.07" y="20.4">w</tspan><tspan class="t" x="-11.74" y="20.4">a</tspan><tspan x="-6.56" y="20.4">yUsingEngine</tspan></tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="412.18" cy="520.52" r="13.56"/>
+    <text class="o" transform="translate(408.64 524.07)"><tspan class="q"><tspan x="0" y="0">B</tspan></tspan><tspan class="r"><tspan x="-45.6" y="20.4">Under</tspan><tspan class="s" x="-19.07" y="20.4">w</tspan><tspan class="t" x="-11.74" y="20.4">a</tspan><tspan x="-6.56" y="20.4">yUsingEngine</tspan></tspan></text>
+  </g>
+  <polyline class="l" points="734.84 337.46 747.9 350.96 735.79 363.48"/>
+  <line class="l" x1="61.2" y1="503.02" x2="61.2" y2="538.03"/>
+  <polyline class="l" points="734.84 506.93 747.9 520.43 735.79 532.96"/>
+  <polyline class="l" points="734.84 383.86 747.9 397.37 735.79 409.89"/>
+  <polyline class="l" points="734.84 434.13 747.9 447.64 735.79 460.16"/>
+</svg>

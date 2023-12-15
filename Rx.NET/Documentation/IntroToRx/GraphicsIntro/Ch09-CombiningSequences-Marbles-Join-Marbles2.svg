@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="421.91" height="261.45" viewBox="0 0 421.91 261.45">
+  <defs>
+    <style>
+      .k {
+        fill: #f0ff8b;
+      }
+
+      .k, .l, .m, .n {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .o {
+        font-family: Consolas, Consolas;
+      }
+
+      .o, .p {
+        font-size: 12px;
+      }
+
+      .l {
+        fill: none;
+      }
+
+      .m {
+        fill: #ff8b8b;
+      }
+
+      .p {
+        font-family: Tahoma, Tahoma;
+      }
+
+      .n {
+        fill: #8bffbc;
+      }
+    </style>
+  </defs>
+  <line class="l" x1="131.49" y1="218.94" x2="131.49" y2="253.95"/>
+  <line id="b" data-name="source line" class="l" x1="131.81" y1="25.84" x2="412.33" y2="25.84"/>
+  <line id="c" data-name="source line" class="l" x1="131.81" y1="236.44" x2="412.33" y2="236.44"/>
+  <text class="o" transform="translate(28.07 28.12)"><tspan x="0" y="0">left:</tspan></text>
+  <text class="o" transform="translate(28.07 137.28)"><tspan x="0" y="0">right:</tspan></text>
+  <text class="o" transform="translate(28.07 240.2)"><tspan x="0" y="0">Join:</tspan></text>
+  <line class="l" x1="131.81" y1="8.33" x2="131.81" y2="43.34"/>
+  <g>
+    <circle class="n" cx="180.19" cy="25.84" r="13.56"/>
+    <text class="p" transform="translate(176.91 29.39)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="n" cx="131.81" cy="25.84" r="13.56"/>
+    <text class="p" transform="translate(128.53 29.39)"><tspan x="0" y="0">0</tspan></text>
+  </g>
+  <g>
+    <circle class="n" cx="230.44" cy="25.84" r="13.56"/>
+    <text class="p" transform="translate(227.17 29.39)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="n" cx="277.93" cy="25.84" r="13.56"/>
+    <text class="p" transform="translate(274.66 29.39)"><tspan x="0" y="0">3</tspan></text>
+  </g>
+  <g>
+    <circle class="n" cx="323.45" cy="25.84" r="13.56"/>
+    <text class="p" transform="translate(320.17 29.39)"><tspan x="0" y="0">4</tspan></text>
+  </g>
+  <g>
+    <circle class="n" cx="371.01" cy="25.84" r="13.56"/>
+    <text class="p" transform="translate(367.73 29.39)"><tspan x="0" y="0">5</tspan></text>
+  </g>
+  <line id="d" data-name="source line" class="l" x1="131.81" y1="52.72" x2="178.23" y2="52.72"/>
+  <text class="o" transform="translate(28.07 68.32)"><tspan x="0" y="0">left</tspan><tspan x="0" y="14.4">durations:</tspan></text>
+  <line class="l" x1="131.81" y1="48.54" x2="131.81" y2="58.11"/>
+  <line id="e" data-name="source line" class="l" x1="178.6" y1="62.83" x2="227.92" y2="62.83"/>
+  <line class="l" x1="178.6" y1="58.64" x2="178.6" y2="68.22"/>
+  <line class="l" x1="178.23" y1="48.54" x2="178.23" y2="58.11"/>
+  <text class="o" transform="translate(28.07 180.6)"><tspan x="0" y="0">right</tspan><tspan x="0" y="14.4">durations:</tspan></text>
+  <line class="l" x1="205.59" y1="160.82" x2="205.59" y2="170.39"/>
+  <line class="l" x1="300.27" y1="170.92" x2="300.27" y2="180.49"/>
+  <line class="l" x1="389.04" y1="181.08" x2="389.04" y2="190.65"/>
+  <line id="f" data-name="source line" class="l" x1="227.92" y1="72.4" x2="277.85" y2="72.4"/>
+  <line class="l" x1="227.92" y1="68.22" x2="227.92" y2="77.79"/>
+  <line class="l" x1="227.92" y1="58.04" x2="227.92" y2="67.61"/>
+  <line id="g" data-name="source line" class="l" x1="277.85" y1="82.12" x2="323.45" y2="82.12"/>
+  <line class="l" x1="277.85" y1="77.94" x2="277.85" y2="87.51"/>
+  <line class="l" x1="277.85" y1="67.62" x2="277.85" y2="77.19"/>
+  <line id="h" data-name="source line" class="l" x1="323.45" y1="91.69" x2="371.01" y2="91.69"/>
+  <line class="l" x1="323.45" y1="87.51" x2="323.45" y2="97.08"/>
+  <line class="l" x1="323.45" y1="77.34" x2="323.45" y2="86.91"/>
+  <line id="i" data-name="source line" class="l" x1="371.01" y1="101.26" x2="412.33" y2="101.26"/>
+  <line class="l" x1="371.01" y1="97.08" x2="371.01" y2="106.65"/>
+  <line class="l" x1="371.01" y1="86.91" x2="371.01" y2="96.48"/>
+  <g>
+    <circle class="k" cx="205.59" cy="236.44" r="13.56"/>
+    <text class="p" transform="translate(196.9 239.99)"><tspan x="0" y="0">1,A</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="299.27" cy="236.44" r="13.56"/>
+    <text class="p" transform="translate(290.64 239.99)"><tspan x="0" y="0">3,B</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="387.54" cy="236.44" r="13.56"/>
+    <text class="p" transform="translate(378.84 239.99)"><tspan x="0" y="0">5,C</tspan></text>
+  </g>
+  <line id="j" data-name="source line" class="l" x1="131.81" y1="133.73" x2="412.33" y2="133.73"/>
+  <line class="l" x1="131.81" y1="116.23" x2="131.81" y2="151.24"/>
+  <g>
+    <circle class="m" cx="205.59" cy="133.73" r="13.56"/>
+    <text class="p" transform="translate(201.99 137.28)"><tspan x="0" y="0">A</tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="299.27" cy="133.73" r="13.56"/>
+    <text class="p" transform="translate(295.73 137.28)"><tspan x="0" y="0">B</tspan></text>
+  </g>
+  <g>
+    <circle class="m" cx="389.04" cy="133.73" r="13.56"/>
+    <text class="p" transform="translate(385.44 137.28)"><tspan x="0" y="0">C</tspan></text>
+  </g>
+</svg>

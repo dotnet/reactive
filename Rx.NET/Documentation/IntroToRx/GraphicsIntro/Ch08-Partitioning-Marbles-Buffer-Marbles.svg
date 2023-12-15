@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="227.37" height="191.02" viewBox="0 0 227.37 191.02">
+  <defs>
+    <style>
+      .d {
+        fill: #f0ff8b;
+      }
+
+      .d, .e, .f, .g, .h, .i, .j {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .k, .l {
+        font-family: Consolas, Consolas;
+      }
+
+      .k, .m {
+        font-size: 12px;
+      }
+
+      .e {
+        fill: none;
+      }
+
+      .f {
+        fill: #ff8be8;
+      }
+
+      .g {
+        fill: #ff8b8b;
+      }
+
+      .l {
+        font-size: 10px;
+      }
+
+      .h {
+        fill: #8be2ff;
+      }
+
+      .i {
+        fill: #ffa532;
+      }
+
+      .m {
+        font-family: Tahoma, Tahoma;
+      }
+
+      .j {
+        fill: #8bffbc;
+      }
+    </style>
+  </defs>
+  <line id="b" data-name="source line" class="e" x1="30.52" y1="48.3" x2="216.71" y2="48.3"/>
+  <text class="k" transform="translate(28.07 25.48)"><tspan x="0" y="0">Range(1, 6)</tspan></text>
+  <text class="k" transform="translate(28.07 102.2)"><tspan x="0" y="0">.Buffer(4, 1)</tspan></text>
+  <line class="e" x1="30.2" y1="129.86" x2="30.2" y2="164.87"/>
+  <line class="e" x1="30.52" y1="30.79" x2="30.52" y2="65.8"/>
+  <g>
+    <circle class="j" cx="30.2" cy="48.3" r="13.56"/>
+    <text class="m" transform="translate(26.92 51.85)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="h" cx="61.23" cy="48.3" r="13.56"/>
+    <text class="m" transform="translate(57.95 51.85)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="d" cx="92.48" cy="48.3" r="13.56"/>
+    <text class="m" transform="translate(89.2 51.85)"><tspan x="0" y="0">3</tspan></text>
+  </g>
+  <g>
+    <circle class="g" cx="123.73" cy="48.3" r="13.56"/>
+    <text class="m" transform="translate(120.46 51.85)"><tspan x="0" y="0">4</tspan></text>
+  </g>
+  <g>
+    <circle class="f" cx="154.76" cy="48.3" r="13.56"/>
+    <text class="m" transform="translate(151.48 51.85)"><tspan x="0" y="0">5</tspan></text>
+  </g>
+  <g>
+    <circle class="i" cx="185.79" cy="48.3" r="13.56"/>
+    <text class="m" transform="translate(182.51 51.85)"><tspan x="0" y="0">6</tspan></text>
+  </g>
+  <line id="c" data-name="source line" class="e" x1="29.78" y1="147.24" x2="216.71" y2="147.24"/>
+  <circle class="g" cx="123.73" cy="147.24" r="13.56"/>
+  <circle class="f" cx="154.76" cy="147.24" r="13.56"/>
+  <text class="l" transform="translate(115.74 144.14)"><tspan x="0" y="0">1,2,</tspan><tspan x="0" y="12">3,4 </tspan></text>
+  <text class="l" transform="translate(145.76 144.14)"><tspan x="0" y="0">2,3,</tspan><tspan x="0" y="12">4,5 </tspan></text>
+  <circle class="i" cx="185.79" cy="147.37" r="13.56"/>
+  <text class="l" transform="translate(177.79 144.14)"><tspan x="0" y="0">3,4,</tspan><tspan x="0" y="12">5,6 </tspan></text>
+</svg>

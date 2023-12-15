@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="98.96" height="13.46" viewBox="0 0 98.96 13.46">
+  <defs>
+    <style>
+      .b {
+        font-family: Consolas, Consolas;
+        font-size: 12px;
+      }
+    </style>
+  </defs>
+  <text class="b" transform="translate(0 9.83)"><tspan x="0" y="0">Switch results:</tspan></text>
+</svg>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="457.73" height="133.38" viewBox="0 0 457.73 133.38">
+  <defs>
+    <style>
+      .e, .f {
+        font-family: Consolas, Consolas;
+      }
+
+      .f, .g, .h {
+        font-size: 12px;
+      }
+
+      .i {
+        fill: none;
+      }
+
+      .i, .j, .k {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .l {
+        letter-spacing: 0em;
+      }
+
+      .l, .m, .n {
+        font-family: MyriadPro-Regular, 'Myriad Pro';
+      }
+
+      .j {
+        fill: #ff8b8b;
+      }
+
+      .g {
+        font-family: Tahoma, Tahoma;
+      }
+
+      .m {
+        letter-spacing: 0em;
+      }
+
+      .k {
+        fill: #8bffbc;
+      }
+    </style>
+  </defs>
+  <line class="i" x1="162.44" y1="88.36" x2="162.44" y2="123.37"/>
+  <line id="b" data-name="source line" class="i" x1="162.6" y1="25.84" x2="284.02" y2="25.84"/>
+  <line id="c" data-name="source line" class="i" x1="162.76" y1="105.87" x2="405.53" y2="105.87"/>
+  <text class="h" transform="translate(29.25 20.63)"><tspan class="e" x="0" y="0">Concat</tspan><tspan class="n" x="39.59" y="0" xml:space="preserve"> subsc</tspan><tspan class="l" x="70.45" y="0">r</tspan><tspan class="n" x="74.42" y="0">iption</tspan><tspan class="m" x="0" y="14.4">t</tspan><tspan class="n" x="3.9" y="14.4">o </tspan><tspan class="e" x="13.03" y="14.4">cold:</tspan></text>
+  <text class="h" transform="translate(29.25 65.03)"><tspan class="e" x="0" y="0">Concat</tspan><tspan class="n" x="39.59" y="0" xml:space="preserve"> subsc</tspan><tspan class="l" x="70.45" y="0">r</tspan><tspan class="n" x="74.42" y="0">iption</tspan><tspan class="m" x="0" y="14.4">t</tspan><tspan class="n" x="3.9" y="14.4">o </tspan><tspan class="e" x="13.03" y="14.4">cold:</tspan></text>
+  <text class="f" transform="translate(28.07 109.62)"><tspan x="0" y="0">cold.Concat(cold):</tspan></text>
+  <line class="i" x1="162.6" y1="8.33" x2="162.6" y2="43.34"/>
+  <line class="i" x1="284.02" y1="8.33" x2="284.02" y2="43.34"/>
+  <g>
+    <circle class="k" cx="188.91" cy="25.84" r="13.56"/>
+    <text class="g" transform="translate(185.64 29.39)"><tspan x="0" y="0">0</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="220.06" cy="25.84" r="13.56"/>
+    <text class="g" transform="translate(216.78 29.39)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="264.88" cy="25.84" r="13.56"/>
+    <text class="g" transform="translate(261.6 29.39)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <line id="d" data-name="source line" class="i" x1="284.11" y1="64.9" x2="405.53" y2="64.9"/>
+  <line class="i" x1="284.11" y1="47.4" x2="284.11" y2="82.4"/>
+  <line class="i" x1="405.53" y1="47.4" x2="405.53" y2="82.4"/>
+  <g>
+    <circle class="j" cx="310.42" cy="64.9" r="13.56"/>
+    <text class="g" transform="translate(307.14 68.45)"><tspan x="0" y="0">0</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="341.56" cy="64.9" r="13.56"/>
+    <text class="g" transform="translate(338.29 68.45)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="386.38" cy="64.9" r="13.56"/>
+    <text class="g" transform="translate(383.11 68.45)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="310.42" cy="105.87" r="13.56"/>
+    <text class="g" transform="translate(307.14 109.41)"><tspan x="0" y="0">0</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="341.56" cy="105.87" r="13.56"/>
+    <text class="g" transform="translate(338.29 109.41)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="j" cx="386.38" cy="105.87" r="13.56"/>
+    <text class="g" transform="translate(383.11 109.41)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="220.06" cy="105.87" r="13.56"/>
+    <text class="g" transform="translate(216.78 109.41)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="264.88" cy="105.87" r="13.56"/>
+    <text class="g" transform="translate(261.6 109.41)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="188.91" cy="105.87" r="13.56"/>
+    <text class="g" transform="translate(185.64 109.41)"><tspan x="0" y="0">0</tspan></text>
+  </g>
+  <line class="i" x1="405.53" y1="88.36" x2="405.53" y2="123.37"/>
+</svg>

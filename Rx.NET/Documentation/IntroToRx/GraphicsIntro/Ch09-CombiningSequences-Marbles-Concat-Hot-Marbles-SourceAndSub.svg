@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="457.73" height="173.11" viewBox="0 0 457.73 173.11">
+  <defs>
+    <style>
+      .f, .g {
+        font-family: Consolas, Consolas;
+      }
+
+      .g, .h, .i {
+        font-size: 12px;
+      }
+
+      .j {
+        fill: none;
+      }
+
+      .j, .k, .l {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .m {
+        letter-spacing: 0em;
+      }
+
+      .m, .n, .o, .p {
+        font-family: MyriadPro-Regular, 'Myriad Pro';
+      }
+
+      .k {
+        fill: #ff8b8b;
+      }
+
+      .n {
+        letter-spacing: 0em;
+      }
+
+      .q {
+        letter-spacing: 0em;
+      }
+
+      .r {
+        letter-spacing: 0em;
+      }
+
+      .h {
+        font-family: Tahoma, Tahoma;
+      }
+
+      .o {
+        letter-spacing: 0em;
+      }
+
+      .s {
+        letter-spacing: 0em;
+      }
+
+      .l {
+        fill: #8bffbc;
+      }
+
+      .t {
+        letter-spacing: -.01em;
+      }
+
+      .u {
+        letter-spacing: 0em;
+      }
+    </style>
+  </defs>
+  <line id="b" data-name="source line" class="j" x1="284.02" y1="107.09" x2="428.65" y2="107.09"/>
+  <line class="j" x1="428.65" y1="89.58" x2="428.65" y2="124.59"/>
+  <line class="j" x1="284.02" y1="91.45" x2="284.02" y2="126.46"/>
+  <g>
+    <circle class="k" cx="349" cy="107.09" r="13.56"/>
+    <text class="h" transform="translate(344.93 110.63)"><tspan x="0" y="0">D</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="407.15" cy="107.09" r="13.56"/>
+    <text class="h" transform="translate(403.79 110.63)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="295.62" cy="107.09" r="13.56"/>
+    <text class="h" transform="translate(292.02 110.63)"><tspan x="0" y="0">C</tspan></text>
+  </g>
+  <line class="j" x1="162.28" y1="129.33" x2="162.28" y2="164.33"/>
+  <line id="c" data-name="source line" class="j" x1="162.6" y1="25.84" x2="284.02" y2="25.84"/>
+  <line id="d" data-name="source line" class="j" x1="162.6" y1="146.83" x2="428.65" y2="146.83"/>
+  <text class="g" transform="translate(28.07 28.12)"><tspan x="0" y="0">cold:</tspan></text>
+  <text class="i" transform="translate(28.07 64.9)"><tspan class="p"><tspan class="s" x="0" y="0">E</tspan><tspan class="t" x="5.82" y="0">v</tspan><tspan class="r" x="11.47" y="0">e</tspan><tspan class="q" x="17.48" y="0">n</tspan><tspan class="r" x="24.1" y="0">ts </tspan><tspan class="u" x="35.36" y="0">a</tspan><tspan class="q" x="41.05" y="0">v</tspan><tspan class="r" x="46.78" y="0">ailable</tspan></tspan><tspan class="p" x="0" y="14.4">f</tspan><tspan class="n" x="3.5" y="14.4">r</tspan><tspan class="p" x="7.31" y="14.4">om </tspan><tspan class="f" x="26.45" y="14.4">hot:</tspan></text>
+  <text class="i" transform="translate(29.25 107.96)"><tspan class="f" x="0" y="0">Concat</tspan><tspan class="p" x="39.59" y="0" xml:space="preserve"> subsc</tspan><tspan class="m" x="70.45" y="0">r</tspan><tspan class="p" x="74.42" y="0">iption</tspan><tspan class="o" x="0" y="14.4">t</tspan><tspan class="p" x="3.9" y="14.4">o </tspan><tspan class="f" x="13.03" y="14.4">hot:</tspan></text>
+  <text class="g" transform="translate(28.07 150.58)"><tspan x="0" y="0">cold.Concat(hot):</tspan></text>
+  <line class="j" x1="162.6" y1="8.33" x2="162.6" y2="43.34"/>
+  <line class="j" x1="284.02" y1="8.33" x2="284.02" y2="43.34"/>
+  <g>
+    <circle class="l" cx="162.28" cy="25.84" r="13.56"/>
+    <text class="h" transform="translate(159.01 29.39)"><tspan x="0" y="0">0</tspan></text>
+  </g>
+  <g>
+    <circle class="l" cx="215.99" cy="25.84" r="13.56"/>
+    <text class="h" transform="translate(212.72 29.39)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="l" cx="260.81" cy="25.84" r="13.56"/>
+    <text class="h" transform="translate(257.53 29.39)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="l" cx="215.99" cy="146.83" r="13.56"/>
+    <text class="h" transform="translate(212.72 150.38)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="l" cx="260.81" cy="146.83" r="13.56"/>
+    <text class="h" transform="translate(257.53 150.38)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="l" cx="162.28" cy="146.83" r="13.56"/>
+    <text class="h" transform="translate(159.01 150.38)"><tspan x="0" y="0">0</tspan></text>
+  </g>
+  <line id="e" data-name="source line" class="j" x1="162.6" y1="66.35" x2="428.65" y2="66.35"/>
+  <line class="j" x1="428.65" y1="48.85" x2="428.65" y2="83.86"/>
+  <line class="j" x1="162.6" y1="48.85" x2="162.6" y2="83.86"/>
+  <g>
+    <circle class="k" cx="349" cy="66.35" r="13.56"/>
+    <text class="h" transform="translate(344.93 69.9)"><tspan x="0" y="0">D</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="407.15" cy="66.35" r="13.56"/>
+    <text class="h" transform="translate(403.79 69.9)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="195.61" cy="66.35" r="13.56"/>
+    <text class="h" transform="translate(192.02 69.9)"><tspan x="0" y="0">A</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="242.25" cy="66.35" r="13.56"/>
+    <text class="h" transform="translate(238.72 69.9)"><tspan x="0" y="0">B</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="295.62" cy="66.35" r="13.56"/>
+    <text class="h" transform="translate(292.02 69.9)"><tspan x="0" y="0">C</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="349" cy="146.83" r="13.56"/>
+    <text class="h" transform="translate(344.93 150.38)"><tspan x="0" y="0">D</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="407.15" cy="146.83" r="13.56"/>
+    <text class="h" transform="translate(403.79 150.38)"><tspan x="0" y="0">E</tspan></text>
+  </g>
+  <g>
+    <circle class="k" cx="295.62" cy="146.83" r="13.56"/>
+    <text class="h" transform="translate(292.02 150.38)"><tspan x="0" y="0">C</tspan></text>
+  </g>
+  <line class="j" x1="428.65" y1="129.33" x2="428.65" y2="164.33"/>
+</svg>

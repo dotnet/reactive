@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="456.19" height="128.83" viewBox="0 0 456.19 128.83">
+  <defs>
+    <style>
+      .d {
+        fill: none;
+      }
+
+      .d, .e {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .f {
+        letter-spacing: 0em;
+      }
+
+      .g {
+        font-size: 12px;
+      }
+
+      .g, .h {
+        font-family: Tahoma, Tahoma;
+      }
+
+      .i {
+        letter-spacing: -.01em;
+      }
+
+      .h {
+        font-size: 8px;
+      }
+
+      .j {
+        letter-spacing: -.13em;
+      }
+
+      .e {
+        fill: #8bffbc;
+      }
+
+      .k {
+        letter-spacing: 0em;
+      }
+
+      .l {
+        letter-spacing: 0em;
+      }
+
+      .m {
+        letter-spacing: 0em;
+      }
+    </style>
+  </defs>
+  <line id="b" data-name="source line" class="d" x1="2.45" y1="33.18" x2="454.17" y2="33.18"/>
+  <line id="c" data-name="Quiescent line" class="d" x1="2.45" y1="114.76" x2="455.49" y2="114.76"/>
+  <text class="g" transform="translate(0 10.36)"><tspan x="0" y="0">sou</tspan><tspan class="k" x="18.56" y="0">r</tspan><tspan x="22.83" y="0">ce</tspan></text>
+  <text class="g" transform="translate(0 87.09)"><tspan x="0" y="0">sou</tspan><tspan class="k" x="18.56" y="0">r</tspan><tspan x="22.83" y="0">ce.Quiescent</tspan><tspan class="f" x="90.47" y="0">(</tspan><tspan x="95.18" y="0">TimeSpan.F</tspan><tspan class="k" x="157.52" y="0">r</tspan><tspan x="161.79" y="0">om</tspan><tspan class="l" x="178.38" y="0">S</tspan><tspan x="185.09" y="0">econds(2), </tspan><tspan class="l" x="245.26" y="0">S</tspan><tspan x="251.97" y="0">chedule</tspan><tspan class="j" x="292.9" y="0">r</tspan><tspan x="295.61" y="0">.De</tspan><tspan class="i" x="313.69" y="0">f</tspan><tspan x="317.37" y="0">au</tspan><tspan class="l" x="330.36" y="0">l</tspan><tspan x="333.12" y="0">t)</tspan></text>
+  <g>
+    <circle class="e" cx="33.13" cy="33.18" r="13.56"/>
+    <text class="g" transform="translate(29.85 36.73)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+  <g>
+    <circle class="e" cx="64.21" cy="33.18" r="13.56"/>
+    <text class="g" transform="translate(60.93 36.73)"><tspan x="0" y="0">2</tspan></text>
+  </g>
+  <g>
+    <circle class="e" cx="117.29" cy="114.76" r="13.56"/>
+    <text class="h" transform="translate(107.4 117.16)"><tspan x="0" y="0">[1, 2]</tspan></text>
+  </g>
+  <g>
+    <circle class="e" cx="302.83" cy="114.76" r="13.56"/>
+    <text class="h" transform="translate(290.84 117.16)"><tspan x="0" y="0">[3,</tspan><tspan class="m" x="9.85" y="0">4</tspan><tspan x="14.14" y="0">,5]</tspan></text>
+  </g>
+  <g>
+    <circle class="e" cx="400.6" cy="114.76" r="13.56"/>
+    <text class="h" transform="translate(395.35 117.16)"><tspan x="0" y="0">[6]</tspan></text>
+  </g>
+  <g>
+    <circle class="e" cx="175.77" cy="33.18" r="13.56"/>
+    <text class="g" transform="translate(172.49 36.73)"><tspan x="0" y="0">3</tspan></text>
+  </g>
+  <g>
+    <circle class="e" cx="218.04" cy="33.18" r="13.56"/>
+    <text class="g" transform="translate(214.77 36.73)"><tspan x="0" y="0">4</tspan></text>
+  </g>
+  <g>
+    <circle class="e" cx="249.75" cy="33.18" r="13.56"/>
+    <text class="g" transform="translate(246.47 36.73)"><tspan x="0" y="0">5</tspan></text>
+  </g>
+  <g>
+    <circle class="e" cx="347.51" cy="33.18" r="13.56"/>
+    <text class="g" transform="translate(344.23 36.73)"><tspan x="0" y="0">6</tspan></text>
+  </g>
+  <line class="d" x1="2.45" y1="19.62" x2="2.45" y2="46.75"/>
+  <line class="d" x1="2.45" y1="101.2" x2="2.45" y2="128.33"/>
+  <polyline class="d" points="441.12 19.62 454.17 33.13 442.07 45.65"/>
+  <polyline class="d" points="442.44 101.2 455.49 114.7 443.39 127.23"/>
+</svg>
