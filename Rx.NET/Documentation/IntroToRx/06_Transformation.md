@@ -1,7 +1,3 @@
----
-title: Transformation of sequences
----
-
 # Transformation of sequences
 
 The values from the sequences we consume are not always in the format we need. Sometimes there is more information than we need, and we need to pick out just the values of interest. Sometimes each value needs to be expanded either into a richer object or into more values.

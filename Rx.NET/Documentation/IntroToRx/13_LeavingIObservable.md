@@ -1,7 +1,3 @@
----
-title: Leaving Rx's World
----
-
 # Leaving Rx's World
 
 An observable sequence is a useful construct, especially when we have the power of LINQ to compose complex queries over it. Even though we recognize the benefits of the observable sequence, sometimes we must leave the `IObservable<T>` paradigm. This is necessary when we need to integrate with an existing non-Rx-based API (e.g. one that uses events or `Task<T>`). You might leave the observable paradigm if you find it easier for testing, or it may simply be easier for you to learn Rx by moving between an observable paradigm and a more familiar one.

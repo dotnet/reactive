@@ -1,7 +1,3 @@
----
-title : Appendix C Usage guidelines
----
-
 # Appendix C: Usage guidelines
 
 This is a list of quick guidelines intended to help you when writing Rx queries.

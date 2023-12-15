@@ -1,7 +1,3 @@
----
-title: Publishing operators
----
-
 # Publishing operators
 
 Hot sources need to be able to deliver events to multiple subscribers. While we can implement the subscriber tracking ourselves, it can be easier to write an oversimplified source that works only for a single subscriber. And although that won't be a full implementation of `IObservable<T>`, that won't matter if we then use one of Rx's _multicast_ operators to publish it as a multi-subscriber hot source. The example in ["Representing Filesystem Events in Rx"](03_CreatingObservableSequences.md#representing-filesystem-events-in-rx) used this trick, but as you'll see in this chapter there are a few variations on the theme.

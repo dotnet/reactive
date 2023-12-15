@@ -1,7 +1,3 @@
----
-title: PART 2
----
-
 # PART 2 - From Events to Insights 
 
 We live in an age where data is being created, stored, and distributed at a phenomenal rate. Consuming this data can be overwhelming, like trying to drink directly from a fire hose. We need the ability to identify the important data, meaning we need ways to determine what is and is not relevant. We need to take groups of data and process them collectively to discover patterns or other information that might not be apparent from any individual raw input. Users, customers and managers need to do this with more data than ever before, while still delivering higher performance and more useful outputs.

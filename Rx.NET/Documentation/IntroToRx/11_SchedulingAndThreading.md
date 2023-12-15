@@ -1,7 +1,3 @@
----
-title: Scheduling and threading
----
-
 # Scheduling and Threading
 
 Rx is primarily a system for working with _data in motion_ asynchronously. If we are dealing with multiple information sources, they may well generate data concurrently. We may want some degree of parallelism when processing data to achieve our scalability targets. We will need control over these aspects of our system.

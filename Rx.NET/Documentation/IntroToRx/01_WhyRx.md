@@ -1,7 +1,3 @@
----
-title : Why Rx?
----
-
 # PART 1 - Getting started
 
 Rx is a .NET library for processing event streams. Why might you want that?

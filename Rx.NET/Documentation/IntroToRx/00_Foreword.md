@@ -1,7 +1,3 @@
----
-title : Foreword
----
-
 # Introduction to Rx
 By Ian Griffiths and Lee Campbell
    

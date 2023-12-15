@@ -1,7 +1,3 @@
----
-title : Key Types
----
-
 # Key types
 
 Rx is a powerful framework that can greatly simplify code that responds to events. But to write good Reactive code you have to understand the basic concepts. The fundamental building block of Rx is an interface called `IObservable<T>`. Understanding this, and its counterpart `IObserver<T>`, is the key to success with Rx.

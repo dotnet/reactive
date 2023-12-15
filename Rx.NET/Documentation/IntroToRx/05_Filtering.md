@@ -1,7 +1,3 @@
----
-title : Filtering
----
-
 # Filtering
 
 Rx provides us with tools to take potentially vast quantities of events and process these to produce higher level insights. This can often involve a reduction in volume. A small number of events may be more useful than a large number if the individual events in that lower-volume stream are, on average, more informative. The simplest mechanisms for achieving this involve simply filtering out events we don't want. Rx defines several operators that can do this.

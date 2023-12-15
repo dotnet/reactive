@@ -1,7 +1,3 @@
----
-title: Partitioning
----
-
 # Partitioning
 
 Rx can split a single sequence into multiple sequences. This can be useful for distributing items over many subscribers. When performing analytics, it can be useful to take aggregates on partitions. You may already be familiar with the standard LINQ operators `GroupBy`. Rx supports this, and also defines some of its own.

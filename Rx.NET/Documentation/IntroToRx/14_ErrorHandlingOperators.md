@@ -1,6 +1,4 @@
----
-title: Error Handling Operators
----
+# Error Handling Operators
 
 Exceptions happen. Some exceptions are inherently avoidable, occurring only because of bugs in our code. For example, if we put the CLR into a situation where it has to raise a `DivideByZeroException`, we've done something wrong. But there are plenty of exceptions that cannot be prevented with defensive coding. For example, exceptions relating to I/O or networking failures such as like `FileNotFoundException` or `TimeoutException` can be caused by environmental factors outside of our code's control. In these cases, we need to handle the exception gracefully. The kind of handling will depend on the context. It might be appropriate to provide some sort of error message to the user; in some scenarios logging the error might be a more appropriate response. If the failure is likely to be transient, we could try to recover by retrying the operation that failed.
 

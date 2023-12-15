@@ -1,7 +1,3 @@
----
-title : Appendix D Rx's Algebraic Underpinnings
----
-
 # Appendix D: Rx's Algebraic Underpinnings
 
 Rx operators can be combined together in more or less any way you can imagine, and they generally combine without any problems. The fact that this works is not merely a happy accident. In general, integration between software components is often one of the largest sources of pain in software development, so the fact that it works so well is remarkable. This is in large part thanks to the fact that Rx relies on some underlying theory. Rx has been designed so that you don't need to know these details to use it, but curious developers typically want to know these things.

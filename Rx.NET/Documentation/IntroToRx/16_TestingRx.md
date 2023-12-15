@@ -1,7 +1,3 @@
----
-title: Testing Rx
----
-
 # Testing Rx
 
 Modern quality assurance standards demand comprehensive automated testing that can help evaluate and prevent bugs. It is good practice to have a suite of tests that verify correct behaviour and to run this as part of the build process to detect regressions early.

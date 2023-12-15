@@ -1,7 +1,3 @@
----
-title : Appendix B Disposables
----
-
 # Appendix B: Disposables
     
 Rx represents subscriptions using the existing `IDisposable` interface. This design choice means we can use existing language features that know how to work with this interface. Rx also provides several public implementations of `IDisposable`. These can be found in the `System.Reactive.Disposables` namespace. This appendix briefly describes each of them.

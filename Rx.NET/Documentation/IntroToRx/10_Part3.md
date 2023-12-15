@@ -1,7 +1,3 @@
----
-title: Getting pragmatic
----
-
 # PART 3 - Getting pragmatic.
 
 The first part of this book focused on the basic ideas and types of Rx. In the second part, I showed the operators Rx offers, enabling us to define the transformations and computations we want to apply to our source data. This second part was essentially functional programming. Rx's operators are mostly like mathematical functions, in that they will invariably behave in the same way for particular inputs. They are unaffected by the state of the world around them, and they also do nothing to change its state. In functional programming, such mechanisms are sometimes described as _pure_.
