@@ -10,7 +10,7 @@ In this chapter, we'll show how you can take advantage of Rx's testability in yo
 
 It's common to deal with timing in Rx. As you've seen, it offers several operators that take time into account, and this presents a challenge. We don't want to introduce slow tests, because that can make test suites take too long to execute, but how might we test an application that waits for the user to stop typing for half a second before submitting a query? Non-deterministic tests can also be a problem: when there are race conditions it can be very hard to recreate these reliably.
 
-The [Scheduling and Threading](./11_SchedulingAndThreading.md) chapter described how schedulers use a virtualized representation of time. This is critical for enabling tests to validate time-related behaviour. It lets us control Rx's perception of the progression of time, enabling us to write tests that logically take seconds, but which execute in microseconds.
+The [Scheduling and Threading](11_SchedulingAndThreading.md) chapter described how schedulers use a virtualized representation of time. This is critical for enabling tests to validate time-related behaviour. It lets us control Rx's perception of the progression of time, enabling us to write tests that logically take seconds, but which execute in microseconds.
 
 Consider this example, where we create a sequence that publishes values every second for five seconds.
 
@@ -273,8 +273,7 @@ public void Testing_with_test_scheduler()
     var actualValues = new List<long>();
     var scheduler = new TestScheduler();
 
-    var interval = Observable.Interval(TimeSpan.FromSeconds(1), scheduler)
-                             .Take(5);
+    var interval = Observable.Interval(TimeSpan.FromSeconds(1), scheduler).Take(5);
     
     interval.Subscribe(actualValues.Add);
 

@@ -16,7 +16,7 @@ So although each call might come in on a different thread, the calls are strictl
 
 Rx operators that receive incoming notifications as well as producing them will notify their observers on whatever thread the incoming notification happened to arrive on. Suppose you have a sequence of operators like this:
 
-```cs
+```csharp
 source
     .Where(x => x.MessageType == 3)
     .Buffer(10)
@@ -44,7 +44,7 @@ You will sometimes hear Rx described as having a _free threaded_ model. All that
 
 An upshot of this is that it's typically the original source that determines which thread is used. This next example illustrates this by creating a subject, then calling `OnNext` on various threads and reporting the thread id.
 
-```cs
+```csharp
 Console.WriteLine($"Main thread: {Environment.CurrentManagedThreadId}");
 var subject = new Subject<string>();
 
@@ -86,7 +86,7 @@ In each case, the handler passed to `Subscribe` was called back on the same thre
 
 Some notifications will not be the immediate result of a source providing an item. For example, Rx offers a [`Delay`](12_Timing.md#delay) operator, which time shifts the delivery of items. This next example is based on the preceding one, with the main difference being that we no longer subscribe directly to the source. We go via `Delay`:
 
-```cs
+```csharp
 Console.WriteLine($"Main thread: {Environment.CurrentManagedThreadId}");
 var subject = new Subject<string>();
 
@@ -149,13 +149,14 @@ Schedulers do three things:
 
 Here's a simple example to explore the first two of those:
 
-```cs
+```csharp
 Console.WriteLine($"Main thread: {Environment.CurrentManagedThreadId}");
 
 Observable
     .Range(1, 5)
-    .Subscribe(
-    m => Console.WriteLine($"Received {m} on thread: {Environment.CurrentManagedThreadId}"));
+    .Subscribe(m => 
+      Console.WriteLine(
+        $"Received {m} on thread: {Environment.CurrentManagedThreadId}"));
 
 Console.WriteLine("Subscribe returned");
 Console.ReadLine();
@@ -175,12 +176,13 @@ Subscribe returned
 
 Looking at the first two items in our list of what schedulers do, we can see that the context in which this has executed the work is the thread on which I called `Subscribe`. And as for when it has decided to execute the work, it has decided to do it all before `Subscribe` returns. So you might think that `Range` immediately produces all of the items we've asked for and then returns. However, it's not quite as simple as that. Let's look at what happens if we have multiple `Range` instances running simultaneously. This introduces an extra operator: a `SelectMany` that calls `Range` again:
 
-```cs
+```csharp
 Observable
     .Range(1, 5)
     .SelectMany(i => Observable.Range(i * 10, 5))
-    .Subscribe(
-    m => Console.WriteLine($"Received {m} on thread: {Environment.CurrentManagedThreadId}"));
+    .Subscribe(m => 
+      Console.WriteLine(
+        $"Received {m} on thread: {Environment.CurrentManagedThreadId}"));
 ```
 
 The output shows that `Range` doesn't in fact necessarily produce all of its items immediately:
@@ -216,7 +218,7 @@ Subscribe returned
 
 The first nested `Range` produces by the `SelectMany` callback produces a couple of values (10 and 11) but then the second one manages to get its first value out (20) before the first one produces its third (12). You can see there's some interleaving of progress here. So although the context in which work is executed continues to be the thread on which we invoked `Subscribe`, the second choice the scheduler has to make—when to execute the work—is more subtle than it first seems. This tells us that `Range` is not as simple as this naive implementation:
 
-```cs
+```csharp
 public static IObservable<int> NaiveRange(int start, int count)
 {
     return System.Reactive.Linq.Observable.Create<int>(obs =>
@@ -233,7 +235,7 @@ public static IObservable<int> NaiveRange(int start, int count)
 
 If `Range` worked like that, this code would produce all of the items from the first range returned by the `SelectMany` callback before moving on to the next. In fact, Rx does provide a scheduler that would give us that behaviour if that's what we want. This example passes `ImmediateScheduler.Instance` to the nested `Observable.Range` call:
 
-```cs
+```csharp
 Observable
     .Range(1, 5)
     .SelectMany(i => Observable.Range(i * 10, 5, ImmediateScheduler.Instance))
@@ -278,7 +280,7 @@ Notice that the `Subscribe returned` message appears last in both examples. So a
 
 Not all schedulers have this characteristic. Here's a variation on the earlier example in which we have just a single call to `Range`, without any nested observables. This time I'm asking it to use the `TaskPoolScheduler`.
 
-```cs
+```csharp
 Observable
     .Range(1, 5, TaskPoolScheduler.Default)
     .Subscribe(
@@ -303,7 +305,7 @@ There's one other very significant difference with this scheduler: notice that t
 
 What if we use the `TaskPoolScheduler` in the example with nested observables? This uses it just on the inner call to `Range`, so the outer one will still use the default `CurrentThreadScheduler`:
 
-```cs
+```csharp
 Observable
     .Range(1, 5)
     .SelectMany(i => Observable.Range(i * 10, 5, TaskPoolScheduler.Default))
@@ -346,13 +348,21 @@ Since we have only a single observer in this example, the rules of Rx require it
 
 I've not yet talked about the scheduler's third job: keeping track of time. This doesn't arise with `Range` because it attempts to produce all of its items as quickly as it can. But for the `Delay` operator I showed in the [Timed Invocation](#timed-invocation) section, timing is obviously a critical element. In fact this would be a good point to show the API that schedulers offer:
 
-```cs
+```csharp
 public interface IScheduler
 {
     DateTimeOffset Now { get; }
-    IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action);
-    IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action);
-    IDisposable Schedule<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action);
+    
+    IDisposable Schedule<TState>(TState state, 
+                                 Func<IScheduler, TState, IDisposable> action);
+    
+    IDisposable Schedule<TState>(TState state, 
+                                 TimeSpan dueTime, 
+                                 Func<IScheduler, TState, IDisposable> action);
+    
+    IDisposable Schedule<TState>(TState state, 
+                                 DateTimeOffset dueTime, 
+                                 Func<IScheduler, TState, IDisposable> action);
 }
 ```
 
@@ -384,7 +394,7 @@ The `CurrentThreadScheduler` is very similar to the `ImmediateScheduler`. The di
 
 To understand what happens, it's helpful to know how sources that produce multiple items in quick succession, such as the [`ToObservable` extension method for `IEnumerable<T>`](03_CreatingObservableSequences.md#from-ienumerablet) or [`Observable.Range`](03_CreatingObservableSequences.md#observablerange), use schedulers. These kinds of operators do not use normal `for` or `foreach` loops. They typically schedule a new work item for each iteration (unless the scheduler happens to make special provisions for long-running work). Whereas the `ImmediateScheduler` will run such work immediately, the `CurrentThreadScheduler` checks to see if it is already processing a work item. We saw that with this example from earlier:
 
-```cs
+```csharp
 Observable
     .Range(1, 5)
     .SelectMany(i => Observable.Range(i * 10, 5))
@@ -424,7 +434,7 @@ The `EventLoopScheduler` provides one-at-a-time scheduling, queuing up newly sch
 
 Unlike the schedulers we've examined so far, there is no static property for obtaining an `EventLoopScheduler`. That's because each one has its own thread, so you need to create one explicitly. It offers two constructors:
 
-```cs
+```csharp
 public EventLoopScheduler()
 public EventLoopScheduler(Func<ThreadStart, Thread> threadFactory)
 ```
@@ -433,7 +443,7 @@ The first creates a thread for you. The second lets you control the thread creat
 
 The `EventLoopScheduler` implements `IDisposable`, and calling Dispose will allow the thread to terminate. This can work nicely with the `Observable.Using` method. The following example shows how to use an `EventLoopScheduler` to iterate over all contents of an `IEnumerable<T>` on a dedicated thread, ensuring that the thread exits once we have finished:
 
-```cs
+```csharp
 IEnumerable<int> xs = GetNumbers();
 Observable
     .Using(
@@ -484,7 +494,7 @@ The discussion so far as mostly focused on the 2nd and 3rd features. When it com
 
 These methods do what their names suggest. If you use `SubscribeOn`, then when you call `Subscribe` on the resulting `IObservable<T>` it arranges to call the original `IObservable<T>`'s `Subscribe` method via the specified scheduler. Here's an example:
 
-```cs
+```csharp
 Console.WriteLine($"[T:{Environment.CurrentManagedThreadId}] Main thread");
 
 Observable
@@ -495,8 +505,9 @@ Observable
         Console.WriteLine($"[T:{t.ManagedThreadId}] Created thread for EventLoopScheduler");
         return t;
     }))
-    .Subscribe(
-        tick => Console.WriteLine($"[T:{Environment.CurrentManagedThreadId}] {DateTime.Now}: Tick {tick}"));
+    .Subscribe(tick => 
+          Console.WriteLine(
+            $"[T:{Environment.CurrentManagedThreadId}] {DateTime.Now}: Tick {tick}"));
 
 Console.WriteLine($"[T:{Environment.CurrentManagedThreadId}] {DateTime.Now}: Main thread exiting");
 ```
@@ -521,13 +532,13 @@ This often catches people out. The scheduler on which you subscribe to an observ
 
 Not all sources are completely unaffected by the context in which their `Subscribe` is invoked, though. If I were to replace this line:
 
-```cs
+```csharp
     .Interval(TimeSpan.FromSeconds(1))
 ```
 
 with this:
 
-```cs
+```csharp
     .Range(1, 5)
 ```
 
@@ -552,12 +563,12 @@ When it comes to emitting items, most of the sources Rx supplies fall into one o
 
 As long as a source follows [the fundamental rules of Rx sequences](02_KeyTypes.md#the-fundamental-rules-of-rx-sequences), it's allowed to invoke its observer's methods from any context it likes. It can choose to accept a scheduler as input and to use that, but it's under no obligation to. And if you have an unruly source of this kind that you'd like to tame, that's where the `ObserveOn` extension method comes in. Consider the following rather daft example:
 
-```cs
+```csharp
 Observable
     .Interval(TimeSpan.FromSeconds(1))
     .SelectMany(tick => Observable.Return(tick, NewThreadScheduler.Default))
-    .Subscribe(
-        tick => Console.WriteLine($"{DateTime.Now}-{Environment.CurrentManagedThreadId}: Tick {tick}"));
+    .Subscribe(tick => 
+      Console.WriteLine($"{DateTime.Now}-{Environment.CurrentManagedThreadId}: Tick {tick}"));
 ```
 
 This deliberately causes every notification to arrive on a different thread, as this output shows:
@@ -573,13 +584,13 @@ Main thread: 1
 
 (It's achieving this by calling `Observable.Return` for every single tick that emerges from `Interval`, and telling `Return` to use the `NewThreadScheduler`. Each such call to `Return` will create a new thread. This is a terrible idea, but it is an easy way to get a source that calls from a different context every time.) If I want to impose some order, I can add a call to `ObserveOn`:
 
-```cs
+```csharp
 Observable
     .Interval(TimeSpan.FromSeconds(1))
     .SelectMany(tick => Observable.Return(tick, NewThreadScheduler.Default))
     .ObserveOn(new EventLoopScheduler())
-    .Subscribe(
-        tick => Console.WriteLine($"{DateTime.Now}-{Environment.CurrentManagedThreadId}: Tick {tick}"));
+    .Subscribe(tick => 
+      Console.WriteLine($"{DateTime.Now}-{Environment.CurrentManagedThreadId}: Tick {tick}"));
 ```
 
 I've created an `EventLoopScheduler` here because it creates a single thread, and runs every scheduled work item on that thread. The output now shows the same thread id (13) every time:
@@ -612,7 +623,7 @@ This is a great fit for Rx: responding to events, potentially composing multiple
 
 Consider a WPF application that used Rx to populate an `ObservableCollection<T>`. You could use `SubscribeOn` to ensure that the main work was not done on the UI thread, followed by `ObserveOn` to ensure you were notified back on the correct thread. If you failed to use the `ObserveOn` method, then your `OnNext` handlers would be invoked on the same thread that raised the notification. In most UI frameworks, this would cause some sort of not-supported/cross-threading exception. In this example, we subscribe to a sequence of `Customers`. I'm using `Defer` so that if `GetCustomers` does any slow initial work before returning its `IObservable<Customer>`, that won't happen until we subscribe. We then use `SubscribeOn` to call that method and perform the subscription on a task pool thread. Then we ensure that as we receive `Customer` notifications, we add them to the `Customers` collection on the `Dispatcher`.
 
-```cs
+```csharp
 Observable
     .Defer(() => _customerService.GetCustomers())
     .SubscribeOn(TaskPoolScheduler.Default)
@@ -636,7 +647,7 @@ In a later chapter, [Testing Rx](16_TestingRx.md), we will look at how Rx improv
 
 Rx can simplify handling of concurrency, but it is not immune deadlock. Some calls (like `First`, `Last`, `Single` and `ForEach`) are blocking—they do not return until something that they are waiting for occurs. The following example shows that this makes it very easy for deadlock to occur:
 
-```cs
+```csharp
 var sequence = new Subject<int>();
 
 Console.WriteLine("Next line should lock the system.");
@@ -653,7 +664,7 @@ This is an oversimplified example to illustrate the behaviour, and we would neve
 
 The next example may be a little harder to detect, but is only small step away from our first, unrealistic example. The basic idea is that we've got a subject that represents button clicks in a user interface. Event handlers representing user input are invoked by the UI framework. We just provide the framework with event handler methods, and it calls them for us whenever the event of interest, such as a button being clicked, occurs. This code calls `First` on the subject representing clicks, but it's less obvious that this might cause a problem here than it was in the preceding example:
 
-```cs
+```csharp
 public Window1()
 {
     InitializeComponent();
@@ -690,7 +701,7 @@ There's nothing intrinsically wrong with that use of `First`. (Risky, yes, but t
 
 You might be starting to get the impression that we should try to avoid blocking calls in Rx. This is a good rule of thumb. We can fix the code above by commenting out the line that uses `First`, and uncommenting the one below it containing this code:
 
-```cs
+```csharp
 _subject.FirstAsync(1).Subscribe(value => Value = value);
 ```
 
@@ -698,7 +709,7 @@ This uses `FirstAsync` which does the same job, but with a different approach. I
 
 If you do a lot of UI development, that last example might have seemed obviously wrong to you: we had code in the constructor for a window that wouldn't allow the constructor to complete until the user clicked a button in that window. The window isn't even going to appear until construction is complete so it makes no sense to wait for the user to click a button. That button's not even going to be visible on screen until after our constructor completes. Moreover, seasoned UI developers know that you don't just stop the world and wait for a specific action from the user. (Even modal dialogs, which effectively do demand a response before continuing, don't block the UI thread.) But as the next example shows, it's easy for problems to be harder to see. In this example, a button's click handler will try to get the first value from an observable sequence exposed via an interface.
 
-```cs
+```csharp
 public partial class Window1 : INotifyPropertyChanged
 {
     //Imagine DI here.
@@ -737,7 +748,7 @@ Unlike the earlier example, this does not attempt to block progress in the const
 
 So even if we've learned to be suspicious of blocking operations such as `First`, it's possible that it's OK in this example. It's not possible to tell for certain by looking at this code alone. It all depends on what sort of an observable `GetTemperature` returns, and the manner in which it produces its items. That call to `First` will block on the UI thread until a first item becomes available, so this will produce a deadlock if the production of that first item requires access to the UI thread. Here's a slightly contrived way to create that problem:
 
-```cs
+```csharp
 class MyService : IMyService
 {
     public IObservable<int> GetTemperature()
@@ -791,19 +802,27 @@ Schedulers provide some features that are mainly of interest when writing observ
 
 All of the methods defined by `IScheduler` take a `state` argument. Here's the interface definition again:
 
-```cs
+```csharp
 public interface IScheduler
 {
     DateTimeOffset Now { get; }
-    IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action);
-    IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action);
-    IDisposable Schedule<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action);
+
+    IDisposable Schedule<TState>(TState state, 
+                                 Func<IScheduler, TState, IDisposable> action);
+    
+    IDisposable Schedule<TState>(TState state, 
+                                 TimeSpan dueTime, 
+                                 Func<IScheduler, TState, IDisposable> action);
+    
+    IDisposable Schedule<TState>(TState state, 
+                                 DateTimeOffset dueTime, 
+                                 Func<IScheduler, TState, IDisposable> action);
 }
 ```
 
 The scheduler does not care what is in this `state` argument. It just passes it unmodified into your callback when it executes your work item. This provides one way to provide context for that callback. It's not strictly necessary: the delegate we pass as the `action` can incorporate whatever state we need. The easiest way to do that is to capture variables in a lambda. However, if you look at the [Rx source code](https://github.com/dotnet/reactive/) you will find that it typically doesn't do that. For example, the heart of the `Range` operator is a method called `LoopRec` and if you look at [the source for `LoopRec`](https://github.com/dotnet/reactive/blob/95d9ea9d2786f6ec49a051c5cff47dc42591e54f/Rx.NET/Source/src/System.Reactive/Linq/Observable/Range.cs#L55-L73) you'll see that it includes this line:
 
-```cs
+```csharp
 var next = scheduler.Schedule(this, static (innerScheduler, @this) => @this.LoopRec(innerScheduler));
 ```
 
@@ -813,7 +832,7 @@ Notice that the lambda passed to `Schedule` has been annotated with `static`. Th
 
 Couldn't the Rx library have used a more straightforward approach? We could choose not to use the state, passing a `null` state to scheduler, and then discarding the state argument passed to our callback:
 
-```cs
+```csharp
 // Less weird, but less efficient:
 var next = scheduler.Schedule<object?>(null, (innerScheduler, _) => LoopRec(innerScheduler));
 ```
@@ -828,7 +847,7 @@ I talked earlier about time-based operators, and also about the two time-based m
 
 You can use the `TimeSpan` overload like this:
 
-```cs
+```csharp
 var delay = TimeSpan.FromSeconds(1);
 Console.WriteLine("Before schedule at {0:o}", DateTime.Now);
 
@@ -852,11 +871,13 @@ You can specify a specific point in time to schedule the task with the `DateTime
 
 Each of the overloads to `Schedule` returns an `IDisposable`, and calling `Dispose` on this will cancel the scheduled work. In the previous example, we scheduled work to be invoked in one second. We could cancel that work by disposing of the return value.
 
-```cs
+```csharp
 var delay = TimeSpan.FromSeconds(1);
 Console.WriteLine("Before schedule at {0:o}", DateTime.Now);
 
-var workItem = scheduler.Schedule(delay, () => Console.WriteLine("Inside schedule at {0:o}", DateTime.Now));
+var workItem = scheduler.Schedule(delay, 
+   () => Console.WriteLine("Inside schedule at {0:o}", DateTime.Now));
+
 Console.WriteLine("After schedule at  {0:o}", DateTime.Now);
 
 workItem.Dispose();
@@ -877,7 +898,7 @@ You may be wondering how this mechanism can be any use: the work item callback n
 
 To illustrate cancellation in operation, this slightly unrealistic example runs some work as a `Task` to enable it to continue after our callback returns. It just fakes some work by performing a spin wait and adding values to the `list` argument. The key here is that we create a `CancellationToken` to be able to tell the task we want it to stop, and we return an `IDisposable` that puts this token in to a cancelled state.
 
-```cs
+```csharp
 public IDisposable Work(IScheduler scheduler, List<int> list)
 {
     CancellationTokenSource tokenSource = new();
@@ -915,7 +936,7 @@ public IDisposable Work(IScheduler scheduler, List<int> list)
 
 This code schedules the above code and allows the user to cancel the processing work by pressing Enter
 
-```cs
+```csharp
 List<int> list = new();
 Console.WriteLine("Enter to quit:");
 
@@ -945,7 +966,7 @@ The problem here is that we have introduced explicit use of `Task` so we are inc
 
 In addition to the `IScheduler` methods, Rx defines various overloads of `Schedule` in the form of extension methods. Some of these take some strange looking delegates as parameters. Take special note of the final parameter in each of these overloads of the `Schedule` extension method.
 
-```cs
+```csharp
 public static IDisposable Schedule(
     this IScheduler scheduler, 
     Action<Action> action)
@@ -987,7 +1008,7 @@ Each of these overloads take a delegate "action" that allows you to call "action
 
 This example uses the simplest recursive overload. We have an `Action` that can be called recursively.
 
-```cs
+```csharp
 Action<Action> work = (Action self) =>
 {
     Console.WriteLine("Running");

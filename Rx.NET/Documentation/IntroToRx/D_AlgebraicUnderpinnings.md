@@ -6,7 +6,7 @@ The earlier sections of the book have already talked about one formal aspect of 
 
 The `IObserver<T>` grammar is important. Components rely on it to ensure correct operation. Consider the `Where` operator, for example. It provides its own `IObserver<T>` implementation with which it subscribes to the underlying source. This receives items from that source, and then decides which to forward to the observer that subscribed to the `IObservable<T>` presented by `Where`. You could imagine it looking something like this:
 
-```cs
+```csharp
 public class OverSimplifiedWhereObserver<T> : IObserver<T>
 {
     private IObserver<T> downstreamSubscriber;
@@ -81,7 +81,7 @@ Critically, to qualify as a monad, the two operations just described (return and
 
 So what does bind actually look like? Here's how it looks for `IEnumerable<T>`:
 
-```cs
+```csharp
 public static IEnumerable<TResult> SelectMany<TSource, TResult> (
     this IEnumerable<TSource> source,
     Func<TSource,IEnumerable<TResult>> selector);
@@ -93,7 +93,7 @@ But we've now got a little too specific. Even if we're looking specifically at L
 
 The mathematical definition of a monadic bind has the same essential shape, it just doesn't dictate a particular behaviour. So any monad will have a bind operation that takes two inputs: an instance of the monadic type constructed for some input value type (`TSource`), and a function that takes a `TSource` as its input and produces an instance of the monadic type constructed for some output value type (`TResult`). When you invoke bind with these two inputs the result is an instance of the monadic type constructed for the output value type. We can't precisely represent this general idea in C#'s type system, but this sort of gives the broad flavour:
 
-```cs
+```csharp
 // An impressionistic sketch of the general form of a monadic bind
 public static M<TResult> SelectMany<TSource, TResult> (
     this M<TSource> source,
@@ -118,7 +118,7 @@ Let's look at each of these in a bit more detail
 
 This law means that if you pass some value `x` into `Return` and then pass the result as one of the inputs to `SelectMany` where the other input is a function `SomeFunc`, then the result should be identical to just passing `x` directly into `SomeFunc`. For example:
 
-```cs
+```csharp
 // Given a function like this:
 //  IObservable<bool> SomeFunc(int)
 // then these two should be identical.
@@ -140,7 +140,7 @@ So this law essentially formalizes the idea that `SelectMany` shouldn't add or r
 
 This law means that if you pass `Return` as the function input to `SelectMany`, and then pass some value of the constructed monadic type in as the other argument, you should get that same value as the output. For example:
 
-```cs
+```csharp
 // These two should be identical.
 IObservable<int> o1 = GetAnySource();
 IObservable<int> o2 = o1.SelectMany(Observable.Return);
@@ -152,7 +152,7 @@ By using `Return` as the function for `SelectMany`, we are essentially asking to
 
 Suppose we have two functions, `Tx1` and `Tx2`, each of a form suitable for passing as the argument to `SelectMany`. There are two ways we could apply these:
 
-```cs
+```csharp
 // These two should be identical.
 IObservable<int> o1 = source.SelectMany(x => Tx1(x).SelectMany(Tx2));
 IObservable<int> o2 = source.SelectMany(x => Tx1(x)).SelectMany(Tx2);
@@ -160,7 +160,7 @@ IObservable<int> o2 = source.SelectMany(x => Tx1(x)).SelectMany(Tx2);
 
 The difference here is just a slight change in the placements of the parentheses: all that changes is whether the call to `SelectMany` on the right-hand side is invoked inside the function passed to the other `SelectMany`, or it is invoked on the result of the other `SelectMany`. This next example adjusts the layout, and also replaces the lambda `x => Tx1(x)` with the exactly equivalent `Tx1`, which might make the difference in structure a bit easier to see:
 
-```cs
+```csharp
 IObservable<int> o1 = source
     .SelectMany(x => Tx1(x).SelectMany(Tx2));
 IObservable<int> o2 = source
@@ -172,14 +172,14 @@ The third law says that either of these should have the same effect. It shouldn'
 
 An informal way to think about this is that `SelectMany` effectively applies two operations: a transformation and an unwrap. The transformation is defined by whatever function you pass to `SelectMany`, but because that function returns the monad type (in LINQ terms it returns a container which may contain any number of items) `SelectMany` unwraps each container returned when it passes an item to the function, in order to collect all the items together into the single container it ultimately returns. When you nest this sort of operation, it doesn't matter which order that unwrapping occurs in. For example, consider these functions:
 
-```cs
+```csharp
 IObservable<int> Tx1(int i) => Observable.Range(1, i);
 IObservable<string> Tx2(int i) => Observable.Return(i.ToString());
 ```
 
 The first converts a number into a range of numbers of the same length. `1` becomes `[1]`, `3` becomes `[1,2,3]` and so on. Before we get to `SelectMany`, imagine what will happen if we use this with `Select` on an observable source that produces a range of numbers:
 
-```cs
+```csharp
 IObservable<int> input = Observable.Range(1, 3); // [1,2,3]
 IObservable<IObservable<int>> expandTx1 = input.Select(Tx1);
 ```
@@ -196,7 +196,7 @@ We get a sequence of sequences. `expand2` is effectively this:
 
 If instead we had used `SelectMany`:
 
-```cs
+```csharp
 IObservable<int> expandTx1Collect = input.SelectMany(Tx1);
 ```
 
@@ -214,7 +214,7 @@ I've kept the line breaks to emphasize the connection between this and the prece
 
 If we then want to apply the second transform, we could use `Select`:
 
-```cs
+```csharp
 IObservable<IObservable<string>> expandTx1CollectExpandTx2 = expandTx1Collect
     .SelectMany(Tx1)
     .Select(Tx2);
@@ -232,7 +232,7 @@ This passes each number in `expandTx1Collect` to `Tx2`, which converts it into a
 
 But if we use `SelectMany` on that final position too:
 
-```cs
+```csharp
 IObservable<string> expandTx1CollectExpandTx2Collect = expandTx1Collect
     .SelectMany(Tx1)
     .SelectMany(Tx2);
@@ -250,13 +250,13 @@ it flattens these back out into just the strings:
 
 The associative-like requirement says it shouldn't matter if we apply `Tx1` inside the function passed to the first `SelectMany` instead of applying it to the result of that first `SelectMany`. So instead of starting with this:
 
-```cs
+```csharp
 IObservable<IObservable<int>> expandTx1 = input.Select(Tx1);
 ```
 
 we might write this:
 
-```cs
+```csharp
 IObservable<IObservable<IObservable<string>>> expandTx1ExpandTx2 =
     input.Select(x => Tx1(x).Select(Tx2));
 ```
@@ -273,7 +273,7 @@ That's going to produce this:
 
 If we change that to use `SelectMany` for the nested call:
 
-```cs
+```csharp
 IObservable<IObservable<string>> expandTx1ExpandTx2Collect =
     input.Select(x => Tx1(x).SelectMany(Tx2));
 ```
@@ -290,7 +290,7 @@ That's going to flatten out the inner items (but we're still using `Select` on t
 
 And then if we change that first `Select` to `SelectMany`:
 
-```cs
+```csharp
 IObservable<string> expandTx1ExpandTx2CollectCollect =
     input.SelectMany(x => Tx1(x).SelectMany(Tx2));
 ```
@@ -328,7 +328,7 @@ These correspond directly to the three monad laws. Informally speaking, this ref
 
 Remember that there are three mathematical concepts at the heart of LINQ: monads, anamorphisms and catamorphisms. So although the preceding discussion has focused on `SelectMany`, the significance is much wider because we can express other standard LINQ operators in terms of these primitives. For example, this shows how we could implement [`Where`](05_Filtering.md#where) using just `Return` and `SelectMany`:
 
-```cs
+```csharp
 public static IObservable<T> Where<T>(this IObservable<T> source, Func<T, bool> predicate)
 {
     return source.SelectMany(item =>
@@ -340,7 +340,7 @@ public static IObservable<T> Where<T>(this IObservable<T> source, Func<T, bool> 
 
 This implements `Select`:
 
-```cs
+```csharp
 public static IObservable<TResult> Select<TSource, TResult>(
     this IObservable<TSource> source, Func<TSource, TResult> f)
 {
@@ -356,14 +356,14 @@ A catamorphism is essentially a generalization of any kind of processing that ta
 
 Catamorphisms are one of the fundamental building blocks of LINQ because you can't construct catamorphisms out of the other elements. But there are numerous LINQ operators that can be built out of LINQ's most elemental catamorphism, the [`Aggregate`](07_Aggregation.md#aggregate) operator. For example, here's one way to implement `Count` in terms of `Aggregate`:
 
-```cs
+```csharp
 public static IObservable<int> MyCount<T>(this IObservable<T> items)
     => items.Aggregate(0, (total, _) => total + 1);
 ```
 
 We could implement `Sum` thus:
 
-```cs
+```csharp
 public static IObservable<T> MySum<T>(this IObservable<T> items)
     where T : INumber<T>
     => items.Aggregate(T.Zero, (total, x) => x + total);
@@ -476,7 +476,7 @@ Side effects are not always intentional. An easy way to reduce accidental side e
 
 To provide a simple example of a query that has a side effect, we will try to output the index and value of the elements that a subscription receives by updating a variable (closure).
 
-```cs
+```csharp
 IObservable<char> letters = Observable
     .Range(0, 3)
     .Select(i => (char)(i + 65));
@@ -547,7 +547,7 @@ In addition to creating potentially unpredictable results in existing software, 
 
 The preferred way of capturing state is as part of the information flowing through the pipeline of Rx operators making up your subscription. Ideally, we want each part of the pipeline to be independent and deterministic. That is, each function that makes up the pipeline should have its inputs and output as its only state. To correct our example we could enrich the data in the pipeline so that there is no shared state. This would be a great example where we could use the `Select` overload that exposes the index.
 
-```cs
+```csharp
 IObservable<int> source = Observable.Range(0, 3);
 IObservable<(int Index, char Letter)> result = source.Select(
     (idx, value) => (Index: idx, Letter: (char) (value + 65)));

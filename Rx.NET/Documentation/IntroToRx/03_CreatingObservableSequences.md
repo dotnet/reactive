@@ -46,7 +46,7 @@ Although `MySequenceOfNumbers` is technically a correct implementation of `IObse
 
 Let's look at something a little more realistic. This is a wrapper around .NET's `FileSystemWatcher`, presenting filesystem change notifications as an `IObservable<FileSystemEventArgs>`. (Note: this is not necessarily the best design for an Rx `FileSystemWatcher` wrapper. The watcher provides events for several different types of change, and one of them, `Renamed`, provides details as a `RenamedEventArgs`. This derives from `FileSystemEventArgs` so collapsing everything down to a single event stream does work, but this would be inconvenient for applications that wanted access to the details of rename events. A more serious design problem is that this is incapable of reporting more than one event from `FileSystemWatcher.Error`. Such errors might be transient and recoverable, in which case an application might want to continue operating, but since this class chooses to represent everything with a single `IObservable<T>`, it reports errors by invoking the observer's `OnError`, at which point the rules of Rx oblige us to stop. It would be possible to work around this with Rx's `Retry` operator, which can automatically resubscribe after an error, but it might be better to offer a separate `IObservable<ErrorEventArgs>` so that we can report errors in a non-terminating way. However, the additional complication of that won't always be warranted. The simplicity of this design means it will be a good fit for some applications. As is often the way with software design, there isn't a one-size-fits-all approach.)
 
-```cs
+```csharp
 // Represents filesystem changes as an Rx observable sequence.
 // NOTE: this is an oversimplified example for illustration purposes.
 //       It does not handle multiple subscribers efficiently, it does not
@@ -142,7 +142,7 @@ There are a couple of issues with this code (aside from the API design issues al
 
 The other issue is that this does not deal with multiple subscribers efficiently. You're allowed to call `IObservable<T>.Subscribe` multiple times, and if you do that with this code, it will create a new `FileSystemWatcher` each time. That could happen more easily than you might think. Suppose we had an instance of this watcher, and wanted to handle different events in different ways. We might use the `Where` operator to define observable sources that split events up in the way we want:
 
-```cs
+```csharp
 IObservable<FileSystemEventArgs> configChanges =
     fs.Where(e => Path.GetExtension(e.Name) == ".config");
 IObservable<FileSystemEventArgs> deletions =
@@ -153,7 +153,7 @@ When you call `Subscribe` on the `IObservable<T>` returned by the `Where` operat
 
 Rx offers a few ways to deal with this. It provides operators designed specifically to take an `IObservable<T>` that does not tolerate multiple subscribers and wrap it in an adapter that can:
 
-```cs
+```csharp
 IObservable<FileSystemEventArgs> fs =
     new RxFsEvents(@"c:\temp")
     .Publish()
@@ -162,7 +162,7 @@ IObservable<FileSystemEventArgs> fs =
 
 But this is leaping ahead. (These operators are described in [the Publishing Operators chapter](15_PublishingOperators.md).) If you want to build a type that is inherently multi-subscriber-friendly, all you really need to do is keep track of all your subscribers and notify each of them in a loop. Here's a modified version of the filesystem watcher:
 
-```cs
+```csharp
 public class RxFsEventsMultiSubscriber : IObservable<FileSystemEventArgs>
 {
     private readonly object sync = new();
@@ -268,7 +268,7 @@ This is looking more realistic than the first example. This is truly a source of
 
 For example, suppose we only cared about `Changed` events. We could write just this:
 
-```cs
+```csharp
 FileSystemWatcher watcher = new (@"c:\temp");
 IObservable<FileSystemEventArgs> changes = Observable
     .FromEventPattern<FileSystemEventArgs>(watcher, nameof(watcher.Changed))
@@ -280,7 +280,7 @@ Here we're using the `FromEventPattern` helper from the `System.Reactive` librar
 
 In practice, we almost always get `System.Reactive` to implement `IObservable<T>` for us. Even if we want to take control of certain aspects (such as automatically starting up and shutting down the `FileSystemWatcher` in these examples) we can almost always find a combination of operators that enable this. The following code uses various methods from `System.Reactive` to return an `IObservable<FileSystemEventArgs>` that has all the same functionality as the fully-featured hand-written `RxFsEventsMultiSubscriber` above, but with considerably less code.
 
-```cs
+```csharp
 IObservable<FileSystemEventArgs> ObserveFileSystem(string folder)
 {
     return 
@@ -426,7 +426,7 @@ The diagram shows the scheduler call `Subscribe` on the underlying observable af
 
 You might be wondering how the `IDisposable` we return to `Observable.Create` can ever do anything useful. It's the return value of the callback, so we can only return it to Rx as the last thing our callback does. Won't we always have finished our work by the time we return, meaning there's nothing to cancel? Not necessarily—we might kick off some work that continues to run after we return. This next example does that, meaning that the unsubscription action it returns is able to do something useful: it sets a cancellation token that is being observed by the loop that generates our observable's output. (This returns a callback instead of an `IDisposable`—`Observable.Create` offers overloads that let you do either. In this case, Rx will invoke our callback when the subscription is terminated early.)
 
-```cs
+```csharp
 IObservable<char> KeyPresses() =>
     Observable.Create<char>(observer =>
     {
@@ -452,7 +452,7 @@ Bearing in mind that cancellation might have been requested while we were waitin
 
 There are overloads of `Create` designed to support `async` methods. This next method exploits this to be able to use the asynchronous `ReadLineAsync` method to present lines of text from a file as an observable source.
 
-```cs
+```csharp
 IObservable<string> ReadFileLines(string path) =>
     Observable.Create<string>(async (observer, cancellationToken) =>
     {
@@ -536,7 +536,7 @@ I've already used `Defer` once. The `ObserveFileSystem` method returned an `IObs
 
 `Observable.Defer` takes a callback that returns an `IObservable<T>`, and `Defer` wraps this with an `IObservable<T>` that invokes that callback upon subscription. To show the effect, I'm first going to show an example that does not use `Defer`:
 
-```cs
+```csharp
 static IObservable<int> WithoutDeferal()
 {
     Console.WriteLine("Doing some startup work...");
@@ -570,7 +570,7 @@ Second subscription
 
 As you can see, the `"Doing some startup work...` message appears when we call the factory method, and before we've subscribed. So if nothing ever subscribed to the `IObservable<int>` that method returns, the work would be done anyway, wasting time and energy. Here's the `Defer` version:
 
-```cs
+```csharp
 static IObservable<int> WithDeferal()
 {
     return Observable.Defer(() =>
@@ -607,7 +607,7 @@ The creation methods we've looked at so far are straightforward in that they eit
 
 `Observable.Range(int, int)` returns an `IObservable<int>` that produces a range of integers. The first integer is the initial value and the second is the number of values to yield. This example will write the values '10' through to '24' and then complete.
 
-```cs
+```csharp
 IObservable<int> range = Observable.Range(10, 15);
 range.Subscribe(Console.WriteLine, () => Console.WriteLine("Completed"));
 ```
@@ -616,7 +616,7 @@ range.Subscribe(Console.WriteLine, () => Console.WriteLine("Completed"));
 
 Suppose you wanted to emulate the `Range` factory method using `Observable.Create`. You might try this:
 
-```cs
+```csharp
 // Not the best way to do it!
 IObservable<int> Range(int start, int count) =>
     Observable.Create<int>(observer =>
@@ -664,7 +664,7 @@ public static IObservable<int> Range(int start, int count)
 
 The `Generate` method calls us back repeatedly until either our `condition` callback says we're done, or the observer unsubscribes. We can define an infinite sequence simply by never saying we are done:
 
-```cs
+```csharp
 IObservable<BigInteger> Fibonacci()
 {
     return Observable.Generate(
@@ -715,7 +715,7 @@ Once subscribed, you must dispose of your subscription to stop the sequence, bec
 
 The second factory method for producing constant time based sequences is `Observable.Timer`. It has several overloads. The most basic one takes just a `TimeSpan` as `Observable.Interval` does. But unlike `Observable.Interval`, `Observable.Timer` will publish exactly one value (the number 0) after the period of time has elapsed, and then it will complete.
 
-```cs
+```csharp
 var timer = Observable.Timer(TimeSpan.FromSeconds(1));
 timer.Subscribe(
     Console.WriteLine, 
@@ -733,7 +733,7 @@ Alternatively, you can provide a `DateTimeOffset` for the `dueTime` parameter. T
 
 A further set of overloads adds a `TimeSpan` that indicates the period at which to produce subsequent values. This allows us to produce infinite sequences. It also shows how `Observable.Interval` is really just a special case of `Observable.Timer`. `Interval` could be implemented like this:
 
-```cs
+```csharp
 public static IObservable<long> Interval(TimeSpan period)
 {
     return Observable.Timer(period, period);
@@ -763,7 +763,7 @@ public static IObservable<TResult> Generate<TState, TResult>(
 
 The extra `timeSelector` argument lets us tell `Generate` when to produce the next item. We can use this to write our own implementation of `Observable.Timer` (and as you've already seen, this in turn enables us to write our own `Observable.Interval`).
 
-```cs
+```csharp
 public static IObservable<long> Timer(TimeSpan dueTime)
 {
     return Observable.Generate(
@@ -858,7 +858,7 @@ The observable returned by `Start` may seem to have a superficial resemblance to
 
 As we discussed early in the book, .NET has a model for events that is baked into its type system. This predates Rx (not least because Rx wasn't feasible until .NET got generics in .NET 2.0) so it's common for types to support events but not Rx. To be able to integrate with the existing event model, Rx provides methods to take an event and turn it into an observable sequence. I showed this briefly in the file system watcher example earlier, but let's examine this in a bit more detail. There are several different varieties you can use. This show the most succinct form:
 
-```cs
+```csharp
 FileSystemWatcher watcher = new (@"c:\incoming");
 IObservable<EventPattern<FileSystemEventArgs>> changeEvents = Observable
     .FromEventPattern<FileSystemEventArgs>(watcher, nameof(watcher.Changed));
@@ -876,7 +876,7 @@ There's another, related problem. The .NET build tools support a feature called 
 
 So reflection-based APIs can be problematic if you're using any of these techniques. Fortunately, there's an alternative. We can use an overload that takes a couple of delegates, and Rx will invoke these when it wants to add or remove handlers for the event:
 
-```cs
+```csharp
 IObservable<EventPattern<FileSystemEventArgs>> changeEvents = Observable
     .FromEventPattern<FileSystemEventHandler, FileSystemEventArgs>(
         h => watcher.Changed += h,
@@ -889,9 +889,13 @@ The downside is that this is a pretty cumbersome bit of code to write. If you've
 
 Not only has that second-class status meant we couldn't just pass the event itself as an argument, it has also meant that we've had to state type arguments explicitly. The relationship between an event's delegate type (`FileSystemEventHandler` in this example) and its event argument type (`FileSystemEventArgs` here) is, in general, not something that C#'s type inference can determine automatically, which is why we've had to specify both types explicitly. (Events that use the generic `EventHandler<T>` type are more amenable to type inference, and can use a slightly less verbose version of `FromEventPattern`. Unfortunately, relatively few events actually use that. Some events provide no information besides the fact that something just happened, and use the base `EventHandler` type, and for those kinds of events, you can in fact omit the type arguments completely, making the code slightly less ugly. You still need to provide the add and remove callbacks though.)
 
-Notice that the return type of `FromEventPattern` in this example is `IObservable<EventPattern<FileSystemEventArgs>>`. The `EventPattern<T>` type encapsulates the information that the event passes to handlers. Most .NET events follow a common pattern in which handler methods take two arguments: an `object sender`, which just tells you which object raised the event (useful if you attach one event handler to multiple objects) and then a second argument of some type derived from `EventArgs` that provides information about the event. `EventPattern<T>` just packages these two arguments into a single object that offers `Sender` and `EventArgs` properties. In cases where you don't in fact want to attach one handler to multiple sources, you only really need that `EventArgs` property, which is why the earlier `FileSystemWatcher` examples went on to extract just that, to get a simpler result of type `IObservable<FileSystemEventArgs>`. It did this with the `Select` operator, which we'll get to in more detail later:
+Notice that the return type of `FromEventPattern` in this example is: 
 
-```cs
+`IObservable<EventPattern<FileSystemEventArgs>>`. 
+
+The `EventPattern<T>` type encapsulates the information that the event passes to handlers. Most .NET events follow a common pattern in which handler methods take two arguments: an `object sender`, which just tells you which object raised the event (useful if you attach one event handler to multiple objects) and then a second argument of some type derived from `EventArgs` that provides information about the event. `EventPattern<T>` just packages these two arguments into a single object that offers `Sender` and `EventArgs` properties. In cases where you don't in fact want to attach one handler to multiple sources, you only really need that `EventArgs` property, which is why the earlier `FileSystemWatcher` examples went on to extract just that, to get a simpler result of type `IObservable<FileSystemEventArgs>`. It did this with the `Select` operator, which we'll get to in more detail later:
+
+```csharp
 IObservable<FileSystemEventArgs> changes = changeEvents.Select(ep => ep.EventArgs);
 ```
 
@@ -946,7 +950,7 @@ Notice that even with two subscribers, the task runs only once. That shouldn't b
 
 There's a different way to get an `IObservable<T>` for a source. I can replace the first statement in the preceding example with this:
 
-```cs
+```csharp
 IObservable<string> source = Observable.FromAsync(() => Task.Run(() =>
 {
     Console.WriteLine("Task running...");
@@ -969,7 +973,7 @@ Notice that this executes the task twice, once for each call to `Subscribe`. `Fr
 
 If I want to use `async` and `await` to define my task, then I don't need to bother with the `Task.Run` because an `async` lambda creates a `Func<Task<T>>`, which is exactly the type `FromAsync` wants:
 
-```cs
+```csharp
 IObservable<string> source = Observable.FromAsync(async () =>
 {
     Console.WriteLine("Task running...");
@@ -1027,14 +1031,17 @@ The result of the call to `Observable.FromAsyncPattern` does _not_ return an obs
 Stream stream = GetStreamFromSomewhere();
 var fileLength = (int) stream.Length;
 
-Func<byte[], int, int, IObservable<int>> read = Observable.FromAsyncPattern<byte[], int, int, int>(
-    stream.BeginRead, 
-    stream.EndRead);
+Func<byte[], int, int, IObservable<int>> read = 
+            Observable.FromAsyncPattern<byte[], int, int, int>(
+              stream.BeginRead, 
+              stream.EndRead);
 var buffer = new byte[fileLength];
 IObservable<int> bytesReadStream = read(buffer, 0, fileLength);
 bytesReadStream.Subscribe(byteCount =>
 {
-    Console.WriteLine("Number of bytes read={0}, buffer should be populated with data now.", byteCount);
+    Console.WriteLine(
+        "Number of bytes read={0}, buffer should be populated with data now.", 
+        byteCount);
 });
 ```
 
@@ -1044,7 +1051,7 @@ So far, this chapter has explored various factory methods that return `IObservab
 
 Types that implement both `IObservable<T>` and `IObserver<T>` are called _subjects_ in Rx. There's an an `ISubject<T>` to represent this. (This is in the `System.Reactive` NuGet package, unlike `IObservable<T>` and `IObserver<T>`, which are both built into the .NET runtime libraries.) `ISubject<T>` looks like this:
 
-```cs
+```csharp
 public interface ISubject<T> : ISubject<T, T>
 {
 }
@@ -1052,7 +1059,7 @@ public interface ISubject<T> : ISubject<T, T>
 
 So it turns out there's also a two-argument `ISubject<TSource, TResult>` to accommodate the fact that something that is both an observer and an observable might transform the data that flows through it in some way, meaning that the input and output types are not necessarily the same. Here's the two-type-argument definition:
 
-```cs
+```csharp
 public interface ISubject<in TSource, out TResult> : IObserver<TSource>, IObservable<TResult>
 {
 }
@@ -1070,7 +1077,7 @@ Rx offers a few subject types. We'll start with the most straightforward one to 
 
 The `Subject<T>` type immediately forwards any calls made to its `IObserver<T>` methods on to all of the observers currently subscribed to it. This example shows its basic operation:
 
-```cs
+```csharp
 Subject<int> s = new();
 s.Subscribe(x => Console.WriteLine($"Sub1: {x}"));
 s.Subscribe(x => Console.WriteLine($"Sub2: {x}"));
@@ -1093,7 +1100,7 @@ Sub2: 3
 
 We could use this as a way to bridge between some API from which we receive data into the world of Rx. You could imagine writing something of this kind:
 
-```cs
+```csharp
 public class MessageQueueToRx : IDisposable
 {
     private readonly Subject<string> messages = new();
@@ -1131,7 +1138,7 @@ It wouldn't be too hard to modify this to use `Observable.Create` instead. But w
 
 This is a variation on the first example in the preceding [Subject<T> section](#subject). It creates a `ReplaySubject<int>` instead of a `Subject<int>`. And instead of immediately subscribing twice, it creates an initial subscription, and then a second one only after a couple of values have been emitted.
 
-```cs
+```csharp
 ReplaySubject<int> s = new();
 s.Subscribe(x => Console.WriteLine($"Sub1: {x}"));
 
@@ -1250,8 +1257,8 @@ If you have some potentially slow work that needs to be done when your applicati
 Finally it is worth making you aware that you can also create a subject via a factory method. Considering that a subject combines the `IObservable<T>` and `IObserver<T>` interfaces, it seems sensible that there should be a factory that allows you to combine them yourself. The `Subject.Create(IObserver<TSource>, IObservable<TResult>)` factory method provides just this.
 
 ```csharp
-//Creates a subject from the specified observer used to publish messages to the subject
-//  and observable used to subscribe to messages sent from the subject
+// Creates a subject from the specified observer used to publish messages to the
+// subject and observable used to subscribe to messages sent from the subject
 public static ISubject<TSource, TResult> Create<TSource, TResult>(
     IObserver<TSource> observer, 
     IObservable<TResult> observable)

@@ -32,7 +32,7 @@ If you are expecting your sequence to have more values than a 32-bit signed inte
 
 The `Sum` operator adds together all the values in its source, producing the total as its only output. As with `Count`, Rx's `Sum` differs from most other LINQ providers in that it does not produce a scalar as its output. It produces an observable sequence that does nothing until its source completes. When the source completes, the observable returned by `Sum` produces a single value and then immediately completes. This example shows it in use:
 
-```cs
+```csharp
 IObservable<int> numbers = Observable.Range(1,5);
 numbers.Sum().Dump("sum");
 ```
@@ -50,13 +50,14 @@ If you supply `Sum` with the nullable versions of these types (e.g., your source
 
 Although `Sum` can work only with a small, fixed list of numeric types, your source doesn't necessarily have to produce values of those types. `Sum` offers overloads that accept a lambda that extracts a suitable numeric value from each input element. For example, suppose you wanted to answer the following unlikely question: if the next 10 ships that happen to broadcast descriptions of themselves over AIS were put side by side, would they all fit in a channel of some particular width? We could do this by filtering the AIS messages down to those that provide ship size information, using `Take` to collect the next 10 such messages, and then using `Sum`. The Ais.NET library's `IVesselDimensions` interface does not implement addition (and even if it did, we already just saw that Rx wouldn't be able to exploit that), but that's fine: all we need to do is supply a lambda that can take an `IVesselDimensions` and return a value of some numeric type that `Sum` can process:
 
-```cs
+```csharp
 IObservable<IVesselDimensions> vesselDimensions = receiverHost.Messages
     .OfType<IVesselDimensions>();
 
 IObservable<int> totalVesselWidths = vesselDimensions
     .Take(10)
-    .Sum(dimensions => checked((int)(dimensions.DimensionToPort + dimensions.DimensionToStarboard)));
+    .Sum(dimensions => 
+            checked((int)(dimensions.DimensionToPort + dimensions.DimensionToStarboard)));
 ```
 
 (If you're wondering what's with cast and the `checked` keyword here, AIS defines these values as unsigned integers, so the Ais.NET library reports them as `uint`, which is not a type Rx's `Sum` supports. In practice, it's very unlikely that a vessel will be wide enough to overflow a 32-bit signed integer, so we just cast it to `int`, and the `checked` keyword will throw an exception in the unlikely event that we encounter ship more than 2.1 billion metres wide.)
@@ -77,10 +78,11 @@ Rx defines specialized implementations for the same numeric types that `Sum` and
 
 As with `Sum` and `Average` there are overloads that accept a callback. If you use these overloads, `Min` and `Max` will invoke this callback for each source item, and will look for the lowest or highest value that your callback returns. Note that the single output they eventually produce will be a value returned by the callback, and not the original source item from which that value was derived. To see what that means, look at this example:
 
-```cs
+```csharp
 IObservable<int> widthOfWidestVessel = vesselDimensions
     .Take(10)
-    .Max(dimensions => checked((int)(dimensions.DimensionToPort + dimensions.DimensionToStarboard)));
+    .Max(dimensions => 
+            checked((int)(dimensions.DimensionToPort + dimensions.DimensionToStarboard)));
 ```
 
 `Max` returns an `IObservable<int>` here, which will be the width of the widest vessel out of the next 10 messages that report vessel dimensions. But what if you didn't just want to see the width? What if you wanted the whole message?
@@ -89,10 +91,11 @@ IObservable<int> widthOfWidestVessel = vesselDimensions
 
 Rx offers two subtle variations on `Min` and `Max`: `MinBy` and `MaxBy`. These are similar to the callback-based `Min` and `Max` we just saw that enable us to work with sequences of elements that are not numeric values, but which may have numeric properties. The difference is that instead of returning the minimum or maximum value, `MinBy` and `MaxBy` tell you which source element produced that value. For example, suppose that instead of just discovering the width of the widest ship, we wanted to know what ship that actually was:
 
-```cs
+```csharp
 IObservable<IVesselDimensions> widthOfWidestVessel = vesselDimensions
     .Take(10)
-    .MaxBy(dimensions => checked((int)(dimensions.DimensionToPort + dimensions.DimensionToStarboard)));
+    .MaxBy(dimensions => 
+              checked((int)(dimensions.DimensionToPort + dimensions.DimensionToStarboard)));
 ```
 
 This is very similar to the example in the preceding section. We're working with a sequence where the element type is `IVesselDimensions`, so we've supplied a callback that extracts the value we want to use for comparison purposes. (The same callback as last time, in fact.) Just like `Max`, `MaxBy` is trying to work out which element produces the highest value when passed to this callback. It can't know which that is until the source completes. If the source hasn't completed yet, all it can know is the highest _yet_, but that might be exceeded by a future value. So as with all the other operators we've looked at in this chapter, this produces nothing until the source completes, which is why I've put a `Take(10)` in there.
@@ -147,6 +150,7 @@ var subject = new Subject<int>();
 subject.Subscribe(Console.WriteLine,
     ex => Console.WriteLine("subject OnError : {0}", ex),
     () => Console.WriteLine("Subject completed"));
+
 IObservable<bool> any = subject.Any();
 
 any.Subscribe(b => Console.WriteLine("The subject has any values? {0}", b),
@@ -165,7 +169,7 @@ subject OnError : System.Exception: Exception of type 'System.Exception' was thr
 
 But if the source were to generate a value before an exception, e.g.:
 
-```cs
+```csharp
 subject.OnNext(42);
 subject.OnError(new Exception());
 ```
@@ -189,14 +193,13 @@ IObservable<bool> any = subject.Any(i => i > 2);
 IObservable<bool> longWindedAny = subject.Where(i => i > 2).Any();
 ```
 
-
 ### All
 
 The `All` operator is similar to the `Any` method that takes a predicate, except that all values must satisfy the predicate. As soon as the predicate rejects a value, the observable returned by `All` produces a `false` value and then completes. If the source reaches its end without producing any elements that do not satisfy the predicate, then `All` will push `true` as its value. (A consequence of this is that if you use `All` on an empty sequence, the result will be a sequence that produces `true`. This is consistent with how `All` works in other LINQ providers, but it might be surprising for anyone not familiar with the formal logic convention known as [vacuous truth](https://en.wikipedia.org/wiki/Vacuous_truth).)
 
 Once `All` decides to produce a `false` value, it immediately unsubscribes from the source (just like `Any` does as soon as it determines that it can produce `true`.) If the source produces an error before this happens, the error will be passed along to the subscriber of the `All` method. 
 
-```cs
+```csharp
 var subject = new Subject<int>();
 subject.Subscribe(Console.WriteLine, () => Console.WriteLine("Subject completed"));
 IEnumerable<bool> all = subject.All(i => i < 5);
@@ -285,19 +288,19 @@ IObservable<int> sum = source.Aggregate((acc, element) => acc + 1);
 
 To understand exactly what this is doing, let's look at how `Aggregate` will call this lambda. To make that slightly easier to see, suppose we put that lambda in its own variable:
 
-```cs
+```csharp
 Func<int, int, int> c = (acc, element) => acc + 1;
 ```
 
 Now suppose the source produces an item with the value 100. `Aggregate` will invoke our function:
 
-```cs
+```csharp
 c(0, 100) // returns 1
 ```
 
 The first argument is the current accumulator. `Aggregate` has used `default(int)` for the initial accumulator value, which is 0. Our function returns 1, which becomes the new accumulator value. So if the source produces a second value, say, 200, `Aggregate` will pass the new accumulator, along with the second value from the source:
 
-```cs
+```csharp
 c(1, 200) // returns 2
 ```
 
@@ -312,13 +315,13 @@ IObservable<int> sum = source.Aggregate(s);
 
 For the first element, `Aggregate` will again pass the default value for our chosen accumulator type, `int`: 0. And it will pass the first element value. So again if the first element is 100 it does this:
 
-```cs
+```csharp
 s(0, 100) // returns 100
 ```
 
 And then if the second element is 200, `Aggregate` will make this call:
 
-```cs
+```csharp
 s(100, 200) // returns 300
 ```
 
@@ -326,7 +329,7 @@ Notice that this time, the first argument was 100, because that's what the previ
 
 What if we want the initial accumulator value to be something other than `default(TAccumulator)`? There's an overload for that. For example, here's how we could implement something like `All` with `Aggregate`:
 
-```cs
+```csharp
 IObservable<bool> all = source.Aggregate(true, (acc, element) => acc && element);
 ```
 
@@ -334,13 +337,13 @@ This isn't exactly equivalent to the real `All` by the way: it handles errors di
 
 Here's a way to think about `Aggregate` that some people find helpful. If your source produces the values 1 through 5, and if the function we pass to `Aggregate` is called `f`, then the value that `Aggregate` produces once the source completes will be this:
 
-```cs
+```csharp
 T result = f(f(f(f(f(default(T), 1), 2), 3), 4), 5);
 ```
 
 So in the case of our recreation of `Count`, the accumulator type was `int`, so that becomes:
 
-```cs
+```csharp
 int sum = s(s(s(s(s(0, 1), 2), 3), 4), 5);
 // Note: Aggregate doesn't return this directly -
 // it returns an IObservable<int> that produces this value.
@@ -352,7 +355,7 @@ Rx's `Aggregate` doesn't perform all those invocations at once: it invokes the f
 
 You might have spotted that in my quest to re-implement some of the built-in aggregation operators, I went straight from `Sum` to `Any`. What about `Average`? It turns out we can't do that with the overloads I've shown you so far. And that's because `Average` needs to accumulate two pieces of information—the running total and the count—and it also needs to perform once final step right at the end: it needs to divide the total by the count. With the overloads shown so far, we can only get part way there:
 
-```cs
+```csharp
 IObservable<int> nums = Observable.Range(1, 5);
 
 IObservable<(int Count, int Sum)> avgAcc = nums.Aggregate(
@@ -362,7 +365,7 @@ IObservable<(int Count, int Sum)> avgAcc = nums.Aggregate(
 
 This uses a tuple as the accumulator, enabling it to accumulate two values: the count and the sum. But the final accumulator value becomes the result, and that's not what we want. We're missing that final step that calculates the average by dividing the sum by the count. Fortunately, `Aggregate` offers a 3rd overload that enables us to provide this final step. We pass a second callback which will be invoked just once when the source completes. `Aggregate` passes the final accumulator value into this lambda, and then whatever it returns becomes the single item produced by the observable that `Aggregate` returns.
 
-```cs
+```csharp
 IObservable<double> avg = nums.Aggregate(
     (Count: 0, Sum: 0),
     (acc, element) => (Count: acc.Count + 1, Sum: acc.Sum + element),
@@ -373,7 +376,7 @@ I've been showing how `Aggregate` can re-implement some of the built-in aggregat
 
 For example, suppose I wanted to build up a list of the names of all the ships that have broadcast their details over AIS. Here's one way to do that:
 
-```cs
+```csharp
 IObservable<IReadOnlySet<string>> allNames = vesselNames
     .Take(10)
     .Aggregate(
@@ -383,7 +386,7 @@ IObservable<IReadOnlySet<string>> allNames = vesselNames
 
 I've used `ImmutableHashSet<string>` here because its usage patterns happen to fit `Aggregate` neatly. An ordinary `HashSet<string>` would also have worked, but is a little less convenient because its `Add` method doesn't return the set, so our function needs an extra statement to return the accumulated set:
 
-```cs
+```csharp
 IObservable<IReadOnlySet<string>> allNames = vesselNames
     .Take(10)
     .Aggregate(
@@ -405,18 +408,18 @@ While `Aggregate` allows us to reduce complete sequences to a single, final valu
 
 We can use this to build up a set of vessel names as in the preceding section, but with `Scan` we don't have to wait until the end. This will report the current list every time it receives a message containing a name:
 
-```
+```csharp
 IObservable<IReadOnlySet<string>> allNames = vesselNames
     .Scan(
         ImmutableHashSet<string>.Empty,
         (set, name) => set.Add(name.VesselName));
 ```
 
-Note that this `allNames` observable will produce elements even if nothing has changed. If the accumulated set of names already contained the name that just emerged from `vesselNames`, the call to `set.Add` will do nothing, because that name will already be in the set. But `Scan` scan produces one output for each input, and doesn't care if the accumulator didn't change. Whether this matters will depend on what you are planning to do with this `allNames` observable, but if you need to, you can fix this easily with the [`DistinctUntilChanged` operator shown in Chapter 5](./05_Filtering.md#distinct-and-distinctuntilchanged).
+Note that this `allNames` observable will produce elements even if nothing has changed. If the accumulated set of names already contained the name that just emerged from `vesselNames`, the call to `set.Add` will do nothing, because that name will already be in the set. But `Scan` scan produces one output for each input, and doesn't care if the accumulator didn't change. Whether this matters will depend on what you are planning to do with this `allNames` observable, but if you need to, you can fix this easily with the [`DistinctUntilChanged` operator shown in Chapter 5](05_Filtering.md#distinct-and-distinctuntilchanged).
 
 You could think of `Scan` as being a version of `Aggregate` that shows its working. If we wanted to see how the process of calculating an average aggregates the count and sum, we could write this:
 
-```cs
+```csharp
 IObservable<int> nums = Observable.Range(1, 5);
 
 IObservable<(int Count, int Sum)> avgAcc = nums.Scan(
@@ -439,9 +442,9 @@ acc completed
 
 You can see clearly here that `Scan` is emitting the current accumulated values each time the source produces a value.
 
-Unlike `Aggregate`, `Scan` doesn't offer an overload taking a second function to transform the accumulator into the result. So we can see the tuple containing the count and sum here, but not the actual average value we want. But we can achieve that by using the [`Select`](06_Transformation.md#select) operator described in the [Transformation chapter](./06_Transformation.md):
+Unlike `Aggregate`, `Scan` doesn't offer an overload taking a second function to transform the accumulator into the result. So we can see the tuple containing the count and sum here, but not the actual average value we want. But we can achieve that by using the [`Select`](06_Transformation.md#select) operator described in the [Transformation chapter](06_Transformation.md):
 
-```cs
+```csharp
 IObservable<double> avg = nums.Scan(
     (Count: 0, Sum: 0),
     (acc, element) => (Count: acc.Count + 1, Sum: acc.Sum + element))
@@ -461,7 +464,7 @@ avg-->3
 avg completed
 ```
 
-`Scan` is a more generalised operator than `Aggregate`. You could implement `Aggregate` by combining `Scan` with the [`TakeLast()` operator described in the Filtering chapter](./05_Filtering.md#takelast).
+`Scan` is a more generalised operator than `Aggregate`. You could implement `Aggregate` by combining `Scan` with the [`TakeLast()` operator described in the Filtering chapter](05_Filtering.md#takelast).
 
 ```csharp
 source.Aggregate(0, (acc, current) => acc + current);

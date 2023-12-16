@@ -8,7 +8,7 @@ Rx offers three operators enabling us to support multiple subscribers using just
 
 `Multicast` turns any `IObservable<T>` into an `IConnectableObservable<T>` which, as you can see, just adds a `Connect` method:
 
-```cs
+```csharp
 public interface IConnectableObservable<out T> : IObservable<T>
 {
     IDisposable Connect();
@@ -17,7 +17,7 @@ public interface IConnectableObservable<out T> : IObservable<T>
 
 Since it derives from `IObservable<T>`, you can call `Subscribe` on an `IConnectableObservable<T>`, but the implementation returned by `Multicast` won't call `Subscribe` on the underlying source when you do that. It only calls `Subscribe` on the underlying source when you call `Connect`. So that we can see this in action, let's define a source that prints out a message each time `Subscribe` is called:
 
-```cs
+```csharp
 IObservable<int> src = Observable.Create<int>(obs =>
 {
     Console.WriteLine("Create callback called");
@@ -30,13 +30,13 @@ IObservable<int> src = Observable.Create<int>(obs =>
 
 Since this is only going to be invoked once no matter how many observers subscribe, `Multicast` can't pass on the `IObserver<T>`s handed to its own `Subscribe` method, because there could be any number of them. It uses a [Subject](03_CreatingObservableSequences.md#subject) as the single `IObserver<T>` that is passes to the underlying source, and this subject is also responsible for keeping track of all subscribers. If we call `Multicast` directly, we are required to pass in the subject we want to use:
 
-```cs
+```csharp
 IConnectableObservable<int> m = src.Multicast(new Subject<int>());
 ```
 
 We can now subscribe to this a few times over:
 
-```cs
+```csharp
 m.Subscribe(x => Console.WriteLine($"Sub1: {x}"));
 m.Subscribe(x => Console.WriteLine($"Sub2: {x}"));
 m.Subscribe(x => Console.WriteLine($"Sub3: {x}"));
@@ -44,7 +44,7 @@ m.Subscribe(x => Console.WriteLine($"Sub3: {x}"));
 
 None of these subscribers will receive anything unless we call `Connect`:
 
-```cs
+```csharp
 m.Connect();
 ```
 
@@ -52,7 +52,7 @@ m.Connect();
 
 This call to `Connect` causes the following output:
 
-```cs
+```csharp
 Create callback called
 Sub1: 1
 Sub2: 1
@@ -66,7 +66,7 @@ As you can see, the method we passed to `Create` runs only once, confirming that
 
 The way `Multicast` works is fairly straightforward: it gets the subject do most of the work. Whenever you call `Subscribe` on an observable returned by `Multicast`, it just calls `Subscribe` on the subject. And when you call `Connect`, it just passes the subject into the underlying source's `Subscribe`. So this code would have had the same effect:
 
-```cs
+```csharp
 var s = new Subject<int>();
 
 s.Subscribe(x => Console.WriteLine($"Sub1: {x}"));
@@ -80,7 +80,7 @@ However, an advantage of `Multicast` is that it returns `IConnectableObservable<
 
 `Multicast` offers an overload that works in a quite different way: it is intended for scenarios where you want to write a query that uses its source observable twice. For example, we might want to get adjacent pairs of items using `Zip`:
 
-```cs
+```csharp
 IObservable<(int, int)> ps = src.Zip(src.Skip(1));
 ps.Subscribe(ps => Console.WriteLine(ps));
 ```
@@ -97,14 +97,14 @@ Create callback called
 
 Our `Create` callback ran twice. The second `Multicast` overload lets us avoid that:
 
-```cs
+```csharp
 IObservable<(int, int)> ps = src.Multicast(() => new Subject<int>(), s => s.Zip(s.Skip(1)));
 ps.Subscribe(ps => Console.WriteLine(ps));
 ```
 
 As the output shows, this avoids the multiple subscriptions:
 
-```cs
+```csharp
 Create callback called
 (1, 2)
 ```
@@ -117,13 +117,13 @@ The remaining operators defined in this section, `Publish`, `PublishLast`, and `
 
 The `Publish` operator calls `Multicast` with a [`Subject<T>`](03_CreatingObservableSequences.md#subject). The effect of this is that once you have called `Connect` on the result, any items produced by the source will be delivered to all subscribers. This enables me to replace this earlier example:
 
-```cs
+```csharp
 IConnectableObservable<int> m = src.Multicast(new Subject<int>());
 ```
 
 with this:
 
-```cs
+```csharp
 IConnectableObservable<int> m = src.Publish();
 ```
 
@@ -131,7 +131,7 @@ These are exactly equivalent.
 
 Because `Subject<T>` forwards all incoming `OnNext` calls to each of its subscribers immediately, and because it doesn't store any previously made calls, the result is a hot source. If you attach some subscribers before calling `Connect`, and then you attached more subscribers after calling `Connect`, those later subscribers will only receive events that occurred after they subscribed. This example demonstrates that:
 
-```cs
+```csharp
 IConnectableObservable<long> publishedTicks = Observable
     .Interval(TimeSpan.FromSeconds(1))
     .Take(4)
@@ -172,14 +172,14 @@ Sub4: 3 (10/08/2023 16:04:05)
 
 As with [`Multicast`](#multicast), `Publish` offers an overload that provides per-top-level-subscription multicast. This lets us simplify the example from the end of that section from this:
 
-```cs
+```csharp
 IObservable<(int, int)> ps = src.Multicast(() => new Subject<int>(), s => s.Zip(s.Skip(1)));
 ps.Subscribe(ps => Console.WriteLine(ps));
 ```
 
 to this:
 
-```cs
+```csharp
 IObservable<(int, int)> ps = src.Publish(s => s.Zip(s.Skip(1)));
 ps.Subscribe(ps => Console.WriteLine(ps));
 ```
@@ -190,7 +190,7 @@ ps.Subscribe(ps => Console.WriteLine(ps));
 
 The `PublishLast` operator calls `Multicast` with an [`AsyncSubject<T>`](03_CreatingObservableSequences.md#asyncsubject). The effect of this is that the final item produced by the source will be delivered to all subscribers. You still need to call `Connect`. This determines when subscription to the underlying source occurs. But all subscribers will receive the final event regardless of when they subscribe, because `AsyncSubject<T>` remembers the final result. We can see this in action with the following example:
 
-```cs
+```csharp
 IConnectableObservable<long> pticks = Observable
     .Interval(TimeSpan.FromSeconds(0.1))
     .Take(4)
@@ -229,7 +229,7 @@ The `Replay` operator calls `Multicast` with a [`ReplaySubject<T>`](03_CreatingO
 
 This example is very similar to the one used for `Publish`:
 
-```cs
+```csharp
 IConnectableObservable<long> pticks = Observable
     .Interval(TimeSpan.FromSeconds(1))
     .Take(4)
@@ -289,7 +289,7 @@ We saw in the preceding section that `Multicast` (and also its various wrappers)
 
 To be able to observe how `RefCount` operators, I'm going to use a modified version of the source that reports when subscription occurs:
 
-```cs
+```csharp
 IObservable<int> src = Observable.Create<int>(async obs =>
 {
     Console.WriteLine("Create callback called");
@@ -307,7 +307,7 @@ IObservable<int> src = Observable.Create<int>(async obs =>
 
 Unlike the earlier example, this uses `async` and delays between each `OnNext` to ensure that the main thread has time to set up multiple subscriptions before all the items are produced. We can then wrap this with `RefCount`:
 
-```cs
+```csharp
 IObservable<int> rc = src
     .Publish()
     .RefCount();
@@ -315,7 +315,7 @@ IObservable<int> rc = src
 
 Notice that I have to call `Publish` first. This is because `RefCount` expects an `IConnectableObservable<T>`. It wants to start the source only when something first subscribes. It will call `Connect` as soon as there's at least one subscriber. Let's try it:
 
-```cs
+```csharp
 rc.Subscribe(x => Console.WriteLine($"Sub1: {x} ({DateTime.Now})"));
 rc.Subscribe(x => Console.WriteLine($"Sub2: {x} ({DateTime.Now})"));
 Thread.Sleep(600);
@@ -348,7 +348,7 @@ Notice that only `Sub1` receives the very first event. That's because the callba
 
 As the name suggests `RefCount` counts the number of active subscribers. If this ever drops to 0, it will call `Dispose` on the object that `Connect` returned, shutting down the subscription. If further subscribers attach, it will restart. This example shows that:
 
-```cs
+```csharp
 IDisposable s1 = rc.Subscribe(x => Console.WriteLine($"Sub1: {x} ({DateTime.Now})"));
 IDisposable s2 = rc.Subscribe(x => Console.WriteLine($"Sub2: {x} ({DateTime.Now})"));
 Thread.Sleep(600);

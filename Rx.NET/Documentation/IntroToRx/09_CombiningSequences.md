@@ -14,7 +14,7 @@ We'll start with the simplest kind of combining operators, which do not attempt 
 
 `Concat` is arguably the simplest way to combine sequences. It does the same thing as its namesake in other LINQ providers: it concatenates two sequences. The resulting sequence produces all of the elements from the first sequence, followed by all of the elements from the second sequence. The simplest signature for `Concat` is as follows.
 
-```cs
+```csharp
 public static IObservable<TSource> Concat<TSource>(
     this IObservable<TSource> first, 
     IObservable<TSource> second)
@@ -22,7 +22,7 @@ public static IObservable<TSource> Concat<TSource>(
 
 Since `Concat` is an extension method, we can invoke it as a method on any sequence, passing the second sequence in as the only argument:
 
-```cs
+```csharp
 IObservable<int> s1 = Observable.Range(0, 3);
 IObservable<int> s2 = Observable.Range(5, 5);
 IObservable<int> c = s1.Concat(s2);
@@ -31,13 +31,13 @@ IDisposable sub = c.Subscribe(Console.WriteLine, x => Console.WriteLine("Error: 
 
 This marble diagram shows the items emerging from the two sources, `s1` and `s2`, and how `Concat` combines them into the result, `c`:
 
-![A marble diagram showing three sequences. The first, s1, produces the values 0, 1, and 2, and then completes shortly after. The second, s2 starts after s1 finishes, and produces the values 5, 6, 7, 8, and 9, and then completes. The final sequence, c, produces all of the values from s1 then s2, that is: 0, 1, 2, 5, 6, 7, 8, and 9. The positioning shows that each item in c is produced at the same time as the corresponding value from s1 or s2.](./GraphicsIntro/Ch09-CombiningSequences-Marbles-Concat-Marbles.svg)
+![A marble diagram showing three sequences. The first, s1, produces the values 0, 1, and 2, and then completes shortly after. The second, s2 starts after s1 finishes, and produces the values 5, 6, 7, 8, and 9, and then completes. The final sequence, c, produces all of the values from s1 then s2, that is: 0, 1, 2, 5, 6, 7, 8, and 9. The positioning shows that each item in c is produced at the same time as the corresponding value from s1 or s2.](GraphicsIntro/Ch09-CombiningSequences-Marbles-Concat-Marbles.svg)
 
 Rx's `Concat` does nothing with its sources until something subscribes to the `IObservable<T>` it returns. So in this case, when we call `Subscribe` on `c` (the source returned by `Concat`) it will subscribe to its first input, `s1`, and each time that produces a value, the `c` observable will emit that same value to its subscriber. If we went on to call `sub.Dispose()` before `s1` completes, `Concat` would unsubscribe from the first source, and would never subscribe to `s2`. If `s1` were to report an error, `c` would report that same error to is subscriber, and again, it will never subscribe to `s2`. Only if `s1` completes will the `Concat` operator subscribe to `s2`, at which point it will forward any items that second input produces until either the second source completes or fails, or the application unsubscribes from the concatenated observable.
 
 Although Rx's `Concat` has the same logical behaviour as the [LINQ to Objects `Concat`](https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.concat), there are some Rx-specific details to be aware of. In particular, timing is often more significant in Rx than with other LINQ implementations. For example, in Rx we distinguish between [_hot_ and _cold_ source](02_KeyTypes.md#hot-and-cold-sources). With a cold source it typically doesn't matter exactly when you subscribe, but hot sources are essentially live, so you only get notified of things that happen while you are subscribed. This can mean that hot sources might not be a good fit with `Concat` The following marble diagram illustrates a scenario in which this produces results that have the potential to surprise:
 
-![A marble diagram showing three sequences. The first, labelled 'cold', produces the values 0, 1, and 2, then completes. The second, labelled 'hot' produces values A, B, C, D, and E, but the positioning shows that these overlap partially with the 'cold' sequence. In particular, 'hot' produces A between items 0 and 1 from 'cold', and it produces B between 1 and 2, meaning that these A and B values occur before cold completes. The final sequence, labelled 'cold.Concat(hot)' shows all three values from 'cold' followed by only those values that 'hot' produced after 'cold' completes, i.e., just C, D, and E.](./GraphicsIntro/Ch09-CombiningSequences-Marbles-Concat-Hot-Marbles.svg)
+![A marble diagram showing three sequences. The first, labelled 'cold', produces the values 0, 1, and 2, then completes. The second, labelled 'hot' produces values A, B, C, D, and E, but the positioning shows that these overlap partially with the 'cold' sequence. In particular, 'hot' produces A between items 0 and 1 from 'cold', and it produces B between 1 and 2, meaning that these A and B values occur before cold completes. The final sequence, labelled 'cold.Concat(hot)' shows all three values from 'cold' followed by only those values that 'hot' produced after 'cold' completes, i.e., just C, D, and E.](GraphicsIntro/Ch09-CombiningSequences-Marbles-Concat-Hot-Marbles.svg)
 
 Since `Concat` doesn't subscribe to its second input until the first has finished, it won't see the first couple of items that the `hot` source would deliver to any subscribers that been listening from the start. This might not be the behaviour you would expect: it certainly doesn't look like this concatenated all of the items from the first sequence with all of the items from the second one. It looks like it missed out `A` and `B` from `hot`.
 
@@ -45,18 +45,18 @@ Since `Concat` doesn't subscribe to its second input until the first has finishe
 
 This last example reveals that marble diagrams gloss over a detail: they show when a source starts, when it produces values, and when it finishes, but they ignore the fact that to be able to produce items at all, an observable source needs a subscriber. If nothing subscribes to an `IObservable<T>`, then it doesn't really produce anything. `Concat` doesn't subscribe to its second input until the first completes, so arguably instead of the diagram above, it would be more accurate to show this:
 
-![A marble diagram showing three sequences. The first, labelled 'cold', produces the values 0, 1, and 2, then completes. The second, labelled 'hot' produces values C, D, and E, and the positioning shows that these are produced after the 'cold' sequence completes. The final sequence, labelled 'cold.Concat(hot)' shows all three values from 'cold' followed by all three values from 'hot', i.e., 0, 1, 2, C, D, and E. This entirely diagram looks almost the same as the preceding one, except the 'hot' sequence doesn't produce the A or B values, and starts directly after 'cold' finishes.](./GraphicsIntro/Ch09-CombiningSequences-Marbles-Concat-Hot-Marbles-SubOnly.svg)
+![A marble diagram showing three sequences. The first, labelled 'cold', produces the values 0, 1, and 2, then completes. The second, labelled 'hot' produces values C, D, and E, and the positioning shows that these are produced after the 'cold' sequence completes. The final sequence, labelled 'cold.Concat(hot)' shows all three values from 'cold' followed by all three values from 'hot', i.e., 0, 1, 2, C, D, and E. This entirely diagram looks almost the same as the preceding one, except the 'hot' sequence doesn't produce the A or B values, and starts directly after 'cold' finishes.](GraphicsIntro/Ch09-CombiningSequences-Marbles-Concat-Hot-Marbles-SubOnly.svg)
 
 This makes it easier to see why `Concat` produces the output it does. But since `hot` is a hot source here, this diagram fails to convey the fact that `hot` is producing items entirely on its own schedule. In a scenario where `hot` had multiple subscribers, then the earlier diagram would arguably be better because it correctly reflects every event available from `hot` (regardless of however many listeners might be subscribed at any particular moment). But although this convention works for hot sources, it doesn't work for cold ones, which typically start producing items upon subscription. A source returned by [`Timer`](03_CreatingObservableSequences.md#observabletimer) produces items on a regular schedule, but that schedule starts at the instant when subscription occurs. That means that if there are multiple subscriptions, there are multiple schedules. Even if I have just a single `IObservable<long>` returned by `Observable.Timer`, each distinct subscriber will get items on its own schedule—subscribers receive events at a regular interval _starting from whenever they happened to subscribe_. So for cold observables, it typically makes sense to use the convention used by this second diagram, in which we're looking at the events received by one particular subscription to a source.
 
 Most of the time we can get away with ignoring this subtlety, quietly using whichever convention suits us. To paraphrase [Humpty Dumpty: when I use a marble diagram, it means just what I choose it to mean—neither more nor less](https://www.goodreads.com/quotes/12608-when-i-use-a-word-humpty-dumpty-said-in-rather). But when you're combining hot and cold sources together, there might not be one obviously best way to represent this in a marble diagram. We could even do something like this, where we describe the events that `hot` represents separately from the events seen by a particular subscription to `hot`.
 
-![This essentially combines the preceding two diagrams. It has the same first and last sequences. In between these it has a sequence labelled 'Events available from hot' which shows the same as the 'hot' sequence in the diagram before last. It then has a sequence labelled 'Concat subscription to hot' which shows the same as the 'hot' sequence from the preceding diagram.](./GraphicsIntro/Ch09-CombiningSequences-Marbles-Concat-Hot-Marbles-SourceAndSub.svg)
+![This essentially combines the preceding two diagrams. It has the same first and last sequences. In between these it has a sequence labelled 'Events available from hot' which shows the same as the 'hot' sequence in the diagram before last. It then has a sequence labelled 'Concat subscription to hot' which shows the same as the 'hot' sequence from the preceding diagram.](GraphicsIntro/Ch09-CombiningSequences-Marbles-Concat-Hot-Marbles-SourceAndSub.svg)
 
 
 We're using a distinct 'lane' in the marble diagram to represent the events seen by a particular subscription to a source. With this technique, we can also show what would happen if you pass the same cold source into `Concat` twice:
 
-![A marble diagram showing three sequences. The first, labelled 'Concat subscription to cold', produces the values 0, 1, and 2, then completes. The second, also labelled 'Concat subscription to cold' produces the values again, but positioned to shows that these are produced after the first sequence completes. The final sequence, labelled 'cold.Concat(cold)' shows the values twice, i.e., 0, 1, 2, 0, 1, and 2.](./GraphicsIntro/Ch09-CombiningSequences-Marbles-Concat-Marbles-Cold-Twice.svg)
+![A marble diagram showing three sequences. The first, labelled 'Concat subscription to cold', produces the values 0, 1, and 2, then completes. The second, also labelled 'Concat subscription to cold' produces the values again, but positioned to shows that these are produced after the first sequence completes. The final sequence, labelled 'cold.Concat(cold)' shows the values twice, i.e., 0, 1, 2, 0, 1, and 2.](GraphicsIntro/Ch09-CombiningSequences-Marbles-Concat-Marbles-Cold-Twice.svg)
 
 This highlights the fact that that being a cold source, `cold` provides items separately to each subscription. We see the same three values emerging from the same source, but at different times.
 
@@ -64,7 +64,7 @@ This highlights the fact that that being a cold source, `cold` provides items se
 
 What if you wanted to concatenate more than two sequences? `Concat` has an overload accepting multiple observable sequences as an array. This is annotated with the `params` keyword, so you don't need to construct the array explicitly. You can just pass any number of arguments, and the C# compiler will generate the code to create the array for you. There's also an overload taking an `IEnumerable<IObservable<T>>`, in case the observables you want to concatenate are already in some collection.
 
-```cs
+```csharp
 public static IObservable<TSource> Concat<TSource>(
     params IObservable<TSource>[] sources)
 
@@ -74,7 +74,7 @@ public static IObservable<TSource> Concat<TSource>(
 
 The `IEnumerable<IObservable<T>>` overload evaluates `sources` lazily. It won't begin to ask it for source observables until someone subscribes to the observable that `Concat` returns, and it only calls `MoveNext` again on the resulting `IEnumerator<IObservable<T>>` when the current source completes meaning it's ready to start on the text. To illustrate this, the following example is an iterator method that returns a sequence of sequences and is sprinkled with logging. It returns three observable sequences each with a single value [1], [2] and [3]. Each sequence returns its value on a timer delay.
 
-```cs
+```csharp
 public IEnumerable<IObservable<long>> GetSequences()
 {
     Console.WriteLine("GetSequences() called");
@@ -119,7 +119,7 @@ public IEnumerable<IObservable<long>> GetSequences()
 
 We can call this `GetSequences` method and pass the results to `Concat`, and then use our `Dump` extension method to watch what happens:
 
-```cs
+```csharp
 GetSequences().Concat().Dump("Concat");
 ```
 
@@ -145,7 +145,7 @@ Concat completed
 
 Below is a marble diagram of the `Concat` operator applied to the `GetSequences` method. 's1', 's2' and 's3' represent sequence 1, 2 and 3. Respectively, 'rs' represents the result sequence.
 
-![A marble diagram showing 4 sequences .The first, s1, waits for a while, then produces a single value, 1, then immediate completes. The second, s2, starts immediately after s1 completes. It waits for a slightly shorter interval, then produces the value 2, then immediately completes. The third, s3, starts some time after s2 completes, waits an even shorter time, produces the value 3, and then immediately completes. The final sequence, r, starts at the same time as s1, produces the values 1, 2, and 3 at exactly the same time as these values are produces by the earlier sources, and completes at the same time as s3.](./GraphicsIntro/Ch09-CombiningSequences-Marbles-Concat-Marbles-Three.svg)
+![A marble diagram showing 4 sequences .The first, s1, waits for a while, then produces a single value, 1, then immediate completes. The second, s2, starts immediately after s1 completes. It waits for a slightly shorter interval, then produces the value 2, then immediately completes. The third, s3, starts some time after s2 completes, waits an even shorter time, produces the value 3, and then immediately completes. The final sequence, r, starts at the same time as s1, produces the values 1, 2, and 3 at exactly the same time as these values are produces by the earlier sources, and completes at the same time as s3.](GraphicsIntro/Ch09-CombiningSequences-Marbles-Concat-Marbles-Three.svg)
 
 You should note that once the iterator has executed its first `yield return` to return the first sequence, the iterator does not continue until the first sequence has completed. The iterator calls `Console.WriteLine` to display the text `Yield 2nd sequence` immediately after that first `yield return`, but you can see that message doesn't appear in the output until after we see the `Concat-->1` message showing the first output from `Concat`, and also the `1st finished` message, produced by the `Finally` operator, which runs only after that first sequence has completed. (The code also makes that first source delay for 500ms before producing its value, so that if you run this, you can see that everything stops for a bit until that first source produces its single value then completes.) Once the first source completes, the `GetSequences` method continues (because `Concat` will ask it for the next item once the first observable source completes). When `GetSequences` provides the second sequence with another `yield return`, `Concat` subscribes to that, and again `GetSequences` makes no further progress until that second observable sequence completes. When asked for the third sequence, the iterator itself waits for a second before producing that third and final value, which you can see from the gap between the end of `s2` and the start of `s3` in the diagram.
 
@@ -155,7 +155,7 @@ There's one particular scenario that `Concat` supports, but in a slightly cumber
 
 How would we implement this? We want initially cold-source-like behaviour, but transitioning into hot. So we could just concatenate two sources. We could use [`Observable.Return`](03_CreatingObservableSequences.md#observablereturn) to create a single-element cold source, and then concatenate that with the live stream:
 
-```cs
+```csharp
 IVesselNavigation lastKnown = ais.GetLastReportedNavigationForVessel(mmsi);
 IObservable<IVesselNavigation> live = ais.GetNavigationMessagesForVessel(mmsi);
 
@@ -165,13 +165,13 @@ IObservable<IVesselNavigation> lastKnownThenLive = Observable.Concat(
 
 This is a common enough requirement that Rx supplies `Prepend` that has a similar effect. We can replace the final line with:
 
-```cs
+```csharp
 IObservable<IVesselNavigation> lastKnownThenLive = live.Prepend(lastKnown);
 ```
 
 This observable will do exactly the same thing: subscribers will immediately receive the `lastKnown`, and then if the vessel should emit further navigation messages, they will receive those too. By the way, for this scenario you'd probably also want to ensure that the look up of the "last known" message happens as late as possible. We can delay this until the point of subscription by using [`Defer`](03_CreatingObservableSequences.md#observabledefer):
 
-```cs
+```csharp
 public static IObservable<IVesselNavigation> GetLastKnownAndSubsequenceNavigationForVessel(uint mmsi)
 {
     return Observable.Defer<IVesselNavigation>(() =>
@@ -195,7 +195,7 @@ public static IObservable<IVesselNavigation> GetLastKnownAndSubsequenceNavigatio
 
 As you can see from its signature, this method takes a `params` array of values so you can pass in as many or as few values as you need:
 
-```cs
+```csharp
 // prefixes a sequence of values to an observable sequence.
 public static IObservable<TSource> StartWith<TSource>(
     this IObservable<TSource> source, 
@@ -210,7 +210,7 @@ There's also an overload that accepts an `IEnumerable<T>`. Note that Rx will _no
 
 The existence of `Prepend` might lead you to wonder whether there is an `Append` for adding a single item onto the end of any `IObservable<T>`. After all, this is a common LINQ operator; [LINQ to Objects has an `Append` implementation](https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.append), for example. And Rx does indeed supply such a thing:
 
-```cs
+```csharp
 IObservable<string> oneMore = arguments.Append("And another thing...");
 ```
 
@@ -228,7 +228,7 @@ You don't have to supply `DefaultIfEmpty` with a value. If you use the overload 
 
 The final operator that combines sequences sequentially is `Repeat`. It allows you to simply repeat a sequence. It offers overloads where you can specify the number of times to repeat the input, and one that repeats infinitely:
 
-```cs
+```csharp
 // Repeats the observable sequence a specified number of times.
 public static IObservable<TSource> Repeat<TSource>(
     this IObservable<TSource> source, 
@@ -288,7 +288,7 @@ To illustrate `Amb`'s behaviour, here's a marble diagram showing three sequences
 
 This code creates exactly the situation described in that marble diagram, to verify that this is indeed how `Amb` behaves:
 
-```cs
+```csharp
 var s1 = new Subject<int>();
 var s2 = new Subject<int>();
 var s3 = new Subject<int>();
@@ -366,7 +366,7 @@ Amb completed
 
 Here is the marble diagram illustrating how this code behaves:
 
-![A marble diagram showing four sequences. The first three all start at the same time, but significantly later than the fourth. The first, s1, waits for a while and then produces the value 1 and then completes. The second, s2, produces a value 2 before s1 produced its value, and immediately completes. The third, s3, produces its value, 3, before s2 produced 2, and then immediately completes. The final sequence, r, starts long before all the rest, and then produces 3 at the same time as s3 produced 3, and then immediately completes.](./GraphicsIntro/Ch09-CombiningSequences-Marbles-Amb-Marbles3.svg)
+![A marble diagram showing four sequences. The first three all start at the same time, but significantly later than the fourth. The first, s1, waits for a while and then produces the value 1 and then completes. The second, s2, produces a value 2 before s1 produced its value, and immediately completes. The third, s3, produces its value, 3, before s2 produced 2, and then immediately completes. The final sequence, r, starts long before all the rest, and then produces 3 at the same time as s3 produced 3, and then immediately completes.](GraphicsIntro/Ch09-CombiningSequences-Marbles-Amb-Marbles3.svg)
 
 Remember that `GetSequences` produces its first two observables as soon as it is asked for them, and then waits for 1 second before producing the third and final one. But unlike `Concat`, `Amb` won't subscribe to any of its sources until it has retrieved all of them from the iterator, which is why this marble diagram shows the subscriptions to all three sources starting after 1 second. (The first two sources were available earlier—`Amb` would have started enumerating the sources as soon as subscription occurred, but it waited until it had all three before subscribing, which is why they all appear over on the right.) The third sequence has the shortest delay between subscription and producing its value, so although it's the last observable returned, it is able to produce its value the fastest even though there are two sequences yielded one second before it (due to the `Thread.Sleep`).
 
@@ -382,7 +382,7 @@ The result of a `Merge` will complete only once all input sequences complete. Ho
 
 If you read the [Creating Observables chapter](03_CreatingObservableSequences.md), you've already seen one example of `Merge`. I used it to combine the individual sequences representing the various events provided by a `FileSystemWatcher` into a single stream at the end of the ['Representing Filesystem Events in Rx'](03_CreatingObservableSequences.md#representing-filesystem-events-in-rx) section. As another example, let's look at AIS once again. There is no publicly available single global source that can provide all AIS messages across the entire globe as an `IObservable<IAisMessage>`. Any single source is likely to cover just one area, or maybe even just a single AIS receiver. With `Merge`, it's straightforward to combine these into a single source:
 
-```cs
+```csharp
 IObservable<IAisMessage> station1 = aisStations.GetMessagesFromStation("AdurStation");
 IObservable<IAisMessage> station2 = aisStations.GetMessagesFromStation("EastbourneStation");
 
@@ -430,7 +430,7 @@ That last `Merge` overload that takes a sequence of sequences is particularly in
 
 That might sound familiar. The [`SelectMany` operator](06_Transformation.md#selectmany), which is able to flatten multiple observable sources back out into a single observable source. This is just another illustration of why I've described `SelectMany` as a fundamental operator in Rx: strictly speaking we don't need a lot of the operators that Rx gives us because we could build them using `SelectMany`. Here's a simple re-implementation of that last `Merge` overload using `SelectMany`:
 
-```cs
+```csharp
 public static IObservable<T> MyMerge<T>(this IObservable<IObservable<T>> sources) =>
     sources.SelectMany(source => source);
 ```
@@ -467,7 +467,7 @@ As we can see from the marble diagram, s1 and s2 are yielded and subscribed to i
 
 For each of the `Merge` overloads that accept variable numbers of sources (either via an array, an `IEnumerable<IObservable<T>>`, or an `IObservable<IObservable<T>>`) there's an additional overload adding a `maxconcurrent` parameter. For example:
 
-```cs
+```csharp
 public static IObservable<TSource> Merge<TSource>(this IEnumerable<IObservable<TSource>> sources, int maxConcurrent)
 ```
 
@@ -513,11 +513,11 @@ var subscription = search
 
 If we were lucky and each search completed before the next element from `searchValues` was produced, the output would look sensible. However, it is much more likely, however that multiple searches will result in overlapped search results. This marble diagram shows what the `Merge` function could do in such a situation.
 
-![A marble diagram showing 6 sources. The first, searchValues, produces the values I, In, Int, and Intr, and is shown as continuing on beyond the time represented by the diagram. The second, 'results (I)', starts when `searchValues` produces its first value, I, and then a while later produces a single value, Self, before immediately completing. It is significant that this single value is produced after the searchValues source has already produced its second value, In. The third source is labelled 'results (In)'. It starts at the same time that searchValues produces its second value, In, and a while later produces a single value, Into, before immediately completing. It is significant that it produces its value after searchValues has already produced its third value, Int. The fourth source is labelled 'results (Int)'. It starts at the same time that searchValues produces its third value, Int, and a while later produces a single value, 42, before immediately completing. It is significant that it produces its value after searchValues has already produced its fourth value, Intr. The fifth source is labelled 'results (Intr)'. It starts at the same time that searchValues produces its fourth value, Intr, and a while later produces a single value, Start, before immediately completing. It is significant that it produces its value before  the previous sequence produced its value. The final souce is labelled 'Merged results'. It starts at the same time that searchValues starts, and it contains each of the items produced by the 2nd, 3rd, 4th, and 5th sequences. It does not complete.](GraphicsIntro/Ch09-CombiningSequences-Marbles-Switch-Marbles-Bad-Merge.svg)
+![A marble diagram showing 6 sources. The first, searchValues, produces the values I, In, Int, and Intr, and is shown as continuing on beyond the time represented by the diagram. The second, 'results (I)', starts when `searchValues` produces its first value, I, and then a while later produces a single value, Self, before immediately completing. It is significant that this single value is produced after the searchValues source has already produced its second value, In. The third source is labelled 'results (In)'. It starts at the same time that searchValues produces its second value, In, and a while later produces a single value, Into, before immediately completing. It is significant that it produces its value after searchValues has already produced its third value, Int. The fourth source is labelled 'results (Int)'. It starts at the same time that searchValues produces its third value, Int, and a while later produces a single value, 42, before immediately completing. It is significant that it produces its value after searchValues has already produced its fourth value, Intr. The fifth source is labelled 'results (Intr)'. It starts at the same time that searchValues produces its fourth value, Intr, and a while later produces a single value, Start, before immediately completing. It is significant that it produces its value before  the previous sequence produced its value. The final source is labelled 'Merged results'. It starts at the same time that searchValues starts, and it contains each of the items produced by the 2nd, 3rd, 4th, and 5th sequences. It does not complete.](GraphicsIntro/Ch09-CombiningSequences-Marbles-Switch-Marbles-Bad-Merge.svg)
 
 Note how the values from the search results are all mixed together. The fact that some search terms took longer to get a search result than others has also meant that they have come out in the wrong order. This is not what we want. If we use the `Switch` extension method we will get much better results. `Switch` will subscribe to the outer sequence and as each inner sequence is yielded it will subscribe to the new inner sequence and dispose of the subscription to the previous inner sequence. This will result in the following marble diagram:
 
-![A marble diagram showing 6 sources. The first, searchValues, produces the values I, In, Int, and Intr, and is shown as continuing on beyond the time represented by the diagram. The second, 'results (I)', starts when `searchValues` produces its first value, I, and then a while later produces a single value, Self, before immediately completing. It is significant that this single value is produced after the searchValues source has already produced its second value, In. The third source is labelled 'results (In)'. It starts at the same time that searchValues produces its second value, In, and a while later produces a single value, Into, before immediately completing. It is significant that it produces its value after searchValues has already produced its third value, Int. The fourth source is labelled 'results (Int)'. It starts at the same time that searchValues produces its third value, Int, and a while later produces a single value, 42, before immediately completing. It is significant that it produces its value after searchValues has already produced its fourth value, Intr. The fifth source is labelled 'results (Intr)'. It starts at the same time that searchValues produces its fourth value, Intr, and a while later produces a single value, Start, before immediately completing. It is significant that it produces its value before  the previous sequence produced its value. The final souce is labelled 'Merged results'. It starts at the same time that searchValues starts, and it reports just a single value, Start, at exactly the same time the `results (Intr)` source produces the same value. It does not complete.](GraphicsIntro/Ch09-CombiningSequences-Marbles-Switch-Marbles.svg)
+![A marble diagram showing 6 sources. The first, searchValues, produces the values I, In, Int, and Intr, and is shown as continuing on beyond the time represented by the diagram. The second, 'results (I)', starts when `searchValues` produces its first value, I, and then a while later produces a single value, Self, before immediately completing. It is significant that this single value is produced after the searchValues source has already produced its second value, In. The third source is labelled 'results (In)'. It starts at the same time that searchValues produces its second value, In, and a while later produces a single value, Into, before immediately completing. It is significant that it produces its value after searchValues has already produced its third value, Int. The fourth source is labelled 'results (Int)'. It starts at the same time that searchValues produces its third value, Int, and a while later produces a single value, 42, before immediately completing. It is significant that it produces its value after searchValues has already produced its fourth value, Intr. The fifth source is labelled 'results (Intr)'. It starts at the same time that searchValues produces its fourth value, Intr, and a while later produces a single value, Start, before immediately completing. It is significant that it produces its value before  the previous sequence produced its value. The final source is labelled 'Merged results'. It starts at the same time that searchValues starts, and it reports just a single value, Start, at exactly the same time the `results (Intr)` source produces the same value. It does not complete.](GraphicsIntro/Ch09-CombiningSequences-Marbles-Switch-Marbles.svg)
 
 Now, each time a new search term arrives, causing a new search to be kicked off, a corresponding new `IObservable<string>` for that search's results appears, causing `Switch` to unsubscribe from the previous results. This means that any results that arrive too late (i.e., when the result is for a search term that is no longer the one in the search box) will be dropped. As it happens, in this particular example, this means that we only see the result for the final search term. All the intermediate values that we saw as the user was typing didn't hang around for long, because the user kept on pressing the next key before we'd received the previous value's results. Only at the end, when the user stopped typing for long enough that the search results came back before they became out of date, do we finally see a value from `Switch`. The net effect is that we've eliminated confusing results that are out of date.
 
@@ -588,7 +588,7 @@ There's another operator that processes pairs of items from two sources: `Sequen
 
 In the case where the sources produce different values, `SequenceEqual` produces a single `false` value as soon as it detects this. But if the sources are equal, it can only report this when both have completed because until that happens, it doesn't yet know if there might a difference coming later. Here's an example illustrating its behaviour:
 
-```cs
+```csharp
 var subject1 = new Subject<int>();
 
 subject1.Subscribe(
@@ -790,7 +790,8 @@ public IObservable<TResult> MyJoin<TLeft, TRight, TLeftDuration, TRightDuration,
         right,
         leftDurationSelector,
         rightDurationSelector,
-        (leftValue, rightValues) => rightValues.Select(rightValue=>resultSelector(leftValue, rightValue))
+        (leftValue, rightValues) => 
+          rightValues.Select(rightValue=>resultSelector(leftValue, rightValue))
     )
     .Merge();
 }
@@ -833,7 +834,7 @@ It may sound very complex, but comparing some code samples should make it easier
 
 To `Zip` three sequences together, you can either use `Zip` methods chained together like this:
 
-```cs
+```csharp
 IObservable<long> one = Observable.Interval(TimeSpan.FromSeconds(1)).Take(5);
 IObservable<long> two = Observable.Interval(TimeSpan.FromMilliseconds(250)).Take(10);
 IObservable<long> three = Observable.Interval(TimeSpan.FromMilliseconds(150)).Take(14);
@@ -851,7 +852,7 @@ zippedSequence.Subscribe(
 
 Or perhaps use the nicer syntax of the `And`/`Then`/`When`:
 
-```cs
+```csharp
 Pattern<long, long, long> pattern =
     one.And(two).And(three);
 Plan<(long One, long Two, long Three)> plan =
@@ -865,7 +866,7 @@ zippedSequence.Subscribe(
 
 This can be further reduced, if you prefer, to:
 
-```cs
+```csharp
 IObservable<(long One, long Two, long Three)> zippedSequence = Observable.When(
     one.And(two).And(three)
         .Then((first, second, third) =>

@@ -10,14 +10,14 @@ If we know exactly which ships we're interested in, you saw how to filter this s
 
 We can fix this by splitting the "all the ships" sequence into lots of little sequences:
 
-```cs
-IObservable<IGroupedObservable<uint, IAisMessage>> perShipObservables = receiverHost.Messages
-    .GroupBy(message => message.Mmsi);
+```csharp
+IObservable<IGroupedObservable<uint, IAisMessage>> perShipObservables = 
+   receiverHost.Messages.GroupBy(message => message.Mmsi);
 ```
 
 This `perShipObservables` is an observable sequence of observable sequences. More specifically, it's an observable sequence of grouped observable sequences, but as you can see from [the definition of `IGroupedObservable<TKey, T>`](https://github.com/dotnet/reactive/blob/95d9ea9d2786f6ec49a051c5cff47dc42591e54f/Rx.NET/Source/src/System.Reactive/Linq/IGroupedObservable.cs#L18), a grouped observable is just a specialized kind of observable:
 
-```cs
+```csharp
 public interface IGroupedObservable<out TKey, out TElement> : IObservable<TElement>
 {
     TKey Key { get; }
@@ -28,13 +28,13 @@ Each time `receiverHost.Message` reports an AIS message, the `GroupBy` operator 
 
 So in this example, the effect is that any time the `receiverHost` reports a message from a ship with we've not previously heard from, `perShipObservables` will emit a new observable that reports messages just for that ship. We could use this to report each time we learn about a new ship:
 
-```cs
+```csharp
 perShipObservables.Subscribe(m => Console.WriteLine($"New ship! {m.Key}"));
 ```
 
 But that doesn't do anything we couldn't have achieved with `Distinct`. The power of `GroupBy` is that we get an observable sequence for each ship here, so we can go on to set up some per-ship processing:
 
-```cs
+```csharp
 IObservable<IObservable<IAisMessageType1to3>> shipStatusChangeObservables =
     perShipObservables.Select(shipMessages => shipMessages
         .OfType<IAisMessageType1to3>()
@@ -48,7 +48,7 @@ At this point we have an observable sequence of observable sequences. The outer 
 
 I'm going to make a small tweak:
 
-```cs
+```csharp
 IObservable<IAisMessageType1to3> shipStatusChanges =
     perShipObservables.SelectMany(shipMessages => shipMessages
         .OfType<IAisMessageType1to3>()
@@ -68,9 +68,9 @@ The `perShipObservables` section shows how `GroupBy` creates a separate observab
 
 Marble diagrams need to be simple to fit on a page, so let's now take a quick look at some real output. This confirms that this is very different from the raw `receiverHost.Messages`. First, I need to attach a subscriber:
 
-```cs
-shipStatusChanges.Subscribe(m =>
-    Console.WriteLine($"Vessel {((IAisMessage)m).Mmsi} changed status to {m.NavigationStatus} at {DateTimeOffset.UtcNow}"));
+```csharp
+shipStatusChanges.Subscribe(m => Console.WriteLine(
+   $"Vessel {((IAisMessage)m).Mmsi} changed status to {m.NavigationStatus} at {DateTimeOffset.UtcNow}"));
 ```
 
 If I then let the receiver run for about ten minutes, I see this output:
@@ -115,7 +115,7 @@ This power comes at a cost, of course. It didn't take much code to get Rx to do 
 
 Now that we've seen an example, let's look at `GroupBy` in a bit more detail. It comes in a few different flavours. We just used this overload:
 
-```cs
+```csharp
 public static IObservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(
     this IObservable<TSource> source, 
     Func<TSource, TKey> keySelector)
@@ -123,7 +123,7 @@ public static IObservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TK
 
 That overload uses whatever the default comparison behaviour is for your chosen key type. In our case we used `uint` (the type of the `Mmsi` property that uniquely identifies a vessel in an AIS message), which is just a number, so it's an intrinsically comparable type. In some cases you might want non-standard comparison. For example, if you use `string` as a key, you might want to be able to specify a locale-specific case-insensitive comparison. For these scenarios, there's an overload that takes a comparer:
 
-```cs
+```csharp
 public static IObservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(
     this IObservable<TSource> source, 
     Func<TSource, TKey> keySelector, 
@@ -132,7 +132,7 @@ public static IObservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TK
 
 There are two more overloads that extend the preceding two with an `elementSelector` argument:
 
-```cs
+```csharp
 public static IObservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(
     this IObservable<TSource> source, 
     Func<TSource, TKey> keySelector, 
@@ -151,32 +151,30 @@ This is functionally equivalent to using the `Select` operator after `GroupBy`.
 
 By the way, when using `GroupBy` you might be tempted to `Subscribe` directly to the nested observables:
 
-```cs
+```csharp
 // Don't do it this way. Use the earlier example.
 perShipObservables.Subscribe(shipMessages =>
-    shipMessages
-        .OfType<IAisMessageType1to3>()
-        .DistinctUntilChanged(m => m.NavigationStatus)
-        .Skip(1)
-        .Subscribe(m =>
-            Console.WriteLine(
-                $"Ship {((IAisMessage)m).Mmsi} changed status to {m.NavigationStatus} at {DateTimeOffset.UtcNow}")));
+  shipMessages
+    .OfType<IAisMessageType1to3>()
+    .DistinctUntilChanged(m => m.NavigationStatus)
+    .Skip(1)
+    .Subscribe(m => Console.WriteLine(
+    $"Ship {((IAisMessage)m).Mmsi} changed status to {m.NavigationStatus} at {DateTimeOffset.UtcNow}")));
 ```
 
 This may seem to have the same effect: `perShipObservables` here is the sequence returned by `GroupBy`, so it will produce a observable stream for each distinct ship. This example subscribes to that, and then uses the same operators as before on each nested sequence, but instead of collecting the results out into a single output observable with `SelectMany`, this explicitly calls `Subscribe` for each nested stream.
 
 This might seem like a more natural way to work if you're unfamiliar with Rx. But although this will seem to produce he same behaviour, it introduces a problem: Rx doesn't understand that these nested subscriptions are associated with the outer subscription. That won't necessarily cause a problem in this simple example, but it could if we start using additional operators. Consider this modification:
 
-```cs
+```csharp
 IDisposable sub = perShipObservables.Subscribe(shipMessages =>
-    shipMessages
-        .OfType<IAisMessageType1to3>()
-        .DistinctUntilChanged(m => m.NavigationStatus)
-        .Skip(1)
-        .Finally(() => Console.WriteLine($"Nested sub for {shipMessages.Key} ending"))
-        .Subscribe(m =>
-            Console.WriteLine(
-                $"Ship {((IAisMessage)m).Mmsi} changed status to {m.NavigationStatus} at {DateTimeOffset.UtcNow}")));
+  shipMessages
+    .OfType<IAisMessageType1to3>()
+    .DistinctUntilChanged(m => m.NavigationStatus)
+    .Skip(1)
+    .Finally(() => Console.WriteLine($"Nested sub for {shipMessages.Key} ending"))
+    .Subscribe(m => Console.WriteLine(
+    $"Ship {((IAisMessage)m).Mmsi} changed status to {m.NavigationStatus} at {DateTimeOffset.UtcNow}")));
 ```
 
 I've added a `Finally` operator for the nested sequence. This enables us to invoke a callback when a sequence comes to an end for any reason. But even if we unsubscribe from the outer sequence (by calling `sub.Dispose();`) this `Finally` will never do anything. That's because Rx has no way of knowing that these inner subscriptions are part of the outer one.
@@ -195,7 +193,7 @@ Efficiency concerns are not the only reason you might want to process multiple e
 
 The simplest way to use `Buffer` is to gather up adjacent elements into chunks. (LINQ to Objects now has an equivalent operator that it calls [`Chunk`](https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.chunk). The reason Rx didn't use the same name is that Rx introduced this operator over 10 years before LINQ to Objects did. So the real question is why LINQ to Objects chose a different name. It might be because `Chunk` doesn't support all of the variations that Rx's `Buffer` does, but you'd need to ask the .NET runtime library team.) This overload of `Buffer` takes a single argument, indicating the chunk size you would like:
 
-```cs
+```csharp
 public static IObservable<IList<TSource>> Buffer<TSource>(
     this IObservable<TSource> source, 
     int count)
@@ -204,20 +202,20 @@ public static IObservable<IList<TSource>> Buffer<TSource>(
 
 This example uses it to split navigation messages into chunks of 4, and then goes on to calculate the average speed across those 4 readings:
 
-```cs
-IObservable<IList<IVesselNavigation>> navigationChunks = receiverHost.Messages
-    .Where(v => v.Mmsi == 235009890)
-    .OfType<IVesselNavigation>()
-    .Where(n => n.SpeedOverGround.HasValue)
-    .Buffer(4);
+```csharp
+IObservable<IList<IVesselNavigation>> navigationChunks = 
+   receiverHost.Messages.Where(v => v.Mmsi == 235009890)
+                        .OfType<IVesselNavigation>()
+                        .Where(n => n.SpeedOverGround.HasValue)
+                        .Buffer(4);
 
-IObservable<float> recentAverageSpeed = navigationChunks
-    .Select(chunk => chunk.Average(n => n.SpeedOverGround.Value));
+IObservable<float> recentAverageSpeed = 
+    navigationChunks.Select(chunk => chunk.Average(n => n.SpeedOverGround.Value));
 ```
 
 If the source completes, and has not produced an exact multiple of the chunk size, the final chunk will be smaller. We can see this with the following more artificial example:
 
-```cs
+```csharp
 Observable
     .Range(1, 5)
     .Buffer(2)
@@ -253,7 +251,7 @@ public static IObservable<IList<TSource>> Buffer<TSource>(
 
 The first of these partitions the source based on nothing but timing. This will emit one chunk every second no matter the rate at which `source` produces value:
 
-```cs
+```csharp
 IObservable<IList<string>> output = source.Buffer(TimeSpan.FromSeconds(1));
 ```
 
@@ -271,7 +269,7 @@ There's an overload of `Buffer` that enables us to do a little better: instead o
 
 This is sometimes called a sliding window. We want to process readings 1, 2, 3, 4, then 2, 3, 4, 5, then 3, 4, 5, 6, and so on. There's an overload of buffer that can do this. This example shows the first statement from the earlier average speed example, but with one small modification:
 
-```cs
+```csharp
 IObservable<IList<IVesselNavigation>> navigationChunks = receiverHost.Messages
     .Where(v => v.Mmsi == 235009890)
     .OfType<IVesselNavigation>()
@@ -291,7 +289,7 @@ If we fed this into the same `recentAverageSpeed` expression as the earlier exam
 
 We could also use this to improve the example earlier that reported when ships changed their `NavigationStatus`. The last example told you what state a vessel had just entered, but this raises an obvious question: what state was it in before? We can use `Buffer(2, 1)` so that each time we see a message indicating a change in status, we also have access to the preceding change in status:
 
-```cs
+```csharp
 IObservable<IList<IAisMessageType1to3>> shipStatusChanges =
     perShipObservables.SelectMany(shipMessages => shipMessages
         .OfType<IAisMessageType1to3>()
@@ -345,7 +343,7 @@ Nested observables produce their items as and when they become available. They c
 
 In addition to supporting simple count-based or duration-based splitting, there are more flexible ways to define the window boundaries, such as this overload:
 
-```cs
+```csharp
 // Projects each element of an observable sequence into consecutive non-overlapping windows.
 // windowClosingSelector : A function invoked to define the boundaries of the produced 
 // windows. A new window is started when the previous one is closed.
@@ -360,22 +358,22 @@ The first of these complex overloads allows us to control when windows close. Th
 
 In this example, we create a window with a closing selector. We return the same subject from that selector every time, then notify from the subject whenever a user presses enter from the console.
 
-```cs
+```csharp
 int windowIdx = 0;
 IObservable<long> source = Observable.Interval(TimeSpan.FromSeconds(1)).Take(10);
 var closer = new Subject<Unit>();
 source.Window(() => closer)
-        .Subscribe(window =>
-        {
-            int thisWindowIdx = windowIdx++;
-            Console.WriteLine("--Starting new window");
-            string windowName = $"Window{thisWindowIdx}";
-            window.Subscribe(
-                value => Console.WriteLine("{0} : {1}", windowName, value),
-                ex => Console.WriteLine("{0} : {1}", windowName, ex),
-                () => Console.WriteLine("{0} Completed", windowName));
-        },
-        () => Console.WriteLine("Completed"));
+      .Subscribe(window =>
+       {
+           int thisWindowIdx = windowIdx++;
+           Console.WriteLine("--Starting new window");
+           string windowName = $"Window{thisWindowIdx}";
+           window.Subscribe(
+              value => Console.WriteLine("{0} : {1}", windowName, value),
+              ex => Console.WriteLine("{0} : {1}", windowName, ex),
+              () => Console.WriteLine("{0} Completed", windowName));
+       },
+       () => Console.WriteLine("Completed"));
 
 string input = "";
 while (input != "exit")

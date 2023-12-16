@@ -18,7 +18,7 @@ The [Reactive Extensions for .NET](https://github.com/dotnet/reactive) (Rx.NET o
 
 For example, C# offers integrated query features that we might use to find all of the entries in a list that meet some criteria. If we have some `List<Trade> trades` variable, we might write this:
 
-```cs
+```csharp
 var bigTrades =
     from trade in trades
     where trade.Volume > 1_000_000;
@@ -106,7 +106,7 @@ Alternatively, if you have Visual Studio installed, create a new .NET Console pr
 
 This code creates an observable source (`ticks`) that produces an event once every second. The code also passes a handler to that source that writes a message to the console for each event:
 
-```cs
+```csharp
 using System.Reactive.Linq;
 
 IObservable<long> ticks = Observable.Timer(

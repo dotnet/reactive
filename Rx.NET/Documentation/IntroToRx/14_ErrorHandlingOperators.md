@@ -12,7 +12,7 @@ Rx defines a `Catch` operator. The name is deliberately reminiscent of C#'s `try
 
 `Catch` has an overload that enables you provide a handler to be invoked if the source produces an error:
 
-```cs
+```csharp
 public static IObservable<TSource> Catch<TSource, TException>(
     this IObservable<TSource> source, 
     Func<TException, IObservable<TSource>> handler) 
@@ -21,7 +21,7 @@ public static IObservable<TSource> Catch<TSource, TException>(
 
 This is conceptually very similar to a C# `catch` block: we can write code that looks at the exception and then decides how to proceed. And as with a `catch` block we can decide which kinds of exceptions we are interested in. For example, we might know that the source will sometimes produce a `TimeoutException`, and we might just want to return an empty sequence in that case, instead of an error:
 
-```cs
+```csharp
 IObservable<int> result = source.Catch<int, TimeoutException>(_ => Observable.Empty<int>());
 ```
 
@@ -31,7 +31,7 @@ This example returns `Observable.Empty<int>()`. This is conceptually similar to 
 
 This last example ignored its input, because it was interested only in the exception type. However, we are free to examine the exception, and make more fine-grained decisions about what should emerge from the `Catch`:
 
-```cs
+```csharp
 IObservable<string> result = source.Catch(
     (FileNotFoundException x) => x.FileName == "settings.txt"
         ? Observable.Return(DefaultSettings) : Observable.Throw<string>(x));
@@ -45,13 +45,13 @@ You're also free to throw a completely different exception, of course. You can r
 
 The other overloads of `Catch` offer less discriminating behaviour: you can supply one or more additional sequences, and any time the current source fails, the exception will be ignored, and `Catch` will simply move onto the next sequence. Since you will never get to know what the exception is, this mechanism gives you no way of knowing whether the exception that occurred was one you anticipated, or a completely unexpected one, so you will normally want to avoid this form. But for completeness, here's how to use it:
 
-```cs
+```csharp
 IObservable<string> settings = settingsSource1.Catch(settingsSource2);
 ```
 
 That form provides just a single fallback. There's also a static `Observable.Catch` method that takes a `params` array, so you can pass any number of sources. This is exactly equivalent to the preceding example:
 
-```cs
+```csharp
 IObservable<string> settings = Observable.Catch(settingsSource1, settingsSource2);
 ```
 
@@ -122,7 +122,7 @@ Finally
 
 Note that if the subscriber's `OnError` throws an exception, and if the source calls `OnNext` without a `try`/`catch` block, the CLR's unhandled exception reporting mechanism kicks in, and in some circumstances this can result in the application shutting down before the `Finally` operator has had an opportunity to invoke the callback. We can create this scenario with the following code:
 
-```cs
+```csharp
 var source = new Subject<int>();
 var result = source.Finally(() => Console.WriteLine("Finally"));
 result.Subscribe(

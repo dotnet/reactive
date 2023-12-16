@@ -1,6 +1,6 @@
 # Time-based sequences
 
-With event sources, timing is often important. In some cases, the only information of interest about some event might be the time at which it occurred. The core `IObservable<T>` and `IObserver<T>` interfaces don't mention timing at all in their method signatures, but they don't need to, because a source can decide when it calls an observer's `OnNext` method. A subscriber knows when an event occurred because it is occurring right now. This isn't always the most convenient way in which to work with timing, so the Rx library provides some timing-related operators. We've already seen a couple of operators that offer optional time-based operation: [`Buffer`](./08_Partitioning.md#buffer) and [`Window`](08_Partitioning#window). This chapter looks at the various operators that are all about timing.
+With event sources, timing is often important. In some cases, the only information of interest about some event might be the time at which it occurred. The core `IObservable<T>` and `IObserver<T>` interfaces don't mention timing at all in their method signatures, but they don't need to, because a source can decide when it calls an observer's `OnNext` method. A subscriber knows when an event occurred because it is occurring right now. This isn't always the most convenient way in which to work with timing, so the Rx library provides some timing-related operators. We've already seen a couple of operators that offer optional time-based operation: [`Buffer`](08_Partitioning.md#buffer) and [`Window`](08_Partitioning#window). This chapter looks at the various operators that are all about timing.
 
 ## Timestamp and TimeInterval
 
@@ -56,7 +56,7 @@ There are overloads of `Delay` offering various different ways to specify the ti
 
 To show the `Delay` method in action, this example creates a sequence of values one second apart and timestamps them. This will show that it is not the subscription that is being delayed, but the actual forwarding of the notifications to our final subscriber.
 
-```cs
+```csharp
 IObservable<Timestamped<long>> source = Observable
     .Interval(TimeSpan.FromSeconds(1))
     .Take(5)
@@ -64,9 +64,10 @@ IObservable<Timestamped<long>> source = Observable
 
 IObservable<Timestamped<long>> delay = source.Delay(TimeSpan.FromSeconds(2));
 
-delay.Subscribe(
-    value => Console.WriteLine($"Item {value.Value} with timestamp {value.Timestamp} received at {DateTimeOffset.Now}"),
-    () => Console.WriteLine("delay Completed"));
+delay.Subscribe(value => 
+   Console.WriteLine(
+     $"Item {value.Value} with timestamp {value.Timestamp} received at {DateTimeOffset.Now}"),
+   () => Console.WriteLine("delay Completed"));
 ```
 
 If you look at the timestamps in the output, you can see that the times captured by `Timestamp` are all two seconds earlier than the time reported by the subscription:
@@ -172,8 +173,8 @@ Since the first sample is taken after the source emits five, and two thirds of t
 The `Throttle` extension method provides a sort of protection against sequences that produce values at variable rates and sometimes too quickly. Like the `Sample` method, `Throttle` will return the last sampled value for a period of time. Unlike `Sample` though, `Throttle`'s period is a sliding window. Each time `Throttle` receives a value, the window is reset. Only once the period of time has elapsed will the last value be propagated. This means that the `Throttle` method is only useful for sequences that produce values at a variable rate. Sequences that produce values at a constant rate (like `Interval` or `Timer`) would have all of their values suppressed if they produced values faster than the throttle period, whereas all of their values would be propagated if they produced values slower than the throttle period.
 
 ```csharp
-// Ignores values from an observable sequence which are followed by another value before
-//  dueTime.
+// Ignores values from an observable sequence which 
+// are followed by another value before dueTime.
 public static IObservable<TSource> Throttle<TSource>(
     this IObservable<TSource> source, 
     TimeSpan dueTime)
@@ -194,8 +195,8 @@ Note that the RxJS library decided to make their version of throttle work differ
 The `Timeout` operator method allows us terminate a sequence with an error if the source does not produce any notifications for a given period. We can either specify the period as a sliding window with a `TimeSpan`, or as an absolute time that the sequence must complete by providing a `DateTimeOffset`.
 
 ```csharp
-// Returns either the observable sequence or a TimeoutException if the maximum duration
-//  between values elapses.
+// Returns either the observable sequence or a TimeoutException
+// if the maximum duration between values elapses.
 public static IObservable<TSource> Timeout<TSource>(
     this IObservable<TSource> source, 
     TimeSpan dueTime)
@@ -206,7 +207,8 @@ public static IObservable<TSource> Timeout<TSource>(
     IScheduler scheduler)
 {...}
 
-// Returns either the observable sequence or a TimeoutException if dueTime elapses.
+// Returns either the observable sequence or a  
+// TimeoutException if dueTime elapses.
 public static IObservable<TSource> Timeout<TSource>(
     this IObservable<TSource> source, 
     DateTimeOffset dueTime)
@@ -221,8 +223,9 @@ public static IObservable<TSource> Timeout<TSource>(
 If we provide a `TimeSpan` and no values are produced within that time span, then the sequence fails with a `TimeoutException`.
 
 ```csharp
-var source = Observable.Interval(TimeSpan.FromMilliseconds(100)).Take(5)
-    .Concat(Observable.Interval(TimeSpan.FromSeconds(2)));
+var source = Observable.Interval(TimeSpan.FromMilliseconds(100))
+                       .Take(5)
+                       .Concat(Observable.Interval(TimeSpan.FromSeconds(2)));
 
 var timeout = source.Timeout(TimeSpan.FromSeconds(1));
 timeout.Subscribe(
@@ -266,8 +269,8 @@ System.TimeoutException: The operation has timed out.
 There are other `Timeout` overloads enabling us to substitute an alternative sequence when a timeout occurs.
 
 ```csharp
-// Returns the source observable sequence or the other observable sequence if the maximum 
-// duration between values elapses.
+// Returns the source observable sequence or the other observable 
+// sequence if the maximum duration between values elapses.
 public static IObservable<TSource> Timeout<TSource>(
     this IObservable<TSource> source, 
     TimeSpan dueTime, 
@@ -281,8 +284,8 @@ public static IObservable<TSource> Timeout<TSource>(
     IScheduler scheduler)
 {...}
 
-// Returns the source observable sequence or the other observable sequence if dueTime 
-// elapses.
+// Returns the source observable sequence or the 
+// other observable sequence if dueTime elapses.
 public static IObservable<TSource> Timeout<TSource>(
     this IObservable<TSource> source, 
     DateTimeOffset dueTime, 

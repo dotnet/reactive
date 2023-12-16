@@ -8,7 +8,7 @@ Up until now, we have looked at creation of sequences, transition into sequences
 
 The most straightforward transformation method is `Select`. It allows you provide a function that takes a value of `TSource` and return a value of `TResult`. The signature for `Select` reflects its ability to transform a sequence's elements from one type to another type, i.e. `IObservable<TSource>` to `IObservable<TResult>`.
 
-```cs
+```csharp
 IObservable<TResult> Select<TSource, TResult>(
     this IObservable<TSource> source, 
     Func<TSource, TResult> selector)
@@ -16,7 +16,7 @@ IObservable<TResult> Select<TSource, TResult>(
 
 You don't have to change the type—`TSource` and `TResult` can be the same if you want. This first example transforms a sequence of integers by adding 3, resulting in another sequence of integers.
 
-```cs
+```csharp
 IObservable<int> source = Observable.Range(0, 5);
 source.Select(i => i+3)
       .Dump("+3")
@@ -35,7 +35,7 @@ This uses the `Dump` extension method we defined at the start of [the Filtering 
 
 This next example transforms values in a way that changes their type. It converts integer values to characters.
 
-```cs
+```csharp
 Observable.Range(1, 5);
           .Select(i => (char)(i + 64))
           .Dump("char");
@@ -86,7 +86,7 @@ In Rx, `Select` has another overload, in which the `selector` function takes two
 
 Whereas `Select` produces one output for each input, `SelectMany` enables each input element to be transformed into any number of outputs. To see how this can work, let's first look at an example that uses just `Select`:
 
-```cs
+```csharp
 Observable
     .Range(1, 5)
     .Select(i => new string((char)(i+64), i))
@@ -106,7 +106,7 @@ strings completed
 
 As you can see, for each of the numbers produced by `Range`, our output contains a string whose length is that many characters. What if, instead of transforming each number into a string, we transformed it into an `IObservable<char>`. We can do that just by adding `.ToObservable()` after constructing the string:
 
-```cs
+```csharp
 Observable
     .Range(1, 5)
     .Select(i => new string((char)(i+64), i).ToObservable())
@@ -126,7 +126,7 @@ strings completed
 
 We have an observable sequence of observable sequences. But look at what happens if we now replace that `Select` with a `SelectMany`:
 
-```cs
+```csharp
 Observable
     .Range(1, 5)
     .SelectMany(i => new string((char)(i+64), i).ToObservable())
@@ -158,7 +158,7 @@ The order has become a little scrambled, but if you look carefully you'll see th
 
 `SelectMany` expects the transformation function to return an `IObservable<T>` for each input, and it then combines the result of those back into a single result. The LINQ to Objects equivalent is a little less chaotic. If you were to run this:
 
-```cs
+```csharp
 Enumerable
     .Range(1, 5)
     .SelectMany(i => new string((char)(i+64), i))
@@ -187,10 +187,12 @@ The Rx version of the example we're currently examining is in fact one of these 
 
 We can make a small tweak to prevent the child sequences all from trying to run at the same time. (This also uses `Observable.Repeat` instead of the rather indirect route of constructing a `string` and then calling `ToObservable` on that. I did that in earlier examples to emphasize the similarity with the LINQ to Objects example, but you wouldn't really do it that way in Rx.)
 
-```cs
+```csharp
 Observable
     .Range(1, 5)
-    .SelectMany(i => Observable.Repeat((char)(i+64), i).Delay(TimeSpan.FromMilliseconds(i * 100)))
+    .SelectMany(i => 
+        Observable.Repeat((char)(i+64), i)
+                  .Delay(TimeSpan.FromMilliseconds(i * 100)))
     .Dump("chars");
 ```
 
@@ -221,7 +223,7 @@ This clarifies that `SelectMany` lets you produce a sequence for each item that 
 
 I introduced these gaps purely to provide a slightly less confusing example, but if you really wanted this sort of strictly-in-order handling, you wouldn't use `SelectMany` in this way in practice. For one thing, it's not completely guaranteed to work. (If you try this example, but modify it to use shorter and shorter timespans, eventually you reach a point where the items start getting jumbled up again. And since .NET is not a real-time programming system, there's actually no safe timespan you can specific here that guarantees the ordering.) If you absolutely need all the items from the first child sequence before seeing any from the second, there's actually a robust way to ask for that:
 
-```cs
+```csharp
 Observable
     .Range(1, 5)
     .Select(i => Observable.Repeat((char)(i+64), i))
@@ -233,12 +235,15 @@ However, that would not have been a good way to show what `SelectMany` does, sin
 
 ### The Significance of SelectMany
 
-If you've been reading this book's chapters in order, you had already seen two examples of `SelectMany` in earlier chapters. The first example in the [**LINQ Operators and Composition** section of Chapter 2](./02_KeyTypes.md#linq-operators-and-composition) used it. Here's the relevant code:
+If you've been reading this book's chapters in order, you had already seen two examples of `SelectMany` in earlier chapters. The first example in the [**LINQ Operators and Composition** section of Chapter 2](02_KeyTypes.md#linq-operators-and-composition) used it. Here's the relevant code:
 
-```cs
+```csharp
 IObservable<int> onoffs =
     from _ in src
-    from delta in Observable.Return(1, scheduler).Concat(Observable.Return(-1, scheduler).Delay(minimumInactivityPeriod, scheduler))
+    from delta in 
+       Observable.Return(1, scheduler)
+                 .Concat(Observable.Return(-1, scheduler)
+                                   .Delay(minimumInactivityPeriod, scheduler))
     select delta;
 ```
 
@@ -246,25 +251,25 @@ IObservable<int> onoffs =
 
 As you may recall, this example worked by creating a new, short-lived `IObservable<int>` for each item produced by `src`. (These child sequences, represented by the `delta` range variable in the example, produce the value `1`, and then after the specified `minimumActivityPeriod`, they produce `-1`. This enabled us to keep count of the number of recent events emitted.) This is the _fanning out_ part, where items in a source sequence produce new observable sequences. `SelectMany` is crucial in these scenarios because it enables all of those new sequences to be flattened back out into a single output sequence.
 
-The second place I used `SelectMany` was slightly different: it was the final example of the [**Representing Filesystem Events in Rx** section in Chapter 3](./03_CreatingObservableSequences.md#representing-filesystem-events-in-rx). Although that example also combined multiple observable sources into a single observable, that list of observables was fixed: there was one for each of the different events from `FileSystemWatcher`. It used a different operator `Merge` (which we'll get to in [Combining Sequences](09_CombiningSequences.md)), which was simpler to use in that scenario because you just pass it the list of all the observables you'd like to combine. However, because of a few other things this code wanted to do (including deferred startup, automated disposal, and sharing a single source when multiple subscribers were active), the particular combination of operators used to achieve this meant our merging code that returned an `IObservable<FileSystemEventArgs>`, needed to be invoked as a transforming step. If we'd just used `Select`, the result would have been an `IObservable<IObservable<FileSystemEventArgs>>`. The structure of the code meant that it would only ever produce a single `IObservable<FileSystemEventArgs>`, so the double-wrapped type would be rather inconvenient. `SelectMany` is very useful in these scenarios. If composition of operators has introduced an extra layer of observables-in-observables that you don't want, `SelectMany` can unwrap one layer for you.
+The second place I used `SelectMany` was slightly different: it was the final example of the [**Representing Filesystem Events in Rx** section in Chapter 3](03_CreatingObservableSequences.md#representing-filesystem-events-in-rx). Although that example also combined multiple observable sources into a single observable, that list of observables was fixed: there was one for each of the different events from `FileSystemWatcher`. It used a different operator `Merge` (which we'll get to in [Combining Sequences](09_CombiningSequences.md)), which was simpler to use in that scenario because you just pass it the list of all the observables you'd like to combine. However, because of a few other things this code wanted to do (including deferred startup, automated disposal, and sharing a single source when multiple subscribers were active), the particular combination of operators used to achieve this meant our merging code that returned an `IObservable<FileSystemEventArgs>`, needed to be invoked as a transforming step. If we'd just used `Select`, the result would have been an `IObservable<IObservable<FileSystemEventArgs>>`. The structure of the code meant that it would only ever produce a single `IObservable<FileSystemEventArgs>`, so the double-wrapped type would be rather inconvenient. `SelectMany` is very useful in these scenarios. If composition of operators has introduced an extra layer of observables-in-observables that you don't want, `SelectMany` can unwrap one layer for you.
 
 These two cases—fanning out then back in, and removing or avoiding a layer of observables of observables—come up quite often, which makes `SelectMany` an important method. (It's not surprising that I was unable to avoid using it in earlier examples.)
 
-As it happens, `SelectMany` is also a particularly important operator in the mathematical theory that Rx is based on. It is a fundamental operator, in the sense that it is possible to build many other Rx operators with it. [Section 'Recreating other operators with `SelectMany`' in Appendix D](./D_AlgebraicUnderpinnings.md#recreating-other-operators-with-selectmany) shows how you can implement `Select` and `Where` using `SelectMany`.
+As it happens, `SelectMany` is also a particularly important operator in the mathematical theory that Rx is based on. It is a fundamental operator, in the sense that it is possible to build many other Rx operators with it. [Section 'Recreating other operators with `SelectMany`' in Appendix D](D_AlgebraicUnderpinnings.md#recreating-other-operators-with-selectmany) shows how you can implement `Select` and `Where` using `SelectMany`.
 
 ## Cast
 
 C#'s type system is not omniscient. Sometimes we might know something about the type of the values emerging from an observable source that is not reflected in that source's type. This might be based on domain-specific knowledge. For example, with the AIS messages broadcast by ships, we might know that if the message type is 3, it will contain navigation information. That means we could write this:
 
-```cs
-IObservable<IVesselNavigation> type3 = receiverHost.Messages
-    .Where(v => v.MessageType == 3)
-    .Cast<IVesselNavigation>();
+```csharp
+IObservable<IVesselNavigation> type3 = 
+   receiverHost.Messages.Where(v => v.MessageType == 3)
+                        .Cast<IVesselNavigation>();
 ```
 
 This uses `Cast`, a standard LINQ operator that we can use whenever we know that the items in some collection are of some more specific type than the type system has been able to deduce.
 
-The difference between `Cast` and the [`OfType` operator shown in Chapter 5](./05_Filtering.md#oftype) is the way in which they handle items that are not of the specified type. `OfType` is a filtering operator, so it just filters out any items that are not of the specified type. But with `Cast` (as with a normal C# cast expression) we are asserting that we expect the source items to be of the specified type, so the observable returned by `Cast` will invoke its subscriber's `OnError` if its source produces an item that is not compatible with the specified type.
+The difference between `Cast` and the [`OfType` operator shown in Chapter 5](05_Filtering.md#oftype) is the way in which they handle items that are not of the specified type. `OfType` is a filtering operator, so it just filters out any items that are not of the specified type. But with `Cast` (as with a normal C# cast expression) we are asserting that we expect the source items to be of the specified type, so the observable returned by `Cast` will invoke its subscriber's `OnError` if its source produces an item that is not compatible with the specified type.
 
 This distinction might be easier to see if we recreate the functionality of `Cast` and `OfType` using other more fundamental operators.
 
