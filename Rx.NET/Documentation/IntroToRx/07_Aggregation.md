@@ -415,7 +415,7 @@ IObservable<IReadOnlySet<string>> allNames = vesselNames
         (set, name) => set.Add(name.VesselName));
 ```
 
-Note that this `allNames` observable will produce elements even if nothing has changed. If the accumulated set of names already contained the name that just emerged from `vesselNames`, the call to `set.Add` will do nothing, because that name will already be in the set. But `Scan` scan produces one output for each input, and doesn't care if the accumulator didn't change. Whether this matters will depend on what you are planning to do with this `allNames` observable, but if you need to, you can fix this easily with the [`DistinctUntilChanged` operator shown in Chapter 5](05_Filtering.md#distinct-and-distinctuntilchanged).
+Note that this `allNames` observable will produce elements even if nothing has changed. If the accumulated set of names already contained the name that just emerged from `vesselNames`, the call to `set.Add` will do nothing, because that name will already be in the set. But `Scan` scan produces one output for each input, and doesn't care if the accumulator didn't change. Whether this matters will depend on what you are planning to do with this `allNames` observable, but if you need to, you can fix this easily with the [`DistinctUntilChanged` operator shown in chapter 5](05_Filtering.md#distinct-and-distinctuntilchanged).
 
 You could think of `Scan` as being a version of `Aggregate` that shows its working. If we wanted to see how the process of calculating an average aggregates the count and sum, we could write this:
 
