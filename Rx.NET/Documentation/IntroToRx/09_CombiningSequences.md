@@ -185,7 +185,7 @@ public static IObservable<IVesselNavigation> GetLastKnownAndSubsequenceNavigatio
 }
 ```
 
-`StartWith` might remind you of [`BehaviorSubject<T>`](03_CreatingObservableSequences.md#behaviorsubject), because that also ensures that consumers receive a value as soon as they subscribe. It's not quite the same: `BehaviorSubject<T>` caches the last value its own source emits. You might think that would make it a better way to implement this vessel navigation example. However, since this example is able to return a source for any vessel (the `mmsi` argument is a [Maritime Mobile Service Identity](https://en.wikipedia.org/wiki/Maritime_Mobile_Service_Identity) uniquely identifying a vessel) it would need to keep a `BehaviorSubject<T>` running for every single vessel you were interested in, which might be impractical.
+`StartWith` might remind you of [`BehaviorSubject<T>`](03_CreatingObservableSequences.md#behaviorsubjectt), because that also ensures that consumers receive a value as soon as they subscribe. It's not quite the same: `BehaviorSubject<T>` caches the last value its own source emits. You might think that would make it a better way to implement this vessel navigation example. However, since this example is able to return a source for any vessel (the `mmsi` argument is a [Maritime Mobile Service Identity](https://en.wikipedia.org/wiki/Maritime_Mobile_Service_Identity) uniquely identifying a vessel) it would need to keep a `BehaviorSubject<T>` running for every single vessel you were interested in, which might be impractical.
 
 `BehaviorSubject<T>` can hold onto only one value, which is fine for this AIS scenario, and `Prepend` shares this limitation. But what if you need a source to begin with some particular sequence?
 
