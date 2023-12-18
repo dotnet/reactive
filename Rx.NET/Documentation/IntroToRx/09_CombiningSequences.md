@@ -273,7 +273,7 @@ We'll now move on to operators for combining observable sequences that might pro
 
 ### Amb
 
-`Amb` is a strangely named operator. It's short for _ambiguous_, but that doesn't tell us much more than `Amb`. If you're curious about the name you can read about the [origins of `Amb` in Appendix C](C_AlgebraicUnderpinnings#amb), but for now, let's look at what it actually does. 
+`Amb` is a strangely named operator. It's short for _ambiguous_, but that doesn't tell us much more than `Amb`. If you're curious about the name you can read about the [origins of `Amb` in Appendix D](D_AlgebraicUnderpinnings.md#amb), but for now, let's look at what it actually does. 
 Rx's `Amb` takes any number of `IObservable<T>` sources as inputs, and waits to see which, if any, first produces some sort of output. As soon as this happens, it immediately unsubscribes from all of the other sources, and forwards all notifications from the source that reacted first.
 
 Why is that useful?
