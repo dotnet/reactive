@@ -239,7 +239,7 @@ public static IObservable<TSource> Repeat<TSource>(
     this IObservable<TSource> source)
 ```
 
-`Repeat` resubscribes to the source for each repetition. This means that this will only strictly repeat if the source produces the same items each time you subscribe. Unlike the [`ReplaySubject<T>`](03_CreatingObservableSequences.md#replaysubject), this doesn't store and replay the items that emerge from the source. This means that you normally won't want to call `Repeat` on a hot source. (If you really want repetition of the output of a hot source, a combination of [`Replay`](15_PublishingOperators.md#replay) and `Repeat` might fit the bill.)
+`Repeat` resubscribes to the source for each repetition. This means that this will only strictly repeat if the source produces the same items each time you subscribe. Unlike the [`ReplaySubject<T>`](03_CreatingObservableSequences.md#replaysubjectt), this doesn't store and replay the items that emerge from the source. This means that you normally won't want to call `Repeat` on a hot source. (If you really want repetition of the output of a hot source, a combination of [`Replay`](15_PublishingOperators.md#replay) and `Repeat` might fit the bill.)
 
 If you use the overload that repeats indefinitely, then the only way the sequence will stop is if there is an error or the subscription is disposed of. The overload that specifies a repeat count will stop on error, un-subscription, or when it reaches that count. This example shows the sequence [0,1,2] being repeated three times.
 

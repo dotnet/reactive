@@ -28,7 +28,7 @@ IObservable<int> src = Observable.Create<int>(obs =>
 });
 ```
 
-Since this is only going to be invoked once no matter how many observers subscribe, `Multicast` can't pass on the `IObserver<T>`s handed to its own `Subscribe` method, because there could be any number of them. It uses a [Subject](03_CreatingObservableSequences.md#subject) as the single `IObserver<T>` that is passes to the underlying source, and this subject is also responsible for keeping track of all subscribers. If we call `Multicast` directly, we are required to pass in the subject we want to use:
+Since this is only going to be invoked once no matter how many observers subscribe, `Multicast` can't pass on the `IObserver<T>`s handed to its own `Subscribe` method, because there could be any number of them. It uses a [Subject](03_CreatingObservableSequences.md#subjectt) as the single `IObserver<T>` that is passes to the underlying source, and this subject is also responsible for keeping track of all subscribers. If we call `Multicast` directly, we are required to pass in the subject we want to use:
 
 ```csharp
 IConnectableObservable<int> m = src.Multicast(new Subject<int>());
@@ -225,7 +225,7 @@ These last two subscribers receive the value later because they subscribed later
 
 ### Replay
 
-The `Replay` operator calls `Multicast` with a [`ReplaySubject<T>`](03_CreatingObservableSequences.md#replaysubject). The effect of this is that any subscribers attached before calling `Connect` just receive all events as the underlying source produces them, but any subscribers attached later effectively get to 'catch up', because the `ReplaySubject<T>` remembers events it has already seen, and replays them to new subscribers.
+The `Replay` operator calls `Multicast` with a [`ReplaySubject<T>`](03_CreatingObservableSequences.md#replaysubjectt). The effect of this is that any subscribers attached before calling `Connect` just receive all events as the underlying source produces them, but any subscribers attached later effectively get to 'catch up', because the `ReplaySubject<T>` remembers events it has already seen, and replays them to new subscribers.
 
 This example is very similar to the one used for `Publish`:
 
