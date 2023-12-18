@@ -32,7 +32,7 @@ The best way to learn Rx is to use it. Reading the theory from this book will on
 
 # Acknowledgements
 
-Firstly, I (Ian Griffiths) should make it clear that this revised edition builds on the excellent work of the original author [Lee Campbell](https://github.com/LeeCampbell). I am grateful that he generously allowed the Rx.NET project to make use of his content, enabling this new edition to come into existence.
+Firstly, I ([Ian Griffiths](https://endjin.com/who-we-are/our-people/ian-griffiths/)) should make it clear that this revised edition builds on the excellent work of the original author [Lee Campbell](https://github.com/LeeCampbell). I am grateful that he generously allowed the Rx.NET project to make use of his content, enabling this new edition to come into existence.
 
 I would also like to recognize the people that made this book possible.
 
