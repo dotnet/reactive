@@ -25,7 +25,7 @@ If a source reports an error by invoking its observer's `OnError`, Rx's `await` 
 
 Sequences can be empty. They might call `OnCompleted` without ever having called `OnNext`. However, since there's no way to tell from the type of a source that it will be empty, this doesn't fit especially well with the `await` paradigm. With tasks, you can know at compile time whether you'll get a result by looking at whether you're awaiting a `Task` or `Task<T>`, so the compiler is able to know whether a particular `await` expression produces a value. But when you `await` and `IObservable<T>`, there's no compile-time distinction, so the only way Rx can report that a sequence is empty when you `await` is to throw an `InvalidOperationException` reporting that the sequence contains no elements.
 
-As you may recall from the [`AsyncSubject<T>` section of chapter 3](03_CreatingObservableSequences.md#asyncsubject), `AsyncSubject<T>` reports only the final value to emerge from its source. So if you `await` a sequence that reports multiple items, all but the final item will be ignored. What if you want to see all of the items, but you'd still like to use `await` to handle completion and errors?
+As you may recall from the [`AsyncSubject<T>` section of chapter 3](03_CreatingObservableSequences.md#asyncsubjectt), `AsyncSubject<T>` reports only the final value to emerge from its source. So if you `await` a sequence that reports multiple items, all but the final item will be ignored. What if you want to see all of the items, but you'd still like to use `await` to handle completion and errors?
 
 ## ForEachAsync
 

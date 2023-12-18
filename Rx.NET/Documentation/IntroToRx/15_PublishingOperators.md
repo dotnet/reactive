@@ -184,11 +184,11 @@ IObservable<(int, int)> ps = src.Publish(s => s.Zip(s.Skip(1)));
 ps.Subscribe(ps => Console.WriteLine(ps));
 ```
 
-`Publish` offers overloads that let you specify an initial value. These use [`BehaviorSubject<T>`](03_CreatingObservableSequences.md#behaviorsubject) instead of `Subject<T>`. The difference here is that all subscribers will immediately receive a value as soon as they subscribe. If the underlying source hasn't yet produced an item (or if `Connect` hasn't been called, meaning we've not even subscribed to the source yet) they will receive the initial value. And if at least one item has been received from the source, any new subscribers will instantly receive the latest value the source produced, and will then go on to receive any further new values.
+`Publish` offers overloads that let you specify an initial value. These use [`BehaviorSubject<T>`](03_CreatingObservableSequences.md#behaviorsubjectt) instead of `Subject<T>`. The difference here is that all subscribers will immediately receive a value as soon as they subscribe. If the underlying source hasn't yet produced an item (or if `Connect` hasn't been called, meaning we've not even subscribed to the source yet) they will receive the initial value. And if at least one item has been received from the source, any new subscribers will instantly receive the latest value the source produced, and will then go on to receive any further new values.
 
 ### PublishLast
 
-The `PublishLast` operator calls `Multicast` with an [`AsyncSubject<T>`](03_CreatingObservableSequences.md#asyncsubject). The effect of this is that the final item produced by the source will be delivered to all subscribers. You still need to call `Connect`. This determines when subscription to the underlying source occurs. But all subscribers will receive the final event regardless of when they subscribe, because `AsyncSubject<T>` remembers the final result. We can see this in action with the following example:
+The `PublishLast` operator calls `Multicast` with an [`AsyncSubject<T>`](03_CreatingObservableSequences.md#asyncsubjectt). The effect of this is that the final item produced by the source will be delivered to all subscribers. You still need to call `Connect`. This determines when subscription to the underlying source occurs. But all subscribers will receive the final event regardless of when they subscribe, because `AsyncSubject<T>` remembers the final result. We can see this in action with the following example:
 
 ```csharp
 IConnectableObservable<long> pticks = Observable
