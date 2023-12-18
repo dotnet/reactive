@@ -1136,7 +1136,7 @@ It wouldn't be too hard to modify this to use `Observable.Create` instead. But w
 
 `Subject<T>` does not remember anything: it immediately distributes incoming values to subscribers. If new subscribers come along, they will only see events that occur after they subscribe. `ReplaySubject<T>`, on the other hand, can remember every value it has ever seen. If a new subject comes along, it will receive the complete history of events so far.
 
-This is a variation on the first example in the preceding [Subject<T> section](#subject). It creates a `ReplaySubject<int>` instead of a `Subject<int>`. And instead of immediately subscribing twice, it creates an initial subscription, and then a second one only after a couple of values have been emitted.
+This is a variation on the first example in the preceding [`Subject<T>` section](#subjectt). It creates a `ReplaySubject<int>` instead of a `Subject<int>`. And instead of immediately subscribing twice, it creates an initial subscription, and then a second one only after a couple of values have been emitted.
 
 ```csharp
 ReplaySubject<int> s = new();
