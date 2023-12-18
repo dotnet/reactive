@@ -115,7 +115,7 @@ The remaining operators defined in this section, `Publish`, `PublishLast`, and `
 
 ### Publish
 
-The `Publish` operator calls `Multicast` with a [`Subject<T>`](03_CreatingObservableSequences.md#subject). The effect of this is that once you have called `Connect` on the result, any items produced by the source will be delivered to all subscribers. This enables me to replace this earlier example:
+The `Publish` operator calls `Multicast` with a [`Subject<T>`](03_CreatingObservableSequences.md#subjectt). The effect of this is that once you have called `Connect` on the result, any items produced by the source will be delivered to all subscribers. This enables me to replace this earlier example:
 
 ```csharp
 IConnectableObservable<int> m = src.Multicast(new Subject<int>());
