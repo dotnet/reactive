@@ -10,6 +10,20 @@ This repository contains four libraries which are conceptually related in that t
 
 Each will be described later in this README.
 
+## FREE Introduction to Rx.NET 2nd Edition eBook
+
+<a href="https://introtorx.com/"><img align="left" alt="Introduction to Rx.NET 2nd Edition book cover." src="Rx.NET/Resources/Artwork/title_page_sm.png"/></a>
+
+Reactive programming provides clarity when our code needs to respond to events. The Rx.NET libraries were designed to enable cloud-native applications to process live data in reliable, predictable ways.
+
+We've written a FREE book which explains the vital abstractions that underpin Rx, and shows how to exploit the powerful and extensive functionality built into the Rx.NET libraries. 
+
+Based on Lee Campbell's 2010 book (kindly donated to the project), it has been re-written to bring it up to date with Rx.NET v6.0, .NET 8.0, and modern cloud native use cases such as IoT and real-time stream data processing.
+
+Introduction to Rx.NET is available [Online](https://introtorx.com/), [on GitHub](Rx.NET/Documentation/IntroToRx/), as [PDF](https://endjincdn.blob.core.windows.net/assets/ebooks/introduction-to-rx-dotnet/introduction-to-rx-dotnet-2nd-edition.pdf), and [EPUB](https://endjincdn.blob.core.windows.net/assets/ebooks/introduction-to-rx-dotnet/introduction-to-rx-dotnet-2nd-edition.epub).
+
+<br clear="left"/>
+
 ## Getting the bits
 
 Channel  | Rx | AsyncRx | Ix | System.Linq.Async
@@ -25,7 +39,6 @@ For nightly builds, configure NuGet to use this feed: `https://pkgs.dev.azure.co
 ### Join the conversation
 
 Catch us in the #rxnet channel over at http://reactiveui.net/slack
-
 
 ## A Brief Introduction to Rx
 
@@ -60,7 +73,7 @@ The two key features of Rx are:
 
 Rx has been particularly successfully applied in user interfaces. (This is also true outside of .NET—[RxJS](https://rxjs.dev/) is a JavaScript spin-off of Rx, and it is very popular in user interface code.) The https://github.com/reactiveui/reactiveui makes deep use of Rx to support .NET UI development.
 
-To learn more, see this [Rx playlist](https://www.youtube.com/playlist?list=PLJt9xcgQpM60Fz20FIXBvj6ku4a7WOLGb).
+Ian Griffiths presented a concise 60 minute overview of [Reactive Extensions for .NET](https://endjin.com/what-we-think/talks/reactive-extensions-for-dotnet) at the dotnetsheff meetup in 2020. More videos are available on the [Rx playlist](https://www.youtube.com/playlist?list=PLJt9xcgQpM60Fz20FIXBvj6ku4a7WOLGb).
 
 ## AsyncRx.Net
 
@@ -139,6 +152,13 @@ The people currently maintaining Rx are:
 Rx has been around for roughly a decade and a half, so we owe a great deal to its creators, and the many people who have worked on it since. See the [AUTHORS.txt](AUTHORS.txt) for a full list.
 
 ## Roadmap
+
+As part of .NET Conf 2023, Ian Griffiths provided an update on the efforts to [modernize Rx.NET for v6.0 and the plans to for v7.0](https://endjin.com/what-we-think/talks/modernizing-reactive-extensions-for-dotnet). 
+
+For more information, see the following discussions:
+
+- [Future Rx.NET Packaging](https://github.com/dotnet/reactive/discussions/2038)
+- [Rx.NET v6.0 & v7.0 high-level plan](https://github.com/dotnet/reactive/discussions/1868)
 
 We have set out a [roadmap](Rx.NET/Documentation/Rx-Roadmap-2023.md) explaining our medium term plans for ongoing development of Rx. This diagram illustrates our view of the platforms on which Rx is used, and the planned support lifecycles for these various targets:
 
