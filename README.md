@@ -40,6 +40,15 @@ For nightly builds, configure NuGet to use this feed: `https://pkgs.dev.azure.co
 
 Catch us in the #rxnet channel over at http://reactiveui.net/slack
 
+## Current status & future plans
+
+As part of .NET Conf 2023, Ian Griffiths provided an update on the efforts to [modernize Rx.NET for v6.0 and the plans to for v7.0](https://endjin.com/what-we-think/talks/modernizing-reactive-extensions-for-dotnet). 
+
+For more information, see the following discussions:
+
+- [Future Rx.NET Packaging](https://github.com/dotnet/reactive/discussions/2038)
+- [Rx.NET v6.0 & v7.0 high-level plan](https://github.com/dotnet/reactive/discussions/1868)
+
 ## A Brief Introduction to Rx
 
 In this digital age, live data streams are ubiquitous. Financial applications depend on a swift response to timely information. Computer networks have always been able to provide extensive information about their health and operation. Utility companies such as water providers have vast numbers of devices monitoring their operations. User interface and game building frameworks report user interactions in great detail. Delivery vans continuously report their progress. Aircraft provide performance telemetry to detect potential maintenance issues before they become serious problems, and cars are now starting to do the same. Many of us wear or carry devices that track our physical activity and even [vital signs](https://www.youtube.com/watch?v=6yjl_h7-WYA&t=2443s). And the improvements in machine learning have enriched the insights that can be derived from the ever-increasing volume and variety of live data.
@@ -73,7 +82,7 @@ The two key features of Rx are:
 
 Rx has been particularly successfully applied in user interfaces. (This is also true outside of .NET—[RxJS](https://rxjs.dev/) is a JavaScript spin-off of Rx, and it is very popular in user interface code.) The https://github.com/reactiveui/reactiveui makes deep use of Rx to support .NET UI development.
 
-To learn more, see this [Rx playlist](https://www.youtube.com/playlist?list=PLJt9xcgQpM60Fz20FIXBvj6ku4a7WOLGb).
+Ian Griffiths presented a concise 60 minute overview of [Reactive Extensions for .NET](https://endjin.com/what-we-think/talks/reactive-extensions-for-dotnet) at the dotnetsheff meetup in 2020. More videos are available on the [Rx playlist](https://www.youtube.com/playlist?list=PLJt9xcgQpM60Fz20FIXBvj6ku4a7WOLGb).
 
 ## AsyncRx.Net
 
