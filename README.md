@@ -10,9 +10,13 @@ This repository contains four libraries which are conceptually related in that t
 
 Each will be described later in this README.
 
-For a comprehensive guide to Rx.NET, visit the [Intro to Rx.NET](https://introtorx.com/) site. (The source for Intro to Rx.NET is in this repo's [Rx.NET/Documentation/IntroToRx/](Rx.NET/Documentation/IntroToRx/) folder.)
+## FREE Introduction to Rx.NET 2nd Edition eBook
 
-[![IntroToRx.NET](https://introtorx.com/assets/intro1-00e32fa0.svg)](https://introtorx.com/)
+![Introduction to Rx.NET book cover](Rx.NET/Resources/Artwork/title_page_sm.png)
+
+Reactive programming provides clarity when our code needs to respond to events. The Rx.NET libraries were designed to enable cloud-native applications to process live data in reliable, predictable ways.
+
+We've written a FREE book which explains the vital abstractions that underpin Rx, and shows how to exploit the powerful and extensive functionality built into the Rx.NET libraries. It's available [Online](https://introtorx.com/), [on GitHub](Rx.NET/Documentation/IntroToRx/), as [PDF](https://endjincdn.blob.core.windows.net/assets/ebooks/introduction-to-rx-dotnet/introduction-to-rx-dotnet-2nd-edition.pdf), and [EPUB](https://endjincdn.blob.core.windows.net/assets/ebooks/introduction-to-rx-dotnet/introduction-to-rx-dotnet-2nd-edition.epub).
 
 ## Getting the bits
 
@@ -29,7 +33,6 @@ For nightly builds, configure NuGet to use this feed: `https://pkgs.dev.azure.co
 ### Join the conversation
 
 Catch us in the #rxnet channel over at http://reactiveui.net/slack
-
 
 ## A Brief Introduction to Rx
 
