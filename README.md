@@ -12,11 +12,13 @@ Each will be described later in this README.
 
 ## FREE Introduction to Rx.NET 2nd Edition eBook
 
-<img align="left" src="Rx.NET/Resources/Artwork/title_page_sm.png"/>
+<a href="https://introtorx.com/"><img align="left" alt="Introduction to Rx.NET 2nd Edition book cover." src="Rx.NET/Resources/Artwork/title_page_sm.png"/></a>
 
 Reactive programming provides clarity when our code needs to respond to events. The Rx.NET libraries were designed to enable cloud-native applications to process live data in reliable, predictable ways.
 
 We've written a FREE book which explains the vital abstractions that underpin Rx, and shows how to exploit the powerful and extensive functionality built into the Rx.NET libraries. It's available [Online](https://introtorx.com/), [on GitHub](Rx.NET/Documentation/IntroToRx/), as [PDF](https://endjincdn.blob.core.windows.net/assets/ebooks/introduction-to-rx-dotnet/introduction-to-rx-dotnet-2nd-edition.pdf), and [EPUB](https://endjincdn.blob.core.windows.net/assets/ebooks/introduction-to-rx-dotnet/introduction-to-rx-dotnet-2nd-edition.epub).
+
+<br clear="left"/>
 
 ## Getting the bits
 
