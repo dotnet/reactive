@@ -12,7 +12,7 @@ Each will be described later in this README.
 
 ## FREE Introduction to Rx.NET 2nd Edition eBook
 
-![Introduction to Rx.NET book cover](Rx.NET/Resources/Artwork/title_page_sm.png)
+<img align="left" src="Rx.NET/Resources/Artwork/title_page_sm.png"/>
 
 Reactive programming provides clarity when our code needs to respond to events. The Rx.NET libraries were designed to enable cloud-native applications to process live data in reliable, predictable ways.
 
