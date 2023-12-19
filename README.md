@@ -16,7 +16,11 @@ Each will be described later in this README.
 
 Reactive programming provides clarity when our code needs to respond to events. The Rx.NET libraries were designed to enable cloud-native applications to process live data in reliable, predictable ways.
 
-We've written a FREE book which explains the vital abstractions that underpin Rx, and shows how to exploit the powerful and extensive functionality built into the Rx.NET libraries. It's available [Online](https://introtorx.com/), [on GitHub](Rx.NET/Documentation/IntroToRx/), as [PDF](https://endjincdn.blob.core.windows.net/assets/ebooks/introduction-to-rx-dotnet/introduction-to-rx-dotnet-2nd-edition.pdf), and [EPUB](https://endjincdn.blob.core.windows.net/assets/ebooks/introduction-to-rx-dotnet/introduction-to-rx-dotnet-2nd-edition.epub).
+We've written a FREE book which explains the vital abstractions that underpin Rx, and shows how to exploit the powerful and extensive functionality built into the Rx.NET libraries. 
+
+Based on Lee Campbell's 2010 book (kindly donated to the project), it has been re-written to bring it up to date with Rx.NET v6.0 and .NET 8.0, and modern cloud native use cases such as IoT and real-time stream data processing.
+
+Introduction to Rx.NET is available [Online](https://introtorx.com/), [on GitHub](Rx.NET/Documentation/IntroToRx/), as [PDF](https://endjincdn.blob.core.windows.net/assets/ebooks/introduction-to-rx-dotnet/introduction-to-rx-dotnet-2nd-edition.pdf), and [EPUB](https://endjincdn.blob.core.windows.net/assets/ebooks/introduction-to-rx-dotnet/introduction-to-rx-dotnet-2nd-edition.epub).
 
 <br clear="left"/>
 
