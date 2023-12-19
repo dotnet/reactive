@@ -40,15 +40,6 @@ For nightly builds, configure NuGet to use this feed: `https://pkgs.dev.azure.co
 
 Catch us in the #rxnet channel over at http://reactiveui.net/slack
 
-## Current status & future plans
-
-As part of .NET Conf 2023, Ian Griffiths provided an update on the efforts to [modernize Rx.NET for v6.0 and the plans to for v7.0](https://endjin.com/what-we-think/talks/modernizing-reactive-extensions-for-dotnet). 
-
-For more information, see the following discussions:
-
-- [Future Rx.NET Packaging](https://github.com/dotnet/reactive/discussions/2038)
-- [Rx.NET v6.0 & v7.0 high-level plan](https://github.com/dotnet/reactive/discussions/1868)
-
 ## A Brief Introduction to Rx
 
 In this digital age, live data streams are ubiquitous. Financial applications depend on a swift response to timely information. Computer networks have always been able to provide extensive information about their health and operation. Utility companies such as water providers have vast numbers of devices monitoring their operations. User interface and game building frameworks report user interactions in great detail. Delivery vans continuously report their progress. Aircraft provide performance telemetry to detect potential maintenance issues before they become serious problems, and cars are now starting to do the same. Many of us wear or carry devices that track our physical activity and even [vital signs](https://www.youtube.com/watch?v=6yjl_h7-WYA&t=2443s). And the improvements in machine learning have enriched the insights that can be derived from the ever-increasing volume and variety of live data.
@@ -161,6 +152,13 @@ The people currently maintaining Rx are:
 Rx has been around for roughly a decade and a half, so we owe a great deal to its creators, and the many people who have worked on it since. See the [AUTHORS.txt](AUTHORS.txt) for a full list.
 
 ## Roadmap
+
+As part of .NET Conf 2023, Ian Griffiths provided an update on the efforts to [modernize Rx.NET for v6.0 and the plans to for v7.0](https://endjin.com/what-we-think/talks/modernizing-reactive-extensions-for-dotnet). 
+
+For more information, see the following discussions:
+
+- [Future Rx.NET Packaging](https://github.com/dotnet/reactive/discussions/2038)
+- [Rx.NET v6.0 & v7.0 high-level plan](https://github.com/dotnet/reactive/discussions/1868)
 
 We have set out a [roadmap](Rx.NET/Documentation/Rx-Roadmap-2023.md) explaining our medium term plans for ongoing development of Rx. This diagram illustrates our view of the platforms on which Rx is used, and the planned support lifecycles for these various targets:
 
