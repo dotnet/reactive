@@ -1049,7 +1049,7 @@ bytesReadStream.Subscribe(byteCount =>
 
 So far, this chapter has explored various factory methods that return `IObservable<T>` implementations. There is another way though: `System.Reactive` defines various types that implement `IObservable<T>` that we can instantiate directly. But how do we determine what values these types produce? We're able to do that because they also implement `IObserver<T>`, enabling us to push values into them, and those very same values we push in will be the ones seen by observers.
 
-Types that implement both `IObservable<T>` and `IObserver<T>` are called _subjects_ in Rx. There's an an `ISubject<T>` to represent this. (This is in the `System.Reactive` NuGet package, unlike `IObservable<T>` and `IObserver<T>`, which are both built into the .NET runtime libraries.) `ISubject<T>` looks like this:
+Types that implement both `IObservable<T>` and `IObserver<T>` are called _subjects_ in Rx. There's an `ISubject<T>` to represent this. (This is in the `System.Reactive` NuGet package, unlike `IObservable<T>` and `IObserver<T>`, which are both built into the .NET runtime libraries.) `ISubject<T>` looks like this:
 
 ```csharp
 public interface ISubject<T> : ISubject<T, T>
