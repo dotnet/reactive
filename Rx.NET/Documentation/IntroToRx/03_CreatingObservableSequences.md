@@ -671,7 +671,7 @@ IObservable<BigInteger> Fibonacci()
         (v1: new BigInteger(1), v2: new BigInteger(1)),
         value => true, // It never ends!
         value => (value.v2, value.v1 + value.v2),
-        value => value.v1); ;
+        value => value.v1);
 }
 ```
 
