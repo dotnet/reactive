@@ -671,7 +671,7 @@ IObservable<BigInteger> Fibonacci()
         (v1: new BigInteger(1), v2: new BigInteger(1)),
         value => true, // It never ends!
         value => (value.v2, value.v1 + value.v2),
-        value => value.v1); ;
+        value => value.v1);
 }
 ```
 
@@ -885,7 +885,7 @@ IObservable<EventPattern<FileSystemEventArgs>> changeEvents = Observable
 
 This is code that AOT and trimming tools can understand easily. We've written methods that explicitly add and remove handlers for the `FileSystemWatcher.Changed` event, so AOT tools can pre-compile those two methods, and trimming tools know that they cannot remove the add and remove handlers for those events.
 
-The downside is that this is a pretty cumbersome bit of code to write. If you've not already bought into the idea of using Rx, this might well be enough to make you think "I'll just stick with ordinary .NET events, thanks. But the cumbersome nature is a symptom of what is wrong with .NET events. We wouldn't have had to write anything so ugly if events had been first class citizens in the first place.
+The downside is that this is a pretty cumbersome bit of code to write. If you've not already bought into the idea of using Rx, this might well be enough to make you think "I'll just stick with ordinary .NET events, thanks." But the cumbersome nature is a symptom of what is wrong with .NET events. We wouldn't have had to write anything so ugly if events had been first class citizens in the first place.
 
 Not only has that second-class status meant we couldn't just pass the event itself as an argument, it has also meant that we've had to state type arguments explicitly. The relationship between an event's delegate type (`FileSystemEventHandler` in this example) and its event argument type (`FileSystemEventArgs` here) is, in general, not something that C#'s type inference can determine automatically, which is why we've had to specify both types explicitly. (Events that use the generic `EventHandler<T>` type are more amenable to type inference, and can use a slightly less verbose version of `FromEventPattern`. Unfortunately, relatively few events actually use that. Some events provide no information besides the fact that something just happened, and use the base `EventHandler` type, and for those kinds of events, you can in fact omit the type arguments completely, making the code slightly less ugly. You still need to provide the add and remove callbacks though.)
 
@@ -1023,7 +1023,7 @@ Rx provides support for the ancient [.NET Asynchronous Programming Model (APM)](
 
 Nobody should be using the APM today, but for completeness (and just in case you have to use an ancient library that only offers the APM) I will provide a very brief explanation of Rx's support for it.
 
-The result of the call to `Observable.FromAsyncPattern` does _not_ return an observable sequence. It returns a delegate that returns an observable sequence. (So it is essentially a factory factory) The signature for this delegate will match the generic arguments of the call to `FromAsyncPattern`, except that the return type will be wrapped in an observable sequence. The following example wraps the `Stream` class's `BeginRead`/`EndRead` methods (which are an implementation of the APM).
+The result of the call to `Observable.FromAsyncPattern` does _not_ return an observable sequence. It returns a delegate that returns an observable sequence. (So it is essentially a factory factory.) The signature for this delegate will match the generic arguments of the call to `FromAsyncPattern`, except that the return type will be wrapped in an observable sequence. The following example wraps the `Stream` class's `BeginRead`/`EndRead` methods (which are an implementation of the APM).
 
 **Note**: this is purely to illustrate how to wrap the APM. You would never do this in practice because `Stream` has supported the TAP for years.
 
@@ -1049,7 +1049,7 @@ bytesReadStream.Subscribe(byteCount =>
 
 So far, this chapter has explored various factory methods that return `IObservable<T>` implementations. There is another way though: `System.Reactive` defines various types that implement `IObservable<T>` that we can instantiate directly. But how do we determine what values these types produce? We're able to do that because they also implement `IObserver<T>`, enabling us to push values into them, and those very same values we push in will be the ones seen by observers.
 
-Types that implement both `IObservable<T>` and `IObserver<T>` are called _subjects_ in Rx. There's an an `ISubject<T>` to represent this. (This is in the `System.Reactive` NuGet package, unlike `IObservable<T>` and `IObserver<T>`, which are both built into the .NET runtime libraries.) `ISubject<T>` looks like this:
+Types that implement both `IObservable<T>` and `IObserver<T>` are called _subjects_ in Rx. There's an `ISubject<T>` to represent this. (This is in the `System.Reactive` NuGet package, unlike `IObservable<T>` and `IObserver<T>`, which are both built into the .NET runtime libraries.) `ISubject<T>` looks like this:
 
 ```csharp
 public interface ISubject<T> : ISubject<T, T>

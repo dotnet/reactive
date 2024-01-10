@@ -13,7 +13,7 @@ This is a list of quick guidelines intended to help you when writing Rx queries.
     2. over 10 lines of query expression syntax
     3. using the `into` keyword
 - Name your observables well, i.e. avoid using variable names like `query`, `q`, `xs`, `ys`, `subject` etc.
-- Avoid creating side effects. If you really can't avoid it, don't bury the side effects in callbacks for operators designed to be use functionally such as `Select` or `Where`. be explicit by using the `Do` operator.
+- Avoid creating side effects. If you really can't avoid it, don't bury the side effects in callbacks for operators designed to be use functionally such as `Select` or `Where`. Be explicit by using the `Do` operator.
 - Where possible, prefer `Observable.Create` to subjects as a means of defining new Rx sources.
 - Avoid creating your own implementations of the `IObservable<T>` interface. Use `Observable.Create` (or subjects if you really need to).
 - Avoid creating your own implementations of the `IObserver<T>` interface. Favour using the `Subscribe` extension method overloads instead.
