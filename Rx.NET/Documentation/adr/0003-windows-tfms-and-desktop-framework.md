@@ -219,6 +219,25 @@ The last row is interesting. Again, I've said it probably shouldn't include Wind
 The reason I think Windows Forms and WPF support should not automatically be included with 
 
 
+For example, this is a completely legitimate C# console application:
+
+```cs
+using Windows.Devices.Input;
+
+MouseCapabilities mouseCapabilities = new();
+KeyboardCapabilities keyboardCapabilities = new();
+TouchCapabilities touchCapabilities = new();
+
+Console.WriteLine($"Mouse {mouseCapabilities.MousePresent}");
+Console.WriteLine($"Keyboard {keyboardCapabilities.KeyboardPresent}");
+Console.WriteLine($"Touch {touchCapabilities.TouchPresent}");
+```
+
+This is using [WinRT-based APIs to discover whether certain forms of input are available on the machine](https://learn.microsoft.com/en-us/windows/apps/design/input/identify-input-devices). These APIs are available if I specify a Windows-specific TFM such as `net6.0-windows10.0.17763.0`. With just `net6.0` that code would fail to compile because these are Windows-only APIs.
+
+
+
+
 
 
 
