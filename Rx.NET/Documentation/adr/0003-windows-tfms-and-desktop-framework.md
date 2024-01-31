@@ -38,37 +38,119 @@ That "or transitively" is important but easily overlooked. Some developers have 
 
 ### The road to the current problem
 
+This problem arose from a series of changes that were intended to solve other problems. We need to ensure that we don't reintroduce any of these older problems, so it's important to have a good understanding of the following factors that led to the current design:
 
 1. the long history of confusion in Rx's package structure before Rx 4.0
 2. the subtle problems that could occur when plug-ins use Rx
 3. the [_great unification_](https://github.com/dotnet/reactive/issues/199) in Rx 4.0 that solved the first two problems
-4. the new problem caused by the _great unification_: as described above, an .NET application that runs on Windows might get tens of megabytes larger as a result of adding a reference to `System.Reactive`
+4. changes in .NET Core 3.0 which, in combination with the _great unification_, caused the problem that this ADR aims to solve
 
 #### Rx's history of confusing packaging
 
-The first public previews of Rx appeared before NuGet was a thing. So it was initially distributed in the old-fashioned way: you installed an SDK on development machines that made Rx's assemblies available for local development, and had to arrange to copy the necessary files onto target machines as part of your installation process. By the time the first supported Rx release shipped, NuGet did exist, but it was early days, so for quite a while Rx was available both via NuGet and through an installable SDK.
+The first public previews of Rx appeared before NuGet was a thing. This meant Rx was initially distributed in the old-fashioned way: you installed an SDK on development machines that made Rx's assemblies available for local development, and had to arrange to copy the necessary files onto target machines as part of your installation process. By the time the first supported Rx release shipped, NuGet did exist, but it was early days, so for quite a while Rx had two official distribution channels: NuGet and an installable SDK.
 
-There were several different versions of .NET around at this time. Silverlight and Windows Phone both had their own runtimes, and a version of Rx was actually preinstalled on the latter. Windows 8 had its own version of .NET that worked quite differently from anything else. These all had very different subsections of the .NET runtime class libraries, especially when it came to threading support. Rx was slightly different on each of these platforms because attempting to target the lowest common denominator would have meant sub-optimal performance. The scheduler support was specialized to work as well as possible on each distinct target.
+There were several different versions of .NET around at this time. Silverlight and Windows Phone both had their own runtimes, and the latter has a version of Rx preinstalled. Windows 8 had its own version of .NET that worked quite differently from anything else. These all had very different subsections of the .NET runtime class libraries, especially when it came to threading support. Rx was slightly different on each of these platforms because attempting to target the lowest common denominator would have meant sub-optimal performance everywhere. There were two main ways in which each of the different Rx versions varied:
+
+* The scheduler support was specialized to work as well as possible on each distinct target
+* Each platform had a different UI framework (or frameworks) available, so Rx's UI framework integration was different for each target
+
+Some of the differences in the first category were implementation details behind an API common to all versions, but there were some public API differences too. The second category was all about differences in the public API, although at this point the UI-framework-specific code was in separate assemblies. There was a common core to Rx's public API that the same across all platforms.
+
+This meant that it would be possible, in principle, to write a library that depended on Rx, and which could be used on all the same platforms that Rx supported. However, it wasn't entirely straightforward to do this back in 2012.
 
 This was years before .NET Standard was introduced, and at the time, if you wanted to write cross-platform libraries, you had to create something called a Portable Class Library (PCL). Rx wanted to offer a common API across all platforms while also providing optimized platform-specific schedulers, so it introduced a platform abstraction layer and a system it called "enlightenments" (named after a similar feature in Virtual Machine architectures). This worked, but resulted in a somewhat confusing proliferation of DLLs. Understanding which component your applications or libraries should reference in order to use Rx, and understanding which particular DLLs needed to be deployed was not easy, and was something of a barrier to adoption for new users.
 
-With Rx 3.0, things got a little simpler, with NuGet metapackages providing you with a single package you could reference for basic Rx usage, and packages appropriate for using specific UI frameworks with Rx. However, this led to a new problem.
+An additional dimension to the confusion is that even within any single target platform, Rx was split across several different components, and it wasn't entirely obvious why. There was a separate `System.Reactive.Interfaces` component, and the original idea behind this was that this would be a stable component that didn't need new releases because the expectation was that the core Rx interfaces would change very rarely. That expectation was correct, but unfortunately, the rationale behind the packaging decision was apparently forgotten, because instead of `System.Reactive.Interfaces` v2.0.0 being the one true definition for all time, new versions of this component were produced with each new version of Rx even though nothing changed. The defeated the entire purpose of having a separate component for the core interfaces.
+
+The other splits were also a bit hard to comprehend—it's not obvious why the LINQ parts of Rx are in their own package. In practice, anyone using Rx is going to use its LINQ features.
+
+The 'platform services' part is arguably slightly easier to understand because .NET developers at this time were generally aware that there were lots of flavours of .NET each with slightly different characteristics. Even then, understanding how that worked in practice was tricky, and this was just another bit of complexity that could make Rx harder to use.
+
+With Rx 3.0, things got a little simpler. It settled on NuGet as the distribution mechanism. Rx was still fragmented across multiple components at this point, but Rx 3.0's simplifying move was to define NuGet metapackages enabling you to use just a single package reference for basic Rx usage. There were additional packages appropriate for using specific UI frameworks with Rx. However, there was another problem that this did not address.
 
 #### Plug-in problems
 
-Because Rx has always supported many different runtimes, each component came in several forms. At one point, there were different copies of Rx for different versions of .NET Framework: there was one targetting .NET Framework 4.0, and another targetting .NET Framework 4.5. NuGet can cope with this—you just end up with `net40` and `net45` subfolders under `lib`. And the idea is that the .NET SDK will work out which one to use based on the runtime you target.
+Because Rx has always supported many different runtimes, there were several different builds of each component. At one point, there were different copies of Rx for different versions of .NET Framework: there was one targetting .NET Framework 4.0, and another targetting .NET Framework 4.5. NuGet can cope with this—you just end up with `net40` and `net45` subfolders under `lib`. And the idea is that the .NET SDK will work out which one to use based on the runtime you target.
 
-However there was a problem with plug-in systems. People ran into this in practice a few times writing extensions for Visual Studio. If one plug-in was written to use Rx.NET and if that plug-in was compiled for .NET Framework 4.0, deploying that plug-in would entail providing a copy of the `net40` `System.Reactive.dll` file. If another plug-in was also written to use the same version of Rx.NET but was compiled for .NET Framework 4.5, its deployment files would include the `net45` copy of `System.Reactive.dll`. Visual Studio is capable of loading components compiled for older versions of .NET Framework, so it would happily load either of these. But if it ended up loading both, that would mean that each plug-in was trying to supply its own `System.Reactive.dll`. The first one to load would be able to use its copy, but when the second one tried to load, the .NET assembly resolver would notice that it was asking for a version of `System.Reactive.dll` that was already loaded. (The `net40` and `net45` builds both had the same version number.) So the second component would end up getting the `net40` version, and not the `net45` version it shipped. This would result in `MissingMethodException` failures if that second component tried to use features that were present in the `net45` but not the `net40` build.
+So there were effectively two dimensions of fragmentation. First, behind each metapackage there were multiple NuGet packages. (The Rx 3.0 [`Rx-Main` metapackage](https://www.nuget.org/packages/Rx-Main/2.2.0#dependencies-body-tab) depends on [`Rx-Core`](https://www.nuget.org/packages/Rx-Core/2.2.0), [`Rx-Interfaces`](https://www.nuget.org/packages/Rx-Interfaces/2.2.0), [`Rx-Linq`](https://www.nuget.org/packages/Rx-Linq/2.2.0) and [`Rx-PlatformServices`](https://www.nuget.org/packages/Rx-PlatformServices/2.2.0), for example. And just to add to the confusion, the package names aren't the same as the names of the assemblies they contain. These four packages provide `System.Reactive.Core.dll`, `System.Reactive.Interfaces.dll`, `System.Reactive.Linq.dll`, and `System.Reactive.PlatformServices.dll` respectively) And then each of those packages contained multiple versions of its assembly. For example, if you [look inside `Rx-Core` 2.2.0](https://nuget.info/packages/Rx-Core/2.2.0) you'll see its `lib` folder contains 8 folders
 
-Rx 3.0 attempted to solve this by using [slightly different version numbers for the same 'logical' component on each supported target](https://github.com/dotnet/reactive/issues/205). But this went on to cause [various new issues](https://github.com/dotnet/reactive/issues/199#issuecomment-266138120).
+![](./images/0003-Rx-Core-2.2.0-contents.png)
+
+It's the same story for [`Rx-Interfaces`](https://nuget.info/packages/Rx-Interfaces/2.2.0) and [`Rx-Linq`](https://nuget.info/packages/Rx-Linq/2.2.0). And it's almost the same for [`Rx-PlatformServices`](https://nuget.info/packages/Rx-PlatformServices/2.2.0) except for some reason that doesn't have the `portable-windows8+net45+wp8`. Each of these folders contains a version of the assembly for that package. So `Rx-Core` contains 8 copies of `System.Reactive.Core.dll`, `Rx-Interfaces` contains 8 copies of `System.Reactive.Interfaces.dll`, `Rx-Linq` contains 8 copies of `System.Reactive.Linq.dll`, and `Rx-Core` contains 7 copies of `System.Reactive.PlatformServices.dll`. So conceptually we've got 4 assemblies here, but because of all the different builds, there are actually 31 files!
+
+This fragmentation caused a problem with plug-in systems. People ran into this in practice a few times writing extensions for Visual Studio. If one plug-in was written to use Rx.NET and if that plug-in was compiled for .NET Framework 4.0, deploying that plug-in would entail providing a copy of the assembly in the `net40` folder of each of the four packages referenced by `Rx-Main`. If another plug-in was also written to use the same version of Rx.NET but was compiled for .NET Framework 4.5, its deployment files would include the DLLs from the `net45` folders of each of these pages.
+
+Visual Studio is capable of loading components compiled for older versions of .NET Framework, so a version of Visual Studio running on .NET Framework 4.5 would happily load either of these plug-ins. But if it ended up loading both, that would mean that each plug-in was trying to supply its own set of Rx DLLs.
+
+Here's what would happen. Let's say a we have two plug-ins, `PlugOneBuiltFor40` and `PlugInTwoBuildFor45`. Both were built with a reference to `Rx-Main` 2.2.0. That means that if we were to look at how these plug-ins looked on disk we'd see something like this:
+
+* `PlugInInstallationFolder`
+  * `PlugOneBuiltFor40`
+    * `PlugOneBuiltFor40.dll`
+    * `System.Reactive.Core.dll` v2.2.0 (`net40` build)
+    * `System.Reactive.Interfaces.dll` v2.2.0 (`net40` build)
+    * `System.Reactive.Linq.dll` v2.2.0 (`net40` build)
+    * `System.Reactive.PlatformServices.dll` v2.2.0 (`net40` build)
+  * `PlugInTwoBuildFor45`
+    * `PlugInTwoBuildFor45.dll`
+    * `System.Reactive.Core.dll` v2.2.0 (`net45` build)
+    * `System.Reactive.Interfaces.dll` v2.2.0 (`net45` build)
+    * `System.Reactive.Linq.dll` v2.2.0 (`net45` build)
+    * `System.Reactive.PlatformServices.dll` v2.2.0 (`net45` build)
+
+The critical thing to notice here is that for each of the Rx assemblies, we have two copies, one built for .NET 4.0 and one build for .NET 4.5, but crucially _they have the same version number_. They both from NuGet package version 2.2.0, and the assembly version numbers are all 2.2.0.0. (.NET assemblies have 4 parts, one more than NuGet packages. But in Rx 2, the 4th part of the .NET assembly version was always set to 0.) The vital thing to understand here is that for any Rx component, e.g. `System.Reactive.Core.dll`, we have two _different_ copies (a .NET 4.0 and a .NET 4.5 one) but they have _exactly the same name in .NET_.
+
+Let's see why that causes a problem. Suppose Visual Studio happens to load `PlugOneBuiltFor40` first. That will be able to use its copies of the Rx assemblies. But when the second one plug-in, `PlugInTwoBuildFor45` first attempts to use `System.Reactive.Interfaces`, the .NET assembly resolver would notice that it has already loaded an assembly named `System.Reactive.Interfaces` with version number 2.2.0.0, the exact version `PlugInTwoBuildFor45` is asking for. Now that was the `net40` version, but the assembly resolver doesn't know that these are different. It assumes that the full name (the combination of simple name, version, public key token, and culture) uniquely identifies an assembly. By supplying two different assemblies that have exactly the same full name, we fail to comply with that basic assumption, so the assembly resolver doesn't do what we want. It doesn't even bother to look at the copy of `System.Reactive.Interfaces` in the `PlugInTwoBuildFor45` folder, because it already has an assembly with the right name in memory. The second component ends up using the `net40` version, and not the `net45` version it shipped. This would result in `MissingMethodException` failures if that second component tried to use features that were present in the `net45` but not the `net40` build.
+
+This only afflicts plug-in systems because those defeat an assumption that is normally valid. Normally we can assume that for any single application, the build process for that application will have an opportunity to look at all of the components that make up the application, including all transitive dependencies, and to detect situations like this. In some cases, it might be possible to use rules to resolve it automatically. (You might have a rule saying that a .NET 4.0 component can be given the .NET 4.5 version of one of its dependencies. In this case it would mean both `PlugOneBuiltFor40` and `PlugInTwoBuildFor45` would end up using the `net45` build of the Rx components. And that would work just fine.) Or it might detect a conflict that cannot be safely resolved automatically. But the problem with plug-in systems is that the exact set of .NET components in use does not become apparent until runtime, and will change each time you add a new plug-in. It's not possible to know what the entire application looks like when you build the application because the entire point of a plug-in system is that it makes it possible to add new components to the application long after the application has shipped.
+
+It's worth noting at this point that the problem I've just described doesn't need to affect applications using .NET (as opposed to .NET Framework). Back when it was still called .NET Core, .NET Core added the [`AssemblyLoadContext` type](https://learn.microsoft.com/en-us/dotnet/core/dependency-loading/understanding-assemblyloadcontext) which makes it possible for different plug-ins each to load their own copies of assemblies, even when they have exactly the same full name as assemblies loaded by other plug-ins. But that didn't exist back in the Rx 2.0 or 3.0 days.
+
+Rx 3.0 attempted to solve this by using [slightly different version numbers for the same 'logical' component on each supported target](https://github.com/dotnet/reactive/pull/212). You might have thought that this would use the fourth part that .NET assembly versions can have, with the first 3 matching the 3 parts that NuGet packages have, but in fact they chose to use the 3rd part, leaving the 4th part as 0. You can see the [code that sets the version number differently based on the target in GitHub](https://github.com/dotnet/reactive/blob/e0b6af3e204feb8aa13841a8a873d78ae6c43467/Rx.NET/Source/GlobalAssemblyVersion.cs) but I've reproduced it here:
+
+```cs
+#if NETSTANDARD1_0 || WP8
+[assembly: AssemblyVersion("3.0.0.0")]
+#elif NETSTANDARD1_1 || WINDOWS8 || NET45 || NETCORE45
+[assembly: AssemblyVersion("3.0.1000.0")]
+#elif NETSTANDARD1_2 || WINDOWS81 || NET451 || NETCORE451 || WPA81
+[assembly: AssemblyVersion("3.0.2000.0")]
+#elif NETSTANDARD1_3 || NET46
+[assembly: AssemblyVersion("3.0.3000.0")]
+#elif NETSTANDARD1_4 || UAP10_0 || NETCORE50 || NET461
+[assembly: AssemblyVersion("3.0.4000.0")]
+#elif NETSTANDARD1_5 || NET462
+[assembly: AssemblyVersion("3.0.5000.0")]
+#elif NETSTANDARD1_6 || NETCOREAPP1_0 || NET463
+[assembly: AssemblyVersion("3.0.6000.0")]
+#else // this is here to prevent the build system from complaining. It should never be hit
+[assembly: AssemblyVersion("invalid")]
+#endif
+```
+
+By time time Rx.NET was no longer building .NET 4.0 versions, but it did offer `net45`, `net451`, `net462`, and `net463` versions. So in a suitably updated vesion of the plug-in scenario described above, imagine we have `PlugTwoBuiltFor45` and `PlugInThreeBuiltfor46` both using Rx v3.1.1. `PlugTwoBuiltFor45` would be using versions of the Rx components with a .NET assembly version of `3.0.1000.0`, while `PlugInThreeBuiltfor46` would be using version `3.0.3000.0`. The .NET Framework assembly resolver would consider these to be distinct assemblies because they have different full names, so it would happily load both versions simultaneously, avoiding the problem.
+
+Again, it's worth stepping over into .NET Core/modern .NET at this point to see how things are different there. Those have a different approach to assembly versioning: whereas .NET Framework requires a strict version match, .NET Core and its successors (e.g. .NET 6.0, .NET 8.0) consider any assembly with a version number greater than equal to the requested version to be a match. It typically doesn't matter for plug-in scenarios because the `AssemblyLoadContext` side-steps this whole issue, but it's helpful to bear in mind that a basic assumption of this Rx 3.0 versioning tactic—that the assembly resolver wants an exact match on the version—is no longer true on all versions of .NET. (A common theme of the problems described in this ADR is that many decisions were based on assumptions that were valid at the time but no longer are.)
+
+Unfortunately, this change in version numbering went on to cause various new issues. There's [a partial list of these issues in a comment in issue 199](https://github.com/dotnet/reactive/issues/199#issuecomment-266138120), and if you look through [#205](https://github.com/dotnet/reactive/issues/205) you'll see a few links to other problems.
+
+As happens quite a lot in the history of this problem, something that worked fine in a simple set up turned out to have issues when dependency trees got more complex. Applications (or plug-ins) using Rx directly had no problems. But if you were using multiple components that depended on Rx, and if those components had support for different mixtures of targets, you could hit problems.
+
+For example, if your application targetted .NET 4.6.2, and you were using two libraries that both depend on Rx 3.1.1, but one of those libraries offers only a `net45` target and the other offers only a `net461` target, they now disagree on the version of Rx they want. The first wants Rx components with version numbers of `3.0.1000.0`, while the second wants components with version numbers of `3.0.4000.0`. This could result in assembly version conflict reports when building the application. You might be able to solve this with assembly binding redirects, and you might even be able to get the build tools to generate those for you. But there were scenarios where that didn't always know what to do, and developers were left trying to understand all the history described to date in order to work out how to unpick the mess. And this also relies on the same "we can resolve it all when we build the application" assumption that is undermined in plug-in scenarios, so this could _still_ cause problems for plug-ins!
+
+The basic problem here is that when building any single deployable target (either an application or a plug-in) you might be using a mixture of components that target several different targets. These might be a mutually compatible combination (e.g., if you use components targetting `net40`, `net45`, and `net46`, they can all happily run on .NET 4.6.2) but if any of them used Rx you now have a problem because they all want different versions of Rx.
+
 
 
 #### Rx 4.0's great unification
 
-Rx 4.0 tried a different approach: have a single Rx package, `System.Reactive`.
+Rx 4.0 tried a different approach: have a single Rx package, `System.Reactive`. This removed all of the confusion that had been caused by Rx previously being split into four pieces.
 
+By this time it was also possible to sidestep the plug-in problem because by now, there was no need to ship separate versions for multiple versions of .NET Framework. That had been necessary on older versions because different .NET Framework releases had different capabilities relating to the thread pool, meaning that a version of Rx that worked on .NET 4.0 would be suboptimal on .NET 4.5. But by the time Rx 4.0 came out, .NET Framework 4.0 was old and there was no longer any need to support it. The oldest version of .NET Framework that it made sense to target at this point was .NET 4.6, and it turns out that none of the new features added in later versions of .NET Framework were of particular use to Rx.NET, so there was no longer any value in building multiple versions of Rx.NET targetting different versions of .NET Framework.
 
-In .NET, components and applications indicate the environments they can run on with a Target Framework Moniker (TFM). These can be very broad. A component with a TFM of `netstandard2.0` can run on any .NET runtime that supports .NET Standard 2.0 (e.g., .NET 8.0, or .NET Framework 4.7.2), and does not care which operating system it runs on. But TFMs can be a good deal more specific. If a component has a TFM of `net6.0-windows10.0.19041`, it requires .NET 6.0 or later (so it won't run on any version of .NET Framework) and will run only on Windows. Moreover, and it has indicated a particular Windows API surface area that it was built for. That `10.0.19041` is an SDK version number but it corresponds to the May 2020 update to Windows 10 (also known as version 2004, or 20H1).
+Since there was now just a single .NET Framework target (`net46`), that solved the original plug-in problems. And collapsing it all down to a single assembly, `System.Reactive`, solved all of the newer problems created by the earlier attempt to solve the plug-in problems.
+
+It was an ingenious master stroke, and it worked brilliantly. Until it didn't. But we'll get to that.
 
 The `System.Reactive` is a multi-target NuGet package. If you download the v6.0 package and unzip it (`.nupkg` files are just ZIP files) you will find the `lib` folder contains subfolders for 5 different TFMs: `net472`, `net6.0`, `net6.0-windows10.0.19041`, `netstandard2.0`, and `uap10.0.18362`. Each contains a `System.Reactive.dll` file, and each is slightly different. The `netstandard2.0` one is effectively a lowest common denominator, and it is missing some types you will find in the more specialized versions. For example, the version in `net472` includes `ControlScheduler`, a type that provides integration between Rx and the Windows Forms desktop client framework. Windows Forms is built into .NET Framework—it's not possible to install .NET Framework without Windows Forms—and so it's possible for the `net472` version of Rx to include that type. But `netstandard2.0` does not include Windows Forms—that version of Rx may find itself running on Linux, where Windows Forms definitely won't be available.
 
@@ -260,3 +342,9 @@ Another idea: could we introduce a later Windows-specific TFM, so that use of wi
 ## Decision
 
 ## Consequences
+
+
+
+Spare:
+
+In .NET, components and applications indicate the environments they can run on with a Target Framework Moniker (TFM). These can be very broad. A component with a TFM of `netstandard2.0` can run on any .NET runtime that supports .NET Standard 2.0 (e.g., .NET 8.0, or .NET Framework 4.7.2), and does not care which operating system it runs on. But TFMs can be a good deal more specific. If a component has a TFM of `net6.0-windows10.0.19041`, it requires .NET 6.0 or later (so it won't run on any version of .NET Framework) and will run only on Windows. Moreover, and it has indicated a particular Windows API surface area that it was built for. That `10.0.19041` is an SDK version number but it corresponds to the May 2020 update to Windows 10 (also known as version 2004, or 20H1).
