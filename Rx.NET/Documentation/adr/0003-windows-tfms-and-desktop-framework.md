@@ -2,7 +2,7 @@
 
 When a .NET project that targets Windows takes a dependency on `System.Reactive`, there are circumstances in which this causes unwanted dependencies on the WPF and Windows Forms frameworks. This can add tens of megabytes to the deployable size of applications. It has caused some projects to abandon Rx entirely.
 
-For example, [Avalonia removed all use of Rx.NET](https://github.com/AvaloniaUI/Avalonia/pull/9749) in January 2023. In the discussion of https://github.com/dotnet/reactive/issues/1461 you'll see some people talking about not being able to use Rx because of this problem.
+For example, after [Avalonia ran into this problem](https://github.com/AvaloniaUI/Avalonia/issues/9549), they [ removed all use of Rx.NET](https://github.com/AvaloniaUI/Avalonia/pull/9749) in January 2023. In the discussion of https://github.com/dotnet/reactive/issues/1461 you'll see some people talking about not being able to use Rx because of this problem.
 
 The view of the Rx .NET maintainers is that projects using Rx should not be forced into this situation. There are a lot of subtleties and technical complexity here, but the bottom line is that we want Rx to be an attractive choice.
 
@@ -179,7 +179,7 @@ But .NET Core 3.0 ended that simple relationship. Consider this table:
 
 Before .NET Core 3.0 came out, your choice of target framework would always determine which client-side UI frameworks were available. The _great unification_'s decision to include UI framework support as part of the unification rested on the assumption that this would be the case. But .NET Core 3.0 broke that. Once again, a decision that made sense when it was made was later undermined because one of its assumptions ceased to hold.
 
-Why is it a problem? Well, what UI framework integration should Rx offer in its various targets? This table attempts to answer that question for all of the targets that [Rx 4.2](https://github.com/dotnet/reactive/releases/tag/rxnet-v4.2.0) (the version that added .NET Core 3.0 support) supported:
+Why is it a problem? Well, what UI framework integration should Rx offer in its various targets? This table attempts to answer that question for all of the targets that [Rx 4.2](https://github.com/dotnet/reactive/releases/tag/rxnet-v4.2.0) (the version that added [.NET Core 3.0 support](https://github.com/dotnet/reactive/pull/857)) supported:
 
 | TFM | Which UI framework should Rx support? | What does it actually support? |
 |--|--|--|
@@ -212,14 +212,11 @@ The addition of OS-specific TFMs cleared things up a bit in .NET 5.0. You knew t
 
 This repeats the .NET Core 3.0 problem for .NET Core 3.1, but given what Rx 4.2 did, Rx 5.0 pretty much had to do the same thing regardless of whether you think it was right or wrong.
 
-It does **not** repeat the mistake for `net5.0` but then it can't: the build tools prevent you from trying to use Windows Forms or WPF unless you've specified that your target platform has to be Windows.
+It does **not** repeat the mistake for `net5.0` but then it can't: when targeting .NET 5.0 or later, the build tools prevent you from trying to use Windows Forms or WPF unless you've specified that your target platform has to be Windows.
 
-The last row is interesting. Again, I've said it probably shouldn't include Windows Forms and WPF support. But really that's because I think that last row shouldn't even be there. There are good reasons that merely using `-windows` TFM shouldn't automatically turn on WPF and Windows Forms support, but if you agree with that, then there's no longer any reason for Rx to offer a `-windows` TFM at all—there'd be no difference between those two .NET 5.0 TFMs at that point.
+The last row is interesting. Again, I've said it probably shouldn't include Windows Forms and WPF support. But really that's because I think that last row shouldn't even be there. There are good reasons that merely using some `-windows` TFM shouldn't automatically turn on WPF and Windows Forms support, but if you agree with that, then there's no longer any reason for Rx to offer a `-windows` TFM at all—there'd be no difference between those two .NET 5.0 TFMs at that point.
 
-The reason I think Windows Forms and WPF support should not automatically be included with 
-
-
-For example, this is a completely legitimate C# console application:
+The reason I think Windows Forms and WPF support should not automatically be included just because you've used a `-windows` TFM is that there are many different reasons you might want such a TFM, most of which have nothing to do with either Windows Forms or WPF. For example, this is a completely legitimate C# console application:
 
 ```cs
 using Windows.Devices.Input;
@@ -233,28 +230,56 @@ Console.WriteLine($"Keyboard {keyboardCapabilities.KeyboardPresent}");
 Console.WriteLine($"Touch {touchCapabilities.TouchPresent}");
 ```
 
-This is using [WinRT-based APIs to discover whether certain forms of input are available on the machine](https://learn.microsoft.com/en-us/windows/apps/design/input/identify-input-devices). These APIs are available if I specify a Windows-specific TFM such as `net6.0-windows10.0.17763.0`. With just `net6.0` that code would fail to compile because these are Windows-only APIs.
+This uses [WinRT-based APIs to discover whether certain forms of input are available on the machine](https://learn.microsoft.com/en-us/windows/apps/design/input/identify-input-devices). These APIs are available if I use a suitable Windows-specific TFM. They're only in Windows 10 or later, so I need to use a versioned Windows-specific TFM such as `net8.0-windows10.0.18362.0`. (The APIs I'm using are actually available starting with version 10.0.10240.0, but I've chosen version 10.0.18362 because that's the oldest Windows build number that Visual Studio 2022's installer supports) With just `net8.0` that code would fail to compile because these are Windows-only APIs.
 
+This illustrates the very specific meaning of OS-specific TFMs: they determine the OS-specific API surface area that your code will attempt to use. Here are some things that OS-specific TFMs **don't** mean:
 
+* a minimum supported OS version (because code might use a new API when it runs on the latest OS version but be capable of handling its unavailability gracefully)
+* an intention to use WPF or Windows Forms (this particular program is a console application)
 
+If you want to indicate a minimum OS version, you do that with [`SupportedOSPlatformVersion`](https://learn.microsoft.com/en-us/dotnet/standard/frameworks#support-older-os-versions) property in your project file. This is allowed to be lower than the version in your TFM (but you need to detect when you're on an older version and handle the absence of missing APIs gracefully).
 
+If you want to use WPF, you set the `UseWPF` property to true in your project file. For Windows Forms you set `UseWindowsForms`. It's entirely possible to need to specify a Windows-specific TFM without wanting to use either of these frameworks. The console app shown above is a somewhat unusual example. Another, perhaps more common scenario, is that you want to use a different UI framework.
 
+But Rx 5.0 takes the position that if an applications targets Windows, Rx should make its WPF and Windows Forms functionality available. (In fact, Rx doesn't support this on versions of Windows older than 10.0.19041, aka Windows 10 2004. So if your TFM specifies an older version, or no version at all (which implicitly means Windows 7 by the way) then Rx's WPF and Windows Forms won't be available.)
 
+And the problem with that is that if you use any self-contained form of deployment (including Native AOT) in which the .NET runtime and its libraries are shipped as part of the application, that means your application will be shipping the WPF and Windows Forms parts of the .NET runtime library. Normally those are optional—the basic .NET runtime does not include them—so this is not a case of "well you'd be doing that anyway."
 
-But that's not why I qualified that row with "probably." In fact it's because I think they might not have had a choice: they had already painted themselves into a corner by this time.
+Let's look at the impact. The first column of the following table shows the size of the deployable output (excluding debug symbols, which get included in the published output by default) for the code shown above. The second column shows the impact of adding a reference to `System.Reactive` and writing a single line of code that uses it (to ensure that Rx doesn't get removed due to not really being used), but for that column I targetted `net80-windows10.0.18362`. Remember, Rx doesn't support WPF or Windows Forms for versions before 10.0.19041, so this shows the impact of adding Rx without its WPF or Windows Forms support. As you can see, it adds a little over a megabyte in the first two rows—the size of `System.Reactive.dll` in fact—and in the last two rows it has a smaller impact because trimming can remove most of that.
 
-However, that change also added an additional target, `net5.0-windows`
+| Deployment type | Size without Rx | Size with Rx targetting 18362 | Size with Rx targetting 19041 |
+|--|--|--|--|
+| Framework-dependent | 20.8MB | 22.1MB | 22.5MB |
+| Self-contained | 90.8MB | 92.1MB | 182MB |
+| Self-contained trimmed | 18.3MB | 18.3MB | 65.7MB |
+| Native AOT | 5.9MB | 6.2MB | 17.4MB |
 
-But the last row is problematic. This is a Windows-specific TFM. If you build an app with that TFM, you can set `UseWPF` or `UseWindowsForms` (or both) to `true`, and you can start using types from those UI frameworks. Does that mean Rx should include its support for Windows Forms and WPF with that target?
+But the third column looks very different. In this case I've targetted `net8.0-windows10.0.19041.0`. Rx has decided that since it is able to provide Windows Forms and WPF support for that target, it _will_ provide it, even though I actually have no use for it.
 
-Rx [added .NET Core 3.0 targets](https://github.com/dotnet/reactive/pull/857) in 
+In the framework-dependent row it makes only a small difference (because the copy of `System.Reactive.dll` we get is a little larger). But that's misleading: the resulting executable will now required host systems to have not just the basic .NET 8.0 runtime installed, but also the optional Windows Desktop components. So unless the target machine already has that installed, I will in fact have a larger install to perform.
 
+The self-contained deployment is the worst. It has roughly doubled in size—it is 90MB larger! And for absolutely no change in behaviour. I compiled exactly the same code for the last two columns, it's just that in the 18362 column I chose a target runtime that would prevent Rx from trying to offer the Windows Forms and WPF support that I'm not using.
 
+What's happened here is that because Rx has insisted on providing its Windows Forms and WPF support, the .NET SDK has had to include all of the .NET runtime library components that constitute Windows Forms and WPF, and those are large! That's where that extra 90MB comes from: a complete copy of TWO user interface frameworks, and my application isn't using either of them!
+
+The self-contained trimmed version did a little better. It was able to work out that there was a whole load of code I wasn't using. But there's a limit to that. The trimmer is apparently not able to work out that I wasn't really using Windows Forms or WPF at all, so the deployment is still over 47MB larger. Or to put it another way, the deployment is about 3.5x the size that it needs to be!
+
+The Native AOT version did better again. Obviously the absolute sizes are all significantly smaller, but the ratio of Rx without Windows Forms and WPF to Rx with Windows Forms and WPF is about 2.8x here. That's a lot better than ordinary trimming. The absolute increase of 11.2MB is relatively modest, and would be a smaller proportion of the whole in a larger application.
+
+But it's still not great. And there are lots of scenarios in which Native AOT simply isn't an option. There are a fair few in which trimming can't be used either. So that unwanted 90MB in the self-contained deployment is a real problem in many scenarios.
+
+(In case you're wondering why the self-contained deployment is so large, at 20.8MB, most of that is the `Microsoft.Windows.SDK.NET.dll` library. This gets included as a result of using a Windows-specific TFM, and using some of the WinRT-style APIs that it makes available. That library is where the types such as `MouseCapabilities` my example uses come from.)
+
+So this is why, in the earlier table, I said that for the `net5.0-windows10.0.19401` the answer to the question "Which UI framework should Rx support?" should be "None." But why did I qualify it as "probably?" It's because I think they might not have had a choice: they had already painted themselves into a corner by this time. In order to avoid this, they would have had to have designed Rx 4 differently, and that ship had already sailed.
+
+In my view, the best solution to this whole problem would have been for all of the UI-frameworks-specific pieces of Rx to remain in separate libraries. Although the simplicity of getting all Rx can offer with a single package reference is appealing, we simply wouldn't have the problem we have today if the framework-specific pieces had remained separate.
+
+This is easy to say with hindsight of course, particularly since there are now many different options for building client-side UI with .NET. In a world where Avalonia, MAUI, Windows Forms, WPF, and WinUI are all possibilities for a .NET application, the idea that `System.Reactive` should do everything looks obviously unsustainable, in a way that it didn't back in the Rx 4.0 days.
 
 
 ### The workaround
 
-If your application has encountered [the problem](#the-problem), you add this to the `csproj`:
+If your application has encountered [the problem](#the-problem), you can add this to the `csproj`:
 
 ```xml
 <PropertyGroup>
@@ -264,26 +289,65 @@ If your application has encountered [the problem](#the-problem), you add this to
 
 This needs to go just the project that builds your application's executable output. It does not need to go in every project—if you've split code across multiple libraries, those don't need to have this. The problem afflicts only executables, not DLLs.
 
-Why not just set [`UseWPF`](https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props-desktop#usewpf) and [`UseWindowsForms`](https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props-desktop#usewindowsforms) back to `false`? That might work in a simple single-project setup, but there are cases involving libraries where it does not. For example, consider this dependency chain:
+here's an updated version of the table from the previous section. The final two columns are for the same application as last time, `net8.0-windows10.0.19041.0`. One shows the same values as the final column from the previous section, in which Rx has brought in Windows Forms and WPF. The final column here shows the effect of applying the workaround.
 
-* MyApp (with no direct `System.Reactive` dependency)
-  * SomeThirdPartyLib
-    * `System.Reactive`
+| Deployment type | Size without Rx | Size with Rx without workaround | Size with Rx using workaround |
+|--|--|--|--|
+| Framework-dependent | 20.8MB | 22.5MB | 22.5MB
+| Self-contained | 90.8MB | 182MB | 92.5MB |
+| Self-contained trimmed | 18.3MB | 65.7MB | 18.3MB |
+| Native AOT | 5.9MB | 17.4MB | 6.2MB |
 
-If `SomeThirdPartyLib` has target that's subject to this problem (e.g., it targets `net80-windows10.0.19041`), and if it did not also set `UseWPF` and `UseWindowsForms` to `false`, then that library will have a dependency on `Microsoft.WindowsDesktop.App`
+As you can see, this is much more reasonable. In the first two cases, the output grows by the size of the `System.Reactive.dll` file. In the second two cases, the impact is considerably more modest. Rx makes a barely perceptible impact to the trimmed case. It's slightly more noticeable in Native AOT, but it's adding only about 300KB, roughly a 5% increase in size.
+
+So that seems pretty effective.
+
+Why not just set [`UseWPF`](https://learn.microsoft.com/en-us/dotnet/core/project-sdk/-msbuild-props-desktop#usewpf) and [`UseWindowsForms`](https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props-desktop#usewindowsforms) back to `false`? The short answer is: it doesn't work. But why? The problem is that these really only determine whether the code in your project can use WPF or Windows Forms features. Your project might not use them, but that doesn't change the fact that if any of the components you depend on do have a dependency on the .NET runtime Windows Desktop components, your application will automtically pick up that dependency even if you've not turned on the WPF or Windows Forms features for your own build.
+
 
 ### Community input
 
+We started a [public discussion about this topic](https://github.com/dotnet/reactive/discussions/2038) to garner opinions and suggestions. There was plenty of feedback. The following sections attempt to summarise the themes.
 
-https://github.com/dotnet/reactive/discussions/2038
+#### Does size matter?
 
-https://github.com/AvaloniaUI/Avalonia/issues/9549
+[Anais Betts questioned whether this is really a problem](https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7610677):
 
+> Are we really worried about Disk Space here? In 2023? And that's worth nuking our entire ecosystem over?
 
-Is size that big a deal? Ani Betts wanted to dismiss this whole topic on the grounds that in this day and age, 50MB is really nothing. But the reality is that people voted with their feet. This has been a big deal for some people, and we need to take it seriously.
+I would not dismiss Anais's views lightly. She is a long-standing Rx veteran and continues to be a positive force in the Rx community. In particular, I think we need to pay close attention to the concerns she raises over the damage we might do if we overcomplicate Rx's packaging.
 
+However, the evidence compels me to disagree on her first point. My answers to her two questions here are: yes, and no, respectively.
+
+Yes, clearly people are worried about this. We know this because people have complained, and some major projects have abandoned Rx purely because of this problem.
+
+As for the second point no, I do not want to nuke anything. It's possible Anais had read some of the other comments (discussed in the next section) where there seemed to be a surprising appetite for completely abandoning all hope of compatibility. Seen in that context, the extreme language of "nuking" is understandable.
+
+The problem is that the answer to the first question is: yes, people are demonstrably worried enough about disk space in 2023 to drop Rx. That means we do actually have to do something. And for what it's worth I'm not convinced it's all about disk space per se. Network bandwidth is an issue. Not everyone has hundreds of megabits of internet connectivity. I live in the UK, which is a reasonably advanced economy, and I can get 1GB internet to my house, but only because I live in a built up area. A significant proportion of the population can't get even 10% of that speed. And that's in a country with unusually high average population density and a fairly high-tech economy. There are plenty of countries where poor connectivity is even more common than here, with no prospect of change any time soon. So adding 90MB unnecessarily to a download is a problem for significant parts of the world.
+
+Even in a world of gigabit internet, web page download sizes matter. We added trimming support to Rx 6.0 specifically in response to people wanting to use it in Blazor. Bear in mind that in that scenario removed a mere 1MB from the download size, and yet it was a feature people care about. If 1MB can be a problem, I think it's safe to say that there are still scenarios today where 90MB matters.
+
+But while I disagree with the premise that 90MB is no big deal, I think Anais offers some extremely important analysis. She worries that a solution to this problem could be:
+
+> worse than the original problem of "Wow there's too many DLLs". Please don't make a mess of the Rx namespaces again, we have already been through this, Rx is already confusing enough, we know from the first time around that having "too many DLLs" caused immense user confusion and (for some reason) accusations of "bloat" because "there were too many references" - now we are proposing making it even more confusing
+
+What I take from this is that we should keep things as simple as possible, but no simpler. I think the problem we have today is that the _great unification_ was, with hindsight, an oversimplification. So for me the questions are:
+
+* what's the simplest approach that's not an oversimplification?
+* how can we best get from where we are today to that approach?
+
+I think that second one is the harder question to answer, and we need to keep in mind this request: "Please don't make a mess of the Rx namespaces again."
 
 #### The peculiar faith in the power of breaking changes
+
+A "clean break" is probably a misnomer.
+
+
+#### Are we holding Rx to too high a standard?
+
+Some people think it's wrong of us to try to maintain high levels of backwards compatibility. I think that's debatable, but if you are going to take that position, then it demands the question: how much backwards compatibility is enough? How much can we break.
+
+As it happens, I made clear from the start that total compatibility was not a goal: I am quite keen to throw UWP under a bus if at all possible because its continued presence in the Rx codebase is a massive headache.
 
 
 #### Exploiting radical change as an opportunity
