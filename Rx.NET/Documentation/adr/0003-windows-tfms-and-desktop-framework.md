@@ -20,6 +20,9 @@ Draft
 
 @idg10 ([Ian Griffiths](https://endjin.com/who-we-are/our-people/ian-griffiths/)).
 
+NOTE: I forgot I'd done all this in my repo: https://github.com/idg10/reactive/blob/experiment/separate-platforms/Rx.NET/Documentation/adr/0003-multi-platform-packaging.md
+
+I was sure I'd remembered doing a load of work to collate this information...I was wondering where it all went!
 
 ## Context
 
@@ -315,7 +318,7 @@ We started a [public discussion about this topic](https://github.com/dotnet/reac
 
 > Are we really worried about Disk Space here? In 2023? And that's worth nuking our entire ecosystem over?
 
-I would not dismiss Anais's views lightly. She is a long-standing Rx veteran and continues to be a positive force in the Rx community. In particular, I think we need to pay close attention to the concerns she raises over the damage we might do if we overcomplicate Rx's packaging.
+I would not dismiss anything Anais has to say about Rx lightly. She is a long-standing Rx veteran and continues to be a positive force in the Rx community. In particular, I think we need to pay close attention to the concerns she raises over the damage we might do if we overcomplicate Rx's packaging.
 
 However, the evidence compels me to disagree on her first point. My answers to her two questions here are: yes, and no, respectively.
 
@@ -331,7 +334,15 @@ But while I disagree with the premise that 90MB is no big deal, I think Anais of
 
 > worse than the original problem of "Wow there's too many DLLs". Please don't make a mess of the Rx namespaces again, we have already been through this, Rx is already confusing enough, we know from the first time around that having "too many DLLs" caused immense user confusion and (for some reason) accusations of "bloat" because "there were too many references" - now we are proposing making it even more confusing
 
-What I take from this is that we should keep things as simple as possible, but no simpler. I think the problem we have today is that the _great unification_ was, with hindsight, an oversimplification. So for me the questions are:
+What I take from this is that we should keep things as simple as possible, but no simpler.
+
+It's worth noting that [glopesdev offered a slightly contrary opinion](https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7627617):
+
+> I don't buy the argument of counting nodes in a "dependency tree" as a measure of complexity. Humans often care more about names than they care about numbers. My definition of "sanity" is not just that we have one package, it's that the root of the namespace System.Reactive should not be in a package called System.Reactive.Base.
+
+
+
+I think the problem we have today is that the _great unification_ was, with hindsight, an oversimplification. So for me the questions are:
 
 * what's the simplest approach that's not an oversimplification?
 * how can we best get from where we are today to that approach?
@@ -340,7 +351,27 @@ I think that second one is the harder question to answer, and we need to keep in
 
 #### The peculiar faith in the power of breaking changes
 
-A "clean break" is probably a misnomer.
+A feature of the community response that surprised me was that a lot of people seem very open to breaking changes. Some go further and are actively enthusiastic about them:
+
+* Open to breaking changes
+  * ["I think it's ok to introduce breaking changes"](https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7559009)
+  * ["I also find these "breaking changes" acceptable"](https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7603636)
+* Actively encouraging breaking changes
+  * [" I would like to see a splitting"](https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7977086)
+  * [glopesdev's extensive explanation of why he just wants to change `System.Reactive`](https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7627617)
+  * [A disruptive change is worth it if it solves the current problem and meets future plans, it also helps to ship new features and bug fixes faster.](https://github.com/dotnet/reactive/discussions/2038#discussioncomment-8170628)
+  * [I really would like the team to consider that a major update is a major update and that breaking changes are acceptable](https://github.com/dotnet/reactive/discussions/2038#discussioncomment-8279135)
+
+About half of these make no attempt to explain why they think a breaking change will help. Simply breaking everything is no guarantee of fixing the problem!
+
+
+#### 'Clean starts' aren't, due to extension method ambiguity
+
+David Karnok made a [killer argument against so-called clean starts](https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7557205):
+
+>As for the clean start, there would be a lot of clashes due to the use of extension methods, right? For example, if old Rx and new Rx needed to be interoperated, whose Select() will be applied on that IObservable?
+
+For me this pretty much destroys the idea of a 'clean break' to enable breaking changes. The exact meaning of 'clean break' being presumed here is described in the [Option 2: 'clean break' section](#option-2-clean-break-introducing-new-packages-with-no-relationship-with-current-rx) later in this document. That section also explains why the point David raised here is fatal for that design.
 
 
 #### Are we holding Rx to too high a standard?
@@ -349,13 +380,32 @@ Some people think it's wrong of us to try to maintain high levels of backwards c
 
 As it happens, I made clear from the start that total compatibility was not a goal: I am quite keen to throw UWP under a bus if at all possible because its continued presence in the Rx codebase is a massive headache.
 
+> [I don't understand why given this we are assuming that System.Reactive needs to somehow hold itself to a higher standard than the core framework itself.](https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7627617)
+
+One reason is that we can't actually impose the split that Microsoft did by introducing .NET Core. (Or the similar split they imposed by introducing ASP.NET Core.) When you chose a host runtime (or an application framework) that's an application-level decision, and you're choosing to be on one world instead of another. That is a top-down decision: you choose .NET or .NET Framework and then a whole bunch of consequences flow from which you chose. As the application developer you're going to 
+
+But as a library author I'm not making that kind of choice when I decide to use, say, `System.Text.RegularExpressions`. Or `List<T>`. Or, and I think this is probably actually the most relevant comparison for Rx, LINQ to Objects? Or any of the other library types which are nearly identical across both worlds.
+
+So the question we need to ask is this: is Rx more like a framework or a common library feature? Are we more like ASP.NET Core, or `System.Linq`? I'd say the fact that we offer a `netstandard2.0` target points very much towards the latter.
+
+
+
 
 #### Exploiting radical change as an opportunity
 
 If radical change is unavoidable (and that's a big "if") there is a view that it presents an opportunity to achieve things that would normally be impossible. This is essentially the 'never let a good crisis go to waste' mindset, a notable example being Chris Pulman's [proposal for a greater separation of concerns in Rx.NET](https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7559424).
 
+Chris is one of the main developers on ReactiveUI, an open source Rx-based project. Anais Betts has also been deeply involved in that project in the past. I find it surprising that the two of them have come to almost precisely opposite conclusions on this: whereas Anais recoils at the complexity of the early days of Rx and advocates strongly for staying with the current single-assembly solution, Chris is effectively arguing for something that looks quite a lot like the earliest versions of Rx, but, if anything, slightly more complex!
+
+I'd quite like to hear the two of them debate this, because they both have formidable experience with Rx.
+
 
 #### Windows version numbers
+
+
+#### Use obsolete
+
+https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7604157
 
 
 ### Constraints
@@ -456,6 +506,34 @@ We don't want to drop UWP support completely, but we are prepared to contemplate
 
 This is problematic for all of the reasons just discussed in the preceding section. However, as far as we know UWP never really became hugely popular, and the fact that Microsoft never added proper support for it to the .NET SDK sets a precedent that makes us comfortable with dropping it relatively abruptly. Existing Rx.NET users using UWP will have two choices: 1) remain on Rx 6.0, or 2) rebuild code that was using UWP-specific types in `System.Reactive` to use the new UWP-specific package we would be adding.
 
+#### Transitive references to different versions
+
+consider an application MyApp that has two dependencies (which might be indirect, non-obvious dependencies) of this form:
+
+* UiLibA uses `System.Reactive` v5.0. This is a UI library and it and depends on `DispatcherScheduler`
+* NonUiLibB uses Rx 7, and it does not use any UI-framework-specific Rx features but it does use new functionality in Rx 7
+
+Imagine for the sake of argument that Rx 7 adds a `RateLimit` operator to deal with the fact that almost nobody likes Throttle.
+
+So we now have this situation:
+
+* UiLibA will require `DispatcherScheduler` to be available through `System.Reactive` v5.0
+* NonUiLibB will require `Observable.RateLimit` to be available through whatever reference it's using to get Rx 7
+
+This needs to work. This constraint prevents us from simply removing UI-specific types from `System.Reactive` v7.0. 
+
+
+#### Limited tolerance for breaking changes
+
+While we would prefer to have no breaking changes at all, there are some circumstance where the are acceptable: security considerations can trump backwards compatibility for example. (Not that we currently know of any examples of that in Rx.) In considering a breaking change we need to ask which of the following would apply in cases where a change does break an application:
+
+1. the app authors need to make some changes to get everything working again
+2. we put the app authors in a position where it's not possible for them to get everything working again
+
+Simply removing UI-specific types in `System.Reactive` v7 would be a type 2 change (because of [the need for things to work when we have indirect dependencies on multiple versions](#transitive-references-to-different-versions)).
+
+We consider type 2 changes to be unacceptable. We consider all breaking changes undesirable, but would be open to type 1 changes if no better alternative exists.
+
 
 ### The design options
 
@@ -465,27 +543,104 @@ The following sections describe the design choices that have been considered to 
 
 The status quo is always an option. It's the default, but it can also be a deliberate choice. The availability of a [workaround](#the-workaround)
 
-#### Option 2: new main Rx package, demoting `System.Reactive` to a facade
+#### Option 2: 'clean break' introducing new packages with no relationship with current Rx
 
-#### Option 3: `System.Reactive` remains the primary package and becomes a facade
+**Note**: we have already ruled this out.
 
-We could maintain `System.Reactive` as the face of Rx, but turn it into a facade, with all the real bits being elsewhere. This would give people the option to depend on, say, `System.Reactive.Common` or whatever, to be sure of avoiding any UI dependencies. However, this might not help with transitive dependencies.
+This idea was one of those to emerge from some some discussion on an early protoype of [option 3](#option-3-new-main-rx-package-demoting-systemreactive-to-a-facade) at https://github.com/dotnet/reactive/pull/2034
 
+In this design, we effectively introduce a whole new set of Rx packages that have absolutely no connection with any existing packages. It would in effect be a fork of Rx.NET that just happened to be produced by the maintainers of the current Rx.NET.
 
-#### Option 4: UI-framework specific packages, deprecating their
+Applications wanting to use the latest Rx would use the new package. (`System.Rereactive`? `System.ReactiveEx`?) Existing code could carry on using `System.Reactive`. The theory is that we would be free to make breaking changes because code with references to the existing Rx would be entirely unaffected. This would free us to move the UI-specific features back out into separate packages. And it would also present a once-in-a-generation opportunity to fix other things, although that line of thinking risks turning this into the vehicle for everyone's pet feature.
 
+That's all moot, though, because we're not going to do it.
 
-### Other options less seriously considered
+This option was elegantly torpedoed by David Karnok. The [earlier section about how 'clean breaks' are a myth](#clean-starts-arent-due-to-extension-method-ambiguity) contains relevant quotes and links. I'll now explain why this is a terrible idea.
 
-### Change everything
+The defining feature of this idea is that there is no unification between "before" and "after" versions of Rx. Today, if a single application uses several libraries using several versions of Rx, they all end up using the same version—the build tooling basically picks the highest version number referenced, and everyone gets that. This is called _unification_. The effect of introducing completely new packages that are unrelated to the existing ones is that the build tools will consider these totally different libraries. If your app uses some libraries that use Rx 6 and some that use Rx 7, the build tools won't realise that these are references to different versions of the same thing. It would see a reference to `System.Reactive` v6.0.0, and a reference to `System.Newreactive` (or whatever) v7.0.0, and would just treat them as two separate libraries.
 
-We could do something similar to what the Azure SDK team did a few years back: they introduced a new set of libraries under a completely different set of namespaces. There was no attempt at or pretense of continuity. New NuGet packages were released, and the old ones they replaced have gradually been deprecated.
+At that point, you've now got both Rx 6 and Rx 7 in your app. So what happens if you want to use Rx in your application code too? When you write this:
+
+```cs
+public IObservable<string> FormatNumbers(IObservable<int> xs) => xs.Select(x => x.ToString("G"));
+```
+
+Which implementation of `Select` is it going to pick? The problem is that you've now got two definitions of `System.Reactive.Linq.Observable` from two different assemblies. Any file that has a `using System.Reactive.Linq` is going to have both the v6 and the v7 definition of `Observable` in scope. Which one is the compiler supposed to pick?
+
+That call to `Select` is ambiguous.
+
+It is technically possible to disambiguate identically-named classes with the rarely-used [`extern alias` feature](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/extern-alias). You can associate an alias with a NuGet reference like this:
+
+```xml
+<ItemGroup>
+  <PackageReference Include="System.Reactive" Version="6.0.0">
+    <Aliases>RxV6</Aliases>
+  </PackageReference>
+
+  <PackageReference Include="HypotheticalRxVNext" Version="7.0.0">
+    <Aliases>RxV7</Aliases>
+  </PackageReference>
+</ItemGroup>
+```
+
+With that in place you can then be specific about which one you're using:
+
+```cs
+extern alias RxV6;
+extern alias RxV7;
+
+using RxV7::System; // for the Subscribe extension method
+using RxV7::System.Reactive.Linq; // for Select
+
+IObservable<int> numbers = RxV6::System.Reactive.Linq.Observable.Range(0, 3);
+IObservable<string> strings = numbers.Select(x => x.ToString());
+
+strings.Subscribe(Console.WriteLine);
+```
+
+This uses the Rx v6 implementation of `Observable.Range`, but the two places where this uses extension methods (the call to `Select` and the call to the delegate-based `Subscribe` overload) will use the Rx v6 implementation, because that's what we specified in the `using` directives when importing the relevant namespaces.
+
+So it's possible to make it work, but we consider this to be confusing and painful. The `extern alias` mechanism is really something you should only have to use if something somewhere has gone horribly wrong. We don't want to make it the norm in Rx usage. And it wouldn't be for simple applications that use Rx directly. But it would become necessary any time you have indirect references to versions of Rx from both sides of this alleged 'clean break'.
+
+The only way to avoid this would be to change not just the NuGet package names but also all the namespaces. That somewhat resembles what the Azure SDK team did a few years back: they introduced a new set of libraries under a completely different set of namespaces. There was no attempt at or pretence of continuity. New NuGet packages were released, and the old ones they replaced have gradually been deprecated.
 
 You could argue that we've already done this. There's a whole new version of Rx at https://github.com/reaqtive/reaqtor that implements functionality not available in `System.Reactive`. (Most notably the ability to persist a subscription. In the ['reaqtive' implementation of Rx](https://reaqtive.net), operators that accumulate state over time, such as [`Aggregate`](https://introtorx.com/chapters/aggregation#aggregate), can migrate across machines, and be checkpointed, enabling reliable, persistent Rx subscriptions to run over the long term, potentially even for years.) The NuGet package names and the namespaces are completely different. There's no attempt to create any continuity here.
 
 An upshot of this is that there is no straightforward way to migrate from `System.Reactive` to the [reaqtive Rx](https://reaqtive.net). (The Azure SDK revamp has the same characteristic. You can't just change your NuGet package references: you need to change your code to use the newer libraries, because lots of things are just different.)
 
 Our view is that we don't want three versions of Rx. The split between `System.Reactive` and [reaqtive Rx](https://reaqtive.net) was essentially a _fait acompli_ by the time the latter was open sourced. And the use cases in which the latter's distinctive features are helpful are sufficiently specialized that in most cases it probably wouldn't make sense to try to migrate from one to the other. But to create yet another public API surface area for Rx in .NET would cause confusion. We don't think it offers enough benefit to offset that.
+
+So for all these reasons, we are rejecting this design option.
+
+#### Option 3: new main Rx package, demoting `System.Reactive` to a facade
+
+Discussed at https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7557014 with a prototype on https://github.com/dotnet/reactive/pull/2034
+
+
+
+#### Option 4: `System.Reactive` remains the primary package and becomes a facade
+
+We could maintain `System.Reactive` as the face of Rx, but turn it into a facade, with all the real bits being elsewhere. This would give people the option to depend on, say, `System.Reactive.Common` or whatever, to be sure of avoiding any UI dependencies. However, this might not help with transitive dependencies.
+
+
+#### Option 5: gut the UI-specific types so they are hollowed out shells
+
+David Karnok [suggested we turn `DispatcherScheduler` into a delegator and move the real implementation elsewhere](https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7557205). 
+
+
+#### Option 6: UI-framework specific packages, deprecating their
+
+
+
+#### Um
+
+https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7628930
+
+
+### Other options less seriously considered
+
+### Change everything
+
 
 
 Another idea: could we introduce a later Windows-specific TFM, so that use of windows10.0.19041 becomes a sort of dead end?
