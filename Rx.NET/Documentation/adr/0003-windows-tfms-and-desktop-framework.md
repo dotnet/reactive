@@ -763,29 +763,19 @@ The following sections describe the design choices that have been considered to 
 
 The status quo is always an option. It's the default, but it can also be a deliberate choice. The availability of a [workaround](#the-workaround) makes this a more attractive option than it had seemed when we first started looking at this problem.
 
-Rx 5.0 and 6.0 have both shipped, and a lot of people use them, so one option is just to continue doing things in the same way. This is not a good solution. Back when Rx 5.0 was the current version, some people seemed to think that the changes we adopted in Rx 6.0 would be sufficient to solve the problems described in this document. But as will be explained, it doesn't.
+Rx 5.0 and 6.0 have both shipped, and a lot of people use them, so one option is just to continue doing things in the same way. This is not a good solution. Back when Rx 5.0 was the current version, some people seemed to think that the changes we adopted in Rx 6.0 would be sufficient to solve the problems described in this document, but as is now clear, they don't.
 
-`System.Reactive` 5.0 targeted `netstandard2.0`, `net472`, `netcoreapp3.1`, `net5.0`, `net5.0-windows10.0.19041`, and `uap10.0.16299`. The idea with this design option was to target `netstandard2.0`, `net472`, `net6.0`, `net6.0-windows10.0.19041`, and `uap10.0.16299`. (In other words, drop .NET Core 3.1 and .,NET 5.0, both of which went out of support in 2022, and effectively upgrade the .NET 5.0 target to .NET 6.0.) This is in fact exactly what we did for Rx 6.0, but despite what some people seemed to believe, this was never going to solve the problems described above.
+`System.Reactive` 5.0 targeted `netstandard2.0`, `net472`, `netcoreapp3.1`, `net5.0`, `net5.0-windows10.0.19041`, and `uap10.0.16299`. Rx 6.0 targets `netstandard2.0`, `net472`, `net6.0`, `net6.0-windows10.0.19041`, and `uap10.0.16299`. (In other words, it dropped .NET Core 3.1 and .,NET 5.0, both of which went out of support in 2022, and effectively upgraded the .NET 5.0 target to .NET 6.0.) This is in fact exactly what we did for Rx 6.0, but despite what some people seemed to believe, this was never going to solve the problems this ADR discusses.
 
-Let's look at how this gets on with the three challenges:
+This meets all of the [constraints](#constraints), for the simple reason that those are all concerned with not making things worse than they already are. This _is_ where we already are, so it can't possibly be any worse than where we are. But the big problem is the one stated at the start of this ADR: the fact that self-contained deployments are vastly bloated by unwanted dependencies on Windows Forms and WPF.
 
-**1: Host applications with a plug-in model getting into a state where plug-ins disagree about which `System.Reactive.dll` is loaded**
-
-Since the plug-in issues are only relevant to .NET Framework, and this doesn't change the .NET Framework packaging in any way, this solves the problem in the same way that Rx 4.0 and 5.0 do.
-
-**2: Incompatible mixes of version numbers of Rx components**
-
-Rx 4.0 introduced the unified packaging to solve this problem, and this option retains it, so it will solve the problem in the same way.
-
-**3. Applications getting WPF and Windows Forms dependencies even though they use neither of these frameworks**
-
-This design option does not solve this problem. I think this is a fundamental problem with anything that continues to have a unified structure: if `System.Reactive` inevitably gives you WPF and Windows Forms support whenever you target a `netX.0-windowX`-like framework, you're going to have this problem. There has to be some way to indicate whether or not you want that, and I think separating out those parts is the only way to achieve this.
+I think this is a fundamental problem with anything that continues to have a unified structure: if `System.Reactive` inevitably gives you WPF and Windows Forms support whenever you target a `netX.0-windowX`-like framework, you're going to have this problem. There has to be some way to indicate whether or not you want that. The [workaround](#the-workaround) provides a way to undo this problem, but workaround usually have their own problems, and we don't want people to have to discover and then apply a fix just to be able to use Rx.NET. I think separating out these parts is the only way to achieve this.
 
 This design option also doesn't have a good answer for how we provide UI-framework-specific support for other frameworks. (E.g., how would we offer a `DispatcherScheduler` for MAUI's `IScheduler`?)
 
-So in short, I ([@idg10](https://github.com/idg10)) haven't been able to think of a design that maintains the unified approach that doesn't also suffer from problem 3.
+So in short, I ([@idg10](https://github.com/idg10)) haven't been able to think of a design that maintains the unified approach that doesn't also suffer from primary problem this ADR discusses.
 
-The only attraction of this design option is that it is least likely to cause any unanticipated new problems, because it closely resembles the existing design.
+The only attraction of this design option is that it is least likely to cause any unanticipated new problems, because it _is_ the existing design.
 
 
 #### Option 2: 'clean break' introducing new packages with no relationship with current Rx
