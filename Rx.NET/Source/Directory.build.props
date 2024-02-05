@@ -20,6 +20,28 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(_ExtrasSdkWithDesktopAppSupport)' == ''">
+    <!--
+    This is stuff the MS Extras SDK normally sets for us, but not all projects use it now.
+    This is all copied in right now. We need to work out how to make this work properly.
+    -->
+    <Configuration Condition="'$(Configuration)'==''">Debug</Configuration>
+    <Platform Condition="'$(Platform)'==''">AnyCPU</Platform>
+    <PlatformName Condition="'$(PlatformName)' == ''">$(Platform)</PlatformName>
+
+    <BaseOutputPath Condition="'$(BaseOutputPath)' == ''">bin\</BaseOutputPath>
+    <BaseOutputPath Condition="!HasTrailingSlash('$(BaseOutputPath)')">$(BaseOutputPath)\</BaseOutputPath>
+    <OutputPath Condition="'$(OutputPath)' == '' and '$(PlatformName)' == 'AnyCPU'">$(BaseOutputPath)$(Configuration)\</OutputPath>
+    <OutputPath Condition="'$(OutputPath)' == '' and '$(PlatformName)' != 'AnyCPU'">$(BaseOutputPath)$(PlatformName)\$(Configuration)\</OutputPath>
+    <OutputPath Condition="!HasTrailingSlash('$(OutputPath)')">$(OutputPath)\</OutputPath>
+
+    <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)' == ''">obj\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath Condition="!HasTrailingSlash('$(BaseIntermediateOutputPath)')">$(BaseIntermediateOutputPath)\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath Condition=" $(IntermediateOutputPath) == '' and '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\</IntermediateOutputPath>
+    <IntermediateOutputPath Condition=" $(IntermediateOutputPath) == '' and '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\</IntermediateOutputPath>
+    <IntermediateOutputPath Condition="!HasTrailingSlash('$(IntermediateOutputPath)')">$(IntermediateOutputPath)\</IntermediateOutputPath>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>    
