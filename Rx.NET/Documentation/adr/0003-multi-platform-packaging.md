@@ -161,7 +161,7 @@ Back before the 'great unification' in Rx v4.0, the distinction between these tw
 With that in mind, let's now consider some possible choices.
 
 
-### Design option: the status quo
+#### Design option: the status quo
 
 Rx 5.0 and 6.0 have both shipped, and a lot of people use them, so one option is just to continue doing things in the same way. This is not a good solution. Back when Rx 5.0 was the current version, some people seemed to think that the changes we adopted in Rx 6.0 would be sufficient to solve the problems described in this document. But as will be explained, it doesn't.
 
