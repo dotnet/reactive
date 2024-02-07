@@ -602,11 +602,11 @@ The JIT compiler will then inspect the `System.Reactive` assembly and discover t
 
 And that's why we can't just remove types from `System.Reactive`.
 
-What we can do is replace them with a type forwarder. If we want to move `ObserveOnDispatcher` out of `System.Reactive` and into `System.Reactive.Wpf`, we can do that in a backwards compatible way by adding a type forwarding entry for the `System.Reactive.Linq.DispatcherObservable`. Basically `System.Reactive` contains a note telling the CLR "I know you've been told that this type is in this assembly, but it's actually in `System.Reactive.Wpf`, so please look there instead."
+Type forwarders seem like they might offer a solution, but unfortunately not. If we want to move `ObserveOnDispatcher` out of `System.Reactive` and into `System.Reactive.Wpf`, in theory we do that in a backwards compatible way by adding a type forwarding entry for the `System.Reactive.Linq.DispatcherObservable`. Basically `System.Reactive` contains a note telling the CLR "I know you've been told that this type is in this assembly, but it's actually in `System.Reactive.Wpf`, so please look there instead."
 
-Doesn't a type forwarder solve the problem? Not really, because if the `System.Reactive` assembly contains type forwarders to some proposed `System.Reactive.Wpf` assembly, the .NET SDK will require the resulting `System.Reactive` NuGet package to have a dependency on `System.Reactive.Wpf`.
+Doesn't that solve the problem? Not really, because if the `System.Reactive` assembly contains type forwarders to some proposed `System.Reactive.Wpf` assembly, the .NET SDK will require the resulting `System.Reactive` NuGet package to have a dependency on `System.Reactive.Wpf`.
 
-And that gets us back to square one: if taking a dependency on `System.Reactive` causes you to acquire a transitive dependency on `System.Reactive.Wpf`, that means using Rx automatically opts you into use WPF whether you want it or not.
+And that gets us back to square one: if taking a dependency on `System.Reactive` causes you to acquire a transitive dependency on `System.Reactive.Wpf`, that means using Rx automatically opts you into use WPF whether you want it or not. (Also, since the new component containing WPF-specific Rx.NET features would need to depend on `System.Reactive` for its `IScheduler` definition, attempting to use a type forwarder in this way would create a circular reference. So in practice it wouldn't be possible without going back to the older design in which such things were defined in `System.Reactive.Interfaces`, and we don't want to do that.)
 
 It would be technically possible to meddle with the build system's normal behaviour in order to produce a `System.Reactive` assembly with a suitable type forwarder, but for the resulting NuGet package not to have the corresponding dependency. However, this is unsupported, and is likely to cause a lot of confusion for people who actually do want the WPF functionality, because adding a reference to just `System.Reactive` (which has been all that has been required for Rx v4 through v6) would still enable code using WPF features to compile when upgrading to this hypothetical form of v7, but it would result in runtime errors due to the `System.Reactive.Wpf` assembly not being found. So this is not an acceptable workaround.
 
@@ -934,7 +934,7 @@ Unless I've missed something, I don't think this helps us at all because all of 
 
 In this option, `System.Reactive` would continue to be the package through which core Rx functionality is used, but we would add new NuGet packages for each UI framework we wish to support. All of the UI-framework-specific functionality that's in `System.Reactive` would be copied into these new packages. The types would remain in the relevant targets of `System.Reactive` too, but would be marked as `[Obsolete]`, with the long term plan being to remove then [as soon as is acceptable](#minimum-acceptable-path-for-breaking-changes).
 
-It's not clear yet whether we would need to define brand new types in these new frameworks, or use type forwarders. I'm not sure if it's possible to deprecate use of a type through a type forwarder, but not have it be deprecated if you use it directly. I _think_ you can't but need to check.
+We would need to define brand new types in these new frameworks to replace the ones that will ultimately be removed. We can't use type forwarders because it's not possible to deprecate use of a type through a type forwarder, but not have it be deprecated if you use it directly.
 
 This also has a similar unresolved question around `ThreadPoolScheduler` was was discussed in [option 4](#option-4-systemreactive-remains-the-primary-package-and-becomes-a-facade).
 
@@ -986,8 +986,17 @@ The main relevant consequences are:
 * This minimizes disruption: `System.Reactive` continues to be the main way to use Rx.NET
 * Applications encountering the problem described in this ADR will need to use [the workaround](#the-workaround) for the foreseeable future
 * The eventual end state (ca. 2030) is that `System.Reactive` will be free from UI-framework-specific types
+* New assemblies, one for each UI framework we support (Windows Forms, WPF, and UWP) will be added containing replacements for the UI-framework-specific types in `System.Reactive`
+* We will deprecate the existing UI-framework-specific types so that developers will be notified that they are on their way out
+* We won't be able to add type forwarders from the old types in `System.Reactive` to their replacements because you can't deprecate a type forwarder
 * We'll be able to take UWP out of the majority of the source tree in 2-3 years
 * All UI-frameworks-specific support will be on an equal footing, enabling MAUI, Blazor, and Avalonia to be supported in exactly the same way as Windows Forms and WPF (i.e., through separate NuGet packages)
 
+Although there are some existing old packages that used to contain some UI-framework-specific types, they are now backwards-compatibility facades. However, these don't separate out all the frameworks completely: Windows Forms has its own one, `System.Reactive.Windows.Forms`, but the WPF support lives in a more confusingly named `System.Reactive.Windows.Threading`, and that same component also defines the UWP integration. The WPF support is available only in the `net472` build, and the UWP support is only in the `uap10.0.18362` build, so this one package contains completely different types in its two target frameworks! And just to confuse matters, there's also a `System.Reactive.WindowsRuntime` package that targets only `uap10.0.18362`, and which contains some different UWP types.
 
+Our current plan is to leave these facade components untouched, since the split of types is a bit confusing, the naming is a bit inconsistent, and their purpose for years has been to provide backwards compatibility for Rx v3 era apps. We will introduce new components each with a clear purpose:
+
+* `System.Reactive.Integration.WindowsForms`
+* `System.Reactive.Integration.WPF`
+* `System.Reactive.Integration.UWP`
 
