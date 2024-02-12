@@ -38,7 +38,7 @@ For nightly builds, configure NuGet to use this feed: `https://pkgs.dev.azure.co
 
 ### Join the conversation
 
-Catch us in the #rxnet channel over at http://reactiveui.net/slack
+Catch us in the #rxnet channel over at https://reactivex.slack.com/
 
 ## A Brief Introduction to Rx
 
