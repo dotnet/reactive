@@ -1,0 +1,44 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras">
+
+  <PropertyGroup>
+    <!--
+    For .NET 6.0 and later, we need to specify the Windows 10 target framework because Windows
+    Runtime APIs are not available on older platforms. We use:
+    CoreDispatcher          10.0.10240
+    CoreDispatcherPriority  10.0.10240
+    CoreWindow              10.0.10240
+    DispatcherQueue         10.0.16299
+    DispatcherQueueTimer    10.0.16299
+
+    So in theory, 10.0.16299.0 meets our needs. However, the .NET SDK doesn't recognize that.
+    The oldest version it supports in a TFM is 10.0.17763.0, corresponding to Windows 1809.
+    Although that went out of mainstream support in 2021, it's still in extended support until 2029
+    for enterprises paying for long term support. It is also a common choice for the oldest version
+    supported by tooling (e.g., the .NET SDK), which is why we've chosen it here.
+    For UWP we need a newer version because Visual Studio 2022 supports nothing older than 18362.
+    -->
+    <TargetFrameworks>net6.0-windows10.0.17763.0;uap10.0.18362</TargetFrameworks>
+
+    <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events;Windows Forms</PackageTags>
+    <Description>Reactive Extensions (Rx) for .NET</Description>
+
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
+  </ItemGroup>
+
+</Project>

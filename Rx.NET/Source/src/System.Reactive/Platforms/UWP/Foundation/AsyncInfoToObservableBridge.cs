@@ -8,6 +8,15 @@ using Windows.Foundation;
 
 namespace System.Reactive.Windows.Foundation
 {
+    /// <summary>
+    /// Used only by the obsolete <see cref="AsyncInfoObservableExtensions"/> type.
+    /// </summary>
+    /// <typeparam name="TResult">The type of the asynchronous operation's result.</typeparam>
+    /// <typeparam name="TProgress">The type of the reported progress objects, which get ignored by this conversion.</typeparam>
+    /// <remarks>
+    /// This should be removed when <see cref="AsyncInfoObservableExtensions"/> is eventually removed.
+    /// </remarks>
+    [Obsolete]
     internal class AsyncInfoToObservableBridge<TResult, TProgress> : ObservableBase<TResult>
     {
         private readonly Action<IAsyncInfo, Action<IAsyncInfo, AsyncStatus>> _onCompleted;

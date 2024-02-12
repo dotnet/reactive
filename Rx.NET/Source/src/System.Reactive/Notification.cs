@@ -7,8 +7,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reactive.Concurrency;
 
-#pragma warning disable 0659
-#pragma warning disable 0661
+#pragma warning disable CS0659
+#pragma warning disable CS0661
 
 namespace System.Reactive
 {
@@ -710,5 +710,5 @@ namespace System.Reactive
     }
 }
 
-#pragma warning restore 0659
-#pragma warning restore 0661
+#pragma warning restore CS0659
+#pragma warning restore CS0661

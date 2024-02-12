@@ -15,10 +15,14 @@ using System.Windows.Threading;
 using System.Reactive;
 using System.Reactive.Subjects;
 
+using LegacyDispatcherScheduler = System.Reactive.Concurrency.DispatcherScheduler;
+using DispatcherScheduler = System.Reactive.Integration.Wpf.DispatcherScheduler;
 #endif
 
 #if HAS_WINFORMS
 using System.Windows.Forms;
+using LegacyControlScheduler = System.Reactive.Concurrency.ControlScheduler;
+using ControlScheduler = System.Reactive.Integration.WindowsForms.ControlScheduler;
 #endif
 
 using Assert = Xunit.Assert;
@@ -40,7 +44,11 @@ namespace ReactiveTests.Tests
 #pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overload being tested.
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default(IObservable<int>), new ControlScheduler(new Label())));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(someObservable, default(ControlScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default(IObservable<int>), new LegacyControlScheduler(new Label())));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(someObservable, default(LegacyControlScheduler)));
 
+            ReactiveAssert.Throws<ArgumentNullException>(() => WindowsFormsControlObservable.SubscribeOnWindowFormsControl<int>(default(IObservable<int>), new Label()));
+            ReactiveAssert.Throws<ArgumentNullException>(() => WindowsFormsControlObservable.SubscribeOnWindowFormsControl<int>(someObservable, default(Label)));
             ReactiveAssert.Throws<ArgumentNullException>(() => ControlObservable.SubscribeOn<int>(default(IObservable<int>), new Label()));
             ReactiveAssert.Throws<ArgumentNullException>(() => ControlObservable.SubscribeOn<int>(someObservable, default(Label)));
 #pragma warning restore IDE0034
@@ -49,7 +57,12 @@ namespace ReactiveTests.Tests
 #pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overload being tested.
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default(IObservable<int>), new DispatcherScheduler(Dispatcher.CurrentDispatcher)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(someObservable, default(DispatcherScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default(IObservable<int>), new LegacyDispatcherScheduler(Dispatcher.CurrentDispatcher)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(someObservable, default(LegacyDispatcherScheduler)));
 
+            ReactiveAssert.Throws<ArgumentNullException>(() => WpfDispatcherObservable.SubscribeOnWpfDispatcher<int>(default(IObservable<int>), Dispatcher.CurrentDispatcher));
+            ReactiveAssert.Throws<ArgumentNullException>(() => WpfDispatcherObservable.SubscribeOnWpfDispatcher<int>(someObservable, default(Dispatcher)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => WpfDispatcherObservable.SubscribeOnCurrentWpfDispatcher<int>(default(IObservable<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.SubscribeOn<int>(default(IObservable<int>), Dispatcher.CurrentDispatcher));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.SubscribeOn<int>(someObservable, default(Dispatcher)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.SubscribeOnDispatcher<int>(default(IObservable<int>)));
@@ -61,7 +74,7 @@ namespace ReactiveTests.Tests
 
 #if HAS_WINFORMS
         [TestMethod]
-        public void SubscribeOn_Control()
+        public void SubscribeOn_Control_Legacy()
         {
             var okay = true;
 
@@ -95,7 +108,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void SubscribeOn_ControlScheduler()
+        public void SubscribeOnControl()
         {
             var okay = true;
 
@@ -103,7 +116,41 @@ namespace ReactiveTests.Tests
             {
                 var evt2 = new ManualResetEvent(false);
                 var evt = new ManualResetEvent(false);
-                
+                var d = Observable.Create<int>(obs =>
+                {
+                    lbl.Text = "Subscribe";
+                    okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
+                    evt2.Set();
+
+                    return () =>
+                    {
+                        lbl.Text = "Unsubscribe";
+                        okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
+                        evt.Set();
+                    };
+                })
+                .SubscribeOnWindowFormsControl(lbl)
+                .Subscribe(_ => { });
+
+                evt2.WaitOne();
+                d.Dispose();
+
+                evt.WaitOne();
+            }
+
+            Assert.True(okay);
+        }
+
+        [TestMethod]
+        public void SubscribeOn_ControlScheduler_Legacy()
+        {
+            var okay = true;
+
+            using (WinFormsTestUtils.RunTest(out var lbl))
+            {
+                var evt2 = new ManualResetEvent(false);
+                var evt = new ManualResetEvent(false);
+
                 var d = Observable.Create<int>(obs =>
                 {
                     lbl.Text = "Subscribe";
@@ -128,12 +175,47 @@ namespace ReactiveTests.Tests
 
             Assert.True(okay);
         }
+
+        [TestMethod]
+        public void SubscribeOn_ControlScheduler()
+        {
+            var okay = true;
+
+            using (WinFormsTestUtils.RunTest(out var lbl))
+            {
+                var evt2 = new ManualResetEvent(false);
+                var evt = new ManualResetEvent(false);
+                
+                var d = Observable.Create<int>(obs =>
+                {
+                    lbl.Text = "Subscribe";
+                    okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
+                    evt2.Set();
+
+                    return () =>
+                    {
+                        lbl.Text = "Unsubscribe";
+                        okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
+                        evt.Set();
+                    };
+                })
+                .SubscribeOn(new System.Reactive.Integration.WindowsForms.ControlScheduler(lbl))
+                .Subscribe(_ => { });
+
+                evt2.WaitOne();
+                d.Dispose();
+
+                evt.WaitOne();
+            }
+
+            Assert.True(okay);
+        }
 #endif
 
 #if HAS_DISPATCHER
         [TestMethod]
         [Asynchronous]
-        public void SubscribeOn_Dispatcher()
+        public void SubscribeOn_Dispatcher_Legacy()
         {
             using (DispatcherHelpers.RunTest(out var dispatcher))
             {
@@ -155,6 +237,37 @@ namespace ReactiveTests.Tests
                         };
                     })
                     .SubscribeOn(dispatcher)
+                    .Subscribe(_ => { });
+
+                    s.Subscribe(_ => d.Dispose());
+                });
+            }
+        }
+
+        [TestMethod]
+        [Asynchronous]
+        public void SubscribeOnDispatcher()
+        {
+            using (DispatcherHelpers.RunTest(out var dispatcher))
+            {
+                RunAsync(evt =>
+                {
+                    var s = new AsyncSubject<Unit>();
+                    var okay = true;
+                    var d = Observable.Create<int>(obs =>
+                    {
+                        okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
+                        s.OnNext(Unit.Default);
+                        s.OnCompleted();
+
+                        return () =>
+                        {
+                            okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
+                            Assert.True(okay);
+                            evt.Set();
+                        };
+                    })
+                    .SubscribeOnWpfDispatcher(dispatcher)
                     .Subscribe(_ => { });
 
                     s.Subscribe(_ => d.Dispose());
@@ -195,7 +308,7 @@ namespace ReactiveTests.Tests
 
         [TestMethod]
         [Asynchronous]
-        public void SubscribeOn_CurrentDispatcher()
+        public void SubscribeOn_CurrentDispatcher_Legacy()
         {
             using (DispatcherHelpers.RunTest(out var dispatcher))
             {
@@ -220,6 +333,41 @@ namespace ReactiveTests.Tests
                             };
                         })
                         .SubscribeOnDispatcher()
+                        .Subscribe(_ => { });
+
+                        s.Subscribe(_ => d.Dispose());
+                    }));
+                });
+            }
+        }
+
+        [TestMethod]
+        [Asynchronous]
+        public void SubscribeOnCurrentDispatcher()
+        {
+            using (DispatcherHelpers.RunTest(out var dispatcher))
+            {
+                RunAsync(evt =>
+                {
+                    var s = new AsyncSubject<Unit>();
+                    var okay = true;
+
+                    dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        var d = Observable.Create<int>(obs =>
+                        {
+                            okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
+                            s.OnNext(Unit.Default);
+                            s.OnCompleted();
+
+                            return () =>
+                            {
+                                okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
+                                Assert.True(okay);
+                                evt.Set();
+                            };
+                        })
+                        .SubscribeOnCurrentWpfDispatcher()
                         .Subscribe(_ => { });
 
                         s.Subscribe(_ => d.Dispose());

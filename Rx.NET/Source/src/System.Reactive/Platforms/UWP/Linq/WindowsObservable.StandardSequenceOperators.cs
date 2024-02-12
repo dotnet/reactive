@@ -20,6 +20,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of the asynchronous operations executed for each element of the input sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>This overload supports composition of observable sequences and Windows Runtime asynchronous operations, without requiring manual conversion of the asynchronous operations to observable sequences using <see cref="AsyncInfoObservableExtensions.ToObservable{TResult}(IAsyncOperation{TResult})"/>.</remarks>
+        [Obsolete("Use the SelectManyIAsyncOperation extension method defined by System.Reactive.Linq.WindowsRuntimeObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, IAsyncOperation<TResult>> selector)
         {
             if (source == null)
@@ -46,6 +47,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of the asynchronous operations executed for each element of the input sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>This overload supports composition of observable sequences and Windows Runtime asynchronous operations, without requiring manual conversion of the asynchronous operations to observable sequences using <see cref="AsyncInfoObservableExtensions.ToObservable{TResult}(IAsyncOperation{TResult})"/>.</remarks>
+        [Obsolete("Use the SelectManyIAsyncOperationWithProgress extension method defined by System.Reactive.Linq.WindowsRuntimeObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
         public static IObservable<TResult> SelectMany<TSource, TResult, TProgress>(this IObservable<TSource> source, Func<TSource, IAsyncOperationWithProgress<TResult, TProgress>> selector)
         {
             if (source == null)
@@ -73,6 +75,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of obtaining an asynchronous operation for each element of the input sequence and then mapping the asynchronous operation's result and its corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="asyncOperationSelector"/> or <paramref name="resultSelector"/> is null.</exception>
         /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and Windows Runtime asynchronous operations, without requiring manual conversion of the asynchronous operations to observable sequences using <see cref="AsyncInfoObservableExtensions.ToObservable{TResult}(IAsyncOperation{TResult})"/>.</remarks>
+        [Obsolete("Use the SelectManyIAsyncOperation extension method defined by System.Reactive.Linq.WindowsRuntimeObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
         public static IObservable<TResult> SelectMany<TSource, TAsyncOperationResult, TResult>(this IObservable<TSource> source, Func<TSource, IAsyncOperation<TAsyncOperationResult>> asyncOperationSelector, Func<TSource, TAsyncOperationResult, TResult> resultSelector)
         {
             if (source == null)
@@ -106,6 +109,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of obtaining an asynchronous operation for each element of the input sequence and then mapping the asynchronous operation's result and its corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="asyncOperationSelector"/> or <paramref name="resultSelector"/> is null.</exception>
         /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and Windows Runtime asynchronous operations, without requiring manual conversion of the asynchronous operations to observable sequences using <see cref="AsyncInfoObservableExtensions.ToObservable{TResult}(IAsyncOperation{TResult})"/>.</remarks>
+        [Obsolete("Use the SelectManyIAsyncOperationWithProgress extension method defined by System.Reactive.Linq.WindowsRuntimeObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
         public static IObservable<TResult> SelectMany<TSource, TAsyncOperationResult, TAsyncOperationProgress, TResult>(this IObservable<TSource> source, Func<TSource, IAsyncOperationWithProgress<TAsyncOperationResult, TAsyncOperationProgress>> asyncOperationSelector, Func<TSource, TAsyncOperationResult, TResult> resultSelector)
         {
             if (source == null)

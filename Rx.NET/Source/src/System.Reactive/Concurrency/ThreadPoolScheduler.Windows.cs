@@ -15,11 +15,14 @@ namespace System.Reactive.Concurrency
     [CLSCompliant(false)]
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerPeriodic
     {
+#pragma warning disable CS0618 // Type or member is obsolete. The non-UWP ThreadPoolScheduler (which will eventually supersede this) defines the zero-args constructor as private, so it's only the accessibility of "public" that is obsolete, not the presence of the constructor. So this warning is spurious in this particular case.
         private static readonly Lazy<ThreadPoolScheduler> LazyDefault = new(static () => new ThreadPoolScheduler());
+#pragma warning restore CS0618
 
         /// <summary>
         /// Constructs a ThreadPoolScheduler that schedules units of work on the Windows ThreadPool.
         /// </summary>
+        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the UwpThreadPoolScheduler in the System.Reactive.Integration.Uwp package. Otherwise, use the Instance property, because this constructor will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
         public ThreadPoolScheduler()
         {
         }
@@ -28,6 +31,7 @@ namespace System.Reactive.Concurrency
         /// Constructs a ThreadPoolScheduler that schedules units of work on the Windows ThreadPool with the given priority.
         /// </summary>
         /// <param name="priority">Priority for scheduled units of work.</param>
+        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the UwpThreadPoolScheduler in the System.Reactive.Integration.Uwp package. Otherwise, use the Instance property, because this constructor will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
         public ThreadPoolScheduler(WorkItemPriority priority)
         {
             Priority = priority;
@@ -39,6 +43,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="priority">Priority for scheduled units of work.</param>
         /// <param name="options">Options that configure how work is scheduled.</param>
+        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the UwpThreadPoolScheduler in the System.Reactive.Integration.Uwp package. Otherwise, use the Instance property, because this constructor will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
         public ThreadPoolScheduler(WorkItemPriority priority, WorkItemOptions options)
         {
             Priority = priority;
@@ -60,11 +65,13 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the priority at which work is scheduled.
         /// </summary>
+        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the UwpThreadPoolScheduler in the System.Reactive.Integration.Uwp package. This property will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
         public WorkItemPriority Priority { get; }
 
         /// <summary>
         /// Gets the options that configure how work is scheduled.
         /// </summary>
+        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the UwpThreadPoolScheduler in the System.Reactive.Integration.Uwp package. This property will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
         public WorkItemOptions Options { get; }
 
         /// <summary>
@@ -81,11 +88,33 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
 
             var userWorkItem = new UserWorkItem<TState>(this, state, action);
-            
+
+#pragma warning disable CS0618 // Type or member is obsolete.
+            // A note on obsolescence:
+            //  The compiler complains because this uses Priority and Options. We could mark the
+            //  whole method as obsolete, but this would be slightly misleading because when we
+            // eventually remove the obsoleted UWP support, this whole ThreadPoolScheduler will
+            // be replaced by the non-UWP implementation, and that continues to support this
+            // Schedule overload. So the method isn't really obsolete - it will continue to be
+            // available to UWP apps even after we've removed all UWP-specific code from
+            // System.Reactive.
+            // An argument in favour of marking the method as Obsolete anyway is that the
+            // behaviour will change once we remove UWP code from System.Reactive. However,
+            // the change in behaviour is interesting only if you've specified either
+            // priority or options for the work items, and all the public methods we supply
+            // for that *are* obsolete. So anyone relying on that behaviour will already have
+            // received an obsolescence warning, and should move to UwpThreadPoolScheduler.
+            // Code that left these with the default values should not be affected by the
+            // change to the non-UWP ThreadPoolScheduler, so it would be irksome for them
+            // to get an obsolescence warning, particularly since there isn't actually
+            // anything they can do about it. If they want to continue using this type in
+            // the full knowledge that in a future version that means they'll get the
+            // non-UWP version, we want to let them.
             var res = ThreadPool.RunAsync(
                 iaa => userWorkItem.Run(),
                 Priority,
                 Options);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             userWorkItem.CancelQueueDisposable = res.AsDisposable();
 

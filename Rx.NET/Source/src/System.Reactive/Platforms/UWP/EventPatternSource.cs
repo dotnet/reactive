@@ -7,6 +7,10 @@ using Windows.Foundation;
 
 namespace System.Reactive
 {
+    /// <summary>
+    /// Legacy implementation of obsolete <see cref="IEventPatternSource{TSender, TEventArgs}"/>
+    /// </summary>
+    [Obsolete]
     internal class EventPatternSource<TSender, TEventArgs> : EventPatternSourceBase<TSender, TEventArgs>, IEventPatternSource<TSender, TEventArgs>
     {
         public EventPatternSource(IObservable<EventPattern<TSender, TEventArgs>> source, Action<Action<TSender, TEventArgs>, /*object,*/ EventPattern<TSender, TEventArgs>> invokeHandler)

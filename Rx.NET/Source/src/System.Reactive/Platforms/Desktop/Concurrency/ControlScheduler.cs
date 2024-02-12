@@ -9,8 +9,17 @@ using System.Windows.Forms;
 namespace System.Reactive.Concurrency
 {
     /// <summary>
-    /// Represents an object that schedules units of work on the message loop associated with a Windows Forms control.
+    /// Obsolete. The <c>System.Reactive.Integration.WindowsForms</c> NuGet package defines a
+    /// <c>ControlScheduler</c> class in the <c>System.Reactive.Integration.WindowsForms</c>
+    /// namespace that replaces this class.
     /// </summary>
+    /// <remarks>
+    /// This will eventually be removed because all UI-framework-specific functionality is being
+    /// removed from <c>System.Reactive</c>. This is necessary to fix problems in which
+    /// <c>System.Reactive</c> causes applications to end up with dependencies on Windows Forms and
+    /// WPF whether they want them or not.
+    /// </remarks>
+    [Obsolete("Use System.Reactive.Integration.WindowsForms.ControlScheduler in the System.Reactive.Integration.WindowsForms package instead", error: false)]
     public class ControlScheduler : LocalScheduler, ISchedulerPeriodic
     {
         private readonly Control _control;

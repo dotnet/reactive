@@ -8,18 +8,21 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using Windows.System;
 using Windows.UI.Core;
-#if HAS_OS_XAML
-using Windows.UI.Xaml;
-#endif
 
 namespace System.Reactive.Concurrency
 {
     /// <summary>
-    /// Represents an object that schedules units of work on a <see cref="CoreDispatcher"/>.
+    /// Obsolete. The <c>System.Reactive.Integration.WindowsForms</c> NuGet package defines a
+    /// <c>ControlScheduler</c> class in the <c>System.Reactive.Integration.WindowsForms</c>
+    /// namespace that replaces this class.
     /// </summary>
     /// <remarks>
-    /// This scheduler type is typically used indirectly through the <see cref="Linq.CoreDispatcherObservable.ObserveOnCoreDispatcher{TSource}(IObservable{TSource})"/> and <see cref="Linq.CoreDispatcherObservable.SubscribeOnCoreDispatcher{TSource}(IObservable{TSource})"/> methods that use the current CoreDispatcher.
+    /// This will eventually be removed because all UI-framework-specific functionality is being
+    /// removed from <c>System.Reactive</c>. This is necessary to fix problems in which
+    /// <c>System.Reactive</c> causes applications to end up with dependencies on Windows Forms and
+    /// WPF whether they want them or not.
     /// </remarks>
+    [Obsolete("Use System.Reactive.Integration.WindowsRuntime.CoreDispatcherScheduler in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
     [CLSCompliant(false)]
     public sealed class CoreDispatcherScheduler : LocalScheduler, ISchedulerPeriodic
     {
