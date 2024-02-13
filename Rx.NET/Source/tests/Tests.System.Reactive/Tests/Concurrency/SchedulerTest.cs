@@ -34,6 +34,14 @@ namespace ReactiveTests.Tests
     [TestClass]
     public class SchedulerTest : ReactiveTest
     {
+#if HAS_DISPATCHER
+        [TestInitialize]
+        public void EnsureDispatcherAvailable()
+        {
+            _ = new System.Windows.DependencyObject();
+        }
+#endif
+
         #region IScheduler
 
         [TestMethod]

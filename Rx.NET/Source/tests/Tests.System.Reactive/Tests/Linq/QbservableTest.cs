@@ -39,6 +39,14 @@ namespace ReactiveTests.Tests
         private readonly IQbservable<int> _qbMy = new MyQbservable<int>();
         private readonly IQbservableProvider _qbp = new MyQbservableProvider();
 
+#if HAS_DISPATCHER
+        [TestInitialize]
+        public void EnsureDispatcherAvailable()
+        {
+            _ = new System.Windows.DependencyObject();
+        }
+#endif
+
         [TestMethod]
         public void LocalQueryMethodImplementationTypeAttribute()
         {
