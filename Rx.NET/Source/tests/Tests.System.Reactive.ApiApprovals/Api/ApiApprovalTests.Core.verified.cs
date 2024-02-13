@@ -235,7 +235,10 @@ namespace System.Reactive.Concurrency
         public AsyncLock() { }
         public void Dispose() { }
         public void Wait(System.Action action) { }
+        public void Wait<TState>(TState state, System.Action<TState> action) { }
     }
+    [System.Obsolete("Use System.Reactive.Integration.WindowsForms.ControlScheduler in the System.React" +
+        "ive.Integration.WindowsForms package instead", false)]
     public class ControlScheduler : System.Reactive.Concurrency.LocalScheduler, System.Reactive.Concurrency.ISchedulerPeriodic
     {
         public ControlScheduler(System.Windows.Forms.Control control) { }
@@ -261,6 +264,8 @@ namespace System.Reactive.Concurrency
         public override System.IDisposable Schedule<TState>(TState state, System.TimeSpan dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
         public System.IDisposable SchedulePeriodic<TState>(TState state, System.TimeSpan period, System.Func<TState, TState> action) { }
     }
+    [System.Obsolete("Use System.Reactive.Integration.Wpf.DispatcherScheduler in the System.Reactive.In" +
+        "tegration.Wpf package instead", false)]
     public class DispatcherScheduler : System.Reactive.Concurrency.LocalScheduler, System.Reactive.Concurrency.ISchedulerPeriodic
     {
         public DispatcherScheduler(System.Windows.Threading.Dispatcher dispatcher) { }
@@ -829,26 +834,69 @@ namespace System.Reactive.Joins
 }
 namespace System.Reactive.Linq
 {
+    [System.Obsolete("Use the extension methods defined by the System.Reactive.Linq.WindowsFormsControl" +
+        "Observable class in the System.Reactive.Integration.WindowsForms package instead" +
+        "", false)]
     public static class ControlObservable
     {
+        [System.Obsolete("Use the ObserveOnWindowsFormsControl extension method defined by System.Reactive." +
+            "Linq.WindowsFormsControlObservable in the System.Reactive.Integration.WindowsFor" +
+            "ms package instead", false)]
         public static System.IObservable<TSource> ObserveOn<TSource>(this System.IObservable<TSource> source, System.Windows.Forms.Control control) { }
+        [System.Obsolete("Use the SubscribeOnWindowFormsControl extension method defined by System.Reactive" +
+            ".Linq.WindowsFormsControlObservable in the System.Reactive.Integration.WindowsFo" +
+            "rms package instead", false)]
         public static System.IObservable<TSource> SubscribeOn<TSource>(this System.IObservable<TSource> source, System.Windows.Forms.Control control) { }
     }
+    [System.Obsolete("Use the extension methods defined by the System.Reactive.Linq.WpfDispatcherObserv" +
+        "able class in the System.Reactive.Integration.Wpf package instead", false)]
     public static class DispatcherObservable
     {
+        [System.Obsolete("Use the ObserveOnWpfDispatcher extension method defined by System.Reactive.Linq.W" +
+            "pfDispatcherObservable in the System.Reactive.Integration.Wpf package instead", false)]
         public static System.IObservable<TSource> ObserveOn<TSource>(this System.IObservable<TSource> source, System.Reactive.Concurrency.DispatcherScheduler scheduler) { }
+        [System.Obsolete("Use the ObserveOnWpfDispatcher extension method defined by System.Reactive.Linq.W" +
+            "pfDispatcherObservable in the System.Reactive.Integration.Wpf package instead", false)]
         public static System.IObservable<TSource> ObserveOn<TSource>(this System.IObservable<TSource> source, System.Windows.Threading.Dispatcher dispatcher) { }
+        [System.Obsolete("Use the ObserveOnWpfDispatcher extension method defined by System.Reactive.Linq.W" +
+            "pfDispatcherObservable in the System.Reactive.Integration.Wpf package instead", false)]
         public static System.IObservable<TSource> ObserveOn<TSource>(this System.IObservable<TSource> source, System.Windows.Threading.DispatcherObject dispatcherObject) { }
+        [System.Obsolete("Use the ObserveOnWpfDispatcher extension method defined by System.Reactive.Linq.W" +
+            "pfDispatcherObservable in the System.Reactive.Integration.Wpf package instead", false)]
         public static System.IObservable<TSource> ObserveOn<TSource>(this System.IObservable<TSource> source, System.Windows.Threading.Dispatcher dispatcher, System.Windows.Threading.DispatcherPriority priority) { }
+        [System.Obsolete("Use the ObserveOnWpfDispatcher extension method defined by System.Reactive.Linq.W" +
+            "pfDispatcherObservable in the System.Reactive.Integration.Wpf package instead", false)]
         public static System.IObservable<TSource> ObserveOn<TSource>(this System.IObservable<TSource> source, System.Windows.Threading.DispatcherObject dispatcherObject, System.Windows.Threading.DispatcherPriority priority) { }
+        [System.Obsolete("Use the ObserveOnCurrentWpfDispatcher extension method defined by System.Reactive" +
+            ".Linq.WpfDispatcherObservable in the System.Reactive.Integration.Wpf package ins" +
+            "tead", false)]
         public static System.IObservable<TSource> ObserveOnDispatcher<TSource>(this System.IObservable<TSource> source) { }
+        [System.Obsolete("Use the ObserveOnCurrentWpfDispatcher extension method defined by System.Reactive" +
+            ".Linq.WpfDispatcherObservable in the System.Reactive.Integration.Wpf package ins" +
+            "tead", false)]
         public static System.IObservable<TSource> ObserveOnDispatcher<TSource>(this System.IObservable<TSource> source, System.Windows.Threading.DispatcherPriority priority) { }
+        [System.Obsolete("Use the SubscribeOnWpfDispatcher extension method defined by System.Reactive.Linq" +
+            ".WpfDispatcherObservable in the System.Reactive.Integration.Wpf package instead", false)]
         public static System.IObservable<TSource> SubscribeOn<TSource>(this System.IObservable<TSource> source, System.Reactive.Concurrency.DispatcherScheduler scheduler) { }
+        [System.Obsolete("Use the SubscribeOnWpfDispatcher extension method defined by System.Reactive.Linq" +
+            ".WpfDispatcherObservable in the System.Reactive.Integration.Wpf package instead", false)]
         public static System.IObservable<TSource> SubscribeOn<TSource>(this System.IObservable<TSource> source, System.Windows.Threading.Dispatcher dispatcher) { }
+        [System.Obsolete("Use the SubscribeOnWpfDispatcher extension method defined by System.Reactive.Linq" +
+            ".WpfDispatcherObservable in the System.Reactive.Integration.Wpf package instead", false)]
         public static System.IObservable<TSource> SubscribeOn<TSource>(this System.IObservable<TSource> source, System.Windows.Threading.DispatcherObject dispatcherObject) { }
+        [System.Obsolete("Use the SubscribeOnWpfDispatcher extension method defined by System.Reactive.Linq" +
+            ".WpfDispatcherObservable in the System.Reactive.Integration.Wpf package instead", false)]
         public static System.IObservable<TSource> SubscribeOn<TSource>(this System.IObservable<TSource> source, System.Windows.Threading.Dispatcher dispatcher, System.Windows.Threading.DispatcherPriority priority) { }
+        [System.Obsolete("Use the SubscribeOnWpfDispatcher extension method defined by System.Reactive.Linq" +
+            ".WpfDispatcherObservable in the System.Reactive.Integration.Wpf package instead", false)]
         public static System.IObservable<TSource> SubscribeOn<TSource>(this System.IObservable<TSource> source, System.Windows.Threading.DispatcherObject dispatcherObject, System.Windows.Threading.DispatcherPriority priority) { }
+        [System.Obsolete("Use the SubscribeOnCurrentWpfDispatcher extension method defined by System.Reacti" +
+            "ve.Linq.WpfDispatcherObservable in the System.Reactive.Integration.Wpf package i" +
+            "nstead", false)]
         public static System.IObservable<TSource> SubscribeOnDispatcher<TSource>(this System.IObservable<TSource> source) { }
+        [System.Obsolete("Use the SubscribeOnCurrentWpfDispatcher extension method defined by System.Reacti" +
+            "ve.Linq.WpfDispatcherObservable in the System.Reactive.Integration.Wpf package i" +
+            "nstead", false)]
         public static System.IObservable<TSource> SubscribeOnDispatcher<TSource>(this System.IObservable<TSource> source, System.Windows.Threading.DispatcherPriority priority) { }
     }
     public interface IGroupedObservable<out TKey, out TElement> : System.IObservable<TElement>
