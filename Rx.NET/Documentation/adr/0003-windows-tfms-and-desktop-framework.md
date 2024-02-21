@@ -220,9 +220,9 @@ The basic problem here is that when building any single deployable target (eithe
 
 #### Rx 4.0's great unification
 
-[Rx 4.0](https://github.com/dotnet/reactive/releases/tag/rxnet-v4.0.0) tried a different approach: have just one Rx package, `System.Reactive`. This was a single package with no dependencies. This removed all of the confusion that had been caused by Rx previously being split into four pieces.
+[Rx 4.0](https://github.com/dotnet/reactive/releases/tag/rxnet-v4.0.0) tried a different approach: have just one Rx package, `System.Reactive`, which has no dependencies. This removed all of the confusion that had been caused by Rx previously being split into four pieces.
 
-Rx 4.0 was able to sidestep the plug-in problem because by now, there was no need to ship separate Rx builds for multiple versions of .NET Framework. That had been necessary on older versions because different .NET Framework releases had different capabilities relating to the thread pool, meaning that a version of Rx that worked on .NET Framework 4.0 would be suboptimal on .NET Framework 4.5. But by the time Rx 4.0 came out (May 2018) Microsoft had already ended support for .NET Framework 4.0, so Rx didn't need to support it. In fact, the oldest version of .NET Framework that it made sense to target at this point was 4.6, and it turns out that none of the new features added in subsequent versions of .NET Framework were of particular use to Rx.NET, so there was no longer any value in building multiple versions of Rx.NET targeting different versions of .NET Framework.
+Rx 4.0 was able to sidestep the plug-in problem because by now, there was no need to ship separate Rx builds for multiple versions of .NET Framework. That had been necessary on older versions because different .NET Framework releases had different capabilities relating to the thread pool or other task-related features, meaning that a version of Rx that worked on .NET Framework 4.0 would be suboptimal on .NET Framework 4.5. But by the time Rx 4.0 came out (May 2018) Microsoft had already ended support for .NET Framework 4.0, so Rx didn't need to support it. In fact, the oldest version of .NET Framework that it made sense to target at this point was 4.6, and it turns out that none of the new features added in subsequent versions of .NET Framework were of particular use to Rx.NET, so there was no longer any value in building multiple versions of Rx.NET targeting different versions of .NET Framework.
 
 This was a critical change in the landscape, because it created an opportunity for Rx.NET.
 
@@ -230,15 +230,14 @@ Since there was now just a single .NET Framework target (`net46`), the original 
 
 This simplification was an ingenious master stroke, and it worked brilliantly. Until it didn't. But we'll get to that.
 
-Although it now targets just one version of .NET Framework, `System.Reactive` is still a multi-target NuGet package. If you download the v6.0 package and unzip it (`.nupkg` files are just ZIP files) you will find the `lib` folder contains subfolders for 5 different TFMs:
+Although it now targets just one version of .NET Framework, `System.Reactive` is still a multi-target NuGet package. If you download the v4.0 package and unzip it (`.nupkg` files are just ZIP files) you will find the `lib` folder contains subfolders for 5 different TFMs:
 
-* `net472` (.NET Framework)
-* `net6.0`
-*  `net6.0-windows10.0.19041`
+* `net46` (.NET Framework 4.0)
 * `netstandard2.0`
+* `uap10` (UWP)
 * `uap10.0.18362` (UWP)
 
-Each contains a `System.Reactive.dll` file, and each is slightly different. The `netstandard2.0` one is effectively a lowest common denominator, and it is missing some types you will find in the more specialized versions. For example, the version in `net472` includes `ControlScheduler`, a type that provides integration between Rx and the Windows Forms desktop client framework. Windows Forms is built into .NET Framework—it's not possible to install .NET Framework without Windows Forms—and so it's possible for the `net472` version of Rx to include that type. But `netstandard2.0` does not include Windows Forms—that version of Rx may find itself running on Linux, where Windows Forms definitely won't be available. Consequently, the `System.Reactive.dll` in the package's `netstandard2.0` folder does not include the `ControlScheduler`.
+Each contains a `System.Reactive.dll` file, and each is slightly different. The `netstandard2.0` one is effectively a lowest common denominator, and it is missing some types you will find in the more specialized versions. For example, the version in `net46` includes `ControlScheduler`, a type that provides integration between Rx and the Windows Forms desktop client framework. Windows Forms is built into .NET Framework—it's not possible to install .NET Framework without Windows Forms—and so it's possible for the `net46` version of Rx to include that type. But `netstandard2.0` does not include Windows Forms—that version of Rx may find itself running on Linux, where Windows Forms definitely won't be available. Consequently, the `System.Reactive.dll` in the package's `netstandard2.0` folder does not include the `ControlScheduler`.
 
 This illustrates that with this _great unification_, when you add a reference to `System.Reactive`, you get everything NuGet has to offer on whatever platform your application targets. So if you're using .NET Framework, you get Rx's WPF and Windows Forms features because WPF and Windows Forms are built into .NET Framework. If you're writing a UWP application and you add a reference to `System.Reactive`, you get the UWP features of Rx.
 
@@ -269,7 +268,7 @@ Why is it a problem? Well, what UI framework integration should Rx offer in its 
 | `netstandard2.0` | None | None |
 | `netcoreapp3.0`| **None, probably** (see below) | **Windows Forms and WPF (!)** |
 
-Why have I put "None" in the `netcoreapp3.0` row, bearing in mind that .NET .NET Core 3.0 added WPF and Windows Forms support? Well these UI frameworks are only available on Windows. The `netcoreapp3.0` TFM is OS-agnostic. With this target you could find yourself running on macOS or Linux. The Windows-specific underpinnings won't necessarily be there, and that's why I believe the correct answer for that row is "None".
+Why have I put "None" in the middle column of the `netcoreapp3.0` row, bearing in mind that .NET .NET Core 3.0 added WPF and Windows Forms support? Well these UI frameworks are only available on Windows. The `netcoreapp3.0` TFM is OS-agnostic. With this target you could find yourself running on macOS or Linux. The Windows-specific underpinnings won't necessarily be there, and that's why I believe the correct answer for that row is "None".
 
 As part of Rx.NET's [preparation for .NET 5 support](https://github.com/dotnet/reactive/pull/1291), a `net5.0` target was added. This did **not** include Windows Forms and WPF features. That is unarguably correct, because if you were to create a new project targeting `net5.0` and set either `UseWPF` or `UseWindowsForms` (or both) to `true` you'd get a build error telling you that you can only do that when the target platform is Windows. It recommends that you use an OS-specific TFM, such as `net5.0-windows`.
 
@@ -277,7 +276,7 @@ Why is it like this for .NET 5.0, but not .NET Core 3.0? It's because [TFMs chan
 
 My view is that since the `netcoreapp3.0` TFM doesn't enable you to know whether Windows Forms and WPF will necessarily be available, that it would be better not to ship a component with this TFM that requires that it will be available (unless that component is specifically designed to be used only in environments where these frameworks will be available). That's why I put "None" in the 2nd column for that row. However, it seems like when Rx team added .NET Core 3.0 support, they chose a maximalist interpretation of their concept that a reference to `System.Reactive` means that you get access to all Rx functionality that is applicable to your target. Since running on .NET Core 3.0 _might_ mean that Windows Forms and WPF are available, Rx decides it _will_ include its support for that.
 
-I don't know what happens if you use Rx 4.2 on .NET Core 3.0 in an environment where you don't in fact have Windows Forms or WPF. (There are two reasons that could happen. First, you might not be running on Windows. Second, more subtly, you might be running on Windows, but in an environment where .NET Core 3.0's WPF and Windows Forms support has not been installed. That is an optional feature of .NET Core 3.0. It typically isn't present on a web server, for example.) It might be that it doesn't work at all. Or maybe it works so long as you never attempt to use any of the UI-framework-specific parts of Rx.
+I don't know what happens if you use Rx 4.2 on .NET Core 3.0 in an environment where you don't in fact have Windows Forms or WPF. (There are two reasons that could happen. First, you might not be running on Windows. Second, more subtly, you might be running on Windows, but in an environment where .NET Core 3.0's WPF and Windows Forms support has not been installed. That is an optional feature of .NET Core 3.0. It typically isn't present on a web server, for example.) It might be that it doesn't work at all. Or maybe it works so long as you never attempt to use any of the UI-framework-specific parts of Rx. It's moot because .NET Core 3.0 is no out of support, but unfortunately, the decision made in the .NET 3.0 Core timeframe remains with us.
 
 The addition of OS-specific TFMs cleared things up a bit in .NET 5.0. You knew that with a TFM of `net5.0-windows` you would definitely be running on Windows, although that was no guarantee that .NET 5's Windows Forms and WPF support was  actually available. (On Windows, you can install just the [.NET 5.0 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/5.0) without including the .NET Desktop Runtime if you want.) And a TFM of `net5.0` increased the chances of their not being available because you might not even be running on Windows. So let's look at the options again in this new .NET 5.0 world, listing all the TFMs that [Rx 5.0](https://github.com/dotnet/reactive/releases/tag/rxnet-v5.0.0) (the first version to support .NET 5.0) offered:
 
@@ -292,11 +291,13 @@ The addition of OS-specific TFMs cleared things up a bit in .NET 5.0. You knew t
 
 This repeats the .NET Core 3.0 problem for .NET Core 3.1, but given what Rx 4.2 did, Rx 5.0 pretty much had to do the same thing regardless of whether you think it was right or wrong.
 
-It does **not** repeat the mistake for `net5.0` but then it can't: when targeting .NET 5.0 or later, the build tools prevent you from trying to use Windows Forms or WPF unless you've specified that your target platform has to be Windows.
+It does **not** repeat the mistake with the `net5.0` TFM but then it can't: when targeting .NET 5.0 or later, the build tools prevent you from trying to use Windows Forms or WPF unless you've specified that your target platform has to be Windows.
 
 The last row is interesting. Again, I've said it probably shouldn't include Windows Forms and WPF support. But really that's because I think that last row shouldn't even be there. There are good reasons that merely using some `-windows` TFM shouldn't automatically turn on WPF and Windows Forms support, but if you agree with that, then there's no longer any reason for Rx to offer a `-windows` TFM at all—there'd be no difference between those two .NET 5.0 TFMs at that point.
 
-The reason I think Windows Forms and WPF support should not automatically be included just because you've used a `-windows` TFM is that there are many different reasons you might want such a TFM, many of which have nothing to do with either Windows Forms or WPF. For example, this is a completely legitimate C# console application:
+(Actually, there is a third point of view: Rx could have provided a `.net5.0-windows10.0.x` TFM that included the features that support Windows Runtime types such as integration between `IAsyncOperation<T>` and `IObservable<T>`, but not include WPF or Windows Forms support.)
+
+The reason I think Windows Forms and WPF support should not automatically be included just because you've used a `-windows` TFM is that there are many different reasons an application might specify such a TFM, many of which have nothing to do with either Windows Forms or WPF. For example, this is a completely legitimate C# console application:
 
 ```cs
 using Windows.Devices.Input;
@@ -317,15 +318,15 @@ This illustrates the very specific meaning of OS-specific TFMs: they determine w
 * a minimum supported OS version (because code might use a new API when it runs on the latest OS version but be capable of handling its unavailability gracefully)
 * an intention to use WPF or Windows Forms (this particular program is a console application)
 
-If you want to indicate a minimum OS version, you do that with [`SupportedOSPlatformVersion`](https://learn.microsoft.com/en-us/dotnet/standard/frameworks#support-older-os-versions) property in your project file. This is allowed to be lower than the version in your TFM (but you need to detect when you're on an older version and handle the absence of missing APIs gracefully).
+If you want to indicate a minimum OS version, you do that with [`SupportedOSPlatformVersion`](https://learn.microsoft.com/en-us/dotnet/standard/frameworks#support-older-os-versions) property in your project file. This is allowed to be lower than the version in your TFM (but you would then need to detect when you're on an older version and handle the absence of missing APIs gracefully).
 
-If you want to use WPF, you set the `UseWPF` property to true in your project file. For Windows Forms you set `UseWindowsForms`. It's entirely possible to need to specify a Windows-specific TFM without wanting to use either of these frameworks. The console app shown above is a somewhat unusual example. Another, perhaps more common scenario, is that you want to use a different UI framework.
+If you are writing an application that wants to use WPF, you set the `UseWPF` property to true in your project file. For Windows Forms you set `UseWindowsForms`. It's entirely possible to need to specify a Windows-specific TFM without wanting to use either of these frameworks. The console app shown above is a somewhat unusual example. Another, perhaps more common scenario, is that you want to use a different UI framework. (Avalonia, for example. Or WinUI.)
 
-But Rx 5.0 takes the position that if an applications targets Windows, Rx should make its WPF and Windows Forms functionality available. (In fact, Rx doesn't support this on versions of Windows older than 10.0.19041, aka Windows 10 2004. So if your TFM specifies an older version, or no version at all (which implicitly means Windows 7 by the way) then Rx's WPF and Windows Forms won't be available.)
+But Rx 5.0 takes the position that if an applications targets Windows, Rx should make its WPF and Windows Forms functionality available. (In fact, Rx doesn't support this for TFMs specifying a Windows API version older than 10.0.19041, aka Windows 10 2004. So if your TFM specifies an older version, or no version at all (which implicitly means Windows 7 by the way) then Rx's WPF and Windows Forms support won't be available.)
 
 The problem with that is that if you use any self-contained form of deployment (including Native AOT) in which the .NET runtime and its libraries are shipped as part of the application, that means your application will be shipping the WPF and Windows Forms parts of the .NET runtime library. Normally those are optional—the basic .NET runtime does not include them—so this is not a case of "well you'd be doing that anyway."
 
-Let's look at the impact. The first column of the following table shows the size of the deployable output (excluding debug symbols, which get included in the published output by default) for the code shown above. The second column shows the impact of adding a reference to `System.Reactive` and writing a single line of code that uses it (to ensure that Rx doesn't get removed due to not really being used), but for that column I targetted `net80-windows10.0.18362`. Remember, Rx doesn't support WPF or Windows Forms for versions before 10.0.19041, so this shows the impact of adding Rx without its WPF or Windows Forms support. As you can see, it adds a little over a megabyte in the first two rows—the size of `System.Reactive.dll` in fact—and in the last two rows it has a smaller impact because trimming can remove most of that.
+Let's look at the impact. The first column of the following table shows the size of the deployable output for the code shown above (excluding debug symbols; these will be present in the published output by default but including them here skew the results for the smaller outputs). The second column shows the impact of adding a reference to `System.Reactive` and writing a single line of code that uses it (to ensure that Rx doesn't get removed due to not really being used), but for that column I targetted `net80-windows10.0.18362`. Remember, Rx doesn't support WPF or Windows Forms for versions before 10.0.19041, so this shows the impact of adding Rx without its WPF or Windows Forms support. As you can see, it adds a little over a megabyte in the first two rows—the size of `System.Reactive.dll` in fact—and in the last two rows it has a smaller impact because trimming can remove most of that.
 
 | Deployment type | Size without Rx | Size with Rx targeting 18362 | Size with Rx targeting 19041 |
 |--|--|--|--|
@@ -334,7 +335,7 @@ Let's look at the impact. The first column of the following table shows the size
 | Self-contained trimmed | 18.3MB | 18.3MB | 65.7MB |
 | Native AOT | 5.9MB | 6.2MB | 17.4MB |
 
-But the third column looks very different. In this case I've targetted `net8.0-windows10.0.19041.0`, the oldest Windows version for which Rx offers support on .NET 6.0 and later. Rx has decided that since it is able to provide Windows Forms and WPF support for that target, it _will_ provide it, even though I actually have no use for it.
+But the third column looks very different. In this case I've targetted `net8.0-windows10.0.19041.0`, the oldest Windows version for which Rx offers support on .NET 6.0 and later. Rx has decided that since it is able to provide Windows Forms and WPF support for that target, it _will_ provide it, even though nothing in my code actually uses it.
 
 In the framework-dependent row it makes only a small difference (because the copy of `System.Reactive.dll` we get is a little larger). But that's misleading: the resulting executable will now required host systems to have not just the basic .NET 8.0 runtime installed, but also the optional Windows Desktop components. So unless the target machine already has that installed, I will in fact have a larger install to perform.
 
@@ -357,9 +358,36 @@ In my view, the best solution to this whole problem would have been for all of t
 This is easy to say with hindsight of course, particularly since there are now many different options for building client-side UI with .NET. In a world where Avalonia, MAUI, Windows Forms, WPF, and WinUI are all possibilities for a .NET application, the idea that `System.Reactive` should do everything looks obviously unsustainable, in a way that it didn't back in the Rx 4.0 days.
 
 
-### The return of the plug-in problems in Rx 5.0
+#### The return of the plug-in problems in Rx 5.0
 
-TBD.
+In the section describing the [Great Unification](#rx-40s-great-unification), I explained how Rx 4.0 did a better job of dealing with the plug-in problems than Rx 3.1's attempt to solve the same problems had managed. Unfortunately, these problems returned in Rx 5.0.
+
+But why? This is the critical text from that section:
+
+> ...there was no longer any value in building multiple versions of Rx.NET targeting different versions of .NET Framework.
+>
+>This was a critical change in the landscape, because it created an opportunity for Rx.NET.
+>
+> Since there was now just a single .NET Framework target (`net46`)...
+
+In Rx 5.0, it was still true that there was just a single .NET Framework target. But it had changed. It was now `net472` instead of `net46`. And that turns out to create a new version of the problem.
+
+Remember, the basic plug-in problem occurs when a single version of Rx contains multiple distinct assemblies with the same strong name that can run on the same version of .NET Framework. Rx 4.0 looks like it might have that problem because it contains `net46` and `netstandard2.0` targets. .NET Framework 4.6.2 supports both of these TFMs. However, the way NuGet packages get resolved means that for any version of .NET Framework that supports `netstandard2.0` (4.6.2 or later), it will consider the `net46` TFM to be a better match than the `netstandard2.0` one.
+
+In short, there is no version of .NET Framework for which the build system will select the `netstandard2.0` component. Older versions of .NET don't support .NET Standard 2.0. And for newer versions, it will always pick the `net46` library.
+
+Unfortunately, it's different in Rx 5.0.
+
+Which Rx target will be used when we target .NET Framework versions 4.6.2, 4.7, or 4.7.1? None of these can load the `net472` target because that required .NET Framework 4.7.2 or later. But they can all load the `netstandard2.0` one.
+
+This opens the door to a plug-in problem. If someone built a Visual Studio plug-in targetting .NET Framework 4.6.2 that uses Rx 5.0, that plug-in would include a copy of the `netstandard2.0` copy of `System.Reactive.dll`. A plug-in targetting .NET Framework 4.7.2 that also uses Rx 5.0 will include a copy of the `net472` DLL. If that first plug-in loads first, it will cause the `netstandard2.0` DLL to load, and since that has exactly the same strong name as the `net472` DLL, the second plug-in is also going to get that `netstandard2.0` one. So if that second plug-in tries to use, say, Rx's WPF features, it will fail with a `TypeLoadException` or `MissingMethodException`.
+
+And yet, nobody seems to have reported this regression. Why would that be?
+
+It seems likely that the answer is that unlike the problems back in the Rx 2.0 and 3.0 days, the problem does not occur by default. Anyone using Rx 5.0 or later in a Visual Studio plug-in will most likely be targetting .NET Framework 4.7.2 or later. By the time Rx 5.0 shipped, there has never been any good reason to write a plug-in that targets an older version of Visual Studio. Of course, there are plenty of older plug-ins still around but those will be using older versions of Rx.NET.
+
+In the unlikely event of needing to write a new plug-in that targets a version of .NET Framework older than 4.7.2, you can always use an old version of Rx. So this problem is not the showstopper it was in older versions of Rx.NET.
+
 
 ### The workaround
 
