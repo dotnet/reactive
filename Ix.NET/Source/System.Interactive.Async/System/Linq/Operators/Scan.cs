@@ -10,10 +10,6 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
-        // NB: Implementations of Scan never yield the first element, unlike the behavior of Aggregate on a sequence with one
-        //     element, which returns the first element (or the seed if given an empty sequence). This is compatible with Rx
-        //     but one could argue whether it was the right default.
-
         /// <summary>
         /// Applies an accumulator function over an async-enumerable sequence and returns each intermediate result.
         /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource}"/>.
@@ -42,6 +38,8 @@ namespace System.Linq
                 }
 
                 var res = e.Current;
+
+                yield return res;
 
                 while (await e.MoveNextAsync())
                 {
@@ -75,6 +73,8 @@ namespace System.Linq
             static async IAsyncEnumerable<TAccumulate> Core(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 var res = seed;
+
+                yield return res;
 
                 await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
@@ -113,6 +113,8 @@ namespace System.Linq
                 }
 
                 var res = e.Current;
+
+                yield return res;
 
                 while (await e.MoveNextAsync())
                 {
@@ -153,6 +155,8 @@ namespace System.Linq
 
                 var res = e.Current;
 
+                yield return res;
+
                 while (await e.MoveNextAsync())
                 {
                     res = await accumulator(res, e.Current, cancellationToken).ConfigureAwait(false);
@@ -187,6 +191,8 @@ namespace System.Linq
             {
                 var res = seed;
 
+                yield return res;
+
                 await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     res = await accumulator(res, item).ConfigureAwait(false);
@@ -220,6 +226,8 @@ namespace System.Linq
             static async IAsyncEnumerable<TAccumulate> Core(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, CancellationToken, ValueTask<TAccumulate>> accumulator, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
             {
                 var res = seed;
+
+                yield return res;
 
                 await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
