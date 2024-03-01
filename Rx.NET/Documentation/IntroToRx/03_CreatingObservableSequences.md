@@ -118,7 +118,7 @@ public class RxFsEvents : IObservable<FileSystemEventArgs>
             {
                 // The FileSystemWatcher might report multiple errors, but
                 // we're only allowed to report one to IObservable<T>.
-                if (onErrorAlreadyCalled)
+                if (!onErrorAlreadyCalled)
                 {
                     observer.OnError(e.GetException());
                     onErrorAlreadyCalled = true; 
