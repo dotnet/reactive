@@ -68,13 +68,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarks", "Benchmarks", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrameworkIntegrations", "FrameworkIntegrations", "{1873A545-87AA-4C22-BA1A-8A6602F65749}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Integration.WindowsForms", "src\System.Reactive.Integration.WindowsForms\System.Reactive.Integration.WindowsForms.csproj", "{DCD4D74D-FEED-4606-B9C6-6669A5D70B85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.For.WindowsForms", "src\System.Reactive.For.WindowsForms\System.Reactive.For.WindowsForms.csproj", "{DCD4D74D-FEED-4606-B9C6-6669A5D70B85}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Integration.Wpf", "src\System.Reactive.Integration.Wpf\System.Reactive.Integration.Wpf.csproj", "{D548C2CA-5C32-4FFF-B9E9-A251971ED7B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.For.Wpf", "src\System.Reactive.For.Wpf\System.Reactive.For.Wpf.csproj", "{D548C2CA-5C32-4FFF-B9E9-A251971ED7B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Integration.Uwp", "src\System.Reactive.Integration.Uwp\System.Reactive.Integration.Uwp.csproj", "{C3FC6098-AC7F-4825-B292-4049BC6FC76E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.For.Uwp", "src\System.Reactive.For.Uwp\System.Reactive.For.Uwp.csproj", "{C3FC6098-AC7F-4825-B292-4049BC6FC76E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Integration.WindowsRuntime", "src\System.Reactive.Integration.WindowsRuntime\System.Reactive.Integration.WindowsRuntime.csproj", "{EB27A089-56EC-4621-BF88-E3B0DA8E6557}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.For.WindowsRuntime", "src\System.Reactive.For.WindowsRuntime\System.Reactive.For.WindowsRuntime.csproj", "{EB27A089-56EC-4621-BF88-E3B0DA8E6557}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

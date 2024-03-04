@@ -12,7 +12,7 @@ using Windows.Foundation;
 namespace System.Reactive.Linq
 {
     /// <summary>
-    /// Obsolete. The <c>System.Reactive.Integration.WindowsRuntime</c> NuGet package defines a
+    /// Obsolete. The <c>System.Reactive.For.WindowsRuntime</c> NuGet package defines a
     /// <c>WindowsRuntimeAsyncInfoObservable</c> class that defines new extension methods to be used in
     /// place of these (also in the <c>System.Reactive.Linq</c> namespace).
     /// </summary>
@@ -79,7 +79,7 @@ namespace System.Reactive.Linq
     /// former even when running on Windows.
     /// </para>
     /// </remarks>
-    [Obsolete("Use the extension methods defined by the System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable class in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+    [Obsolete("Use the extension methods defined by the System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable class in the System.Reactive.For.WindowsRuntime package instead", error: false)]
     [CLSCompliant(false)]
     public static class AsyncInfoObservable
     {
@@ -87,13 +87,13 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Obsolete. Use the <c>WindowsRuntimeAsyncInfoObservable.ToIAsyncAction</c> method in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence to expose as an asynchronous action.</param>
         /// <returns>Windows Runtime asynchronous action object representing the completion of the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        [Obsolete("Use the ToIAsyncAction extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ToIAsyncAction extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IAsyncAction ToAsyncAction<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -108,13 +108,13 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Obsolete. Use the <c>WindowsRuntimeAsyncInfoObservable.ToIAsyncActionWithProgress</c>
-        /// method in the <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// method in the <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence to expose as an asynchronous action.</param>
         /// <returns>Windows Runtime asynchronous action object representing the completion of the observable sequence, reporting incremental progress for each source sequence element.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        [Obsolete("Use the ToIAsyncActionWithProgress extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ToIAsyncActionWithProgress extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IAsyncActionWithProgress<int> ToAsyncActionWithProgress<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -131,7 +131,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Obsolete. Use the <c>WindowsRuntimeAsyncInfoObservable.ToIAsyncActionWithProgress</c>
-        /// method in the <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// method in the <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TProgress">The type of the elements in the progress sequence.</typeparam>
@@ -139,7 +139,7 @@ namespace System.Reactive.Linq
         /// <param name="progressSelector">Selector function to map the source sequence on a progress reporting sequence.</param>
         /// <returns>Windows Runtime asynchronous action object representing the completion of the result sequence, reporting progress computed through the progress sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="progressSelector"/> is null.</exception>
-        [Obsolete("Use the ToIAsyncActionWithProgress extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ToIAsyncActionWithProgress extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IAsyncActionWithProgress<TProgress> ToAsyncActionWithProgress<TSource, TProgress>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TProgress>> progressSelector)
         {
             if (source == null)
@@ -177,13 +177,13 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Obsolete. Use the <c>WindowsRuntimeAsyncInfoObservable.ToAsyncOperation</c> method in
-        /// the <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// the <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence to expose as an asynchronous operation.</param>
         /// <returns>Windows Runtime asynchronous operation object that returns the last element of the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        [Obsolete("Use the ToIAsyncOperation extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ToIAsyncOperation extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IAsyncOperation<TSource> ToAsyncOperation<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -196,13 +196,13 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Obsolete. Use the <c>WindowsRuntimeAsyncInfoObservable.ToIAsyncOperationWithProgress</c>
-        /// method in the <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// method in the <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence to expose as an asynchronous operation.</param>
         /// <returns>Windows Runtime asynchronous operation object that returns the last element of the observable sequence, reporting incremental progress for each source sequence element.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        [Obsolete("Use the ToIAsyncOperationWithProgress extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ToIAsyncOperationWithProgress extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IAsyncOperationWithProgress<TSource, int> ToAsyncOperationWithProgress<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -221,7 +221,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Obsolete. Use the <c>WindowsRuntimeAsyncInfoObservable.ToIAsyncOperationWithProgress</c>
-        /// method in the <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// method in the <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -229,7 +229,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Selector function to map the source sequence on a result sequence.</param>
         /// <returns>Windows Runtime asynchronous operation object that returns the last element of the result sequence, reporting incremental progress for each source sequence element.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="resultSelector"/> is null.</exception>
-        [Obsolete("Use the ToIAsyncOperationWithProgress extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ToIAsyncOperationWithProgress extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IAsyncOperationWithProgress<TResult, int> ToAsyncOperationWithProgress<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> resultSelector)
         {
             if (source == null)
@@ -251,7 +251,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Obsolete. Use the <c>WindowsRuntimeAsyncInfoObservable.ToIAsyncOperationWithProgress</c>
-        /// method in the <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// method in the <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -261,7 +261,7 @@ namespace System.Reactive.Linq
         /// <param name="progressSelector">Selector function to map the source sequence on a progress reporting sequence.</param>
         /// <returns>Windows Runtime asynchronous operation object that returns the last element of the result sequence, reporting progress computed through the progress sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="resultSelector"/> or <paramref name="progressSelector"/> is null.</exception>
-        [Obsolete("Use the ToIAsyncOperationWithProgress extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ToIAsyncOperationWithProgress extension method defined by System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IAsyncOperationWithProgress<TResult, TProgress> ToAsyncOperationWithProgress<TSource, TResult, TProgress>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> resultSelector, Func<IObservable<TSource>, IObservable<TProgress>> progressSelector)
         {
             if (source == null)

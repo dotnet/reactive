@@ -28,8 +28,8 @@
     <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
     <PackageReference Include="xunit.assert" Version="2.4.2" />
     <PackageReference Include="System.Reactive" Version="7.0.0-preview*" />
-    <PackageReference Include="System.Reactive.Integration.WindowsForms" Version="7.0.0-preview*" />
-    <PackageReference Include="System.Reactive.Integration.Wpf" Version="7.0.0-preview*" />
+    <PackageReference Include="System.Reactive.For.WindowsForms" Version="7.0.0-preview*" />
+    <PackageReference Include="System.Reactive.For.Wpf" Version="7.0.0-preview*" />
     <PackageReference Include="Microsoft.Reactive.Testing" Version="7.0.0-preview*" />
     <PackageReference Include="System.Reactive.Observable.Aliases" Version="7.0.0-preview*" />
   </ItemGroup>

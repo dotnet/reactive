@@ -8,8 +8,8 @@ using Windows.Foundation;
 namespace System.Reactive
 {
     /// <summary>
-    /// Obsolete. The <c>System.Reactive.Integration.WindowsRuntime</c> NuGet package defines an
-    /// <c>ITypedEventPatternSource</c> class that should be used instead.
+    /// Obsolete. The <c>System.Reactive.For.WindowsRuntime</c> NuGet package defines an
+    /// <c>ITypedEventPatternSource</c> interface that should be used instead.
     /// </summary>
     /// <typeparam name="TSender">Sender type.</typeparam>
     /// <typeparam name="TEventArgs">Event arguments type.</typeparam>
@@ -22,7 +22,7 @@ namespace System.Reactive
     /// </para>
     /// <para>
     /// The replacement type is not just in a different package and namespace. Its name has been
-    /// changed. There are two reasons.
+    /// changed to <c>ITypedEventPatternSource</c>. There are two reasons.
     /// </para>
     /// <para>
     /// First, the choice of name and namespace implied, wrongly, that this was a general purpose
@@ -42,7 +42,7 @@ namespace System.Reactive
     /// other reasons. This could make it difficult for code to move cleanly onto the new
     /// definition for as long as the old one remains present in <c>Obsolete</c> form, because it
     /// might not always be possible to replace <c>using System.Reactive;</c> with, say,
-    /// <c>using System.Reactive.Integration.WindowsRuntime;</c>
+    /// <c>using System.Reactive.WindowsRuntime;</c>
     /// </para>
     /// <para>
     /// The main reason for pushing such code out into separate packages is to avoid a problem in
@@ -66,7 +66,7 @@ namespace System.Reactive
     /// </para>
     /// </remarks>
     [CLSCompliant(false)]
-    [Obsolete("Use the System.Reactive.Integration.WindowsRuntime.IEventPatternSource interface in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+    [Obsolete("Use the System.Reactive.WindowsRuntime.ITypedEventPatternSource interface in the System.Reactive.For.WindowsRuntime package instead", error: false)]
     public interface IEventPatternSource<TSender, TEventArgs>
     {
         /// <summary>

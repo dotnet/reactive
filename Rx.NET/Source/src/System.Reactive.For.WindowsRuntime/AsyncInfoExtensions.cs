@@ -5,7 +5,7 @@
 using System.Reactive.Disposables;
 using Windows.Foundation;
 
-namespace System.Reactive.Integration.WindowsRuntime
+namespace System.Reactive.WindowsRuntime
 {
     internal static class AsyncInfoExtensions
     {

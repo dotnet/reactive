@@ -9,8 +9,8 @@ using System.Windows.Forms;
 namespace System.Reactive.Concurrency
 {
     /// <summary>
-    /// Obsolete. The <c>System.Reactive.Integration.WindowsForms</c> NuGet package defines a
-    /// <c>ControlScheduler</c> class in the <c>System.Reactive.Integration.WindowsForms</c>
+    /// Obsolete. The <c>System.Reactive.For.WindowsForms</c> NuGet package defines a
+    /// <c>ControlScheduler</c> class in the <c>System.Reactive.WindowsForms</c>
     /// namespace that replaces this class.
     /// </summary>
     /// <remarks>
@@ -19,7 +19,7 @@ namespace System.Reactive.Concurrency
     /// <c>System.Reactive</c> causes applications to end up with dependencies on Windows Forms and
     /// WPF whether they want them or not.
     /// </remarks>
-    [Obsolete("Use System.Reactive.Integration.WindowsForms.ControlScheduler in the System.Reactive.Integration.WindowsForms package instead", error: false)]
+    [Obsolete("Use System.Reactive.WindowsForms.ControlScheduler in the System.Reactive.For.WindowsForms package instead", error: false)]
     public class ControlScheduler : LocalScheduler, ISchedulerPeriodic
     {
         private readonly Control _control;

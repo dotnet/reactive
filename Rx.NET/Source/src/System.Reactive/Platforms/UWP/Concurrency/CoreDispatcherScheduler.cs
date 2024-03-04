@@ -12,8 +12,8 @@ using Windows.UI.Core;
 namespace System.Reactive.Concurrency
 {
     /// <summary>
-    /// Obsolete. The <c>System.Reactive.Integration.WindowsForms</c> NuGet package defines a
-    /// <c>ControlScheduler</c> class in the <c>System.Reactive.Integration.WindowsForms</c>
+    /// Obsolete. The <c>System.Reactive.For.WindowsRuntime</c> NuGet package defines a
+    /// <c>CoreDispatcherScheduler</c> class in the <c>System.Reactive.WindowsForms</c>
     /// namespace that replaces this class.
     /// </summary>
     /// <remarks>
@@ -22,7 +22,7 @@ namespace System.Reactive.Concurrency
     /// <c>System.Reactive</c> causes applications to end up with dependencies on Windows Forms and
     /// WPF whether they want them or not.
     /// </remarks>
-    [Obsolete("Use System.Reactive.Integration.WindowsRuntime.CoreDispatcherScheduler in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+    [Obsolete("Use System.Reactive.WindowsRuntime.CoreDispatcherScheduler in the System.Reactive.For.WindowsRuntime package instead", error: false)]
     [CLSCompliant(false)]
     public sealed class CoreDispatcherScheduler : LocalScheduler, ISchedulerPeriodic
     {

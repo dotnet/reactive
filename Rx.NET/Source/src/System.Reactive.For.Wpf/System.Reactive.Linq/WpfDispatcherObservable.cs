@@ -4,7 +4,7 @@
 
 using System.Windows.Threading;
 
-using DispatcherScheduler = System.Reactive.Integration.Wpf.DispatcherScheduler;
+using DispatcherScheduler = System.Reactive.Wpf.DispatcherScheduler;
 using Synchronization = System.Reactive.Concurrency.Synchronization;
 
 namespace System.Reactive.Linq

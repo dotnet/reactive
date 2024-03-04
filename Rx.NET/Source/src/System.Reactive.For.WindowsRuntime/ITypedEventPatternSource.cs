@@ -4,7 +4,7 @@
 
 using Windows.Foundation;
 
-namespace System.Reactive.Integration.WindowsRuntime
+namespace System.Reactive.WindowsRuntime
 {
     /// <summary>
     /// Represents a data stream signaling its elements by means of a Windows Runtime

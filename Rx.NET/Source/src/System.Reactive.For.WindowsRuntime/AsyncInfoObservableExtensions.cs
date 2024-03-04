@@ -5,7 +5,7 @@
 using System.Reactive.Linq;
 using Windows.Foundation;
 
-namespace System.Reactive.Integration.WindowsRuntime
+namespace System.Reactive.WindowsRuntime
 {
     /// <summary>
     /// Provides conversions from Windows Runtime asynchronous actions and operations to observable sequences.

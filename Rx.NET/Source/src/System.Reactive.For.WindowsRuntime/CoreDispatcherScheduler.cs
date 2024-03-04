@@ -9,7 +9,7 @@ using System.Threading;
 using Windows.System;
 using Windows.UI.Core;
 
-namespace System.Reactive.Integration.WindowsRuntime
+namespace System.Reactive.WindowsRuntime
 {
     /// <summary>
     /// Schedules units of work on a <see cref="CoreDispatcher"/>.

@@ -103,14 +103,14 @@ namespace System.Reactive.Linq
         /// <param name="source">Observable source sequence.</param>
         /// <returns>The event source object.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static System.Reactive.Integration.WindowsRuntime.ITypedEventPatternSource<TSender, TEventArgs> ToWindowsFoundationEventPattern<TSender, TEventArgs>(this IObservable<EventPattern<TSender, TEventArgs>> source)
+        public static System.Reactive.WindowsRuntime.ITypedEventPatternSource<TSender, TEventArgs> ToWindowsFoundationEventPattern<TSender, TEventArgs>(this IObservable<EventPattern<TSender, TEventArgs>> source)
         {
             if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return new System.Reactive.Integration.WindowsRuntime.EventPatternSource<TSender, TEventArgs>(source, static (h, evt) => h(evt.Sender!, evt.EventArgs));
+            return new System.Reactive.WindowsRuntime.EventPatternSource<TSender, TEventArgs>(source, static (h, evt) => h(evt.Sender!, evt.EventArgs));
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace System.Reactive.Linq
 {
     /// <summary>
-    /// Obsolete. The <c>System.Reactive.Integration.WindowsForms</c> NuGet package defines a
+    /// Obsolete. The <c>System.Reactive.For.WindowsForms</c> NuGet package defines a
     /// <c>WindowsFormsControlObservable</c> class that defines new extension methods to be used in
     /// place of these (also in the <c>System.Reactive.Linq</c> namespace).
     /// </summary>
@@ -45,14 +45,14 @@ namespace System.Reactive.Linq
     /// visibly different names (and not the same names on a new type).
     /// </para>
     /// </remarks>
-    [Obsolete("Use the extension methods defined by the System.Reactive.Linq.WindowsFormsControlObservable class in the System.Reactive.Integration.WindowsForms package instead", error: false)]
+    [Obsolete("Use the extension methods defined by the System.Reactive.Linq.WindowsFormsControlObservable class in the System.Reactive.For.WindowsForms package instead", error: false)]
 
     public static class ControlObservable
     {
         /// <summary>
         /// Obsolete. Use the <c>SubscribeOnWindowFormsControl</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsFormsControlObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsForms</c> package instead.
+        /// <c>System.Reactive.For.WindowsForms</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -63,7 +63,7 @@ namespace System.Reactive.Linq
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the specified control.
         /// In order to invoke observer callbacks on the specified control, e.g. to render results in a control, use <see cref="ObserveOn"/>.
         /// </remarks>
-        [Obsolete("Use the SubscribeOnWindowFormsControl extension method defined by System.Reactive.Linq.WindowsFormsControlObservable in the System.Reactive.Integration.WindowsForms package instead", error: false)]
+        [Obsolete("Use the SubscribeOnWindowFormsControl extension method defined by System.Reactive.Linq.WindowsFormsControlObservable in the System.Reactive.For.WindowsForms package instead", error: false)]
         public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, Control control)
         {
             if (source == null)
@@ -82,14 +82,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>ObserveOnWindowsFormsControl</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsFormsControlObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsForms</c> package instead.
+        /// <c>System.Reactive.For.WindowsForms</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <param name="control">Windows Forms control whose associated message loop is used to notify observers on.</param>
         /// <returns>The source sequence whose observations happen on the Windows Forms message loop associated with the specified control.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="control"/> is null.</exception>
-        [Obsolete("Use the ObserveOnWindowsFormsControl extension method defined by System.Reactive.Linq.WindowsFormsControlObservable in the System.Reactive.Integration.WindowsForms package instead", error: false)]
+        [Obsolete("Use the ObserveOnWindowsFormsControl extension method defined by System.Reactive.Linq.WindowsFormsControlObservable in the System.Reactive.For.WindowsForms package instead", error: false)]
         public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, Control control)
         {
             if (source == null)

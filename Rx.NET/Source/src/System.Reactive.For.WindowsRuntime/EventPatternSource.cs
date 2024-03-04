@@ -4,7 +4,7 @@
 
 using Windows.Foundation;
 
-namespace System.Reactive.Integration.WindowsRuntime
+namespace System.Reactive.WindowsRuntime
 {
     internal sealed class EventPatternSource<TSender, TEventArgs> : EventPatternSourceBase<TSender, TEventArgs>, ITypedEventPatternSource<TSender, TEventArgs>
     {

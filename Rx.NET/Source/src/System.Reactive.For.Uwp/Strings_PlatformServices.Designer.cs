@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace System.Reactive.Integration.Uwp {
+namespace System.Reactive.Uwp {
     using System;
     using System.Reflection;
     
@@ -40,7 +40,7 @@ namespace System.Reactive.Integration.Uwp {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Integration.Uwp.Strings_PlatformServices", typeof(Strings_PlatformServices).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.For.Uwp.Strings_PlatformServices", typeof(Strings_PlatformServices).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

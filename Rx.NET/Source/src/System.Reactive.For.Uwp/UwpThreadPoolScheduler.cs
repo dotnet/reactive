@@ -3,10 +3,10 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
-using System.Reactive.Integration.WindowsRuntime;
+using System.Reactive.WindowsRuntime;
 using Windows.System.Threading;
 
-namespace System.Reactive.Integration.Uwp
+namespace System.Reactive.Uwp
 {
     /// <summary>
     /// Schedules units of work on the Windows Runtime thread pool.

@@ -7,7 +7,7 @@ using System.Reactive.Concurrency;
 using System.Threading;
 using System.Windows.Threading;
 
-namespace System.Reactive.Integration.Wpf
+namespace System.Reactive.Wpf
 {
     /// <summary>
     /// Represents an object that schedules units of work on a <see cref="System.Windows.Threading.Dispatcher"/>.

@@ -5,7 +5,7 @@
 using System.Reactive.Subjects;
 using Windows.Foundation;
 
-namespace System.Reactive.Integration.WindowsRuntime
+namespace System.Reactive.WindowsRuntime
 {
     internal sealed class AsyncInfoToObservableBridge<TResult, TProgress> : ObservableBase<TResult>
     {

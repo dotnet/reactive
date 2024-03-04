@@ -9,8 +9,8 @@ using System.Threading;
 namespace System.Reactive.Concurrency
 {
     /// <summary>
-    /// Obsolete. The <c>System.Reactive.Integration.Wpf</c> NuGet package defines a
-    /// <c>DispatcherScheduler</c> class in the <c>System.Reactive.Integration.Wpf</c>
+    /// Obsolete. The <c>System.Reactive.For.Wpf</c> NuGet package defines a
+    /// <c>DispatcherScheduler</c> class in the <c>System.Reactive.Wpf</c>
     /// namespace that replaces this class.
     /// </summary>
     /// <remarks>
@@ -19,7 +19,7 @@ namespace System.Reactive.Concurrency
     /// <c>System.Reactive</c> causes applications to end up with dependencies on Windows Forms and
     /// WPF whether they want them or not.
     /// </remarks>
-    [Obsolete("Use System.Reactive.Integration.Wpf.DispatcherScheduler in the System.Reactive.Integration.Wpf package instead", error: false)]
+    [Obsolete("Use System.Reactive.Wpf.DispatcherScheduler in the System.Reactive.For.Wpf package instead", error: false)]
     public class DispatcherScheduler : LocalScheduler, ISchedulerPeriodic
     {
         /// <summary>

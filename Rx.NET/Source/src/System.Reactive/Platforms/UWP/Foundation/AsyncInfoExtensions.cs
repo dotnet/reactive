@@ -10,19 +10,19 @@ namespace System.Reactive.Windows.Foundation
 {
     /// <summary>
     /// Obsolete. Use the <c>AsyncInfoObservableExtensions</c> class in the
-    /// <c>System.Reactive.Integration.WindowsRuntime</c> namespace in the
-    /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+    /// <c>System.Reactive.WindowsRuntime</c> namespace in the
+    /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
     /// </summary>
     /// <remarks>
     /// <para>
     /// Since this obsolete class is the only public type in the <c>System.Reactive.Windows.Foundation</c>
     /// namespace, existing code will normally need only to replace a using directive of
     /// <c>using System.Reactive.Windows.Foundation;</c> with
-    /// <c>using System.Reactive.Integration.WindowsRuntime;</c>.
+    /// <c>using System.Reactive.WindowsRuntime;</c>.
     /// </para>
     /// </remarks>
     [CLSCompliant(false)]
-    [Obsolete("Use the System.Reactive.Integration.WindowsRuntime.AsyncInfoObservableExtensions class in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+    [Obsolete("Use the System.Reactive.WindowsRuntime.AsyncInfoObservableExtensions class in the System.Reactive.For.WindowsRuntime package instead", error: false)]
     public static class AsyncInfoObservableExtensions
     {
         #region IAsyncAction and IAsyncActionWithProgress

@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net8.0-windows'))">
-    <ProjectReference Include="..\..\src\System.Reactive.Integration.WindowsForms\System.Reactive.Integration.WindowsForms.csproj" />
-    <ProjectReference Include="..\..\src\System.Reactive.Integration.Wpf\System.Reactive.Integration.Wpf.csproj" />
+    <ProjectReference Include="..\..\src\System.Reactive.For.WindowsForms\System.Reactive.For.WindowsForms.csproj" />
+    <ProjectReference Include="..\..\src\System.Reactive.For.Wpf\System.Reactive.For.Wpf.csproj" />
   </ItemGroup>
 </Project>

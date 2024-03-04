@@ -4,7 +4,7 @@
 
 using System.Threading;
 
-namespace System.Reactive.Integration.WindowsRuntime
+namespace System.Reactive.WindowsRuntime
 {
     /// <summary>
     /// Represents a group of disposable resources that are disposed together.

@@ -16,13 +16,13 @@ using System.Reactive;
 using System.Reactive.Subjects;
 
 using LegacyDispatcherScheduler = System.Reactive.Concurrency.DispatcherScheduler;
-using DispatcherScheduler = System.Reactive.Integration.Wpf.DispatcherScheduler;
+using DispatcherScheduler = System.Reactive.Wpf.DispatcherScheduler;
 #endif
 
 #if HAS_WINFORMS
 using System.Windows.Forms;
 using LegacyControlScheduler = System.Reactive.Concurrency.ControlScheduler;
-using ControlScheduler = System.Reactive.Integration.WindowsForms.ControlScheduler;
+using ControlScheduler = System.Reactive.WindowsForms.ControlScheduler;
 #endif
 
 using Assert = Xunit.Assert;
@@ -199,7 +199,7 @@ namespace ReactiveTests.Tests
                         evt.Set();
                     };
                 })
-                .SubscribeOn(new System.Reactive.Integration.WindowsForms.ControlScheduler(lbl))
+                .SubscribeOn(new System.Reactive.WindowsForms.ControlScheduler(lbl))
                 .Subscribe(_ => { });
 
                 evt2.WaitOne();

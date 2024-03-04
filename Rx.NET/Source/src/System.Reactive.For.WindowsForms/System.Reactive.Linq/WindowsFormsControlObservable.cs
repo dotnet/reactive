@@ -4,7 +4,7 @@
 
 using System.Windows.Forms;
 
-using ControlScheduler = System.Reactive.Integration.WindowsForms.ControlScheduler;
+using ControlScheduler = System.Reactive.WindowsForms.ControlScheduler;
 using Synchronization = System.Reactive.Concurrency.Synchronization;
 
 namespace System.Reactive.Linq

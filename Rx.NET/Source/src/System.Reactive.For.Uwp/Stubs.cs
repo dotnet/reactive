@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-namespace System.Reactive.Integration.Uwp
+namespace System.Reactive.Uwp
 {
     internal static class Stubs<T>
     {

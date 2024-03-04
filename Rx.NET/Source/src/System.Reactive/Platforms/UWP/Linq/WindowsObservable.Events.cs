@@ -8,7 +8,7 @@ using Windows.Foundation;
 namespace System.Reactive.Linq
 {
     /// <summary>
-    /// Obsolete. The <c>System.Reactive.Integration.WindowsRuntime</c> NuGet package defines a
+    /// Obsolete. The <c>System.Reactive.For.WindowsRuntime</c> NuGet package defines a
     /// <c>WindowsRuntimeObservable</c> class (also in the <c>System.Reactive.Linq</c> namespace)
     /// to use instead.
     /// </summary>
@@ -75,7 +75,7 @@ namespace System.Reactive.Linq
     /// former even when running on Windows.
     /// </para>
        /// </remarks>
-    [Obsolete("Use the System.Reactive.Linq.WindowsRuntimeObservable class in the System.Reactive.Integration.WindowsRuntime instead", error: false)]
+    [Obsolete("Use the System.Reactive.Linq.WindowsRuntimeObservable class in the System.Reactive.For.WindowsRuntime instead", error: false)]
     [CLSCompliant(false)]
     public static partial class WindowsObservable
     {
@@ -89,7 +89,7 @@ namespace System.Reactive.Linq
         /// <returns>The observable sequence that contains data representations of invocations of the underlying typed event.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="addHandler"/> or <paramref name="removeHandler"/> is null.</exception>
         /// <seealso cref="ToEventPattern"/>
-        [Obsolete("Use the FromEventPattern method defined by System.Reactive.Linq.WindowsRuntimeObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the FromEventPattern method defined by System.Reactive.Linq.WindowsRuntimeObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<EventPattern<TSender, TResult>> FromEventPattern<TSender, TResult>(Action<TypedEventHandler<TSender, TResult>> addHandler, Action<TypedEventHandler<TSender, TResult>> removeHandler)
         {
             if (addHandler == null)
@@ -130,7 +130,7 @@ namespace System.Reactive.Linq
         /// <returns>The observable sequence that contains data representations of invocations of the underlying typed event.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="conversion"/> or <paramref name="addHandler"/> or <paramref name="removeHandler"/> is null.</exception>
         /// <seealso cref="ToEventPattern"/>
-        [Obsolete("Use the FromEventPattern method defined by System.Reactive.Linq.WindowsRuntimeObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the FromEventPattern method defined by System.Reactive.Linq.WindowsRuntimeObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<EventPattern<TSender, TResult>> FromEventPattern<TDelegate, TSender, TResult>(Func<TypedEventHandler<TSender, TResult>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
         {
             if (conversion == null)
@@ -172,7 +172,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Observable source sequence.</param>
         /// <returns>The event source object.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        [Obsolete("Use the ToWindowsFoundationEventPattern extension method defined by System.Reactive.Linq.WindowsRuntimeObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ToWindowsFoundationEventPattern extension method defined by System.Reactive.Linq.WindowsRuntimeObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IEventPatternSource<TSender, TEventArgs> ToEventPattern<TSender, TEventArgs>(this IObservable<EventPattern<TSender, TEventArgs>> source)
         {
             if (source == null)

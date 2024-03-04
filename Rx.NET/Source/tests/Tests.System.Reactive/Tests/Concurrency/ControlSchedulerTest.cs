@@ -15,7 +15,7 @@ using Microsoft.Reactive.Testing;
 
 using Assert = Xunit.Assert;
 using LegacyControlScheduler = System.Reactive.Concurrency.ControlScheduler;
-using ControlScheduler = System.Reactive.Integration.WindowsForms.ControlScheduler;
+using ControlScheduler = System.Reactive.WindowsForms.ControlScheduler;
 
 namespace ReactiveTests.Tests
 {

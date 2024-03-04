@@ -13,7 +13,7 @@ using Windows.UI.Xaml;
 namespace System.Reactive.Linq
 {
     /// <summary>
-    /// Obsolete. The <c>System.Reactive.Integration.WindowsRuntime</c> NuGet package defines a
+    /// Obsolete. The <c>System.Reactive.For.WindowsRuntime</c> NuGet package defines a
     /// <c>WindowsRuntimeCoreDispatcherObservable</c> class that defines new extension methods to
     /// be used in place of these (also in the <c>System.Reactive.Linq</c> namespace).
     /// </summary>
@@ -70,7 +70,7 @@ namespace System.Reactive.Linq
     /// </para>
     /// </remarks>
     [CLSCompliant(false)]
-    [Obsolete("Use the extension methods defined by the System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable class in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+    [Obsolete("Use the extension methods defined by the System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable class in the System.Reactive.For.WindowsRuntime package instead", error: false)]
     public static class CoreDispatcherObservable
     {
         #region ObserveOn[CoreDispatcher]
@@ -78,14 +78,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>ObserveOnWindowsRuntimeCoreDispatcher</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <param name="dispatcher">Dispatcher whose associated message loop is used to notify observers on.</param>
         /// <returns>The source sequence whose observations happen on the specified dispatcher.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="dispatcher"/> is null.</exception>
-        [Obsolete("Use the ObserveOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ObserveOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, CoreDispatcher dispatcher)
         {
             if (source == null)
@@ -104,7 +104,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>ObserveOnWindowsRuntimeCoreDispatcher</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -112,7 +112,7 @@ namespace System.Reactive.Linq
         /// <param name="priority">Priority to schedule work items at.</param>
         /// <returns>The source sequence whose observations happen on the specified dispatcher.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="dispatcher"/> is null.</exception>
-        [Obsolete("Use the ObserveOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ObserveOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, CoreDispatcher dispatcher, CoreDispatcherPriority priority)
         {
             if (source == null)
@@ -132,14 +132,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>ObserveOnWindowsRuntimeCoreDispatcher</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <param name="dependencyObject">Object to get the dispatcher from.</param>
         /// <returns>The source sequence whose observations happen on the specified object's dispatcher.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="dependencyObject"/> is null.</exception>
-        [Obsolete("Use the ObserveOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ObserveOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, DependencyObject dependencyObject)
         {
             if (source == null)
@@ -158,7 +158,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>ObserveOnWindowsRuntimeCoreDispatcher</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -166,7 +166,7 @@ namespace System.Reactive.Linq
         /// <param name="priority">Priority to schedule work items at.</param>
         /// <returns>The source sequence whose observations happen on the specified object's dispatcher.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="dependencyObject"/> is null.</exception>
-        [Obsolete("Use the ObserveOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ObserveOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, DependencyObject dependencyObject, CoreDispatcherPriority priority)
         {
             if (source == null)
@@ -185,13 +185,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>ObserveOnCurrentWindowsRuntimeCoreDispatcher</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <returns>The source sequence whose observations happen on the current window's dispatcher.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        [Obsolete("Use the ObserveOnCurrentWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ObserveOnCurrentWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<TSource> ObserveOnCoreDispatcher<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -205,14 +205,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>ObserveOnCurrentWindowsRuntimeCoreDispatcher</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <param name="priority">Priority to schedule work items at.</param>
         /// <returns>The source sequence whose observations happen on the current window's dispatcher.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        [Obsolete("Use the ObserveOnCurrentWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the ObserveOnCurrentWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<TSource> ObserveOnDispatcher<TSource>(this IObservable<TSource> source, CoreDispatcherPriority priority)
         {
             if (source == null)
@@ -230,7 +230,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>SubscribeOnWindowsRuntimeCoreDispatcher</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -241,7 +241,7 @@ namespace System.Reactive.Linq
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the specified dispatcher.
         /// In order to invoke observer callbacks on the specified dispatcher, e.g. to render results in a control, use <see cref="CoreDispatcherObservable.ObserveOn{TSource}(IObservable{TSource}, CoreDispatcher)"/>.
         /// </remarks>
-        [Obsolete("Use the SubscribeOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the SubscribeOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, CoreDispatcher dispatcher)
         {
             if (source == null)
@@ -260,7 +260,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>SubscribeOnWindowsRuntimeCoreDispatcher</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -272,7 +272,7 @@ namespace System.Reactive.Linq
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the specified dispatcher.
         /// In order to invoke observer callbacks on the specified dispatcher, e.g. to render results in a control, use <see cref="CoreDispatcherObservable.ObserveOn{TSource}(IObservable{TSource}, CoreDispatcher, CoreDispatcherPriority)"/>.
         /// </remarks>
-        [Obsolete("Use the SubscribeOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the SubscribeOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, CoreDispatcher dispatcher, CoreDispatcherPriority priority)
         {
             if (source == null)
@@ -292,7 +292,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>SubscribeOnWindowsRuntimeCoreDispatcher</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -303,7 +303,7 @@ namespace System.Reactive.Linq
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the dispatcher associated with the specified object.
         /// In order to invoke observer callbacks on the dispatcher associated with the specified object, e.g. to render results in a control, use <see cref="CoreDispatcherObservable.ObserveOn{TSource}(IObservable{TSource}, DependencyObject)"/>.
         /// </remarks>
-        [Obsolete("Use the SubscribeOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the SubscribeOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, DependencyObject dependencyObject)
         {
             if (source == null)
@@ -322,7 +322,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>SubscribeOnWindowsRuntimeCoreDispatcher</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -334,7 +334,7 @@ namespace System.Reactive.Linq
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the dispatcher associated with the specified object.
         /// In order to invoke observer callbacks on the dispatcher associated with the specified object, e.g. to render results in a control, use <see cref="CoreDispatcherObservable.ObserveOn{TSource}(IObservable{TSource}, DependencyObject, CoreDispatcherPriority)"/>.
         /// </remarks>
-        [Obsolete("Use the SubscribeOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the SubscribeOnWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, DependencyObject dependencyObject, CoreDispatcherPriority priority)
         {
             if (source == null)
@@ -354,7 +354,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>SubscribeOnCurrentWindowsRuntimeCoreDispatcher</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -364,7 +364,7 @@ namespace System.Reactive.Linq
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the dispatcher associated with the current window.
         /// In order to invoke observer callbacks on the dispatcher associated with the current window, e.g. to render results in a control, use <see cref="CoreDispatcherObservable.ObserveOnCoreDispatcher{TSource}(IObservable{TSource})"/>.
         /// </remarks>
-        [Obsolete("Use the SubscribeOnCurrentWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the SubscribeOnCurrentWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<TSource> SubscribeOnCoreDispatcher<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -378,7 +378,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Obsolete. Use the <c>SubscribeOnCurrentWindowsRuntimeCoreDispatcher</c> extension method defined by
         /// <c>System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable</c> in the
-        /// <c>System.Reactive.Integration.WindowsRuntime</c> package instead.
+        /// <c>System.Reactive.For.WindowsRuntime</c> package instead.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -389,7 +389,7 @@ namespace System.Reactive.Linq
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the dispatcher associated with the current window.
         /// In order to invoke observer callbacks on the dispatcher associated with the current window, e.g. to render results in a control, use <see cref="CoreDispatcherObservable.ObserveOnDispatcher{TSource}(IObservable{TSource}, CoreDispatcherPriority)"/>.
         /// </remarks>
-        [Obsolete("Use the SubscribeOnCurrentWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.Integration.WindowsRuntime package instead", error: false)]
+        [Obsolete("Use the SubscribeOnCurrentWindowsRuntimeCoreDispatcher extension method defined by System.Reactive.Linq.WindowsRuntimeCoreDispatcherObservable in the System.Reactive.For.WindowsRuntime package instead", error: false)]
         public static IObservable<TSource> SubscribeOnDispatcher<TSource>(this IObservable<TSource> source, CoreDispatcherPriority priority)
         {
             if (source == null)

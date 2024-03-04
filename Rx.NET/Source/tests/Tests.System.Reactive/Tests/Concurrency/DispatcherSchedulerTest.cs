@@ -14,7 +14,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Assert = Xunit.Assert;
 using LegacyDispatcherScheduler = System.Reactive.Concurrency.DispatcherScheduler;
-using DispatcherScheduler = System.Reactive.Integration.Wpf.DispatcherScheduler;
+using DispatcherScheduler = System.Reactive.Wpf.DispatcherScheduler;
 
 namespace ReactiveTests.Tests
 {

@@ -6,7 +6,7 @@ using System.Reactive.Disposables;
 
 using Windows.System.Threading;
 
-namespace System.Reactive.Integration.Uwp
+namespace System.Reactive.Uwp
 {
     internal static class ThreadPoolTimerExtensions
     {

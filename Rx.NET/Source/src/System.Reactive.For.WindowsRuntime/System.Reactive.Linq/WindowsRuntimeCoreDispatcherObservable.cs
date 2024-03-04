@@ -8,7 +8,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 #endif
 
-using CoreDispatcherScheduler = System.Reactive.Integration.WindowsRuntime.CoreDispatcherScheduler;
+using CoreDispatcherScheduler = System.Reactive.WindowsRuntime.CoreDispatcherScheduler;
 using Synchronization = System.Reactive.Concurrency.Synchronization;
 
 namespace System.Reactive.Linq

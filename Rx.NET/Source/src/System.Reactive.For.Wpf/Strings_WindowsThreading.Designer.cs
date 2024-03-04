@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace System.Reactive.Integration.Wpf {
+namespace System.Reactive.Wpf {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace System.Reactive.Integration.Wpf {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Integration.Wpf.Strings_WindowsThreading", typeof(Strings_WindowsThreading).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.For.Wpf.Strings_WindowsThreading", typeof(Strings_WindowsThreading).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

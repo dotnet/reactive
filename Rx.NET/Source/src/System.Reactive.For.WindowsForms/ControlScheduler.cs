@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace System.Reactive.Integration.WindowsForms
+namespace System.Reactive.WindowsForms
 {
     /// <summary>
     /// Represents an object that schedules units of work on the message loop associated with a Windows Forms control.

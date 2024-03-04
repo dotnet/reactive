@@ -18,13 +18,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Windows.Threading;
 
 using LegacyDispatcherScheduler = System.Reactive.Concurrency.DispatcherScheduler;
-using DispatcherScheduler = System.Reactive.Integration.Wpf.DispatcherScheduler;
+using DispatcherScheduler = System.Reactive.Wpf.DispatcherScheduler;
 #endif
 
 #if HAS_WINFORMS
 using System.Windows.Forms;
 using LegacyControlScheduler = System.Reactive.Concurrency.ControlScheduler;
-using ControlScheduler = System.Reactive.Integration.WindowsForms.ControlScheduler;
+using ControlScheduler = System.Reactive.WindowsForms.ControlScheduler;
 #endif
 
 using Assert = Xunit.Assert;
