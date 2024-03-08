@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventCorrelationSample", "EventCorrelationSample.csproj", "{E359E3A2-816C-4E0A-B788-CB4E02414B3D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E359E3A2-816C-4E0A-B788-CB4E02414B3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E359E3A2-816C-4E0A-B788-CB4E02414B3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E359E3A2-816C-4E0A-B788-CB4E02414B3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E359E3A2-816C-4E0A-B788-CB4E02414B3D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {94D79462-DF35-4796-9557-7BF8AAA9A7F6}
+	EndGlobalSection
+EndGlobal
