@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "cobol",
+      "request": "launch",
+      "name": "COBOL (native): Launch",
+      "program": "${workspaceFolder}/<insert-program-name-here>",
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": true
+    },
+    {
+      "type": "cobol",
+      "request": "attach",
+      "name": "COBOL (native): Attach to process",
+      "processId": "${command:pickProcess}"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/Bryan/OneDrive/OLLAMA/interna/reactive/AsyncRx.NET/System.Reactive.Async/Internal",
+      "program": "c:/Users/Bryan/OneDrive/OLLAMA/interna/reactive/AsyncRx.NET/System.Reactive.Async/Internal/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
