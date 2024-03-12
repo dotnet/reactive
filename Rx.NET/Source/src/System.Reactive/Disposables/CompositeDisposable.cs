@@ -288,8 +288,6 @@ namespace System.Reactive.Disposables
                     {
                         dictionaryDisposables[item] = thisDisposableCount;
                     }
-
-                    // TODO: do we need to shrink the dictionary?
                 }
 
                 // make sure the Count property sees an atomic update
