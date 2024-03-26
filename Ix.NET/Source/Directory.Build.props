@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
   <PropertyGroup>
     <Copyright>Copyright (c) .NET Foundation and Contributors.</Copyright>
     <MinClientVersion>2.12</MinClientVersion>
@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="coverlet.collector" Version="3.2.0" />
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
   </ItemGroup>
 
 
