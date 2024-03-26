@@ -4,6 +4,7 @@
 
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,7 +32,7 @@ namespace System.Linq
             private readonly IObservable<TSource> _source;
 
             private ConcurrentQueue<TSource>? _values = new ConcurrentQueue<TSource>();
-            private Exception? _error;
+            private ExceptionDispatchInfo? _error;
             private bool _completed;
             private TaskCompletionSource<bool>? _signal;
             private IDisposable? _subscription;
@@ -95,7 +96,7 @@ namespace System.Linq
 
                                 if (error != null)
                                 {
-                                    throw error;
+                                    error.Throw();
                                 }
 
                                 return false;
@@ -120,7 +121,7 @@ namespace System.Linq
 
             public void OnError(Exception error)
             {
-                _error = error;
+                _error = ExceptionDispatchInfo.Capture(error);
                 Volatile.Write(ref _completed, true);
 
                 DisposeSubscription();
