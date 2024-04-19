@@ -30,7 +30,7 @@ Rx is a powerfully productive development tool. It enables developers to work wi
 
 Rx builds on LINQ (Language Integrated Query). This enables us to use the query syntax shown above (or you can use the explicit function call approach that some .NET developers prefer). LINQ is widely used in .NET both for data access (e.g., in Entity Framework Core), but also for working with in-memory collections (with LINQ to Objects), meaning that experienced .NET developers will tend to feel at home with Rx. Crucially, LINQ is a highly composable design: you can connect operators together in any combination you like, expressing potentially complex processing in a straightforward way. This composability arises from the mathematical foundations of its design, but although you can learn about this aspect of LINQ if you want, it's not a prerequisite: developers who aren't interested in the mathematics behind it can just enjoy the fact that LINQ providers such as Rx provide a set of building blocks that can be plugged together in endless different ways, and it all just works.
 
-LINQ has proven track record of handling high very high volumes of data. Microsoft has used it extensively in the internal implementation of some of their systems, including services that support tens of millions of active users.
+LINQ has proven track record of handling very high volumes of data. Microsoft has used it extensively in the internal implementation of some of their systems, including services that support tens of millions of active users.
 
 ## When is Rx appropriate?
 
