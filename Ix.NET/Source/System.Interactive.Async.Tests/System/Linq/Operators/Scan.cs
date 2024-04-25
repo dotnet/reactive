@@ -28,6 +28,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan(8, (x, y) => x + y);
 
             var e = xs.GetAsyncEnumerator();
+            await HasNextAsync(e, 8);
             await HasNextAsync(e, 9);
             await HasNextAsync(e, 11);
             await HasNextAsync(e, 14);
@@ -40,6 +41,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan((x, y) => x + y);
 
             var e = xs.GetAsyncEnumerator();
+            await HasNextAsync(e, 1);
             await HasNextAsync(e, 3);
             await HasNextAsync(e, 6);
             await NoNextAsync(e);
