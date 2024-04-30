@@ -66,9 +66,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual(new[] {
+                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual([
                     new KeyValuePair<int, string>(2, "a"),
-                })),
+                ])),
                 OnCompleted<IList<KeyValuePair<int, string>>>(250)
             );
 
@@ -95,9 +95,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual(new[] {
+                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual([
                     new KeyValuePair<int, string>(2, "c"),
-                })),
+                ])),
                 OnCompleted<IList<KeyValuePair<int, string>>>(250)
             );
 
@@ -127,10 +127,10 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual(new[] {
+                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual([
                     new KeyValuePair<int, string>(2, "d"),
                     new KeyValuePair<int, string>(2, "y"),
-                })),
+                ])),
                 OnCompleted<IList<KeyValuePair<int, string>>>(250)
             );
 
@@ -227,9 +227,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual(new[] {
+                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual([
                     new KeyValuePair<int, string>(2, "a"),
-                })),
+                ])),
                 OnCompleted<IList<KeyValuePair<int, string>>>(250)
             );
 
@@ -256,9 +256,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual(new[] {
+                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual([
                     new KeyValuePair<int, string>(20, "c"),
-                })),
+                ])),
                 OnCompleted<IList<KeyValuePair<int, string>>>(250)
             );
 

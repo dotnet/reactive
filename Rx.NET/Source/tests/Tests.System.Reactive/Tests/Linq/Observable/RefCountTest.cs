@@ -498,7 +498,7 @@ namespace ReactiveTests.Tests
 
             Assert.Equal(1, connected);
 
-            var expected = new List<int>(new[] { 1, 2, 3, 4, 5 });
+            List<int> expected = [1, 2, 3, 4, 5];
 
             Assert.Equal(expected, list1);
             Assert.Equal(expected, list2);
@@ -548,7 +548,7 @@ namespace ReactiveTests.Tests
 
             Assert.Equal(1, connected);
 
-            var expected = new List<int>(new[] { 1, 2, 3, 4, 5 });
+            var expected = new List<int>([1, 2, 3, 4, 5]);
 
             Assert.Equal(expected, list1);
             Assert.Equal(expected, list2);

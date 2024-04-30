@@ -486,7 +486,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.For(null, new[] { 1 }, i => _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.For(_qbp, default(IEnumerable<int>), i => _qbMy));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.For(_qbp, new[] { 1 }, default(Expression<Func<int, IObservable<int>>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.For(_qbp, [1], default(Expression<Func<int, IObservable<int>>>)));
         }
 
         [TestMethod]
@@ -1535,7 +1535,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbMy, _qbMy, default(Expression<Func<int, int, int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbNull, new[] { 1 }, (a, b) => a + b));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbMy, default(IEnumerable<int>), (a, b) => a + b));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbMy, new[] { 1 }, default(Expression<Func<int, int, int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbMy, [1], default(Expression<Func<int, int, int>>)));
         }
 
         [TestMethod]
@@ -1659,17 +1659,17 @@ namespace ReactiveTests.Tests
         {
             var xs = Observable.Return(1).AsQbservable();
 
-            Assert.True(xs.Where(x => true).ToEnumerable().SequenceEqual(new[] { 1 }), "Where");
-            Assert.True(xs.Select(x => x.ToString()).ToEnumerable().SequenceEqual(new[] { "1" }), "Select");
-            Assert.True(xs.Take(1).ToEnumerable().SequenceEqual(new[] { 1 }), "Take");
-            Assert.True(xs.Sum().ToEnumerable().SequenceEqual(new[] { 1 }), "Sum");
-            Assert.True(xs.Amb(xs).ToEnumerable().SequenceEqual(new[] { 1 }), "Amb");
-            Assert.True(xs.Concat(xs).ToEnumerable().SequenceEqual(new[] { 1, 1 }), "Concat");
-            Assert.True(xs.Aggregate("", (s, i) => s + i).ToEnumerable().SequenceEqual(new[] { "1" }), "Aggregate");
-            Assert.True(xs.Where(x => true).Concat(xs.Where(x => false)).ToEnumerable().SequenceEqual(new[] { 1 }), "Concat/Where");
-            Assert.True(xs.SelectMany(x => xs).ToEnumerable().SequenceEqual(new[] { 1 }), "SelectMany");
-            Assert.True(xs.GroupBy(x => x).SelectMany(g => g).ToEnumerable().SequenceEqual(new[] { 1 }), "GroupBy/SelectMany");
-            Assert.True(xs.GroupBy(x => x, x => x).SelectMany(g => g).ToEnumerable().SequenceEqual(new[] { 1 }), "GroupBy/SelectMany (more generics)");
+            Assert.True(xs.Where(x => true).ToEnumerable().SequenceEqual([1]), "Where");
+            Assert.True(xs.Select(x => x.ToString()).ToEnumerable().SequenceEqual(["1"]), "Select");
+            Assert.True(xs.Take(1).ToEnumerable().SequenceEqual([1]), "Take");
+            Assert.True(xs.Sum().ToEnumerable().SequenceEqual([1]), "Sum");
+            Assert.True(xs.Amb(xs).ToEnumerable().SequenceEqual([1]), "Amb");
+            Assert.True(xs.Concat(xs).ToEnumerable().SequenceEqual([1, 1]), "Concat");
+            Assert.True(xs.Aggregate("", (s, i) => s + i).ToEnumerable().SequenceEqual(["1"]), "Aggregate");
+            Assert.True(xs.Where(x => true).Concat(xs.Where(x => false)).ToEnumerable().SequenceEqual([1]), "Concat/Where");
+            Assert.True(xs.SelectMany(x => xs).ToEnumerable().SequenceEqual([1]), "SelectMany");
+            Assert.True(xs.GroupBy(x => x).SelectMany(g => g).ToEnumerable().SequenceEqual([1]), "GroupBy/SelectMany");
+            Assert.True(xs.GroupBy(x => x, x => x).SelectMany(g => g).ToEnumerable().SequenceEqual([1]), "GroupBy/SelectMany (more generics)");
 
             // TODO: IQueryable ones
         }
@@ -1679,8 +1679,8 @@ namespace ReactiveTests.Tests
         {
             var xs = Observable.Return(1).AsQbservable();
 
-            Assert.True(Qbservable.Provider.Amb(xs, xs, xs).ToEnumerable().SequenceEqual(new[] { 1 }), "Amb (n-ary)");
-            Assert.True(Qbservable.Provider.Concat(xs, xs, xs).ToEnumerable().SequenceEqual(new[] { 1, 1, 1 }), "Concat (n-ary)");
+            Assert.True(Qbservable.Provider.Amb(xs, xs, xs).ToEnumerable().SequenceEqual([1]), "Amb (n-ary)");
+            Assert.True(Qbservable.Provider.Concat(xs, xs, xs).ToEnumerable().SequenceEqual([1, 1, 1]), "Concat (n-ary)");
 
             ReactiveAssert.Throws<MyException>(() => Qbservable.Provider.Throw<int>(new MyException()).ForEach(_ => { }));
         }
@@ -1696,8 +1696,8 @@ namespace ReactiveTests.Tests
             var ys = Observable.Return(2).AsQbservable();
             var zs = Observable.Return(3).AsQbservable();
 
-            Assert.True(Qbservable.Provider.When(xs.And(ys).Then((x, y) => x + y)).ToEnumerable().SequenceEqual(new[] { 3 }), "Join");
-            Assert.True(Qbservable.Provider.When(xs.And(ys).And(zs).Then((x, y, z) => x + y + z)).ToEnumerable().SequenceEqual(new[] { 6 }), "Join");
+            Assert.True(Qbservable.Provider.When(xs.And(ys).Then((x, y) => x + y)).ToEnumerable().SequenceEqual([3]), "Join");
+            Assert.True(Qbservable.Provider.When(xs.And(ys).And(zs).Then((x, y, z) => x + y + z)).ToEnumerable().SequenceEqual([6]), "Join");
         }
 
         [TestMethod]
@@ -1711,7 +1711,7 @@ namespace ReactiveTests.Tests
                 )
                 .Catch((Exception ex) => Qbservable.Provider.Return(3))
                 .ToEnumerable()
-                .SequenceEqual(new[] { 2, 3 })
+                .SequenceEqual([2, 3])
             );
         }
 
@@ -1721,7 +1721,7 @@ namespace ReactiveTests.Tests
             var xs = Observable.Range(0, 10).Where(x => x > 5).AsQbservable().Select(x => x + 1);
             var ys = xs.ToQueryable().OrderByDescending(x => x);
 
-            Assert.True(ys.SequenceEqual(new[] { 10, 9, 8, 7 }));
+            Assert.True(ys.SequenceEqual([10, 9, 8, 7]));
         }
 
         [TestMethod]
@@ -1761,8 +1761,8 @@ namespace ReactiveTests.Tests
             var obs = typeof(Observable).GetMethods(BindingFlags.Public | BindingFlags.Static).ToList();
             var qbs = typeof(Qbservable).GetMethods(BindingFlags.Public | BindingFlags.Static).ToList();
 
-            var onlyInObs = obs.Select(m => m.Name).Except(qbs.Select(m => m.Name)).Except(new[] { "First", "FirstOrDefault", "Last", "LastOrDefault", "Single", "SingleOrDefault", "ForEach", "Subscribe", "GetEnumerator", "ToEnumerable", "Multicast", "GetAwaiter", "ToEvent", "ToEventPattern", "ForEachAsync", "Wait", "RunAsync", "ToListObservable" }).ToList();
-            var onlyInQbs = qbs.Select(m => m.Name).Except(obs.Select(m => m.Name)).Except(new[] { "ToQueryable", "ToQbservable", "get_Provider", "AsQbservable" }).ToList();
+            var onlyInObs = obs.Select(m => m.Name).Except(qbs.Select(m => m.Name)).Except(["First", "FirstOrDefault", "Last", "LastOrDefault", "Single", "SingleOrDefault", "ForEach", "Subscribe", "GetEnumerator", "ToEnumerable", "Multicast", "GetAwaiter", "ToEvent", "ToEventPattern", "ForEachAsync", "Wait", "RunAsync", "ToListObservable"]).ToList();
+            var onlyInQbs = qbs.Select(m => m.Name).Except(obs.Select(m => m.Name)).Except(["ToQueryable", "ToQbservable", "get_Provider", "AsQbservable"]).ToList();
 
             Assert.True(onlyInObs.Count == 0, "Missing Qbservable operator: " + string.Join(", ", onlyInObs.ToArray()));
             Assert.True(onlyInQbs.Count == 0, "Missing Observable operator: " + string.Join(", ", onlyInQbs.ToArray()));

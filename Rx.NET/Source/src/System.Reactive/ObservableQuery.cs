@@ -322,13 +322,13 @@ namespace System.Reactive
                     if (lastArgument.NodeType == ExpressionType.NewArrayInit)
                     {
                         var paramsArray = (NewArrayExpression)lastArgument;
-                        return new List<Expression>
-                        {
+                        return
+                        [
                             Expression.NewArrayInit(
                                 typeof(Plan<>).MakeGenericType(method.GetGenericArguments()[0]),
                                 paramsArray.Expressions.Select(param => Visit(param))
                             )
-                        };
+                        ];
                     }
                 }
 

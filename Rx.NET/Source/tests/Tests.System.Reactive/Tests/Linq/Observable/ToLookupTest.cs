@@ -58,8 +58,8 @@ namespace ReactiveTests.Tests
                 OnNext<ILookup<int, int>>(660, d =>
                 {
                     return d.Count == 2
-                        && d[0].SequenceEqual(new[] { 4, 8 })
-                        && d[1].SequenceEqual(new[] { 6, 10 });
+                        && d[0].SequenceEqual([4, 8])
+                        && d[1].SequenceEqual([6, 10]);
                 }),
                 OnCompleted<ILookup<int, int>>(660)
             );

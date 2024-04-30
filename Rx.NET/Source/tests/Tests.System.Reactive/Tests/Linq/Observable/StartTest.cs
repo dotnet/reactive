@@ -37,7 +37,7 @@ namespace ReactiveTests.Tests
         public void Start_Action()
         {
             var done = false;
-            Assert.True(Observable.Start(() => { done = true; }).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.Start(() => { done = true; }).ToEnumerable().SequenceEqual([new Unit()]));
             Assert.True(done, "done");
         }
 
@@ -67,9 +67,9 @@ namespace ReactiveTests.Tests
 
             var res = Observable.Start(() => { throw ex; }).Materialize().ToEnumerable();
 
-            Assert.True(res.SequenceEqual(new[] {
+            Assert.True(res.SequenceEqual([
                 Notification.CreateOnError<Unit>(ex)
-            }));
+            ]));
         }
 
         [TestMethod]
@@ -103,9 +103,9 @@ namespace ReactiveTests.Tests
         {
             var res = Observable.Start(() => 1).ToEnumerable();
 
-            Assert.True(res.SequenceEqual(new[] {
+            Assert.True(res.SequenceEqual([
                 1
-            }));
+            ]));
         }
 
         [TestMethod]
@@ -130,9 +130,9 @@ namespace ReactiveTests.Tests
 
             var res = Observable.Start<int>(() => { throw ex; }).Materialize().ToEnumerable();
 
-            Assert.True(res.SequenceEqual(new[] {
+            Assert.True(res.SequenceEqual([
                 Notification.CreateOnError<int>(ex)
-            }));
+            ]));
         }
 
     }

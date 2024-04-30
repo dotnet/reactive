@@ -479,7 +479,7 @@ namespace ReactiveTests.Tests
         public void DisableOptimizations_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default, new Type[0]));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default, []));
 #if !WINDOWS
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(ThreadPoolScheduler.Instance, default));
 #endif

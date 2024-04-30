@@ -76,7 +76,7 @@ namespace ReactiveTests.Tests
 
             src.OnNext(3);
 
-            Assert.True(lst.SequenceEqual(new[] { 1, 2 }));
+            Assert.True(lst.SequenceEqual([1, 2]));
         }
 
         [TestMethod]
@@ -96,7 +96,7 @@ namespace ReactiveTests.Tests
 
             src.OnNext(3);
 
-            Assert.True(lst.SequenceEqual(new[] { 1, 2 }));
+            Assert.True(lst.SequenceEqual([1, 2]));
         }
 
     }

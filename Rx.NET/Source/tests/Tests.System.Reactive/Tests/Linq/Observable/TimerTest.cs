@@ -132,25 +132,25 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void OneShotTimer_TimeSpan_DefaultScheduler()
         {
-            Assert.True(Observable.Timer(TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual(new[] { 0L }));
+            Assert.True(Observable.Timer(TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual([0L]));
         }
 
         [TestMethod]
         public void OneShotTimer_DateTimeOffset_DefaultScheduler()
         {
-            Assert.True(Observable.Timer(DateTimeOffset.UtcNow + TimeSpan.FromSeconds(1)).ToEnumerable().SequenceEqual(new[] { 0L }));
+            Assert.True(Observable.Timer(DateTimeOffset.UtcNow + TimeSpan.FromSeconds(1)).ToEnumerable().SequenceEqual([0L]));
         }
 
         [TestMethod]
         public void OneShotTimer_TimeSpan_TimeSpan_DefaultScheduler()
         {
-            Assert.True(Observable.Timer(TimeSpan.FromMilliseconds(1), TimeSpan.FromMilliseconds(1)).ToEnumerable().Take(2).SequenceEqual(new[] { 0L, 1L }));
+            Assert.True(Observable.Timer(TimeSpan.FromMilliseconds(1), TimeSpan.FromMilliseconds(1)).ToEnumerable().Take(2).SequenceEqual([0L, 1L]));
         }
 
         [TestMethod]
         public void OneShotTimer_DateTimeOffset_TimeSpan_DefaultScheduler()
         {
-            Assert.True(Observable.Timer(DateTimeOffset.UtcNow + TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(1)).ToEnumerable().Take(2).SequenceEqual(new[] { 0L, 1L }));
+            Assert.True(Observable.Timer(DateTimeOffset.UtcNow + TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(1)).ToEnumerable().Take(2).SequenceEqual([0L, 1L]));
         }
 
         [TestMethod]
