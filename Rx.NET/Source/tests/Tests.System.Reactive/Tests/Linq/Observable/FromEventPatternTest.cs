@@ -486,13 +486,13 @@ namespace ReactiveTests.Tests
             var tpe = mod.DefineType("FromEvent");
 
             var ev1 = tpe.DefineEvent("Bar", (EventAttributes)MethodAttributes.Public, typeof(Action));
-            var add = tpe.DefineMethod("add_Bar", MethodAttributes.Public, CallingConventions.Standard, typeof(void), new Type[0]);
+            var add = tpe.DefineMethod("add_Bar", MethodAttributes.Public, CallingConventions.Standard, typeof(void), []);
             var ge1 = add.GetILGenerator();
             ge1.Emit(System.Reflection.Emit.OpCodes.Ret);
             ev1.SetAddOnMethod(add);
 
             var ev2 = tpe.DefineEvent("Foo", (EventAttributes)MethodAttributes.Public, typeof(Action));
-            var rem = tpe.DefineMethod("remove_Foo", MethodAttributes.Public, CallingConventions.Standard, typeof(void), new Type[0]);
+            var rem = tpe.DefineMethod("remove_Foo", MethodAttributes.Public, CallingConventions.Standard, typeof(void), []);
             var ge2 = rem.GetILGenerator();
             ge2.Emit(System.Reflection.Emit.OpCodes.Ret);
             ev2.SetRemoveOnMethod(rem);

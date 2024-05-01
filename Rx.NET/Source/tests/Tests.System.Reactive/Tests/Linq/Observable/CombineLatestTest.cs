@@ -3707,10 +3707,10 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(230, l => l.SequenceEqual(new[] { 1, 2, 3 })),
-                OnNext<IList<int>>(240, l => l.SequenceEqual(new[] { 4, 2, 3 })),
-                OnNext<IList<int>>(250, l => l.SequenceEqual(new[] { 4, 5, 3 })),
-                OnNext<IList<int>>(260, l => l.SequenceEqual(new[] { 4, 5, 6 })),
+                OnNext<IList<int>>(230, l => l.SequenceEqual([1, 2, 3])),
+                OnNext<IList<int>>(240, l => l.SequenceEqual([4, 2, 3])),
+                OnNext<IList<int>>(250, l => l.SequenceEqual([4, 5, 3])),
+                OnNext<IList<int>>(260, l => l.SequenceEqual([4, 5, 6])),
                 OnCompleted<IList<int>>(290)
             );
         }
@@ -3720,7 +3720,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(default(IEnumerable<IObservable<int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(default(IEnumerable<IObservable<int>>), _ => 42));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(new[] { Observable.Return(42) }, default(Func<IList<int>, string>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest([Observable.Return(42)], default(Func<IList<int>, string>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(default(IObservable<int>[])));
         }
 
@@ -3738,10 +3738,10 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(230, l => l.SequenceEqual(new[] { 1, 2, 3 })),
-                OnNext<IList<int>>(240, l => l.SequenceEqual(new[] { 1, 5, 3 })),
-                OnNext<IList<int>>(250, l => l.SequenceEqual(new[] { 4, 5, 3 })),
-                OnNext<IList<int>>(260, l => l.SequenceEqual(new[] { 4, 5, 6 })),
+                OnNext<IList<int>>(230, l => l.SequenceEqual([1, 2, 3])),
+                OnNext<IList<int>>(240, l => l.SequenceEqual([1, 5, 3])),
+                OnNext<IList<int>>(250, l => l.SequenceEqual([4, 5, 3])),
+                OnNext<IList<int>>(260, l => l.SequenceEqual([4, 5, 6])),
                 OnCompleted<IList<int>>(420)
             );
 
@@ -3806,13 +3806,13 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(230, l => l.SequenceEqual(new[] { 1, 2, 3 })),
-                OnNext<IList<int>>(240, l => l.SequenceEqual(new[] { 1, 5, 3 })),
-                OnNext<IList<int>>(250, l => l.SequenceEqual(new[] { 4, 5, 3 })),
-                OnNext<IList<int>>(260, l => l.SequenceEqual(new[] { 4, 5, 6 })),
-                OnNext<IList<int>>(280, l => l.SequenceEqual(new[] { 4, 5, 8 })),
-                OnNext<IList<int>>(290, l => l.SequenceEqual(new[] { 4, 7, 8 })),
-                OnNext<IList<int>>(310, l => l.SequenceEqual(new[] { 4, 9, 8 })),
+                OnNext<IList<int>>(230, l => l.SequenceEqual([1, 2, 3])),
+                OnNext<IList<int>>(240, l => l.SequenceEqual([1, 5, 3])),
+                OnNext<IList<int>>(250, l => l.SequenceEqual([4, 5, 3])),
+                OnNext<IList<int>>(260, l => l.SequenceEqual([4, 5, 6])),
+                OnNext<IList<int>>(280, l => l.SequenceEqual([4, 5, 8])),
+                OnNext<IList<int>>(290, l => l.SequenceEqual([4, 7, 8])),
+                OnNext<IList<int>>(310, l => l.SequenceEqual([4, 9, 8])),
                 OnCompleted<IList<int>>(410)
             );
 
@@ -3882,8 +3882,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(230, l => l.SequenceEqual(new[] { 1, 2, 3 })),
-                OnNext<IList<int>>(240, l => l.SequenceEqual(new[] { 1, 5, 3 })),
+                OnNext<IList<int>>(230, l => l.SequenceEqual([1, 2, 3])),
+                OnNext<IList<int>>(240, l => l.SequenceEqual([1, 5, 3])),
                 OnError<IList<int>>(250, ex)
             );
 

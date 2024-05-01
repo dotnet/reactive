@@ -694,13 +694,13 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Delay_TimeSpan_DefaultScheduler()
         {
-            Assert.True(Observable.Return(1).Delay(TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual(new[] { 1 }));
+            Assert.True(Observable.Return(1).Delay(TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual([1]));
         }
 
         [TestMethod]
         public void Delay_DateTimeOffset_DefaultScheduler()
         {
-            Assert.True(Observable.Return(1).Delay(DateTimeOffset.UtcNow + TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual(new[] { 1 }));
+            Assert.True(Observable.Return(1).Delay(DateTimeOffset.UtcNow + TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual([1]));
         }
 
         [TestMethod]

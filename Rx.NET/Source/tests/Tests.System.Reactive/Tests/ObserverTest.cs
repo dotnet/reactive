@@ -849,7 +849,7 @@ namespace ReactiveTests.Tests
             p.Report(42);
             p.Report(43);
 
-            Assert.True(xs.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(xs.SequenceEqual([42, 43]));
         }
 
         [TestMethod]
@@ -892,7 +892,7 @@ namespace ReactiveTests.Tests
             o.OnNext(42);
             o.OnNext(43);
 
-            Assert.True(xs.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(xs.SequenceEqual([42, 43]));
         }
 
         private class MyProgress<T> : IProgress<T>

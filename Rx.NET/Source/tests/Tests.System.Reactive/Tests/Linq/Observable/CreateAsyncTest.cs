@@ -46,7 +46,7 @@ namespace ReactiveTests.Tests
             var d = xs.Subscribe(lst.Add);
             d.Dispose();
 
-            Assert.True(lst.SequenceEqual(new[] { 42 }));
+            Assert.True(lst.SequenceEqual([42]));
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@ namespace ReactiveTests.Tests
             var d = xs.Subscribe(lst.Add);
             d.Dispose();
 
-            Assert.True(lst.SequenceEqual(new[] { 42 }));
+            Assert.True(lst.SequenceEqual([42]));
         }
 
         [TestMethod]
@@ -78,7 +78,7 @@ namespace ReactiveTests.Tests
             var d = xs.Subscribe(lst.Add);
             d.Dispose();
 
-            Assert.True(lst.SequenceEqual(new[] { 42 }));
+            Assert.True(lst.SequenceEqual([42]));
         }
 
         [TestMethod]
@@ -94,7 +94,7 @@ namespace ReactiveTests.Tests
             var d = xs.Subscribe(lst.Add);
             d.Dispose();
 
-            Assert.True(lst.SequenceEqual(new[] { 42 }));
+            Assert.True(lst.SequenceEqual([42]));
         }
 
         private Task Producer1(IObserver<int> results, IScheduler scheduler, CancellationToken token)

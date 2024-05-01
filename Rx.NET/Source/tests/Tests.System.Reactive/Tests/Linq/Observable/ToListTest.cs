@@ -40,7 +40,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(660, l => l.SequenceEqual(new[] { 2, 3, 4, 5 })),
+                OnNext<IList<int>>(660, l => l.SequenceEqual([2, 3, 4, 5])),
                 OnCompleted<IList<int>>(660)
             );
 

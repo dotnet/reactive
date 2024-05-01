@@ -69,13 +69,13 @@ namespace ReactiveTests.Tests
             );
 
             Assert.Equal(7, res.Count);
-            Assert.True(res[0].SequenceEqual(new int[] { }));
-            Assert.True(res[1].SequenceEqual(new int[] { 3 }));
-            Assert.True(res[2].SequenceEqual(new int[] { 4 }));
-            Assert.True(res[3].SequenceEqual(new int[] { }));
-            Assert.True(res[4].SequenceEqual(new int[] { 5, 6, 7 }));
-            Assert.True(res[5].SequenceEqual(new int[] { 8 }));
-            Assert.True(res[6].SequenceEqual(new int[] { }));
+            Assert.True(res[0].SequenceEqual([]));
+            Assert.True(res[1].SequenceEqual([3]));
+            Assert.True(res[2].SequenceEqual([4]));
+            Assert.True(res[3].SequenceEqual([]));
+            Assert.True(res[4].SequenceEqual([5, 6, 7]));
+            Assert.True(res[5].SequenceEqual([8]));
+            Assert.True(res[6].SequenceEqual([]));
         }
 
         [TestMethod]
@@ -118,8 +118,8 @@ namespace ReactiveTests.Tests
             );
 
             Assert.Equal(2, res.Count);
-            Assert.True(res[0].SequenceEqual(new int[] { 3, 4, 5 }));
-            Assert.True(res[1].SequenceEqual(new int[] { 6, 7, 8 }));
+            Assert.True(res[0].SequenceEqual([3, 4, 5]));
+            Assert.True(res[1].SequenceEqual([6, 7, 8]));
         }
 
         [TestMethod]
@@ -175,10 +175,10 @@ namespace ReactiveTests.Tests
             );
 
             Assert.Equal(4, res.Count);
-            Assert.True(res[0].SequenceEqual(new int[] { }));
-            Assert.True(res[1].SequenceEqual(new int[] { 3 }));
-            Assert.True(res[2].SequenceEqual(new int[] { 4 }));
-            Assert.True(res[3].SequenceEqual(new int[] { }));
+            Assert.True(res[0].SequenceEqual([]));
+            Assert.True(res[1].SequenceEqual([3]));
+            Assert.True(res[2].SequenceEqual([4]));
+            Assert.True(res[3].SequenceEqual([]));
         }
 
     }

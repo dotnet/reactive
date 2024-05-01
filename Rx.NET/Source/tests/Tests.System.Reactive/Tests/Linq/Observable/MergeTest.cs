@@ -1080,19 +1080,19 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Merge_Binary_DefaultScheduler()
         {
-            Assert.True(Observable.Return(1).Merge(Observable.Return(2)).ToEnumerable().OrderBy(x => x).SequenceEqual(new[] { 1, 2 }));
+            Assert.True(Observable.Return(1).Merge(Observable.Return(2)).ToEnumerable().OrderBy(x => x).SequenceEqual([1, 2]));
         }
 
         [TestMethod]
         public void Merge_Params_DefaultScheduler()
         {
-            Assert.True(Observable.Merge(Observable.Return(1), Observable.Return(2)).ToEnumerable().OrderBy(x => x).SequenceEqual(new[] { 1, 2 }));
+            Assert.True(Observable.Merge(Observable.Return(1), Observable.Return(2)).ToEnumerable().OrderBy(x => x).SequenceEqual([1, 2]));
         }
 
         [TestMethod]
         public void Merge_IEnumerableOfIObservable_DefaultScheduler()
         {
-            Assert.True(Observable.Merge((IEnumerable<IObservable<int>>)new[] { Observable.Return(1), Observable.Return(2) }).ToEnumerable().OrderBy(x => x).SequenceEqual(new[] { 1, 2 }));
+            Assert.True(Observable.Merge((IEnumerable<IObservable<int>>)[Observable.Return(1), Observable.Return(2)]).ToEnumerable().OrderBy(x => x).SequenceEqual([1, 2]));
         }
 
         [TestMethod]
@@ -1717,7 +1717,7 @@ namespace ReactiveTests.Tests
 
             var res = tss.ToArray().Single();
 
-            Assert.True(res.OrderBy(x => x).SequenceEqual(new[] { 1, 2, 3 }));
+            Assert.True(res.OrderBy(x => x).SequenceEqual([1, 2, 3]));
         }
 
         [TestMethod]
@@ -1785,7 +1785,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.Same(ex, err);
         }
 
@@ -1810,7 +1810,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.Same(ex, err);
         }
 
@@ -1834,7 +1834,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
@@ -1858,7 +1858,7 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 

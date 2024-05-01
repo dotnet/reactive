@@ -1839,14 +1839,14 @@ namespace ReactiveTests.Tests
 
             r.OnNext(5);
 
-            Assert.True(xs.SequenceEqual(new[]
-            {
+            Assert.True(xs.SequenceEqual(
+            [
                 1, 2, 3, 4, // original
                 1, 2, 3, 4, // reentrant (+ fed back)
                 1, 2, 3, 4, // reentrant (+ first two fed back)
                 1, 2,       // reentrant
                 5           // tune in
-            }));
+            ]));
         }
 
 #if !NO_INTERNALSTEST

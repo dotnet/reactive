@@ -447,7 +447,7 @@ namespace ReactiveTests.Tests
         {
             var evt = new ManualResetEvent(false);
 
-            IEnumerable<IObservable<int>> sources = new[] { Observable.Return(1), Observable.Return(2), Observable.Return(3) };
+            IEnumerable<IObservable<int>> sources = [Observable.Return(1), Observable.Return(2), Observable.Return(3)];
 
             var sum = 0;
             Observable.OnErrorResumeNext(sources).Subscribe(x =>
@@ -545,7 +545,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(340)
             );
 
-            var xss = new MockEnumerable<ITestableObservable<int>>(scheduler, new[] { o1, o2, o3, o2 });
+            var xss = new MockEnumerable<ITestableObservable<int>>(scheduler, [o1, o2, o3, o2]);
 
             var res = scheduler.Start(() =>
                 xss.Select(xs => (IObservable<int>)xs).OnErrorResumeNext()
@@ -606,7 +606,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(340)
             );
 
-            var xss = new MockEnumerable<ITestableObservable<int>>(scheduler, new[] { o1, o2 });
+            var xss = new MockEnumerable<ITestableObservable<int>>(scheduler, [o1, o2]);
 
             var res = scheduler.Start(() =>
                 xss.Select(xs => (IObservable<int>)xs).OnErrorResumeNext(),
@@ -712,7 +712,7 @@ namespace ReactiveTests.Tests
                     }),
                     Observable.Return(2)
                 )
-                .SequenceEqual(new[] { 1, 2 });
+                .SequenceEqual([1, 2]);
 
             Assert.True(res.Wait());
         }

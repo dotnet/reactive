@@ -312,7 +312,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() => ObservableEx.ForkJoin(o1, o2, o3));
 
             res.Messages.AssertEqual(
-                OnNext<int[]>(270, l => l.SequenceEqual(new[] { 4, 7, 5 })), // TODO: fix ForkJoin behavior
+                OnNext<int[]>(270, l => l.SequenceEqual([4, 7, 5])), // TODO: fix ForkJoin behavior
                 OnCompleted<int[]>(270)
             );
         }
@@ -424,7 +424,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() => ObservableEx.ForkJoin(new List<IObservable<int>> { o1, o2, o3, Observable.Return(20) }));
 
             res.Messages.AssertEqual(
-                OnNext<int[]>(270, l => l.SequenceEqual(new[] { 4, 7, 5, 20 })),
+                OnNext<int[]>(270, l => l.SequenceEqual([4, 7, 5, 20])),
                 OnCompleted<int[]>(270)
             );
         }
@@ -462,7 +462,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() => ObservableEx.ForkJoin(new List<IObservable<int>> { Observable.Return(20), o1, o2, o3 }));
 
             res.Messages.AssertEqual(
-                OnNext<int[]>(270, l => l.SequenceEqual(new[] { 20, 4, 7, 5 })),
+                OnNext<int[]>(270, l => l.SequenceEqual([20, 4, 7, 5])),
                 OnCompleted<int[]>(270)
             );
         }
@@ -500,7 +500,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() => ObservableEx.ForkJoin(new List<IObservable<int>> { o1, o2, o3 }));
 
             res.Messages.AssertEqual(
-                OnNext<int[]>(270, l => l.SequenceEqual(new[] { 4, 7, 5 })), // TODO: fix ForkJoin behavior
+                OnNext<int[]>(270, l => l.SequenceEqual([4, 7, 5])), // TODO: fix ForkJoin behavior
                 OnCompleted<int[]>(270)
             );
         }

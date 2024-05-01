@@ -34,7 +34,7 @@ namespace ReactiveTests.Tests
         {
             var lst = new List<int>();
             Observable.Empty<int>().ForEach(x => lst.Add(x));
-            Assert.True(lst.SequenceEqual(Enumerable.Empty<int>()));
+            Assert.True(lst.SequenceEqual([]));
         }
 
         [TestMethod]
@@ -42,7 +42,7 @@ namespace ReactiveTests.Tests
         {
             var lstX = new List<int>();
             Observable.Empty<int>().ForEach((x, i) => lstX.Add(x));
-            Assert.True(lstX.SequenceEqual(Enumerable.Empty<int>()));
+            Assert.True(lstX.SequenceEqual([]));
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace ReactiveTests.Tests
         {
             var lst = new List<int>();
             Observable.Return(42).ForEach(x => lst.Add(x));
-            Assert.True(lst.SequenceEqual(new[] { 42 }));
+            Assert.True(lst.SequenceEqual([42]));
         }
 
         [TestMethod]
@@ -59,8 +59,8 @@ namespace ReactiveTests.Tests
             var lstX = new List<int>();
             var lstI = new List<int>();
             Observable.Return(42).ForEach((x, i) => { lstX.Add(x); lstI.Add(i); });
-            Assert.True(lstX.SequenceEqual(new[] { 42 }));
-            Assert.True(lstI.SequenceEqual(new[] { 0 }));
+            Assert.True(lstX.SequenceEqual([42]));
+            Assert.True(lstI.SequenceEqual([0]));
         }
 
         [TestMethod]
