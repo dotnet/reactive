@@ -36,7 +36,7 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var e = new MockEnumerable<int>(scheduler,
-                new[] { 3, 1, 2, 4 }
+                [3, 1, 2, 4]
             );
 
             var results = scheduler.Start(() =>
@@ -62,7 +62,7 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var e = new MockEnumerable<int>(scheduler,
-                new[] { 3, 1, 2, 4 }
+                [3, 1, 2, 4]
             );
 
             var results = scheduler.Start(() =>

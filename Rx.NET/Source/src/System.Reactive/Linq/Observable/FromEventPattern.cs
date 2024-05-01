@@ -135,13 +135,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private Action AddHandlerCore(Delegate handler)
             {
-                _addMethod.Invoke(_target, new object[] { handler });
-                return () => _removeMethod.Invoke(_target, new object[] { handler });
+                _addMethod.Invoke(_target, [handler]);
+                return () => _removeMethod.Invoke(_target, [handler]);
             }
 
             private Action AddHandlerCoreWinRT(Delegate handler)
             {
-                var token = _addMethod.Invoke(_target, new object[] { handler });
+                var token = _addMethod.Invoke(_target, [handler]);
                 return () => _removeMethod.Invoke(_target, [token]);
             }
         }

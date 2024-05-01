@@ -443,7 +443,7 @@ namespace ReactiveTests.Tests
 
             end.WaitOne();
 
-            Assert.True(lst.SequenceEqual(new[] { 1, 2, 3 }));
+            Assert.True(lst.SequenceEqual([1, 2, 3]));
         }
 
         [TestMethod]
@@ -533,7 +533,7 @@ namespace ReactiveTests.Tests
             resume.Set();
 
             end.WaitOne();
-            Assert.True(lst.SequenceEqual(new[] { 1, 2, 3 }));
+            Assert.True(lst.SequenceEqual([1, 2, 3]));
             Assert.Same(ex, err);
         }
 

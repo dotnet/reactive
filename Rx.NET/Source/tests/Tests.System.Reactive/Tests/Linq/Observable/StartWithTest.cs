@@ -18,7 +18,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void StartWith_ArgumentChecking()
         {
-            var values = (IEnumerable<int>)new[] { 1, 2, 3 };
+            var values = (IEnumerable<int>)[1, 2, 3];
 
             var scheduler = new TestScheduler();
             var someObservable = Observable.Empty<int>();
@@ -95,7 +95,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            var data = new List<int>(new[] { 1, 2, 3 });
+            List<int> data = [1, 2, 3];
             var res = scheduler.Start(() =>
                 xs.StartWith(data)
             );
@@ -120,7 +120,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            var data = new List<int>(new[] { 1, 2, 3 });
+            List<int> data = [1, 2, 3];
             var res = scheduler.Start(() =>
                 xs.StartWith(scheduler, data)
             );

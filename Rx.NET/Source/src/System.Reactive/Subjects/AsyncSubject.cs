@@ -22,7 +22,7 @@ namespace System.Reactive.Subjects
         private bool _hasValue;
         private Exception? _exception;
 
-#pragma warning disable CA1825 // (Avoid zero-length array allocations.) The identity of these arrays matters, so we can't use the shared Array.Empty<T>() instance
+#pragma warning disable CA1825,IDE0300 // (Avoid zero-length array allocations. Use collection expressions) The identity of these arrays matters, so we can't use the shared Array.Empty<T>() instance either explicitly, or indirectly via a collection expression
         /// <summary>
         /// A pre-allocated empty array indicating the AsyncSubject has terminated.
         /// </summary>
@@ -31,7 +31,7 @@ namespace System.Reactive.Subjects
         /// A pre-allocated empty array indicating the AsyncSubject has been disposed.
         /// </summary>
         private static readonly AsyncSubjectDisposable[] Disposed = new AsyncSubjectDisposable[0];
-#pragma warning restore CA1825
+#pragma warning restore CA1825,IDE0300
 
         #endregion
 

@@ -262,7 +262,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Throttle_DefaultScheduler()
         {
-            Assert.True(Observable.Return(1).Throttle(TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual(new[] { 1 }));
+            Assert.True(Observable.Return(1).Throttle(TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual([1]));
         }
 
         [TestMethod]

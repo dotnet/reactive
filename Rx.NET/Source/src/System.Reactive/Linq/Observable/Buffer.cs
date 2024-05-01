@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly int _count;
                 private int _index;
-                private IList<TSource>? _buffer;
+                private List<TSource>? _buffer;
 
                 internal ExactSink(IObserver<IList<TSource>> observer, int count) : base(observer)
                 {
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var buffer = _buffer;
                     if (buffer == null)
                     {
-                        buffer = new List<TSource>();
+                        buffer = [];
                         _buffer = buffer;
                     }
 
@@ -102,7 +102,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly int _count;
                 private readonly int _skip;
                 private int _index;
-                private IList<TSource>? _buffer;
+                private List<TSource>? _buffer;
 
                 internal SkipSink(IObserver<IList<TSource>> observer, int count, int skip) : base(observer)
                 {
@@ -116,7 +116,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var buffer = _buffer;
                     if (idx == 0)
                     {
-                        buffer = new List<TSource>();
+                        buffer = [];
                         _buffer = buffer;
                     }
 

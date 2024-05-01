@@ -3462,7 +3462,7 @@ namespace ReactiveTests.Tests
             );
 
             var e = new MockEnumerable<int>(scheduler,
-                Enumerable.Empty<int>()
+                []
             );
 
             var res = scheduler.Start(() =>
@@ -3527,7 +3527,7 @@ namespace ReactiveTests.Tests
             );
 
             var e2 = new MockEnumerable<int>(scheduler,
-                Enumerable.Empty<int>()
+                []
             );
 
             var res = scheduler.Start(() =>
@@ -3558,7 +3558,7 @@ namespace ReactiveTests.Tests
             );
 
             var o = new MockEnumerable<int>(scheduler,
-                new[] { 2 }
+                [2]
             );
 
             var res = scheduler.Start(() =>
@@ -3584,7 +3584,7 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var e = new MockEnumerable<int>(scheduler,
-                Enumerable.Empty<int>()
+                []
             );
 
             var o = scheduler.CreateHotObservable(
@@ -3616,7 +3616,7 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var o = new MockEnumerable<int>(scheduler,
-                new[] { 2 }
+                [2]
             );
 
             var n = scheduler.CreateHotObservable(
@@ -3651,7 +3651,7 @@ namespace ReactiveTests.Tests
             );
 
             var o2 = new MockEnumerable<int>(scheduler,
-                new[] { 3 }
+                [3]
             );
 
             var res = scheduler.Start(() =>
@@ -3713,7 +3713,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
 
             var e = new MockEnumerable<int>(scheduler,
-                Enumerable.Empty<int>()
+                []
             );
 
             var f = scheduler.CreateHotObservable(
@@ -3882,7 +3882,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
 
             var o = new MockEnumerable<int>(scheduler,
-                new[] { 2 }
+                [2]
             );
 
             var e = scheduler.CreateHotObservable(
@@ -3915,7 +3915,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
 
             var o = new MockEnumerable<int>(scheduler,
-                new[] { 5, 4, 3, 2 }
+                [5, 4, 3, 2]
             );
 
             var e = scheduler.CreateHotObservable(
@@ -4029,7 +4029,7 @@ namespace ReactiveTests.Tests
             );
 
             var o2 = new MockEnumerable<int>(scheduler,
-                new[] { 3, 5 }
+                [3, 5]
             );
 
             var ex = new Exception();
@@ -4264,7 +4264,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(default(IEnumerable<IObservable<int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(default(IEnumerable<IObservable<int>>), _ => 42));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(new[] { Observable.Return(42) }, default(Func<IList<int>, string>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip([Observable.Return(42)], default(Func<IList<int>, string>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(default(IObservable<int>[])));
         }
 
@@ -4282,8 +4282,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(230, l => l.SequenceEqual(new[] { 1, 2, 3 })),
-                OnNext<IList<int>>(260, l => l.SequenceEqual(new[] { 4, 5, 6 })),
+                OnNext<IList<int>>(230, l => l.SequenceEqual([1, 2, 3])),
+                OnNext<IList<int>>(260, l => l.SequenceEqual([4, 5, 6])),
                 OnCompleted<IList<int>>(420)
             );
 
@@ -4346,8 +4346,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(230, l => l.SequenceEqual(new[] { 1, 2, 3 })),
-                OnNext<IList<int>>(260, l => l.SequenceEqual(new[] { 4, 5, 6 })),
+                OnNext<IList<int>>(230, l => l.SequenceEqual([1, 2, 3])),
+                OnNext<IList<int>>(260, l => l.SequenceEqual([4, 5, 6])),
                 OnCompleted<IList<int>>(310)
             );
 
@@ -4412,7 +4412,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(230, l => l.SequenceEqual(new[] { 1, 2, 3 })),
+                OnNext<IList<int>>(230, l => l.SequenceEqual([1, 2, 3])),
                 OnError<IList<int>>(250, ex)
             );
 
@@ -4481,8 +4481,8 @@ namespace ReactiveTests.Tests
             Assert.Equal(200, started);
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(230, l => l.SequenceEqual(new[] { 1, 2, 3 })),
-                OnNext<IList<int>>(260, l => l.SequenceEqual(new[] { 4, 5, 6 })),
+                OnNext<IList<int>>(230, l => l.SequenceEqual([1, 2, 3])),
+                OnNext<IList<int>>(260, l => l.SequenceEqual([4, 5, 6])),
                 OnCompleted<IList<int>>(420)
             );
 

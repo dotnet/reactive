@@ -188,7 +188,7 @@ namespace ReactiveTests.Tests
 
             src.OnBar(42);
 
-            Assert.True(fst.SequenceEqual(new[] { 42 }));
+            Assert.True(fst.SequenceEqual([42]));
 
             d1.Dispose();
 
@@ -203,8 +203,8 @@ namespace ReactiveTests.Tests
 
             src.OnBar(43);
 
-            Assert.True(fst.SequenceEqual(new[] { 42 }));
-            Assert.True(snd.SequenceEqual(new[] { 43 }));
+            Assert.True(fst.SequenceEqual([42]));
+            Assert.True(snd.SequenceEqual([43]));
 
             var thd = new List<int>();
             var d3 = xs.Subscribe(e => thd.Add(e.EventArgs.Value));
@@ -214,9 +214,9 @@ namespace ReactiveTests.Tests
 
             src.OnBar(44);
 
-            Assert.True(fst.SequenceEqual(new[] { 42 }));
-            Assert.True(snd.SequenceEqual(new[] { 43, 44 }));
-            Assert.True(thd.SequenceEqual(new[] { 44 }));
+            Assert.True(fst.SequenceEqual([42]));
+            Assert.True(snd.SequenceEqual([43, 44]));
+            Assert.True(thd.SequenceEqual([44]));
 
             d2.Dispose();
 
@@ -225,9 +225,9 @@ namespace ReactiveTests.Tests
 
             src.OnBar(45);
 
-            Assert.True(fst.SequenceEqual(new[] { 42 }));
-            Assert.True(snd.SequenceEqual(new[] { 43, 44 }));
-            Assert.True(thd.SequenceEqual(new[] { 44, 45 }));
+            Assert.True(fst.SequenceEqual([42]));
+            Assert.True(snd.SequenceEqual([43, 44]));
+            Assert.True(thd.SequenceEqual([44, 45]));
 
             d3.Dispose();
 
@@ -236,9 +236,9 @@ namespace ReactiveTests.Tests
 
             src.OnBar(46);
 
-            Assert.True(fst.SequenceEqual(new[] { 42 }));
-            Assert.True(snd.SequenceEqual(new[] { 43, 44 }));
-            Assert.True(thd.SequenceEqual(new[] { 44, 45 }));
+            Assert.True(fst.SequenceEqual([42]));
+            Assert.True(snd.SequenceEqual([43, 44]));
+            Assert.True(thd.SequenceEqual([44, 45]));
         }
 
         [TestMethod]
@@ -289,10 +289,10 @@ namespace ReactiveTests.Tests
                 subscribeOnCtx = ReferenceEquals(addCtx, ctx);
 
                 src.OnBar(42);
-                fstNext = res.SequenceEqual(new[] { 42 });
+                fstNext = res.SequenceEqual([42]);
 
                 src.OnBar(43);
-                sndNext = res.SequenceEqual(new[] { 42, 43 });
+                sndNext = res.SequenceEqual([42, 43]);
 
                 var u = new Thread(() =>
                 {
@@ -309,7 +309,7 @@ namespace ReactiveTests.Tests
                 disposeOnCtx = ReferenceEquals(remCtx, ctx);
 
                 src.OnBar(44);
-                thdNext = res.SequenceEqual(new[] { 42, 43 });
+                thdNext = res.SequenceEqual([42, 43]);
             });
 
             Assert.True(beforeSubscribeNull);

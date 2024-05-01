@@ -40,6 +40,7 @@ namespace ReactiveTests.Tests
         /// </summary>
         static ArgumentValidationTest()
         {
+#pragma warning disable IDE0300 // Simplify collection initialization. We want to be clear about what kinds of collections are in use in these tests.
             _defaultValues = new Dictionary<string, object>
             {
                 { "IObservable`1[Object]", Observable.Return(new object()) },
@@ -269,6 +270,7 @@ namespace ReactiveTests.Tests
 
                 { "Func`17[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16) => null) }
             };
+#pragma warning restore IDE0300 // Simplify collection initialization
         }
 
         #endregion

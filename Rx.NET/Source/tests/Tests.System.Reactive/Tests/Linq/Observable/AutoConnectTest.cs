@@ -12,6 +12,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Assert = Xunit.Assert;
 
+#pragma warning disable IDE0028 // Simplify collection initialization. Using this in Assert.Equals makes it unclear what types are actually in use.
+
 namespace ReactiveTests.Tests
 {
     [TestClass]

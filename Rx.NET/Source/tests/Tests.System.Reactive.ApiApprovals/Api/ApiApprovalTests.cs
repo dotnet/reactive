@@ -50,7 +50,7 @@ namespace ReactiveTests.Tests.Api
         {
             ApiGeneratorOptions options = new()
             {
-                AllowNamespacePrefixes = new[] { "System", "Microsoft" }
+                AllowNamespacePrefixes = ["System", "Microsoft"]
             };
             return Filter(ApiGenerator.GeneratePublicApi(assembly, options));
         }

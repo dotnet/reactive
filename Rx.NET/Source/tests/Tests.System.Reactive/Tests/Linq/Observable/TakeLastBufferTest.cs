@@ -146,7 +146,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(650, lst => lst.SequenceEqual(new[] { 9 })),
+                OnNext<IList<int>>(650, lst => lst.SequenceEqual([9])),
                 OnCompleted<IList<int>>(650)
             );
 
@@ -240,7 +240,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(650, lst => lst.SequenceEqual(new[] { 7, 8, 9 })),
+                OnNext<IList<int>>(650, lst => lst.SequenceEqual([7, 8, 9])),
                 OnCompleted<IList<int>>(650)
             );
 
@@ -396,7 +396,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(240, lst => lst.SequenceEqual(new[] { 2, 3 })),
+                OnNext<IList<int>>(240, lst => lst.SequenceEqual([2, 3])),
                 OnCompleted<IList<int>>(240)
             );
 
@@ -454,7 +454,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(300, lst => lst.SequenceEqual(new[] { 6, 7, 8, 9 })),
+                OnNext<IList<int>>(300, lst => lst.SequenceEqual([6, 7, 8, 9])),
                 OnCompleted<IList<int>>(300)
             );
 
@@ -508,7 +508,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(230, lst => lst.SequenceEqual(new[] { 1, 2 })),
+                OnNext<IList<int>>(230, lst => lst.SequenceEqual([1, 2])),
                 OnCompleted<IList<int>>(230)
             );
 
