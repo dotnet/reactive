@@ -28,11 +28,27 @@ If that last fact has changed—if the BCL team _is_ now open to moving this cod
 
 ### Compatibility
 
+There are two options. The new built-in library could maintain compatibility with the published library, and we could release a new version of the `System.Linq.Async` package with type forwarders for newer runtimes. Or it could make no such attempt
+
+#### Pros of non-compatibility
+
+[Stephen Toub commented](https://github.com/dotnet/reactive/pull/2102#issuecomment-2090886494) on an earlier draft of this document, saying:
+
+>  were a bunch of choices made in the APIs exposed here that we would not want to bring in, e.g. an AggregateAsync method is fine, but not AggregateAwaitAsync or AggregateAwaitWithCancellationAsync... that's simply not how we'd choose to expose such functionality. We would also be able to design the new methods taking into account features that didn't previously exist, e.g. generic math
+
+Also, there are significant dangers in attempting to make functionality available through a public NuGet package when that functionality is also built into some but not all versions of .NET. If you ever had to deal with the [problems with `System.Net.Http` 4.1.1-4.3.0](https://github.com/dotnet/runtime/issues/20777) you will know how painful it is when packages get this wrong.
+
+#### Pros of compatibility
+
 The existing `System.Linq.Async` library is widely used: it has had 126 million downloads as of May 2024. Although it enjoys no official support from Microsoft, there are some factors that may cause people to perceive it otherwise—its name starts with `System`, and the package gets a blue tick followed by "by .NET Foundation" which strongly suggests that it's part of .NET, even though it isn't. (People continue to believe that Rx.NET is still a Microsoft thing, well over a decade after that stopped being true.) The Microsoft Developer YouTube channel positioned this library as "how to use LINQ with IAsyncEnumerable" in https://www.youtube.com/watch?v=Ktl8K2b1-WU and didn't make it at all clear that this is just a community-supported open source project.
 
-We should therefore consider what it would mean for existing users of this library if the code were to migrate into the .NET runtime libraries. Given its widespread usage and the inaccurate but widespread perception that the existing `System.Linq.Async` is a Microsoft thing, our view is that we want to avoid breaking changes. Projects already using `System.Linq.Async` should be able to upgrade to whichever version of .NET incorporates this functionality without needing to change anything in their code. Projects that have acquired a dependency on this package transitively, without the developers being aware that they've done so, shouldn't get any nasty surprises as a result of this change.
+Also, this part of David Fowler's original message is relevant:
 
-Ideally, we would like the .NET runtime libraries to offer a `System.Linq.Async` assembly with a public API fully compatible with the existing library. If this were to go into, say, .NET 10.0, we would publish a new version of the `System.Linq.Async` NuGet package with a `net10.0` target consisting entirely of type forwarders pointing into the .NET runtime library implementation.
+> we’re not adding async LINQ to the BCL and it’s because this package already does that
+
+We should therefore consider what it would mean for existing users of this library if the code were to migrate into the .NET runtime libraries. Given its widespread usage and the inaccurate but widespread perception that the existing `System.Linq.Async` is a Microsoft thing, there is a strong case for avoiding breaking changes. Ideally, projects already using `System.Linq.Async` should be able to upgrade to whichever version of .NET incorporates this functionality without needing to change anything in their code. Projects that have acquired a dependency on this package transitively without the developers being aware that they've done so shouldn't get any nasty surprises as a result of this change.
+
+The .NET runtime libraries could offer a `System.Linq.Async` assembly with a public API fully compatible with the existing library. If this were to go into, say, .NET 10.0, we would publish a new version of the `System.Linq.Async` NuGet package with a `net10.0` target consisting entirely of type forwarders pointing into the .NET runtime library implementation.
 
 That way, code using the existing package would continue to work and would automatically migrate to the .NET runtime implementation in applications that target versions of .NET that have `System.Linq.Async` built in. Developers using such versions of .NET could remove the reference to the `System.Linq.Async` package if they wanted, but would not be required to. 
 
@@ -42,15 +58,62 @@ Ideally, if projects retain a reference to the `System.Linq.Async` package that 
 
 ## Proposal
 
-The basic changes would be to to create a new `System.Linq.Async` folder in the [`src/libraries`](https://github.com/dotnet/runtime/tree/main/src/libraries) folder in the .NET Runtime repository, and then move the code as follows:
+This section describes the proposed approach.
+
+### Not backwards compatible
+
+[Stephen Toub's comment](https://github.com/dotnet/reactive/pull/2102#issuecomment-2090886494) seems to make it fairly clear that binary compatibility is not going to happen.
+
+> a) there would be breaking changes (both source and binary) and b) the existing types could not just be type-forwarded to the new ones
+
+So async LINQ functionality built into the .NET runtime libraries would be a new API. There would be no binary compatibility, and no attempt to ensure source compatibility. There are likely to be some specific examples that do not change, but some definitely would change.
+
+For the most part this simplifies, things, but it does also cause some problems that we need to anticipate.
+
+### Renaming Ix's `System.Linq.Async`
+
+Since there is to be no compatibility between the current `System.Linq.Async` provided by Ix.NET, and any future .NET runtime implementation, we believe that it would be a good idea to change the existing component name and namespaces. The naming currently strongly implies that this is an official Microsoft component, which it is not. People may also think there's a guarantee that these APIs will not change; not only is there no such guarantee, we can be sure that they _will_ change if the .NET team builds async LINQ into the runtime libraries.
+
+The fact that the extension methods are defined in `System.Linq` will create a problem if a built-in implementation does ever appear. Today, code using Ix.NET's `System.Linq.Async` can write this sort of thing:
+
+```cs
+public async Task<bool> UseIae(IAsyncEnumerable<int> iae)
+{
+    return await iae.AllAsync(x => x % 2 == 0);
+}
+```
+
+Since .NET 8.0, new projects have a setting that generates a `global using global::System.Linq;` statement, so you don't even need to write `using System.Linq;` for that `AllAsync` extension method to be available. But imagine some future .NET version that has async LINQ built in: that will also almost certainly define extension methods for `IAsyncEnumerable<T>` in the `System.Linq` namespace.
+
+The effect will be that any project containing code like that, and which upgrades to this hypothetical new version of .NET, will no longer compile. This `AllAsync` method will now be ambiguous: it could refer either to the implementation in `System.Linq.Async` or the new implementation supplied by the .NET runtime. There is no convenient way to disambiguate extension methods when this happens.
+
+In some cases developers might be able to resolve this by removing the reference to `System.Linq.Async`, but if they acquired that transitively, they won't be able to unless they either stop using some other component, or can induce the author of that component to release a new version that doesn't depend on `System.Linq.Async`.
+
+There's a particularly insidious variation on this theme in which an application had never attempted to use `System.Linq.Async` directly, but had a transitive reference to it, and then some time later starts trying to use the new async LINQ built into .NET. To the compiler, this is basically the same situation as the example above—a call to `AllAsync` will produce an error because it is ambiguous. But to the developer it looks a bit different. In the earlier example it's "Well I was using that `System.Linq.Async` to do this before, but I now need to make some adjustments because this is now built into .NET." But in this second scenario, it's a case of "What is this `System.Linq.Async` library, and how can a library with that name be _preventing_ me from using async LINQ?" If such a developer was unfamiliar with the history of these libraries (and why would they know about that?) this will be baffling and vexing.
+
+We can pre-emptively prevent this by deprecating the existing `System.Linq.Async`, and releasing a new library which is identical except for its name and namespaces. We've not yet picked a name, but imagine we called the package `LinqAsyncExtensions`, and we put these extension methods in the `AsyncExtensions.Linq` namespace. Anyone using `System.Linq.Async` today would see in the NuGet package explorer that the package has been deprecated, and that they are being asked to move to `LinqAsyncExtensions`. We would provide documentation explaining the need to add a `using AsyncExtensions.Linq;` declaration. This means that if in the future, .NET ships async LINQ, this code, and also anything depending on this code, will be able to use the .NET async LINQ implementation with `using System.Linq;`. Our implementation won't cause conflicts because it will be visible only if you ask for it explicitly through the `AsyncExtensions.Linq` namespace.
+
+This change would also clarify that `System.Linq.Async` is not, and never has been, an officially supported component from Microsoft. This should help set more realistic expectations around this component.
+
+It would also make it possible for us to produce a version of `LinqAsyncExtensions` that had a target which, on versions of .NET new enough to have built-in async LINQ, simply deferred to that. (This would not be type forwarding. It would reduce `LinqAsyncExtensions` to a facade over the .NET runtime implementation.) This would enable `LinqAsyncExtensions` to make life easier for people who need to target multiple versions of .NET, where only some have the built-in async LINQ. They could program against the single API offered by `LinqAsyncExtensions`, knowing that this will defer to the high-quality Microsoft-supplied implementation where that is available.
+
+
+### Code contribution
+
+It is not a given that a future .NET runtime library implementation of async LINQ to objects would be based on our existing implementation. It's possible that the .NET team would decide, after reviewing our code, that it does not meet current performance requirements, and that it would be less effort to re-implement it from the ground up than to try to adapt the existing code.
+
+However, it might also be the case that they would consider the current code to be an adequate starting point. In that case, the basic changes would be to move the code into a folder under in the [`src/libraries`](https://github.com/dotnet/runtime/tree/main/src/libraries) folder in the .NET Runtime repository (either a new `System.Linq.Async` folder, or possibly into the existing `System.Linq` folder) as follows:
 
 | Existing code | New location in .NET Runtime repository |
 |--|--|
-| [`Ix.NET/Source/System.Linq.Async`](https://github.com/dotnet/reactive/tree/main/Ix.NET/Source/System.Linq.Async) folder | `src` subfolder in the new `System.Linq.Async`|
-| [`Ix.NET/Source/System.Linq.Async.Tests`](https://github.com/dotnet/reactive/tree/main/Ix.NET/Source/System.Linq.Async.Tests) folder | `tests` subfolder in the new `System.Linq.Async` |
-| N/A | a new `System.Linq.Async.cs` file in the `ref` subfolder of the new `System.Linq.Async` |
+| [`Ix.NET/Source/System.Linq.Async`](https://github.com/dotnet/reactive/tree/main/Ix.NET/Source/System.Linq.Async) folder | `src` subfolder either in the existing `System.Linq` folder or in a new `System.Linq.Async`|
+| [`Ix.NET/Source/System.Linq.Async.Tests`](https://github.com/dotnet/reactive/tree/main/Ix.NET/Source/System.Linq.Async.Tests) folder | `tests` subfolder in the existing `System.Linq` folder or in a new `System.Linq.Async` |
+| N/A | a new `System.Linq.Async.cs` file in the `ref` subfolder of `System.Linq[.Async]` |
+
+This would be a starting point, but we expect that significant work would then be required to meet the .NET team's current quality bars.
 
 (**Note**: although there is a `Source/refs` subfolder that purports to build ref assemblies, this relies on building the existing source with the `REFERENCE_ASSEMBLY` preprocessor symbold defined. The `System.Linq.Async` project completely ignores this symbol, so the 'reference' assembly for that ends up containing all of the code. In any case, the .NET runtime library seems to define reference assemblies explicitly, so that the public API is specified separately from the implementation. We would need to do the same. This shouldn't be too difficult, though, because we already extract something that looks a lot like this would need to in the tests that verify that we haven't introduced changes to the public API by accident.)
+
 
 ## Use of T4 templates
 
@@ -99,17 +162,22 @@ The non-flat design was ultimately chosen, for reasons that are lost in the hist
 
 It doesn't seem useful to retain this flexibility now. The purpose of this seems to be to enable prototypes with both styles to be fully developed, and to enable the choice of style to be deferred right until the last moment. But the first non-preview version shipped years ago, so the 'last moment' was approximate half a decade in the past. This code generator now just adds complexity to the code base. (It's not as though it's generating multiple forms of the same API. It simply decides on the name for the single public facade of the internal implementation for each method that uses it.)
 
-The one question is: does the BCL team agree with the choice of a non-flat API? We argued above that we should maintain binary and source compatibility: existing code using the current `System.Linq.Async` should not be broken by its migration into the .NET runtime libraries. Obviously this is only possible if we don't change the public API. However, that would ultimately be a decision for the BCL team. We will be leaving this code generator in place for now, but if the BCL team accepts the public API in its current form, we would remove this code generator before submitting the code for inclusion in the .NET runtime repository.
+The one question is: does the BCL team agree with the choice of a non-flat API? Based on Stephen Toub's feedback, the answer appears to be: no. So we'd need to make changes here in any case.
 
 
-### Conform to .NET runtime library coding standards
+### Conform to .NET runtime library standards
 
 Although everything in the Rx.NET repo started out as a Microsoft project, it became a community supported open source project over a decade ago, so it seems likely that the coding standards in this repo and those for the .NET runtime repository will have drifted apart somewhat in that time.
 
-So we expect some changes to be necessary to make this code feel like part of the .NET runtime library source tree. But we expect this to be superficial.
+#### Superficial standards
+
+So we expect some changes to be necessary to make this code feel like part of the .NET runtime library source tree when it comes to things like folder layout, project file structure, and naming conventions. But we expect this to be superficial.
 
 One oversight we have noticed in writing up this proposal is that our code is missing doc comments on some of the 'deep cancellation' methods. 'Deep cancellation' was the name for the feature by which operators that accept application-defined callbacks (e.g. `Where`) were able to work with callbacks which took a `CancellationToken`. (All our async operators are cancellable; the 'deep' cancelation meant the ability to forward that to user callbacks. For some operators this wasn't totally straightforward, and it looks like this was, at one point, an experimental feature. However, it seems that it now ships, so although there's a compiler symbol you can set to disable it, we never do that.) We would need to fill that in.
 
+#### Code quality standards
+
+The existing `System.Linq.Async` was written many years ago, and with less sensitivity to efficiency (especially around memory allocation) than is the norm with modern library. It seems likely that substantial changes would be necessary to meet current expectations around performance.
 
 ### Parity with LINQ to Objects
 
