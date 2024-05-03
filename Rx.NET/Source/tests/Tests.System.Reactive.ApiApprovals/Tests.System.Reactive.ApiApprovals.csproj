@@ -33,7 +33,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="DiffPlex" Version="1.7.2" />
-    <PackageReference Include="PublicApiGenerator" Version="11.0.0" />
+    <PackageReference Include="PublicApiGenerator" Version="11.1.0" />
   </ItemGroup>
 
   <ItemGroup>
