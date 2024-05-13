@@ -15,22 +15,16 @@ namespace Tests
     {
         protected static readonly IAsyncEnumerable<int> Return42 = new[] { 42 }.ToAsyncEnumerable();
 
-        protected async Task AssertThrowsAsync<TException>(Task t)
+        protected async Task<TException> AssertThrowsAsync<TException>(Task t)
             where TException : Exception
         {
-            await Assert.ThrowsAsync<TException>(() => t);
+            return await Assert.ThrowsAsync<TException>(() => t);
         }
 
         protected async Task AssertThrowsAsync(Task t, Exception e)
         {
-            try
-            {
-                await t;
-            }
-            catch (Exception ex)
-            {
-                Assert.Same(e, ex);
-            }
+            var ex = await Assert.ThrowsAnyAsync<Exception>(() => t);
+            Assert.Same(e, ex);
         }
 
         protected Task AssertThrowsAsync<T>(ValueTask<T> t, Exception e)
