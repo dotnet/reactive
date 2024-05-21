@@ -7,5 +7,6 @@
   ],
   "nugetPackageVersion":{
     "semVer": 2
-  }
+  },
+  "versionHeightOffset": -8
 }
