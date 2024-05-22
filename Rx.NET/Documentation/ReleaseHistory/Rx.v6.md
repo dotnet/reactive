@@ -1,8 +1,13 @@
 # Rx Release History v6.0
 
-## v6.0.1-preview
+## v6.0.1
 
-This release fixes [Issue #1942: "AOT compilation produces single trim analysis warning"](https://github.com/dotnet/reactive/issues/1942)
+This release fixes:
+
+* [Issue #1942: "AOT compilation produces single trim analysis warning"](https://github.com/dotnet/reactive/issues/1942)
+* [Issue #2005: "Observable completion exhibits O(n^2) behavior in GroupBy+[SelectMany/Merge] in the number of groups"](https://github.com/dotnet/reactive/issues/2005)
+
+Note: the test suite now tests on .NET 8.0. No changes were required as a result of this.
 
 ## v6.0.0
 
