@@ -29,7 +29,7 @@
     specific Windows version.
 -->
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.3.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.4.3" />
     <PackageReference Include="MSTest.TestFramework" Version="3.3.1" />
     <PackageReference Include="xunit.assert" Version="2.8.0" />
     <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
