@@ -127,10 +127,10 @@ namespace System.Linq
                             ++_index;
 
                             var enumerator = enumerable.GetAsyncEnumerator(_cancellationToken);
+                            await SetEnumeratorAsync(enumerator).ConfigureAwait(false);
 
                             if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
-                                await SetEnumeratorAsync(enumerator).ConfigureAwait(false);
                                 StoreFirst();
 
                                 _state = AsyncIteratorState.Iterating;
