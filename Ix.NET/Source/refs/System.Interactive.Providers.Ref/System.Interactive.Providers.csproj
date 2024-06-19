@@ -5,11 +5,10 @@
     <AssemblyTitle>Interactive Extensions - Providers Library</AssemblyTitle>
     <TargetFrameworks>net4.8;netstandard2.1;net6.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
-  <AssemblyName>System.Interactive.Providers</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\System.Interactive.Ref\System.Interactive.Ref.csproj" />
+    <ProjectReference Include="..\System.Interactive.Ref\System.Interactive.csproj" />
   </ItemGroup>
 
   <ItemGroup>
