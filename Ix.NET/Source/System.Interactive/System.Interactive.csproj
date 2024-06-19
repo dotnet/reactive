@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Properties\System.Interactive.rd.xml" />
-    <ReferenceAssemblyProjectReference Include="..\refs\System.Interactive.Ref\System.Interactive.Ref.csproj" ReferenceOutputAssembly="false" />
+    <ReferenceAssemblyProjectReference Include="..\refs\System.Interactive.Ref\System.Interactive.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
   
 </Project>

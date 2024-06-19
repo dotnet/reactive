@@ -3,7 +3,6 @@
   <PropertyGroup>
     <Description>Interactive Extensions Main Library used to express queries over enumerable sequences.</Description>
     <AssemblyTitle>Interactive Extensions - Main Library</AssemblyTitle>
-    <AssemblyName>System.Interactive</AssemblyName>
     <Authors>Microsoft</Authors>
     <TargetFrameworks>net4.8;netstandard2.1;net6.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>

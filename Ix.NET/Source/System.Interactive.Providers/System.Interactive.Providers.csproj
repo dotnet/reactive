@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\System.Interactive\System.Interactive.csproj" />
-    <ReferenceAssemblyProjectReference Include="..\refs\System.Interactive.Providers.Ref\System.Interactive.Providers.Ref.csproj" ReferenceOutputAssembly="false" />
+    <ReferenceAssemblyProjectReference Include="..\refs\System.Interactive.Providers.Ref\System.Interactive.Providers.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>

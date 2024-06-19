@@ -53,13 +53,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Refs", "Refs", "{A3D72E6E-4
 		refs\Directory.build.props = refs\Directory.build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Ref", "refs\System.Interactive.Ref\System.Interactive.Ref.csproj", "{2EC0C302-B029-4DDB-AC91-000BF11006AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive", "refs\System.Interactive.Ref\System.Interactive.csproj", "{2EC0C302-B029-4DDB-AC91-000BF11006AD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Providers.Ref", "refs\System.Interactive.Providers.Ref\System.Interactive.Providers.Ref.csproj", "{5DF341BE-B369-4250-AFD4-604DE8C95E45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Providers", "refs\System.Interactive.Providers.Ref\System.Interactive.Providers.csproj", "{5DF341BE-B369-4250-AFD4-604DE8C95E45}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks.System.Interactive", "Benchmarks.System.Interactive\Benchmarks.System.Interactive.csproj", "{3285529A-8227-4D40-B524-1A1F919F0E7B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Linq.Async.Ref", "refs\System.Linq.Async.Ref\System.Linq.Async.Ref.csproj", "{1754B36C-D0DB-4E5D-8C30-1F116046DC0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Linq.Async", "refs\System.Linq.Async.Ref\System.Linq.Async.csproj", "{1754B36C-D0DB-4E5D-8C30-1F116046DC0F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Linq.Async.SourceGenerator", "System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj", "{5C26D649-5ED4-49EE-AFBD-8FA8F12C4AE4}"
 EndProject
