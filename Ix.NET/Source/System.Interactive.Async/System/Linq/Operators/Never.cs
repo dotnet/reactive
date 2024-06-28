@@ -19,7 +19,7 @@ namespace System.Linq
 
         private sealed class NeverAsyncEnumerable<TValue> : IAsyncEnumerable<TValue>
         {
-            internal static readonly NeverAsyncEnumerable<TValue> Instance = new NeverAsyncEnumerable<TValue>();
+            internal static readonly NeverAsyncEnumerable<TValue> Instance = new();
 
             public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken)
             {
