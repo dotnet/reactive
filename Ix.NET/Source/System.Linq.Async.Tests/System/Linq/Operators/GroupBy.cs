@@ -826,7 +826,7 @@ namespace Tests
             public string Key { get; }
             public int Item { get; }
 
-            public bool Equals(Kvp other)
+            public bool Equals(Kvp? other)
             {
                 if (other is null) return false;
                 if (ReferenceEquals(this, other)) return true;
