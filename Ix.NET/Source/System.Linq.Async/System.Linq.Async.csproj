@@ -1,10 +1,17 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
     <Title>System.Linq.Async</Title>    
     <PackageTags>LINQ;async;streams;query</PackageTags>
     <Description>Provides support for Language-Integrated Query (LINQ) over IAsyncEnumerable&lt;T&gt; sequences.</Description>  
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--
+    IDE0301 uses collection expressions in places where they don't necessarily have the same effect, which we want to avoid in case of possible compatibility issues.
+    IDE0305 wants to turn things like list.ToArray into [..list], which we don't find to be an improvement in readability. -->
+    <NoWarn>$(NoWarn);IDE0301;IDE0305</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
