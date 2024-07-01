@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net48;net8.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net48;net8.0;net6.0;netcoreapp3.1</TargetFrameworks>
 
     <!--
     CA1510: Use ArgumentNullException.ThrowIfNull - not available on .NET 4.8

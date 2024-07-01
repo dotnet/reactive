@@ -819,7 +819,13 @@ namespace Tests
 
 #endif
 
+#if NET8_0_OR_GREATER
+#pragma warning disable CA1859 // Use specific iterator type for perf. Not really necessary for tests.
+#endif
         private static IAsyncEnumerable<int> ToAsyncEnumerable(int[] xs) => new MyIterator(xs);
+#if NET8_0_OR_GREATER
+#pragma warning restore CA1859
+#endif
 
         private class MyIterator : IAsyncEnumerable<int>
         {
@@ -844,7 +850,13 @@ namespace Tests
             }
         }
 
+#if NET8_0_OR_GREATER
+#pragma warning disable CA1859 // Use specific iterator type for perf. Not really necessary for tests.
+#endif
         private static IAsyncEnumerable<int> ToAsyncEnumerableIList(int[] xs) => new MyIteratorIList(xs);
+#if NET8_0_OR_GREATER
+#pragma warning restore CA1859
+#endif
 
         private class MyIteratorIList : IAsyncEnumerable<int>, IList<int>
         {
