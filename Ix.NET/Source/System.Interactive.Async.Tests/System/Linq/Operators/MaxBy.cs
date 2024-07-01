@@ -41,7 +41,7 @@ namespace Tests
         [Fact]
         public async Task MaxBy2()
         {
-            var xs = new int[0].ToAsyncEnumerable().MaxByAsync(x => x / 2);
+            var xs = Array.Empty<int>().ToAsyncEnumerable().MaxByAsync(x => x / 2);
 
             await AssertThrowsAsync<InvalidOperationException>(xs.AsTask());
         }

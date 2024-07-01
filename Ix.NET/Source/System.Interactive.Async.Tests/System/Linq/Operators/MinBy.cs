@@ -41,7 +41,7 @@ namespace Tests
         [Fact]
         public async Task MinBy2Async()
         {
-            var xs = new int[0].ToAsyncEnumerable().MinByAsync(x => x / 2);
+            var xs = Array.Empty<int>().ToAsyncEnumerable().MinByAsync(x => x / 2);
 
             await AssertThrowsAsync<InvalidOperationException>(xs.AsTask());
         }

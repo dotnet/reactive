@@ -143,7 +143,7 @@ namespace Tests
             Assert.Equal(1, await ys.ElementAtAsync(0));
             Assert.Equal(2, await ys.ElementAtAsync(1));
 
-            Assert.Equal(new[] { 1, 2 }, await ys.ToArrayAsync());
+            Assert.Equal([1, 2], await ys.ToArrayAsync());
             Assert.Equal(new[] { 1, 2 }, await ys.ToListAsync());
         }
 
@@ -161,7 +161,7 @@ namespace Tests
             Assert.Equal(1, await ys.ElementAtAsync(0));
             Assert.Equal(2, await ys.ElementAtAsync(1));
 
-            Assert.Equal(new[] { 1, 2 }, await ys.ToArrayAsync());
+            Assert.Equal([1, 2], await ys.ToArrayAsync());
             Assert.Equal(new[] { 1, 2 }, await ys.ToListAsync());
         }
 
@@ -179,14 +179,14 @@ namespace Tests
             Assert.Equal(3, await ys.ElementAtAsync(0));
             Assert.Equal(4, await ys.ElementAtAsync(1));
 
-            Assert.Equal(new[] { 3, 4 }, await ys.ToArrayAsync());
+            Assert.Equal([3, 4], await ys.ToArrayAsync());
             Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
         }
 
         [Fact]
         public async Task Take_IAsyncPartition_Empty_Take()
         {
-            var xs = new int[0].ToAsyncEnumerable().Where(x => true);
+            var xs = Array.Empty<int>().ToAsyncEnumerable().Where(x => true);
             var ys = xs.Take(2);
 
             Assert.Equal(0, await ys.CountAsync());
@@ -233,7 +233,7 @@ namespace Tests
             Assert.Equal(1, await ys.ElementAtAsync(0));
             Assert.Equal(2, await ys.ElementAtAsync(1));
 
-            Assert.Equal(new[] { 1, 2 }, await ys.ToArrayAsync());
+            Assert.Equal([1, 2], await ys.ToArrayAsync());
             Assert.Equal(new[] { 1, 2 }, await ys.ToListAsync());
         }
 
@@ -251,7 +251,7 @@ namespace Tests
             Assert.Equal(1, await ys.ElementAtAsync(0));
             Assert.Equal(2, await ys.ElementAtAsync(1));
 
-            Assert.Equal(new[] { 1, 2 }, await ys.ToArrayAsync());
+            Assert.Equal([1, 2], await ys.ToArrayAsync());
             Assert.Equal(new[] { 1, 2 }, await ys.ToListAsync());
         }
 
@@ -269,14 +269,14 @@ namespace Tests
             Assert.Equal(3, await ys.ElementAtAsync(0));
             Assert.Equal(4, await ys.ElementAtAsync(1));
 
-            Assert.Equal(new[] { 3, 4 }, await ys.ToArrayAsync());
+            Assert.Equal([3, 4], await ys.ToArrayAsync());
             Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
         }
 
         [Fact]
         public async Task Take_IAsyncPartition_IList_Empty_Take()
         {
-            var xs = new int[0].ToAsyncEnumerable();
+            var xs = Array.Empty<int>().ToAsyncEnumerable();
             var ys = xs.Take(2);
 
             Assert.Equal(0, await ys.CountAsync());

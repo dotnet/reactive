@@ -63,7 +63,7 @@ namespace Tests
             Assert.Equal(2, await xs.Take(1024).FirstAsync());
             Assert.Equal(6, await xs.Take(1024).LastAsync());
 
-            Assert.Equal(new[] { 2, 3, 4, 5, 6 }, await xs.ToArrayAsync());
+            Assert.Equal([2, 3, 4, 5, 6], await xs.ToArrayAsync());
             Assert.Equal(new[] { 2, 3, 4, 5, 6 }, await xs.ToListAsync());
         }
 
