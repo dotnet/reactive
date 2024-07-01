@@ -13,7 +13,7 @@ namespace Tests
         [Fact]
         public void While_Arguments()
         {
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.While<int>(null, new[] { 1 }));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.While<int>(null, [1]));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.While<int>(() => true, null));
         }
 
@@ -22,7 +22,7 @@ namespace Tests
         {
             var x = 5;
             var res = EnumerableEx.While(() => x > 0, EnumerableEx.Defer(() => new[] { x }).Do(_ => x--)).ToList();
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 5, 4, 3, 2, 1 }));
+            Assert.True(Enumerable.SequenceEqual(res, [5, 4, 3, 2, 1]));
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace Tests
         {
             var x = 0;
             var res = EnumerableEx.While(() => x > 0, EnumerableEx.Defer(() => new[] { x }).Do(_ => x--)).ToList();
-            Assert.True(Enumerable.SequenceEqual(res, new int[0]));
+            Assert.True(Enumerable.SequenceEqual(res, []));
         }
     }
 }

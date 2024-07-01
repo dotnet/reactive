@@ -13,14 +13,14 @@ namespace Tests
         [Fact]
         public void Expand_Arguments()
         {
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Expand<int>(null, _ => new[] { _ }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Expand<int>(new[] { 1 }, null));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Expand<int>(null, _ => [_]));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Expand<int>([1], null));
         }
 
         [Fact]
         public void Expand1()
         {
-            var res = new[] { 0 }.Expand(x => new[] { x + 1 }).Take(10).ToList();
+            var res = new[] { 0 }.Expand(x => [x + 1]).Take(10).ToList();
             Assert.True(Enumerable.SequenceEqual(res, Enumerable.Range(0, 10)));
         }
 

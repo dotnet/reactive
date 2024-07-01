@@ -15,10 +15,10 @@ namespace Tests
         public void Distinct_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Distinct<int, int>(null, _ => _));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Distinct<int, int>(new[] { 1 }, null));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Distinct<int, int>([1], null));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Distinct<int, int>(null, _ => _, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Distinct<int, int>(new[] { 1 }, null, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Distinct<int, int>(new[] { 1 }, _ => _, null));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Distinct<int, int>([1], null, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Distinct<int, int>([1], _ => _, null));
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace Tests
         public void Distinct2()
         {
             var res = Enumerable.Range(0, 10).Distinct(x => x % 5, new MyEqualityComparer()).ToList();
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 0, 1 }));
+            Assert.True(Enumerable.SequenceEqual(res, [0, 1]));
         }
 
         private sealed class MyEqualityComparer : IEqualityComparer<int>

@@ -13,7 +13,7 @@ namespace Tests
         [Fact]
         public void Using_Arguments()
         {
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Using<int, MyDisposable>(null, d => new[] { 1 }));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Using<int, MyDisposable>(null, d => [1]));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Using<int, MyDisposable>(() => new MyDisposable(), null));
         }
 
