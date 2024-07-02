@@ -21,4 +21,8 @@
     <Compile Update="System\Linq\AsyncQueryableEx.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="AsyncQueryableEx.Generated.tt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
 </Project>

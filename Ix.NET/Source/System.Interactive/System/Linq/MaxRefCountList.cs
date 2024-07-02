@@ -9,7 +9,7 @@ namespace System.Linq
 {
     internal sealed class MaxRefCountList<T> : IRefCountList<T>
     {
-        private readonly IList<T> _list = new List<T>();
+        private readonly IList<T> _list = [];
 
         public void Clear() => _list.Clear();
 

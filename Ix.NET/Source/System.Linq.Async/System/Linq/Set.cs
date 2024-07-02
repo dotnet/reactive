@@ -145,9 +145,11 @@ namespace System.Linq
 
         private struct Slot
         {
+#pragma warning disable IDE1006 // Naming Styles
             internal int _hashCode;
             internal int _next;
             internal TElement _value;
+#pragma warning restore IDE1006 // Naming Styles
         }
     }
 }

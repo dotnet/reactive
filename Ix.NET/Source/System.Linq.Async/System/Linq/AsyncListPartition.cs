@@ -147,13 +147,7 @@ namespace System.Linq
             var count = Count;
             if (count == 0)
             {
-                return new ValueTask<TSource[]>(
-#if NO_ARRAY_EMPTY
-                    EmptyArray<TSource>.Value
-#else
-                    Array.Empty<TSource>()
-#endif
-                );
+                return new ValueTask<TSource[]>([]);
             }
 
             var array = new TSource[count];
@@ -170,7 +164,7 @@ namespace System.Linq
             var count = Count;
             if (count == 0)
             {
-                return new ValueTask<List<TSource>>(new List<TSource>());
+                return new ValueTask<List<TSource>>([]);
             }
 
             var list = new List<TSource>(count);

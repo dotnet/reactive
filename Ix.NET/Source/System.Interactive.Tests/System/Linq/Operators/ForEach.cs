@@ -14,9 +14,9 @@ namespace Tests
         public void ForEach_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.ForEach<int>(null, x => { }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.ForEach<int>(new[] { 1 }, default(Action<int>)));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.ForEach<int>([1], default(Action<int>)));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.ForEach<int>(null, (x, i) => { }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.ForEach<int>(new[] { 1 }, default(Action<int, int>)));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.ForEach<int>([1], default(Action<int, int>)));
         }
 
         [Fact]

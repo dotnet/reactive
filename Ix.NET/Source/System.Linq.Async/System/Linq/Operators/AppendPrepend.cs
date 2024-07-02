@@ -241,7 +241,7 @@ namespace System.Linq
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var list = count == -1 ? new List<TSource>() : new List<TSource>(count);
+                var list = count == -1 ? [] : new List<TSource>(count);
 
                 if (!_appending)
                 {
@@ -429,7 +429,7 @@ namespace System.Linq
             public override async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
                 var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
-                var list = count == -1 ? new List<TSource>() : new List<TSource>(count);
+                var list = count == -1 ? [] : new List<TSource>(count);
                 for (var n = _prepended; n != null; n = n.Linked)
                 {
                     list.Add(n.Item);

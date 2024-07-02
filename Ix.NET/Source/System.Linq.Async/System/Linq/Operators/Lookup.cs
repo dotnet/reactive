@@ -35,11 +35,7 @@ namespace System.Linq.Internal
                     return grouping;
                 }
 
-#if NO_ARRAY_EMPTY
-                return EmptyArray<TElement>.Value;
-#else
                 return Array.Empty<TElement>();
-#endif
             }
         }
 
@@ -317,11 +313,7 @@ namespace System.Linq.Internal
                     return grouping;
                 }
 
-#if NO_ARRAY_EMPTY
-                return EmptyArray<TElement>.Value;
-#else
                 return Array.Empty<TElement>();
-#endif
             }
         }
 

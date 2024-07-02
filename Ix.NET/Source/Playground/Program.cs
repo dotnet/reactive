@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#pragma warning disable IDE0051 // Remove unused private members - all used via reflection
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,22 +12,22 @@ using System.Threading.Tasks;
 
 namespace Playground
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             RunDemos();
         }
 
         [Demo(0, "Random experimentation")]
-        static async Task Experiment()
+        private static async Task Experiment()
         {
             // Add test code here
             await Task.Yield(); // Suppress CS1998
         }
 
         [Demo(11, "LINQ to Objects for IEnumerable<T>")]
-        static void Linq()
+        private static void Linq()
         {
             var xs = new List<int> { 1, 2, 3 };
             var ys = xs.Where(x => x % 2 == 0);
@@ -37,7 +39,7 @@ namespace Playground
         }
 
         [Demo(12, "LINQ to Objects for IQueryable<T>")]
-        static void LinqQueryable()
+        private static void LinqQueryable()
         {
             var xs = new List<int> { 1, 2, 3 }.AsQueryable();
             var ys = xs.Where(x => x % 2 == 0);
@@ -49,7 +51,7 @@ namespace Playground
         }
 
         [Demo(21, "LINQ to Objects for IEnumerable<T> - Interactive Extensions")]
-        static void Ix()
+        private static void Ix()
         {
             var xs = new List<int> { 1, 2, 3 };
             var ys = xs.Distinct(x => x % 2);
@@ -61,7 +63,7 @@ namespace Playground
         }
 
         [Demo(22, "LINQ to Objects for IQueryable<T> - Interactive Extensions")]
-        static void IxQueryable()
+        private static void IxQueryable()
         {
             var xs = new List<int> { 1, 2, 3 }.AsQueryable();
             var ys = xs.Distinct(x => x % 2);
@@ -73,7 +75,7 @@ namespace Playground
         }
 
         [Demo(31, "LINQ to Objects for IAsyncEnumerable<T>")]
-        static async Task AsyncLinq()
+        private static async Task AsyncLinq()
         {
             var xs = new List<int> { 1, 2, 3 };
             var ys = xs.ToAsyncEnumerable().Where(x => x % 2 == 0);
@@ -103,7 +105,7 @@ namespace Playground
         }
 
         [Demo(32, "LINQ to Objects for IAsyncQueryable<T>")]
-        static async Task AsyncLinqQueryable()
+        private static async Task AsyncLinqQueryable()
         {
             var xs = new List<int> { 1, 2, 3 }.AsQueryable();
             var ys = xs.ToAsyncEnumerable().Where(x => x % 2 == 0);
@@ -133,7 +135,7 @@ namespace Playground
         }
 
         [Demo(41, "LINQ to Objects for IAsyncEnumerable<T> - Interactive Extensions")]
-        static async Task AsyncIx()
+        private static async Task AsyncIx()
         {
             var xs = new List<int> { 1, 2, 3 };
             var ys = xs.ToAsyncEnumerable().Distinct(x => x % 2);
@@ -152,7 +154,7 @@ namespace Playground
         }
 
         [Demo(42, "LINQ to Objects for IAsyncQueryable<T> - Interactive Extensions")]
-        static async Task AsyncIxQueryable()
+        private static async Task AsyncIxQueryable()
         {
             var xs = new List<int> { 1, 2, 3 }.AsQueryable();
             var ys = xs.ToAsyncEnumerable().Distinct(x => x % 2);
@@ -170,7 +172,7 @@ namespace Playground
 #endif
         }
 
-        static void RunDemos()
+        private static void RunDemos()
         {
             var methods = (from method in typeof(Program).GetTypeInfo().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
                            let demo = method.GetCustomAttribute<DemoAttribute>()
@@ -197,7 +199,7 @@ namespace Playground
                 while (retry)
                 {
                     Console.Write("Enter demo [C: Clear, X: Exit]: ");
-                    var input = Console.ReadLine().Trim().ToUpper();
+                    var input = Console.ReadLine()?.Trim().ToUpper();
 
                     switch (input)
                     {

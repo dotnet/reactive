@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information. 
 
 <#@ template debug="false" hostspecific="false" language="C#" #>
-<#@ assembly name="$(ProjectDir)\..\System.Linq.Async\bin\$(Configuration)\net461\Microsoft.Bcl.AsyncInterfaces.dll" #>
-<#@ assembly name="$(ProjectDir)\..\System.Linq.Async\bin\$(Configuration)\net461\System.Threading.Tasks.Extensions.dll" #>
-<#@ assembly name="$(ProjectDir)\..\System.Linq.Async\bin\$(Configuration)\net461\System.Linq.Async.dll" #>
+<#@ assembly name="$(ProjectDir)\..\System.Linq.Async\bin\$(Configuration)\net48\Microsoft.Bcl.AsyncInterfaces.dll" #>
+<#@ assembly name="$(ProjectDir)\..\System.Linq.Async\bin\$(Configuration)\net48\System.Threading.Tasks.Extensions.dll" #>
+<#@ assembly name="$(ProjectDir)\..\System.Linq.Async\bin\$(Configuration)\net48\System.Linq.Async.dll" #>
 <#@ output extension=".cs" #>
 <#
 var asyncEnumerableType = typeof(AsyncEnumerable);

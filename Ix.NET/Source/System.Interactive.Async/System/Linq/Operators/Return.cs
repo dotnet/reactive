@@ -33,11 +33,11 @@ namespace System.Linq
                 return new ReturnEnumerator(_value);
             }
 
-            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(1);
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new(1);
 
-            public ValueTask<TValue[]> ToArrayAsync(CancellationToken cancellationToken) => new ValueTask<TValue[]>(new[] { _value });
+            public ValueTask<TValue[]> ToArrayAsync(CancellationToken cancellationToken) => new([_value]);
 
-            public ValueTask<List<TValue>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<TValue>>(new List<TValue>(1) { _value });
+            public ValueTask<List<TValue>> ToListAsync(CancellationToken cancellationToken) => new([_value]);
 
             private sealed class ReturnEnumerator : IAsyncEnumerator<TValue>
             {

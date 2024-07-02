@@ -31,7 +31,7 @@ namespace Tests
         [Fact]
         public async Task ToArray_IAsyncIListProvider_Empty1()
         {
-            var xs = new int[0];
+            var xs = Array.Empty<int>();
             var res = xs.ToAsyncEnumerable().ToArrayAsync();
             Assert.True((await res).SequenceEqual(xs));
         }

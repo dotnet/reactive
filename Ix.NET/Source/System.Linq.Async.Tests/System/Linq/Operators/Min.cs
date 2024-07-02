@@ -359,7 +359,7 @@ namespace Tests
         [Fact]
         public async Task MinAsync_TSource_Value_Empty()
         {
-            var xs = new DateTimeOffset[0].ToAsyncEnumerable();
+            var xs = Array.Empty<DateTimeOffset>().ToAsyncEnumerable();
             await AssertThrowsAsync<InvalidOperationException>(xs.MinAsync().AsTask());
             await AssertThrowsAsync<InvalidOperationException>(xs.MinAsync(x => x).AsTask());
             await AssertThrowsAsync<InvalidOperationException>(xs.MinAwaitAsync(x => new ValueTask<DateTimeOffset>(x)).AsTask());
@@ -371,7 +371,7 @@ namespace Tests
         [Fact]
         public async Task MinAsync_TSource_NonValue_Empty()
         {
-            var xs = new string[0].ToAsyncEnumerable();
+            var xs = Array.Empty<string>().ToAsyncEnumerable();
             Assert.Null(await xs.MinAsync());
             Assert.Null(await xs.MinAsync(x => x));
             Assert.Null(await xs.MinAwaitAsync(x => new ValueTask<string>(x)));
@@ -383,7 +383,7 @@ namespace Tests
         [Fact]
         public async Task MinAsync_TSource_NullableValue_Empty()
         {
-            var xs = new DateTimeOffset?[0].ToAsyncEnumerable();
+            var xs = Array.Empty<DateTimeOffset?>().ToAsyncEnumerable();
             Assert.Null(await xs.MinAsync());
             Assert.Null(await xs.MinAsync(x => x));
             Assert.Null(await xs.MinAwaitAsync(x => new ValueTask<DateTimeOffset?>(x)));

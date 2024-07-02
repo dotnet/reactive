@@ -7,17 +7,11 @@ using System.Diagnostics;
 
 namespace System.Linq
 {
-    internal sealed class RefCountList<T> : IRefCountList<T>
+    internal sealed class RefCountList<T>(int readerCount) : IRefCountList<T>
     {
-        private readonly IDictionary<int, RefCount> _list;
+        private readonly IDictionary<int, RefCount> _list = new Dictionary<int, RefCount>();
 
-        public RefCountList(int readerCount)
-        {
-            ReaderCount = readerCount;
-            _list = new Dictionary<int, RefCount>();
-        }
-
-        public int ReaderCount { get; set; }
+        public int ReaderCount { get; set; } = readerCount;
 
         public void Clear() => _list.Clear();
 

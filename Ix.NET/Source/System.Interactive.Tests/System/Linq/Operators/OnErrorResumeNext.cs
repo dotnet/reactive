@@ -14,9 +14,9 @@ namespace Tests
         [Fact]
         public void OnErrorResumeNext_Arguments()
         {
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.OnErrorResumeNext<int>(null, new[] { 1 }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.OnErrorResumeNext<int>(new[] { 1 }, null));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.OnErrorResumeNext<int>(default(IEnumerable<int>[])));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.OnErrorResumeNext<int>(null, [1]));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.OnErrorResumeNext<int>([1], null));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.OnErrorResumeNext<int>(default));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.OnErrorResumeNext<int>(default(IEnumerable<IEnumerable<int>>)));
         }
 
@@ -27,7 +27,7 @@ namespace Tests
             var ys = new[] { 3, 4 };
 
             var res = xs.OnErrorResumeNext(ys);
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 1, 2, 3, 4 }));
+            Assert.True(Enumerable.SequenceEqual(res, [1, 2, 3, 4]));
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Tests
             var ys = new[] { 3, 4 };
 
             var res = xs.OnErrorResumeNext(ys);
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 1, 2, 3, 4 }));
+            Assert.True(Enumerable.SequenceEqual(res, [1, 2, 3, 4]));
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace Tests
             var zs = new[] { 5, 6 };
 
             var res = EnumerableEx.OnErrorResumeNext(xs, ys, zs);
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 1, 2, 3, 4, 5, 6 }));
+            Assert.True(Enumerable.SequenceEqual(res, [1, 2, 3, 4, 5, 6]));
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace Tests
             var zs = new[] { 5, 6 };
 
             var res = EnumerableEx.OnErrorResumeNext(xs, ys, zs);
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 1, 2, 3, 4, 5, 6 }));
+            Assert.True(Enumerable.SequenceEqual(res, [1, 2, 3, 4, 5, 6]));
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace Tests
             var ys = new[] { 3, 4 };
 
             var res = new[] { xs, ys }.OnErrorResumeNext();
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 1, 2, 3, 4 }));
+            Assert.True(Enumerable.SequenceEqual(res, [1, 2, 3, 4]));
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace Tests
             var ys = new[] { 3, 4 };
 
             var res = new[] { xs, ys }.OnErrorResumeNext();
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 1, 2, 3, 4 }));
+            Assert.True(Enumerable.SequenceEqual(res, [1, 2, 3, 4]));
         }
 
         private sealed class MyException : Exception

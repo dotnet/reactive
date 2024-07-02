@@ -14,7 +14,7 @@ namespace Tests
         public void Finally_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Finally<int>(null, () => { }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Finally<int>(new[] { 1 }, null));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Finally<int>([1], null));
         }
 
         [Fact]

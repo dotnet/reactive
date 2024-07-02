@@ -113,7 +113,7 @@ namespace System.Linq
 
         private sealed class MemoizedBuffer<T> : IBuffer<T>
         {
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
             private readonly IRefCountList<T> _buffer;
             private readonly IEnumerator<T> _source;
 
@@ -231,8 +231,7 @@ namespace System.Linq
                 }
                 finally
                 {
-                    if (_buffer != null)
-                        _buffer.Done(i + 1);
+                    _buffer?.Done(i + 1);
                 }
             }
         }

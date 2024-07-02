@@ -7,6 +7,11 @@
     <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- IDE0305 wants to turn things like list.ToArray into [..list], which we don't find to be an improvement in readability. -->
+    <NoWarn>$(NoWarn);IDE0305</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\System.Linq.Async\System\Error.cs" Link="System\Error.cs" />
     <Compile Include="..\System.Linq.Async\System\Linq\AsyncIterator.cs" Link="System\Linq\AsyncIterator.cs" />

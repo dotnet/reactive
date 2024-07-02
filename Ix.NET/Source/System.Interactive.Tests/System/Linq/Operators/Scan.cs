@@ -14,23 +14,23 @@ namespace Tests
         public void Scan_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Scan<int>(null, (x, y) => x + y));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Scan<int>(new[] { 1 }, null));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Scan<int>([1], null));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Scan<int, int>(null, 0, (x, y) => x + y));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Scan<int, int>(new[] { 1 }, 0, null));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Scan<int, int>([1], 0, null));
         }
 
         [Fact]
         public void Scan1()
         {
             var res = Enumerable.Range(0, 5).Scan((n, x) => n + x).ToList();
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 1, 3, 6, 10 }));
+            Assert.True(Enumerable.SequenceEqual(res, [1, 3, 6, 10]));
         }
 
         [Fact]
         public void Scan2()
         {
             var res = Enumerable.Range(0, 5).Scan(10, (n, x) => n - x).ToList();
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 10, 9, 7, 4, 0 }));
+            Assert.True(Enumerable.SequenceEqual(res, [10, 9, 7, 4, 0]));
         }
     }
 }

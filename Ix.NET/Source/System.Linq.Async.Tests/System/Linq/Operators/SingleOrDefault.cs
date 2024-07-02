@@ -29,7 +29,7 @@ namespace Tests
         [Fact]
         public async Task SingleOrDefaultAsync_Empty_IList()
         {
-            var res = new int[0].ToAsyncEnumerable().SingleOrDefaultAsync();
+            var res = Array.Empty<int>().ToAsyncEnumerable().SingleOrDefaultAsync();
             Assert.Equal(0, await res);
         }
 

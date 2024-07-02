@@ -167,19 +167,19 @@ namespace Tests
         {
             var customers = new List<Customer>
             {
-                new Customer { CustomerId = "ALFKI" },
-                new Customer { CustomerId = "ANANT" },
-                new Customer { CustomerId = "FISSA" },
+                new() { CustomerId = "ALFKI" },
+                new() { CustomerId = "ANANT" },
+                new() { CustomerId = "FISSA" },
             };
 
             var orders = new List<Order>
             {
-                new Order { OrderId = 1, CustomerId = "ALFKI"},
-                new Order { OrderId = 2, CustomerId = "ALFKI"},
-                new Order { OrderId = 3, CustomerId = "ALFKI"},
-                new Order { OrderId = 4, CustomerId = "FISSA"},
-                new Order { OrderId = 5, CustomerId = "FISSA"},
-                new Order { OrderId = 6, CustomerId = "FISSA"},
+                new() { OrderId = 1, CustomerId = "ALFKI"},
+                new() { OrderId = 2, CustomerId = "ALFKI"},
+                new() { OrderId = 3, CustomerId = "ALFKI"},
+                new() { OrderId = 4, CustomerId = "FISSA"},
+                new() { OrderId = 5, CustomerId = "FISSA"},
+                new() { OrderId = 6, CustomerId = "FISSA"},
             };
 
             var asyncResult = customers.ToAsyncEnumerable()
@@ -201,18 +201,18 @@ namespace Tests
         {
             var customers = new List<Customer>
             {
-                new Customer {CustomerId = "ANANT"},
-                new Customer {CustomerId = "ALFKI"},
-                new Customer {CustomerId = "FISSA"}
+                new() {CustomerId = "ANANT"},
+                new() {CustomerId = "ALFKI"},
+                new() {CustomerId = "FISSA"}
             };
             var orders = new List<Order>
             {
-                new Order { OrderId = 1, CustomerId = "ALFKI"},
-                new Order { OrderId = 2, CustomerId = "ALFKI"},
-                new Order { OrderId = 3, CustomerId = "ALFKI"},
-                new Order { OrderId = 4, CustomerId = "FISSA"},
-                new Order { OrderId = 5, CustomerId = "FISSA"},
-                new Order { OrderId = 6, CustomerId = "FISSA"},
+                new() { OrderId = 1, CustomerId = "ALFKI"},
+                new() { OrderId = 2, CustomerId = "ALFKI"},
+                new() { OrderId = 3, CustomerId = "ALFKI"},
+                new() { OrderId = 4, CustomerId = "FISSA"},
+                new() { OrderId = 5, CustomerId = "FISSA"},
+                new() { OrderId = 6, CustomerId = "FISSA"},
             };
 
             var asyncResult = customers.ToAsyncEnumerable()
@@ -245,7 +245,7 @@ namespace Tests
             public int OrderId { get; set; }
             public string? CustomerId { get; set; }
 
-            public bool Equals(CustomerOrder other)
+            public bool Equals(CustomerOrder? other)
             {
                 if (other is null) return false;
                 if (ReferenceEquals(this, other)) return true;

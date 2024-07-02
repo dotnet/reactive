@@ -113,7 +113,7 @@ namespace Tests
         [Fact]
         public async Task ToAsyncEnumerable_Enumerable_HashSet()
         {
-            var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
+            var set = new HashSet<int>([1, 2, 3, 4]);
 
             var xs = set.ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
@@ -127,7 +127,7 @@ namespace Tests
         [Fact]
         public async Task ToAsyncEnumerable_Enumerable_HashSet_ToArray()
         {
-            var set = new HashSet<int>(new[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+            var set = new HashSet<int>([1, 2, 3, 4, 5, 6, 7, 8]);
 
             var xs = set.ToAsyncEnumerable();
 
@@ -139,7 +139,7 @@ namespace Tests
         [Fact]
         public async Task ToAsyncEnumerable_Enumerable_HashSet_ToList()
         {
-            var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
+            var set = new HashSet<int>([1, 2, 3, 4]);
             var xs = set.ToAsyncEnumerable();
 
             var arr = await xs.ToListAsync();
@@ -150,7 +150,7 @@ namespace Tests
         [Fact]
         public async Task ToAsyncEnumerable_Enumerable_HashSet_Count()
         {
-            var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
+            var set = new HashSet<int>([1, 2, 3, 4]);
             var xs = set.ToAsyncEnumerable();
 
             var c = await xs.CountAsync();
@@ -161,7 +161,7 @@ namespace Tests
         [Fact]
         public async Task ToAsyncEnumerable_Enumerable_HashSet_SequenceIdentity()
         {
-            var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
+            var set = new HashSet<int>([1, 2, 3, 4]);
             var xs = set.ToAsyncEnumerable();
 
             await SequenceIdentity(xs);
@@ -170,7 +170,7 @@ namespace Tests
         [Fact]
         public void ToAsyncEnumerable_Enumerable_HashSet_ICollection()
         {
-            var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
+            var set = new HashSet<int>([1, 2, 3, 4]);
             var xs = set.ToAsyncEnumerable();
 
             var xc = xs as ICollection<int>;

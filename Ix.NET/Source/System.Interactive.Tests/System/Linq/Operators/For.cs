@@ -13,15 +13,15 @@ namespace Tests
         [Fact]
         public void For_Arguments()
         {
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.For<int, int>(null, x => new[] { 1 }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.For<int, int>(new[] { 1 }, null));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.For<int, int>(null, x => [1]));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.For<int, int>([1], null));
         }
 
         [Fact]
         public void For1()
         {
             var res = EnumerableEx.For(new[] { 1, 2, 3 }, x => Enumerable.Range(0, x)).ToList();
-            Assert.True(res.SequenceEqual(new[] { 0, 0, 1, 0, 1, 2 }));
+            Assert.True(res.SequenceEqual([0, 0, 1, 0, 1, 2]));
         }
     }
 }

@@ -8,7 +8,7 @@ namespace System.Linq
 {
     internal sealed class CancellationTokenDisposable : IDisposable
     {
-        private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+        private readonly CancellationTokenSource _cts = new();
 
         public CancellationToken Token => _cts.Token;
 

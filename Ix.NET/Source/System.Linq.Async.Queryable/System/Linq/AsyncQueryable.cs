@@ -34,22 +34,6 @@ namespace System.Linq
             return new AsyncEnumerableQuery<TElement>(source);
         }
 
-        private static MethodInfo? s_Zip__TFirst_TSecond__2__0;
-        
-        private static MethodInfo Zip__TFirst_TSecond__2__0(Type TFirst, Type TSecond) =>
-            (s_Zip__TFirst_TSecond__2__0 ??
-            (s_Zip__TFirst_TSecond__2__0 = new Func<IAsyncQueryable<object>, IAsyncEnumerable<object>, IAsyncQueryable<ValueTuple<object, object>>>(Zip<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TFirst, TSecond);
-
-        public static IAsyncQueryable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IAsyncQueryable<TFirst> first, IAsyncEnumerable<TSecond> second)
-        {
-            if (first == null)
-                throw new ArgumentNullException(nameof(first));
-            if (second == null)
-                throw new ArgumentNullException(nameof(second));
-
-            return first.Provider.CreateQuery<(TFirst, TSecond)>(Expression.Call(Zip__TFirst_TSecond__2__0(typeof(TFirst), typeof(TSecond)), first.Expression, GetSourceExpression(second)));
-        }
-
         private static Expression GetSourceExpression<TSource>(IAsyncEnumerable<TSource> source)
         {
             if (source is IAsyncQueryable<TSource> queryable)

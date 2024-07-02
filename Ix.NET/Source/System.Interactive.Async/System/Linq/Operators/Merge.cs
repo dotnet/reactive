@@ -276,12 +276,7 @@ namespace System.Linq
                         }
                         catch (Exception ex)
                         {
-                            if (errors == null)
-                            {
-                                errors = new List<Exception>();
-                            }
-
-                            errors.Add(ex);
+                            (errors ??= []).Add(ex);
                         }
                     }
 
@@ -292,21 +287,27 @@ namespace System.Linq
 
                     if (errors != null)
                     {
+#if NET6_0_OR_GREATER
+#pragma warning disable CA2219 // Do not raise an exception from within a finally clause
+#endif
                         throw new AggregateException(errors);
+#if NET6_0_OR_GREATER
+#pragma warning restore CA2219
+#endif
                     }
                 }
             }
 #endif
-        }
+                    }
 
-        /// <summary>
-        /// Merges elements from all async-enumerable sequences in the given enumerable sequence into a single async-enumerable sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
-        /// <param name="sources">Enumerable sequence of async-enumerable sequences.</param>
-        /// <returns>The async-enumerable sequence that merges the elements of the async-enumerable sequences.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
-        public static IAsyncEnumerable<TSource> Merge<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
+                    /// <summary>
+                    /// Merges elements from all async-enumerable sequences in the given enumerable sequence into a single async-enumerable sequence.
+                    /// </summary>
+                    /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
+                    /// <param name="sources">Enumerable sequence of async-enumerable sequences.</param>
+                    /// <returns>The async-enumerable sequence that merges the elements of the async-enumerable sequences.</returns>
+                    /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
+                    public static IAsyncEnumerable<TSource> Merge<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
                 throw Error.ArgumentNull(nameof(sources));

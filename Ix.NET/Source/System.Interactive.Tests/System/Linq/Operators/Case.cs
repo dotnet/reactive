@@ -16,8 +16,8 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Case<int, int>(null, new Dictionary<int, IEnumerable<int>>()));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Case<int, int>(() => 1, null));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Case<int, int>(null, new Dictionary<int, IEnumerable<int>>(), new[] { 1 }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Case<int, int>(() => 1, null, new[] { 1 }));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Case<int, int>(null, new Dictionary<int, IEnumerable<int>>(), [1]));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Case<int, int>(() => 1, null, [1]));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Case<int, int>(() => 1, new Dictionary<int, IEnumerable<int>>(), null));
         }
 
@@ -64,7 +64,7 @@ namespace Tests
                 { 1, new[] { 'b' } },
                 { 2, new[] { 'c' } },
                 { 3, EnumerableEx.Defer(() => new[] { d }) },
-            }, new[] { 'z' });
+            }, ['z']);
 
             Assert.Equal('b', res.Single());
             Assert.Equal('b', res.Single());

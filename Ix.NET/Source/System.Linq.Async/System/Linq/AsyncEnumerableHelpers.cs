@@ -93,11 +93,7 @@ namespace System.Collections.Generic
             }
 
             result.Length = 0;
-#if NO_ARRAY_EMPTY
-            result.Array = EmptyArray<T>.Value;
-#else
-            result.Array = Array.Empty<T>();
-#endif
+            result.Array = [];
             return result;
         }
 

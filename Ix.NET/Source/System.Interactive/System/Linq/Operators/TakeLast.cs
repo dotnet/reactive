@@ -25,7 +25,6 @@ namespace System.Linq
 
             return TakeLastCore(source, count);
         }
-#endif
 
         private static IEnumerable<TSource> TakeLastCore<TSource>(IEnumerable<TSource> source, int count)
         {
@@ -51,5 +50,6 @@ namespace System.Linq
                 yield return q.Dequeue();
             }
         }
+#endif
     }
 }

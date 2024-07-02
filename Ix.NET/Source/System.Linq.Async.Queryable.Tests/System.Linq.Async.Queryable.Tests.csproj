@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net48;net6.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net48;net8.0;net6.0;netcoreapp3.1</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
   </PropertyGroup>
 

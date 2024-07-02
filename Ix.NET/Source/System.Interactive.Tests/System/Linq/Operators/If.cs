@@ -13,18 +13,18 @@ namespace Tests
         [Fact]
         public void If_Arguments()
         {
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.If<int>(null, new[] { 1 }));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.If<int>(null, [1]));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.If<int>(() => true, null));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.If<int>(null, new[] { 1 }, new[] { 1 }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.If<int>(() => true, null, new[] { 1 }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.If<int>(() => true, new[] { 1 }, null));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.If<int>(null, [1], [1]));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.If<int>(() => true, null, [1]));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.If<int>(() => true, [1], null));
         }
 
         [Fact]
         public void If1()
         {
             var x = 5;
-            var res = EnumerableEx.If(() => x > 0, new[] { +1 }, new[] { -1 });
+            var res = EnumerableEx.If(() => x > 0, [+1], [-1]);
 
             Assert.Equal(+1, res.Single());
 

@@ -38,41 +38,39 @@ namespace System.Linq
 
                 async void Core()
                 {
-                    await using (var e = _source.GetAsyncEnumerator(ctd.Token))
+                    await using var e = _source.GetAsyncEnumerator(ctd.Token);
+                    do
                     {
-                        do
+                        bool hasNext;
+                        var value = default(T)!;
+
+                        try
                         {
-                            bool hasNext;
-                            var value = default(T)!;
-
-                            try
+                            hasNext = await e.MoveNextAsync().ConfigureAwait(false);
+                            if (hasNext)
                             {
-                                hasNext = await e.MoveNextAsync().ConfigureAwait(false);
-                                if (hasNext)
-                                {
-                                    value = e.Current;
-                                }
+                                value = e.Current;
                             }
-                            catch (Exception ex)
-                            {
-                                if (!ctd.Token.IsCancellationRequested)
-                                {
-                                    observer.OnError(ex);
-                                }
-
-                                return;
-                            }
-
-                            if (!hasNext)
-                            {
-                                observer.OnCompleted();
-                                return;
-                            }
-
-                            observer.OnNext(value);
                         }
-                        while (!ctd.Token.IsCancellationRequested);
+                        catch (Exception ex)
+                        {
+                            if (!ctd.Token.IsCancellationRequested)
+                            {
+                                observer.OnError(ex);
+                            }
+
+                            return;
+                        }
+
+                        if (!hasNext)
+                        {
+                            observer.OnCompleted();
+                            return;
+                        }
+
+                        observer.OnNext(value);
                     }
+                    while (!ctd.Token.IsCancellationRequested);
                 }
 
                 // Fire and forget

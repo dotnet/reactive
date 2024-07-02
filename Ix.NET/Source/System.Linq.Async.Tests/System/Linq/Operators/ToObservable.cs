@@ -74,7 +74,7 @@ namespace Tests
 
             evt.WaitOne();
             Assert.False(fail);
-            Assert.True(lst.SequenceEqual(new[] { 42 }));
+            Assert.True(lst.SequenceEqual([42]));
         }
 
         [Fact]
@@ -351,7 +351,7 @@ namespace Tests
 
         private sealed class ThrowOnCurrentAsyncEnumerator : IAsyncEnumerator<int>
         {
-            readonly private Exception _exception;
+            private readonly Exception _exception;
             public ThrowOnCurrentAsyncEnumerator(Exception ex)
             {
                 _exception = ex;
@@ -359,7 +359,7 @@ namespace Tests
 
             public int Current => throw _exception;
             public ValueTask DisposeAsync() => default;
-            public ValueTask<bool> MoveNextAsync() => new ValueTask<bool>(true);
+            public ValueTask<bool> MoveNextAsync() => new(true);
         }
     }
 }

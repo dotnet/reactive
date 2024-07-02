@@ -43,13 +43,9 @@ namespace System.Linq
             }
         }
 
-        private sealed class AnonymousEnumerable<TResult> : IEnumerable<TResult>
+        private sealed class AnonymousEnumerable<TResult>(Func<IEnumerator<TResult>> getEnumerator) : IEnumerable<TResult>
         {
-            private readonly Func<IEnumerator<TResult>> _getEnumerator;
-
-            public AnonymousEnumerable(Func<IEnumerator<TResult>> getEnumerator) => _getEnumerator = getEnumerator;
-
-            public IEnumerator<TResult> GetEnumerator() => _getEnumerator();
+            public IEnumerator<TResult> GetEnumerator() => getEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }

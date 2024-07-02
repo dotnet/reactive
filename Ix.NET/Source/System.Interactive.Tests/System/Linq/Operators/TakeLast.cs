@@ -15,7 +15,7 @@ namespace Tests
         public void TakeLast_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.TakeLast<int>(null, 5));
-            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.TakeLast<int>(new[] { 1 }, -1));
+            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.TakeLast<int>([1], -1));
         }
 
         [Fact]
@@ -23,7 +23,7 @@ namespace Tests
         {
             var e = Enumerable.Range(1, 5);
             var r = e.TakeLast(0).ToList();
-            Assert.True(Enumerable.SequenceEqual(r, Enumerable.Empty<int>()));
+            Assert.True(Enumerable.SequenceEqual(r, []));
         }
 
         [Fact]

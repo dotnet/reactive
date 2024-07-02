@@ -27,7 +27,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 1, 2, 3, 4, 1, 2, 3, 4 };
             var res = xs.ToAsyncEnumerable().ToHashSetAsync();
-            Assert.True((await res).OrderBy(x => x).SequenceEqual(new[] { 1, 2, 3, 4 }));
+            Assert.True((await res).OrderBy(x => x).SequenceEqual([1, 2, 3, 4]));
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace Tests
         {
             var xs = new[] { 1, 12, 11, 2, 3, 14, 1, 12, 13, 4 };
             var res = xs.ToAsyncEnumerable().ToHashSetAsync(new Eq());
-            Assert.True((await res).OrderBy(x => x).SequenceEqual(new[] { 1, 3, 12, 14 }));
+            Assert.True((await res).OrderBy(x => x).SequenceEqual([1, 3, 12, 14]));
         }
 
         private class Eq : IEqualityComparer<int>

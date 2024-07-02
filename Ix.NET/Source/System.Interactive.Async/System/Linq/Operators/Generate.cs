@@ -34,7 +34,7 @@ namespace System.Linq
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
             return Core(initialState, condition, iterate, resultSelector);
 
-            static async IAsyncEnumerable<TResult> Core(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
+            static async IAsyncEnumerable<TResult> Core(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
             {
                 for (var state = initialState; condition(state); state = iterate(state))
                 {

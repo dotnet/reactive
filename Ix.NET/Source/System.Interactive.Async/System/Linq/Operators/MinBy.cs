@@ -192,7 +192,7 @@ namespace System.Linq
                     }
                     else if (cmp > 0)
                     {
-                        result = new List<TSource> { cur };
+                        result = [cur];
                         resKey = key;
                     }
                 }
@@ -227,7 +227,7 @@ namespace System.Linq
                     }
                     else if (cmp > 0)
                     {
-                        result = new List<TSource> { cur };
+                        result = [cur];
                         resKey = key;
                     }
                 }
@@ -263,7 +263,7 @@ namespace System.Linq
                     }
                     else if (cmp > 0)
                     {
-                        result = new List<TSource> { cur };
+                        result = [cur];
                         resKey = key;
                     }
                 }

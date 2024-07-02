@@ -19,33 +19,27 @@ namespace System.Linq
 
         internal sealed class EmptyAsyncIterator<TValue> : IAsyncPartition<TValue>, IAsyncEnumerator<TValue>
         {
-            public static readonly EmptyAsyncIterator<TValue> Instance = new EmptyAsyncIterator<TValue>();
+            public static readonly EmptyAsyncIterator<TValue> Instance = new();
 
             public TValue Current => default!;
 
-            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(0);
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new(0);
 
             public IAsyncPartition<TValue> Skip(int count) => this;
 
             public IAsyncPartition<TValue> Take(int count) => this;
 
-            public ValueTask<TValue[]> ToArrayAsync(CancellationToken cancellationToken) => new ValueTask<TValue[]>(
-#if NO_ARRAY_EMPTY
-                EmptyArray<TValue>.Value
-#else
-                Array.Empty<TValue>()
-#endif
-                );
+            public ValueTask<TValue[]> ToArrayAsync(CancellationToken cancellationToken) => new([]);
 
-            public ValueTask<List<TValue>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<TValue>>(new List<TValue>());
+            public ValueTask<List<TValue>> ToListAsync(CancellationToken cancellationToken) => new([]);
 
-            public ValueTask<Maybe<TValue>> TryGetElementAtAsync(int index, CancellationToken cancellationToken) => new ValueTask<Maybe<TValue>>(new Maybe<TValue>());
+            public ValueTask<Maybe<TValue>> TryGetElementAtAsync(int index, CancellationToken cancellationToken) => new(new Maybe<TValue>());
 
-            public ValueTask<Maybe<TValue>> TryGetFirstAsync(CancellationToken cancellationToken) => new ValueTask<Maybe<TValue>>(new Maybe<TValue>());
+            public ValueTask<Maybe<TValue>> TryGetFirstAsync(CancellationToken cancellationToken) => new(new Maybe<TValue>());
 
-            public ValueTask<Maybe<TValue>> TryGetLastAsync(CancellationToken cancellationToken) => new ValueTask<Maybe<TValue>>(new Maybe<TValue>());
+            public ValueTask<Maybe<TValue>> TryGetLastAsync(CancellationToken cancellationToken) => new(new Maybe<TValue>());
 
-            public ValueTask<bool> MoveNextAsync() => new ValueTask<bool>(false);
+            public ValueTask<bool> MoveNextAsync() => new(false);
 
             public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken)
             {

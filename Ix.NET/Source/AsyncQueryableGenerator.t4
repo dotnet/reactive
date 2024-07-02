@@ -1,6 +1,7 @@
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.Runtime" #>
 <#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Reflection" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Threading" #>
 <#@ import namespace="System.Threading.Tasks" #>
@@ -8,29 +9,67 @@
 <#
 var infoFieldNames = new Dictionary<string, int>();
 
-var toQuotedImpl = default(Func<Type, int, bool, string>);
-toQuotedImpl = (t, i, b) =>
+var toQuotedImpl = default(Func<Type, ParameterInfo, int, bool, string>);
+toQuotedImpl = (t, paramObjectForAttributes, parameterIndex, notNestedGenericTypeParameter) =>
 {
 var name = t.Name;
 
+// We always want to look at the whole-type nullability, so we look at that now, and if it's a generic
+// type, we'll also go on to inspect per-type-parameter nullability.
+var nullableData = paramObjectForAttributes?.GetCustomAttributesData().SingleOrDefault(ad => ad.AttributeType.FullName == "System.Runtime.CompilerServices.NullableAttribute");
+bool wholeTypeNullable = false;
+if (nullableData is not null)
+{
+    if (nullableData.ConstructorArguments[0].Value is IReadOnlyList<CustomAttributeTypedArgument> nullableFlags)
+    {
+        // When we end up in this part, the type argument is, in practice, being used as the type argument to
+        // the actual type. E.g., ValueTask<TSource?>. So we need to look at the second nullable flag.
+        wholeTypeNullable = ((byte)nullableFlags[1].Value) == 2;
+    }
+    else if (nullableData.ConstructorArguments[0].Value is byte bv)
+    {
+        wholeTypeNullable = bv == 2;
+    }
+}
 if (t.IsGenericType)
 {
     var genDef = t.GetGenericTypeDefinition();
     name = genDef.Name.Substring(0, genDef.Name.LastIndexOf('`'));
 
-    var genArgs = "<" + string.Join(", ", t.GetGenericArguments().Select(a => toQuotedImpl(a, i, false))) + ">";
+    Type[] genericArguments = t.GetGenericArguments();
+    bool[] typeParamsNullable = new bool[genericArguments.Length];
+    if (nullableData is not null)
+    {
+        if (nullableData.ConstructorArguments[0].Value is IReadOnlyList<CustomAttributeTypedArgument> nullableFlags)
+        {
+            // There isn't a 1-1 correspondence between type parameters and nullable flags. Really we should be recursively
+            // walking the type parameters, but this hack suffices for the types we actually encounter in practice.
+            int flagIndex = 1;
+            for (int i = 0; i < typeParamsNullable.Length; ++i)
+            {
+                if (!genericArguments[i].IsValueType)
+                {
+                    if (flagIndex >= nullableFlags.Count) throw new InvalidOperationException($"Type {t} has {typeParamsNullable.Length} type params, but the associated nullable attribute on parameterinto {paramObjectForAttributes} has length {nullableFlags.Count}");
+                    typeParamsNullable[i] = ((byte)nullableFlags[flagIndex].Value) == 2;
+                    flagIndex += 1;
+                }
+            }
+        }
+    }
 
-    if (b)
+    var genArgs = "<" + string.Join(", ", genericArguments.Select((a, i) => toQuotedImpl(a, null, parameterIndex, false) + (typeParamsNullable[i] ? "?" : ""))) + ">";
+
+    if (notNestedGenericTypeParameter)
     {
         if (name == "Func" || name == "Action")
         {
             name = "Expression<" + name + genArgs + ">";
         }
-        else if (name == "IAsyncEnumerable" && i == 0)
+        else if (name == "IAsyncEnumerable" && parameterIndex == 0)
         {
             name = "IAsyncQueryable" + genArgs;
         }
-        else if (name == "IOrderedAsyncEnumerable" && i == 0)
+        else if (name == "IOrderedAsyncEnumerable" && parameterIndex == 0)
         {
             name = "IOrderedAsyncQueryable" + genArgs;
         }
@@ -38,6 +77,8 @@ if (t.IsGenericType)
         {
             name += genArgs;
         }
+
+        //if (wholeTypeNullable) { name += "?"; }
     }
     else
     {
@@ -48,12 +89,13 @@ if (t.IsGenericType)
         else
         {
             name += genArgs;
+            if (wholeTypeNullable) { name += "?"; }
         }
     }
 }
 else if (t.IsArray)
 {
-    var elem = toQuotedImpl(t.GetElementType(), i, b);
+    var elem = toQuotedImpl(t.GetElementType(), null, parameterIndex, notNestedGenericTypeParameter);
     name = elem + "[]";
 }
 else
@@ -86,12 +128,13 @@ else
     {
         name = "object";
     }
+    if (wholeTypeNullable) { name += "?"; }
 }
 
 return name;
 };
 
-var toQuoted = new Func<Type, int, string>((t, i) => toQuotedImpl(t, i, true));
+var toQuoted = new Func<Type, ParameterInfo, int, string>((t, paramObjectForAttributes, parameterIndex) => toQuotedImpl(t, paramObjectForAttributes, parameterIndex, true));
 #>
 #nullable enable
 
@@ -125,16 +168,16 @@ foreach (var m in asyncEnumerableType.GetMethods()
                         .OrderBy(m => m.Name)
                         .ThenBy(m => m.IsGenericMethod ? m.GetGenericArguments().Length : 0)
                         .ThenBy(m => m.GetParameters().Length)
-                        .ThenBy(m => string.Join(", ", m.GetParameters().Select((p, i) => toQuoted(p.ParameterType, i) + " " + p.Name))))
+                        .ThenBy(m => string.Join(", ", m.GetParameters().Select((p, i) => toQuoted(p.ParameterType, p, i) + " " + p.Name))))
 {
     var genArgs = m.GetGenericArguments();
 
-    var ret = toQuoted(m.ReturnType, 0);
+    var ret = toQuoted(m.ReturnType, m.ReturnParameter, 0);
     var name = m.Name;
 
     if (genArgs.Length > 0)
     {
-        name += "<" + string.Join(", ", genArgs.Select(a => a.Name)) + ">";
+        name += "<" + string.Join(", ", genArgs.Select((a, i) => a.Name)) + ">";
     }
 
     var isParams = false;
@@ -156,8 +199,8 @@ foreach (var m in asyncEnumerableType.GetMethods()
         }
     }
 
-    var pars = string.Join(", ", m.GetParameters().Select((p, i) => (i == parCount - 1 && isParams ? "params " : "") + toQuoted(p.ParameterType, i) + (nullableParameterNames.Contains(p.Name) ? "?" : "") + " " + p.Name + (i == parCount - 1 && lastParameterDefault ? " = default" : "")));
-    var quotedPars = string.Join(", ", m.GetParameters().Select((p, i) => "default(" + toQuoted(p.ParameterType, i) + ")"));
+    var pars = string.Join(", ", m.GetParameters().Select((p, i) => (i == parCount - 1 && isParams ? "params " : "") + toQuoted(p.ParameterType, p, i) + (nullableParameterNames.Contains(p.Name) ? "?" : "") + " " + p.Name + (i == parCount - 1 && lastParameterDefault ? " = default" : "")));
+    var quotedPars = string.Join(", ", m.GetParameters().Select((p, i) => "default(" + toQuoted(p.ParameterType, p, i) + ")"));
 
     if (m.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), true))
     {
@@ -193,7 +236,7 @@ foreach (var m in asyncEnumerableType.GetMethods()
 
     infoName += infoNameId;
 
-    var infoSignature = string.Join(", ", m.GetParameters().Select((p, i) => toQuoted(p.ParameterType, i)).Concat(new[] { toQuoted(m.ReturnType, 0) }));
+    var infoSignature = string.Join(", ", m.GetParameters().Select((p, i) => toQuoted(p.ParameterType, p, i)).Concat(new[] { toQuoted(m.ReturnType, m.ReturnParameter, 0) }));
 
     foreach (var genArg in genArgs)
     {
@@ -219,7 +262,7 @@ foreach (var m in asyncEnumerableType.GetMethods()
 
         if (td.Name.EndsWith("Task`1")) // NB: Covers Task and ValueTask
         {
-            factory = "ExecuteAsync<" + toQuotedImpl(m.ReturnType.GetGenericArguments()[0], -1, false) + ">";
+            factory = "ExecuteAsync<" + toQuotedImpl(m.ReturnType.GetGenericArguments()[0], m.ReturnParameter, -1, false) + ">";
 
             var last = m.GetParameters().Last();
             if (last.ParameterType == typeof(CancellationToken))
@@ -233,11 +276,11 @@ foreach (var m in asyncEnumerableType.GetMethods()
         }
         else if (td == typeof(IAsyncEnumerable<>) || td == typeof(IOrderedAsyncEnumerable<>))
         {
-            factory = "CreateQuery<" + toQuotedImpl(m.ReturnType.GetGenericArguments()[0], -1, false) + ">";
+            factory = "CreateQuery<" + toQuotedImpl(m.ReturnType.GetGenericArguments()[0], null, -1, false) + ">";
 
             if (td == typeof(IOrderedAsyncEnumerable<>))
             {
-                cast = "(" + toQuoted(m.ReturnType, 0) + ")";
+                cast = "(" + toQuoted(m.ReturnType, null, 0) + ")";
             }
         }
     }
@@ -274,7 +317,7 @@ foreach (var m in asyncEnumerableType.GetMethods()
         
         if (!add)
         {
-            quotedArgs.Add("Expression.Constant(" + p.Name + ", typeof(" + toQuoted(pt, -1) + "))");
+            quotedArgs.Add("Expression.Constant(" + p.Name + ", typeof(" + toQuoted(pt, null, -1) + "))");
         }
 
         n++;

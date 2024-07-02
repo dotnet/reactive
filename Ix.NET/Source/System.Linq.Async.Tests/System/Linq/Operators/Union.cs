@@ -150,7 +150,7 @@ namespace Tests
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
             var res = xs.Union(ys);
 
-            Assert.Equal(new[] { 1, 2, 3, 4, 5 }, (await res.ToArrayAsync()).OrderBy(x => x));
+            Assert.Equal([1, 2, 3, 4, 5], (await res.ToArrayAsync()).OrderBy(x => x));
         }
 
         [Fact]
@@ -160,7 +160,7 @@ namespace Tests
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
             var res = xs.Union(ys);
 
-            Assert.Equal(new[] { 1, 2, 3, 4, 5 }, (await res.ToListAsync()).OrderBy(x => x));
+            Assert.Equal([1, 2, 3, 4, 5], (await res.ToListAsync()).OrderBy(x => x));
         }
 
 
@@ -309,7 +309,7 @@ namespace Tests
                 _count = count;
             }
 
-            public List<Enumerator> Enumerators { get; } = new List<Enumerator>();
+            public List<Enumerator> Enumerators { get; } = [];
 
             public IAsyncEnumerator<int> GetAsyncEnumerator(CancellationToken cancellationToken = default)
             {
@@ -318,7 +318,7 @@ namespace Tests
                 return r;
             }
 
-            public class Enumerator : IAsyncEnumerator<int>
+            public sealed class Enumerator : IAsyncEnumerator<int>
             {
                 private readonly int _max;
 

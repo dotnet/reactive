@@ -15,7 +15,7 @@ namespace Tests
         public void SkipLast_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.SkipLast<int>(null, 5));
-            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.SkipLast<int>(new[] { 1 }, -1));
+            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.SkipLast<int>([1], -1));
         }
 
         [Fact]

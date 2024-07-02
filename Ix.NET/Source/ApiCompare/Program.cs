@@ -13,16 +13,16 @@ using System.Threading.Tasks;
 
 namespace ApiCompare
 {
-    class Program
+    internal class Program
     {
-        private static readonly Type asyncInterfaceType = typeof(IAsyncEnumerable<>);
-        private static readonly Type syncInterfaceType = typeof(IEnumerable<>);
+        private static readonly Type AsyncInterfaceType = typeof(IAsyncEnumerable<>);
+        private static readonly Type SyncInterfaceType = typeof(IEnumerable<>);
 
-        private static readonly Type asyncOrderedInterfaceType = typeof(IOrderedAsyncEnumerable<>);
-        private static readonly Type syncOrderedInterfaceType = typeof(IOrderedEnumerable<>);
+        private static readonly Type AsyncOrderedInterfaceType = typeof(IOrderedAsyncEnumerable<>);
+        private static readonly Type SyncOrderedInterfaceType = typeof(IOrderedEnumerable<>);
 
-        private static readonly string[] exceptions = new[]
-        {
+        private static readonly string[] Exceptions =
+        [
             "SkipLast",  // In .NET Core 2.0
             "TakeLast",  // In .NET Core 2.0
 
@@ -39,16 +39,16 @@ namespace ApiCompare
             "ToAsyncEnumerable",  // First-class conversions
             "ToEnumerable",       // First-class conversions
             "ToObservable",       // First-class conversions
-        };
+        ];
 
-        private static readonly TypeSubstitutor subst = new TypeSubstitutor(new Dictionary<Type, Type>
+        private static readonly TypeSubstitutor Subst = new(new Dictionary<Type, Type>
         {
-            { asyncInterfaceType, syncInterfaceType },
-            { asyncOrderedInterfaceType, syncOrderedInterfaceType },
+            { AsyncInterfaceType, SyncInterfaceType },
+            { AsyncOrderedInterfaceType, SyncOrderedInterfaceType },
             { typeof(IAsyncGrouping<,>), typeof(IGrouping<,>) },
         });
 
-        static void Main()
+        private static void Main()
         {
             var asyncOperatorsType = typeof(AsyncEnumerable);
             var syncOperatorsType = typeof(Enumerable);
@@ -56,22 +56,22 @@ namespace ApiCompare
             Compare(syncOperatorsType, asyncOperatorsType);
         }
 
-        static void Compare(Type syncOperatorsType, Type asyncOperatorsType)
+        private static void Compare(Type syncOperatorsType, Type asyncOperatorsType)
         {
-            var syncOperators = GetQueryOperators(new[] { syncInterfaceType, syncOrderedInterfaceType }, syncOperatorsType, exceptions);
-            var asyncOperators = GetQueryOperators(new[] { asyncInterfaceType, asyncOrderedInterfaceType }, asyncOperatorsType, exceptions);
+            var syncOperators = GetQueryOperators([SyncInterfaceType, SyncOrderedInterfaceType], syncOperatorsType, Exceptions);
+            var asyncOperators = GetQueryOperators([AsyncInterfaceType, AsyncOrderedInterfaceType], asyncOperatorsType, Exceptions);
 
             CompareFactories(syncOperators.Factories, asyncOperators.Factories);
             CompareQueryOperators(syncOperators.QueryOperators, asyncOperators.QueryOperators);
             CompareAggregates(syncOperators.Aggregates, asyncOperators.Aggregates);
         }
 
-        static void CompareFactories(ILookup<string, MethodInfo> syncFactories, ILookup<string, MethodInfo> asyncFactories)
+        private static void CompareFactories(ILookup<string, MethodInfo> syncFactories, ILookup<string, MethodInfo> asyncFactories)
         {
             CompareSets(syncFactories, asyncFactories, CompareFactoryOverloads);
         }
 
-        static void CompareFactoryOverloads(string name, IEnumerable<MethodInfo> syncMethods, IEnumerable<MethodInfo> asyncMethods)
+        private static void CompareFactoryOverloads(string name, IEnumerable<MethodInfo> syncMethods, IEnumerable<MethodInfo> asyncMethods)
         {
             var sync = GetSignatures(syncMethods).ToArray();
             var async = GetRewrittenSignatures(asyncMethods).ToArray();
@@ -105,12 +105,12 @@ namespace ApiCompare
             }
         }
 
-        static void CompareQueryOperators(ILookup<string, MethodInfo> syncOperators, ILookup<string, MethodInfo> asyncOperators)
+        private static void CompareQueryOperators(ILookup<string, MethodInfo> syncOperators, ILookup<string, MethodInfo> asyncOperators)
         {
             CompareSets(syncOperators, asyncOperators, CompareQueryOperatorsOverloads);
         }
 
-        static void CompareQueryOperatorsOverloads(string name, IEnumerable<MethodInfo> syncMethods, IEnumerable<MethodInfo> asyncMethods)
+        private static void CompareQueryOperatorsOverloads(string name, IEnumerable<MethodInfo> syncMethods, IEnumerable<MethodInfo> asyncMethods)
         {
             var sync = GetSignatures(syncMethods).ToArray();
             var async = GetRewrittenSignatures(asyncMethods).ToArray();
@@ -171,12 +171,12 @@ namespace ApiCompare
             }
         }
 
-        static void CompareAggregates(ILookup<string, MethodInfo> syncAggregates, ILookup<string, MethodInfo> asyncAggregates)
+        private static void CompareAggregates(ILookup<string, MethodInfo> syncAggregates, ILookup<string, MethodInfo> asyncAggregates)
         {
             CompareSets(syncAggregates, asyncAggregates, CompareAggregateOverloads);
         }
 
-        static void CompareAggregateOverloads(string name, IEnumerable<MethodInfo> syncMethods, IEnumerable<MethodInfo> asyncMethods)
+        private static void CompareAggregateOverloads(string name, IEnumerable<MethodInfo> syncMethods, IEnumerable<MethodInfo> asyncMethods)
         {
             var sync = GetSignatures(syncMethods).Select(GetAsyncAggregateSignature).ToArray();
             var async = GetRewrittenSignatures(asyncMethods).ToArray();
@@ -281,20 +281,16 @@ namespace ApiCompare
 
         private static Signature GetAsyncVariant(Signature signature)
         {
-            return new Signature
-            {
-                ParameterTypes = signature.ParameterTypes.Select(GetAsyncVariant).ToArray(),
-                ReturnType = signature.ReturnType
-            };
+            return new Signature(
+                parameterTypes: signature.ParameterTypes.Select(GetAsyncVariant).ToArray(),
+                returnType: signature.ReturnType);
         }
 
         private static Signature AppendCancellationToken(Signature signature)
         {
-            return new Signature
-            {
-                ParameterTypes = signature.ParameterTypes.Concat(new[] { typeof(CancellationToken) }).ToArray(),
-                ReturnType = signature.ReturnType
-            };
+            return new Signature(
+                parameterTypes: [.. signature.ParameterTypes, typeof(CancellationToken)],
+                returnType: signature.ReturnType);
         }
 
         private static Type GetAsyncVariant(Type type)
@@ -318,7 +314,7 @@ namespace ApiCompare
                     }
                     else
                     {
-                        return Expression.GetFuncType(args.Append(typeof(Task)).ToArray());
+                        return Expression.GetFuncType([.. args, typeof(Task)]);
                     }
                 }
             }
@@ -326,7 +322,7 @@ namespace ApiCompare
             return type;
         }
 
-        static void CompareSets(ILookup<string, MethodInfo> sync, ILookup<string, MethodInfo> async, Action<string, IEnumerable<MethodInfo>, IEnumerable<MethodInfo>> compareCore)
+        private static void CompareSets(ILookup<string, MethodInfo> sync, ILookup<string, MethodInfo> async, Action<string, IEnumerable<MethodInfo>, IEnumerable<MethodInfo>> compareCore)
         {
             var syncNames = sync.Select(g => g.Key).ToArray();
             var asyncNames = async.Select(g => g.Key).ToArray();
@@ -374,7 +370,7 @@ namespace ApiCompare
             }
         }
 
-        static Operators GetQueryOperators(Type[] interfaceTypes, Type operatorsType, string[] exclude)
+        private static Operators GetQueryOperators(Type[] interfaceTypes, Type operatorsType, string[] exclude)
         {
             //
             // Get all the static methods.
@@ -410,25 +406,23 @@ namespace ApiCompare
             // Return operators.
             //
 
-            return new Operators
-            {
-                Factories = factories.ToLookup(m => m.Name, m => m),
-                QueryOperators = queryOperators.ToLookup(m => m.Name, m => m),
-                Aggregates = aggregates.ToLookup(m => m.Name, m => m),
-            };
+            return new Operators(
+                Factories: factories.ToLookup(m => m.Name, m => m),
+                QueryOperators: queryOperators.ToLookup(m => m.Name, m => m),
+                Aggregates: aggregates.ToLookup(m => m.Name, m => m));
         }
 
-        static IEnumerable<Signature> GetSignatures(IEnumerable<MethodInfo> methods)
+        private static IEnumerable<Signature> GetSignatures(IEnumerable<MethodInfo> methods)
         {
             return methods.Select(m => GetSignature(m));
         }
 
-        static IEnumerable<Signature> GetRewrittenSignatures(IEnumerable<MethodInfo> methods)
+        private static IEnumerable<Signature> GetRewrittenSignatures(IEnumerable<MethodInfo> methods)
         {
             return GetSignatures(methods).Select(s => RewriteSignature(s));
         }
 
-        static Signature GetSignature(MethodInfo method)
+        private static Signature GetSignature(MethodInfo method)
         {
             if (method.IsGenericMethodDefinition)
             {
@@ -436,37 +430,31 @@ namespace ApiCompare
                 method = method.MakeGenericMethod(newArgs);
             }
 
-            return new Signature
-            {
-                Method = method,
-                ReturnType = method.ReturnType,
-                ParameterTypes = method.GetParameters().Select(p => p.ParameterType).ToArray()
-            };
+            return new Signature(
+                returnType: method.ReturnType,
+                parameterTypes: method.GetParameters().Select(p => p.ParameterType).ToArray(),
+                method: method);
         }
 
-        static Signature RewriteSignature(Signature signature)
+        private static Signature RewriteSignature(Signature signature)
         {
-            return new Signature
-            {
-                Method = signature.Method,
-                ReturnType = subst.Visit(signature.ReturnType),
-                ParameterTypes = subst.Visit(signature.ParameterTypes)
-            };
+            return new Signature(
+                returnType: Subst.Visit(signature.ReturnType),
+                parameterTypes: Subst.Visit(signature.ParameterTypes),
+                method: signature.Method);
         }
 
-        static Signature GetAsyncAggregateSignature(Signature signature)
+        private static Signature GetAsyncAggregateSignature(Signature signature)
         {
             var retType = signature.ReturnType == typeof(void) ? typeof(Task) : typeof(Task<>).MakeGenericType(signature.ReturnType);
 
-            return new Signature
-            {
-                Method = signature.Method,
-                ReturnType = retType,
-                ParameterTypes = signature.ParameterTypes
-            };
+            return new Signature(
+                returnType: retType,
+                parameterTypes: signature.ParameterTypes,
+                method: signature.Method);
         }
 
-        static string ToString(MethodInfo method)
+        private static string ToString(MethodInfo? method)
         {
             if (method == null)
             {
@@ -478,30 +466,31 @@ namespace ApiCompare
                 method = method.GetGenericMethodDefinition();
             }
 
-            return method.ToString();
+            return method.ToString() ?? "UNKNOWN";
         }
 
-        class Operators
-        {
-            public ILookup<string, MethodInfo> Factories;
-            public ILookup<string, MethodInfo> QueryOperators;
-            public ILookup<string, MethodInfo> Aggregates;
-        }
+        private record Operators(
+            ILookup<string, MethodInfo> Factories,
+            ILookup<string, MethodInfo> QueryOperators,
+            ILookup<string, MethodInfo> Aggregates);
 
-        class Signature : IEquatable<Signature>
+        private class Signature(
+            Type returnType,
+            Type[] parameterTypes,
+            MethodInfo? method = null) : IEquatable<Signature>
         {
-            public MethodInfo Method;
-            public Type ReturnType;
-            public Type[] ParameterTypes;
+            public MethodInfo? Method { get; } = method;
+            public Type ReturnType { get; } = returnType;
+            public Type[] ParameterTypes { get; } = parameterTypes;
 
             public static bool operator ==(Signature s1, Signature s2)
             {
-                if ((object)s1 == null && (object)s2 == null)
+                if (s1 is null && s2 is null)
                 {
                     return true;
                 }
 
-                if ((object)s1 == null || (object)s2 == null)
+                if (s1 is null || s2 is null)
                 {
                     return false;
                 }
@@ -514,24 +503,16 @@ namespace ApiCompare
                 return !(s1 == s2);
             }
 
-            public bool Equals(Signature s)
+            public bool Equals(Signature? s)
             {
-                return (object)s != null && ReturnType.Equals(s.ReturnType) && ParameterTypes.SequenceEqual(s.ParameterTypes);
+                return s is not null && ReturnType.Equals(s.ReturnType) && ParameterTypes.SequenceEqual(s.ParameterTypes);
             }
 
-            public override bool Equals(object obj)
-            {
-                if (obj is Signature s)
-                {
-                    return Equals(s);
-                }
-
-                return false;
-            }
+            public override bool Equals(object? obj) => obj is Signature s && Equals(s);
 
             public override int GetHashCode()
             {
-                return ParameterTypes.Concat(new[] { ReturnType }).Aggregate(0, (a, t) => a * 17 + t.GetHashCode());
+                return ParameterTypes.Concat([ReturnType]).Aggregate(0, (a, t) => a * 17 + t.GetHashCode());
             }
 
             public override string ToString()
@@ -540,13 +521,13 @@ namespace ApiCompare
             }
         }
 
-        class TypeVisitor
+        private class TypeVisitor
         {
             public virtual Type Visit(Type type)
             {
                 if (type.IsArray)
                 {
-                    if (type.GetElementType().MakeArrayType() == type)
+                    if (type.GetElementType()!.MakeArrayType() == type)
                     {
                         return VisitArray(type);
                     }
@@ -579,12 +560,12 @@ namespace ApiCompare
 
             protected virtual Type VisitArray(Type type)
             {
-                return Visit(type.GetElementType()).MakeArrayType();
+                return Visit(type.GetElementType() ?? throw new ArgumentException($"{type} does not have an element type")).MakeArrayType();
             }
 
             protected virtual Type VisitMultidimensionalArray(Type type)
             {
-                return Visit(type.GetElementType()).MakeArrayType(type.GetArrayRank());
+                return Visit(type.GetElementType() ?? throw new ArgumentException($"{type} does not have an element type")).MakeArrayType(type.GetArrayRank());
             }
 
             protected virtual Type VisitGenericTypeDefinition(Type type)
@@ -599,12 +580,12 @@ namespace ApiCompare
 
             protected virtual Type VisitByRef(Type type)
             {
-                return Visit(type.GetElementType()).MakeByRefType();
+                return Visit(type.GetElementType() ?? throw new ArgumentException($"{type} does not have an element type")).MakeByRefType();
             }
 
             protected virtual Type VisitPointer(Type type)
             {
-                return Visit(type.GetElementType()).MakePointerType();
+                return Visit(type.GetElementType() ?? throw new ArgumentException($"{type} does not have an element type")).MakePointerType();
             }
 
             protected virtual Type VisitSimple(Type type)
@@ -618,15 +599,8 @@ namespace ApiCompare
             }
         }
 
-        class TypeSubstitutor : TypeVisitor
+        private class TypeSubstitutor(Dictionary<Type, Type> map) : TypeVisitor
         {
-            private readonly Dictionary<Type, Type> map;
-
-            public TypeSubstitutor(Dictionary<Type, Type> map)
-            {
-                this.map = map;
-            }
-
             public override Type Visit(Type type)
             {
                 if (map.TryGetValue(type, out var subst))
@@ -638,33 +612,37 @@ namespace ApiCompare
             }
         }
 
-        private static readonly Type[] Wildcards = new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) };
+        private static readonly Type[] Wildcards = [typeof(T1), typeof(T2), typeof(T3), typeof(T4)];
 
-        class T1 { }
-        class T2 { }
-        class T3 { }
-        class T4 { }
+        private class T1 { }
+
+        private class T2 { }
+
+        private class T3 { }
+
+        private class T4 { }
     }
 
-    static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static string ToCSharp(this Type type)
         {
             if (type.IsArray)
             {
-                if (type.GetElementType().MakeArrayType() == type)
+                var elementType = type.GetElementType()!;
+                if (elementType.MakeArrayType() == type)
                 {
-                    return type.GetElementType().ToCSharp() + "[]";
+                    return elementType.ToCSharp() + "[]";
                 }
                 else
                 {
-                    return type.GetElementType().ToCSharp() + "[" + new string(',', type.GetArrayRank() - 1) + "]";
+                    return elementType.ToCSharp() + "[" + new string(',', type.GetArrayRank() - 1) + "]";
                 }
             }
             else if (type.IsConstructedGenericType)
             {
                 var def = type.GetGenericTypeDefinition();
-                var defName = def.Name.Substring(0, def.Name.IndexOf('`'));
+                var defName = def.Name[..def.Name.IndexOf('`')];
 
                 return defName + "<" + string.Join(", ", type.GetGenericArguments().Select(ToCSharp)) + ">";
             }

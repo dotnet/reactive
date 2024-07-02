@@ -226,7 +226,7 @@ namespace Tests
         public void PublishLambda_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Publish<int, int>(null, xs => xs));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Publish<int, int>(new[] { 1 }, null));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Publish<int, int>([1], null));
         }
 
         [Fact]
@@ -248,12 +248,12 @@ namespace Tests
             }
         }
 
-        private static readonly Random s_rand = new Random();
+        private static readonly Random RandSource = new();
 
         private static IEnumerable<int> Rand()
         {
             while (true)
-                yield return s_rand.Next();
+                yield return RandSource.Next();
         }
     }
 }

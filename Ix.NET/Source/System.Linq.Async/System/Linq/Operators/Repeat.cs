@@ -40,7 +40,7 @@ namespace System.Linq
 
             public override AsyncIteratorBase<TResult> Clone() => new RepeatAsyncIterator<TResult>(_element, _count);
 
-            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(_count);
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new(_count);
 
             public ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {

@@ -61,7 +61,7 @@ namespace System.Linq
 
         private sealed class PublishedBuffer<T> : IBuffer<T>
         {
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
             private readonly RefCountList<T> _buffer;
             private readonly IEnumerator<T> _source;
 

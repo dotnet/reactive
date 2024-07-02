@@ -17,16 +17,16 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(null, _ => { }, () => { }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(null, _ => { }, _ => { }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(null, _ => { }, _ => { }, () => { }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default(Action<int>)));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default(Action<int>), () => { }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, _ => { }, default(Action)));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default(Action<int>), _ => { }, () => { }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, _ => { }, default(Action<Exception>), () => { }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, _ => { }, _ => { }, default(Action)));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default(Action<int>), _ => { }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, _ => { }, default(Action<Exception>)));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>([1], default(Action<int>)));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>([1], default, () => { }));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>([1], _ => { }, default(Action)));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>([1], default, _ => { }, () => { }));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>([1], _ => { }, default, () => { }));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>([1], _ => { }, _ => { }, default));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>([1], default, _ => { }));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>([1], _ => { }, default(Action<Exception>)));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(null, new MyObserver()));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default(IObserver<int>)));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>([1], default(IObserver<int>)));
         }
 
         [Fact]

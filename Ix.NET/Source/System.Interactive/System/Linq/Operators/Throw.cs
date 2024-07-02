@@ -25,9 +25,9 @@ namespace System.Linq
         private static IEnumerable<TResult> ThrowCore<TResult>(Exception exception)
         {
             throw exception;
-#pragma warning disable 0162
+#pragma warning disable CS0162 // Unreachable code detected
             yield break;
-#pragma warning restore 0162
+#pragma warning restore CS0162 // Unreachable code detected
         }
     }
 }

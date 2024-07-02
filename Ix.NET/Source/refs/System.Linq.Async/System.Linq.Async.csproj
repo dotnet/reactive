@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ProduceOnlyReferenceAssembly>true</ProduceOnlyReferenceAssembly>
+
+    <Description>LINQ Standard Query Operators used to express queries over asynchronous enumerable sequences.</Description>
+    <AssemblyTitle>System.Linq.Async</AssemblyTitle>
+    <Authors>Microsoft</Authors>
+    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+    <PackageTags>Enumerable;Asynchronous;LINQ</PackageTags>
+    <AssemblyName>System.Linq.Async</AssemblyName>
+  </PropertyGroup>
+
+<PropertyGroup>
+      <!--
+    IDE0301 uses collection expressions in places where they don't necessarily have the same effect, which we want to avoid in case of possible compatibility issues.
+    IDE0305 wants to turn things like list.ToArray into [..list], which we don't find to be an improvement in readability. -->
+    <NoWarn>$(NoWarn);IDE0301;IDE0305</NoWarn>
+
+</PropertyGroup>
+  <ItemGroup>
+    <PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0'" Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+    
+    <ProjectReference Include="..\..\System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\System.Linq.Async\**\*.cs" Exclude="..\..\System.Linq.Async\obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="..\..\System.Linq.Async\System\Linq\EmptyArray.cs" />
+  </ItemGroup>
+  
+</Project>
