@@ -4,6 +4,8 @@
 
 #nullable disable
 
+#pragma warning disable CS0436 // Interface definitions conflict with .NET Runtime. This brings its own older definitions of various async interfaces.
+
 using System;
 using System.Collections;
 using System.Collections.Generic;

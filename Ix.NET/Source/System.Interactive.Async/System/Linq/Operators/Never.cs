@@ -28,14 +28,12 @@ namespace System.Linq
                 return new NeverAsyncEnumerator(cancellationToken);
             }
 
-            private sealed class NeverAsyncEnumerator : IAsyncEnumerator<TValue>
+            private sealed class NeverAsyncEnumerator(CancellationToken token) : IAsyncEnumerator<TValue>
             {
-                private readonly CancellationToken _token;
+                private readonly CancellationToken _token = token;
 
                 private CancellationTokenRegistration _registration;
                 private bool _once;
-
-                public NeverAsyncEnumerator(CancellationToken token) => _token = token;
 
                 public TValue Current => throw new InvalidOperationException();
 

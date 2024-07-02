@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.2.32131.331
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{87534290-A7A6-47A4-9A3A-D0D21A9AD1D4}"
+	ProjectSection(SolutionItems) = preProject
+		NetCore31TestReadme.txt = NetCore31TestReadme.txt
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B733D97A-F1ED-4FC3-BF8E-9AC47A89DE96}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,15 +15,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CodeCoverage.runsettings = CodeCoverage.runsettings
 		Directory.build.props = Directory.build.props
 		Directory.build.targets = Directory.build.targets
-		global.json = global.json
 		version.json = version.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive", "System.Interactive\System.Interactive.csproj", "{FF97CD0F-8108-4B66-8A34-42190B459180}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2EC0C302-B029-4DDB-AC91-000BF11006AD} = {2EC0C302-B029-4DDB-AC91-000BF11006AD}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Async", "System.Interactive.Async\System.Interactive.Async.csproj", "{A9F6D09B-15B9-4CE8-867F-6F3383C5F247}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Providers", "System.Interactive.Providers\System.Interactive.Providers.csproj", "{CA7B7136-13EE-4F01-BC22-722875EE8569}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5DF341BE-B369-4250-AFD4-604DE8C95E45} = {5DF341BE-B369-4250-AFD4-604DE8C95E45}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Async.Providers", "System.Interactive.Async.Providers\System.Interactive.Async.Providers.csproj", "{33691BB5-DD5B-4FED-8EE3-52CEE0DE2550}"
 EndProject
@@ -29,6 +37,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Async.Tests", "System.Interactive.Async.Tests\System.Interactive.Async.Tests.csproj", "{172BD8C4-5C3E-4928-9D3F-746CF336FFEC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Linq.Async", "System.Linq.Async\System.Linq.Async.csproj", "{9B1E5420-E8F3-4B5F-A11A-4D18578F50CE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1754B36C-D0DB-4E5D-8C30-1F116046DC0F} = {1754B36C-D0DB-4E5D-8C30-1F116046DC0F}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Linq.Async.Queryable", "System.Linq.Async.Queryable\System.Linq.Async.Queryable.csproj", "{513F9ABD-4FB8-4AC1-89DA-C3300399F34C}"
 EndProject
@@ -53,13 +64,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Refs", "Refs", "{A3D72E6E-4
 		refs\Directory.build.props = refs\Directory.build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive", "refs\System.Interactive.Ref\System.Interactive.csproj", "{2EC0C302-B029-4DDB-AC91-000BF11006AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive", "refs\System.Interactive\System.Interactive.csproj", "{2EC0C302-B029-4DDB-AC91-000BF11006AD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Providers", "refs\System.Interactive.Providers.Ref\System.Interactive.Providers.csproj", "{5DF341BE-B369-4250-AFD4-604DE8C95E45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Providers", "refs\System.Interactive.Providers\System.Interactive.Providers.csproj", "{5DF341BE-B369-4250-AFD4-604DE8C95E45}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks.System.Interactive", "Benchmarks.System.Interactive\Benchmarks.System.Interactive.csproj", "{3285529A-8227-4D40-B524-1A1F919F0E7B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Linq.Async", "refs\System.Linq.Async.Ref\System.Linq.Async.csproj", "{1754B36C-D0DB-4E5D-8C30-1F116046DC0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Linq.Async", "refs\System.Linq.Async\System.Linq.Async.csproj", "{1754B36C-D0DB-4E5D-8C30-1F116046DC0F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Linq.Async.SourceGenerator", "System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj", "{5C26D649-5ED4-49EE-AFBD-8FA8F12C4AE4}"
 EndProject
@@ -134,9 +145,7 @@ Global
 		{3285529A-8227-4D40-B524-1A1F919F0E7B}.Release|Any CPU.ActiveCfg = Current Sources|Any CPU
 		{3285529A-8227-4D40-B524-1A1F919F0E7B}.Release|Any CPU.Build.0 = Current Sources|Any CPU
 		{1754B36C-D0DB-4E5D-8C30-1F116046DC0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1754B36C-D0DB-4E5D-8C30-1F116046DC0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1754B36C-D0DB-4E5D-8C30-1F116046DC0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1754B36C-D0DB-4E5D-8C30-1F116046DC0F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5C26D649-5ED4-49EE-AFBD-8FA8F12C4AE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5C26D649-5ED4-49EE-AFBD-8FA8F12C4AE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C26D649-5ED4-49EE-AFBD-8FA8F12C4AE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
