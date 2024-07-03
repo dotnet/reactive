@@ -6,7 +6,7 @@ The `System.Interactive` NuGet package contains the usual `lib` folder, and also
 
 Fait acomplis.
 
-This dates back at least as far as 2018. The main purpose of this document (written in 2024) is to explain why it's like it is. The original thinking was lost in the mists of time, and it took considerable effort to work out why on earth it's like this. This ADR is intended to save others from the same extensive archaeology. And the discovery is important: if we hadn't managed to reverse engineer the thinking behind this design choice, we might have dismissed it as a mistake. (Indeed, part of its current implementation _is_ a mistake.) But it turns out to serve an important purpose in a non-obvious way.
+This dates back at least as far as 2018. The main purpose of this document (written in 2024) is to explain why it's like it is. The original thinking was lost in the mists of time, and it took considerable effort to work out why on earth it's like this. This ADR is intended to save others from the same extensive archaeology. And the discovery is important: if we hadn't managed to reverse engineer the apparent thinking behind this design choice, we might have dismissed it as a mistake. (Indeed, part of its current implementation _is_ a mistake.) But it turns out to serve an important purpose in a non-obvious way.
 
 
 ## Authors
@@ -28,9 +28,9 @@ At the time of writing this, the current version of `System.Interactive` is 6.0.
     * `netstandard2.1`
 
   
-The use of `net4.8` in `ref` seems to have been a bug: that should have been `net48`. (The main reason I am confident it's a bug, and not a clever but obscure trick that we've not understood, is that the [commit of 2021/12/06 that added this](https://github.com/dotnet/reactive/commit/a2410b2267abe193191f3894d243771ae4b126fd) used [`net48` in one of the other reference assemblies](https://github.com/dotnet/reactive/commit/a2410b2267abe193191f3894d243771ae4b126fd#diff-3b568c93a468dab1b1a619a450bf1c4d88d3ec9539737d09fa6fb7659bc0ae5fR7), so this just seems to have been a slip.)
+The use of `net4.8` in `ref` seems to have been a bug: that should have been `net48`. (The main reason I am confident it's a bug, and not a clever but obscure trick that we've not understood, is that the [commit of 2021/12/06 that added this](https://github.com/dotnet/reactive/commit/a2410b2267abe193191f3894d243771ae4b126fd) used [`net48` in reference assemblies for one of the other packages](https://github.com/dotnet/reactive/commit/a2410b2267abe193191f3894d243771ae4b126fd#diff-3b568c93a468dab1b1a619a450bf1c4d88d3ec9539737d09fa6fb7659bc0ae5fR7), so this just seems to have been a slip.)
 
-The other discrepancy is that we have `netstandard2.0` in the `lib` folder but `netstandard2.1` in the ref folder. At first glance, this too certainly looks quite a lot like a mistake, particularly when you examine the history. Here is the point in the release histroy at which the `ref` folder first started having a `netstandard2.1` folder:
+The other discrepancy is that we have `netstandard2.0` in the `lib` folder but `netstandard2.1` in the ref folder. At first glance, this too looks quite a lot like a mistake, particularly when you examine the history. Here is the point in the release history at which the `ref` folder first started having a `netstandard2.1` folder:
 
 * v3.1.1:
     * no reference assemblies
@@ -51,7 +51,7 @@ And yet, on closer inspection, this appears to be deliberate. Looking at this co
 
 I can only guess that they knew .NET Standard 2.1 was coming, and wanted to ensure that `System.Interactive` was ready for it when it shipped.
   
-So it was deliberate. But offering reference assemblies for a platform without any corresponding implementation for that platform is an odd choice. (All subsequent Ix.NET releases have continued to provide `netstandard2.1` in the `ref` folder with no matching folder in `lib`.) What purpose does this serve?
+So it was deliberate. But offering reference assemblies for a platform without any corresponding implementation for that platform is an odd choice. (And although at the time this was a placholder for a forthcoming .NET Standard version, it continued to look like this after .NET Standard 2.1 shipped. All subsequent Ix.NET releases have continued to provide `netstandard2.1` in the `ref` folder with no matching folder in `lib`. So it wasn't just a temporary measure.) What purpose does this serve?
 
 Some of the features that Ix offers eventually became available in .NET Core, such as `EnumerableEx.SkipLast`. This method exists in the implementation assemblies for every TFM of Ix.NET, but the `netstandard2.1` and `net6.0` reference assemblies omit it. This has the effect that if you're targetting any version of .NET recent enough to have these methods built into the .NET runtime libraries, the Ix.NET equivalents will:
 
@@ -62,7 +62,7 @@ The non-availability at build time is important because these are extension meth
 
 By arranging for the `netstandard2.1` and `net6.0` reference assemblies to omit these methods, Ix.NET ensures that the C# compiler has no idea these methods even exist, avoiding the problem. But why do we need reference assemblies for this? Why not just omit the methods from the main assemblies? That's because you might depend on some library, `OldLib`, that was built for `netstandard2.0`, where, say, `SkipLast` is unavailable. `OldLib` might use Ix.NET's `EnumerableEx.SkipLast`, so that method really has to be there at runtime, even if you're running on, say, .NET 8.0. .NET 8.0 provides `Enumerable.SkipLast` but if `OldLib` is only available in `netstandard2.0` form it won't have access to that. It can only use the `Ix.NET` one. So that method has to be there at runtime.
 
-So the basic trick here is that Ix.NET provides one API surface area for backwards compatibility purposes and a slightly smaller API surface that it advertises to new code targeting the latest Rx.NET. The `lib` folder contains complete assemblies providing the former, and the `ref` folder contains reference assemblies providing the latter.
+So the basic trick here is that Ix.NET provides one API surface area for backwards compatibility purposes and a slightly smaller API surface that it advertises to new code targeting the latest Ix.NET. The `lib` folder contains complete assemblies providing the former, and the `ref` folder contains reference assemblies providing the latter.
 
 This still doesn't make it obvious why it's useful for `ref` to include `netstandard2.1` when `lib` does not. If I've understood the original design here, the thinking is that on any runtime where `netstandard2.1` is available, methods like `Enumerable.SkipLast` are available in the runtime libraries, so libraries built for `netstandard2.1` should be using that built-in `Enumerable.SkipLast`, and not Ix.NET's `EnumerableEx.SkipLast`. At runtime, `netstandard2.1` libraries with a dependency on `System.Interactive` may well find themselves using the `lib\netstandard2.0` version (because there is no `lib\netstandard2.1` version). E.g.:
 
