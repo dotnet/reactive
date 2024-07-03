@@ -70,7 +70,7 @@ stages:
     - task: DotNetCoreCLI@2
       inputs:
         command: build
-        configuration: $(BuildConfiguration)
+        arguments: -c $(BuildConfiguration)
         projects: Ix.NET/Source/refs/**/*.csproj
       displayName: Build reference assemblies
 
