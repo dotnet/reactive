@@ -29,14 +29,14 @@ namespace Tests
         [Fact]
         public async Task LasyOrDefaultAsync_NoParam_Empty_Enumerable()
         {
-            var res = new int[0].Select(x => x).ToAsyncEnumerable().LastOrDefaultAsync();
+            var res = Array.Empty<int>().Select(x => x).ToAsyncEnumerable().LastOrDefaultAsync();
             Assert.Equal(0, await res);
         }
 
         [Fact]
         public async Task LastOrDefaultAsync_NoParam_Empty_IList()
         {
-            var res = new int[0].ToAsyncEnumerable().LastOrDefaultAsync();
+            var res = Array.Empty<int>().ToAsyncEnumerable().LastOrDefaultAsync();
             Assert.Equal(0, await res);
         }
 

@@ -28,7 +28,6 @@ namespace System.Linq
 
             return SkipLastCore(source, count);
         }
-#endif
 
         private static IEnumerable<TSource> SkipLastCore<TSource>(this IEnumerable<TSource> source, int count)
         {
@@ -44,5 +43,6 @@ namespace System.Linq
                 }
             }
         }
+#endif
     }
 }

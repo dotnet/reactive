@@ -35,13 +35,13 @@ namespace Tests
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MinByAsync(x => x / 2);
             var res = await xs;
 
-            Assert.True(res.SequenceEqual(new[] { 3, 2 }));
+            Assert.True(res.SequenceEqual([3, 2]));
         }
 
         [Fact]
         public async Task MinBy2Async()
         {
-            var xs = new int[0].ToAsyncEnumerable().MinByAsync(x => x / 2);
+            var xs = Array.Empty<int>().ToAsyncEnumerable().MinByAsync(x => x / 2);
 
             await AssertThrowsAsync<InvalidOperationException>(xs.AsTask());
         }

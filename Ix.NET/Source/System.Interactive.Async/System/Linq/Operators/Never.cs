@@ -19,7 +19,7 @@ namespace System.Linq
 
         private sealed class NeverAsyncEnumerable<TValue> : IAsyncEnumerable<TValue>
         {
-            internal static readonly NeverAsyncEnumerable<TValue> Instance = new NeverAsyncEnumerable<TValue>();
+            internal static readonly NeverAsyncEnumerable<TValue> Instance = new();
 
             public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken)
             {
@@ -28,14 +28,12 @@ namespace System.Linq
                 return new NeverAsyncEnumerator(cancellationToken);
             }
 
-            private sealed class NeverAsyncEnumerator : IAsyncEnumerator<TValue>
+            private sealed class NeverAsyncEnumerator(CancellationToken token) : IAsyncEnumerator<TValue>
             {
-                private readonly CancellationToken _token;
+                private readonly CancellationToken _token = token;
 
                 private CancellationTokenRegistration _registration;
                 private bool _once;
-
-                public NeverAsyncEnumerator(CancellationToken token) => _token = token;
 
                 public TValue Current => throw new InvalidOperationException();
 
@@ -54,7 +52,7 @@ namespace System.Linq
 
                     _once = true;
                     var task = new TaskCompletionSource<bool>();
-                    _registration = _token.Register(state => ((TaskCompletionSource<bool>)state).TrySetCanceled(_token), task);
+                    _registration = _token.Register(state => ((TaskCompletionSource<bool>)state!).TrySetCanceled(_token), task);
                     return new ValueTask<bool>(task.Task);
                 }
             }

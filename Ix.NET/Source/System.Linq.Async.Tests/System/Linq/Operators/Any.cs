@@ -65,7 +65,7 @@ namespace Tests
         [Fact]
         public async Task AnyAsync_NoSelector_Empty()
         {
-            var res = new int[0].ToAsyncEnumerable().AnyAsync();
+            var res = Array.Empty<int>().ToAsyncEnumerable().AnyAsync();
             Assert.False(await res);
         }
 

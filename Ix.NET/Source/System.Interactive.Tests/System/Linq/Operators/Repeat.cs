@@ -23,7 +23,7 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Repeat<int>(null));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Repeat<int>(null, 5));
-            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.Repeat<int>(new[] { 1 }, -1));
+            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.Repeat<int>([1], -1));
         }
 
         [Fact]
