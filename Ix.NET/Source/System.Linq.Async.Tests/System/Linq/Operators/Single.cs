@@ -29,7 +29,7 @@ namespace Tests
         [Fact]
         public async Task SingleAsync_Empty_IList()
         {
-            var res = new int[0].ToAsyncEnumerable().SingleAsync();
+            var res = Array.Empty<int>().ToAsyncEnumerable().SingleAsync();
             await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
 

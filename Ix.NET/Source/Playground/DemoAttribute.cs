@@ -7,15 +7,9 @@ using System;
 namespace Playground
 {
     [AttributeUsage(AttributeTargets.Method)]
-    internal sealed class DemoAttribute : Attribute
+    internal sealed class DemoAttribute(int index, string title) : Attribute
     {
-        public DemoAttribute(int index, string title)
-        {
-            Index = index;
-            Title = title;
-        }
-
-        public int Index { get; }
-        public string Title { get; }
+        public int Index { get; } = index;
+        public string Title { get; } = title;
     }
 }

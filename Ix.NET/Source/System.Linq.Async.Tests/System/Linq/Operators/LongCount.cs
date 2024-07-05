@@ -22,7 +22,7 @@ namespace Tests
         [Fact]
         public async Task LongCountAsync_Simple()
         {
-            Assert.Equal(0, await new int[0].ToAsyncEnumerable().LongCountAsync());
+            Assert.Equal(0, await Array.Empty<int>().ToAsyncEnumerable().LongCountAsync());
             Assert.Equal(3, await new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCountAsync());
         }
 
@@ -46,7 +46,7 @@ namespace Tests
         [Fact]
         public async Task LongCountAsync_Predicate_Simple()
         {
-            Assert.Equal(0, await new int[0].ToAsyncEnumerable().LongCountAsync(x => x < 3));
+            Assert.Equal(0, await Array.Empty<int>().ToAsyncEnumerable().LongCountAsync(x => x < 3));
             Assert.Equal(2, await new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCountAsync(x => x < 3));
         }
 
@@ -78,7 +78,7 @@ namespace Tests
         [Fact]
         public async Task LongCountAwaitAsync_Predicate()
         {
-            Assert.Equal(0, await new int[0].ToAsyncEnumerable().LongCountAwaitAsync(x => new ValueTask<bool>(x < 3)));
+            Assert.Equal(0, await Array.Empty<int>().ToAsyncEnumerable().LongCountAwaitAsync(x => new ValueTask<bool>(x < 3)));
             Assert.Equal(2, await new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCountAwaitAsync(x => new ValueTask<bool>(x < 3)));
         }
 
@@ -111,7 +111,7 @@ namespace Tests
         [Fact]
         public async Task LongCountAwaitWithCancellationAsync_Predicate()
         {
-            Assert.Equal(0, await new int[0].ToAsyncEnumerable().LongCountAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x < 3)));
+            Assert.Equal(0, await Array.Empty<int>().ToAsyncEnumerable().LongCountAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x < 3)));
             Assert.Equal(2, await new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCountAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x < 3)));
         }
 

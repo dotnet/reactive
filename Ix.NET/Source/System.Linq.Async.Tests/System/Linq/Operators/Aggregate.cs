@@ -47,7 +47,7 @@ namespace Tests
         [Fact]
         public async Task AggregateAsync_Empty()
         {
-            var xs = new int[0].ToAsyncEnumerable();
+            var xs = Array.Empty<int>().ToAsyncEnumerable();
             var ys = xs.AggregateAsync((x, y) => x * y);
             await AssertThrowsAsync<InvalidOperationException>(ys.AsTask());
         }
@@ -81,7 +81,7 @@ namespace Tests
         [Fact]
         public async Task AggregateAsync_Seed_Emtpy()
         {
-            var xs = new int[0].ToAsyncEnumerable();
+            var xs = Array.Empty<int>().ToAsyncEnumerable();
             var ys = xs.AggregateAsync(1, (x, y) => x * y);
             Assert.Equal(1, await ys);
         }
@@ -115,7 +115,7 @@ namespace Tests
         [Fact]
         public async Task AggregateAsync_Seed_Result_Empty()
         {
-            var xs = new int[0].ToAsyncEnumerable();
+            var xs = Array.Empty<int>().ToAsyncEnumerable();
             var ys = xs.AggregateAsync(1, (x, y) => x * y, x => x + 1);
             Assert.Equal(2, await ys);
         }
@@ -182,7 +182,7 @@ namespace Tests
         [Fact]
         public async Task AggregateAwaitAsync_Empty()
         {
-            var xs = new int[0].ToAsyncEnumerable();
+            var xs = Array.Empty<int>().ToAsyncEnumerable();
             var ys = xs.AggregateAwaitAsync((x, y) => new ValueTask<int>(x * y));
             await AssertThrowsAsync<InvalidOperationException>(ys.AsTask());
         }
@@ -216,7 +216,7 @@ namespace Tests
         [Fact]
         public async Task AggregateAwaitAsync_Seed_Emtpy()
         {
-            var xs = new int[0].ToAsyncEnumerable();
+            var xs = Array.Empty<int>().ToAsyncEnumerable();
             var ys = xs.AggregateAwaitAsync(1, (x, y) => new ValueTask<int>(x * y));
             Assert.Equal(1, await ys);
         }
@@ -250,7 +250,7 @@ namespace Tests
         [Fact]
         public async Task AggregateAwaitAsync_Seed_Result_Empty()
         {
-            var xs = new int[0].ToAsyncEnumerable();
+            var xs = Array.Empty<int>().ToAsyncEnumerable();
             var ys = xs.AggregateAwaitAsync(1, (x, y) => new ValueTask<int>(x * y), x => new ValueTask<int>(x + 1));
             Assert.Equal(2, await ys);
         }
@@ -318,7 +318,7 @@ namespace Tests
         [Fact]
         public async Task AggregateAwaitWithCancellationAsync_Empty()
         {
-            var xs = new int[0].ToAsyncEnumerable();
+            var xs = Array.Empty<int>().ToAsyncEnumerable();
             var ys = xs.AggregateAwaitWithCancellationAsync((x, y, ct) => new ValueTask<int>(x * y));
             await AssertThrowsAsync<InvalidOperationException>(ys.AsTask());
         }
@@ -352,7 +352,7 @@ namespace Tests
         [Fact]
         public async Task AggregateAwaitWithCancellationAsync_Seed_Emtpy()
         {
-            var xs = new int[0].ToAsyncEnumerable();
+            var xs = Array.Empty<int>().ToAsyncEnumerable();
             var ys = xs.AggregateAwaitWithCancellationAsync(1, (x, y, ct) => new ValueTask<int>(x * y));
             Assert.Equal(1, await ys);
         }
@@ -386,7 +386,7 @@ namespace Tests
         [Fact]
         public async Task AggregateAwaitWithCancellationAsync_Seed_Result_Empty()
         {
-            var xs = new int[0].ToAsyncEnumerable();
+            var xs = Array.Empty<int>().ToAsyncEnumerable();
             var ys = xs.AggregateAwaitWithCancellationAsync(1, (x, y, ct) => new ValueTask<int>(x * y), (x, ct) => new ValueTask<int>(x + 1));
             Assert.Equal(2, await ys);
         }

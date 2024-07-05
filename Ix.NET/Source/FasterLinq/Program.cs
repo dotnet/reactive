@@ -4,6 +4,8 @@
 
 #nullable disable
 
+#pragma warning disable CS0436 // Interface definitions conflict with .NET Runtime. This brings its own older definitions of various async interfaces.
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +17,7 @@ namespace FasterLinq
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var N = 4;
 
@@ -808,12 +810,9 @@ namespace System.Labs.Linq
 
             try
             {
-                while (true)
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        res = await aggregate(res, e.Current).ConfigureAwait(false);
-                    }
+                    res = await aggregate(res, e.Current).ConfigureAwait(false);
                 }
             }
             finally

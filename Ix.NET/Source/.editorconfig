@@ -1,0 +1,34 @@
+[*.cs]
+
+# Prevent IDE1006 (Naming rule violation) errors for non-public fields.
+#
+# Unfortunately, the codebase has not historically been entirely consistent with internal naming
+# conventions. Apparently this wasn't noticed by older analyzer tooling, but as of the .NET 7
+# era, the naming rules analyzers are a bit more particular, and cannot be configured in a way
+# that makes them happy with the code as it stands. We could rename all the relevant symbols,
+# but that doesn't seem like an especially good use of time, so for now, we're suppressing
+# diagnostics in certain cases.
+#
+# Static readonly fields
+#dotnet_naming_rule.static_readonly_fields_should_be_pascal_case.severity = none
+
+# Internal fields
+dotnet_naming_symbols.internal_field_symbols.applicable_kinds           = field
+dotnet_naming_symbols.internal_field_symbols.applicable_accessibilities = internal
+
+dotnet_naming_rule.internal_instance_fields_must_be_camel_cased_underscore_prefix.symbols  = internal_field_symbols
+dotnet_naming_rule.internal_instance_fields_must_be_camel_cased_underscore_prefix.style    = camel_case_and_prefix_with_underscore_style
+#dotnet_naming_rule.internal_instance_fields_must_be_camel_cased_underscore_prefix.severity = none
+
+
+# Protected fields
+# Annoyingly, a protected field in an internal class cannot be distinguished from a protected field in a public
+# class. That's unfortunate, because the latter are publicly visible, but the former are not, so we don't really
+# want to enforce public naming conventions on them. We generally avoid publicly visible fields, so the majority
+# of protected fields are in fact in internal types, so we use naming conventions appropriate to those.
+dotnet_naming_symbols.protected_field_symbols.applicable_kinds           = field
+dotnet_naming_symbols.protected_field_symbols.applicable_accessibilities = protected
+
+dotnet_naming_rule.protected_instance_fields_must_be_camel_cased_underscore_prefix.symbols  = protected_field_symbols
+dotnet_naming_rule.protected_instance_fields_must_be_camel_cased_underscore_prefix.style    = camel_case_and_prefix_with_underscore_style
+dotnet_naming_rule.protected_instance_fields_must_be_camel_cased_underscore_prefix.severity = none

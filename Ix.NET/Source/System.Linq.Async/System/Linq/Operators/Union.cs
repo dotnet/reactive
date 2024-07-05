@@ -52,7 +52,9 @@ namespace System.Linq
         /// <typeparam name="TSource">The type of the source enumerables.</typeparam>
         private abstract class UnionAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
+#pragma warning disable IDE1006 // Naming Styles
             internal readonly IEqualityComparer<TSource>? _comparer;
+#pragma warning restore IDE1006 // Naming Styles
             private IAsyncEnumerator<TSource>? _enumerator;
             private Set<TSource>? _set;
             private int _index;

@@ -105,7 +105,13 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
+#if NET6_0_OR_GREATER
+#pragma warning disable CA2012 // Always await ValueTasks immediately; this is deliberate advanced usage
+#endif
                         var moveNext = _enumerator!.MoveNextAsync();
+#if NET6_0_OR_GREATER
+#pragma warning restore CA2012
+#endif
 
                         if (!moveNext.IsCompleted)
                         {

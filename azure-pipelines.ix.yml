@@ -64,6 +64,16 @@ stages:
         projects: Ix.NET/Source/**/*.csproj
       displayName: Restore
 
+    # Since we can no longer use MSBuild.Extras.SDK, the reference assembly projects don't get built automatically
+    # when the corresponding main project run, so we need this extra build step to ensure that the files exist by
+    # the time pack runs
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: build
+        arguments: -c $(BuildConfiguration)
+        projects: Ix.NET/Source/refs/**/*.csproj
+      displayName: Build reference assemblies
+
     - task: DotNetCoreCLI@2
       inputs:
         command: pack

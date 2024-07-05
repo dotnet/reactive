@@ -23,7 +23,7 @@ namespace System.Linq
         {
             public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
             {
-                var provider = new TElement[0].AsQueryable().Provider;
+                var provider = Array.Empty<TElement>().AsQueryable().Provider;
                 var res = Redir(expression);
                 return provider.CreateQuery<TElement>(res);
             }
@@ -35,7 +35,7 @@ namespace System.Linq
 
             public TResult Execute<TResult>(Expression expression)
             {
-                var provider = new TResult[0].AsQueryable().Provider;
+                var provider = Array.Empty<TResult>().AsQueryable().Provider;
                 var res = Redir(expression);
                 return provider.Execute<TResult>(res);
             }
