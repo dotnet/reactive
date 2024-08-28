@@ -11,6 +11,93 @@ namespace System.Collections.Generic
         public static System.Collections.Generic.IAsyncEnumerator<T> WithCancellation<T>(this System.Collections.Generic.IAsyncEnumerator<T> source, System.Threading.CancellationToken cancellationToken) { }
     }
 }
+namespace System.Collections.Immutable
+{
+    public static class ImmutableArrayAsyncEnumerableExtensions
+    {
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableArray<TSource>> ToImmutableArrayAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public static class ImmutableDictionaryAsyncEnumerableExtensions
+    {
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TValue>> ToImmutableDictionaryAsync<TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> source, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TValue>> ToImmutableDictionaryAsync<TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> source, System.Collections.Generic.IEqualityComparer<TKey>? keyComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TSource>> ToImmutableDictionaryAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TValue>> ToImmutableDictionaryAsync<TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> source, System.Collections.Generic.IEqualityComparer<TKey>? keyComparer, System.Collections.Generic.IEqualityComparer<TValue>? valueComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TSource>> ToImmutableDictionaryAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IEqualityComparer<TKey>? keyComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TValue>> ToImmutableDictionaryAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TValue> elementSelector, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TValue>> ToImmutableDictionaryAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TValue> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? keyComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TValue>> ToImmutableDictionaryAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TValue> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? keyComparer, System.Collections.Generic.IEqualityComparer<TValue>? valueComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TSource>> ToImmutableDictionaryAwaitAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TSource>> ToImmutableDictionaryAwaitAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IEqualityComparer<TKey>? keyComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TValue>> ToImmutableDictionaryAwaitAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TValue>> elementSelector, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TValue>> ToImmutableDictionaryAwaitAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TValue>> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? keyComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TValue>> ToImmutableDictionaryAwaitAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TValue>> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? keyComparer, System.Collections.Generic.IEqualityComparer<TValue>? valueComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TSource>> ToImmutableDictionaryAwaitWithCancellationAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TSource>> ToImmutableDictionaryAwaitWithCancellationAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IEqualityComparer<TKey>? keyComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TValue>> ToImmutableDictionaryAwaitWithCancellationAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TValue>> elementSelector, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TValue>> ToImmutableDictionaryAwaitWithCancellationAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TValue>> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? keyComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableDictionary<TKey, TValue>> ToImmutableDictionaryAwaitWithCancellationAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TValue>> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? keyComparer, System.Collections.Generic.IEqualityComparer<TValue>? valueComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+    }
+    public static class ImmutableHashSetAsyncEnumerableExtensions
+    {
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableHashSet<TSource>> ToImmutableHashSetAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableHashSet<TSource>> ToImmutableHashSetAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Collections.Generic.IEqualityComparer<TSource>? equalityComparer, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public static class ImmutableListAsyncEnumerableExtensions
+    {
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableList<TSource>> ToImmutableListAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public static class ImmutableSortedDictionaryAsyncEnumerableExtensions
+    {
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedDictionary<TKey, TValue>> ToImmutableSortedDictionaryAsync<TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> source, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedDictionary<TKey, TValue>> ToImmutableSortedDictionaryAsync<TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> source, System.Collections.Generic.IComparer<TKey>? keyComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedDictionary<TKey, TValue>> ToImmutableSortedDictionaryAsync<TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> source, System.Collections.Generic.IComparer<TKey>? keyComparer, System.Collections.Generic.IEqualityComparer<TValue>? valueComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedDictionary<TKey, TValue>> ToImmutableSortedDictionaryAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TValue> elementSelector, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedDictionary<TKey, TValue>> ToImmutableSortedDictionaryAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TValue> elementSelector, System.Collections.Generic.IComparer<TKey>? keyComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedDictionary<TKey, TValue>> ToImmutableSortedDictionaryAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TValue> elementSelector, System.Collections.Generic.IComparer<TKey>? keyComparer, System.Collections.Generic.IEqualityComparer<TValue>? valueComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedDictionary<TKey, TValue>> ToImmutableSortedDictionaryAwaitAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TValue>> elementSelector, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedDictionary<TKey, TValue>> ToImmutableSortedDictionaryAwaitAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TValue>> elementSelector, System.Collections.Generic.IComparer<TKey>? keyComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedDictionary<TKey, TValue>> ToImmutableSortedDictionaryAwaitAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TValue>> elementSelector, System.Collections.Generic.IComparer<TKey>? keyComparer, System.Collections.Generic.IEqualityComparer<TValue>? valueComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedDictionary<TKey, TValue>> ToImmutableSortedDictionaryAwaitWithCancellationAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TValue>> elementSelector, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedDictionary<TKey, TValue>> ToImmutableSortedDictionaryAwaitWithCancellationAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TValue>> elementSelector, System.Collections.Generic.IComparer<TKey>? keyComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedDictionary<TKey, TValue>> ToImmutableSortedDictionaryAwaitWithCancellationAsync<TSource, TKey, TValue>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TValue>> elementSelector, System.Collections.Generic.IComparer<TKey>? keyComparer, System.Collections.Generic.IEqualityComparer<TValue>? valueComparer, System.Threading.CancellationToken cancellationToken = default)
+            where TKey :  notnull { }
+    }
+    public static class ImmutableSortedSetAsyncEnumerableExtensions
+    {
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedSet<TSource>> ToImmutableSortedSetAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<System.Collections.Immutable.ImmutableSortedSet<TSource>> ToImmutableSortedSetAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Collections.Generic.IComparer<TSource>? comparer, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+}
 namespace System.Linq
 {
     public static class AsyncEnumerable
