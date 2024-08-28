@@ -15,7 +15,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _defaultValue = defaultValue;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(_defaultValue, observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(_defaultValue, observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 

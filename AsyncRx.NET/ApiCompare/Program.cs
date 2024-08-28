@@ -9,9 +9,9 @@ using System.Reflection;
 
 namespace ApiCompare
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             var observable = typeof(Observable).GetMethods(BindingFlags.Public | BindingFlags.Static).Select(m => m.Name).Distinct();
             var asyncObservable = typeof(AsyncObservable).GetMethods(BindingFlags.Public | BindingFlags.Static).Select(m => m.Name).Distinct();

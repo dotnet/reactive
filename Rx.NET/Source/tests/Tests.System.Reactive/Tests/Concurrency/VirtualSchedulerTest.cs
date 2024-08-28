@@ -10,11 +10,13 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class VirtualSchedulerTest
     {
         private class VirtualSchedulerTestScheduler : VirtualTimeScheduler<string, char>
@@ -44,26 +46,25 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Virtual_Now()
         {
             var res = new VirtualSchedulerTestScheduler().Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
-#if !NO_THREAD
-        [Fact]
+
+        [TestMethod]
         public void Virtual_ScheduleAction()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
             var scheduler = new VirtualSchedulerTestScheduler();
-            scheduler.Schedule(() => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            scheduler.Schedule(() => { Assert.Equal(id, Environment.CurrentManagedThreadId); ran = true; });
             scheduler.Start();
             Assert.True(ran);
         }
-#endif
 
-        [Fact]
+        [TestMethod]
         public void Virtual_ScheduleActionError()
         {
             var ex = new Exception();
@@ -81,22 +82,24 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Virtual_InitialAndComparer_Now()
         {
             var s = new VirtualSchedulerTestScheduler("Bar", Comparer<string>.Default);
             Assert.Equal(3, s.Now.Ticks);
         }
 
-        [Fact]
+        [TestMethod]
         public void Virtual_ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler("", null));
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().ScheduleRelative(0, 'a', null));
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().ScheduleAbsolute(0, "", null));
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, TimeSpan.Zero, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, DateTimeOffset.UtcNow, default));
+#pragma warning restore CA1806
 
             ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleAbsolute(default(VirtualSchedulerTestScheduler), "", () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleAbsolute(new VirtualSchedulerTestScheduler(), "", default));
@@ -104,29 +107,29 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleRelative(new VirtualSchedulerTestScheduler(), 'a', default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Historical_ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler(DateTime.Now, default));
+#pragma warning restore CA1806
             ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler().ScheduleAbsolute(42, DateTime.Now, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler().ScheduleRelative(42, TimeSpan.FromSeconds(1), default));
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Virtual_ScheduleActionDue()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
             var scheduler = new VirtualSchedulerTestScheduler();
-            scheduler.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            scheduler.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Environment.CurrentManagedThreadId); ran = true; });
             scheduler.Start();
             Assert.True(ran, "ran");
         }
-#endif
 
-        [Fact]
-        [Trait("SkipCI", "true")]
+        [TestMethod]
+        [TestCategory("SkipCI")]
         public void Virtual_ThreadSafety()
         {
             for (var i = 0; i < 10; i++)

@@ -7,14 +7,17 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ExpandTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Expand_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Expand(null, DummyFunc<int, IObservable<int>>.Instance, DummyScheduler.Instance));
@@ -24,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Expand(DummyObservable<int>.Instance, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Expand_Default()
         {
             var b = Observable.Return(1).Expand(x => x < 10 ? Observable.Return(x + 1) : Observable.Empty<int>())
@@ -33,7 +36,7 @@ namespace ReactiveTests.Tests
             Assert.True(b);
         }
 
-        [Fact]
+        [TestMethod]
         public void Expand_Empty()
         {
             var scheduler = new TestScheduler();
@@ -59,7 +62,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Expand_Error()
         {
             var scheduler = new TestScheduler();
@@ -87,7 +90,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Expand_Never()
         {
             var scheduler = new TestScheduler();
@@ -111,7 +114,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Expand_Basic()
         {
             var scheduler = new TestScheduler();
@@ -152,7 +155,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Expand_Throw()
         {
             var scheduler = new TestScheduler();

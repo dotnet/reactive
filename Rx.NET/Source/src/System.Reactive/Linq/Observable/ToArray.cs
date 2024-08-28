@@ -15,18 +15,17 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<TSource[]> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<TSource[]> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : Sink<TSource, TSource[]>
         {
-            private List<TSource> _list;
+            private List<TSource> _list = [];
 
             public _(IObserver<TSource[]> observer)
                 : base(observer)
             {
-                _list = new List<TSource>();
             }
 
             public override void OnNext(TSource value)

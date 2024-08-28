@@ -8,7 +8,9 @@ namespace ReactiveTests.Tests
 {
     internal static class StopwatchTest
     {
+#pragma warning disable IDE0060 // (Remove unused parameter.) Will be used when code reinstated
         public static void Run(IStopwatchProvider stopwatchProvider)
+#pragma warning restore IDE0060
         {
             /*
              * TODO: Temporarily disabled until we iron out all of the scheduler improvements.

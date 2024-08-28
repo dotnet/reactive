@@ -8,7 +8,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #if HAS_DISPATCHER
 using System.Windows.Threading;
@@ -21,43 +21,49 @@ using System.Reactive.Subjects;
 using System.Windows.Forms;
 #endif
 
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SubscribeOnTest : TestBase
     {
 
         #region + TestBase +
 
-        [Fact]
+        [TestMethod]
         public void SubscribeOn_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
 
 #if HAS_WINFORMS
+#pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overload being tested.
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default(IObservable<int>), new ControlScheduler(new Label())));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(someObservable, default(ControlScheduler)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => ControlObservable.SubscribeOn<int>(default(IObservable<int>), new Label()));
             ReactiveAssert.Throws<ArgumentNullException>(() => ControlObservable.SubscribeOn<int>(someObservable, default(Label)));
+#pragma warning restore IDE0034
 #endif
 #if HAS_DISPATCHER
+#pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overload being tested.
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default(IObservable<int>), new DispatcherScheduler(Dispatcher.CurrentDispatcher)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(someObservable, default(DispatcherScheduler)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.SubscribeOn<int>(default(IObservable<int>), Dispatcher.CurrentDispatcher));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.SubscribeOn<int>(someObservable, default(Dispatcher)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.SubscribeOnDispatcher<int>(default(IObservable<int>)));
+#pragma warning restore IDE0034
 #endif
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default, new SynchronizationContext()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn(someObservable, default(SynchronizationContext)));
         }
 
 #if HAS_WINFORMS
-        [Fact]
+        [TestMethod]
         public void SubscribeOn_Control()
         {
-            bool okay = true;
+            var okay = true;
 
             using (WinFormsTestUtils.RunTest(out var lbl))
             {
@@ -88,10 +94,10 @@ namespace ReactiveTests.Tests
             Assert.True(okay);
         }
 
-        [Fact]
+        [TestMethod]
         public void SubscribeOn_ControlScheduler()
         {
-            bool okay = true;
+            var okay = true;
 
             using (WinFormsTestUtils.RunTest(out var lbl))
             {
@@ -125,7 +131,7 @@ namespace ReactiveTests.Tests
 #endif
 
 #if HAS_DISPATCHER
-        [Fact]
+        [TestMethod]
         [Asynchronous]
         public void SubscribeOn_Dispatcher()
         {
@@ -134,7 +140,7 @@ namespace ReactiveTests.Tests
                 RunAsync(evt =>
                 {
                     var s = new AsyncSubject<Unit>();
-                    bool okay = true;
+                    var okay = true;
                     var d = Observable.Create<int>(obs =>
                     {
                         okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
@@ -156,7 +162,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         [Asynchronous]
         public void SubscribeOn_DispatcherScheduler()
         {
@@ -165,7 +171,7 @@ namespace ReactiveTests.Tests
                 RunAsync(evt =>
                 {
                     var s = new AsyncSubject<Unit>();
-                    bool okay = true;
+                    var okay = true;
                     var d = Observable.Create<int>(obs =>
                     {
                         okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
@@ -187,7 +193,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         [Asynchronous]
         public void SubscribeOn_CurrentDispatcher()
         {
@@ -196,7 +202,7 @@ namespace ReactiveTests.Tests
                 RunAsync(evt =>
                 {
                     var s = new AsyncSubject<Unit>();
-                    bool okay = true;
+                    var okay = true;
 
                     dispatcher.BeginInvoke(new Action(() =>
                     {
@@ -227,17 +233,18 @@ namespace ReactiveTests.Tests
 
     }
 
+    [TestClass]
     public class SubscribeOnReactiveTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void SubscribeOn_Scheduler_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn(default(IObservable<int>), DummyScheduler.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn(DummyObservable<int>.Instance, default(IScheduler)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SubscribeOn_Scheduler_Sleep()
         {
             var scheduler = new TestScheduler();
@@ -262,7 +269,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1001, d);
         }
 
-        [Fact]
+        [TestMethod]
         public void SubscribeOn_Scheduler_Completed()
         {
             var scheduler = new TestScheduler();
@@ -284,7 +291,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SubscribeOn_Scheduler_Error()
         {
             var scheduler = new TestScheduler();
@@ -308,7 +315,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SubscribeOn_Scheduler_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -328,7 +335,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SubscribeOn_SynchronizationContext_Simple()
         {
             var scheduler = new TestScheduler();

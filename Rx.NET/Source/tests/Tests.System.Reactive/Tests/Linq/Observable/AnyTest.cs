@@ -7,13 +7,14 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class AnyTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Any_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Any(default(IObservable<int>)));
@@ -21,7 +22,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Any(default(IObservable<int>), x => true));
         }
 
-        [Fact]
+        [TestMethod]
         public void Any_Empty()
         {
             var scheduler = new TestScheduler();
@@ -45,7 +46,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Any_Return()
         {
             var scheduler = new TestScheduler();
@@ -70,7 +71,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Any_Throw()
         {
             var ex = new Exception();
@@ -95,7 +96,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Any_Never()
         {
             var ex = new Exception();
@@ -118,7 +119,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Any_Predicate_Empty()
         {
             var scheduler = new TestScheduler();
@@ -142,7 +143,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Any_Predicate_Return()
         {
             var scheduler = new TestScheduler();
@@ -167,7 +168,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Any_Predicate_ReturnNotMatch()
         {
             var scheduler = new TestScheduler();
@@ -192,7 +193,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Any_Predicate_SomeNoneMatch()
         {
             var scheduler = new TestScheduler();
@@ -219,7 +220,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Any_Predicate_SomeMatch()
         {
             var scheduler = new TestScheduler();
@@ -246,7 +247,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Any_Predicate_Throw()
         {
             var ex = new Exception();
@@ -271,7 +272,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Any_Predicate_Never()
         {
             var scheduler = new TestScheduler();
@@ -292,7 +293,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Any_Predicate_PredicateThrows()
         {
             var ex = new Exception();

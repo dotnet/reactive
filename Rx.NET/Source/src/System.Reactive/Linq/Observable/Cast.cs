@@ -13,7 +13,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
@@ -26,10 +26,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                TResult result;
+                TResult? result;
                 try
                 {
-                    result = (TResult)(object?)value;
+                    result = (TResult?)(object?)value;
                 }
                 catch (Exception exception)
                 {

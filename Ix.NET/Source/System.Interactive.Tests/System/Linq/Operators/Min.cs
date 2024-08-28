@@ -11,6 +11,7 @@ namespace Tests
 {
     public class Min : Tests
     {
+#if !NET6_0_OR_GREATER
         [Fact]
         public void Min_Arguments()
         {
@@ -31,5 +32,6 @@ namespace Tests
                 return Comparer<int>.Default.Compare(x % 3, y % 3);
             }
         }
+#endif
     }
 }

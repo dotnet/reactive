@@ -37,7 +37,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 if (redo == null)
                 {
+#pragma warning disable CA2201 // (Do not raise reserved exception types.) Backwards compatibility prevents us from complying.
                     throw new NullReferenceException("The handler returned a null IObservable");
+#pragma warning restore CA2201
                 }
             }
             catch (Exception ex)
@@ -161,7 +163,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
     internal sealed class RedoSerializedObserver<X> : IObserver<X>
     {
-        private static readonly Exception SignaledIndicator = new Exception();
+#pragma warning disable CA2201 // (Do not raise reserved exception types.) This is a sentinel, and is not thrown, so there's no need for it to be anything else.
+        private static readonly Exception SignaledIndicator = new();
+#pragma warning restore CA2201
 
         private readonly IObserver<X> _downstream;
         private readonly ConcurrentQueue<X> _queue;

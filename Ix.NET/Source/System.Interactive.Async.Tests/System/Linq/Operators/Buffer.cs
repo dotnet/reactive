@@ -31,13 +31,13 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
 
             Assert.True(await e.MoveNextAsync());
-            Assert.True(e.Current.SequenceEqual(new[] { 1, 2 }));
+            Assert.True(e.Current.SequenceEqual([1, 2]));
 
             Assert.True(await e.MoveNextAsync());
-            Assert.True(e.Current.SequenceEqual(new[] { 3, 4 }));
+            Assert.True(e.Current.SequenceEqual([3, 4]));
 
             Assert.True(await e.MoveNextAsync());
-            Assert.True(e.Current.SequenceEqual(new[] { 5 }));
+            Assert.True(e.Current.SequenceEqual([5]));
 
             Assert.False(await e.MoveNextAsync());
         }
@@ -50,13 +50,13 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
 
             Assert.True(await e.MoveNextAsync());
-            Assert.True(e.Current.SequenceEqual(new[] { 1, 2, 3 }));
+            Assert.True(e.Current.SequenceEqual([1, 2, 3]));
 
             Assert.True(await e.MoveNextAsync());
-            Assert.True(e.Current.SequenceEqual(new[] { 3, 4, 5 }));
+            Assert.True(e.Current.SequenceEqual([3, 4, 5]));
 
             Assert.True(await e.MoveNextAsync());
-            Assert.True(e.Current.SequenceEqual(new[] { 5 }));
+            Assert.True(e.Current.SequenceEqual([5]));
 
             Assert.False(await e.MoveNextAsync());
         }
@@ -69,10 +69,10 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
 
             Assert.True(await e.MoveNextAsync());
-            Assert.True(e.Current.SequenceEqual(new[] { 1, 2 }));
+            Assert.True(e.Current.SequenceEqual([1, 2]));
 
             Assert.True(await e.MoveNextAsync());
-            Assert.True(e.Current.SequenceEqual(new[] { 4, 5 }));
+            Assert.True(e.Current.SequenceEqual([4, 5]));
 
             Assert.False(await e.MoveNextAsync());
         }

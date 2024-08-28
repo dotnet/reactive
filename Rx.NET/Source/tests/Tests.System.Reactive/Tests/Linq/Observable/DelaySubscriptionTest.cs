@@ -9,14 +9,17 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class DelaySubscriptionTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void DelaySubscription_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DelaySubscription(default(IObservable<int>), DateTimeOffset.Now));
@@ -31,7 +34,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.DelaySubscription(DummyObservable<int>.Instance, TimeSpan.FromSeconds(-1), Scheduler.Immediate));
         }
 
-        [Fact]
+        [TestMethod]
         public void DelaySubscription_TimeSpan_Default()
         {
             var lst = new List<int>();
@@ -39,7 +42,7 @@ namespace ReactiveTests.Tests
             Assert.True(Enumerable.Range(0, 10).SequenceEqual(lst));
         }
 
-        [Fact]
+        [TestMethod]
         public void DelaySubscription_TimeSpan_Simple()
         {
             var scheduler = new TestScheduler();
@@ -65,7 +68,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DelaySubscription_TimeSpan_Error()
         {
             var ex = new Exception();
@@ -93,7 +96,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DelaySubscription_DateTimeOffset_Default()
         {
             var lst = new List<int>();
@@ -101,7 +104,7 @@ namespace ReactiveTests.Tests
             Assert.True(Enumerable.Range(0, 10).SequenceEqual(lst));
         }
 
-        [Fact]
+        [TestMethod]
         public void DelaySubscription_DateTimeOffset_Simple()
         {
             var scheduler = new TestScheduler();
@@ -127,7 +130,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DelaySubscription_DateTimeOffset_Error()
         {
             var ex = new Exception();

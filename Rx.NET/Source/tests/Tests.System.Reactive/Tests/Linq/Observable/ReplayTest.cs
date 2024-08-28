@@ -9,14 +9,17 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ReplayTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Replay_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -72,7 +75,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Replay(someObservable, x => x, 1, TimeSpan.FromSeconds(1), null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayCount_Basic()
         {
             var scheduler = new TestScheduler();
@@ -128,7 +131,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayCount_Error()
         {
             var scheduler = new TestScheduler();
@@ -184,7 +187,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayCount_Complete()
         {
             var scheduler = new TestScheduler();
@@ -238,7 +241,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayCount_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -293,7 +296,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayCount_MultipleConnections()
         {
             var xs = Observable.Never<int>();
@@ -314,7 +317,7 @@ namespace ReactiveTests.Tests
             connection3.Dispose();
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayCountLambda_Zip_Complete()
         {
             var scheduler = new TestScheduler();
@@ -376,7 +379,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayCountLambda_Zip_Error()
         {
             var scheduler = new TestScheduler();
@@ -434,7 +437,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayCountLambda_Zip_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -485,7 +488,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayTime_Basic()
         {
             var scheduler = new TestScheduler();
@@ -542,7 +545,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayTime_Error()
         {
             var scheduler = new TestScheduler();
@@ -596,7 +599,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayTime_Complete()
         {
             var scheduler = new TestScheduler();
@@ -649,7 +652,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayTime_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -704,7 +707,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayTime_MultipleConnections()
         {
             var xs = Observable.Never<int>();
@@ -725,7 +728,7 @@ namespace ReactiveTests.Tests
             connection3.Dispose();
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayTimeLambda_Zip_Complete()
         {
             var scheduler = new TestScheduler();
@@ -784,7 +787,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayTimeLambda_Zip_Error()
         {
             var scheduler = new TestScheduler();
@@ -841,7 +844,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayTimeLambda_Zip_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -892,7 +895,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Replay_Default1()
         {
             var s = new Subject<int>();
@@ -909,7 +912,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [Fact]
+        [TestMethod]
         public void Replay_Default2()
         {
             var s = new Subject<int>();
@@ -926,7 +929,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [Fact]
+        [TestMethod]
         public void Replay_Default3()
         {
             var s = new Subject<int>();
@@ -943,7 +946,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [Fact]
+        [TestMethod]
         public void Replay_Default4()
         {
             var s = new Subject<int>();
@@ -960,7 +963,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayLambda_Default1()
         {
             var xs = Observable.Range(1, 10).Replay(_xs => _xs, 100, DefaultScheduler.Instance);
@@ -969,7 +972,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayLambda_Default2()
         {
             var xs = Observable.Range(1, 10).Replay(_xs => _xs, TimeSpan.FromHours(1), DefaultScheduler.Instance);
@@ -978,7 +981,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayLambda_Default3()
         {
             var xs = Observable.Range(1, 10).Replay(_xs => _xs, 100, TimeSpan.FromHours(1), DefaultScheduler.Instance);
@@ -987,7 +990,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [Fact]
+        [TestMethod]
         public void ReplayLambda_Default4()
         {
             var xs = Observable.Range(1, 10).Replay(_xs => _xs, DefaultScheduler.Instance);

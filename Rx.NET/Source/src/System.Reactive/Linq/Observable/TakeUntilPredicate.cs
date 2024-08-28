@@ -20,7 +20,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _stopPredicate = stopPredicate;
         }
 
-        protected override TakeUntilPredicateObserver CreateSink(IObserver<TSource> observer) => new TakeUntilPredicateObserver(observer, _stopPredicate);
+        protected override TakeUntilPredicateObserver CreateSink(IObserver<TSource> observer) => new(observer, _stopPredicate);
 
         protected override void Run(TakeUntilPredicateObserver sink) => sink.Run(_source);
 

@@ -147,7 +147,7 @@ namespace System.Reactive.Concurrency
             public bool IsDisposed => _cancel.IsDisposed;
         }
 
-        private static readonly Lazy<TaskPoolScheduler> LazyInstance = new Lazy<TaskPoolScheduler>(static () => new TaskPoolScheduler(new TaskFactory(TaskScheduler.Default)));
+        private static readonly Lazy<TaskPoolScheduler> LazyInstance = new(static () => new TaskPoolScheduler(new TaskFactory(TaskScheduler.Default)));
         private readonly TaskFactory _taskFactory;
 
         /// <summary>
@@ -272,8 +272,8 @@ namespace System.Reactive.Concurrency
             private readonly TimeSpan _period;
             private readonly TaskFactory _taskFactory;
             private readonly Func<TState, TState> _action;
-            private readonly AsyncLock _gate = new AsyncLock();
-            private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+            private readonly AsyncLock _gate = new();
+            private readonly CancellationTokenSource _cts = new();
 
             public PeriodicallyScheduledWorkItem(TState state, TimeSpan period, Func<TState, TState> action, TaskFactory taskFactory)
             {

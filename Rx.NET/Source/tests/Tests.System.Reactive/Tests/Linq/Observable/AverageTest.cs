@@ -7,13 +7,14 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class AverageTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Average_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(default(IObservable<int>)));
@@ -50,7 +51,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(Observable.Empty<DateTime>(), default(Func<DateTime, long?>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -73,7 +74,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -98,7 +99,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Int32_Some()
         {
             var scheduler = new TestScheduler();
@@ -125,7 +126,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Int32_Throw()
         {
             var ex = new Exception();
@@ -150,7 +151,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Int32_Never()
         {
             var ex = new Exception();
@@ -173,7 +174,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -196,7 +197,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -221,7 +222,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Int64_Some()
         {
             var scheduler = new TestScheduler();
@@ -248,7 +249,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Int64_Throw()
         {
             var ex = new Exception();
@@ -273,7 +274,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Int64_Never()
         {
             var ex = new Exception();
@@ -296,7 +297,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -319,7 +320,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -344,7 +345,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Double_Some()
         {
             var scheduler = new TestScheduler();
@@ -371,7 +372,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Double_Throw()
         {
             var ex = new Exception();
@@ -396,7 +397,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Double_Never()
         {
             var ex = new Exception();
@@ -419,7 +420,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -442,7 +443,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -467,7 +468,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Float_Some()
         {
             var scheduler = new TestScheduler();
@@ -494,7 +495,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Float_Throw()
         {
             var ex = new Exception();
@@ -519,7 +520,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Float_Never()
         {
             var ex = new Exception();
@@ -542,7 +543,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -565,7 +566,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -590,7 +591,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Decimal_Some()
         {
             var scheduler = new TestScheduler();
@@ -617,7 +618,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Decimal_Throw()
         {
             var ex = new Exception();
@@ -642,7 +643,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Decimal_Never()
         {
             var ex = new Exception();
@@ -665,7 +666,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -689,7 +690,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -714,7 +715,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Int32_Some()
         {
             var scheduler = new TestScheduler();
@@ -741,7 +742,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Int32_Throw()
         {
             var ex = new Exception();
@@ -766,7 +767,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Int32_Never()
         {
             var ex = new Exception();
@@ -789,7 +790,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -813,7 +814,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -838,7 +839,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Int64_Some()
         {
             var scheduler = new TestScheduler();
@@ -865,7 +866,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Int64_Throw()
         {
             var ex = new Exception();
@@ -890,7 +891,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Int64_Never()
         {
             var ex = new Exception();
@@ -913,7 +914,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -937,7 +938,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -962,7 +963,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Double_Some()
         {
             var scheduler = new TestScheduler();
@@ -989,7 +990,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Double_Throw()
         {
             var ex = new Exception();
@@ -1014,7 +1015,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Double_Never()
         {
             var ex = new Exception();
@@ -1037,7 +1038,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1061,7 +1062,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -1086,7 +1087,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Float_Some()
         {
             var scheduler = new TestScheduler();
@@ -1113,7 +1114,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Float_Throw()
         {
             var ex = new Exception();
@@ -1138,7 +1139,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Float_Never()
         {
             var ex = new Exception();
@@ -1161,7 +1162,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1185,7 +1186,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -1210,7 +1211,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Decimal_Some()
         {
             var scheduler = new TestScheduler();
@@ -1237,7 +1238,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Decimal_Throw()
         {
             var ex = new Exception();
@@ -1262,7 +1263,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Nullable_Decimal_Never()
         {
             var ex = new Exception();
@@ -1286,8 +1287,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Average_InjectOverflow_Int32()
         {
             var xs = Observable.Return(42, ThreadPoolScheduler.Instance);
@@ -1297,7 +1297,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_InjectOverflow_Int64()
         {
             var xs = Observable.Return(42L, ThreadPoolScheduler.Instance);
@@ -1307,7 +1307,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_InjectOverflow_Double()
         {
             var xs = Observable.Return(42.0, ThreadPoolScheduler.Instance);
@@ -1317,7 +1317,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_InjectOverflow_Single()
         {
             var xs = Observable.Return(42.0f, ThreadPoolScheduler.Instance);
@@ -1327,7 +1327,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_InjectOverflow_Decimal()
         {
             var xs = Observable.Return(42.0m, ThreadPoolScheduler.Instance);
@@ -1337,7 +1337,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_InjectOverflow_Int32_Nullable()
         {
             var xs = Observable.Return((int?)42, ThreadPoolScheduler.Instance);
@@ -1347,7 +1347,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_InjectOverflow_Int64_Nullable()
         {
             var xs = Observable.Return((long?)42L, ThreadPoolScheduler.Instance);
@@ -1357,7 +1357,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_InjectOverflow_Double_Nullable()
         {
             var xs = Observable.Return((double?)42.0, ThreadPoolScheduler.Instance);
@@ -1367,7 +1367,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_InjectOverflow_Single_Nullable()
         {
             var xs = Observable.Return((float?)42.0f, ThreadPoolScheduler.Instance);
@@ -1377,7 +1377,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_InjectOverflow_Decimal_Nullable()
         {
             var xs = Observable.Return((decimal?)42.0m, ThreadPoolScheduler.Instance);
@@ -1386,8 +1386,7 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
-#endif
-#if !CRIPPLED_REFLECTION || NETCOREAPP1_1 || NETCOREAPP1_0
+
         private class OverflowInjection<T> : IObservable<T>
         {
             private readonly IObservable<T> _source;
@@ -1408,9 +1407,8 @@ namespace ReactiveTests.Tests
             }
         }
 #endif
-#endif
 
-        [Fact]
+        [TestMethod]
         public void Average_Selector_Regular_Int32()
         {
             var scheduler = new TestScheduler();
@@ -1434,7 +1432,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Selector_Regular_Int64()
         {
             var scheduler = new TestScheduler();
@@ -1458,7 +1456,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Selector_Regular_Single()
         {
             var scheduler = new TestScheduler();
@@ -1482,7 +1480,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Selector_Regular_Double()
         {
             var scheduler = new TestScheduler();
@@ -1506,7 +1504,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Selector_Regular_Decimal()
         {
             var scheduler = new TestScheduler();
@@ -1530,7 +1528,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Selector_Regular_Int32_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -1554,7 +1552,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Selector_Regular_Int64_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -1578,7 +1576,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Selector_Regular_Single_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -1602,7 +1600,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Selector_Regular_Double_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -1626,7 +1624,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Average_Selector_Regular_Decimal_Nullable()
         {
             var scheduler = new TestScheduler();

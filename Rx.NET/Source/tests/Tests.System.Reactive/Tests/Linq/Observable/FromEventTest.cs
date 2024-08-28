@@ -9,14 +9,17 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class FromEventTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void FromEvent_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(default, h => { }, h => { }));
@@ -50,7 +53,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent(h => { }, h => { }, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromEvent_Action()
         {
             var fe = new FromEvent();
@@ -72,7 +75,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(2, n);
         }
 
-        [Fact]
+        [TestMethod]
         public void FromEvent_ActionOfInt()
         {
             var fe = new FromEvent();
@@ -94,7 +97,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(2 + 3, n);
         }
 
-        [Fact]
+        [TestMethod]
         public void FromEvent_ActionOfInt_SpecifiedExplicitly()
         {
             var fe = new FromEvent();
@@ -116,7 +119,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(2 + 3, n);
         }
 
-        [Fact]
+        [TestMethod]
         public void FromEvent_ActionOfInt_SpecifiedExplicitly_TrivialConversion()
         {
             var fe = new FromEvent();
@@ -138,7 +141,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(2 + 3, n);
         }
 
-        [Fact]
+        [TestMethod]
         public void FromEvent_MyAction()
         {
             var fe = new FromEvent();
@@ -162,7 +165,7 @@ namespace ReactiveTests.Tests
 
         #region Rx v2.0 behavior
 
-        [Fact]
+        [TestMethod]
         public void FromEvent_ImplicitPublish()
         {
             var src = new MyEventSource();
@@ -185,7 +188,7 @@ namespace ReactiveTests.Tests
 
             src.OnBar(42);
 
-            Assert.True(fst.SequenceEqual(new[] { 42 }));
+            Assert.True(fst.SequenceEqual([42]));
 
             d1.Dispose();
 
@@ -200,8 +203,8 @@ namespace ReactiveTests.Tests
 
             src.OnBar(43);
 
-            Assert.True(fst.SequenceEqual(new[] { 42 }));
-            Assert.True(snd.SequenceEqual(new[] { 43 }));
+            Assert.True(fst.SequenceEqual([42]));
+            Assert.True(snd.SequenceEqual([43]));
 
             var thd = new List<int>();
             var d3 = xs.Subscribe(e => thd.Add(e.EventArgs.Value));
@@ -211,9 +214,9 @@ namespace ReactiveTests.Tests
 
             src.OnBar(44);
 
-            Assert.True(fst.SequenceEqual(new[] { 42 }));
-            Assert.True(snd.SequenceEqual(new[] { 43, 44 }));
-            Assert.True(thd.SequenceEqual(new[] { 44 }));
+            Assert.True(fst.SequenceEqual([42]));
+            Assert.True(snd.SequenceEqual([43, 44]));
+            Assert.True(thd.SequenceEqual([44]));
 
             d2.Dispose();
 
@@ -222,9 +225,9 @@ namespace ReactiveTests.Tests
 
             src.OnBar(45);
 
-            Assert.True(fst.SequenceEqual(new[] { 42 }));
-            Assert.True(snd.SequenceEqual(new[] { 43, 44 }));
-            Assert.True(thd.SequenceEqual(new[] { 44, 45 }));
+            Assert.True(fst.SequenceEqual([42]));
+            Assert.True(snd.SequenceEqual([43, 44]));
+            Assert.True(thd.SequenceEqual([44, 45]));
 
             d3.Dispose();
 
@@ -233,12 +236,12 @@ namespace ReactiveTests.Tests
 
             src.OnBar(46);
 
-            Assert.True(fst.SequenceEqual(new[] { 42 }));
-            Assert.True(snd.SequenceEqual(new[] { 43, 44 }));
-            Assert.True(thd.SequenceEqual(new[] { 44, 45 }));
+            Assert.True(fst.SequenceEqual([42]));
+            Assert.True(snd.SequenceEqual([43, 44]));
+            Assert.True(thd.SequenceEqual([44, 45]));
         }
-#if !NO_THREAD
-        [Fact]
+
+        [TestMethod]
         public void FromEvent_SynchronizationContext()
         {
             var beforeSubscribeNull = false;
@@ -286,10 +289,10 @@ namespace ReactiveTests.Tests
                 subscribeOnCtx = ReferenceEquals(addCtx, ctx);
 
                 src.OnBar(42);
-                fstNext = res.SequenceEqual(new[] { 42 });
+                fstNext = res.SequenceEqual([42]);
 
                 src.OnBar(43);
-                sndNext = res.SequenceEqual(new[] { 42, 43 });
+                sndNext = res.SequenceEqual([42, 43]);
 
                 var u = new Thread(() =>
                 {
@@ -306,7 +309,7 @@ namespace ReactiveTests.Tests
                 disposeOnCtx = ReferenceEquals(remCtx, ctx);
 
                 src.OnBar(44);
-                thdNext = res.SequenceEqual(new[] { 42, 43 });
+                thdNext = res.SequenceEqual([42, 43]);
             });
 
             Assert.True(beforeSubscribeNull);
@@ -334,27 +337,26 @@ namespace ReactiveTests.Tests
             t.Start();
             t.Join();
         }
-#endif
 
-        [Fact]
+        [TestMethod]
         public void FromEvent_Scheduler1()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEvent<MyEventArgs>(h => { add(); }, h => { remove(); }, s));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromEvent_Scheduler2()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEvent(h => { add(); }, h => { remove(); }, s));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromEvent_Scheduler3()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEvent<Action<MyEventArgs>, MyEventArgs>(h => { add(); }, h => { remove(); }, s));
         }
 
-        [Fact]
+        [TestMethod]
         public void FromEvent_Scheduler4()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEvent<Action, MyEventArgs>(h => () => { }, h => { add(); }, h => { remove(); }, s));

@@ -6,20 +6,22 @@ using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class EventPatternSourceBaseTest
     {
-        [Fact]
+        [TestMethod]
         public void ArgumentChecking()
         {
             var xs = Observable.Empty<EventPattern<object, EventArgs>>();
 
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new MyEventPatternSource(null, (a, x) => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => new MyEventPatternSource(xs, null));
+#pragma warning restore CA1806
 
             var e = new MyEventPatternSource(xs, (a, x) => { })
             {

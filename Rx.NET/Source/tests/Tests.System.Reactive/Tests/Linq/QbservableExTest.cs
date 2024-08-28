@@ -7,18 +7,18 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class QbservableExTest : ReactiveTest
     {
         private readonly IQbservable<int> _qbNull = null;
-        private IQbservable<int> _qbMy = new MyQbservable<int>();
-        private IQbservableProvider _qbp = new MyQbservableProvider();
+        private readonly IQbservable<int> _qbMy = new MyQbservable<int>();
+        private readonly IQbservableProvider _qbp = new MyQbservableProvider();
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_ArgumentNullChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.ForkJoin(_qbNull, _qbMy, (a, b) => a + b));
@@ -30,7 +30,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.ForkJoin(_qbp, default(IQueryable<IObservable<int>>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin()
         {
             _qbMy.ForkJoin(_qbMy, (a, b) => a + b);
@@ -38,7 +38,7 @@ namespace ReactiveTests.Tests
             _qbp.ForkJoin(new MyQueryable<IObservable<int>>());
         }
 
-        [Fact]
+        [TestMethod]
         public void Create_ArgumentNullChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.Create<int>(default, _ => new IObservable<object>[0]));
@@ -47,21 +47,21 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.Create(_qbp, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Create()
         {
             _qbp.Create<int>(obs => new IObservable<object>[0]);
             _qbp.Create(() => new IObservable<object>[0]);
         }
 
-        [Fact]
+        [TestMethod]
         public void Let_ArgumentNullChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.Let(_qbNull, xs => xs));
             ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.Let(_qbMy, default(Expression<Func<IObservable<int>, IObservable<int>>>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Let()
         {
             _qbMy.Let(xs => xs);

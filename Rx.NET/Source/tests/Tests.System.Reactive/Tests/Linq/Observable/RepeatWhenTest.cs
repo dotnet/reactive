@@ -9,14 +9,17 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class RepeatWhenTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RepeatWhen<int, object>(null, v => v));
@@ -24,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.RepeatWhen(v => v).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_Handler_Crash()
         {
             var scheduler = new TestScheduler();
@@ -47,7 +50,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_Handler_Error()
         {
             var scheduler = new TestScheduler();
@@ -71,7 +74,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_Handler_Completed()
         {
             var scheduler = new TestScheduler();
@@ -95,7 +98,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_Disposed()
         {
             var main = new Subject<int>();
@@ -112,7 +115,7 @@ namespace ReactiveTests.Tests
             Assert.False(inner.HasObservers);
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_Handler_Completed_Disposes_Main()
         {
             var main = new Subject<int>();
@@ -140,7 +143,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, end);
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_Handler_Error_Disposes_Main()
         {
             var main = new Subject<int>();
@@ -168,7 +171,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, end);
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_Basic()
         {
             var scheduler = new TestScheduler();
@@ -204,7 +207,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_Infinite()
         {
             var scheduler = new TestScheduler();
@@ -230,7 +233,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_Error()
         {
             var scheduler = new TestScheduler();
@@ -260,7 +263,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_Throws()
         {
             var scheduler1 = new TestScheduler();
@@ -294,7 +297,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => xss.Subscribe());
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_RepeatCount_Basic()
         {
             var scheduler = new TestScheduler();
@@ -334,7 +337,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_RepeatCount_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -368,7 +371,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_RepeatCount_Infinite()
         {
             var scheduler = new TestScheduler();
@@ -398,7 +401,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_RepeatCount_Error()
         {
             var scheduler = new TestScheduler();
@@ -432,7 +435,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_RepeatCount_Throws()
         {
             var scheduler1 = new TestScheduler();
@@ -482,7 +485,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => xss.Subscribe());
         }
 
-        [Fact]
+        [TestMethod]
         public void RepeatWhen_Observable_Repeat_Delayed()
         {
             var scheduler = new TestScheduler();
@@ -499,7 +502,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 xs.RepeatWhen(v =>
                 {
-                    int[] count = { 0 };
+                    int[] count = [0];
                     return v.SelectMany(w =>
                     {
                         var c = ++count[0];

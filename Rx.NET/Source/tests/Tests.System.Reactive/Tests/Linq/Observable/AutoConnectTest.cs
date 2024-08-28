@@ -8,13 +8,18 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
+
+#pragma warning disable IDE0028 // Simplify collection initialization. Using this in Assert.Equals makes it unclear what types are actually in use.
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class AutoConnectTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void AutoConnect_Basic()
         {
             var called = 0;
@@ -40,7 +45,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(new List<int>() { 1, 2, 3, 4, 5 }, list);
         }
 
-        [Fact]
+        [TestMethod]
         public void AutoConnect_Immediately()
         {
             var called = 0;
@@ -66,7 +71,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(new List<int>() { 1, 2, 3, 4, 5 }, list);
         }
 
-        [Fact]
+        [TestMethod]
         public void AutoConnect_TwoConsumers()
         {
             var called = 0;
@@ -93,7 +98,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, called);
             Assert.Equal(new List<int>() { 1, 2, 3, 4, 5 }, list);
 
-            Assert.Equal(new List<int>() { 1, 2, 3, 4, 5 }, list0);
+            Assert.Equal([1, 2, 3, 4, 5], list0);
 
             list = source.ToList().First();
 
@@ -101,7 +106,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(new List<int>() { 1, 2, 3, 4, 5 }, list);
         }
 
-        [Fact]
+        [TestMethod]
         public void AutoConnect_Dispose()
         {
             var subject = new Subject<int>();
@@ -129,7 +134,7 @@ namespace ReactiveTests.Tests
             subject.OnNext(4);
             subject.OnNext(5);
 
-            Assert.Equal(new List<int>() { 1, 2, 3 }, list);
+            Assert.Equal([1, 2, 3], list);
 
         }
     }

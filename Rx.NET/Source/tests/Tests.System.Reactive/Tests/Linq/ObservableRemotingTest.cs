@@ -10,14 +10,16 @@ using System.Reflection;
 using System.Runtime.Remoting.Lifetime;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public partial class ObservableRemotingTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Remotable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => RemotingObservable.Remotable(default(IObservable<int>)));
@@ -102,7 +104,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Remotable_Empty()
         {
             var evt = new ManualResetEvent(false);
@@ -114,7 +116,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Remotable_Return()
         {
             var evt = new ManualResetEvent(false);
@@ -128,7 +130,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Remotable_Return_LongLease()
         {
             var evt = new ManualResetEvent(false);
@@ -142,7 +144,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Remotable_Throw()
         {
             var ex = new InvalidOperationException("Oops!");
@@ -158,7 +160,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Remotable_Disposal()
         {
             var test = GetRemoteTestObject();

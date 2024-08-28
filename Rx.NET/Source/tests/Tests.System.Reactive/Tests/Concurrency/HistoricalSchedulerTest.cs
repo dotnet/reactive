@@ -8,11 +8,13 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class HistoricalSchedulerTest
     {
         public DateTimeOffset Time(int i)
@@ -20,7 +22,7 @@ namespace ReactiveTests.Tests
             return new DateTimeOffset(1979, 10, 31, 4, 30, 15, TimeSpan.Zero).AddDays(i);
         }
 
-        [Fact]
+        [TestMethod]
         public void Ctor()
         {
             var s = new HistoricalScheduler();
@@ -30,7 +32,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(false, s.IsEnabled);
         }
 
-        [Fact]
+        [TestMethod]
         public void Start_Stop()
         {
             var s = new HistoricalScheduler();
@@ -75,7 +77,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Order()
         {
             var s = new HistoricalScheduler();
@@ -99,7 +101,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Cancellation()
         {
             var s = new HistoricalScheduler();
@@ -121,7 +123,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AdvanceTo_ArgumentChecking()
         {
             var now = DateTimeOffset.Now;
@@ -131,7 +133,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => s.AdvanceTo(now.Subtract(TimeSpan.FromSeconds(1))));
         }
 
-        [Fact]
+        [TestMethod]
         public void AdvanceTo()
         {
             var s = new HistoricalScheduler();
@@ -210,7 +212,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AdvanceBy_ArgumentChecking()
         {
             var s = new HistoricalScheduler();
@@ -218,7 +220,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => s.AdvanceBy(TimeSpan.FromSeconds(-1)));
         }
 
-        [Fact]
+        [TestMethod]
         public void AdvanceBy()
         {
             var s = new HistoricalScheduler();
@@ -297,7 +299,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void IsEnabled()
         {
             var s = new HistoricalScheduler();
@@ -318,7 +320,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(false, s.IsEnabled);
         }
 
-        [Fact]
+        [TestMethod]
         public void No_Nested_AdvanceBy()
         {
             var s = new HistoricalScheduler();
@@ -328,7 +330,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => s.Start());
         }
 
-        [Fact]
+        [TestMethod]
         public void No_Nested_AdvanceTo()
         {
             var s = new HistoricalScheduler();
@@ -338,7 +340,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => s.Start());
         }
 
-        [Fact]
+        [TestMethod]
         public void Sleep_ArgumentChecking()
         {
             var s = new HistoricalScheduler(DateTimeOffset.Now);
@@ -346,7 +348,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => s.Sleep(TimeSpan.FromSeconds(-1)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Sleep1()
         {
             var now = new DateTimeOffset(1983, 2, 11, 12, 0, 0, TimeSpan.Zero);
@@ -358,7 +360,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(now + TimeSpan.FromDays(1), s.Clock);
         }
 
-        [Fact]
+        [TestMethod]
         public void Sleep2()
         {
             var s = new HistoricalScheduler();
@@ -378,13 +380,15 @@ namespace ReactiveTests.Tests
             Assert.Equal(2, n);
         }
 
-        [Fact]
+        [TestMethod]
         public void WithComparer_ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler(DateTimeOffset.Now, null));
+#pragma warning restore CA1806
         }
 
-        [Fact]
+        [TestMethod]
         public void WithComparer()
         {
             var now = DateTimeOffset.Now;

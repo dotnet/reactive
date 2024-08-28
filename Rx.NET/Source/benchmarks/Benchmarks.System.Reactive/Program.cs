@@ -27,7 +27,8 @@ namespace Benchmarks.System.Reactive
                 typeof(ScalarScheduleBenchmark),
                 typeof(StableCompositeDisposableBenchmark),
                 typeof(SubjectBenchmark),
-                typeof(ComparisonAsyncBenchmark)
+                typeof(ComparisonAsyncBenchmark),
+                typeof(GroupByCompletion)
 #if (CURRENT)
                 ,typeof(AppendPrependBenchmark)
                 ,typeof(PrependVsStartWtihBenchmark)

@@ -24,16 +24,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
         protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TResult>
         {
-            private readonly object _gate = new object();
-            private readonly CompositeDisposable _group = new CompositeDisposable();
-            private readonly SortedDictionary<int, TLeft> _leftMap = new SortedDictionary<int, TLeft>();
-            private readonly SortedDictionary<int, TRight> _rightMap = new SortedDictionary<int, TRight>();
+            private readonly object _gate = new();
+            private readonly CompositeDisposable _group = [];
+            private readonly SortedDictionary<int, TLeft> _leftMap = [];
+            private readonly SortedDictionary<int, TRight> _rightMap = [];
 
             private readonly Func<TLeft, IObservable<TLeftDuration>> _leftDurationSelector;
             private readonly Func<TRight, IObservable<TRightDuration>> _rightDurationSelector;

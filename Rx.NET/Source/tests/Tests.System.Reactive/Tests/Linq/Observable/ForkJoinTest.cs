@@ -8,14 +8,15 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ForkJoinTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_ArgumentChecking()
         {
             var someObservable = DummyObservable<int>.Instance;
@@ -27,7 +28,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.ForkJoin((IEnumerable<IObservable<int>>)null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_EmptyEmpty()
         {
             var scheduler = new TestScheduler();
@@ -51,7 +52,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_None()
         {
             var scheduler = new TestScheduler();
@@ -62,7 +63,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_EmptyReturn()
         {
             var scheduler = new TestScheduler();
@@ -87,7 +88,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_ReturnEmpty()
         {
             var scheduler = new TestScheduler();
@@ -112,7 +113,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_ReturnReturn()
         {
             var scheduler = new TestScheduler();
@@ -139,7 +140,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_EmptyThrow()
         {
             var ex = new Exception();
@@ -166,7 +167,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_ThrowEmpty()
         {
             var ex = new Exception();
@@ -193,7 +194,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_ReturnThrow()
         {
             var ex = new Exception();
@@ -221,7 +222,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_ThrowReturn()
         {
             var ex = new Exception();
@@ -249,7 +250,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_Binary()
         {
             var scheduler = new TestScheduler();
@@ -278,7 +279,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_NaryParams()
         {
             var scheduler = new TestScheduler();
@@ -311,12 +312,12 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() => ObservableEx.ForkJoin(o1, o2, o3));
 
             res.Messages.AssertEqual(
-                OnNext<int[]>(270, l => l.SequenceEqual(new[] { 4, 7, 5 })), // TODO: fix ForkJoin behavior
+                OnNext<int[]>(270, l => l.SequenceEqual([4, 7, 5])), // TODO: fix ForkJoin behavior
                 OnCompleted<int[]>(270)
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_NaryParamsEmpty()
         {
             var scheduler = new TestScheduler();
@@ -350,7 +351,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_NaryParamsEmptyBeforeEnd()
         {
             var scheduler = new TestScheduler();
@@ -384,13 +385,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_Nary_Immediate()
         {
-            ObservableEx.ForkJoin(Observable.Return(1), Observable.Return(2)).First().SequenceEqual(new[] { 1, 2 });
+            ObservableEx.ForkJoin(Observable.Return(1), Observable.Return(2)).First().AssertEqual([1, 2]);
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_Nary_Virtual_And_Immediate()
         {
             var scheduler = new TestScheduler();
@@ -423,12 +424,12 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() => ObservableEx.ForkJoin(new List<IObservable<int>> { o1, o2, o3, Observable.Return(20) }));
 
             res.Messages.AssertEqual(
-                OnNext<int[]>(270, l => l.SequenceEqual(new[] { 4, 7, 5, 20 })),
+                OnNext<int[]>(270, l => l.SequenceEqual([4, 7, 5, 20])),
                 OnCompleted<int[]>(270)
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_Nary_Immediate_And_Virtual()
         {
             var scheduler = new TestScheduler();
@@ -461,12 +462,12 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() => ObservableEx.ForkJoin(new List<IObservable<int>> { Observable.Return(20), o1, o2, o3 }));
 
             res.Messages.AssertEqual(
-                OnNext<int[]>(270, l => l.SequenceEqual(new[] { 20, 4, 7, 5 })),
+                OnNext<int[]>(270, l => l.SequenceEqual([20, 4, 7, 5])),
                 OnCompleted<int[]>(270)
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ForkJoin_Nary()
         {
             var scheduler = new TestScheduler();
@@ -499,12 +500,12 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() => ObservableEx.ForkJoin(new List<IObservable<int>> { o1, o2, o3 }));
 
             res.Messages.AssertEqual(
-                OnNext<int[]>(270, l => l.SequenceEqual(new[] { 4, 7, 5 })), // TODO: fix ForkJoin behavior
+                OnNext<int[]>(270, l => l.SequenceEqual([4, 7, 5])), // TODO: fix ForkJoin behavior
                 OnCompleted<int[]>(270)
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Bug_1302_SelectorThrows_LeftLast()
         {
             var scheduler = new TestScheduler();
@@ -536,7 +537,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Bug_1302_SelectorThrows_RightLast()
         {
             var scheduler = new TestScheduler();
@@ -568,7 +569,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Bug_1302_RightLast_NoLeft()
         {
             var scheduler = new TestScheduler();
@@ -597,7 +598,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Bug_1302_RightLast_NoRight()
         {
             var scheduler = new TestScheduler();

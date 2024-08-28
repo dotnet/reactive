@@ -4,13 +4,17 @@
     <MinClientVersion>2.12</MinClientVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Authors>.NET Foundation and Contributors</Authors>
-    <PackageIconUrl>https://raw.githubusercontent.com/dotnet/reactive/0f837d11385cfaf575861ccc5a5fbcafb22d888f/Rx.NET/Resources/Artwork/Logo.png</PackageIconUrl>
+    <PackageIcon>Logo.png</PackageIcon>
     <PackageProjectUrl>https://github.com/dotnet/reactive</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)ReactiveX.snk</AssemblyOriginatorKeyFile>
-    <NoWarn>$(NoWarn);1701;1702;CS1591;NU5105</NoWarn>
+    <!--
+    IDE0056 Suggests using range-based indexing, which doesn't work on .NET 4.8 (even in cases where it would compile down to code with no dependency on Index or Range).
+    IDE0270 Null check can be simplified. Tends to suggest using for exception throwing cases even when the resulting code would be overly complex.
+    -->
+    <NoWarn>$(NoWarn);1701;1702;CS1591;NU5105;IDE0056;IDE0270</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -25,12 +29,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.231" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.255" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\Rx.NET\Resources\Artwork\Logo.png" Pack="true" PackagePath="\" Visible="false"  />
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="coverlet.collector" Version="3.1.0" />
+    <PackageReference Include="coverlet.collector" Version="3.2.0" />
   </ItemGroup>
 
 

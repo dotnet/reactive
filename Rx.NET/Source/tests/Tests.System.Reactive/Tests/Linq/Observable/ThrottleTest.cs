@@ -9,14 +9,17 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ThrottleTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Throttle_ArgumentChecking()
         {
             var scheduler = new TestScheduler();
@@ -30,18 +33,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Throttle(someObservable, TimeSpan.FromSeconds(-1), scheduler));
         }
 
-        private IEnumerable<Recorded<Notification<T>>> Generate<T, S>(S seed, Func<S, bool> condition, Func<S, S> iterate, Func<S, Recorded<Notification<T>>> selector, Func<S, Recorded<Notification<T>>> final)
-        {
-            S s;
-            for (s = seed; condition(s); s = iterate(s))
-            {
-                yield return selector(s);
-            }
-
-            yield return final(s);
-        }
-
-        [Fact]
+        [TestMethod]
         public void Throttle_TimeSpan_AllPass()
         {
             var scheduler = new TestScheduler();
@@ -72,7 +64,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_TimeSpan_AllPass_ErrorEnd()
         {
             var ex = new Exception();
@@ -105,7 +97,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_TimeSpan_AllDrop()
         {
             var scheduler = new TestScheduler();
@@ -136,7 +128,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_TimeSpan_AllDrop_ErrorEnd()
         {
             var ex = new Exception();
@@ -168,7 +160,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Empty()
         {
             var scheduler = new TestScheduler();
@@ -191,7 +183,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Error()
         {
             var scheduler = new TestScheduler();
@@ -216,7 +208,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Never()
         {
             var scheduler = new TestScheduler();
@@ -237,7 +229,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Simple()
         {
             var scheduler = new TestScheduler();
@@ -267,13 +259,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_DefaultScheduler()
         {
-            Assert.True(Observable.Return(1).Throttle(TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual(new[] { 1 }));
+            Assert.True(Observable.Return(1).Throttle(TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual([1]));
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Duration_ArgumentChecking()
         {
             var someObservable = DummyObservable<int>.Instance;
@@ -282,7 +274,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throttle(someObservable, default(Func<int, IObservable<string>>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Duration_DelayBehavior()
         {
             var scheduler = new TestScheduler();
@@ -344,7 +336,7 @@ namespace ReactiveTests.Tests
             ys[4].Subscriptions.AssertEqual(Subscribe(400, 400 + 20));
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Duration_ThrottleBehavior()
         {
             var scheduler = new TestScheduler();
@@ -404,7 +396,7 @@ namespace ReactiveTests.Tests
             ys[4].Subscriptions.AssertEqual(Subscribe(400, 400 + 20));
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Duration_EarlyCompletion()
         {
             var scheduler = new TestScheduler();
@@ -464,7 +456,7 @@ namespace ReactiveTests.Tests
             ys[4].Subscriptions.AssertEqual(Subscribe(400, 410));
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Duration_InnerError()
         {
             var scheduler = new TestScheduler();
@@ -502,7 +494,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Duration_OuterError()
         {
             var scheduler = new TestScheduler();
@@ -537,7 +529,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Duration_SelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -580,7 +572,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Duration_InnerDone_DelayBehavior()
         {
             var scheduler = new TestScheduler();
@@ -615,7 +607,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throttle_Duration_InnerDone_ThrottleBehavior()
         {
             var scheduler = new TestScheduler();

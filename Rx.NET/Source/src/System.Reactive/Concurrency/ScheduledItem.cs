@@ -11,6 +11,7 @@ namespace System.Reactive.Concurrency
     /// Abstract base class for scheduled work items.
     /// </summary>
     /// <typeparam name="TAbsolute">Absolute time representation type.</typeparam>
+#pragma warning disable CA1033, CA1063, CA1816 // (Overridable IDisposable.) This is a specialized base type, and it would be inappropriate to encourage anyone to build derived types that do more in Dispose.
     public abstract class ScheduledItem<TAbsolute> : IScheduledItem<TAbsolute>, IComparable<ScheduledItem<TAbsolute>>, IDisposable
         where TAbsolute : IComparable<TAbsolute>
     {
@@ -155,6 +156,7 @@ namespace System.Reactive.Concurrency
 
         void IDisposable.Dispose() => Cancel();
     }
+#pragma warning restore CA1033, CA1063, CA1816
 
     /// <summary>
     /// Represents a scheduled work item based on the materialization of an IScheduler.Schedule method call.

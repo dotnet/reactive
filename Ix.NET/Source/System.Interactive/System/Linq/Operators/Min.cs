@@ -8,6 +8,7 @@ namespace System.Linq
 {
     public static partial class EnumerableEx
     {
+#if !(REFERENCE_ASSEMBLY && NET6_0_OR_GREATER)
         /// <summary>
         /// Returns the minimum value in the enumerable sequence by using the specified comparer to compare values.
         /// </summary>
@@ -22,7 +23,8 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return MinBy(source, x => x, comparer).First();
+            return MinByWithTies(source, x => x, comparer).First();
         }
+#endif
     }
 }

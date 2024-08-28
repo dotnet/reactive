@@ -1,0 +1,10 @@
+[*.cs]
+
+# Test projects don't need to conform to the .NET Framework class library design guidelines,
+# because they are not libraries intended for public consumption.
+dotnet_analyzer_diagnostic.category-Design.severity=none
+
+# A couple of the disable diagnostics have suppressions in the code, so we get 'unnecessary
+# suppression' messages unless we re-enable them.
+dotnet_diagnostic.CA1067.severity = warning
+dotnet_diagnostic.CA1806.severity = warning

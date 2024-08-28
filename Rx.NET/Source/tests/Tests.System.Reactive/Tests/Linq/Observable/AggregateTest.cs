@@ -7,13 +7,14 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class AggregateTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Aggregate_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int>(default, 1, (x, y) => x + y));
@@ -27,7 +28,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(DummyObservable<int>.Instance, 1, (x, y) => x + y, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeed_Empty()
         {
             var scheduler = new TestScheduler();
@@ -51,7 +52,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeed_Return()
         {
             var scheduler = new TestScheduler();
@@ -76,7 +77,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeed_Throw()
         {
             var ex = new Exception();
@@ -101,7 +102,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeed_Never()
         {
             var ex = new Exception();
@@ -124,7 +125,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeed_Range()
         {
             var ex = new Exception();
@@ -155,7 +156,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeed_AccumulatorThrows()
         {
             var ex = new Exception();
@@ -185,7 +186,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeedAndResult_Empty()
         {
             var scheduler = new TestScheduler();
@@ -209,7 +210,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeedAndResult_Return()
         {
             var scheduler = new TestScheduler();
@@ -234,7 +235,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeedAndResult_Throw()
         {
             var ex = new Exception();
@@ -259,7 +260,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeedAndResult_Never()
         {
             var ex = new Exception();
@@ -282,7 +283,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeedAndResult_Range()
         {
             var ex = new Exception();
@@ -313,7 +314,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeedAndResult_AccumulatorThrows()
         {
             var ex = new Exception();
@@ -343,7 +344,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithSeedAndResult_ResultSelectorThrows()
         {
             var ex = new Exception();
@@ -373,7 +374,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithoutSeed_Empty()
         {
             var scheduler = new TestScheduler();
@@ -396,7 +397,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithoutSeed_Return()
         {
             var scheduler = new TestScheduler();
@@ -421,7 +422,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithoutSeed_Throw()
         {
             var ex = new Exception();
@@ -446,7 +447,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithoutSeed_Never()
         {
             var scheduler = new TestScheduler();
@@ -463,7 +464,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithoutSeed_Range()
         {
             var scheduler = new TestScheduler();
@@ -492,7 +493,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AggregateWithoutSeed_AccumulatorThrows()
         {
             var ex = new Exception();

@@ -1179,7 +1179,9 @@ namespace System.Reactive.Linq
 
     }
 
+#pragma warning disable CA1711 // (Don't use Ex suffix.) This has been a public type for many years, so we can't rename it now.
     public static partial class ObservableEx
+#pragma warning restore CA1711
     {
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence of tuple values whenever all of the observable sequences have produced an element at a corresponding index.

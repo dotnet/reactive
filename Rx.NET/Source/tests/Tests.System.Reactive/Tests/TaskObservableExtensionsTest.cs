@@ -11,11 +11,13 @@ using System.Reactive.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class TaskObservableExtensionsTest : ReactiveTest
     {
         private readonly Task<int> _doneTask;
@@ -29,7 +31,7 @@ namespace ReactiveTests.Tests
 
         #region ToObservable
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_ArgumentChecking()
         {
             var s = Scheduler.Immediate;
@@ -37,14 +39,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task<int>)null));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task<int>)null, s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(_doneTask, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(_doneTask, default(IScheduler)));
 
             var tcs = new TaskCompletionSource<int>();
             var task = tcs.Task;
             ReactiveAssert.Throws<ArgumentNullException>(() => task.ToObservable().Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Complete_BeforeCreate()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -71,7 +73,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Complete_BeforeSubscribe()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -98,7 +100,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Complete_BeforeDispose()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -125,7 +127,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Complete_AfterDispose()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -150,7 +152,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Exception_BeforeCreate()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -178,7 +180,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Exception_BeforeSubscribe()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -206,7 +208,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Exception_BeforeDispose()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -234,7 +236,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Exception_AfterDispose()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -259,7 +261,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Canceled_BeforeCreate()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -285,7 +287,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Canceled_BeforeSubscribe()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -311,7 +313,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Canceled_BeforeDispose()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -337,7 +339,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Canceled_AfterDispose()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -363,7 +365,7 @@ namespace ReactiveTests.Tests
         }
 
 #if DESKTOPCLR
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_NonVoid_Scheduler()
         {
             var e = new ManualResetEvent(false);
@@ -376,7 +378,7 @@ namespace ReactiveTests.Tests
             xs.Subscribe(res =>
             {
                 x = res;
-                t = Thread.CurrentThread.ManagedThreadId;
+                t = Environment.CurrentManagedThreadId;
                 e.Set();
             });
 
@@ -385,11 +387,11 @@ namespace ReactiveTests.Tests
             e.WaitOne();
 
             Assert.Equal(42, x);
-            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(Environment.CurrentManagedThreadId, t);
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_ArgumentChecking()
         {
             var s = Scheduler.Immediate;
@@ -397,14 +399,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(null));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(null, s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)_doneTask, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)_doneTask, default(IScheduler)));
 
             var tcs = new TaskCompletionSource<int>();
             Task task = tcs.Task;
             ReactiveAssert.Throws<ArgumentNullException>(() => task.ToObservable().Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Complete_BeforeCreate()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -431,7 +433,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Complete_BeforeSubscribe()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -458,7 +460,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Complete_BeforeDispose()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -485,7 +487,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Complete_AfterDispose()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -510,7 +512,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Exception_BeforeCreate()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -538,7 +540,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Exception_BeforeSubscribe()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -566,7 +568,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Exception_BeforeDispose()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -594,7 +596,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Exception_AfterDispose()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -619,7 +621,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Canceled_BeforeCreate()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -645,7 +647,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Canceled_BeforeSubscribe()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -671,7 +673,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Canceled_BeforeDispose()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -697,7 +699,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Canceled_AfterDispose()
         {
             var taskScheduler = new TestTaskScheduler();
@@ -723,7 +725,7 @@ namespace ReactiveTests.Tests
         }
 
 #if DESKTOPCLR
-        [Fact]
+        [TestMethod]
         public void TaskToObservable_Void_Scheduler()
         {
             var e = new ManualResetEvent(false);
@@ -734,7 +736,7 @@ namespace ReactiveTests.Tests
             var xs = ((Task)tcs.Task).ToObservable(Scheduler.Immediate);
             xs.Subscribe(res =>
             {
-                t = Thread.CurrentThread.ManagedThreadId;
+                t = Environment.CurrentManagedThreadId;
                 e.Set();
             });
 
@@ -742,7 +744,7 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(Environment.CurrentManagedThreadId, t);
         }
 #endif
 
@@ -750,7 +752,7 @@ namespace ReactiveTests.Tests
 
         #region ToTask
 
-        [Fact]
+        [TestMethod]
         public void ObservableToTask_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToTask<int>(null));
@@ -764,7 +766,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToTask(Observable.Never<int>(), new CancellationToken(), new object(), scheduler: null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ObservableToTaskNoValue()
         {
             var scheduler = new TestScheduler();
@@ -780,7 +782,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, scheduler.Clock);
         }
 
-        [Fact]
+        [TestMethod]
         public void ObservableToTaskSingleValue()
         {
             var scheduler = new TestScheduler();
@@ -796,7 +798,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, scheduler.Clock);
         }
 
-        [Fact]
+        [TestMethod]
         public void ObservableToTaskMultipleValues()
         {
             var scheduler = new TestScheduler();
@@ -819,7 +821,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ObservableToTaskException()
         {
             var scheduler = new TestScheduler();
@@ -846,7 +848,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ObservableToTaskCancelled()
         {
             var scheduler = new TestScheduler();
@@ -870,7 +872,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ObservableToTaskWithStateSingleValue()
         {
             var state = "bar";
@@ -890,7 +892,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, scheduler.Clock);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToTask_Scheduler_Resumed_On_Thread_Success()
         {
             var scheduler = new OneshotScheduler();
@@ -906,7 +908,7 @@ namespace ReactiveTests.Tests
             Assert.True(task.IsCompleted);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToTask_Scheduler_Resumed_On_Thread_Failure()
         {
             var scheduler = new OneshotScheduler();
@@ -924,7 +926,7 @@ namespace ReactiveTests.Tests
             Assert.Equal("failure", task.Exception.InnerException.Message);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToTask_Scheduler_Resumed_On_Thread_Cancel()
         {
             var scheduler = new OneshotScheduler();
@@ -947,7 +949,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void ToTask_Scheduler_Resumed_On_Thread_Success_With_State()
         {
             var scheduler = new OneshotScheduler();
@@ -965,7 +967,7 @@ namespace ReactiveTests.Tests
             Assert.Equal("state", task.AsyncState);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToTask_Scheduler_Resumed_On_Thread_Failure_With_State()
         {
             var scheduler = new OneshotScheduler();
@@ -984,7 +986,7 @@ namespace ReactiveTests.Tests
             Assert.Equal("state", task.AsyncState);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToTask_Scheduler_Resumed_On_Thread_Cancel_With_State()
         {
             var scheduler = new OneshotScheduler();
@@ -1007,7 +1009,7 @@ namespace ReactiveTests.Tests
             Assert.Equal("state", task.AsyncState);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToTask_Scheduler_Resumed_On_Thread_Success_With_Cancellation()
         {
             var scheduler = new OneshotScheduler();
@@ -1023,7 +1025,7 @@ namespace ReactiveTests.Tests
             Assert.True(task.IsCompleted);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToTask_Scheduler_Resumed_On_Thread_Failure_With_Cancellation()
         {
             var scheduler = new OneshotScheduler();
@@ -1041,7 +1043,7 @@ namespace ReactiveTests.Tests
             Assert.Equal("failure", task.Exception.InnerException.Message);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToTask_Scheduler_Resumed_On_Thread_Cancel_With_Cancellation()
         {
             var scheduler = new OneshotScheduler();
@@ -1063,7 +1065,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(new TaskCanceledException(task).CancellationToken, cts.Token);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToTask_Scheduler_Resumed_On_Thread_Success_With_State_And_Cancellation()
         {
             var scheduler = new OneshotScheduler();
@@ -1081,7 +1083,7 @@ namespace ReactiveTests.Tests
             Assert.Equal("state", task.AsyncState);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToTask_Scheduler_Resumed_On_Thread_Failure_With_State_And_Cancellation()
         {
             var scheduler = new OneshotScheduler();
@@ -1100,7 +1102,7 @@ namespace ReactiveTests.Tests
             Assert.Equal("state", task.AsyncState);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToTask_Scheduler_Resumed_On_Thread_Cancel_With_State_And_Cancellation()
         {
             var scheduler = new OneshotScheduler();
@@ -1123,7 +1125,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(new TaskCanceledException(task).CancellationToken, cts.Token);
         }
 
-        sealed class OneshotScheduler : IScheduler
+        private sealed class OneshotScheduler : IScheduler
         {
             public DateTimeOffset Now => DateTimeOffset.Now;
 
@@ -1156,7 +1158,7 @@ namespace ReactiveTests.Tests
 
             public bool HasTask => _task != null;
 
-            sealed class Work<TState> : IDisposable
+            private sealed class Work<TState> : IDisposable
             {
                 internal TState State;
                 internal Func<IScheduler, TState, IDisposable> Action;
@@ -1168,10 +1170,10 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public async Task ToTask_Scheduler_Dispose_Can_Propagate()
         {
-            async Task asyncMethod()
+            static async Task asyncMethod()
             {
                 await Task.Delay(500);
                 Console.WriteLine("Done");

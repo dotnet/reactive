@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<Reactive.TimeInterval<TSource>> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<Reactive.TimeInterval<TSource>> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(this);
 

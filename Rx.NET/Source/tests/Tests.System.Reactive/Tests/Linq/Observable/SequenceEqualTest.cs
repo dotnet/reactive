@@ -8,14 +8,15 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SequenceEqualTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(default, DummyObservable<int>.Instance));
@@ -26,12 +27,12 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(default, new[] { 42 }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, default(IEnumerable<int>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(default, new[] { 42 }, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(default, [42], EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, default(IEnumerable<int>), EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, new[] { 42 }, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, [42], default));
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_Equal()
         {
             var scheduler = new TestScheduler();
@@ -75,7 +76,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_Equal_Sym()
         {
             var scheduler = new TestScheduler();
@@ -119,7 +120,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_NotEqual_Left()
         {
             var scheduler = new TestScheduler();
@@ -163,7 +164,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_NotEqual_Left_Sym()
         {
             var scheduler = new TestScheduler();
@@ -207,7 +208,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_NotEqual_Right()
         {
             var scheduler = new TestScheduler();
@@ -251,7 +252,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_NotEqual_Right_Sym()
         {
             var scheduler = new TestScheduler();
@@ -295,7 +296,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_NotEqual_2()
         {
             var scheduler = new TestScheduler();
@@ -347,7 +348,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_NotEqual_2_Sym()
         {
             var scheduler = new TestScheduler();
@@ -399,7 +400,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_NotEqual_3()
         {
             var scheduler = new TestScheduler();
@@ -438,7 +439,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_NotEqual_3_Sym()
         {
             var scheduler = new TestScheduler();
@@ -477,7 +478,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_ComparerThrows()
         {
             var scheduler = new TestScheduler();
@@ -517,7 +518,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_ComparerThrows_Sym()
         {
             var scheduler = new TestScheduler();
@@ -577,7 +578,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_NotEqual_4()
         {
             var scheduler = new TestScheduler();
@@ -611,7 +612,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_NotEqual_4_Sym()
         {
             var scheduler = new TestScheduler();
@@ -645,7 +646,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_Left_Throw()
         {
             var scheduler = new TestScheduler();
@@ -680,7 +681,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Observable_Right_Throw()
         {
             var scheduler = new TestScheduler();
@@ -715,7 +716,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Enumerable_Equal()
         {
             var scheduler = new TestScheduler();
@@ -732,7 +733,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3, 4, 5, 6, 7 })
+                xs.SequenceEqual([3, 4, 5, 6, 7])
             );
 
             res.Messages.AssertEqual(
@@ -745,7 +746,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Enumerable_NotEqual_Elements()
         {
             var scheduler = new TestScheduler();
@@ -762,7 +763,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3, 4, 9, 6, 7 })
+                xs.SequenceEqual([3, 4, 9, 6, 7])
             );
 
             res.Messages.AssertEqual(
@@ -775,7 +776,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Enumerable_Comparer_Equal()
         {
             var scheduler = new TestScheduler();
@@ -792,7 +793,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3 - 2, 4, 5, 6 + 42, 7 - 6 }, new OddEvenComparer())
+                xs.SequenceEqual([3 - 2, 4, 5, 6 + 42, 7 - 6], new OddEvenComparer())
             );
 
             res.Messages.AssertEqual(
@@ -805,7 +806,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Enumerable_Comparer_NotEqual()
         {
             var scheduler = new TestScheduler();
@@ -822,7 +823,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3 - 2, 4, 5 + 9, 6 + 42, 7 - 6 }, new OddEvenComparer())
+                xs.SequenceEqual([3 - 2, 4, 5 + 9, 6 + 42, 7 - 6], new OddEvenComparer())
             );
 
             res.Messages.AssertEqual(
@@ -848,7 +849,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Enumerable_Comparer_Throws()
         {
             var scheduler = new TestScheduler();
@@ -867,7 +868,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3, 4, 5, 6, 7 }, new ThrowingComparer(5, ex))
+                xs.SequenceEqual([3, 4, 5, 6, 7], new ThrowingComparer(5, ex))
             );
 
             res.Messages.AssertEqual(
@@ -906,7 +907,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Enumerable_NotEqual_TooLong()
         {
             var scheduler = new TestScheduler();
@@ -923,7 +924,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3, 4, 5, 6, 7, 8 })
+                xs.SequenceEqual([3, 4, 5, 6, 7, 8])
             );
 
             res.Messages.AssertEqual(
@@ -936,7 +937,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Enumerable_NotEqual_TooShort()
         {
             var scheduler = new TestScheduler();
@@ -953,7 +954,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3, 4, 5, 6 })
+                xs.SequenceEqual([3, 4, 5, 6])
             );
 
             res.Messages.AssertEqual(
@@ -966,7 +967,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Enumerable_OnError()
         {
             var ex = new Exception();
@@ -982,7 +983,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3, 4 })
+                xs.SequenceEqual([3, 4])
             );
 
             res.Messages.AssertEqual(
@@ -994,7 +995,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Enumerable_IteratorThrows1()
         {
             var ex = new Exception();
@@ -1022,7 +1023,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Enumerable_IteratorThrows2()
         {
             var ex = new Exception();
@@ -1055,7 +1056,7 @@ namespace ReactiveTests.Tests
             throw ex;
         }
 
-        [Fact]
+        [TestMethod]
         public void SequenceEqual_Enumerable_GetEnumeratorThrows()
         {
             var ex = new Exception();

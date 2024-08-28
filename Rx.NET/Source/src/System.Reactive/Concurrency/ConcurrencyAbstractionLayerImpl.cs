@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#if !NO_THREAD
 using System.Reactive.Disposables;
 using System.Threading;
 
@@ -156,7 +155,7 @@ namespace System.Reactive.Concurrency
             private Action<object?> _action;
             private SingleAssignmentDisposableValue _timer;
 
-            private static readonly object DisposedState = new object();
+            private static readonly object DisposedState = new();
 
             public Timer(Action<object?> action, object? state, TimeSpan dueTime)
             {
@@ -251,4 +250,3 @@ namespace System.Reactive.Concurrency
         }
     }
 }
-#endif

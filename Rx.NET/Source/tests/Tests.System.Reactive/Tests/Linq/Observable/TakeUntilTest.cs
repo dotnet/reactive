@@ -10,22 +10,25 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class TakeUntilTest : ReactiveTest
     {
         #region + Observable +
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeUntil<int, int>(null, DummyObservable<int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeUntil<int, int>(DummyObservable<int>.Instance, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Preempt_SomeData_Next()
         {
             var scheduler = new TestScheduler();
@@ -64,7 +67,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Preempt_SomeData_Error()
         {
             var scheduler = new TestScheduler();
@@ -104,7 +107,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_NoPreempt_SomeData_Empty()
         {
             var scheduler = new TestScheduler();
@@ -144,7 +147,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_NoPreempt_SomeData_Never()
         {
             var scheduler = new TestScheduler();
@@ -183,7 +186,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Preempt_Never_Next()
         {
             var scheduler = new TestScheduler();
@@ -215,7 +218,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Preempt_Never_Error()
         {
             var scheduler = new TestScheduler();
@@ -248,7 +251,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_NoPreempt_Never_Empty()
         {
             var scheduler = new TestScheduler();
@@ -278,7 +281,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_NoPreempt_Never_Never()
         {
             var scheduler = new TestScheduler();
@@ -307,7 +310,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Preempt_BeforeFirstProduced()
         {
             var scheduler = new TestScheduler();
@@ -341,7 +344,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Preempt_BeforeFirstProduced_RemainSilentAndProperDisposed()
         {
             var scheduler = new TestScheduler();
@@ -371,7 +374,7 @@ namespace ReactiveTests.Tests
             Assert.False(sourceNotDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_NoPreempt_AfterLastProduced_ProperDisposedSignal()
         {
             var scheduler = new TestScheduler();
@@ -402,7 +405,7 @@ namespace ReactiveTests.Tests
             Assert.False(signalNotDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Error_Some()
         {
             var scheduler = new TestScheduler();
@@ -436,7 +439,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Immediate()
         {
             var scheduler = new TestScheduler();
@@ -456,7 +459,7 @@ namespace ReactiveTests.Tests
 
         #region + Timed +
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Timed_ArgumentChecking()
         {
             var xs = Observable.Return(42);
@@ -467,7 +470,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeUntil(xs, DateTimeOffset.Now, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Zero()
         {
             var scheduler = new TestScheduler();
@@ -491,7 +494,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Some()
         {
             var scheduler = new TestScheduler();
@@ -518,7 +521,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Late()
         {
             var scheduler = new TestScheduler();
@@ -544,7 +547,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Error()
         {
             var scheduler = new TestScheduler();
@@ -568,7 +571,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Never()
         {
             var scheduler = new TestScheduler();
@@ -591,7 +594,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Twice1()
         {
             var scheduler = new TestScheduler();
@@ -624,7 +627,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Twice2()
         {
             var scheduler = new TestScheduler();
@@ -657,7 +660,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Default()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);
@@ -681,14 +684,14 @@ namespace ReactiveTests.Tests
 
         #region + Predicate +
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Predicate_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeUntil<int>(null, v => true));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeUntil(DummyObservable<int>.Instance, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Predicate_Basic()
         {
             var scheduler = new TestScheduler();
@@ -722,7 +725,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Predicate_True()
         {
             var scheduler = new TestScheduler();
@@ -752,7 +755,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Predicate_False()
         {
             var scheduler = new TestScheduler();
@@ -790,7 +793,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Predicate_Error()
         {
             var scheduler = new TestScheduler();
@@ -818,7 +821,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeUntil_Predicate_Crash()
         {
             var scheduler = new TestScheduler();

@@ -8,14 +8,17 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class TimeIntervalTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void TimeInterval_ArgumentChecking()
         {
             var scheduler = new TestScheduler();
@@ -26,7 +29,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TimeInterval(someObservable, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void TimeInterval_Regular()
         {
             var scheduler = new TestScheduler();
@@ -59,7 +62,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TimeInterval_Empty()
         {
             var scheduler = new TestScheduler();
@@ -82,7 +85,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TimeInterval_Error()
         {
             var scheduler = new TestScheduler();
@@ -107,7 +110,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TimeInterval_Never()
         {
             var scheduler = new TestScheduler();
@@ -128,13 +131,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TimeInterval_DefaultScheduler()
         {
             Assert.True(Observable.Return(1).TimeInterval().Count().First() == 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void TimeInterval_WithStopwatch_Regular()
         {
             var scheduler = new TestScheduler();
@@ -167,7 +170,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TimeInterval_WithStopwatch_Empty()
         {
             var scheduler = new TestScheduler();
@@ -190,7 +193,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TimeInterval_WithStopwatch_Error()
         {
             var scheduler = new TestScheduler();
@@ -215,7 +218,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TimeInterval_WithStopwatch_Never()
         {
             var scheduler = new TestScheduler();

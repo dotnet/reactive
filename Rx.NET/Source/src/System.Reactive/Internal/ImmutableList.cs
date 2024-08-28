@@ -6,11 +6,11 @@ namespace System.Reactive
 {
     internal sealed class ImmutableList<T>
     {
-        public static readonly ImmutableList<T> Empty = new ImmutableList<T>();
+        public static readonly ImmutableList<T> Empty = new();
 
         private readonly T[] _data;
 
-        private ImmutableList() => _data = Array.Empty<T>();
+        private ImmutableList() => _data = [];
 
         public ImmutableList(T[] data) => _data = data;
 

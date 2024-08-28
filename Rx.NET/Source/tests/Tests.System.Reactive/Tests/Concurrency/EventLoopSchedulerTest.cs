@@ -10,34 +10,36 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 #if STRESS
 using ReactiveTests.Stress.Schedulers;
 #endif
 
+using Assert = Xunit.Assert;
+
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class EventLoopSchedulerTest
     {
         private static readonly TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ArgumentChecking()
         {
             using var el = new EventLoopScheduler();
 
-#if !NO_THREAD
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new EventLoopScheduler(null));
-#endif
             ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule(42, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule(42, DateTimeOffset.Now, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule(42, TimeSpan.Zero, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => el.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => el.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
+#pragma warning restore CA1806
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_Now()
         {
             using var el = new EventLoopScheduler();
@@ -46,20 +48,18 @@ namespace ReactiveTests.Tests
             Assert.True(res.Seconds < 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_DisposeWithInFlightActions()
         {
-            using (var scheduler = new EventLoopScheduler())
-            using (var subscription = Observable
+            using var scheduler = new EventLoopScheduler();
+            using var subscription = Observable
                 .Range(1, 10)
                 .ObserveOn(scheduler)
-                .Subscribe(_ => Thread.Sleep(50)))
-            {
-                Thread.Sleep(50);
-            }
+                .Subscribe(_ => Thread.Sleep(50));
+            Thread.Sleep(50);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleAction()
         {
             var ran = false;
@@ -74,8 +74,7 @@ namespace ReactiveTests.Tests
             Assert.True(ran);
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void EventLoop_DifferentThread()
         {
             var id = default(int);
@@ -83,15 +82,14 @@ namespace ReactiveTests.Tests
             using var el = new EventLoopScheduler();
             el.Schedule(() =>
             {
-                id = Thread.CurrentThread.ManagedThreadId;
+                id = Environment.CurrentManagedThreadId;
                 gate.Release();
             });
             Assert.True(gate.WaitOne(MaxWaitTime), "Timeout!");
-            Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, id);
+            Assert.NotEqual(Environment.CurrentManagedThreadId, id);
         }
-#endif
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleOrderedActions()
         {
             var results = new List<int>();
@@ -107,7 +105,7 @@ namespace ReactiveTests.Tests
             results.AssertEqual(0, 1);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_SchedulerDisposed()
         {
             var d = 0;
@@ -156,7 +154,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(2, d);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleTimeOrderedActions()
         {
             var results = new List<int>();
@@ -173,7 +171,7 @@ namespace ReactiveTests.Tests
             results.AssertEqual(1, 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleOrderedAndTimedActions()
         {
             var results = new List<int>();
@@ -190,7 +188,7 @@ namespace ReactiveTests.Tests
             results.AssertEqual(1, 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleTimeOrderedInFlightActions()
         {
             var results = new List<int>();
@@ -212,7 +210,7 @@ namespace ReactiveTests.Tests
             results.AssertEqual(0, 1, 2);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleTimeAndOrderedInFlightActions()
         {
             var results = new List<int>();
@@ -235,7 +233,7 @@ namespace ReactiveTests.Tests
             results.AssertEqual(0, 4, 1, 2);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_ScheduleActionNested()
         {
             var ran = false;
@@ -250,7 +248,7 @@ namespace ReactiveTests.Tests
             Assert.True(ran);
         }
 
-        [Fact(Skip = "")]
+        [TestMethod]
         public void EventLoop_ScheduleActionDue()
         {
             var ran = false;
@@ -269,7 +267,7 @@ namespace ReactiveTests.Tests
             Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
         }
 
-        [Fact(Skip = "")]
+        [TestMethod]
         public void EventLoop_ScheduleActionDueNested()
         {
             var ran = false;
@@ -296,7 +294,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void Stopwatch()
         {
             using var el = new EventLoopScheduler();
@@ -304,7 +302,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_Immediate()
         {
             var M = 1000;
@@ -314,28 +312,24 @@ namespace ReactiveTests.Tests
             {
                 for (var j = 1; j <= M; j *= 10)
                 {
-                    using (var e = new EventLoopScheduler())
+                    using var e = new EventLoopScheduler();
+                    using var d = new CompositeDisposable();
+                    var cd = new CountdownEvent(j);
+
+                    for (var k = 0; k < j; k++)
                     {
-                        using (var d = new CompositeDisposable())
-                        {
-                            var cd = new CountdownEvent(j);
+                        d.Add(e.Schedule(() => cd.Signal()));
+                    }
 
-                            for (var k = 0; k < j; k++)
-                            {
-                                d.Add(e.Schedule(() => cd.Signal()));
-                            }
-
-                            if (!cd.Wait(10000))
-                            {
-                                Assert.True(false, "j = " + j);
-                            }
-                        }
+                    if (!cd.Wait(10000))
+                    {
+                        Assert.True(false, "j = " + j);
                     }
                 }
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_TimeCollisions()
         {
             var M = 1000;
@@ -345,28 +339,24 @@ namespace ReactiveTests.Tests
             {
                 for (var j = 1; j <= M; j *= 10)
                 {
-                    using (var e = new EventLoopScheduler())
+                    using var e = new EventLoopScheduler();
+                    using var d = new CompositeDisposable();
+                    var cd = new CountdownEvent(j);
+
+                    for (var k = 0; k < j; k++)
                     {
-                        using (var d = new CompositeDisposable())
-                        {
-                            var cd = new CountdownEvent(j);
+                        d.Add(e.Schedule(TimeSpan.FromMilliseconds(100), () => cd.Signal()));
+                    }
 
-                            for (var k = 0; k < j; k++)
-                            {
-                                d.Add(e.Schedule(TimeSpan.FromMilliseconds(100), () => cd.Signal()));
-                            }
-
-                            if (!cd.Wait(10000))
-                            {
-                                Assert.True(false, "j = " + j);
-                            }
-                        }
+                    if (!cd.Wait(10000))
+                    {
+                        Assert.True(false, "j = " + j);
                     }
                 }
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_Spread()
         {
             var M = 1000;
@@ -376,55 +366,49 @@ namespace ReactiveTests.Tests
             {
                 for (var j = 1; j <= M; j *= 10)
                 {
-                    using (var e = new EventLoopScheduler())
+                    using var e = new EventLoopScheduler();
+                    using var d = new CompositeDisposable();
+                    var cd = new CountdownEvent(j);
+
+                    for (var k = 0; k < j; k++)
                     {
-                        using (var d = new CompositeDisposable())
-                        {
-                            var cd = new CountdownEvent(j);
+                        d.Add(e.Schedule(TimeSpan.FromMilliseconds(k), () => cd.Signal()));
+                    }
 
-                            for (var k = 0; k < j; k++)
-                            {
-                                d.Add(e.Schedule(TimeSpan.FromMilliseconds(k), () => cd.Signal()));
-                            }
-
-                            if (!cd.Wait(10000))
-                            {
-                                Assert.True(false, "j = " + j);
-                            }
-                        }
+                    if (!cd.Wait(10000))
+                    {
+                        Assert.True(false, "j = " + j);
                     }
                 }
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EventLoop_Periodic()
         {
             var n = 0;
 
-            using (var s = new EventLoopScheduler())
+            using var s = new EventLoopScheduler();
+            var e = new ManualResetEvent(false);
+
+            var d = s.SchedulePeriodic(TimeSpan.FromMilliseconds(25), () =>
             {
-                var e = new ManualResetEvent(false);
-
-                var d = s.SchedulePeriodic(TimeSpan.FromMilliseconds(25), () =>
+                if (Interlocked.Increment(ref n) == 10)
                 {
-                    if (Interlocked.Increment(ref n) == 10)
-                    {
-                        e.Set();
-                    }
-                });
-
-                if (!e.WaitOne(10000))
-                {
-                    Assert.True(false);
+                    e.Set();
                 }
+            });
 
-                d.Dispose();
+            if (!e.WaitOne(10000))
+            {
+                Assert.True(false);
             }
+
+            d.Dispose();
         }
 
 #if STRESS
-        [Fact]
+        [TestMethod]
         public void EventLoop_Stress()
         {
             EventLoop.NoSemaphoreFullException();
@@ -432,7 +416,7 @@ namespace ReactiveTests.Tests
 #endif
 
 #if DESKTOPCLR
-        [Fact]
+        [TestMethod]
         public void EventLoop_CorrectWorkStealing()
         {
             const int workItemCount = 100;

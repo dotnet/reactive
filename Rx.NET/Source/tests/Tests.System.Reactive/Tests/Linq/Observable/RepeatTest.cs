@@ -11,14 +11,17 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class RepeatTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Value_Count_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(1, 0, default));
@@ -26,7 +29,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(1, 1, DummyScheduler.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Value_Count_Zero()
         {
             var scheduler = new TestScheduler();
@@ -46,7 +49,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Value_Count_One()
         {
             var scheduler = new TestScheduler();
@@ -61,7 +64,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Value_Count_Ten()
         {
             var scheduler = new TestScheduler();
@@ -85,7 +88,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Value_Count_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -105,27 +108,27 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Value_Count_Default_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Repeat(1, -1));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(1, 1).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Value_Count_Default()
         {
             Observable.Repeat(42, 10).AssertEqual(Observable.Repeat(42, 10, DefaultScheduler.Instance));
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Value_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(1, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(DummyScheduler.Instance, 1).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Value()
         {
             var scheduler = new TestScheduler();
@@ -145,20 +148,20 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Value_Default_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(1).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Value_Default()
         {
             Observable.Repeat(42).Take(100).AssertEqual(Observable.Repeat(42, DefaultScheduler.Instance).Take(100));
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void Repeat_Count_LongRunning1()
         {
             var start = default(ManualResetEvent);
@@ -177,7 +180,7 @@ namespace ReactiveTests.Tests
             Assert.True(done);
         }
 
-        [Fact]
+        [TestMethod]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Repeat_Count_LongRunning2()
         {
@@ -203,7 +206,7 @@ namespace ReactiveTests.Tests
             Assert.True(true);
         }
 
-        [Fact]
+        [TestMethod]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Repeat_Inf_LongRunning()
         {
@@ -230,14 +233,14 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Repeat().Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_Basic()
         {
             var scheduler = new TestScheduler();
@@ -273,7 +276,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_Infinite()
         {
             var scheduler = new TestScheduler();
@@ -299,7 +302,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_Error()
         {
             var scheduler = new TestScheduler();
@@ -329,7 +332,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_Throws()
         {
             var scheduler1 = new TestScheduler();
@@ -363,14 +366,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => xss.Subscribe());
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_Default_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Repeat().Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_RepeatCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat<int>(null, 0));
@@ -378,7 +381,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Repeat(0).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_RepeatCount_Basic()
         {
             var scheduler = new TestScheduler();
@@ -414,7 +417,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_RepeatCount_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -444,7 +447,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_RepeatCount_Infinite()
         {
             var scheduler = new TestScheduler();
@@ -470,7 +473,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_RepeatCount_Error()
         {
             var scheduler = new TestScheduler();
@@ -500,7 +503,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_RepeatCount_Throws()
         {
             var scheduler1 = new TestScheduler();
@@ -534,7 +537,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => xss.Subscribe());
         }
 
-        [Fact]
+        [TestMethod]
         public void Repeat_Observable_RepeatCount_Default_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(default(IObservable<int>), 0));

@@ -5,17 +5,20 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class HalfSerializerTest
     {
         private int _wip;
         private Exception _error;
-        private Consumer _consumer = new Consumer();
+        private readonly Consumer _consumer = new();
 
-        [Fact]
+        [TestMethod]
         public void HalfSerializer_OnNext()
         {
             HalfSerializer.ForwardOnNext(_consumer, 1, ref _wip, ref _error);
@@ -29,7 +32,7 @@ namespace ReactiveTests.Tests
             Assert.Null(_consumer.Exc);
         }
 
-        [Fact]
+        [TestMethod]
         public void HalfSerializer_OnError()
         {
             var ex = new InvalidOperationException();
@@ -46,7 +49,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(ex, _consumer.Exc);
         }
 
-        [Fact]
+        [TestMethod]
         public void HalfSerializer_OnError_Ignore_Further_Events()
         {
             var ex = new InvalidOperationException();
@@ -66,7 +69,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(ex, _consumer.Exc);
         }
 
-        [Fact]
+        [TestMethod]
         public void HalfSerializer_OnCompleted()
         {
             HalfSerializer.ForwardOnCompleted(_consumer, ref _wip, ref _error);
@@ -81,7 +84,7 @@ namespace ReactiveTests.Tests
             Assert.Null(_consumer.Exc);
         }
 
-        [Fact]
+        [TestMethod]
         public void HalfSerializer_OnCompleted_Ignore_Further_Events()
         {
             HalfSerializer.ForwardOnCompleted(_consumer, ref _wip, ref _error);
@@ -100,7 +103,7 @@ namespace ReactiveTests.Tests
         }
 
         // Practically simulates concurrent invocation of the HalfSerializer methods
-        [Fact]
+        [TestMethod]
         public void HalfSerializer_OnNext_Reentrant_Error()
         {
             var c = new ReentrantConsumer(this, true);
@@ -117,7 +120,7 @@ namespace ReactiveTests.Tests
         }
 
         // Practically simulates concurrent invocation of the HalfSerializer methods
-        [Fact]
+        [TestMethod]
         public void HalfSerializer_OnNext_Reentrant_OnCompleted()
         {
             var c = new ReentrantConsumer(this, false);
@@ -135,7 +138,7 @@ namespace ReactiveTests.Tests
 
         private sealed class Consumer : ISink<int>
         {
-            internal List<int> Items = new List<int>();
+            internal List<int> Items = [];
 
             internal int Done;
             internal Exception Exc;
@@ -165,8 +168,8 @@ namespace ReactiveTests.Tests
 
             public ReentrantConsumer(HalfSerializerTest parent, bool errorReenter)
             {
-                this._parent = parent;
-                this._errorReenter = errorReenter;
+                _parent = parent;
+                _errorReenter = errorReenter;
             }
 
             public void ForwardOnCompleted()

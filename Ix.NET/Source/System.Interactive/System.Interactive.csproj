@@ -1,16 +1,41 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>Interactive Extensions Main Library used to express queries over enumerable sequences.</Description>
     <AssemblyTitle>Interactive Extensions - Main Library</AssemblyTitle>
     <Authors>Microsoft</Authors>
-    <TargetFrameworks>net45;netstandard1.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net48;netstandard2.0;net6.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Properties\System.Interactive.rd.xml" />
-    <ReferenceAssemblyProjectReference Include="..\refs\System.Interactive.Ref\System.Interactive.Ref.csproj" />
   </ItemGroup>
+
+  <!--
+  Incorporate the reference assemblies. Note that these have a different set of TFMs from the proper assemblies.
   
+  See ../../Documentation/adr/0001-Ix-Ref-Assembly-Mismatches.md
+  -->
+  <ItemGroup>
+    <None Include="../refs/System.Interactive/bin/$(Configuration)/$(TargetFramework)/**"
+          PackagePath="ref/$(TargetFramework)"
+          Pack="true" />
+  </ItemGroup>
+
+  <!--
+  These warnings occur because we are deliberately creating a lib/ref mismatch. There doesn't seem to be
+  an official way to do that, so we have to suppress the warnings.
+  
+  See ../../Documentation/adr/0001-Ix-Ref-Assembly-Mismatches.md for an explanation of this bizarreness.
+  -->
+
+  <PropertyGroup>
+    <!--
+    NU5128: lib/ref mismatch. This is deliberate, as explained in the ADR.
+    NU5131: spurious missing file errors. It appears that the build is confused by what we're doing.
+    -->
+    <NoWarn>$(NoWarn);NU5128;NU5131</NoWarn>
+  </PropertyGroup>
+
 </Project>

@@ -19,9 +19,9 @@ namespace System.Reactive.PlatformServices
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class SystemClock
     {
-        private static readonly Lazy<ISystemClock> ServiceSystemClock = new Lazy<ISystemClock>(InitializeSystemClock);
-        private static readonly Lazy<INotifySystemClockChanged> ServiceSystemClockChanged = new Lazy<INotifySystemClockChanged>(InitializeSystemClockChanged);
-        internal static readonly HashSet<WeakReference<LocalScheduler>> SystemClockChanged = new HashSet<WeakReference<LocalScheduler>>();
+        private static readonly Lazy<ISystemClock> ServiceSystemClock = new(InitializeSystemClock);
+        private static readonly Lazy<INotifySystemClockChanged> ServiceSystemClockChanged = new(InitializeSystemClockChanged);
+        internal static readonly HashSet<WeakReference<LocalScheduler>> SystemClockChanged = [];
         private static IDisposable? _systemClockChangedHandlerCollector;
 
         private static int _refCount;
@@ -73,16 +73,12 @@ namespace System.Reactive.PlatformServices
 
         private static ISystemClock InitializeSystemClock()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
             return PlatformEnlightenmentProvider.Current.GetService<ISystemClock>() ?? new DefaultSystemClock();
-#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         private static INotifySystemClockChanged InitializeSystemClockChanged()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
             return PlatformEnlightenmentProvider.Current.GetService<INotifySystemClockChanged>() ?? new DefaultSystemClockMonitor();
-#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         internal static void Register(LocalScheduler scheduler)
@@ -127,10 +123,7 @@ namespace System.Reactive.PlatformServices
                 {
                     if (!handler.TryGetTarget(out _))
                     {
-                        if (remove == null)
-                        {
-                            remove = new HashSet<WeakReference<LocalScheduler>>();
-                        }
+                        remove ??= [];
 
                         remove.Add(handler);
                     }

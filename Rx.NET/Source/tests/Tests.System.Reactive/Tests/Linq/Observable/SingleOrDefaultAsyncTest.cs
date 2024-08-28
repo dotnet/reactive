@@ -6,14 +6,15 @@ using System;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SingleOrAsyncTestTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultAsync_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SingleOrDefaultAsync(default(IObservable<int>)));
@@ -21,7 +22,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SingleOrDefaultAsync(DummyObservable<int>.Instance, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultAsync_Empty()
         {
             var scheduler = new TestScheduler();
@@ -45,7 +46,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultAsync_One()
         {
             var scheduler = new TestScheduler();
@@ -70,7 +71,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultAsync_Many()
         {
             var scheduler = new TestScheduler();
@@ -95,7 +96,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultAsync_Error()
         {
             var scheduler = new TestScheduler();
@@ -120,7 +121,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultAsync_Predicate()
         {
             var scheduler = new TestScheduler();
@@ -149,7 +150,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultAsync_Predicate_Empty()
         {
             var scheduler = new TestScheduler();
@@ -175,7 +176,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultAsync_Predicate_One()
         {
             var scheduler = new TestScheduler();
@@ -205,7 +206,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultAsync_Predicate_None()
         {
             var scheduler = new TestScheduler();
@@ -235,7 +236,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultAsync_Predicate_Throw()
         {
             var scheduler = new TestScheduler();
@@ -260,7 +261,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SingleOrDefaultAsync_PredicateThrows()
         {
             var scheduler = new TestScheduler();

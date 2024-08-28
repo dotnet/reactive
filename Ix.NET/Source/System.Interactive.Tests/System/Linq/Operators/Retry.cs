@@ -15,7 +15,7 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Retry<int>(null));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Retry<int>(null, 5));
-            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.Retry<int>(new[] { 1 }, -1));
+            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.Retry<int>([1], -1));
         }
 
         [Fact]

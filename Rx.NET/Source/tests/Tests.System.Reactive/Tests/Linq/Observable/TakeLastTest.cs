@@ -10,16 +10,19 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class TakeLastTest : ReactiveTest
     {
 
         #region + Count +
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeLast<int>(null, 0));
@@ -29,7 +32,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeLast(DummyObservable<int>.Instance, 0, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Zero_Completed()
         {
             var scheduler = new TestScheduler();
@@ -60,7 +63,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Zero_Error()
         {
             var scheduler = new TestScheduler();
@@ -93,7 +96,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Zero_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -122,7 +125,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_One_Completed()
         {
             var scheduler = new TestScheduler();
@@ -154,7 +157,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_One_Error()
         {
             var scheduler = new TestScheduler();
@@ -187,7 +190,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_One_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -216,7 +219,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Three_Completed()
         {
             var scheduler = new TestScheduler();
@@ -250,7 +253,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Three_Error()
         {
             var scheduler = new TestScheduler();
@@ -283,7 +286,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Three_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -312,7 +315,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_LongRunning_Regular()
         {
             var res = Observable.Range(0, 100, Scheduler.Default).TakeLast(10, NewThreadScheduler.Default);
@@ -327,7 +330,7 @@ namespace ReactiveTests.Tests
 
         #region + Timed +
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Timed_ArgumentChecking()
         {
             var xs = Observable.Return(42);
@@ -345,7 +348,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.TakeLast(xs, TimeSpan.FromSeconds(-1), Scheduler.Default, Scheduler.Default));
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Zero1()
         {
             var scheduler = new TestScheduler();
@@ -369,7 +372,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Zero1_WithLoopScheduler()
         {
             var scheduler = new TestScheduler();
@@ -393,7 +396,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Zero2()
         {
             var scheduler = new TestScheduler();
@@ -418,7 +421,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Zero2_WithLoopScheduler()
         {
             var scheduler = new TestScheduler();
@@ -443,7 +446,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Some1()
         {
             var scheduler = new TestScheduler();
@@ -470,7 +473,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Some1_WithLoopScheduler()
         {
             var scheduler = new TestScheduler();
@@ -497,7 +500,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Some2()
         {
             var scheduler = new TestScheduler();
@@ -522,7 +525,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Some2_WithLoopScheduler()
         {
             var scheduler = new TestScheduler();
@@ -547,7 +550,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Some3()
         {
             var scheduler = new TestScheduler();
@@ -582,7 +585,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Some3_WithLoopScheduler()
         {
             var scheduler = new TestScheduler();
@@ -617,7 +620,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Some4()
         {
             var scheduler = new TestScheduler();
@@ -645,7 +648,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Some4_WithLoopScheduler()
         {
             var scheduler = new TestScheduler();
@@ -673,7 +676,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_All()
         {
             var scheduler = new TestScheduler();
@@ -699,7 +702,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_All_WithLoopScheduler()
         {
             var scheduler = new TestScheduler();
@@ -725,7 +728,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Error()
         {
             var scheduler = new TestScheduler();
@@ -749,7 +752,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Error_WithLoopScheduler()
         {
             var scheduler = new TestScheduler();
@@ -773,7 +776,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Never()
         {
             var scheduler = new TestScheduler();
@@ -795,7 +798,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Never_WithLoopScheduler()
         {
             var scheduler = new TestScheduler();
@@ -817,7 +820,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Default1()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);
@@ -837,7 +840,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Default2()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);
@@ -857,7 +860,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Default3()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);
@@ -877,7 +880,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.Count == 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Default4()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);
@@ -897,7 +900,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.Count == 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLast_Timed_LongRunning_Regular()
         {
             var res = Observable.Range(0, 10, Scheduler.Default).TakeLast(TimeSpan.FromSeconds(60), Scheduler.Default, NewThreadScheduler.Default);

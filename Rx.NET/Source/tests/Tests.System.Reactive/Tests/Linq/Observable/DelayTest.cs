@@ -14,14 +14,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class DelayTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Delay_ArgumentChecking()
         {
             var scheduler = new TestScheduler();
@@ -38,13 +41,13 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Delay(someObservable, TimeSpan.FromSeconds(-1), scheduler));
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Simple1()
         {
             Delay_TimeSpan_Simple1_Impl(false);
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Simple1_Stopwatch()
         {
             Delay_TimeSpan_Simple1_Impl(true);
@@ -78,13 +81,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DateTimeOffset_Simple1()
         {
             Delay_DateTimeOffset_Simple1_Impl(false);
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DateTimeOffset_Simple1_Stopwatch()
         {
             Delay_DateTimeOffset_Simple1_Impl(true);
@@ -118,13 +121,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Simple2()
         {
             Delay_TimeSpan_Simple2_Impl(false);
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Simple2_Stopwatch()
         {
             Delay_TimeSpan_Simple2_Impl(true);
@@ -158,13 +161,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DateTimeOffset_Simple2()
         {
             Delay_DateTimeOffset_Simple2_Impl(false);
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DateTimeOffset_Simple2_Stopwatch()
         {
             Delay_DateTimeOffset_Simple2_Impl(true);
@@ -198,13 +201,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Simple3()
         {
             Delay_TimeSpan_Simple3_Impl(false);
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Simple3_Stopwatch()
         {
             Delay_TimeSpan_Simple3_Impl(true);
@@ -238,13 +241,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DateTimeOffset_Simple3()
         {
             Delay_DateTimeOffset_Simple3_Impl(false);
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DateTimeOffset_Simple3_Stopwatch()
         {
             Delay_DateTimeOffset_Simple3_Impl(true);
@@ -278,13 +281,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Error1()
         {
             Delay_TimeSpan_Error1_Impl(false);
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Error1_Stopwatch()
         {
             Delay_TimeSpan_Error1_Impl(true);
@@ -320,13 +323,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DateTimeOffset_Error1()
         {
             Delay_DateTimeOffset_Error1_Impl(false);
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DateTimeOffset_Error1_Stopwatch()
         {
             Delay_DateTimeOffset_Error1_Impl(true);
@@ -362,13 +365,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Error2()
         {
             Delay_TimeSpan_Error2_Impl(false);
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Error2_Stopwatch()
         {
             Delay_TimeSpan_Error2_Impl(true);
@@ -403,13 +406,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DateTimeOffset_Error2()
         {
             Delay_DateTimeOffset_Error2_Impl(false);
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DateTimeOffset_Error2_Stopwatch()
         {
             Delay_DateTimeOffset_Error2_Impl(true);
@@ -444,19 +447,17 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Real_Simple1()
         {
             Delay_TimeSpan_Real_Simple1_Impl(ThreadPoolScheduler.Instance.DisableOptimizations());
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Real_Simple1_Stopwatch()
         {
             Delay_TimeSpan_Real_Simple1_Impl(ThreadPoolScheduler.Instance);
         }
-#endif
 
         private void Delay_TimeSpan_Real_Simple1_Impl(IScheduler scheduler)
         {
@@ -480,19 +481,17 @@ namespace ReactiveTests.Tests
             Assert.True(new[] { 1, 2, 3 }.SequenceEqual(lst));
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Real_Error1()
         {
             Delay_TimeSpan_Real_Error1_Impl(ThreadPoolScheduler.Instance.DisableOptimizations());
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Real_Error1_Stopwatch()
         {
             Delay_TimeSpan_Real_Error1_Impl(ThreadPoolScheduler.Instance);
         }
-#endif
 
         private void Delay_TimeSpan_Real_Error1_Impl(IScheduler scheduler)
         {
@@ -518,19 +517,17 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Real_Error2()
         {
             Delay_TimeSpan_Real_Error2_Impl(ThreadPoolScheduler.Instance.DisableOptimizations());
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Real_Error2_Stopwatch()
         {
             Delay_TimeSpan_Real_Error2_Impl(ThreadPoolScheduler.Instance);
         }
-#endif
 
         private void Delay_TimeSpan_Real_Error2_Impl(IScheduler scheduler)
         {
@@ -557,19 +554,17 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Real_Error3()
         {
             Delay_TimeSpan_Real_Error3_Impl(ThreadPoolScheduler.Instance.DisableOptimizations());
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Real_Error3_Stopwatch()
         {
             Delay_TimeSpan_Real_Error3_Impl(ThreadPoolScheduler.Instance);
         }
-#endif
 
         private void Delay_TimeSpan_Real_Error3_Impl(IScheduler scheduler)
         {
@@ -599,7 +594,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_Positive()
         {
             var scheduler = new TestScheduler();
@@ -627,7 +622,7 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(expected);
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Empty()
         {
             var scheduler = new TestScheduler();
@@ -650,7 +645,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Error()
         {
             var scheduler = new TestScheduler();
@@ -675,7 +670,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Never()
         {
             var scheduler = new TestScheduler();
@@ -696,19 +691,19 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_TimeSpan_DefaultScheduler()
         {
-            Assert.True(Observable.Return(1).Delay(TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual(new[] { 1 }));
+            Assert.True(Observable.Return(1).Delay(TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual([1]));
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DateTimeOffset_DefaultScheduler()
         {
-            Assert.True(Observable.Return(1).Delay(DateTimeOffset.UtcNow + TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual(new[] { 1 }));
+            Assert.True(Observable.Return(1).Delay(DateTimeOffset.UtcNow + TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual([1]));
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_CrossingMessages()
         {
             var lst = new List<int>();
@@ -738,7 +733,7 @@ namespace ReactiveTests.Tests
             Assert.True(Enumerable.Range(0, 10).SequenceEqual(lst));
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_ArgumentChecking()
         {
             var someObservable = DummyObservable<int>.Instance;
@@ -750,7 +745,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Delay(someObservable, someObservable, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_Simple1()
         {
             var scheduler = new TestScheduler();
@@ -783,7 +778,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_Simple2()
         {
             var scheduler = new TestScheduler();
@@ -828,7 +823,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_Simple3()
         {
             var scheduler = new TestScheduler();
@@ -873,7 +868,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_Simple4_InnerEmpty()
         {
             var scheduler = new TestScheduler();
@@ -918,7 +913,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_Dispose1()
         {
             var scheduler = new TestScheduler();
@@ -960,7 +955,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_Dispose2()
         {
             var scheduler = new TestScheduler();
@@ -994,7 +989,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_OuterError1()
         {
             var scheduler = new TestScheduler();
@@ -1036,7 +1031,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_OuterError2()
         {
             var scheduler = new TestScheduler();
@@ -1083,7 +1078,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_InnerError1()
         {
             var scheduler = new TestScheduler();
@@ -1131,7 +1126,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_InnerError2()
         {
             var scheduler = new TestScheduler();
@@ -1173,7 +1168,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_SelectorThrows1()
         {
             var scheduler = new TestScheduler();
@@ -1221,7 +1216,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_Simple()
         {
             var scheduler = new TestScheduler();
@@ -1255,7 +1250,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_DeferOnCompleted()
         {
             var scheduler = new TestScheduler();
@@ -1289,7 +1284,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_InnerError()
         {
             var scheduler = new TestScheduler();
@@ -1327,7 +1322,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_OuterError()
         {
             var scheduler = new TestScheduler();
@@ -1362,7 +1357,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_SelectorThrows2()
         {
             var scheduler = new TestScheduler();
@@ -1405,7 +1400,19 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
+        public void Delay_Duration_Selector_Immediately()
+        {
+            var list = new List<int>();
+
+            Observable.Range(1, 5)
+                .Delay(_ => Observable.Return(1))
+                .Subscribe(list.Add);
+
+            Assert.Equal([1, 2, 3, 4, 5], list);
+        }
+
+        [TestMethod]
         public void Delay_Duration_InnerDone()
         {
             var scheduler = new TestScheduler();
@@ -1440,7 +1447,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Duration_InnerSubscriptionTimes()
         {
             var scheduler = new TestScheduler();
@@ -1488,7 +1495,7 @@ namespace ReactiveTests.Tests
             ys[2].Subscriptions.AssertEqual(Subscribe(450, 450 + 30));
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DurationAndSubscription_Simple1()
         {
             var scheduler = new TestScheduler();
@@ -1528,7 +1535,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DurationAndSubscription_Simple2()
         {
             var scheduler = new TestScheduler();
@@ -1568,7 +1575,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DurationAndSubscription_Dispose1()
         {
             var scheduler = new TestScheduler();
@@ -1605,7 +1612,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DurationAndSubscription_Dispose2()
         {
             var scheduler = new TestScheduler();
@@ -1640,7 +1647,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_DurationAndSubscription_Error()
         {
             var scheduler = new TestScheduler();
@@ -1677,7 +1684,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_ErrorHandling1()
         {
             //
@@ -1710,29 +1717,23 @@ namespace ReactiveTests.Tests
 
         private class ImpulseScheduler : IScheduler
         {
-            public DateTimeOffset Now
-            {
-                get { return DateTimeOffset.UtcNow; }
-            }
+            public DateTimeOffset Now => DateTimeOffset.UtcNow;
 
             public IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
             {
                 throw new NotImplementedException();
             }
 
-            private ManualResetEvent _event = new ManualResetEvent(false);
-            private ManualResetEvent _done = new ManualResetEvent(false);
-
-            public ManualResetEvent Event { get { return _event; } }
-            public ManualResetEvent Done { get { return _done; } }
+            public ManualResetEvent Event { get; } = new(false);
+            public ManualResetEvent Done { get; } = new(false);
 
             public IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
             {
                 Scheduler.Default.Schedule(() =>
                 {
-                    _event.WaitOne();
+                    Event.WaitOne();
                     action(this, state);
-                    _done.Set();
+                    Done.Set();
                 });
 
                 return Disposable.Empty;
@@ -1744,7 +1745,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_LongRunning_CancelEarly()
         {
             var xs = Observable.Create<int>(observer =>
@@ -1769,8 +1770,8 @@ namespace ReactiveTests.Tests
 
         private class MyLongRunning1 : LocalScheduler, ISchedulerLongRunning
         {
-            private ManualResetEvent _start;
-            private ManualResetEvent _stop;
+            private readonly ManualResetEvent _start;
+            private readonly ManualResetEvent _stop;
 
             public MyLongRunning1(ManualResetEvent start, ManualResetEvent stop)
             {
@@ -1796,7 +1797,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_LongRunning_CancelLate()
         {
             var xs = Observable.Return(42);
@@ -1813,7 +1814,7 @@ namespace ReactiveTests.Tests
             e.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void Delay_Selector_Immediate()
         {
             var result = 0;
@@ -1826,8 +1827,8 @@ namespace ReactiveTests.Tests
 
         private class MyLongRunning2 : LocalScheduler, ISchedulerLongRunning
         {
-            private ManualResetEvent _start;
-            private ManualResetEvent _stop;
+            private readonly ManualResetEvent _start;
+            private readonly ManualResetEvent _stop;
 
             public MyLongRunning2(ManualResetEvent start, ManualResetEvent stop)
             {

@@ -10,20 +10,23 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ToEventPatternTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ToEventPattern_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToEventPattern<EventArgs>(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEventPattern_IEvent()
         {
             var src = new Subject<EventPattern<EventArgs<int>>>();
@@ -47,10 +50,10 @@ namespace ReactiveTests.Tests
 
             src.OnNext(new EventPattern<EventArgs<int>>(snd, new EventArgs<int>(44)));
 
-            Assert.True(lst.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(lst.SequenceEqual([42, 43]));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEventPattern_IEvent_Fails()
         {
             var src = new Subject<EventPattern<EventArgs<int>>>();
@@ -74,10 +77,10 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws(ex, () => src.OnError(ex));
 
-            Assert.True(lst.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(lst.SequenceEqual([42, 43]));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEventPattern_IEvent_Completes()
         {
             var src = new Subject<EventPattern<EventArgs<int>>>();
@@ -99,7 +102,7 @@ namespace ReactiveTests.Tests
 
             src.OnCompleted();
 
-            Assert.True(lst.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(lst.SequenceEqual([42, 43]));
         }
 
         private class EventSrc
@@ -122,7 +125,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void FromEventPattern_ToEventPattern()
         {
             var src = new EventSrc();
@@ -148,10 +151,10 @@ namespace ReactiveTests.Tests
 
             src.On("qux");
 
-            Assert.True(lst.SequenceEqual(new[] { "foo", "baz" }));
+            Assert.True(lst.SequenceEqual(["foo", "baz"]));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEvent_DuplicateHandlers()
         {
             var src = new Subject<Unit>();
@@ -183,7 +186,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(4, num);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEvent_SourceCompletes()
         {
             var src = new Subject<Unit>();
@@ -209,7 +212,7 @@ namespace ReactiveTests.Tests
             Assert.True(tbl.Count == 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEvent_SourceFails()
         {
             var src = new Subject<Unit>();
@@ -236,7 +239,7 @@ namespace ReactiveTests.Tests
             Assert.True(tbl.Count == 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEvent_DoneImmediately()
         {
             var src = Observable.Empty<Unit>();
@@ -256,7 +259,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEvent_UnbalancedHandlers()
         {
             var src = new Subject<Unit>();
@@ -295,7 +298,7 @@ namespace ReactiveTests.Tests
             return (Dictionary<Delegate, Stack<IDisposable>>)evt.GetType().GetField("_subscriptions", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(evt);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventPattern_Equality()
         {
             var e1 = new EventPattern<string, EventArgs>("Bart", EventArgs.Empty);
@@ -313,7 +316,7 @@ namespace ReactiveTests.Tests
             Assert.False(e1 == null);
         }
 
-        [Fact]
+        [TestMethod]
         public void EventPattern_Inequality()
         {
             var a1 = new MyEventArgs();

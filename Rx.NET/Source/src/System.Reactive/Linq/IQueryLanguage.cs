@@ -195,25 +195,25 @@ namespace System.Reactive.Linq
 
         IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync);
         IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync);
-        IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, IScheduler scheduler);
-        IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, IScheduler scheduler);
+        IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, in TaskObservationOptions.Value options);
+        IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, in TaskObservationOptions.Value options);
 
         IObservable<Unit> Start(Action action);
         IObservable<Unit> Start(Action action, IScheduler scheduler);
 
         IObservable<Unit> StartAsync(Func<Task> actionAsync);
         IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync);
-        IObservable<Unit> StartAsync(Func<Task> actionAsync, IScheduler scheduler);
-        IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler);
+        IObservable<Unit> StartAsync(Func<Task> actionAsync, in TaskObservationOptions.Value options);
+        IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, in TaskObservationOptions.Value options);
 
         IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync);
         IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync);
         IObservable<Unit> FromAsync(Func<Task> actionAsync);
         IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync);
-        IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, IScheduler scheduler);
-        IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler);
-        IObservable<Unit> FromAsync(Func<Task> actionAsync, IScheduler scheduler);
-        IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler);
+        IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, TaskObservationOptions.Value options);
+        IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, TaskObservationOptions.Value options);
+        IObservable<Unit> FromAsync(Func<Task> actionAsync, TaskObservationOptions.Value options);
+        IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, TaskObservationOptions.Value options);
 
         Func<IObservable<TResult>> ToAsync<TResult>(Func<TResult> function);
         Func<IObservable<TResult>> ToAsync<TResult>(Func<TResult> function, IScheduler scheduler);
@@ -398,8 +398,8 @@ namespace System.Reactive.Linq
 
         IObservable<TValue> Defer<TValue>(Func<IObservable<TValue>> observableFactory);
 
-        IObservable<TValue> Defer<TValue>(Func<Task<IObservable<TValue>>> observableFactoryAsync);
-        IObservable<TValue> Defer<TValue>(Func<CancellationToken, Task<IObservable<TValue>>> observableFactoryAsync);
+        IObservable<TValue> Defer<TValue>(Func<Task<IObservable<TValue>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe);
+        IObservable<TValue> Defer<TValue>(Func<CancellationToken, Task<IObservable<TValue>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe);
 
         IObservable<TResult> Empty<TResult>();
         IObservable<TResult> Empty<TResult>(IScheduler scheduler);
@@ -433,17 +433,53 @@ namespace System.Reactive.Linq
         IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler);
         IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler);
         IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler);
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         IObservable<EventPattern<object>> FromEventPattern(object target, string eventName);
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         IObservable<EventPattern<object>> FromEventPattern(object target, string eventName, IScheduler scheduler);
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName);
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName, IScheduler scheduler);
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName);
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler);
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         IObservable<EventPattern<object>> FromEventPattern(Type type, string eventName);
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         IObservable<EventPattern<object>> FromEventPattern(Type type, string eventName, IScheduler scheduler);
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName);
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName, IScheduler scheduler);
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName);
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
+#endif
         IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler);
 
         IObservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler);

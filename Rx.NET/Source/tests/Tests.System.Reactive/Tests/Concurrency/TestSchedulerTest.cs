@@ -10,14 +10,14 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class TestSchedulerTest
     {
-        [Fact]
+        [TestMethod]
         public void Test_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new TestScheduler().Start<int>(null));

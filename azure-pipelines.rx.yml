@@ -24,7 +24,8 @@ stages:
 - stage: Build
   jobs:
   - job: Build
-    pool: vs2019-preview
+    pool:
+      vmImage: windows-latest
 
     variables:
       BuildConfiguration: Release
@@ -33,11 +34,25 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 5.0.x SDK
+      displayName: Use .NET 8.0.x SDK
       inputs:
-        version: 5.0.x
-        includePreviewVersions: true
+        version: 8.0.x
         performMultiLevelLookup: true
+
+    # We need .NET 7.0 and 6.0 to be able to run all tests.
+    # For .NET 7.0, the runtime package is sufficient because we don't need to build anything.
+    # That doesn't work for 6.0, because we need the desktop framework, and the only way to
+    # get that into a build agent seems to be to install the SDK.
+    - task: UseDotNet@2
+      displayName: Use .NET 7.0 runtime
+      inputs:
+        version: '7.0.x'
+        packageType: runtime
+
+    - task: UseDotNet@2
+      displayName: Use .NET 6.0 SDK
+      inputs:
+        version: '6.0.x'
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -74,14 +89,14 @@ stages:
       inputs:
         command: test
         projects: Rx.NET/Source/tests/Tests.System.Reactive/*.csproj
-        arguments: -c $(BuildConfiguration) --filter "SkipCI!=true" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
+        arguments: -c $(BuildConfiguration) --filter "TestCategory!=SkipCI" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
       displayName: Run Unit Tests
 
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj
-        arguments: -c $(BuildConfiguration) 
+        arguments: -c $(BuildConfiguration)
       displayName: Run Api Approvals Tests
 
     - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Rx.NET/Source/coverlet/reports -reporttypes:"Cobertura"
@@ -120,17 +135,18 @@ stages:
     steps:
     - task: UseDotNet@2
       inputs:
-        version: 5.0.x
-        includePreviewVersions: true
+        version: 8.0.x
 
     - task: UseDotNet@2
+      displayName: Use .NET 7.0 SDK
       inputs:
-        version: '3.1.x'
+        version: '7.0.x'
         packageType: runtime
 
     - task: UseDotNet@2
+      displayName: Use .NET 6.0 SDK
       inputs:
-        version: '2.2.x'
+        version: '6.0.x'
         packageType: runtime
 
     - task: DotNetCoreCLI@2
@@ -161,22 +177,22 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f net5.0 --filter "SkipCI!=true"
-      displayName: Run 5.0 Tests on Linux
+        arguments: -c $(BuildConfiguration) -f net8.0 --filter "TestCategory!=SkipCI"
+      displayName: Run 8.0 Tests on Linux
 
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f netcoreapp3.1 --filter "SkipCI!=true"
-      displayName: Run 3.1 Tests on Linux
+        arguments: -c $(BuildConfiguration) -f net7.0 --filter "TestCategory!=SkipCI"
+      displayName: Run 7.0 Tests on Linux
 
     - task: DotNetCoreCLI@2
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f netcoreapp2.1 --filter "SkipCI!=true" 
-      displayName: Run 2.1 Tests on Linux
+        arguments: -c $(BuildConfiguration) -f net6.0 --filter "TestCategory!=SkipCI"
+      displayName: Run 6.0 Tests on Linux
 
   - job: WindowsDesktop    
     pool:
@@ -190,9 +206,18 @@ stages:
     steps:
     - task: UseDotNet@2
       inputs:
-        version: 5.0.x
-        includePreviewVersions: true
+        version: 8.0.x
         performMultiLevelLookup: true
+
+    - task: UseDotNet@2
+      displayName: Use .NET 7.0 SDK
+      inputs:
+        version: '7.0.x'
+
+    - task: UseDotNet@2
+      displayName: Use .NET 6.0 SDK
+      inputs:
+        version: '6.0.x'
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -222,7 +247,7 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/WindowsDesktopTests/WindowsDesktopTests.csproj
-        arguments: -c $(BuildConfiguration) --filter "SkipCI!=true"
+        arguments: -c $(BuildConfiguration) --filter "TestCategory!=SkipCI"
       displayName: Run Tests on Window Desktop
 
 - stage: CodeSign

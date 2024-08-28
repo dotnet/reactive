@@ -6,15 +6,20 @@ using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading;
+
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class StartTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Start_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Start(null));
@@ -28,15 +33,15 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void Start_Action()
         {
             var done = false;
-            Assert.True(Observable.Start(() => { done = true; }).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.Start(() => { done = true; }).ToEnumerable().SequenceEqual([new Unit()]));
             Assert.True(done, "done");
         }
 
-        [Fact]
+        [TestMethod]
         public void Start_Action2()
         {
             var scheduler = new TestScheduler();
@@ -55,29 +60,55 @@ namespace ReactiveTests.Tests
             Assert.True(done, "done");
         }
 
-        [Fact]
+        [TestMethod]
         public void Start_ActionError()
         {
             var ex = new Exception();
 
             var res = Observable.Start(() => { throw ex; }).Materialize().ToEnumerable();
 
-            Assert.True(res.SequenceEqual(new[] {
+            Assert.True(res.SequenceEqual([
                 Notification.CreateOnError<Unit>(ex)
-            }));
+            ]));
         }
 
-        [Fact]
+        [TestMethod]
+        public void Start_ActionErrorAfterUnsubscribeDoesNotThrow()
+        {
+            var ex = new Exception();
+            using Barrier gate = new(2);
+
+            var sub = Observable.Start(
+                () =>
+                {
+                    // 1: action running
+                    gate.SignalAndWait();
+                    // 2: unsubscribe Dispose returned
+                    gate.SignalAndWait();
+                    throw ex;
+                })
+                .Subscribe();
+
+            // 1: action running
+            gate.SignalAndWait();
+
+            sub.Dispose();
+
+            // 2: unsubscribe Dispose returned
+            gate.SignalAndWait();
+        }
+
+        [TestMethod]
         public void Start_Func()
         {
             var res = Observable.Start(() => 1).ToEnumerable();
 
-            Assert.True(res.SequenceEqual(new[] {
+            Assert.True(res.SequenceEqual([
                 1
-            }));
+            ]));
         }
 
-        [Fact]
+        [TestMethod]
         public void Start_Func2()
         {
             var scheduler = new TestScheduler();
@@ -92,16 +123,16 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Start_FuncError()
         {
             var ex = new Exception();
 
             var res = Observable.Start<int>(() => { throw ex; }).Materialize().ToEnumerable();
 
-            Assert.True(res.SequenceEqual(new[] {
+            Assert.True(res.SequenceEqual([
                 Notification.CreateOnError<int>(ex)
-            }));
+            ]));
         }
 
     }

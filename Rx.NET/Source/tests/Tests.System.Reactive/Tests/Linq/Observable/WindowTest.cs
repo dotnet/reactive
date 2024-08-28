@@ -9,15 +9,18 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class WindowTest : ReactiveTest
     {
         #region + Observable +
 
-        [Fact]
+        [TestMethod]
         public void Window_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Window(default(IObservable<int>), DummyFunc<IObservable<int>>.Instance));
@@ -29,7 +32,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Window(DummyObservable<int>.Instance, default(IObservable<int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Closings_Basic()
         {
             var scheduler = new TestScheduler();
@@ -71,7 +74,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Closings_InnerSubscriptions()
         {
             var scheduler = new TestScheduler();
@@ -148,7 +151,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Closings_Empty()
         {
             var scheduler = new TestScheduler();
@@ -190,7 +193,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Closings_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -228,7 +231,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Closings_Error()
         {
             var scheduler = new TestScheduler();
@@ -272,7 +275,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Closings_Throw()
         {
             var scheduler = new TestScheduler();
@@ -306,7 +309,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Closings_WindowClose_Error()
         {
             var scheduler = new TestScheduler();
@@ -340,7 +343,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Closings_Default()
         {
             var scheduler = new TestScheduler();
@@ -382,7 +385,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_OpeningClosings_Basic()
         {
             var scheduler = new TestScheduler();
@@ -439,7 +442,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_OpeningClosings_Throw()
         {
             var scheduler = new TestScheduler();
@@ -485,7 +488,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_OpeningClosings_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -533,7 +536,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_OpeningClosings_Data_Error()
         {
             var scheduler = new TestScheduler();
@@ -580,7 +583,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_OpeningClosings_Window_Error()
         {
             var scheduler = new TestScheduler();
@@ -630,7 +633,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Boundaries_Simple()
         {
             var scheduler = new TestScheduler();
@@ -683,7 +686,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Boundaries_OnCompletedBoundaries()
         {
             var scheduler = new TestScheduler();
@@ -730,7 +733,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Boundaries_OnErrorSource()
         {
             var ex = new Exception();
@@ -777,7 +780,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Boundaries_OnErrorBoundaries()
         {
             var ex = new Exception();
@@ -826,7 +829,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Window(default(IObservable<int>), 1, 1));
@@ -836,7 +839,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Window(DummyObservable<int>.Instance, 0));
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithCount_Basic()
         {
             var scheduler = new TestScheduler();
@@ -878,7 +881,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithCount_InnerTimings()
         {
             var scheduler = new TestScheduler();
@@ -957,7 +960,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithCount_InnerTimings_DisposeOuter()
         {
             var scheduler = new TestScheduler();
@@ -1042,7 +1045,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithCount_InnerTimings_DisposeOuterAndInners()
         {
             var scheduler = new TestScheduler();
@@ -1126,7 +1129,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithCount_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -1163,7 +1166,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithCount_Error()
         {
             var scheduler = new TestScheduler();
@@ -1207,7 +1210,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithCount_Default()
         {
             Observable.Range(1, 10).Window(3).Skip(1).First().SequenceEqual(new[] { 4, 5, 6 }.ToObservable());
@@ -1219,7 +1222,7 @@ namespace ReactiveTests.Tests
 
         #region + Timed +
 
-        [Fact]
+        [TestMethod]
         public void Window_Time_Basic()
         {
             var scheduler = new TestScheduler();
@@ -1263,7 +1266,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Time_Basic_Periodic()
         {
             var scheduler = new PeriodicTestScheduler();
@@ -1313,7 +1316,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Time_Basic_Periodic_Error()
         {
             var ex = new Exception();
@@ -1360,7 +1363,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void Window_Time_Basic_Both()
         {
             var scheduler = new TestScheduler();
@@ -1414,7 +1417,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithTime_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Window(default(IObservable<int>), TimeSpan.FromTicks(1), TimeSpan.FromTicks(1), DummyScheduler.Instance));
@@ -1431,7 +1434,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Window(DummyObservable<int>.Instance, TimeSpan.FromTicks(-1)));
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithTime_Basic1()
         {
             var scheduler = new TestScheduler();
@@ -1473,7 +1476,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithTime_Basic2()
         {
             var scheduler = new TestScheduler();
@@ -1510,7 +1513,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithTime_Error()
         {
             var scheduler = new TestScheduler();
@@ -1554,7 +1557,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithTime_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -1592,7 +1595,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithTime_Basic_Same()
         {
             var scheduler = new TestScheduler();
@@ -1631,14 +1634,14 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithTime_Default()
         {
             Observable.Range(0, 10).Window(TimeSpan.FromDays(1), TimeSpan.FromDays(1)).SelectMany(Observable.ToList).First().AssertEqual(Enumerable.Range(0, 10));
             Observable.Range(0, 10).Window(TimeSpan.FromDays(1)).SelectMany(Observable.ToList).First().AssertEqual(Enumerable.Range(0, 10));
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithTimeOrCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Window(default(IObservable<int>), TimeSpan.FromTicks(1), 1, DummyScheduler.Instance));
@@ -1650,7 +1653,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Window(DummyObservable<int>.Instance, TimeSpan.FromTicks(1), 0));
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithTimeOrCount_Basic()
         {
             var scheduler = new TestScheduler();
@@ -1690,7 +1693,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithTimeOrCount_Error()
         {
             var scheduler = new TestScheduler();
@@ -1732,7 +1735,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithTimeOrCount_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -1770,7 +1773,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void WindowWithTimeOrCount_Default()
         {
             Observable.Range(1, 10).Window(TimeSpan.FromDays(1), 3).Skip(1).First().SequenceEqual(Observable.Range(4, 3));

@@ -96,7 +96,7 @@ namespace System.Reactive.Linq
                 }
 
                 private readonly IDisposable _subscription;
-                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+                private readonly CancellationTokenSource _cts = new();
 
                 public Subscription(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync, IObserver<TResult> observer)
                 {
@@ -169,7 +169,7 @@ namespace System.Reactive.Linq
                 }
 
                 private readonly TaskDisposeCompletionObserver _observer;
-                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+                private readonly CancellationTokenSource _cts = new();
 
                 public Subscription(Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync, IObserver<TResult> observer)
                 {
@@ -249,7 +249,7 @@ namespace System.Reactive.Linq
                 }
 
                 private readonly TaskDisposeCompletionObserver _observer;
-                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+                private readonly CancellationTokenSource _cts = new();
 
                 public Subscription(Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync, IObserver<TResult> observer)
                 {
@@ -299,14 +299,14 @@ namespace System.Reactive.Linq
 
         #region + DeferAsync +
 
-        public virtual IObservable<TValue> Defer<TValue>(Func<Task<IObservable<TValue>>> observableFactoryAsync)
+        public virtual IObservable<TValue> Defer<TValue>(Func<Task<IObservable<TValue>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(observableFactoryAsync).Merge());
+            return Defer(() => StartAsync(observableFactoryAsync, new TaskObservationOptions.Value(null, ignoreExceptionsAfterUnsubscribe)).Merge());
         }
 
-        public virtual IObservable<TValue> Defer<TValue>(Func<CancellationToken, Task<IObservable<TValue>>> observableFactoryAsync)
+        public virtual IObservable<TValue> Defer<TValue>(Func<CancellationToken, Task<IObservable<TValue>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe)
         {
-            return Defer(() => StartAsync(observableFactoryAsync).Merge());
+            return Defer(() => StartAsync(observableFactoryAsync, new TaskObservationOptions.Value(null, ignoreExceptionsAfterUnsubscribe)).Merge());
         }
 
         #endregion

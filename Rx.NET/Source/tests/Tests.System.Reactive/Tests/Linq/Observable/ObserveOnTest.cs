@@ -12,7 +12,7 @@ using System.Reactive.Subjects;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #if HAS_DISPATCHER
 using System.Windows.Threading;
@@ -22,42 +22,49 @@ using System.Windows.Threading;
 using System.Windows.Forms;
 #endif
 
+using Assert = Xunit.Assert;
+
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ObserveOnTest : TestBase
     {
         #region + TestBase +
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
 
 #if HAS_WINFORMS
+#pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overloads being tested.
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(default(IObservable<int>), new ControlScheduler(new Label())));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(someObservable, default(ControlScheduler)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => ControlObservable.ObserveOn<int>(default(IObservable<int>), new Label()));
             ReactiveAssert.Throws<ArgumentNullException>(() => ControlObservable.ObserveOn<int>(someObservable, default(Label)));
+#pragma warning restore IDE0034
 #endif
 
 #if HAS_DISPATCHER
+#pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overloads being tested.
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(default(IObservable<int>), new DispatcherScheduler(Dispatcher.CurrentDispatcher)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(someObservable, default(DispatcherScheduler)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.ObserveOn<int>(default(IObservable<int>), Dispatcher.CurrentDispatcher));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.ObserveOn<int>(someObservable, default(Dispatcher)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.ObserveOnDispatcher<int>(default(IObservable<int>)));
+#pragma warning restore IDE0034
 #endif
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(default, new SynchronizationContext()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn(someObservable, default(SynchronizationContext)));
         }
 
 #if HAS_WINFORMS
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Control()
         {
-            bool okay = true;
+            var okay = true;
 
             using (WinFormsTestUtils.RunTest(out var lbl))
             {
@@ -75,10 +82,10 @@ namespace ReactiveTests.Tests
             Assert.True(okay);
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_ControlScheduler()
         {
-            bool okay = true;
+            var okay = true;
 
             using (WinFormsTestUtils.RunTest(out var lbl))
             {
@@ -97,7 +104,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 #if HAS_DISPATCHER
-        [Fact]
+        [TestMethod]
         [Asynchronous]
         public void ObserveOn_Dispatcher()
         {
@@ -105,7 +112,7 @@ namespace ReactiveTests.Tests
             {
                 RunAsync(evt =>
                 {
-                    bool okay = true;
+                    var okay = true;
                     Observable.Range(0, 10, NewThreadScheduler.Default).ObserveOn(dispatcher).Subscribe(x =>
                     {
                         okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
@@ -118,7 +125,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         [Asynchronous]
         public void ObserveOn_DispatcherScheduler()
         {
@@ -126,7 +133,7 @@ namespace ReactiveTests.Tests
             {
                 RunAsync(evt =>
                 {
-                    bool okay = true;
+                    var okay = true;
                     Observable.Range(0, 10, NewThreadScheduler.Default).ObserveOn(new DispatcherScheduler(dispatcher)).Subscribe(x =>
                     {
                         okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
@@ -139,7 +146,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         [Asynchronous]
         public void ObserveOn_CurrentDispatcher()
         {
@@ -147,7 +154,7 @@ namespace ReactiveTests.Tests
             {
                 RunAsync(evt =>
                 {
-                    bool okay = true;
+                    var okay = true;
                     dispatcher.BeginInvoke(new Action(() =>
                     {
                         Observable.Range(0, 10, NewThreadScheduler.Default).ObserveOnDispatcher().Subscribe(x =>
@@ -163,7 +170,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         [Asynchronous]
         public void ObserveOn_Error()
         {
@@ -172,7 +179,7 @@ namespace ReactiveTests.Tests
                 RunAsync(evt =>
                 {
                     var ex = new Exception();
-                    bool okay = true;
+                    var okay = true;
 
                     dispatcher.BeginInvoke(new Action(() =>
                     {
@@ -200,18 +207,19 @@ namespace ReactiveTests.Tests
 
     }
 
+    [TestClass]
     public class ObserveOnReactiveTest : ReactiveTest
     {
-        private static TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
+        private static readonly TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Scheduler_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn(default(IObservable<int>), DummyScheduler.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn(DummyObservable<int>.Instance, default(IScheduler)));
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Scheduler_Completed()
         {
             var scheduler = new TestScheduler();
@@ -254,7 +262,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Scheduler_Error()
         {
             var scheduler = new TestScheduler();
@@ -298,7 +306,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Scheduler_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -328,7 +336,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Scheduler_SameTime()
         {
             var scheduler = new TestScheduler();
@@ -352,7 +360,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_Scheduler_OnNextThrows()
         {
             var e = new ManualResetEvent(false);
@@ -376,7 +384,7 @@ namespace ReactiveTests.Tests
         private class MyScheduler : IScheduler
         {
             internal Exception _exception;
-            private ManualResetEvent _evt;
+            private readonly ManualResetEvent _evt;
 
             public MyScheduler(ManualResetEvent e)
             {
@@ -414,7 +422,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_Simple()
         {
             var started = default(ManualResetEvent);
@@ -435,10 +443,10 @@ namespace ReactiveTests.Tests
 
             end.WaitOne();
 
-            Assert.True(lst.SequenceEqual(new[] { 1, 2, 3 }));
+            Assert.True(lst.SequenceEqual([1, 2, 3]));
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_Error()
         {
             var started = default(ManualResetEvent);
@@ -464,8 +472,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex_, err);
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_TimeVariance()
         {
             var started = default(ManualResetEvent);
@@ -496,9 +503,8 @@ namespace ReactiveTests.Tests
 
             end.WaitOne();
         }
-#endif
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_HoldUpDuringDispatchAndFail()
         {
             var started = default(ManualResetEvent);
@@ -527,11 +533,11 @@ namespace ReactiveTests.Tests
             resume.Set();
 
             end.WaitOne();
-            Assert.True(lst.SequenceEqual(new[] { 1, 2, 3 }));
+            Assert.True(lst.SequenceEqual([1, 2, 3]));
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_Cancel()
         {
             var started = default(ManualResetEvent);
@@ -563,7 +569,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.Count > 0 && !lst.Contains(4));
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_OnNextThrows()
         {
             var started = default(ManualResetEvent);
@@ -596,7 +602,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_SynchronizationContext_Simple()
         {
             var scheduler = new TestScheduler();
@@ -628,7 +634,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_EventLoop_Long()
         {
             using var _scheduler1 = new EventLoopScheduler();
@@ -642,7 +648,7 @@ namespace ReactiveTests.Tests
             Assert.True(cde.Wait(MaxWaitTime), "Timeout!");
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_SameThread()
         {
             var scheduler = TaskPoolScheduler.Default;
@@ -656,7 +662,7 @@ namespace ReactiveTests.Tests
             Observable.Range(1, N)
                 .ObserveOn(scheduler)
                 .Subscribe(
-                    v => threads.Add(Thread.CurrentThread.ManagedThreadId), 
+                    v => threads.Add(Environment.CurrentManagedThreadId), 
                     e => cde.Signal(), 
                     () => cde.Signal()
                 );
@@ -666,7 +672,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, threads.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void ObserveOn_LongRunning_DisableOptimizations()
         {
             var scheduler = TaskPoolScheduler.Default.DisableOptimizations();
@@ -680,7 +686,7 @@ namespace ReactiveTests.Tests
             Observable.Range(1, N)
                 .ObserveOn(scheduler)
                 .Subscribe(
-                    v => threads.Add(Thread.CurrentThread.ManagedThreadId),
+                    v => threads.Add(Environment.CurrentManagedThreadId),
                     e => cde.Signal(),
                     () => cde.Signal()
                 );
@@ -693,7 +699,7 @@ namespace ReactiveTests.Tests
 
     internal class MyCtx : SynchronizationContext
     {
-        private IScheduler _scheduler;
+        private readonly IScheduler _scheduler;
 
         public MyCtx(IScheduler scheduler)
         {

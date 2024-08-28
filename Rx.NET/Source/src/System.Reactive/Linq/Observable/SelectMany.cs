@@ -25,14 +25,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult>
             {
-                private readonly object _gate = new object();
-                private readonly CompositeDisposable _group = new CompositeDisposable();
+                private readonly object _gate = new();
+                private readonly CompositeDisposable _group = [];
 
                 private readonly Func<TSource, IObservable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, TCollection, TResult> _resultSelector;
@@ -186,14 +186,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult>
             {
-                private readonly object _gate = new object();
-                private readonly CompositeDisposable _group = new CompositeDisposable();
+                private readonly object _gate = new();
+                private readonly CompositeDisposable _group = [];
 
                 private readonly Func<TSource, int, IObservable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
@@ -354,7 +354,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
@@ -439,7 +439,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
@@ -530,14 +530,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult>
             {
-                private readonly object _gate = new object();
-                private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
+                private readonly object _gate = new();
+                private readonly CancellationTokenSource _cancel = new();
 
                 private readonly Func<TSource, CancellationToken, Task<TCollection>> _collectionSelector;
                 private readonly Func<TSource, TCollection, TResult> _resultSelector;
@@ -684,14 +684,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult>
             {
-                private readonly object _gate = new object();
-                private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
+                private readonly object _gate = new();
+                private readonly CancellationTokenSource _cancel = new();
 
                 private readonly Func<TSource, int, CancellationToken, Task<TCollection>> _collectionSelector;
                 private readonly Func<TSource, int, TCollection, TResult> _resultSelector;
@@ -842,15 +842,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
             internal class _ : Sink<TSource, TResult>
             {
-                protected readonly object _gate = new object();
+                protected readonly object _gate = new();
                 private readonly Func<TSource, IObservable<TResult>> _selector;
-                private readonly CompositeDisposable _group = new CompositeDisposable();
+                private readonly CompositeDisposable _group = [];
 
                 private volatile bool _isStopped;
 
@@ -1074,14 +1074,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
             internal class _ : Sink<TSource, TResult>
             {
-                private readonly object _gate = new object();
-                private readonly CompositeDisposable _group = new CompositeDisposable();
+                private readonly object _gate = new();
+                private readonly CompositeDisposable _group = [];
 
                 protected readonly Func<TSource, int, IObservable<TResult>> _selector;
 
@@ -1231,7 +1231,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal new sealed class _ : ObservableSelectorIndexed._
             {
-                private readonly object _gate = new object();
+                private readonly object _gate = new();
 
                 private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
                 private readonly Func<IObservable<TResult>> _selectorOnCompleted;
@@ -1310,7 +1310,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
@@ -1391,7 +1391,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
@@ -1474,14 +1474,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult>
             {
-                private readonly object _gate = new object();
-                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+                private readonly object _gate = new();
+                private readonly CancellationTokenSource _cts = new();
 
                 private readonly Func<TSource, CancellationToken, Task<TResult>> _selector;
 
@@ -1608,14 +1608,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<TResult> observer) => new(this, observer);
 
             protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult>
             {
-                private readonly object _gate = new object();
-                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+                private readonly object _gate = new();
+                private readonly CancellationTokenSource _cts = new();
 
                 private readonly Func<TSource, int, CancellationToken, Task<TResult>> _selector;
 

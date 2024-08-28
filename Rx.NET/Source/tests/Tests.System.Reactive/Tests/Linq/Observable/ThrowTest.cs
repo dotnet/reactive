@@ -8,14 +8,17 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ThrowTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Throw_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throw<int>(null));
@@ -27,7 +30,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throw<int>(new Exception(), DummyScheduler.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Throw_Basic()
         {
             var scheduler = new TestScheduler();
@@ -43,7 +46,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throw_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -57,7 +60,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throw_ObserverThrows()
         {
             var scheduler1 = new TestScheduler();
@@ -69,14 +72,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => scheduler1.Start());
         }
 
-        [Fact]
+        [TestMethod]
         public void Throw_DefaultScheduler()
         {
             var ex = new Exception();
             Observable.Throw<int>(ex).AssertEqual(Observable.Throw<int>(ex, DefaultScheduler.Instance));
         }
 
-        [Fact]
+        [TestMethod]
         public void Throw_Witness_Basic1()
         {
             var scheduler = new TestScheduler();
@@ -92,7 +95,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Throw_Witness_Basic2()
         {
             var e = new ManualResetEvent(false);

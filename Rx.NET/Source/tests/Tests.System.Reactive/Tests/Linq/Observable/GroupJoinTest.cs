@@ -9,14 +9,17 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class GroupJoinTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupJoin(null, DummyObservable<int>.Instance, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, IObservable<int>, int>.Instance));
@@ -27,7 +30,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupJoin(DummyObservable<int>.Instance, DummyObservable<int>.Instance, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, IObservable<int>, int>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Normal_I()
         {
             var scheduler = new TestScheduler();
@@ -116,7 +119,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Normal_II()
         {
             var scheduler = new TestScheduler();
@@ -197,7 +200,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Normal_III()
         {
             var scheduler = new TestScheduler();
@@ -286,7 +289,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Normal_IV()
         {
             var scheduler = new TestScheduler();
@@ -367,7 +370,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Normal_V()
         {
             var scheduler = new TestScheduler();
@@ -448,7 +451,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Normal_VI()
         {
             var scheduler = new TestScheduler();
@@ -536,7 +539,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Normal_VII()
         {
             var scheduler = new TestScheduler();
@@ -582,7 +585,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Normal_VIII()
         {
             var scheduler = new TestScheduler();
@@ -625,7 +628,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Normal_IX()
         {
             var scheduler = new TestScheduler();
@@ -694,7 +697,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Error_I()
         {
             var scheduler = new TestScheduler();
@@ -752,7 +755,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Error_II()
         {
             var scheduler = new TestScheduler();
@@ -823,7 +826,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Error_III()
         {
             var scheduler = new TestScheduler();
@@ -899,7 +902,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Error_IV()
         {
             var scheduler = new TestScheduler();
@@ -972,7 +975,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Error_V()
         {
             var scheduler = new TestScheduler();
@@ -1028,7 +1031,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Error_VI()
         {
             var scheduler = new TestScheduler();
@@ -1084,7 +1087,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Error_VII()
         {
             var scheduler = new TestScheduler();
@@ -1144,7 +1147,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void GroupJoinOp_Error_VIII()
         {
             var scheduler = new TestScheduler();

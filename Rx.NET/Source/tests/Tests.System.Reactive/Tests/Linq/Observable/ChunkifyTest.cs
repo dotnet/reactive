@@ -8,20 +8,23 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ChunkifyTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Chunkify_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Chunkify(default(IObservable<int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Chunkify_Regular1()
         {
             var scheduler = new TestScheduler();
@@ -66,16 +69,16 @@ namespace ReactiveTests.Tests
             );
 
             Assert.Equal(7, res.Count);
-            Assert.True(res[0].SequenceEqual(new int[] { }));
-            Assert.True(res[1].SequenceEqual(new int[] { 3 }));
-            Assert.True(res[2].SequenceEqual(new int[] { 4 }));
-            Assert.True(res[3].SequenceEqual(new int[] { }));
-            Assert.True(res[4].SequenceEqual(new int[] { 5, 6, 7 }));
-            Assert.True(res[5].SequenceEqual(new int[] { 8 }));
-            Assert.True(res[6].SequenceEqual(new int[] { }));
+            Assert.True(res[0].SequenceEqual([]));
+            Assert.True(res[1].SequenceEqual([3]));
+            Assert.True(res[2].SequenceEqual([4]));
+            Assert.True(res[3].SequenceEqual([]));
+            Assert.True(res[4].SequenceEqual([5, 6, 7]));
+            Assert.True(res[5].SequenceEqual([8]));
+            Assert.True(res[6].SequenceEqual([]));
         }
 
-        [Fact]
+        [TestMethod]
         public void Chunkify_Regular2()
         {
             var scheduler = new TestScheduler();
@@ -115,11 +118,11 @@ namespace ReactiveTests.Tests
             );
 
             Assert.Equal(2, res.Count);
-            Assert.True(res[0].SequenceEqual(new int[] { 3, 4, 5 }));
-            Assert.True(res[1].SequenceEqual(new int[] { 6, 7, 8 }));
+            Assert.True(res[0].SequenceEqual([3, 4, 5]));
+            Assert.True(res[1].SequenceEqual([6, 7, 8]));
         }
 
-        [Fact]
+        [TestMethod]
         public void Chunkify_Error()
         {
             var ex = new Exception();
@@ -172,10 +175,10 @@ namespace ReactiveTests.Tests
             );
 
             Assert.Equal(4, res.Count);
-            Assert.True(res[0].SequenceEqual(new int[] { }));
-            Assert.True(res[1].SequenceEqual(new int[] { 3 }));
-            Assert.True(res[2].SequenceEqual(new int[] { 4 }));
-            Assert.True(res[3].SequenceEqual(new int[] { }));
+            Assert.True(res[0].SequenceEqual([]));
+            Assert.True(res[1].SequenceEqual([3]));
+            Assert.True(res[2].SequenceEqual([4]));
+            Assert.True(res[3].SequenceEqual([]));
         }
 
     }

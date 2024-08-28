@@ -10,7 +10,7 @@ namespace System.Reactive.Disposables
     /// Represents a disposable resource which only allows a single assignment of its underlying disposable resource.
     /// If an underlying disposable resource has already been set, future attempts to set the underlying disposable resource will throw an <see cref="InvalidOperationException"/>.
     /// </summary>
-    internal struct SingleAssignmentDisposableValue
+    public struct SingleAssignmentDisposableValue
     {
         private IDisposable? _current;
 
@@ -48,5 +48,17 @@ namespace System.Reactive.Disposables
         {
             Disposables.Disposable.Dispose(ref _current);
         }
+
+        /// <inheritdoc/>
+        public override readonly bool Equals(object? obj) => false;
+
+        /// <inheritdoc/>
+        public override readonly int GetHashCode() => 0;
+
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required part of public API
+        public static bool operator ==(SingleAssignmentDisposableValue left, SingleAssignmentDisposableValue right) => false;
+
+        public static bool operator !=(SingleAssignmentDisposableValue left, SingleAssignmentDisposableValue right) => true;
+#pragma warning restore IDE0060
     }
 }

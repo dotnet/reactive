@@ -8,14 +8,17 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ToDictionaryTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ToDictionary_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary(null, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
@@ -32,7 +35,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int, int>(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToDictionary_Completed()
         {
             var scheduler = new TestScheduler();
@@ -67,7 +70,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToDictionary_Error()
         {
             var scheduler = new TestScheduler();
@@ -96,7 +99,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToDictionary_KeySelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -125,7 +128,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToDictionary_ElementSelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -154,7 +157,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToDictionary_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -179,7 +182,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToDictionary_MultipleAdd()
         {
             var scheduler = new TestScheduler();
@@ -206,7 +209,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToDictionary_Default()
         {
             var d1 = Observable.Range(1, 10).ToDictionary(x => x.ToString()).First();

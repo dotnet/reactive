@@ -7,9 +7,7 @@ namespace System.Reactive
     /// <summary>
     /// Represents a type with a single value. This type is often used to denote the successful completion of a void-returning method (C#) or a Sub procedure (Visual Basic).
     /// </summary>
-#if !NO_SERIALIZABLE
     [Serializable]
-#endif
     public readonly struct Unit : IEquatable<Unit>
     {
         /// <summary>
@@ -44,7 +42,7 @@ namespace System.Reactive
         /// <param name="first">The first <see cref="Unit"/> value to compare.</param>
         /// <param name="second">The second <see cref="Unit"/> value to compare.</param>
         /// <returns>Because <see cref="Unit"/> has a single value, this always returns <c>true</c>.</returns>
-        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "first", Justification = "Parameter required for operator overloading."), Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "second", Justification = "Parameter required for operator overloading.")]
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required part of public API
         public static bool operator ==(Unit first, Unit second) => true;
 
         /// <summary>
@@ -53,8 +51,8 @@ namespace System.Reactive
         /// <param name="first">The first <see cref="Unit"/> value to compare.</param>
         /// <param name="second">The second <see cref="Unit"/> value to compare.</param>
         /// <returns>Because <see cref="Unit"/> has a single value, this always returns <c>false</c>.</returns>
-        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "first", Justification = "Parameter required for operator overloading."), Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "second", Justification = "Parameter required for operator overloading.")]
         public static bool operator !=(Unit first, Unit second) => false;
+#pragma warning restore IDE0060
 
         /// <summary>
         /// Gets the single <see cref="Unit"/> value.

@@ -6,14 +6,17 @@ using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class DoTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Do_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -34,7 +37,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, default(IObserver<int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Do_ShouldSeeAllValues()
         {
             var scheduler = new TestScheduler();
@@ -70,7 +73,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do_PlainAction()
         {
             var scheduler = new TestScheduler();
@@ -104,7 +107,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do_NextCompleted()
         {
             var scheduler = new TestScheduler();
@@ -142,7 +145,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do_NextCompleted_Never()
         {
             var scheduler = new TestScheduler();
@@ -166,7 +169,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do_NextError()
         {
             var scheduler = new TestScheduler();
@@ -206,7 +209,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do_NextErrorNot()
         {
             var scheduler = new TestScheduler();
@@ -244,7 +247,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do_NextErrorCompleted()
         {
             var scheduler = new TestScheduler();
@@ -284,7 +287,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do_NextErrorCompletedError()
         {
             var scheduler = new TestScheduler();
@@ -326,7 +329,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do_NextErrorCompletedNever()
         {
             var scheduler = new TestScheduler();
@@ -352,7 +355,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do_Observer_SomeDataWithError()
         {
             var scheduler = new TestScheduler();
@@ -394,7 +397,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do_Observer_SomeDataWithoutError()
         {
             var scheduler = new TestScheduler();
@@ -434,7 +437,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do1422_Next_NextThrows()
         {
             var scheduler = new TestScheduler();
@@ -460,7 +463,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do1422_NextCompleted_NextThrows()
         {
             var scheduler = new TestScheduler();
@@ -486,7 +489,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do1422_NextCompleted_CompletedThrows()
         {
             var scheduler = new TestScheduler();
@@ -513,7 +516,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do1422_NextError_NextThrows()
         {
             var scheduler = new TestScheduler();
@@ -539,7 +542,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do1422_NextError_ErrorThrows()
         {
             var scheduler = new TestScheduler();
@@ -565,7 +568,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do1422_NextErrorCompleted_NextThrows()
         {
             var scheduler = new TestScheduler();
@@ -591,7 +594,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do1422_NextErrorCompleted_ErrorThrows()
         {
             var scheduler = new TestScheduler();
@@ -617,7 +620,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do1422_NextErrorCompleted_CompletedThrows()
         {
             var scheduler = new TestScheduler();
@@ -644,7 +647,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do1422_Observer_NextThrows()
         {
             var scheduler = new TestScheduler();
@@ -670,7 +673,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do1422_Observer_ErrorThrows()
         {
             var scheduler = new TestScheduler();
@@ -696,7 +699,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Do1422_Observer_CompletedThrows()
         {
             var scheduler = new TestScheduler();

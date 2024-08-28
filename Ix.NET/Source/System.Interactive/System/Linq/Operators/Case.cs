@@ -23,7 +23,7 @@ namespace System.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return Case(selector, sources, Enumerable.Empty<TResult>());
+            return Case(selector, sources, []);
         }
 
         /// <summary>

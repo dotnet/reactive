@@ -7,14 +7,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class MinTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Min_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<int>)));
@@ -63,7 +64,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(Observable.Empty<DateTime>(), _ => "", default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -86,7 +87,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -111,7 +112,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Int32_Some()
         {
             var scheduler = new TestScheduler();
@@ -138,7 +139,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Int32_Throw()
         {
             var ex = new Exception();
@@ -163,7 +164,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Int32_Never()
         {
             var ex = new Exception();
@@ -186,7 +187,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -209,7 +210,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -234,7 +235,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Int64_Some()
         {
             var scheduler = new TestScheduler();
@@ -261,7 +262,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Int64_Throw()
         {
             var ex = new Exception();
@@ -286,7 +287,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Int64_Never()
         {
             var ex = new Exception();
@@ -309,7 +310,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -332,7 +333,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -357,7 +358,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Float_Some()
         {
             var scheduler = new TestScheduler();
@@ -384,7 +385,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Float_Throw()
         {
             var ex = new Exception();
@@ -409,7 +410,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Float_Never()
         {
             var ex = new Exception();
@@ -432,7 +433,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -455,7 +456,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -480,7 +481,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Double_Some()
         {
             var scheduler = new TestScheduler();
@@ -507,7 +508,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Double_Throw()
         {
             var ex = new Exception();
@@ -532,7 +533,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Double_Never()
         {
             var ex = new Exception();
@@ -555,7 +556,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -578,7 +579,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -603,7 +604,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Decimal_Some()
         {
             var scheduler = new TestScheduler();
@@ -630,7 +631,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Decimal_Throw()
         {
             var ex = new Exception();
@@ -655,7 +656,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Decimal_Never()
         {
             var ex = new Exception();
@@ -678,7 +679,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -702,7 +703,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -727,7 +728,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Int32_Some1()
         {
             var scheduler = new TestScheduler();
@@ -754,7 +755,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Int32_Some2()
         {
             var scheduler = new TestScheduler();
@@ -781,7 +782,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_GeneralNullableMinTest_LhsNull()
         {
             var scheduler = new TestScheduler();
@@ -807,7 +808,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_GeneralNullableMinTest_RhsNull()
         {
             var scheduler = new TestScheduler();
@@ -833,7 +834,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_GeneralNullableMinTest_Less()
         {
             var scheduler = new TestScheduler();
@@ -859,7 +860,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_GeneralNullableMinTest_Greater()
         {
             var scheduler = new TestScheduler();
@@ -885,7 +886,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Int32_Throw()
         {
             var ex = new Exception();
@@ -910,7 +911,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Int32_Never()
         {
             var ex = new Exception();
@@ -933,7 +934,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -957,7 +958,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -982,7 +983,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Int64_Some1()
         {
             var scheduler = new TestScheduler();
@@ -1009,7 +1010,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Int64_Some2()
         {
             var scheduler = new TestScheduler();
@@ -1036,7 +1037,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Int64_Throw()
         {
             var ex = new Exception();
@@ -1061,7 +1062,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Int64_Never()
         {
             var ex = new Exception();
@@ -1084,7 +1085,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1108,7 +1109,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -1133,7 +1134,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Float_Some1()
         {
             var scheduler = new TestScheduler();
@@ -1160,7 +1161,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Float_Some2()
         {
             var scheduler = new TestScheduler();
@@ -1187,7 +1188,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Float_Throw()
         {
             var ex = new Exception();
@@ -1212,7 +1213,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Float_Never()
         {
             var ex = new Exception();
@@ -1235,7 +1236,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1259,7 +1260,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -1284,7 +1285,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Double_Some1()
         {
             var scheduler = new TestScheduler();
@@ -1311,7 +1312,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Double_Some2()
         {
             var scheduler = new TestScheduler();
@@ -1338,7 +1339,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Double_Throw()
         {
             var ex = new Exception();
@@ -1363,7 +1364,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Double_Never()
         {
             var ex = new Exception();
@@ -1386,7 +1387,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1410,7 +1411,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -1435,7 +1436,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Decimal_Some1()
         {
             var scheduler = new TestScheduler();
@@ -1462,7 +1463,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Decimal_Some2()
         {
             var scheduler = new TestScheduler();
@@ -1489,7 +1490,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Decimal_Throw()
         {
             var ex = new Exception();
@@ -1514,7 +1515,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Nullable_Decimal_Never()
         {
             var ex = new Exception();
@@ -1537,7 +1538,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Reference_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1568,7 +1569,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Value_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1591,7 +1592,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Reference_Return()
         {
             var scheduler = new TestScheduler();
@@ -1616,7 +1617,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Value_Return()
         {
             var scheduler = new TestScheduler();
@@ -1641,7 +1642,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Reference_Some()
         {
             var scheduler = new TestScheduler();
@@ -1668,7 +1669,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Value_Some()
         {
             var scheduler = new TestScheduler();
@@ -1695,7 +1696,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Reference_Throw()
         {
             var ex = new Exception();
@@ -1720,7 +1721,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Value_Throw()
         {
             var ex = new Exception();
@@ -1745,7 +1746,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Reference_Never()
         {
             var ex = new Exception();
@@ -1768,7 +1769,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Value_Never()
         {
             var ex = new Exception();
@@ -1791,7 +1792,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Reference_Comparer_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1822,7 +1823,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Value_Comparer_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1845,7 +1846,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Reference_Comparer_Return()
         {
             var scheduler = new TestScheduler();
@@ -1870,7 +1871,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Value_Comparer_Return()
         {
             var scheduler = new TestScheduler();
@@ -1895,7 +1896,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Reference_Comparer_Some()
         {
             var scheduler = new TestScheduler();
@@ -1922,7 +1923,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Value_Comparer_Some()
         {
             var scheduler = new TestScheduler();
@@ -1949,7 +1950,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Reference_Comparer_Throw()
         {
             var ex = new Exception();
@@ -1974,7 +1975,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Value_Comparer_Throw()
         {
             var ex = new Exception();
@@ -1999,7 +2000,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Reference_Comparer_Never()
         {
             var ex = new Exception();
@@ -2022,7 +2023,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Value_Comparer_Never()
         {
             var ex = new Exception();
@@ -2045,7 +2046,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Reference_ComparerThrows()
         {
             var ex = new Exception();
@@ -2073,7 +2074,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Value_ComparerThrows()
         {
             var ex = new Exception();
@@ -2101,7 +2102,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Selector_Regular_Int32()
         {
             var scheduler = new TestScheduler();
@@ -2125,7 +2126,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Selector_Regular_Int64()
         {
             var scheduler = new TestScheduler();
@@ -2149,7 +2150,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Selector_Regular_Single()
         {
             var scheduler = new TestScheduler();
@@ -2173,7 +2174,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Selector_Regular_Double()
         {
             var scheduler = new TestScheduler();
@@ -2197,7 +2198,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Selector_Regular_Decimal()
         {
             var scheduler = new TestScheduler();
@@ -2221,7 +2222,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Selector_Regular_Int32_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -2245,7 +2246,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Selector_Regular_Int64_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -2269,7 +2270,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Selector_Regular_Single_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -2293,7 +2294,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Selector_Regular_Double_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -2317,7 +2318,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Min_Selector_Regular_Decimal_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -2341,7 +2342,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Selector_Regular()
         {
             var scheduler = new TestScheduler();
@@ -2365,7 +2366,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MinOfT_Selector_Regular_Comparer()
         {
             var scheduler = new TestScheduler();

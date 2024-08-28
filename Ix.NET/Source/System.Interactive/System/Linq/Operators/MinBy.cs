@@ -8,6 +8,8 @@ namespace System.Linq
 {
     public static partial class EnumerableEx
     {
+
+#if !(REFERENCE_ASSEMBLY && NET6_0_OR_GREATER)
         /// <summary>
         /// Returns the elements with the minimum key value by using the default comparer to compare key values.
         /// </summary>
@@ -16,6 +18,7 @@ namespace System.Linq
         /// <param name="source">Source sequence.</param>
         /// <param name="keySelector">Key selector used to extract the key for each element in the sequence.</param>
         /// <returns>List with the elements that share the same minimum key value.</returns>
+        [Obsolete("Use MinByWithTies to maintain same behavior with .NET 6 and later", false)]
         public static IList<TSource> MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
@@ -35,6 +38,7 @@ namespace System.Linq
         /// <param name="keySelector">Key selector used to extract the key for each element in the sequence.</param>
         /// <param name="comparer">Comparer used to determine the minimum key value.</param>
         /// <returns>List with the elements that share the same minimum key value.</returns>
+        [Obsolete("Use MinByWithTies to maintain same behavior with .NET 6 and later", false)]
         public static IList<TSource> MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
@@ -46,5 +50,6 @@ namespace System.Linq
 
             return ExtremaBy(source, keySelector, (key, minValue) => -comparer.Compare(key, minValue));
         }
+#endif
     }
 }

@@ -7,21 +7,22 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class CastTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Cast_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Cast<bool>(default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Cast<bool>(DummyObservable<object>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Cast_Complete()
         {
             var scheduler = new TestScheduler();
@@ -51,7 +52,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Cast_Error()
         {
             var scheduler = new TestScheduler();
@@ -83,7 +84,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Cast_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -112,7 +113,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Cast_NotValid()
         {
             var scheduler = new TestScheduler();
@@ -145,7 +146,7 @@ namespace ReactiveTests.Tests
 
     internal class A : IEquatable<A>
     {
-        private int _id;
+        private readonly int _id;
 
         public A(int id)
         {
@@ -199,7 +200,7 @@ namespace ReactiveTests.Tests
 
     internal class E : IEquatable<E>
     {
-        private int _id;
+        private readonly int _id;
 
         public E(int id)
         {

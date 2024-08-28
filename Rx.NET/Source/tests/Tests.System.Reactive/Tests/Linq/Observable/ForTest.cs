@@ -7,21 +7,22 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ForTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void For_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.For(DummyEnumerable<int>.Instance, default(Func<int, IObservable<int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.For(null, DummyFunc<int, IObservable<int>>.Instance));
         }
 
-        [Fact]
+        [TestMethod]
         public void For_Basic()
         {
             var scheduler = new TestScheduler();
@@ -54,7 +55,7 @@ namespace ReactiveTests.Tests
             throw ex;
         }
 
-        [Fact]
+        [TestMethod]
         public void For_Error_Iterator()
         {
             var scheduler = new TestScheduler();
@@ -81,7 +82,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void For_Error_Source()
         {
             var scheduler = new TestScheduler();
@@ -95,7 +96,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void For_SelectorThrows()
         {
             var scheduler = new TestScheduler();

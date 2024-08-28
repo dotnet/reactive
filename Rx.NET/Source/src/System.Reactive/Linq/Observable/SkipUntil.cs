@@ -18,7 +18,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _other = other;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(this);
 
@@ -151,7 +151,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return new SkipUntil<TSource>(_source, startTime, _scheduler);
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<TSource> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(this);
 

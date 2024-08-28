@@ -8,20 +8,21 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class AllTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void All_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.All(DummyObservable<int>.Instance, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.All(default(IObservable<int>), x => true));
         }
 
-        [Fact]
+        [TestMethod]
         public void All_Empty()
         {
             var scheduler = new TestScheduler();
@@ -45,7 +46,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void All_Return()
         {
             var scheduler = new TestScheduler();
@@ -70,7 +71,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void All_ReturnNotMatch()
         {
             var scheduler = new TestScheduler();
@@ -95,7 +96,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void All_SomeNoneMatch()
         {
             var scheduler = new TestScheduler();
@@ -122,7 +123,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void All_SomeMatch()
         {
             var scheduler = new TestScheduler();
@@ -149,7 +150,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void All_SomeAllMatch()
         {
             var scheduler = new TestScheduler();
@@ -176,7 +177,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void All_Throw()
         {
             var ex = new Exception();
@@ -201,7 +202,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void All_Never()
         {
             var ex = new Exception();
@@ -224,7 +225,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void All_PredicateThrows()
         {
             var ex = new Exception();

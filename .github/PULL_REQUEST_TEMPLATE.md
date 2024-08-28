@@ -1,12 +1,12 @@
 Hello and thank you for contributing to dotnet/reactive. Before you proceed by creating a pull request (PR):
 
-> Please make sure your contribution is in line with the project's [licensing model](https://github.com/dotnet/reactive/blob/master/LICENSE) and
+> Please make sure your contribution is in line with the project's [licensing model](https://github.com/dotnet/reactive/blob/main/LICENSE) and
 your employment allows you to contribute to open source.
 
 > Please sign the [Contributor License Agreement](https://cla.dotnetfoundation.org/dotnet/reactive?pullRequest=1101) in case the CLA bot asks you
 for being a new contributor.
 
-> Please make sure you target the `master` branch when creating the PR.
+> Please make sure you target the `main` branch when creating the PR.
 
 What is the nature of your contribution?
 

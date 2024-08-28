@@ -7,14 +7,17 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SkipWhileTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void SkipWhile_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SkipWhile(DummyFunc<int, bool>.Instance));
@@ -24,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SkipWhile(default(Func<int, int, bool>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipWhile_Complete_Before()
         {
             var scheduler = new TestScheduler();
@@ -66,7 +69,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(4, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipWhile_Complete_After()
         {
             var scheduler = new TestScheduler();
@@ -111,7 +114,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(6, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipWhile_Error_Before()
         {
             var scheduler = new TestScheduler();
@@ -154,7 +157,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(2, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipWhile_Error_After()
         {
             var scheduler = new TestScheduler();
@@ -201,7 +204,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(6, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipWhile_Dispose_Before()
         {
             var scheduler = new TestScheduler();
@@ -242,7 +245,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipWhile_Dispose_After()
         {
             var scheduler = new TestScheduler();
@@ -286,7 +289,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(6, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipWhile_Zero()
         {
             var scheduler = new TestScheduler();
@@ -338,7 +341,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipWhile_Throw()
         {
             var scheduler = new TestScheduler();
@@ -385,7 +388,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipWhile_Index()
         {
             var scheduler = new TestScheduler();
@@ -424,7 +427,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipWhile_Index_Throw()
         {
             var scheduler = new TestScheduler();
@@ -459,7 +462,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SkipWhile_Index_SelectorThrows()
         {
             var scheduler = new TestScheduler();

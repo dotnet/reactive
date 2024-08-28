@@ -27,7 +27,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3);
 
@@ -90,7 +90,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4);
 
@@ -161,7 +161,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4, _source5);
 
@@ -240,7 +240,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4, _source5, _source6);
 
@@ -327,7 +327,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4, _source5, _source6, _source7);
 
@@ -422,7 +422,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4, _source5, _source6, _source7, _source8);
 
@@ -525,7 +525,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4, _source5, _source6, _source7, _source8, _source9);
 
@@ -636,7 +636,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4, _source5, _source6, _source7, _source8, _source9, _source10);
 
@@ -755,7 +755,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4, _source5, _source6, _source7, _source8, _source9, _source10, _source11);
 
@@ -882,7 +882,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4, _source5, _source6, _source7, _source8, _source9, _source10, _source11, _source12);
 
@@ -1017,7 +1017,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4, _source5, _source6, _source7, _source8, _source9, _source10, _source11, _source12, _source13);
 
@@ -1160,7 +1160,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4, _source5, _source6, _source7, _source8, _source9, _source10, _source11, _source12, _source13, _source14);
 
@@ -1311,7 +1311,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4, _source5, _source6, _source7, _source8, _source9, _source10, _source11, _source12, _source13, _source14, _source15);
 
@@ -1470,7 +1470,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(_resultSelector, observer);
 
         protected override void Run(_ sink) => sink.Run(_source1, _source2, _source3, _source4, _source5, _source6, _source7, _source8, _source9, _source10, _source11, _source12, _source13, _source14, _source15, _source16);
 

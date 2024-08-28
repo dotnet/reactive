@@ -53,12 +53,8 @@ namespace System.Reactive.Concurrency
         {
             get
             {
-                var window = CoreWindow.GetForCurrentThread();
-                if (window == null)
-                {
-                    throw new InvalidOperationException(Strings_WindowsThreading.NO_WINDOW_CURRENT);
-                }
-
+                var window = CoreWindow.GetForCurrentThread()
+                    ?? throw new InvalidOperationException(Strings_WindowsThreading.NO_WINDOW_CURRENT);
                 return new CoreDispatcherScheduler(window.Dispatcher);
             }
         }

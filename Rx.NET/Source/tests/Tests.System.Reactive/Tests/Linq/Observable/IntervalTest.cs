@@ -8,14 +8,17 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class IntervalTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Interval_TimeSpan_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Interval(TimeSpan.Zero, null));
@@ -24,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Interval(TimeSpan.FromSeconds(-1), DummyScheduler.Instance));
         }
 
-        [Fact]
+        [TestMethod]
         public void Interval_TimeSpan_Basic()
         {
             var scheduler = new TestScheduler();
@@ -44,7 +47,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Interval_TimeSpan_Zero()
         {
             var scheduler = new TestScheduler();
@@ -67,7 +70,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Interval_TimeSpan_Zero_DefaultScheduler()
         {
             var scheduler = new TestScheduler();
@@ -82,7 +85,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(10, observer.Messages.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void Interval_TimeSpan_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -95,7 +98,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Interval_TimeSpan_ObserverThrows()
         {
             var scheduler = new TestScheduler();
@@ -107,10 +110,10 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => scheduler.Start());
         }
 
-        [Fact]
+        [TestMethod]
         public void Interval_TimeSpan_DefaultScheduler()
         {
-            Assert.True(Observable.Interval(TimeSpan.FromMilliseconds(1)).ToEnumerable().Take(3).SequenceEqual(new[] { 0L, 1L, 2L }));
+            Assert.True(Observable.Interval(TimeSpan.FromMilliseconds(1)).ToEnumerable().Take(3).SequenceEqual([0L, 1L, 2L]));
         }
 
     }

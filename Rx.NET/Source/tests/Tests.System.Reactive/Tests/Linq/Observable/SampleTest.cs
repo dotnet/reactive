@@ -7,14 +7,17 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SampleTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Sample_ArgumentChecking()
         {
             var scheduler = new TestScheduler();
@@ -31,7 +34,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sample(someObservable, default(IObservable<int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Regular()
         {
             var scheduler = new TestScheduler();
@@ -64,7 +67,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Periodic_Regular()
         {
             var scheduler = new PeriodicTestScheduler();
@@ -103,7 +106,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_ErrorInFlight()
         {
             var scheduler = new TestScheduler();
@@ -135,7 +138,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Periodic_ErrorInFlight()
         {
             var scheduler = new PeriodicTestScheduler();
@@ -173,7 +176,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Empty()
         {
             var scheduler = new TestScheduler();
@@ -196,7 +199,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Periodic_Empty()
         {
             var scheduler = new PeriodicTestScheduler();
@@ -225,7 +228,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Error()
         {
             var scheduler = new TestScheduler();
@@ -250,7 +253,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Periodic_Error()
         {
             var scheduler = new PeriodicTestScheduler();
@@ -281,7 +284,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Never()
         {
             var scheduler = new TestScheduler();
@@ -302,7 +305,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Periodic_Never()
         {
             var scheduler = new PeriodicTestScheduler();
@@ -329,21 +332,21 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_DefaultScheduler_Periodic()
         {
             var res = Observable.Return(42).Sample(TimeSpan.FromMilliseconds(1)).ToEnumerable().Single();
             Assert.Equal(42, res);
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_DefaultScheduler_PeriodicDisabled()
         {
             var res = Observable.Return(42).Sample(TimeSpan.FromMilliseconds(1), Scheduler.Default.DisableOptimizations()).ToEnumerable().Single();
             Assert.Equal(42, res);
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Sampler_Simple1()
         {
             var scheduler = new TestScheduler();
@@ -386,7 +389,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Sampler_Simple2()
         {
             var scheduler = new TestScheduler();
@@ -431,7 +434,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Sampler_Simple3()
         {
             var scheduler = new TestScheduler();
@@ -472,7 +475,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Sampler_completes_first()
         {
             var scheduler = new TestScheduler();
@@ -513,7 +516,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sample_Sampler_SourceThrows()
         {
             var ex = new Exception();
@@ -558,7 +561,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF // BREAKING CHANGE v2 > v1.x - behavior when sampler throws
-        [Fact]
+        [TestMethod]
         public void Sample_Sampler_SamplerThrows()
         {
             var ex = new Exception();

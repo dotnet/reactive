@@ -8,14 +8,15 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class CaseTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Case_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Case(null, new Dictionary<int, IObservable<int>>(), DummyObservable<int>.Instance));
@@ -30,7 +31,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Case<int, int>(DummyFunc<int>.Instance, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Case_One()
         {
             var scheduler = new TestScheduler();
@@ -82,7 +83,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Case_Two()
         {
             var scheduler = new TestScheduler();
@@ -134,7 +135,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Case_Three()
         {
             var scheduler = new TestScheduler();
@@ -186,7 +187,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Case_Throw()
         {
             var scheduler = new TestScheduler();
@@ -236,7 +237,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CaseWithDefault_One()
         {
             var scheduler = new TestScheduler();
@@ -278,7 +279,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CaseWithDefault_Two()
         {
             var scheduler = new TestScheduler();
@@ -320,7 +321,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CaseWithDefault_Three()
         {
             var scheduler = new TestScheduler();
@@ -358,7 +359,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CaseWithDefault_Throw()
         {
             var scheduler = new TestScheduler();
@@ -398,14 +399,14 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void CaseWithDefault_CheckDefault()
         {
             Observable.Case(() => 1, new Dictionary<int, IObservable<int>>(), DefaultScheduler.Instance)
                 .AssertEqual(Observable.Case(() => 1, new Dictionary<int, IObservable<int>>()));
         }
 
-        [Fact]
+        [TestMethod]
         public void Case_Error()
         {
             var scheduler = new TestScheduler();

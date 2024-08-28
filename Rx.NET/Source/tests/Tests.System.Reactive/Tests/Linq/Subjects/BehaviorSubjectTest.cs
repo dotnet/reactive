@@ -6,26 +6,28 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public partial class BehaviorSubjectTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Subscribe_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new BehaviorSubject<int>(1).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void OnError_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new BehaviorSubject<int>(1).OnError(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Infinite()
         {
             var scheduler = new TestScheduler();
@@ -92,7 +94,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Finite()
         {
             var scheduler = new TestScheduler();
@@ -157,7 +159,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Error()
         {
             var scheduler = new TestScheduler();
@@ -224,7 +226,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Canceled()
         {
             var scheduler = new TestScheduler();
@@ -277,7 +279,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SubjectDisposed()
         {
             var scheduler = new TestScheduler();
@@ -335,7 +337,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers()
         {
             var s = new BehaviorSubject<int>(42);
@@ -360,7 +362,7 @@ namespace ReactiveTests.Tests
             Assert.False(s.HasObservers);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_Dispose1()
         {
             var s = new BehaviorSubject<int>(42);
@@ -380,7 +382,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_Dispose2()
         {
             var s = new BehaviorSubject<int>(42);
@@ -400,7 +402,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_Dispose3()
         {
             var s = new BehaviorSubject<int>(42);
@@ -412,7 +414,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsDisposed);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_OnCompleted()
         {
             var s = new BehaviorSubject<int>(42);
@@ -428,7 +430,7 @@ namespace ReactiveTests.Tests
             Assert.False(s.HasObservers);
         }
 
-        [Fact]
+        [TestMethod]
         public void HasObservers_OnError()
         {
             var s = new BehaviorSubject<int>(42);
@@ -444,7 +446,7 @@ namespace ReactiveTests.Tests
             Assert.False(s.HasObservers);
         }
 
-        [Fact]
+        [TestMethod]
         public void Value_Initial()
         {
             var s = new BehaviorSubject<int>(42);
@@ -454,7 +456,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(42, x);
         }
 
-        [Fact]
+        [TestMethod]
         public void Value_First()
         {
             var s = new BehaviorSubject<int>(42);
@@ -470,7 +472,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(43, x);
         }
 
-        [Fact]
+        [TestMethod]
         public void Value_Second()
         {
             var s = new BehaviorSubject<int>(42);
@@ -492,7 +494,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(44, x);
         }
 
-        [Fact]
+        [TestMethod]
         public void Value_FrozenAfterOnCompleted()
         {
             var s = new BehaviorSubject<int>(42);
@@ -526,7 +528,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(44, x);
         }
 
-        [Fact]
+        [TestMethod]
         public void Value_ThrowsAfterOnError()
         {
             var s = new BehaviorSubject<int>(42);
@@ -545,7 +547,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void Value_ThrowsOnDispose()
         {
             var s = new BehaviorSubject<int>(42);

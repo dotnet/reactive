@@ -7,14 +7,17 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SingleTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Single_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Single(default(IObservable<int>)));
@@ -22,26 +25,26 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Single(DummyObservable<int>.Instance, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Single_Empty()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Empty<int>().Single());
         }
 
-        [Fact]
+        [TestMethod]
         public void SinglePredicate_Empty()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Empty<int>().Single(_ => true));
         }
 
-        [Fact]
+        [TestMethod]
         public void Single_Return()
         {
             var value = 42;
             Assert.Equal(value, Observable.Return(value).Single());
         }
 
-        [Fact]
+        [TestMethod]
         public void Single_Throw()
         {
             var ex = new Exception();
@@ -51,21 +54,21 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [Fact]
+        [TestMethod]
         public void Single_Range()
         {
             var value = 42;
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Range(value, 10).Single());
         }
 
-        [Fact]
+        [TestMethod]
         public void SinglePredicate_Range()
         {
             var value = 42;
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Range(value, 10).Single(i => i % 2 == 0));
         }
 
-        [Fact]
+        [TestMethod]
         public void SinglePredicate_Range_ReducesToSingle()
         {
             var value = 42;

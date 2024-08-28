@@ -46,9 +46,7 @@ namespace System.Linq
                 // checking that has its own cost, so just use this approach for all types.
                 for (int i = 0, j = array.Length - 1; i < j; ++i, --j)
                 {
-                    var temp = array[i];
-                    array[i] = array[j];
-                    array[j] = temp;
+                    (array[j], array[i]) = (array[i], array[j]);
                 }
 
                 return array;
@@ -71,7 +69,7 @@ namespace System.Linq
                         return listProv.GetCountAsync(true, cancellationToken);
                     }
 
-                    if (!(_source is ICollection<TSource>) && !(_source is ICollection))
+                    if (_source is not ICollection<TSource> && _source is not ICollection)
                     {
                         return new ValueTask<int>(-1);
                     }

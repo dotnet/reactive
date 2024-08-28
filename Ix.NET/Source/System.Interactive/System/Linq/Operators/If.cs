@@ -43,7 +43,7 @@ namespace System.Linq
             if (thenSource == null)
                 throw new ArgumentNullException(nameof(thenSource));
 
-            return Defer(() => condition() ? thenSource : Enumerable.Empty<TResult>());
+            return Defer(() => condition() ? thenSource : []);
         }
     }
 }

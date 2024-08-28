@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.Default">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class DefaultScheduler : LocalScheduler, ISchedulerPeriodic
     {
-        private static readonly Lazy<DefaultScheduler> DefaultInstance = new Lazy<DefaultScheduler>(() => new DefaultScheduler());
+        private static readonly Lazy<DefaultScheduler> DefaultInstance = new(() => new DefaultScheduler());
         private static readonly IConcurrencyAbstractionLayer Cal = ConcurrencyAbstractionLayer.Current;
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace System.Reactive.Concurrency
             private TState _state;
             private Func<TState, TState> _action;
             private readonly IDisposable _cancel;
-            private readonly AsyncLock _gate = new AsyncLock();
+            private readonly AsyncLock _gate = new();
 
             public PeriodicallyScheduledWorkItem(TState state, TimeSpan period, Func<TState, TState> action)
             {

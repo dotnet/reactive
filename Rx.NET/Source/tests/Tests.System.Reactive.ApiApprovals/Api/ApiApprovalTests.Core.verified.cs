@@ -1,4 +1,4 @@
-[assembly: System.CLSCompliant(true)]
+﻿[assembly: System.CLSCompliant(true)]
 [assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo(@"Tests.System.Reactive, PublicKey=00240000048000009400000006020000002400005253413100040000010001008f5cff058631087031f8350f30a36fa078027e5df2316b564352dc9eb7af7ce856016d3c5e9d058036fe73bb5c83987bd3fc0793fbe25d633cc4f37c2bd5f1d717cd2a81661bec08f0971dc6078e17bde372b89005e7738a0ebd501b896ca3e8315270ff64df7809dd912c372df61785a5085b3553b7872e39b1b1cc0ff5a6bc")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo(@"Tests.System.Reactive.Uwp.DeviceRunner, PublicKey=00240000048000009400000006020000002400005253413100040000010001008f5cff058631087031f8350f30a36fa078027e5df2316b564352dc9eb7af7ce856016d3c5e9d058036fe73bb5c83987bd3fc0793fbe25d633cc4f37c2bd5f1d717cd2a81661bec08f0971dc6078e17bde372b89005e7738a0ebd501b896ca3e8315270ff64df7809dd912c372df61785a5085b3553b7872e39b1b1cc0ff5a6bc")]
@@ -54,14 +54,14 @@ namespace System.Reactive
         public EventPattern(TSender? sender, TEventArgs e) { }
         public TEventArgs EventArgs { get; }
         public TSender Sender { get; }
-        public void Deconstruct(out TSender sender, out TEventArgs e) { }
+        public void Deconstruct(out TSender? sender, out TEventArgs e) { }
         public bool Equals(System.Reactive.EventPattern<TSender, TEventArgs>? other) { }
         public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public static bool operator !=(System.Reactive.EventPattern<TSender, TEventArgs> first, System.Reactive.EventPattern<TSender, TEventArgs> second) { }
         public static bool operator ==(System.Reactive.EventPattern<TSender, TEventArgs> first, System.Reactive.EventPattern<TSender, TEventArgs> second) { }
     }
-    [System.AttributeUsage(System.AttributeTargets.Assembly | System.AttributeTargets.Module | System.AttributeTargets.Class | System.AttributeTargets.Struct | System.AttributeTargets.Enum | System.AttributeTargets.Constructor | System.AttributeTargets.Method | System.AttributeTargets.Property | System.AttributeTargets.Field | System.AttributeTargets.Event | System.AttributeTargets.Interface | System.AttributeTargets.Parameter | System.AttributeTargets.Delegate | System.AttributeTargets.ReturnValue | System.AttributeTargets.GenericParameter | System.AttributeTargets.All)]
+    [System.AttributeUsage(System.AttributeTargets.All)]
     [System.Reactive.Experimental]
     public sealed class ExperimentalAttribute : System.Attribute
     {
@@ -487,6 +487,12 @@ namespace System.Reactive.Concurrency
         public override System.IDisposable Schedule<TState>(TState state, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
         public override System.IDisposable Schedule<TState>(TState state, System.TimeSpan dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
     }
+    public sealed class TaskObservationOptions
+    {
+        public TaskObservationOptions(System.Reactive.Concurrency.IScheduler? scheduler, bool ignoreExceptionsAfterUnsubscribe) { }
+        public bool IgnoreExceptionsAfterUnsubscribe { get; }
+        public System.Reactive.Concurrency.IScheduler? Scheduler { get; }
+    }
     public sealed class TaskPoolScheduler : System.Reactive.Concurrency.LocalScheduler, System.Reactive.Concurrency.ISchedulerLongRunning, System.Reactive.Concurrency.ISchedulerPeriodic
     {
         public TaskPoolScheduler(System.Threading.Tasks.TaskFactory taskFactory) { }
@@ -634,6 +640,16 @@ namespace System.Reactive.Disposables
         public System.IDisposable? Disposable { get; set; }
         public bool IsDisposed { get; }
         public void Dispose() { }
+    }
+    public struct SingleAssignmentDisposableValue
+    {
+        public System.IDisposable? Disposable { get; set; }
+        public bool IsDisposed { get; }
+        public void Dispose() { }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
+        public static bool operator !=(System.Reactive.Disposables.SingleAssignmentDisposableValue left, System.Reactive.Disposables.SingleAssignmentDisposableValue right) { }
+        public static bool operator ==(System.Reactive.Disposables.SingleAssignmentDisposableValue left, System.Reactive.Disposables.SingleAssignmentDisposableValue right) { }
     }
     public abstract class StableCompositeDisposable : System.IDisposable, System.Reactive.Disposables.ICancelable
     {
@@ -850,7 +866,7 @@ namespace System.Reactive.Linq
         System.Reactive.Linq.IQbservable<TResult> CreateQuery<TResult>(System.Linq.Expressions.Expression expression);
     }
     public interface IQbservable<out T> : System.IObservable<T>, System.Reactive.Linq.IQbservable { }
-    [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.All, Inherited=false)]
+    [System.AttributeUsage(System.AttributeTargets.Class, Inherited=false)]
     public sealed class LocalQueryMethodImplementationTypeAttribute : System.Attribute
     {
         public LocalQueryMethodImplementationTypeAttribute(System.Type targetType) { }
@@ -862,7 +878,7 @@ namespace System.Reactive.Linq
         public static System.IObservable<TAccumulate> Aggregate<TSource, TAccumulate>(this System.IObservable<TSource> source, TAccumulate seed, System.Func<TAccumulate, TSource, TAccumulate> accumulator) { }
         public static System.IObservable<TResult> Aggregate<TSource, TAccumulate, TResult>(this System.IObservable<TSource> source, TAccumulate seed, System.Func<TAccumulate, TSource, TAccumulate> accumulator, System.Func<TAccumulate, TResult> resultSelector) { }
         public static System.IObservable<bool> All<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
-        public static System.IObservable<TSource> Amb<TSource>(params System.IObservable<>[] sources) { }
+        public static System.IObservable<TSource> Amb<TSource>(params System.IObservable<TSource>[] sources) { }
         public static System.IObservable<TSource> Amb<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
         public static System.IObservable<TSource> Amb<TSource>(this System.IObservable<TSource> first, System.IObservable<TSource> second) { }
         public static System.Reactive.Joins.Pattern<TLeft, TRight> And<TLeft, TRight>(this System.IObservable<TLeft> left, System.IObservable<TRight> right) { }
@@ -910,7 +926,7 @@ namespace System.Reactive.Linq
         public static System.IObservable<TResult> Case<TValue, TResult>(System.Func<TValue> selector, System.Collections.Generic.IDictionary<TValue, System.IObservable<TResult>> sources, System.Reactive.Concurrency.IScheduler scheduler)
             where TValue :  notnull { }
         public static System.IObservable<TResult> Cast<TResult>(this System.IObservable<object> source) { }
-        public static System.IObservable<TSource> Catch<TSource>(params System.IObservable<>[] sources) { }
+        public static System.IObservable<TSource> Catch<TSource>(params System.IObservable<TSource>[] sources) { }
         public static System.IObservable<TSource> Catch<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
         public static System.IObservable<TSource> Catch<TSource>(this System.IObservable<TSource> first, System.IObservable<TSource> second) { }
         public static System.IObservable<TSource> Catch<TSource, TException>(this System.IObservable<TSource> source, System.Func<TException, System.IObservable<TSource>> handler)
@@ -918,7 +934,7 @@ namespace System.Reactive.Linq
         public static System.Collections.Generic.IEnumerable<System.Collections.Generic.IList<TSource>> Chunkify<TSource>(this System.IObservable<TSource> source) { }
         public static System.Collections.Generic.IEnumerable<TResult> Collect<TSource, TResult>(this System.IObservable<TSource> source, System.Func<TResult> newCollector, System.Func<TResult, TSource, TResult> merge) { }
         public static System.Collections.Generic.IEnumerable<TResult> Collect<TSource, TResult>(this System.IObservable<TSource> source, System.Func<TResult> getInitialCollector, System.Func<TResult, TSource, TResult> merge, System.Func<TResult, TResult> getNewCollector) { }
-        public static System.IObservable<System.Collections.Generic.IList<TSource>> CombineLatest<TSource>(params System.IObservable<>[] sources) { }
+        public static System.IObservable<System.Collections.Generic.IList<TSource>> CombineLatest<TSource>(params System.IObservable<TSource>[] sources) { }
         public static System.IObservable<System.Collections.Generic.IList<TSource>> CombineLatest<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
         public static System.IObservable<TResult> CombineLatest<TSource, TResult>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources, System.Func<System.Collections.Generic.IList<TSource>, TResult> resultSelector) { }
         public static System.IObservable<TResult> CombineLatest<TSource1, TSource2, TResult>(this System.IObservable<TSource1> first, System.IObservable<TSource2> second, System.Func<TSource1, TSource2, TResult> resultSelector) { }
@@ -969,7 +985,7 @@ namespace System.Reactive.Linq
                     System.IObservable<TSource15> source15,
                     System.IObservable<TSource16> source16,
                     System.Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> resultSelector) { }
-        public static System.IObservable<TSource> Concat<TSource>(params System.IObservable<>[] sources) { }
+        public static System.IObservable<TSource> Concat<TSource>(params System.IObservable<TSource>[] sources) { }
         public static System.IObservable<TSource> Concat<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
         public static System.IObservable<TSource> Concat<TSource>(this System.IObservable<System.IObservable<TSource>> sources) { }
         public static System.IObservable<TSource> Concat<TSource>(this System.IObservable<System.Threading.Tasks.Task<TSource>> sources) { }
@@ -990,7 +1006,9 @@ namespace System.Reactive.Linq
         public static System.IObservable<TSource> DefaultIfEmpty<TSource>(this System.IObservable<TSource> source, TSource defaultValue) { }
         public static System.IObservable<TResult> Defer<TResult>(System.Func<System.IObservable<TResult>> observableFactory) { }
         public static System.IObservable<TResult> Defer<TResult>(System.Func<System.Threading.Tasks.Task<System.IObservable<TResult>>> observableFactoryAsync) { }
+        public static System.IObservable<TResult> Defer<TResult>(System.Func<System.Threading.Tasks.Task<System.IObservable<TResult>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.IObservable<TResult> DeferAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>> observableFactoryAsync) { }
+        public static System.IObservable<TResult> DeferAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.IObservable<TSource> Delay<TSource>(this System.IObservable<TSource> source, System.DateTimeOffset dueTime) { }
         public static System.IObservable<TSource> Delay<TSource>(this System.IObservable<TSource> source, System.TimeSpan dueTime) { }
         public static System.IObservable<TSource> Delay<TSource>(this System.IObservable<TSource> source, System.DateTimeOffset dueTime, System.Reactive.Concurrency.IScheduler scheduler) { }
@@ -1049,11 +1067,15 @@ namespace System.Reactive.Linq
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> FromAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync) { }
         public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync) { }
         public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> FromAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
         public static System.Func<System.IObservable<System.Reactive.Unit>> FromAsyncPattern(System.Func<System.AsyncCallback, object?, System.IAsyncResult> begin, System.Action<System.IAsyncResult> end) { }
         [System.Obsolete(@"This conversion is no longer supported. Replace use of the Begin/End asynchronous method pair with a new Task-based async method, and convert the result using ToObservable. If no Task-based async method is available, use Task.Factory.FromAsync to obtain a Task object.")]
@@ -1222,11 +1244,11 @@ namespace System.Reactive.Linq
         public static System.IObservable<TResult> Max<TSource, TResult>(this System.IObservable<TSource> source, System.Func<TSource, TResult> selector, System.Collections.Generic.IComparer<TResult> comparer) { }
         public static System.IObservable<System.Collections.Generic.IList<TSource>> MaxBy<TSource, TKey>(this System.IObservable<TSource> source, System.Func<TSource, TKey> keySelector) { }
         public static System.IObservable<System.Collections.Generic.IList<TSource>> MaxBy<TSource, TKey>(this System.IObservable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
-        public static System.IObservable<TSource> Merge<TSource>(params System.IObservable<>[] sources) { }
+        public static System.IObservable<TSource> Merge<TSource>(params System.IObservable<TSource>[] sources) { }
         public static System.IObservable<TSource> Merge<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
         public static System.IObservable<TSource> Merge<TSource>(this System.IObservable<System.IObservable<TSource>> sources) { }
         public static System.IObservable<TSource> Merge<TSource>(this System.IObservable<System.Threading.Tasks.Task<TSource>> sources) { }
-        public static System.IObservable<TSource> Merge<TSource>(System.Reactive.Concurrency.IScheduler scheduler, params System.IObservable<>[] sources) { }
+        public static System.IObservable<TSource> Merge<TSource>(System.Reactive.Concurrency.IScheduler scheduler, params System.IObservable<TSource>[] sources) { }
         public static System.IObservable<TSource> Merge<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources, int maxConcurrent) { }
         public static System.IObservable<TSource> Merge<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<TSource> Merge<TSource>(this System.IObservable<System.IObservable<TSource>> sources, int maxConcurrent) { }
@@ -1268,7 +1290,7 @@ namespace System.Reactive.Linq
         public static System.IObservable<TSource> ObserveOn<TSource>(this System.IObservable<TSource> source, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<TSource> ObserveOn<TSource>(this System.IObservable<TSource> source, System.Threading.SynchronizationContext context) { }
         public static System.IObservable<TResult> OfType<TResult>(this System.IObservable<object> source) { }
-        public static System.IObservable<TSource> OnErrorResumeNext<TSource>(params System.IObservable<>[] sources) { }
+        public static System.IObservable<TSource> OnErrorResumeNext<TSource>(params System.IObservable<TSource>[] sources) { }
         public static System.IObservable<TSource> OnErrorResumeNext<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
         public static System.IObservable<TSource> OnErrorResumeNext<TSource>(this System.IObservable<TSource> first, System.IObservable<TSource> second) { }
         public static System.IObservable<TSource> Prepend<TSource>(this System.IObservable<TSource> source, TSource value) { }
@@ -1379,11 +1401,15 @@ namespace System.Reactive.Linq
         public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync) { }
         public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> StartAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync) { }
         public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync) { }
         public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> StartAsync<TResult>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<TSource> StartWith<TSource>(this System.IObservable<TSource> source, System.Collections.Generic.IEnumerable<TSource> values) { }
         public static System.IObservable<TSource> StartWith<TSource>(this System.IObservable<TSource> source, params TSource[] values) { }
         public static System.IObservable<TSource> StartWith<TSource>(this System.IObservable<TSource> source, System.Reactive.Concurrency.IScheduler scheduler, System.Collections.Generic.IEnumerable<TSource> values) { }
@@ -1559,7 +1585,7 @@ namespace System.Reactive.Linq
         public static System.IObservable<TResult> Using<TResult, TResource>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResource>> resourceFactoryAsync, System.Func<TResource, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>> observableFactoryAsync)
             where TResource : System.IDisposable { }
         public static TSource Wait<TSource>(this System.IObservable<TSource> source) { }
-        public static System.IObservable<TResult> When<TResult>(params System.Reactive.Joins.Plan<>[] plans) { }
+        public static System.IObservable<TResult> When<TResult>(params System.Reactive.Joins.Plan<TResult>[] plans) { }
         public static System.IObservable<TResult> When<TResult>(this System.Collections.Generic.IEnumerable<System.Reactive.Joins.Plan<TResult>> plans) { }
         public static System.IObservable<TSource> Where<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.IObservable<TSource> Where<TSource>(this System.IObservable<TSource> source, System.Func<TSource, int, bool> predicate) { }
@@ -1576,7 +1602,7 @@ namespace System.Reactive.Linq
         public static System.IObservable<System.IObservable<TSource>> Window<TSource, TWindowBoundary>(this System.IObservable<TSource> source, System.IObservable<TWindowBoundary> windowBoundaries) { }
         public static System.IObservable<System.IObservable<TSource>> Window<TSource, TWindowOpening, TWindowClosing>(this System.IObservable<TSource> source, System.IObservable<TWindowOpening> windowOpenings, System.Func<TWindowOpening, System.IObservable<TWindowClosing>> windowClosingSelector) { }
         public static System.IObservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(this System.IObservable<TFirst> first, System.IObservable<TSecond> second, System.Func<TFirst, TSecond, TResult> resultSelector) { }
-        public static System.IObservable<System.Collections.Generic.IList<TSource>> Zip<TSource>(params System.IObservable<>[] sources) { }
+        public static System.IObservable<System.Collections.Generic.IList<TSource>> Zip<TSource>(params System.IObservable<TSource>[] sources) { }
         public static System.IObservable<System.Collections.Generic.IList<TSource>> Zip<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
         public static System.IObservable<TResult> Zip<TSource, TResult>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources, System.Func<System.Collections.Generic.IList<TSource>, TResult> resultSelector) { }
         public static System.IObservable<TResult> Zip<TSource1, TSource2, TResult>(this System.IObservable<TSource1> first, System.Collections.Generic.IEnumerable<TSource2> second, System.Func<TSource1, TSource2, TResult> resultSelector) { }
@@ -1690,7 +1716,7 @@ namespace System.Reactive.Linq
         [System.Reactive.Experimental]
         public static System.IObservable<TSource> Expand<TSource>(this System.IObservable<TSource> source, System.Func<TSource, System.IObservable<TSource>> selector, System.Reactive.Concurrency.IScheduler scheduler) { }
         [System.Reactive.Experimental]
-        public static System.IObservable<TSource[]> ForkJoin<TSource>(params System.IObservable<>[] sources) { }
+        public static System.IObservable<TSource[]> ForkJoin<TSource>(params System.IObservable<TSource>[] sources) { }
         [System.Reactive.Experimental]
         public static System.IObservable<TSource[]> ForkJoin<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
         [System.Reactive.Experimental]
@@ -1771,7 +1797,7 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TResult> Aggregate<TSource, TAccumulate, TResult>(this System.Reactive.Linq.IQbservable<TSource> source, TAccumulate seed, System.Linq.Expressions.Expression<System.Func<TAccumulate, TSource, TAccumulate>> accumulator, System.Linq.Expressions.Expression<System.Func<TAccumulate, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<bool> All<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, bool>> predicate) { }
         public static System.Reactive.Linq.IQbservable<TSource> Amb<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
-        public static System.Reactive.Linq.IQbservable<TSource> Amb<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<>[] sources) { }
+        public static System.Reactive.Linq.IQbservable<TSource> Amb<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<TSource>[] sources) { }
         public static System.Reactive.Linq.IQbservable<TSource> Amb<TSource>(this System.Reactive.Linq.IQbservable<TSource> first, System.IObservable<TSource> second) { }
         public static System.Reactive.Joins.QueryablePattern<TLeft, TRight> And<TLeft, TRight>(this System.Reactive.Linq.IQbservable<TLeft> left, System.IObservable<TRight> right) { }
         public static System.Reactive.Linq.IQbservable<bool> Any<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
@@ -1820,7 +1846,7 @@ namespace System.Reactive.Linq
             where TValue :  notnull { }
         public static System.Reactive.Linq.IQbservable<TResult> Cast<TResult>(this System.Reactive.Linq.IQbservable<object> source) { }
         public static System.Reactive.Linq.IQbservable<TSource> Catch<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
-        public static System.Reactive.Linq.IQbservable<TSource> Catch<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<>[] sources) { }
+        public static System.Reactive.Linq.IQbservable<TSource> Catch<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<TSource>[] sources) { }
         public static System.Reactive.Linq.IQbservable<TSource> Catch<TSource>(this System.Reactive.Linq.IQbservable<TSource> first, System.IObservable<TSource> second) { }
         public static System.Reactive.Linq.IQbservable<TSource> Catch<TSource, TException>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TException, System.IObservable<TSource>>> handler)
             where TException : System.Exception { }
@@ -1828,7 +1854,7 @@ namespace System.Reactive.Linq
         public static System.Linq.IQueryable<TResult> Collect<TSource, TResult>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TResult>> newCollector, System.Linq.Expressions.Expression<System.Func<TResult, TSource, TResult>> merge) { }
         public static System.Linq.IQueryable<TResult> Collect<TSource, TResult>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TResult>> getInitialCollector, System.Linq.Expressions.Expression<System.Func<TResult, TSource, TResult>> merge, System.Linq.Expressions.Expression<System.Func<TResult, TResult>> getNewCollector) { }
         public static System.Reactive.Linq.IQbservable<System.Collections.Generic.IList<TSource>> CombineLatest<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
-        public static System.Reactive.Linq.IQbservable<System.Collections.Generic.IList<TSource>> CombineLatest<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<>[] sources) { }
+        public static System.Reactive.Linq.IQbservable<System.Collections.Generic.IList<TSource>> CombineLatest<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<TSource>[] sources) { }
         public static System.Reactive.Linq.IQbservable<TResult> CombineLatest<TSource, TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources, System.Linq.Expressions.Expression<System.Func<System.Collections.Generic.IList<TSource>, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<TResult> CombineLatest<TSource1, TSource2, TResult>(this System.Reactive.Linq.IQbservable<TSource1> first, System.IObservable<TSource2> second, System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TResult>(this System.Reactive.Linq.IQbservable<TSource1> source1, System.IObservable<TSource2> source2, System.IObservable<TSource3> source3, System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TSource3, TResult>> resultSelector) { }
@@ -1881,7 +1907,7 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TSource> Concat<TSource>(this System.Reactive.Linq.IQbservable<System.IObservable<TSource>> sources) { }
         public static System.Reactive.Linq.IQbservable<TSource> Concat<TSource>(this System.Reactive.Linq.IQbservable<System.Threading.Tasks.Task<TSource>> sources) { }
         public static System.Reactive.Linq.IQbservable<TSource> Concat<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
-        public static System.Reactive.Linq.IQbservable<TSource> Concat<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<>[] sources) { }
+        public static System.Reactive.Linq.IQbservable<TSource> Concat<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<TSource>[] sources) { }
         public static System.Reactive.Linq.IQbservable<TSource> Concat<TSource>(this System.Reactive.Linq.IQbservable<TSource> first, System.IObservable<TSource> second) { }
         public static System.Reactive.Linq.IQbservable<bool> Contains<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, TSource value) { }
         public static System.Reactive.Linq.IQbservable<bool> Contains<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, TSource value, System.Collections.Generic.IEqualityComparer<TSource> comparer) { }
@@ -1899,7 +1925,9 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TSource> DefaultIfEmpty<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, TSource defaultValue) { }
         public static System.Reactive.Linq.IQbservable<TResult> Defer<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.IObservable<TResult>>> observableFactory) { }
         public static System.Reactive.Linq.IQbservable<TResult> Defer<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<System.IObservable<TResult>>>> observableFactoryAsync) { }
+        public static System.Reactive.Linq.IQbservable<TResult> Defer<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<System.IObservable<TResult>>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.Reactive.Linq.IQbservable<TResult> DeferAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>>> observableFactoryAsync) { }
+        public static System.Reactive.Linq.IQbservable<TResult> DeferAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe) { }
         public static System.Reactive.Linq.IQbservable<TSource> Delay<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.DateTimeOffset dueTime) { }
         public static System.Reactive.Linq.IQbservable<TSource> Delay<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.TimeSpan dueTime) { }
         public static System.Reactive.Linq.IQbservable<TSource> Delay<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.DateTimeOffset dueTime, System.Reactive.Concurrency.IScheduler scheduler) { }
@@ -1940,11 +1968,15 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> FromAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task>> actionAsync) { }
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> FromAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task>> actionAsync) { }
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> FromAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> FromAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> FromAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> FromAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<TResult> FromAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<TResult>>> functionAsync) { }
         public static System.Reactive.Linq.IQbservable<TResult> FromAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>>> functionAsync) { }
         public static System.Reactive.Linq.IQbservable<TResult> FromAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<TResult> FromAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<TResult> FromAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<TResult> FromAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Func<System.Reactive.Linq.IQbservable<System.Reactive.Unit>> FromAsyncPattern(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.AsyncCallback, object, System.IAsyncResult>> begin, System.Linq.Expressions.Expression<System.Action<System.IAsyncResult>> end) { }
         public static System.Func<System.Reactive.Linq.IQbservable<TResult>> FromAsyncPattern<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.AsyncCallback, object, System.IAsyncResult>> begin, System.Linq.Expressions.Expression<System.Func<System.IAsyncResult, TResult>> end) { }
         public static System.Func<TArg1, System.Reactive.Linq.IQbservable<System.Reactive.Unit>> FromAsyncPattern<TArg1>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<TArg1, System.AsyncCallback, object, System.IAsyncResult>> begin, System.Linq.Expressions.Expression<System.Action<System.IAsyncResult>> end) { }
@@ -2073,12 +2105,12 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservable<System.IObservable<TSource>> sources) { }
         public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservable<System.Threading.Tasks.Task<TSource>> sources) { }
         public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
-        public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<>[] sources) { }
+        public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<TSource>[] sources) { }
         public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservable<System.IObservable<TSource>> sources, int maxConcurrent) { }
         public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservable<TSource> first, System.IObservable<TSource> second) { }
         public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources, int maxConcurrent) { }
         public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources, System.Reactive.Concurrency.IScheduler scheduler) { }
-        public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Reactive.Concurrency.IScheduler scheduler, params System.IObservable<>[] sources) { }
+        public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Reactive.Concurrency.IScheduler scheduler, params System.IObservable<TSource>[] sources) { }
         public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservable<TSource> first, System.IObservable<TSource> second, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Reactive.Linq.IQbservable<TSource> Merge<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources, int maxConcurrent, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Reactive.Linq.IQbservable<decimal> Min(this System.Reactive.Linq.IQbservable<decimal> source) { }
@@ -2116,7 +2148,7 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TSource> ObserveOn<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Threading.SynchronizationContext context) { }
         public static System.Reactive.Linq.IQbservable<TResult> OfType<TResult>(this System.Reactive.Linq.IQbservable<object> source) { }
         public static System.Reactive.Linq.IQbservable<TSource> OnErrorResumeNext<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
-        public static System.Reactive.Linq.IQbservable<TSource> OnErrorResumeNext<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<>[] sources) { }
+        public static System.Reactive.Linq.IQbservable<TSource> OnErrorResumeNext<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<TSource>[] sources) { }
         public static System.Reactive.Linq.IQbservable<TSource> OnErrorResumeNext<TSource>(this System.Reactive.Linq.IQbservable<TSource> first, System.IObservable<TSource> second) { }
         public static System.Reactive.Linq.IQbservable<TSource> Prepend<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, TSource value) { }
         public static System.Reactive.Linq.IQbservable<TSource> Prepend<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, TSource value, System.Reactive.Concurrency.IScheduler scheduler) { }
@@ -2203,11 +2235,15 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> StartAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task>> actionAsync) { }
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> StartAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task>> actionAsync) { }
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> StartAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> StartAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> StartAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<System.Reactive.Unit> StartAsync(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task>> actionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<TResult> StartAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<TResult>>> functionAsync) { }
         public static System.Reactive.Linq.IQbservable<TResult> StartAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>>> functionAsync) { }
         public static System.Reactive.Linq.IQbservable<TResult> StartAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<TResult> StartAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<TResult> StartAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.Reactive.Linq.IQbservable<TResult> StartAsync<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResult>>> functionAsync, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Reactive.Linq.IQbservable<TSource> StartWith<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Collections.Generic.IEnumerable<TSource> values) { }
         public static System.Reactive.Linq.IQbservable<TSource> StartWith<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, params TSource[] values) { }
         public static System.Reactive.Linq.IQbservable<TSource> StartWith<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Reactive.Concurrency.IScheduler scheduler, System.Collections.Generic.IEnumerable<TSource> values) { }
@@ -2380,7 +2416,7 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TResult> Using<TResult, TResource>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResource>>> resourceFactoryAsync, System.Linq.Expressions.Expression<System.Func<TResource, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>>> observableFactoryAsync)
             where TResource : System.IDisposable { }
         public static System.Reactive.Linq.IQbservable<TResult> When<TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.Reactive.Joins.QueryablePlan<TResult>> plans) { }
-        public static System.Reactive.Linq.IQbservable<TResult> When<TResult>(this System.Reactive.Linq.IQbservableProvider provider, params System.Reactive.Joins.QueryablePlan<>[] plans) { }
+        public static System.Reactive.Linq.IQbservable<TResult> When<TResult>(this System.Reactive.Linq.IQbservableProvider provider, params System.Reactive.Joins.QueryablePlan<TResult>[] plans) { }
         public static System.Reactive.Linq.IQbservable<TSource> Where<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, bool>> predicate) { }
         public static System.Reactive.Linq.IQbservable<TSource> Where<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, int, bool>> predicate) { }
         public static System.Reactive.Linq.IQbservable<TSource> While<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<bool>> condition, System.IObservable<TSource> source) { }
@@ -2397,7 +2433,7 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<System.IObservable<TSource>> Window<TSource, TWindowOpening, TWindowClosing>(this System.Reactive.Linq.IQbservable<TSource> source, System.IObservable<TWindowOpening> windowOpenings, System.Linq.Expressions.Expression<System.Func<TWindowOpening, System.IObservable<TWindowClosing>>> windowClosingSelector) { }
         public static System.Reactive.Linq.IQbservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(this System.Reactive.Linq.IQbservable<TFirst> first, System.IObservable<TSecond> second, System.Linq.Expressions.Expression<System.Func<TFirst, TSecond, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<System.Collections.Generic.IList<TSource>> Zip<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
-        public static System.Reactive.Linq.IQbservable<System.Collections.Generic.IList<TSource>> Zip<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<>[] sources) { }
+        public static System.Reactive.Linq.IQbservable<System.Collections.Generic.IList<TSource>> Zip<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<TSource>[] sources) { }
         public static System.Reactive.Linq.IQbservable<TResult> Zip<TSource, TResult>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources, System.Linq.Expressions.Expression<System.Func<System.Collections.Generic.IList<TSource>, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<TResult> Zip<TSource1, TSource2, TResult>(this System.Reactive.Linq.IQbservable<TSource1> first, System.Collections.Generic.IEnumerable<TSource2> second, System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TResult>> resultSelector) { }
         public static System.Reactive.Linq.IQbservable<TResult> Zip<TSource1, TSource2, TResult>(this System.Reactive.Linq.IQbservable<TSource1> first, System.IObservable<TSource2> second, System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TResult>> resultSelector) { }
@@ -2692,7 +2728,7 @@ namespace System.Reactive.Linq
         [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<TSource[]> ForkJoin<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
         [System.Reactive.Experimental]
-        public static System.Reactive.Linq.IQbservable<TSource[]> ForkJoin<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<>[] sources) { }
+        public static System.Reactive.Linq.IQbservable<TSource[]> ForkJoin<TSource>(this System.Reactive.Linq.IQbservableProvider provider, params System.IObservable<TSource>[] sources) { }
         [System.Reactive.Experimental]
         public static System.Reactive.Linq.IQbservable<TResult> ForkJoin<TSource1, TSource2, TResult>(this System.Reactive.Linq.IQbservable<TSource1> first, System.IObservable<TSource2> second, System.Linq.Expressions.Expression<System.Func<TSource1, TSource2, TResult>> resultSelector) { }
         [System.Reactive.Experimental]
@@ -3121,8 +3157,10 @@ namespace System.Reactive.Threading.Tasks
     {
         public static System.IObservable<System.Reactive.Unit> ToObservable(this System.Threading.Tasks.Task task) { }
         public static System.IObservable<System.Reactive.Unit> ToObservable(this System.Threading.Tasks.Task task, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<System.Reactive.Unit> ToObservable(this System.Threading.Tasks.Task task, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.IObservable<TResult> ToObservable<TResult>(this System.Threading.Tasks.Task<TResult> task) { }
         public static System.IObservable<TResult> ToObservable<TResult>(this System.Threading.Tasks.Task<TResult> task, System.Reactive.Concurrency.IScheduler scheduler) { }
+        public static System.IObservable<TResult> ToObservable<TResult>(this System.Threading.Tasks.Task<TResult> task, System.Reactive.Concurrency.TaskObservationOptions options) { }
         public static System.Threading.Tasks.Task<TResult> ToTask<TResult>(this System.IObservable<TResult> observable) { }
         public static System.Threading.Tasks.Task<TResult> ToTask<TResult>(this System.IObservable<TResult> observable, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Threading.Tasks.Task<TResult> ToTask<TResult>(this System.IObservable<TResult> observable, System.Threading.CancellationToken cancellationToken) { }

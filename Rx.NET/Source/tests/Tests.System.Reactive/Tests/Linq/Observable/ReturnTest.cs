@@ -8,21 +8,22 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ReturnTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Return_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Return(0, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Return(0, DummyScheduler.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Return_Basic()
         {
             var scheduler = new TestScheduler();
@@ -37,7 +38,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Return_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -51,7 +52,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Return_DisposedAfterNext()
         {
             var scheduler = new TestScheduler();
@@ -81,7 +82,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Return_ObserverThrows()
         {
             var scheduler1 = new TestScheduler();
@@ -101,7 +102,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => scheduler2.Start());
         }
 
-        [Fact]
+        [TestMethod]
         public void Return_DefaultScheduler()
         {
             Observable.Return(42).AssertEqual(Observable.Return(42, DefaultScheduler.Instance));

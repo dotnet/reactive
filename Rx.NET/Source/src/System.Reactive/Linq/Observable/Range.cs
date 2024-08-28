@@ -20,7 +20,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override RangeSink CreateSink(IObserver<int> observer) => new RangeSink(_start, _count, observer);
+        protected override RangeSink CreateSink(IObserver<int> observer) => new(_start, _count, observer);
 
         protected override void Run(RangeSink sink) => sink.Run(_scheduler);
 
@@ -86,7 +86,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override RangeSink CreateSink(IObserver<int> observer) => new RangeSink(_start, _count, observer);
+        protected override RangeSink CreateSink(IObserver<int> observer) => new(_start, _count, observer);
 
         protected override void Run(RangeSink sink) => sink.Run(_scheduler);
 

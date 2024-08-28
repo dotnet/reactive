@@ -22,9 +22,8 @@ namespace System.Reactive.Concurrency
                 _scheduler = scheduler;
             }
 
-            protected override ObserveOnObserverNew<TSource> CreateSink(IObserver<TSource> observer) => new ObserveOnObserverNew<TSource>(_scheduler, observer);
+            protected override ObserveOnObserverNew<TSource> CreateSink(IObserver<TSource> observer) => new(_scheduler, observer);
 
-            [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
             protected override void Run(ObserveOnObserverNew<TSource> sink) => sink.Run(_source);
         }
 
@@ -42,9 +41,8 @@ namespace System.Reactive.Concurrency
                 _scheduler = scheduler;
             }
 
-            protected override ObserveOnObserverLongRunning<TSource> CreateSink(IObserver<TSource> observer) => new ObserveOnObserverLongRunning<TSource>(_scheduler, observer);
+            protected override ObserveOnObserverLongRunning<TSource> CreateSink(IObserver<TSource> observer) => new(_scheduler, observer);
 
-            [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
             protected override void Run(ObserveOnObserverLongRunning<TSource> sink) => sink.Run(_source);
         }
 
@@ -59,9 +57,8 @@ namespace System.Reactive.Concurrency
                 _context = context;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(_context, observer);
+            protected override _ CreateSink(IObserver<TSource> observer) => new(_context, observer);
 
-            [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
             protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : IdentitySink<TSource>

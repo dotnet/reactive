@@ -10,13 +10,12 @@ namespace Microsoft.Reactive.Testing
 {
     internal class MockObserver<T> : ITestableObserver<T>
     {
-        private TestScheduler _scheduler;
-        private List<Recorded<Notification<T>>> _messages;
+        private readonly TestScheduler _scheduler;
+        private readonly List<Recorded<Notification<T>>> _messages = [];
 
         public MockObserver(TestScheduler scheduler)
         {
-            this._scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
-            _messages = new List<Recorded<Notification<T>>>();
+            _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
         }
 
         public void OnNext(T value)

@@ -10,23 +10,26 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class TakeLastBufferTest : ReactiveTest
     {
 
         #region + Count +
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeLastBuffer<int>(null, 0));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.TakeLastBuffer(DummyObservable<int>.Instance, -1));
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Zero_Completed()
         {
             var scheduler = new TestScheduler();
@@ -58,7 +61,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Zero_Error()
         {
             var scheduler = new TestScheduler();
@@ -91,7 +94,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Zero_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -120,7 +123,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_One_Completed()
         {
             var scheduler = new TestScheduler();
@@ -143,7 +146,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(650, lst => lst.SequenceEqual(new[] { 9 })),
+                OnNext<IList<int>>(650, lst => lst.SequenceEqual([9])),
                 OnCompleted<IList<int>>(650)
             );
 
@@ -152,7 +155,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_One_Error()
         {
             var scheduler = new TestScheduler();
@@ -185,7 +188,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_One_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -214,7 +217,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Three_Completed()
         {
             var scheduler = new TestScheduler();
@@ -237,7 +240,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(650, lst => lst.SequenceEqual(new[] { 7, 8, 9 })),
+                OnNext<IList<int>>(650, lst => lst.SequenceEqual([7, 8, 9])),
                 OnCompleted<IList<int>>(650)
             );
 
@@ -246,7 +249,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Three_Error()
         {
             var scheduler = new TestScheduler();
@@ -279,7 +282,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Three_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -312,7 +315,7 @@ namespace ReactiveTests.Tests
 
         #region + Timed +
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Timed_ArgumentChecking()
         {
             var xs = Observable.Return(42);
@@ -325,7 +328,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.TakeLastBuffer(xs, TimeSpan.FromSeconds(-1), Scheduler.Default));
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Zero1()
         {
             var scheduler = new TestScheduler();
@@ -350,7 +353,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Zero2()
         {
             var scheduler = new TestScheduler();
@@ -376,7 +379,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Some1()
         {
             var scheduler = new TestScheduler();
@@ -393,7 +396,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(240, lst => lst.SequenceEqual(new[] { 2, 3 })),
+                OnNext<IList<int>>(240, lst => lst.SequenceEqual([2, 3])),
                 OnCompleted<IList<int>>(240)
             );
 
@@ -402,7 +405,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Some2()
         {
             var scheduler = new TestScheduler();
@@ -428,7 +431,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Some3()
         {
             var scheduler = new TestScheduler();
@@ -451,7 +454,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(300, lst => lst.SequenceEqual(new[] { 6, 7, 8, 9 })),
+                OnNext<IList<int>>(300, lst => lst.SequenceEqual([6, 7, 8, 9])),
                 OnCompleted<IList<int>>(300)
             );
 
@@ -460,7 +463,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Some4()
         {
             var scheduler = new TestScheduler();
@@ -489,7 +492,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_All()
         {
             var scheduler = new TestScheduler();
@@ -505,7 +508,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(230, lst => lst.SequenceEqual(new[] { 1, 2 })),
+                OnNext<IList<int>>(230, lst => lst.SequenceEqual([1, 2])),
                 OnCompleted<IList<int>>(230)
             );
 
@@ -514,7 +517,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Error()
         {
             var scheduler = new TestScheduler();
@@ -538,7 +541,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Never()
         {
             var scheduler = new TestScheduler();
@@ -560,7 +563,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Default1()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);
@@ -580,7 +583,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Default2()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);
@@ -600,7 +603,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Default3()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);
@@ -620,7 +623,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.Count == 0);
         }
 
-        [Fact]
+        [TestMethod]
         public void TakeLastBuffer_Default4()
         {
             var xs = Observable.Range(0, 10, Scheduler.Default);

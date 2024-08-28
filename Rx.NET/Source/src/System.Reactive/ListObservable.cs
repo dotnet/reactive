@@ -16,13 +16,12 @@ namespace System.Reactive
     /// Represents an object that retains the elements of the observable sequence and signals the end of the sequence.
     /// </summary>
     /// <typeparam name="T">The type of elements received from the source sequence.</typeparam>
-    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "By design; Observable suffix takes precedence.")]
     [Experimental]
     public class ListObservable<T> : IList<T>, IObservable<object>
     {
         private readonly IDisposable _subscription;
-        private readonly AsyncSubject<object> _subject = new AsyncSubject<object>();
-        private readonly List<T> _results = new List<T>();
+        private readonly AsyncSubject<object> _subject = new();
+        private readonly List<T> _results = [];
 
         /// <summary>
         /// Constructs an object that retains the values of source and signals the end of the sequence.

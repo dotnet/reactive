@@ -1,10 +1,11 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net472;uap10.0.16299;net5.0</TargetFrameworks>    
+    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net6.0</TargetFrameworks>
     <Title>Reactive Extensions - Aliases</Title>    
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>    
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <Description>Reactive Extensions (Rx) provides the aliases Map, FlatMap, and Filter</Description>    
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
@@ -12,4 +13,8 @@
   <ItemGroup>    
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>  
+
+  <ItemGroup>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md"/>
+  </ItemGroup>
 </Project>

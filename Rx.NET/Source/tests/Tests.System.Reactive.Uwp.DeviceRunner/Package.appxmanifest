@@ -8,14 +8,14 @@
 
   <Identity
     Name="ce55b747-4cb1-4fd7-b7f8-9f9e55115229"
-    Publisher="CN=oren"
+    Publisher="CN=ian"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="ce55b747-4cb1-4fd7-b7f8-9f9e55115229" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Tests.System.Reactive.Uwp.DeviceRunner</DisplayName>
-    <PublisherDisplayName>oren</PublisherDisplayName>
+    <PublisherDisplayName>ian</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

@@ -60,7 +60,7 @@ namespace System.Reactive.Concurrency
         //
 
 
-        private static readonly Lazy<IScheduler> _threadPool = new Lazy<IScheduler>(static () => Initialize("ThreadPool"));
+        private static readonly Lazy<IScheduler> _threadPool = new(static () => Initialize("ThreadPool"));
 
         /// <summary>
         /// Gets a scheduler that schedules work on the thread pool.
@@ -68,7 +68,7 @@ namespace System.Reactive.Concurrency
         [Obsolete(Constants_Core.ObsoleteSchedulerThreadpool)]
         public static IScheduler ThreadPool => _threadPool.Value;
 
-        private static readonly Lazy<IScheduler> _newThread = new Lazy<IScheduler>(static () => Initialize("NewThread"));
+        private static readonly Lazy<IScheduler> _newThread = new(static () => Initialize("NewThread"));
 
         /// <summary>
         /// Gets a scheduler that schedules work on a new thread using default thread creation options.
@@ -76,7 +76,7 @@ namespace System.Reactive.Concurrency
         [Obsolete(Constants_Core.ObsoleteSchedulerNewthread)]
         public static IScheduler NewThread => _newThread.Value;
 
-        private static readonly Lazy<IScheduler> _taskPool = new Lazy<IScheduler>(static () => Initialize("TaskPool"));
+        private static readonly Lazy<IScheduler> _taskPool = new(static () => Initialize("TaskPool"));
 
         /// <summary>
         /// Gets a scheduler that schedules work on Task Parallel Library (TPL) task pool using the default TaskScheduler.
@@ -86,15 +86,8 @@ namespace System.Reactive.Concurrency
 
         private static IScheduler Initialize(string name)
         {
-#pragma warning disable CS0618 // Type or member is obsolete
-            var res = PlatformEnlightenmentProvider.Current.GetService<IScheduler>(name);
-#pragma warning restore CS0618 // Type or member is obsolete
-            if (res == null)
-            {
-                throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, Strings_Core.CANT_OBTAIN_SCHEDULER, name));
-            }
-
-            return res;
+            return PlatformEnlightenmentProvider.Current.GetService<IScheduler>(name)
+                ?? throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, Strings_Core.CANT_OBTAIN_SCHEDULER, name));
         }
     }
 }

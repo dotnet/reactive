@@ -4,15 +4,18 @@
 
 using System;
 using System.Reactive;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ExceptionHelperTest
     {
         private Exception _errors;
 
-        [Fact]
+        [TestMethod]
         public void ExceptionHelper_TrySetException_Empty()
         {
             var ex = new InvalidOperationException();
@@ -22,7 +25,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(ex, _errors);
         }
 
-        [Fact]
+        [TestMethod]
         public void ExceptionHelper_TrySetException_Not_Empty()
         {
             var ex1 = new InvalidOperationException();

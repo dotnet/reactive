@@ -5,14 +5,18 @@
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace Tests.System.Reactive.Tests
 {
+    [TestClass]
     public class TaskLikeSupportTest
     {
-        [Fact]
+        [TestMethod]
         public async Task Return()
         {
             Assert.Equal(42, await ManOrBoy_Return());
@@ -25,7 +29,7 @@ namespace Tests.System.Reactive.Tests
         }
 #pragma warning restore 1998
 
-        [Fact]
+        [TestMethod]
         public async Task Throw()
         {
             await Assert.ThrowsAsync<DivideByZeroException>(async () => await ManOrBoy_Throw(42, 0));
@@ -38,13 +42,60 @@ namespace Tests.System.Reactive.Tests
         }
 #pragma warning restore 1998
 
-        [Fact]
-        public async Task Basics()
+        // We execute the ManOrBoy_Basics tests twice, once without a SynchronizationContext, and
+        // once with one. When we were on xUnit, SynchronizationContext.Current was never null
+        // because xUnit populates it with their AsyncTestSyncContext, apparently to ensure that
+        // async void tests work. MSTest takes the more strict view that async void tests should
+        // not be encouraged. (It has an analyzer to detect these and warn you about them). So
+        // tests in MSTest get the default behaviour (i.e. SynchronizationContext.Current will be
+        // null) unless the test sets one up explicitly.
+        //
+        // The ManOrBoy_Basics tests exercise different code paths depending on the availability of
+        // a SynchronizationContext. AsyncSubject<T>.AwaitObserver.InvokeOnOriginalContext will go
+        // via the context if there is one, and invokes its callback synchronously if not. This is
+        // a significant difference, which is why, now that we can test both ways, we do.
+        //
+        // When we switched to MSTest, and before we had added the tests to run both with and
+        // without the SynchronizationContext (meaning we only tested without one) this test
+        // started failing intermittently. It eventually became apparent that this was because
+        // some test somewhere in the system is setting SynchronizationContext.Current to contain
+        // a WindowsFormsSynchronizationContext. That's why this test explicitly sets it to
+        // null - if a UI-based context is present, the test will hang because it will attempt
+        // to use that context to handle completion but nothing will be running a message loop,
+        // so completion never occurs. (It's intermittent because the order in which tests run
+        // is not deterministic, so sometimes when this test runs, the SynchronizationContext
+        // was already null.)
+
+        [TestMethod]
+        public async Task BasicsNoSynchronizationContext()
         {
-            Assert.Equal(45, await ManOrBoy_Basics());
+            var ctx = SynchronizationContext.Current;
+            try
+            {
+                SynchronizationContext.SetSynchronizationContext(null);
+                Assert.Equal(45, await ManOrBoy_Basics());
+            }
+            finally
+            {
+                SynchronizationContext.SetSynchronizationContext(ctx);
+            }
         }
 
-#pragma warning disable 1998
+        [TestMethod]
+        public async Task BasicsWithSynchronizationContext()
+        {
+            var ctx = SynchronizationContext.Current;
+            try
+            {
+                SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
+                Assert.Equal(45, await ManOrBoy_Basics());
+            }
+            finally
+            {
+                SynchronizationContext.SetSynchronizationContext(ctx);
+            }
+        }
+
         private async ITaskObservable<int> ManOrBoy_Basics()
         {
             var res = 0;
@@ -70,6 +121,5 @@ namespace Tests.System.Reactive.Tests
 
             return res;
         }
-#pragma warning restore 1998
     }
 }

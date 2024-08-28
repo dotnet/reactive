@@ -219,10 +219,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 // the session will reach out to reset the _session field to null under the _gate
                 // lock. Future subscriptions will cause a new session to be created.
                 //
-                if (_session == null)
-                {
-                    _session = new Session(this);
-                }
+                _session ??= new Session(this);
 
                 connection = _session.Connect(observer);
             }
@@ -234,7 +231,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly EventProducer<TDelegate, TArgs> _parent;
             private readonly Subject<TArgs> _subject;
-            private readonly SingleAssignmentDisposable _removeHandler = new SingleAssignmentDisposable();
+            private readonly SingleAssignmentDisposable _removeHandler = new();
 
             private int _count;
 

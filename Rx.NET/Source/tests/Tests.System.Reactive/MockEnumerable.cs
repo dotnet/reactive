@@ -11,13 +11,13 @@ namespace ReactiveTests
     public class MockEnumerable<T> : IEnumerable<T>
     {
         public readonly TestScheduler Scheduler;
-        public readonly List<Subscription> Subscriptions = new List<Subscription>();
-        private IEnumerable<T> _underlyingEnumerable;
+        public readonly List<Subscription> Subscriptions = [];
+        private readonly IEnumerable<T> _underlyingEnumerable;
 
         public MockEnumerable(TestScheduler scheduler, IEnumerable<T> underlyingEnumerable)
         {
             Scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
-            this._underlyingEnumerable = underlyingEnumerable ?? throw new ArgumentNullException(nameof(underlyingEnumerable));
+            _underlyingEnumerable = underlyingEnumerable ?? throw new ArgumentNullException(nameof(underlyingEnumerable));
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -33,16 +33,16 @@ namespace ReactiveTests
         private class MockEnumerator : IEnumerator<T>
         {
             private readonly List<Subscription> _subscriptions;
-            private IEnumerator<T> _enumerator;
-            private TestScheduler _scheduler;
+            private readonly IEnumerator<T> _enumerator;
+            private readonly TestScheduler _scheduler;
             private readonly int _index;
             private bool _disposed;
 
             public MockEnumerator(TestScheduler scheduler, List<Subscription> subscriptions, IEnumerator<T> enumerator)
             {
-                this._subscriptions = subscriptions;
-                this._enumerator = enumerator;
-                this._scheduler = scheduler;
+                _subscriptions = subscriptions;
+                _enumerator = enumerator;
+                _scheduler = scheduler;
 
                 _index = subscriptions.Count;
                 subscriptions.Add(new Subscription(scheduler.Clock));

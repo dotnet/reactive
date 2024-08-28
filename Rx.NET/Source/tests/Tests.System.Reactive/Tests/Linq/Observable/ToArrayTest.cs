@@ -6,20 +6,21 @@ using System;
 using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ToArrayTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ToArray_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToArray<int>(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToArray_Completed()
         {
             var scheduler = new TestScheduler();
@@ -38,7 +39,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int[]>(660, a => a.SequenceEqual(new[] { 2, 3, 4, 5 })),
+                OnNext<int[]>(660, a => a.SequenceEqual([2, 3, 4, 5])),
                 OnCompleted<int[]>(660)
             );
 
@@ -47,7 +48,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToArray_Error()
         {
             var scheduler = new TestScheduler();
@@ -76,7 +77,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToArray_Disposed()
         {
             var scheduler = new TestScheduler();

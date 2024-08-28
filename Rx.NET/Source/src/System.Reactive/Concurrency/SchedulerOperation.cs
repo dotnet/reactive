@@ -18,11 +18,11 @@ namespace System.Reactive.Concurrency
         private readonly bool _postBackToOriginalContext;
 
         internal SchedulerOperation(Func<Action, IDisposable> schedule, CancellationToken cancellationToken)
-            : this(schedule, cancellationToken, false)
+            : this(schedule, false, cancellationToken)
         {
         }
 
-        internal SchedulerOperation(Func<Action, IDisposable> schedule, CancellationToken cancellationToken, bool postBackToOriginalContext)
+        internal SchedulerOperation(Func<Action, IDisposable> schedule, bool postBackToOriginalContext, CancellationToken cancellationToken)
         {
             _schedule = schedule;
             _cancellationToken = cancellationToken;
@@ -36,7 +36,7 @@ namespace System.Reactive.Concurrency
         /// <returns>Scheduler operation object with configured await behavior.</returns>
         public SchedulerOperation ConfigureAwait(bool continueOnCapturedContext)
         {
-            return new SchedulerOperation(_schedule, _cancellationToken, continueOnCapturedContext);
+            return new SchedulerOperation(_schedule, continueOnCapturedContext, _cancellationToken);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace System.Reactive.Concurrency
         /// <returns>Awaiter for the scheduler operation.</returns>
         public SchedulerOperationAwaiter GetAwaiter()
         {
-            return new SchedulerOperationAwaiter(_schedule, _cancellationToken, _postBackToOriginalContext);
+            return new SchedulerOperationAwaiter(_schedule, _postBackToOriginalContext, _cancellationToken);
         }
     }
 
@@ -60,7 +60,7 @@ namespace System.Reactive.Concurrency
         private readonly bool _postBackToOriginalContext;
         private readonly CancellationTokenRegistration _ctr;
 
-        internal SchedulerOperationAwaiter(Func<Action, IDisposable> schedule, CancellationToken cancellationToken, bool postBackToOriginalContext)
+        internal SchedulerOperationAwaiter(Func<Action, IDisposable> schedule, bool postBackToOriginalContext, CancellationToken cancellationToken)
         {
             _schedule = schedule;
             _cancellationToken = cancellationToken;

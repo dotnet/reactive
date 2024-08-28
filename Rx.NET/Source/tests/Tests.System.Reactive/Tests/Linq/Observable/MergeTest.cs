@@ -13,14 +13,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class MergeTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Merge_ArgumentChecking()
         {
             var xs = DummyObservable<int>.Instance;
@@ -40,7 +43,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge((IObservable<Task<int>>)null));
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_DefaultScheduler()
         {
             var xs = Observable.Merge(Observable.Return(42), Observable.Return(43), Observable.Return(44));
@@ -48,7 +51,7 @@ namespace ReactiveTests.Tests
             Assert.True(new[] { 42, 43, 44 }.SequenceEqual(res));
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_Never2()
         {
             var scheduler = new TestScheduler();
@@ -77,7 +80,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_Never3()
         {
             var scheduler = new TestScheduler();
@@ -114,7 +117,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_Empty2()
         {
             var scheduler = new TestScheduler();
@@ -146,7 +149,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_Empty3()
         {
             var scheduler = new TestScheduler();
@@ -187,7 +190,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_EmptyDelayed2_RightLast()
         {
             var scheduler = new TestScheduler();
@@ -219,7 +222,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_EmptyDelayed2_LeftLast()
         {
             var scheduler = new TestScheduler();
@@ -251,7 +254,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_EmptyDelayed3_MiddleLast()
         {
             var scheduler = new TestScheduler();
@@ -292,7 +295,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_EmptyNever()
         {
             var scheduler = new TestScheduler();
@@ -322,7 +325,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_NeverEmpty()
         {
             var scheduler = new TestScheduler();
@@ -352,7 +355,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_ReturnNever()
         {
             var scheduler = new TestScheduler();
@@ -384,7 +387,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_NeverReturn()
         {
             var scheduler = new TestScheduler();
@@ -416,7 +419,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_ErrorNever()
         {
             var scheduler = new TestScheduler();
@@ -451,7 +454,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_NeverError()
         {
             var scheduler = new TestScheduler();
@@ -486,7 +489,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_EmptyReturn()
         {
             var scheduler = new TestScheduler();
@@ -520,7 +523,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_ReturnEmpty()
         {
             var scheduler = new TestScheduler();
@@ -554,7 +557,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_Lots2()
         {
             var scheduler = new TestScheduler();
@@ -602,7 +605,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_Lots3()
         {
             var scheduler = new TestScheduler();
@@ -659,7 +662,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_LotsMore()
         {
             var inputs = new List<List<Recorded<Notification<int>>>>();
@@ -714,7 +717,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.Messages[resOnNext.Count].Value.Kind == NotificationKind.OnCompleted && res.Messages[resOnNext.Count].Time == lastCompleted.Time, "complete");
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_ErrorLeft()
         {
             var scheduler = new TestScheduler();
@@ -752,7 +755,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_ErrorCausesDisposal()
         {
             var scheduler = new TestScheduler();
@@ -787,7 +790,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_ObservableOfObservable_Data()
         {
             var scheduler = new TestScheduler();
@@ -873,7 +876,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_ObservableOfObservable_Data_NonOverlapped()
         {
             var scheduler = new TestScheduler();
@@ -942,7 +945,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_ObservableOfObservable_InnerThrows()
         {
             var scheduler = new TestScheduler();
@@ -1014,7 +1017,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_ObservableOfObservable_OuterThrows()
         {
             var scheduler = new TestScheduler();
@@ -1074,25 +1077,25 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_Binary_DefaultScheduler()
         {
-            Assert.True(Observable.Return(1).Merge(Observable.Return(2)).ToEnumerable().OrderBy(x => x).SequenceEqual(new[] { 1, 2 }));
+            Assert.True(Observable.Return(1).Merge(Observable.Return(2)).ToEnumerable().OrderBy(x => x).SequenceEqual([1, 2]));
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_Params_DefaultScheduler()
         {
-            Assert.True(Observable.Merge(Observable.Return(1), Observable.Return(2)).ToEnumerable().OrderBy(x => x).SequenceEqual(new[] { 1, 2 }));
+            Assert.True(Observable.Merge(Observable.Return(1), Observable.Return(2)).ToEnumerable().OrderBy(x => x).SequenceEqual([1, 2]));
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_IEnumerableOfIObservable_DefaultScheduler()
         {
-            Assert.True(Observable.Merge((IEnumerable<IObservable<int>>)new[] { Observable.Return(1), Observable.Return(2) }).ToEnumerable().OrderBy(x => x).SequenceEqual(new[] { 1, 2 }));
+            Assert.True(Observable.Merge((IEnumerable<IObservable<int>>)[Observable.Return(1), Observable.Return(2)]).ToEnumerable().OrderBy(x => x).SequenceEqual([1, 2]));
         }
 
-        [Fact]
+        [TestMethod]
         public void MergeConcat_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge(default(IEnumerable<IObservable<int>>), 1, DummyScheduler.Instance));
@@ -1106,7 +1109,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Concat(default(IObservable<Task<int>>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void MergeConcat_Enumerable_Scheduler()
         {
             var b = Enumerable.Range(1, 3).Select(x => Observable.Range(x * 10, 3)).Merge(1)
@@ -1115,7 +1118,7 @@ namespace ReactiveTests.Tests
             Assert.True(b);
         }
 
-        [Fact]
+        [TestMethod]
         public void MergeConcat_Enumerable()
         {
             var b = Enumerable.Range(1, 3).Select(x => Observable.Range(x * 10, 3)).Merge(1, DefaultScheduler.Instance)
@@ -1124,7 +1127,7 @@ namespace ReactiveTests.Tests
             Assert.True(b);
         }
 
-        [Fact]
+        [TestMethod]
         public void MergeConcat_Default()
         {
             var b = Observable.Range(1, 3).Select(x => Observable.Range(x * 10, 3)).Concat()
@@ -1133,7 +1136,7 @@ namespace ReactiveTests.Tests
             Assert.True(b);
         }
 
-        [Fact]
+        [TestMethod]
         public void MergeConcat_Basic()
         {
             var scheduler = new TestScheduler();
@@ -1218,7 +1221,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MergeConcat_Basic_Long()
         {
             var scheduler = new TestScheduler();
@@ -1303,7 +1306,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MergeConcat_Basic_Wide()
         {
             var scheduler = new TestScheduler();
@@ -1388,7 +1391,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MergeConcat_Basic_Late()
         {
             var scheduler = new TestScheduler();
@@ -1466,7 +1469,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MergeConcat_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -1547,7 +1550,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MergeConcat_OuterError()
         {
             var scheduler = new TestScheduler();
@@ -1622,7 +1625,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MergeConcat_InnerError()
         {
             var scheduler = new TestScheduler();
@@ -1707,17 +1710,17 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_Task()
         {
             var tss = Observable.Merge(new[] { Task.Factory.StartNew(() => 1), Task.Factory.StartNew(() => 2), Task.Factory.StartNew(() => 3) }.ToObservable());
 
             var res = tss.ToArray().Single();
 
-            Assert.True(res.OrderBy(x => x).SequenceEqual(new[] { 1, 2, 3 }));
+            Assert.True(res.OrderBy(x => x).SequenceEqual([1, 2, 3]));
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_TaskWithCompletionSource_RanToCompletion_Async()
         {
             var tcss = new TaskCompletionSource<int>[2];
@@ -1736,10 +1739,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43 });
+            lst.OrderBy(x => x).AssertEqual([42, 43]);
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_TaskWithCompletionSource_RanToCompletion_Sync()
         {
             var tcss = new TaskCompletionSource<int>[2];
@@ -1758,10 +1761,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43 });
+            lst.OrderBy(x => x).AssertEqual([42, 43]);
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_TaskWithCompletionSource_Faulted_Async()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -1782,11 +1785,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_TaskWithCompletionSource_Faulted_Sync()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -1807,11 +1810,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_TaskWithCompletionSource_Canceled_Async()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -1831,11 +1834,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            lst.AssertEqual([]);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_TaskWithCompletionSource_Canceled_Sync()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -1855,11 +1858,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            lst.AssertEqual([]);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_TaskWithCompletionSource_InnerCompleteBeforeOuter()
         {
             var xs = new Subject<int>();
@@ -1889,10 +1892,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_TaskWithCompletionSource_OuterCompleteBeforeInner()
         {
             var xs = new Subject<int>();
@@ -1921,10 +1924,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
-        [Fact]
+        [TestMethod]
         public void Merge_Task_OnError()
         {
             var xs = new Subject<int>();

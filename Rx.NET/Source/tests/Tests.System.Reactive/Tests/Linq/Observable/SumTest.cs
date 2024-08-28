@@ -6,13 +6,14 @@ using System;
 using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SumTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void Sum_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(default(IObservable<int>)));
@@ -49,7 +50,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(Observable.Empty<DateTime>(), default(Func<DateTime, long?>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -73,7 +74,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -98,7 +99,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Int32_Some()
         {
             var scheduler = new TestScheduler();
@@ -125,7 +126,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Int32_Overflow()
         {
             var scheduler = new TestScheduler();
@@ -150,7 +151,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Int32_Throw()
         {
             var ex = new Exception();
@@ -175,7 +176,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Int32_Never()
         {
             var ex = new Exception();
@@ -198,7 +199,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -222,7 +223,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -247,7 +248,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Int64_Some()
         {
             var scheduler = new TestScheduler();
@@ -274,7 +275,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Int64_Overflow()
         {
             var scheduler = new TestScheduler();
@@ -299,7 +300,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Int64_Throw()
         {
             var ex = new Exception();
@@ -324,7 +325,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Int64_Never()
         {
             var ex = new Exception();
@@ -347,7 +348,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -371,7 +372,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -396,7 +397,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Float_Some()
         {
             var scheduler = new TestScheduler();
@@ -423,7 +424,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Float_Throw()
         {
             var ex = new Exception();
@@ -448,7 +449,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Float_Never()
         {
             var ex = new Exception();
@@ -471,7 +472,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -495,7 +496,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -520,7 +521,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Double_Some()
         {
             var scheduler = new TestScheduler();
@@ -547,7 +548,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Double_Throw()
         {
             var ex = new Exception();
@@ -572,7 +573,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Double_Never()
         {
             var ex = new Exception();
@@ -595,7 +596,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -619,7 +620,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -644,7 +645,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Decimal_Some()
         {
             var scheduler = new TestScheduler();
@@ -671,7 +672,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Decimal_Throw()
         {
             var ex = new Exception();
@@ -696,7 +697,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Decimal_Never()
         {
             var ex = new Exception();
@@ -719,7 +720,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -743,7 +744,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -768,7 +769,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Int32_Some()
         {
             var scheduler = new TestScheduler();
@@ -795,7 +796,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Int32_Overflow()
         {
             var scheduler = new TestScheduler();
@@ -820,7 +821,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Int32_Throw()
         {
             var ex = new Exception();
@@ -845,7 +846,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Int32_Never()
         {
             var ex = new Exception();
@@ -868,7 +869,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -892,7 +893,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -917,7 +918,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Int64_Some()
         {
             var scheduler = new TestScheduler();
@@ -944,7 +945,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Int64_Overflow()
         {
             var scheduler = new TestScheduler();
@@ -969,7 +970,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Int64_Throw()
         {
             var ex = new Exception();
@@ -994,7 +995,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Int64_Never()
         {
             var ex = new Exception();
@@ -1017,7 +1018,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1041,7 +1042,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -1066,7 +1067,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Float_Some()
         {
             var scheduler = new TestScheduler();
@@ -1093,7 +1094,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Float_Throw()
         {
             var ex = new Exception();
@@ -1118,7 +1119,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Float_Never()
         {
             var ex = new Exception();
@@ -1141,7 +1142,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1165,7 +1166,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -1190,7 +1191,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Double_Some()
         {
             var scheduler = new TestScheduler();
@@ -1217,7 +1218,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Double_Throw()
         {
             var ex = new Exception();
@@ -1242,7 +1243,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Double_Never()
         {
             var ex = new Exception();
@@ -1265,7 +1266,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1289,7 +1290,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -1314,7 +1315,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Decimal_Some()
         {
             var scheduler = new TestScheduler();
@@ -1341,7 +1342,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Decimal_Throw()
         {
             var ex = new Exception();
@@ -1366,7 +1367,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Nullable_Decimal_Never()
         {
             var ex = new Exception();
@@ -1389,7 +1390,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Selector_Regular_Int32()
         {
             var scheduler = new TestScheduler();
@@ -1413,7 +1414,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Selector_Regular_Int64()
         {
             var scheduler = new TestScheduler();
@@ -1437,7 +1438,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Selector_Regular_Single()
         {
             var scheduler = new TestScheduler();
@@ -1461,7 +1462,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Selector_Regular_Double()
         {
             var scheduler = new TestScheduler();
@@ -1485,7 +1486,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Selector_Regular_Decimal()
         {
             var scheduler = new TestScheduler();
@@ -1509,7 +1510,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Selector_Regular_Int32_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -1533,7 +1534,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Selector_Regular_Int64_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -1557,7 +1558,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Selector_Regular_Single_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -1581,7 +1582,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Selector_Regular_Double_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -1605,7 +1606,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void Sum_Selector_Regular_Decimal_Nullable()
         {
             var scheduler = new TestScheduler();

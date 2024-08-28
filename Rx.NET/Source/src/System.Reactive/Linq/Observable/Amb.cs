@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _right = right;
         }
 
-        protected override AmbCoordinator CreateSink(IObserver<TSource> observer) => new AmbCoordinator(observer);
+        protected override AmbCoordinator CreateSink(IObserver<TSource> observer) => new(observer);
 
         protected override void Run(AmbCoordinator sink) => sink.Run(_left, _right);
 

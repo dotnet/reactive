@@ -16,15 +16,9 @@ namespace System.Reactive
         public static readonly Action<Exception> Throw = static ex => { ex.Throw(); };
     }
 
-#if !NO_THREAD
     internal static class TimerStubs
     {
-#if NETSTANDARD1_3
-        public static readonly System.Threading.Timer Never = new System.Threading.Timer(static _ => { }, null, System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-#else
-        public static readonly System.Threading.Timer Never = new System.Threading.Timer(static _ => { });
-#endif
+        public static readonly System.Threading.Timer Never = new(static _ => { });
     }
-#endif
 }
 

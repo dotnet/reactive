@@ -25,7 +25,7 @@ namespace System.Linq
 
         internal AsyncEnumerablePartition(IAsyncEnumerable<TSource> source, int minIndexInclusive, int maxIndexInclusive)
         {
-            Debug.Assert(!(source is IList<TSource>), $"The caller needs to check for {nameof(IList<TSource>)}.");
+            Debug.Assert(source is not IList<TSource>, $"The caller needs to check for {nameof(IList<TSource>)}.");
             Debug.Assert(minIndexInclusive >= 0);
             Debug.Assert(maxIndexInclusive >= -1);
             // Note that although maxIndexInclusive can't grow, it can still be int.MaxValue.
@@ -303,7 +303,7 @@ namespace System.Linq
 
                     // REVIEW: If this ends up in corefx, the code below can use LargeArrayBuilder<T>.
 
-                    var builder = HasLimit ? new List<TSource>(Limit) : new List<TSource>();
+                    var builder = HasLimit ? new List<TSource>(Limit) : [];
 
                     do
                     {
@@ -320,11 +320,7 @@ namespace System.Linq
                 await en.DisposeAsync().ConfigureAwait(false);
             }
 
-#if NO_ARRAY_EMPTY
-            return EmptyArray<TSource>.Value;
-#else
-            return Array.Empty<TSource>();
-#endif
+            return [];
         }
 
         public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)

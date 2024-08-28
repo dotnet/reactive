@@ -7,14 +7,17 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class FirstTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void First_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.First(default(IObservable<int>)));
@@ -22,40 +25,40 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.First(DummyObservable<int>.Instance, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void First_Empty()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Empty<int>().First());
         }
 
-        [Fact]
+        [TestMethod]
         public void FirstPredicate_Empty()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Empty<int>().First(_ => true));
         }
 
-        [Fact]
+        [TestMethod]
         public void First_Return()
         {
             var value = 42;
             Assert.Equal(value, Observable.Return(value).First());
         }
 
-        [Fact]
+        [TestMethod]
         public void FirstPredicate_Return()
         {
             var value = 42;
             Assert.Equal(value, Observable.Return(value).First(i => i % 2 == 0));
         }
 
-        [Fact]
+        [TestMethod]
         public void FirstPredicate_Return_NoMatch()
         {
             var value = 42;
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Return(value).First(i => i % 2 != 0));
         }
 
-        [Fact]
+        [TestMethod]
         public void First_Throw()
         {
             var ex = new Exception();
@@ -65,7 +68,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.First());
         }
 
-        [Fact]
+        [TestMethod]
         public void FirstPredicate_Throw()
         {
             var ex = new Exception();
@@ -75,14 +78,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.First(_ => true));
         }
 
-        [Fact]
+        [TestMethod]
         public void First_Range()
         {
             var value = 42;
             Assert.Equal(value, Observable.Range(value, 10).First());
         }
 
-        [Fact]
+        [TestMethod]
         public void FirstPredicate_Range()
         {
             var value = 42;

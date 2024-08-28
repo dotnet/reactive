@@ -23,16 +23,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 _maxConcurrent = maxConcurrent;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(_maxConcurrent, observer);
+            protected override _ CreateSink(IObserver<TSource> observer) => new(_maxConcurrent, observer);
 
             protected override void Run(_ sink) => sink.Run(_sources);
 
             internal sealed class _ : Sink<IObservable<TSource>, TSource>
             {
-                private readonly object _gate = new object();
+                private readonly object _gate = new();
                 private readonly int _maxConcurrent;
-                private readonly Queue<IObservable<TSource>> _q = new Queue<IObservable<TSource>>();
-                private readonly CompositeDisposable _group = new CompositeDisposable();
+                private readonly Queue<IObservable<TSource>> _q = new();
+                private readonly CompositeDisposable _group = [];
 
                 public _(int maxConcurrent, IObserver<TSource> observer)
                     : base(observer)
@@ -158,14 +158,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sources = sources;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+            protected override _ CreateSink(IObserver<TSource> observer) => new(observer);
 
             protected override void Run(_ sink) => sink.Run(_sources);
 
             internal sealed class _ : Sink<IObservable<TSource>, TSource>
             {
-                private readonly object _gate = new object();
-                private readonly CompositeDisposable _group = new CompositeDisposable();
+                private readonly object _gate = new();
+                private readonly CompositeDisposable _group = [];
 
                 public _(IObserver<TSource> observer)
                     : base(observer)
@@ -278,14 +278,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sources = sources;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+            protected override _ CreateSink(IObserver<TSource> observer) => new(observer);
 
             protected override void Run(_ sink) => sink.Run(_sources);
 
             internal sealed class _ : Sink<Task<TSource>, TSource>
             {
-                private readonly object _gate = new object();
-                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+                private readonly object _gate = new();
+                private readonly CancellationTokenSource _cts = new();
 
                 public _(IObserver<TSource> observer)
                     : base(observer)

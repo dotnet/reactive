@@ -11,7 +11,7 @@ namespace System.Reactive
 {
     internal abstract class TailRecursiveSink<TSource> : IdentitySink<TSource>
     {
-        private readonly Stack<IEnumerator<IObservable<TSource>>> _stack = new Stack<IEnumerator<IObservable<TSource>>>();
+        private readonly Stack<IEnumerator<IObservable<TSource>>> _stack = new();
 
         private bool _isDisposed;
         private int _trampoline;

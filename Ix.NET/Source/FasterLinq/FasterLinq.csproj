@@ -2,7 +2,9 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+
+    <NoWarn>$(NoWarn);IDE0007;IDE0034;IDE0040;IDE0063;IDE0090;IDE1006</NoWarn>
   </PropertyGroup>
 
 </Project>

@@ -6,21 +6,23 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class WaitTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void Wait_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Wait(default(IObservable<int>)));
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Wait_Return()
         {
             var x = 42;
@@ -28,15 +30,14 @@ namespace ReactiveTests.Tests
             var res = xs.Wait();
             Assert.Equal(x, res);
         }
-#endif
 
-        [Fact]
+        [TestMethod]
         public void Wait_Empty()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Empty<int>().Wait());
         }
 
-        [Fact]
+        [TestMethod]
         public void Wait_Throw()
         {
             var ex = new Exception();
@@ -46,8 +47,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Wait());
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Wait_Range()
         {
             var n = 42;
@@ -55,7 +55,5 @@ namespace ReactiveTests.Tests
             var res = xs.Wait();
             Assert.Equal(n, res);
         }
-#endif
-
     }
 }

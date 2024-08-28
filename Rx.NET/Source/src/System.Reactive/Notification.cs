@@ -37,10 +37,7 @@ namespace System.Reactive
     /// Represents a notification to an observer.
     /// </summary>
     /// <typeparam name="T">The type of the elements received by the observer.</typeparam>
-#if !NO_SERIALIZABLE
     [Serializable]
-#endif
-    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2218:OverrideGetHashCodeOnOverridingEquals", Justification = "Resembles a discriminated union with finite number of subclasses (external users shouldn't create their own subtypes), each of which does override GetHashCode itself.")]
     public abstract class Notification<T> : IEquatable<Notification<T>>
     {
         /// <summary>
@@ -74,9 +71,7 @@ namespace System.Reactive
         /// Represents an OnNext notification to an observer.
         /// </summary>
         [DebuggerDisplay("OnNext({Value})")]
-#if !NO_SERIALIZABLE
         [Serializable]
-#endif
         internal sealed class OnNextNotification : Notification<T>
         {
             /// <summary>
@@ -227,9 +222,7 @@ namespace System.Reactive
         /// Represents an OnError notification to an observer.
         /// </summary>
         [DebuggerDisplay("OnError({Exception})")]
-#if !NO_SERIALIZABLE
         [Serializable]
-#endif
         internal sealed class OnErrorNotification : Notification<T>
         {
             /// <summary>
@@ -380,9 +373,7 @@ namespace System.Reactive
         /// Represents an OnCompleted notification to an observer.
         /// </summary>
         [DebuggerDisplay("OnCompleted()")]
-#if !NO_SERIALIZABLE
         [Serializable]
-#endif
         internal sealed class OnCompletedNotification : Notification<T>
         {
             /// <summary>

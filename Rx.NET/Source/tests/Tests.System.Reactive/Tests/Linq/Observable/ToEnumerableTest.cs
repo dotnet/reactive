@@ -7,32 +7,35 @@ using System.Collections;
 using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ToEnumerableTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ToEnumerable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToEnumerable(default(IObservable<int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEnumerable_Generic()
         {
             Assert.True(Observable.Range(0, 10).ToEnumerable().SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEnumerable_NonGeneric()
         {
             Assert.True(((IEnumerable)Observable.Range(0, 10).ToEnumerable()).Cast<int>().SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEnumerable_ManualGeneric()
         {
             var res = Observable.Range(0, 10).ToEnumerable();
@@ -45,7 +48,7 @@ namespace ReactiveTests.Tests
             Assert.False(ieg.MoveNext());
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEnumerable_ManualNonGeneric()
         {
             var res = (IEnumerable)Observable.Range(0, 10).ToEnumerable();
@@ -58,7 +61,7 @@ namespace ReactiveTests.Tests
             Assert.False(ien.MoveNext());
         }
 
-        [Fact]
+        [TestMethod]
         public void ToEnumerable_ResetNotSupported()
         {
             ReactiveAssert.Throws<NotSupportedException>(() => Observable.Range(0, 10).ToEnumerable().GetEnumerator().Reset());

@@ -4,17 +4,15 @@
     <MinClientVersion>2.12</MinClientVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Authors>.NET Foundation and Contributors</Authors>
-    <PackageIconUrl>https://raw.githubusercontent.com/dotnet/reactive/0f837d11385cfaf575861ccc5a5fbcafb22d888f/Rx.NET/Resources/Artwork/Logo.png</PackageIconUrl>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/dotnet/reactive</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <DebugType Condition="'$(Configuration)' != 'Debug'">embedded</DebugType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)ReactiveX.snk</AssemblyOriginatorKeyFile>
     <NoWarn>$(NoWarn);1701;1702;CS1591;NU5105</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>
     <IncludeSymbols>false</IncludeSymbols>
     <IsTestProject>$(MSBuildProjectName.Contains('Tests'))</IsTestProject>
-    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Rx.ruleset</CodeAnalysisRuleSet>
     <GeneratePackageOnBuild Condition=" '$(IsTestProject)' != 'true' and '$(CreatePackage)' == 'true' ">true</GeneratePackageOnBuild>
     <PackageOutputPath>$(MSBuildThisFileDirectory)artifacts</PackageOutputPath>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -22,17 +20,79 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>    
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.231" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+    
+    <!--
+    Nerdbank.GitVersioning 3.6.128 injects a reference to a .proj file that doesn't work inside the
+    UWP test runner project. We don't ship that as a NuGet package, so it doesn't matter what its
+    version number is.
+    -->
+    <PackageReference
+      Include="Nerdbank.GitVersioning"
+      Version="3.6.128"
+      PrivateAssets="all"
+      Condition="$(ProjectName) != 'Tests.System.Reactive.Uwp.DeviceRunner'" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)../Resources/Artwork/Logo.png" Pack="true" PackagePath="\icon.png"/>
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="coverlet.collector" Version="3.1.0" />
+    <PackageReference Include="coverlet.collector" Version="3.2.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <AnalysisLevelDesign>7.0-default</AnalysisLevelDesign>
+    <AnalysisLevelNaming>7.0-all</AnalysisLevelNaming>
+    <AnalysisLevelPerformance>7.0-all</AnalysisLevelPerformance>
+
+    <!-- Enable analyzers on older targets. -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+
+    <!--
+    Disabled diagnostics:
+    CA1001 - types holding disposable fields should implement IDisposable. See next item.
+    CA2213 - IDisposable types should Dispose any IDisposable fields. This rule finds over 600
+                examples! These are all in subtle multithreaded or async code. Some of them appear
+                not to be real problems. For example, there are places where schedulers retain
+                references to IDisposable work items, but that IDisposable interfaces is only there
+                to enable application code to cancel scheduled work, so it's not Rx's place to call
+                Dispose. And there are more subtle cases where disposal is deferred to give threads
+                a chance to shut down. Each of these likely needs individual review:
+                https://github.com/dotnet/reactive/issues/1927
+
+    IDE0056 - Use of index/range syntax - relevant types not available on all targets, so we can't
+    IDE0057     do this.
+
+    IDE0290 - Primary ctors. This diagnostic suggests them in a lot of places where we don't want
+                them. E.g., in most types with multiple constructors I find I prefer not to have
+                a primary ctor. Since this is all or nothing, we turn it off.
+    IDE0305 - Suggests Collection expressions in place of .ToArray. E.g, wants to change this:
+                  _readyList.ToArray()
+              to this:
+                  [.. readyList]
+              This won't improve performance as far as we know (sometimes a reason for using that
+              syntax), and it's not obviously an improvement in readability.
+
+    CA1510 - use ArgumentNullException.ThrowIf (not available on all targets)
+    CA1513 - use ObjectDisposedException.ThrowIf (not available on all targets)
+    -->
+    <NoWarn>$(NoWarn);CA1001;CA2213;CA1510;CA1513;IDE0056;IDE0057;IDE0290;IDE0305</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <GlobalAnalyzerConfigFiles Include="$(MSBuildThisFileDirectory)analyzers.globalconfig" />
   </ItemGroup>
 
 </Project>

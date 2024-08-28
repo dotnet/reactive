@@ -13,7 +13,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<bool> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<bool> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 

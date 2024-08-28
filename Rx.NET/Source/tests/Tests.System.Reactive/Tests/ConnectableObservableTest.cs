@@ -8,14 +8,16 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public partial class ConnectableObservableTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void ConnectableObservable_Creation()
         {
             var y = 0;
@@ -30,7 +32,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, y);
         }
 
-        [Fact]
+        [TestMethod]
         public void ConnectableObservable_Connected()
         {
             var scheduler = new TestScheduler();
@@ -59,7 +61,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ConnectableObservable_NotConnected()
         {
             var scheduler = new TestScheduler();
@@ -82,7 +84,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ConnectableObservable_Disconnected()
         {
             var scheduler = new TestScheduler();
@@ -107,7 +109,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ConnectableObservable_DisconnectFuture()
         {
             var scheduler = new TestScheduler();
@@ -134,13 +136,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ConnectableObservable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Publish().Subscribe(default));
         }
 
-        [Fact]
+        [TestMethod]
         public void ConnectableObservable_MultipleNonOverlappedConnections()
         {
             var scheduler = new TestScheduler();

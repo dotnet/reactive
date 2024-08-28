@@ -316,7 +316,7 @@ namespace System.Reactive.Linq
             //       IQueryLanguage interface, we went for consistency with the public API, hence the odd position of the IScheduler.
             //
 
-            if (!(values is TSource[] valueArray))
+            if (values is not TSource[] valueArray)
             {
                 var valueList = new List<TSource>(values);
                 valueArray = valueList.ToArray();

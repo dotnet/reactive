@@ -56,15 +56,10 @@ namespace System.Linq
             return Create(() => selector(source.Share()).GetEnumerator());
         }
 
-        private class SharedBuffer<T> : IBuffer<T>
+        private class SharedBuffer<T>(IEnumerator<T> source) : IBuffer<T>
         {
-            private readonly IEnumerator<T> _source;
+            private readonly IEnumerator<T> _source = source;
             private bool _disposed;
-
-            public SharedBuffer(IEnumerator<T> source)
-            {
-                _source = source;
-            }
 
             public IEnumerator<T> GetEnumerator()
             {

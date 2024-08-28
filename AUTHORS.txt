@@ -14,7 +14,11 @@ Arthur Watson
 Gert Drapers
 Mark Shields
 Eric Rozell
-Oren Novotny
+Claire Novotny
+Geoffrey Huntley
+David Karnok
+Daniel C. Weber
+
 
 Rx.js and Ix.js:
 Matthew Podwysocki

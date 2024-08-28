@@ -12,9 +12,7 @@ namespace System.Reactive
     /// The time interval can represent the time it took to produce the value, the interval relative to a previous value, the value's delivery time relative to a base, etc.
     /// </summary>
     /// <typeparam name="T">The type of the value being annotated with time interval information.</typeparam>
-#if !NO_SERIALIZABLE
     [Serializable]
-#endif
     public readonly struct TimeInterval<T> : IEquatable<TimeInterval<T>>
     {
         /// <summary>
@@ -73,7 +71,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current <see cref="TimeInterval{T}"/>.</param>
         /// <returns><c>true</c> if the specified System.Object is equal to the current <see cref="TimeInterval{T}"/>; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object? obj) => obj is TimeInterval<T> && Equals((TimeInterval<T>)obj);
+        public override bool Equals(object? obj) => obj is TimeInterval<T> interval && Equals(interval);
 
         /// <summary>
         /// Returns the hash code for the current <see cref="TimeInterval{T}"/> value.

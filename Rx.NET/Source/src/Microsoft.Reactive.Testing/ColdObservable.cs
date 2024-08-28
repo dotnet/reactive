@@ -13,7 +13,7 @@ namespace Microsoft.Reactive.Testing
     {
         private readonly TestScheduler _scheduler;
         private readonly Recorded<Notification<T>>[] _messages;
-        private readonly List<Subscription> _subscriptions = new List<Subscription>();
+        private readonly List<Subscription> _subscriptions = [];
 
         public ColdObservable(TestScheduler scheduler, params Recorded<Notification<T>>[] messages)
         {

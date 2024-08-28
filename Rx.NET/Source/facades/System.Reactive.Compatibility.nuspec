@@ -11,6 +11,7 @@
         <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Reactive Extensions (Rx) Compatibility Library for enabling v3 apps to work with v4</description>
+        <readme>readme.md</readme>
         <copyright>Copyright (c) .NET Foundation and Contributors.</copyright>
         <language>en-US</language>
         <tags>Rx Reactive Extensions</tags>
@@ -44,5 +45,7 @@
           </group>
         </dependencies>
     </metadata>
-    <files />
+    <files>
+      <file src="NuGet.Facades.Readme.md" target="\readme.md"/>
+    </files>
 </package>

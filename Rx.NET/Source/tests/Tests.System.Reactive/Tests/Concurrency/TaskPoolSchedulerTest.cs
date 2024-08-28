@@ -6,17 +6,21 @@ using System;
 using System.Reactive.Concurrency;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class TaskPoolSchedulerTest
     {
-        [Fact]
+        [TestMethod]
         public void TaskPool_ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new TaskPoolScheduler(null));
+#pragma warning restore CA1806
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(42, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(42, DateTimeOffset.Now, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(42, TimeSpan.Zero, default));
@@ -24,48 +28,47 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => TaskPoolScheduler.Default.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskPool_Now()
         {
             var res = TaskPoolScheduler.Default.Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void TaskPool_ScheduleAction()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = TaskPoolScheduler.Default;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(() => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(() => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskPool_ScheduleActionDueNow()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = TaskPoolScheduler.Default;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(TimeSpan.Zero, () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(TimeSpan.Zero, () => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskPool_ScheduleActionDue()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = TaskPoolScheduler.Default;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(TimeSpan.FromMilliseconds(1), () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(TimeSpan.FromMilliseconds(1), () => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void TaskPool_ScheduleActionCancel()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = TaskPoolScheduler.Default;
             var set = false;
             var d = nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.True(false); set = true; });
@@ -75,7 +78,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void TaskPool_ScheduleLongRunning()
         {
             var n = 0;
@@ -114,17 +117,16 @@ namespace ReactiveTests.Tests
             Assert.True(n >= 0);
         }
 #endif
-#endif
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void Stopwatch()
         {
             StopwatchTest.Run(TaskPoolScheduler.Default);
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void TaskPool_Periodic()
         {
             var n = 0;
@@ -146,8 +148,7 @@ namespace ReactiveTests.Tests
             d.Dispose();
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void TaskPool_Periodic_NonReentrant()
         {
             var n = 0;
@@ -177,9 +178,8 @@ namespace ReactiveTests.Tests
 
             Assert.False(fail);
         }
-#endif
 
-        [Fact]
+        [TestMethod]
         public void TaskPool_Delay_LargerThanIntMaxValue()
         {
             var dueTime = TimeSpan.FromMilliseconds((double)int.MaxValue + 1);

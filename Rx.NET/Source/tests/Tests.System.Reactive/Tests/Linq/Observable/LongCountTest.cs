@@ -8,14 +8,15 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class LongCountTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void LongCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.LongCount(default(IObservable<int>)));
@@ -23,7 +24,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.LongCount(DummyObservable<int>.Instance, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Empty()
         {
             var scheduler = new TestScheduler();
@@ -47,7 +48,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Return()
         {
             var scheduler = new TestScheduler();
@@ -72,7 +73,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Some()
         {
             var scheduler = new TestScheduler();
@@ -99,7 +100,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Throw()
         {
             var ex = new Exception();
@@ -124,7 +125,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Never()
         {
             var scheduler = new TestScheduler();
@@ -145,8 +146,8 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF && !NO_THREAD
-        [Fact]
+#if !NO_PERF
+        [TestMethod]
         public void LongCount_InjectOverflow()
         {
             var xs = Observable.Return(42, ThreadPoolScheduler.Instance);
@@ -157,7 +158,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Predicate_Empty_True()
         {
             var scheduler = new TestScheduler();
@@ -181,7 +182,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Predicate_Empty_False()
         {
             var scheduler = new TestScheduler();
@@ -205,7 +206,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Predicate_Return_True()
         {
             var scheduler = new TestScheduler();
@@ -230,7 +231,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Predicate_Return_False()
         {
             var scheduler = new TestScheduler();
@@ -255,7 +256,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Predicate_Some_All()
         {
             var scheduler = new TestScheduler();
@@ -282,7 +283,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Predicate_Some_None()
         {
             var scheduler = new TestScheduler();
@@ -309,7 +310,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Predicate_Some_Even()
         {
             var scheduler = new TestScheduler();
@@ -336,7 +337,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Predicate_Throw_True()
         {
             var ex = new Exception();
@@ -361,7 +362,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Predicate_Throw_False()
         {
             var ex = new Exception();
@@ -386,7 +387,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Predicate_Never()
         {
             var scheduler = new TestScheduler();
@@ -407,7 +408,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void LongCount_Predicate_PredicateThrows()
         {
             var scheduler = new TestScheduler();
@@ -442,8 +443,8 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF && !NO_THREAD && !CRIPPLED_REFLECTION
-        [Fact]
+#if !NO_PERF
+        [TestMethod]
         public void LongCount_Predicate_InjectOverflow()
         {
             var xs = Observable.Return(42, ThreadPoolScheduler.Instance);

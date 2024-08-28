@@ -14,7 +14,7 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
@@ -22,6 +22,7 @@ namespace ReactiveTests.Tests
     /// Check if the Observable operator methods perform the proper
     /// argument validations en-masse with reflective checks.
     /// </summary>
+    [TestClass]
     public class ArgumentValidationTest
     {
         #region + Default values for the generic types +
@@ -31,7 +32,7 @@ namespace ReactiveTests.Tests
         /// as strings generated via <see cref="TypeNameOf(Type)"/>,
         /// mapped to a value.
         /// </summary>
-        private static Dictionary<string, object> _defaultValues;
+        private static readonly Dictionary<string, object> _defaultValues;
 
         /// <summary>
         /// Prepare the default instances for various types used
@@ -39,6 +40,7 @@ namespace ReactiveTests.Tests
         /// </summary>
         static ArgumentValidationTest()
         {
+#pragma warning disable IDE0300 // Simplify collection initialization. We want to be clear about what kinds of collections are in use in these tests.
             _defaultValues = new Dictionary<string, object>
             {
                 { "IObservable`1[Object]", Observable.Return(new object()) },
@@ -66,6 +68,7 @@ namespace ReactiveTests.Tests
                 { "Object", new object() },
                 { "Exception", new Exception() },
                 { "String", "String" },
+                { "Boolean", false },
 
                 { "IDictionary`2[Int32, IObservable`1[Int32]]", new Dictionary<int, IObservable<int>>() },
 
@@ -81,7 +84,7 @@ namespace ReactiveTests.Tests
 
                 { "IEnumerable`1[IObservable`1[Int32]]", new[] { Observable.Return(1) } },
 
-                { "SynchronizationContext", SynchronizationContext.Current },
+                { "SynchronizationContext", SynchronizationContext.Current ?? new SynchronizationContext() },
 
                 { "IEqualityComparer`1[Int32]", EqualityComparer<int>.Default },
 
@@ -90,6 +93,8 @@ namespace ReactiveTests.Tests
                 { "IObserver`1[Int32]", Observer.Create<int>(v => { }) },
 
                 { "CancellationToken", new CancellationToken() },
+
+                { "TaskObservationOptions", new TaskObservationOptions(null, false) },
 
                 { "Action", new Action(() => { }) },
 
@@ -265,17 +270,18 @@ namespace ReactiveTests.Tests
 
                 { "Func`17[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16) => null) }
             };
+#pragma warning restore IDE0300 // Simplify collection initialization
         }
 
         #endregion
 
-        [Fact]
+        [TestMethod]
         public void Verify_Observable()
         {
             VerifyClass(typeof(Observable));
         }
 
-        [Fact]
+        [TestMethod]
         public void Verify_ObservableEx()
         {
             VerifyClass(typeof(ObservableEx));
@@ -419,7 +425,7 @@ namespace ReactiveTests.Tests
                     catch (Exception ex)
                     {
                         // reflection wraps the actual exception, let's unwrap it
-                        if (!(ex.InnerException is ArgumentNullException))
+                        if (ex.InnerException is not ArgumentNullException)
                         {
                             throw new Exception("Method threw: " + method + " @ " + i, ex);
                         }

@@ -10,14 +10,17 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class FirstOrDefaultTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void FirstOrDefault_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstOrDefault(default(IObservable<int>)));
@@ -25,26 +28,26 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstOrDefault(DummyObservable<int>.Instance, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void FirstOrDefault_Empty()
         {
             Assert.Equal(default, Observable.Empty<int>().FirstOrDefault());
         }
 
-        [Fact]
+        [TestMethod]
         public void FirstOrDefaultPredicate_Empty()
         {
             Assert.Equal(default, Observable.Empty<int>().FirstOrDefault(_ => true));
         }
 
-        [Fact]
+        [TestMethod]
         public void FirstOrDefault_Return()
         {
             var value = 42;
             Assert.Equal(value, Observable.Return(value).FirstOrDefault());
         }
 
-        [Fact]
+        [TestMethod]
         public void FirstOrDefault_Throw()
         {
             var ex = new Exception();
@@ -54,15 +57,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.FirstOrDefault());
         }
 
-        [Fact]
+        [TestMethod]
         public void FirstOrDefault_Range()
         {
             var value = 42;
             Assert.Equal(value, Observable.Range(value, 10).FirstOrDefault());
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void FirstOrDefault_NoDoubleSet()
         {
             //
@@ -94,11 +96,10 @@ namespace ReactiveTests.Tests
 
             o.Done();
         }
-#endif
 
         private class O : IObservable<int>
         {
-            private readonly ManualResetEvent _event = new ManualResetEvent(false);
+            private readonly ManualResetEvent _event = new(false);
             private IObserver<int> _observer;
 
             public void Wait()

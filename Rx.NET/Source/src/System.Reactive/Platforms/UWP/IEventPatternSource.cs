@@ -18,7 +18,9 @@ namespace System.Reactive
         /// <summary>
         /// Event signaling the next element in the data stream.
         /// </summary>
+#pragma warning disable CA1003 // (Use generic EventHandler.) The use of the Windows.Foundation handler type is by design
         event TypedEventHandler<TSender, TEventArgs> OnNext;
+#pragma warning restore CA1003
     }
 }
 #endif

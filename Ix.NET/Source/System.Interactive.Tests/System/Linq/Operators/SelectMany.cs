@@ -13,15 +13,15 @@ namespace Tests
         [Fact]
         public void SelectMany_Arguments()
         {
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.SelectMany<int, int>(null, new[] { 1 }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.SelectMany<int, int>(new[] { 1 }, null));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.SelectMany<int, int>(null, [1]));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.SelectMany<int, int>([1], null));
         }
 
         [Fact]
         public void SelectMany1()
         {
             var res = new[] { 1, 2 }.SelectMany(new[] { 'a', 'b', 'c' }).ToList();
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 'a', 'b', 'c', 'a', 'b', 'c' }));
+            Assert.True(Enumerable.SequenceEqual(res, ['a', 'b', 'c', 'a', 'b', 'c']));
         }
     }
 }

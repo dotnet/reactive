@@ -10,21 +10,24 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class UsingAsyncTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void UsingAsync_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using<int, IDisposable>(null, (res, ct) => null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using<int, IDisposable>(ct => null, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void UsingAsync_Simple()
         {
             var done = new CountdownEvent(1);
@@ -36,11 +39,11 @@ namespace ReactiveTests.Tests
 
             var res = xs.ToEnumerable().ToList();
 
-            Assert.Equal(new List<int> { 42 }, res);
+            Assert.Equal([42], res);
             Assert.True(done.Wait(5000), "done.Wait(5000)");
         }
 
-        [Fact]
+        [TestMethod]
         public void UsingAsync_CancelResource()
         {
             var N = 10;// 0000;
@@ -86,7 +89,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void UsingAsync_CancelFactory()
         {
             var N = 10;// 0000;

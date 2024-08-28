@@ -11,14 +11,17 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ToObservableTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void EnumerableToObservable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToObservable((IEnumerable<int>)null, DummyScheduler.Instance));
@@ -27,13 +30,13 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<NullReferenceException>(() => Observable.ToObservable(NullEnumeratorEnumerable<int>.Instance, Scheduler.CurrentThread).Subscribe());
         }
 
-        [Fact]
+        [TestMethod]
         public void EnumerableToObservable_Complete()
         {
             var scheduler = new TestScheduler();
 
             var e = new MockEnumerable<int>(scheduler,
-                new[] { 3, 1, 2, 4 }
+                [3, 1, 2, 4]
             );
 
             var results = scheduler.Start(() =>
@@ -53,13 +56,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void EnumerableToObservable_Dispose()
         {
             var scheduler = new TestScheduler();
 
             var e = new MockEnumerable<int>(scheduler,
-                new[] { 3, 1, 2, 4 }
+                [3, 1, 2, 4]
             );
 
             var results = scheduler.Start(() =>
@@ -77,7 +80,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void EnumerableToObservable_Error()
         {
             var scheduler = new TestScheduler();
@@ -103,14 +106,14 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void EnumerableToObservable_Default_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToObservable((IEnumerable<int>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToObservable(DummyEnumerable<int>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void EnumerableToObservable_Default()
         {
             var xs = new[] { 4, 3, 1, 5, 9, 2 };
@@ -119,7 +122,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [Fact]
+        [TestMethod]
         public void EnumerableToObservable_LongRunning_Complete()
         {
             var start = default(ManualResetEvent);
@@ -139,7 +142,7 @@ namespace ReactiveTests.Tests
             Assert.True(e.SequenceEqual(lst));
         }
 
-        [Fact]
+        [TestMethod]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void EnumerableToObservable_LongRunning_Dispose()
         {
@@ -167,7 +170,7 @@ namespace ReactiveTests.Tests
             Assert.True(e.Take(100).SequenceEqual(lst.Take(100)));
         }
 
-        [Fact]
+        [TestMethod]
         public void EnumerableToObservable_LongRunning_Error()
         {
             var start = default(ManualResetEvent);
@@ -198,7 +201,7 @@ namespace ReactiveTests.Tests
             throw ex;
         }
 
-        [Fact]
+        [TestMethod]
         public void EnumerableToObservable_GetEnumeratorThrows()
         {
             var ex = new Exception();

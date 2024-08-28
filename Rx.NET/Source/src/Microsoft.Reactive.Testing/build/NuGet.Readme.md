@@ -1,0 +1,3 @@
+# Testing utilities for Rx (Reactive Extensions for .NET)
+
+This package is mainly designed for internal use in the https://github.com/dotnet/reactive repository. It enables virtual-time-based testing of Rx operators, so it may be useful to libraries defining their own custom Rx operators, which is why it is published as a NuGet package. However, its use is currently unsupported, and there is no commitment to backwards compatibility.

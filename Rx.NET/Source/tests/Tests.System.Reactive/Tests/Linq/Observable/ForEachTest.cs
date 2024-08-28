@@ -7,14 +7,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ForEachTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ForEach_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -26,41 +29,41 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ForEach(someObservable, default(Action<int, int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void ForEach_Empty()
         {
             var lst = new List<int>();
             Observable.Empty<int>().ForEach(x => lst.Add(x));
-            Assert.True(lst.SequenceEqual(Enumerable.Empty<int>()));
+            Assert.True(lst.SequenceEqual([]));
         }
 
-        [Fact]
+        [TestMethod]
         public void ForEach_Index_Empty()
         {
             var lstX = new List<int>();
             Observable.Empty<int>().ForEach((x, i) => lstX.Add(x));
-            Assert.True(lstX.SequenceEqual(Enumerable.Empty<int>()));
+            Assert.True(lstX.SequenceEqual([]));
         }
 
-        [Fact]
+        [TestMethod]
         public void ForEach_Return()
         {
             var lst = new List<int>();
             Observable.Return(42).ForEach(x => lst.Add(x));
-            Assert.True(lst.SequenceEqual(new[] { 42 }));
+            Assert.True(lst.SequenceEqual([42]));
         }
 
-        [Fact]
+        [TestMethod]
         public void ForEach_Index_Return()
         {
             var lstX = new List<int>();
             var lstI = new List<int>();
             Observable.Return(42).ForEach((x, i) => { lstX.Add(x); lstI.Add(i); });
-            Assert.True(lstX.SequenceEqual(new[] { 42 }));
-            Assert.True(lstI.SequenceEqual(new[] { 0 }));
+            Assert.True(lstX.SequenceEqual([42]));
+            Assert.True(lstI.SequenceEqual([0]));
         }
 
-        [Fact]
+        [TestMethod]
         public void ForEach_Throw()
         {
             var ex = new Exception();
@@ -70,7 +73,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.ForEach(x => { Assert.True(false); }));
         }
 
-        [Fact]
+        [TestMethod]
         public void ForEach_Index_Throw()
         {
             var ex = new Exception();
@@ -80,7 +83,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.ForEach((x, i) => { Assert.True(false); }));
         }
 
-        [Fact]
+        [TestMethod]
         public void ForEach_SomeData()
         {
             var lstX = new List<int>();
@@ -88,7 +91,7 @@ namespace ReactiveTests.Tests
             Assert.True(lstX.SequenceEqual(Enumerable.Range(10, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void ForEach_Index_SomeData()
         {
             var lstX = new List<int>();
@@ -98,7 +101,7 @@ namespace ReactiveTests.Tests
             Assert.True(lstI.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void ForEach_OnNextThrows()
         {
             var ex = new Exception();
@@ -108,7 +111,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.ForEach(x => { throw ex; }));
         }
 
-        [Fact]
+        [TestMethod]
         public void ForEach_Index_OnNextThrows()
         {
             var ex = new Exception();

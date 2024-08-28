@@ -12,14 +12,17 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class CreateAsyncTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Create(default(Func<IObserver<int>, Task>)));
@@ -30,7 +33,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Create(default(Func<IObserver<int>, CancellationToken, Task<Action>>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_NullCoalescingAction1()
         {
             var xs = Observable.Create<int>(o =>
@@ -43,10 +46,10 @@ namespace ReactiveTests.Tests
             var d = xs.Subscribe(lst.Add);
             d.Dispose();
 
-            Assert.True(lst.SequenceEqual(new[] { 42 }));
+            Assert.True(lst.SequenceEqual([42]));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_NullCoalescingAction2()
         {
             var xs = Observable.Create<int>((o, ct) =>
@@ -59,10 +62,10 @@ namespace ReactiveTests.Tests
             var d = xs.Subscribe(lst.Add);
             d.Dispose();
 
-            Assert.True(lst.SequenceEqual(new[] { 42 }));
+            Assert.True(lst.SequenceEqual([42]));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_NullCoalescingDisposable1()
         {
             var xs = Observable.Create<int>(o =>
@@ -75,10 +78,10 @@ namespace ReactiveTests.Tests
             var d = xs.Subscribe(lst.Add);
             d.Dispose();
 
-            Assert.True(lst.SequenceEqual(new[] { 42 }));
+            Assert.True(lst.SequenceEqual([42]));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_NullCoalescingDisposable2()
         {
             var xs = Observable.Create<int>((o, ct) =>
@@ -91,10 +94,10 @@ namespace ReactiveTests.Tests
             var d = xs.Subscribe(lst.Add);
             d.Dispose();
 
-            Assert.True(lst.SequenceEqual(new[] { 42 }));
+            Assert.True(lst.SequenceEqual([42]));
         }
 
-        private Task Producer1(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer1(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -111,7 +114,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Never()
         {
             RunSynchronously(() =>
@@ -119,7 +122,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer1(observer, token, scheduler))
+                    Observable.Create<int>((observer, token) => Producer1(observer, scheduler, token))
                 );
 
                 res.Messages.AssertEqual(
@@ -134,7 +137,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer2(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer2(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -155,7 +158,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Completed1()
         {
             RunSynchronously(() =>
@@ -163,7 +166,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer2(observer, token, scheduler))
+                    Observable.Create<int>((observer, token) => Producer2(observer, scheduler, token))
                 );
 
                 res.Messages.AssertEqual(
@@ -176,7 +179,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer3(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer3(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -197,7 +200,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Completed2()
         {
             RunSynchronously(() =>
@@ -205,7 +208,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer3(observer, token, scheduler))
+                    Observable.Create<int>((observer, token) => Producer3(observer, scheduler, token))
                 );
 
                 res.Messages.AssertEqual(
@@ -218,7 +221,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer4(IObserver<int> results, CancellationToken token, IScheduler scheduler, Exception exception)
+        private Task Producer4(IObserver<int> results, IScheduler scheduler, Exception exception, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -239,7 +242,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Error1()
         {
             RunSynchronously(() =>
@@ -249,7 +252,7 @@ namespace ReactiveTests.Tests
                 var exception = new Exception();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer4(observer, token, scheduler, exception))
+                    Observable.Create<int>((observer, token) => Producer4(observer, scheduler, exception, token))
                 );
 
                 res.Messages.AssertEqual(
@@ -262,7 +265,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer5(IObserver<int> results, CancellationToken token, IScheduler scheduler, Exception exception)
+        private Task Producer5(IObserver<int> results, IScheduler scheduler, Exception exception, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -283,7 +286,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Error2()
         {
             RunSynchronously(() =>
@@ -293,7 +296,7 @@ namespace ReactiveTests.Tests
                 var exception = new Exception();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer5(observer, token, scheduler, exception))
+                    Observable.Create<int>((observer, token) => Producer5(observer, scheduler, exception, token))
                 );
 
                 res.Messages.AssertEqual(
@@ -306,12 +309,12 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer6(IObserver<int> results, CancellationToken token, Exception exception)
+        private Task Producer6(IObserver<int> results, Exception exception, CancellationToken token)
         {
             throw exception;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Error3()
         {
             RunSynchronously(() =>
@@ -321,7 +324,7 @@ namespace ReactiveTests.Tests
                 var exception = new InvalidOperationException();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer6(observer, token, exception))
+                    Observable.Create<int>((observer, token) => Producer6(observer, exception, token))
                 );
 
                 res.Messages.AssertEqual(
@@ -330,7 +333,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer7(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer7(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -351,7 +354,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Cancel1()
         {
             RunSynchronously(() =>
@@ -359,7 +362,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer7(observer, token, scheduler)),
+                    Observable.Create<int>((observer, token) => Producer7(observer, scheduler, token)),
                     650
                 );
 
@@ -372,7 +375,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer8(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer8(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -393,7 +396,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Cancel2()
         {
             RunSynchronously(() =>
@@ -401,7 +404,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer8(observer, token, scheduler)),
+                    Observable.Create<int>((observer, token) => Producer8(observer, scheduler, token)),
                     650
                 );
 
@@ -414,7 +417,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer9(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer9(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -435,7 +438,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Cancel3()
         {
             RunSynchronously(() =>
@@ -443,7 +446,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer9(observer, token, scheduler)),
+                    Observable.Create<int>((observer, token) => Producer9(observer, scheduler, token)),
                     750
                 );
 
@@ -457,7 +460,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        private Task Producer10(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer10(IObserver<int> results, IScheduler scheduler, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -478,7 +481,7 @@ namespace ReactiveTests.Tests
             return tcs.Task;
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Cancel4()
         {
             RunSynchronously(() =>
@@ -486,7 +489,7 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
 
                 var res = scheduler.Start(() =>
-                    Observable.Create<int>((observer, token) => Producer10(observer, token, scheduler))
+                    Observable.Create<int>((observer, token) => Producer10(observer, scheduler, token))
                 );
 
                 res.Messages.Take(4).AssertEqual(
@@ -529,7 +532,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Task_Simple()
         {
             var xs = Observable.Create<int>(observer =>
@@ -547,7 +550,7 @@ namespace ReactiveTests.Tests
             Assert.True(new[] { 42 }.SequenceEqual(lst));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Task_Token()
         {
             var e = new ManualResetEvent(false);
@@ -567,19 +570,30 @@ namespace ReactiveTests.Tests
 
                         observer.OnNext(42);
                     }
-                });
+                },
+                CancellationToken.None);
             });
 
             var lst = new List<int>();
-            var d = xs.Subscribe(lst.Add);
+            var d = xs.Subscribe(i => { lock (lst) { lst.Add(i); } });
 
             e.WaitOne();
             d.Dispose();
 
-            Assert.True(lst.Take(10).SequenceEqual(Enumerable.Repeat(42, 10)));
+            // Although Dispose will set the _isStopped gate in the AutoDetachObserver that our
+            // observer gets wrapped in, it's possible that the thread we kicked off had just
+            // made one of its calls to observer.OnNext, and that this had just got past the
+            // _isStopped gate when we called Dispose, meaning that it might right now be inside
+            // List<int>.Add. We're synchronizing access to the list to ensure that any such
+            // call has completed by the time we try to inspect the list.
+
+            lock (lst)
+            {
+                Assert.True(lst.Take(10).SequenceEqual(Enumerable.Repeat(42, 10)));
+            }
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_IDisposable_Simple()
         {
             var stopped = new ManualResetEvent(false);
@@ -604,7 +618,7 @@ namespace ReactiveTests.Tests
             Assert.True(new[] { 42 }.SequenceEqual(lst));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_IDisposable_Token()
         {
             var stopped = new ManualResetEvent(false);
@@ -642,7 +656,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.Take(10).SequenceEqual(Enumerable.Repeat(42, 10)));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Action_Simple()
         {
             var stopped = new ManualResetEvent(false);
@@ -667,7 +681,7 @@ namespace ReactiveTests.Tests
             Assert.True(new[] { 42 }.SequenceEqual(lst));
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateAsync_Action_Token()
         {
             var stopped = new ManualResetEvent(false);
@@ -706,7 +720,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void CreateWithTaskDisposable_NoPrematureTermination()
         {
             var obs = Observable.Create<int>(async o =>
@@ -725,7 +739,7 @@ namespace ReactiveTests.Tests
             var result = obs.Take(1).Wait();
         }
 
-        [Fact]
+        [TestMethod]
         public void CreateWithTaskAction_NoPrematureTermination()
         {
             var obs = Observable.Create<int>(async o =>
@@ -740,7 +754,9 @@ namespace ReactiveTests.Tests
                     o.OnNext(x);
                 });
 
+#pragma warning disable IDE0039 // (Use local function.) We are testing for a returned Action, and want to be explicit about that.
                 Action a = () => d.Dispose();
+#pragma warning restore IDE0039
                 return a;
             });
 

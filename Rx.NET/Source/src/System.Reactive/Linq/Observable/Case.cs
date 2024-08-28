@@ -30,7 +30,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _defaultSource;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(observer);
+        protected override _ CreateSink(IObserver<TResult> observer) => new(observer);
 
         protected override void Run(_ sink) => sink.Run(this);
 

@@ -6,21 +6,22 @@ using System;
 using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class DefaultIfEmptyTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void DefaultIfEmpty_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DefaultIfEmpty(default(IObservable<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DefaultIfEmpty(default, 42));
         }
 
-        [Fact]
+        [TestMethod]
         public void DefaultIfEmpty_NonEmpty1()
         {
             var scheduler = new TestScheduler();
@@ -46,7 +47,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DefaultIfEmpty_NonEmpty2()
         {
             var scheduler = new TestScheduler();
@@ -72,7 +73,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DefaultIfEmpty_Empty1()
         {
             var scheduler = new TestScheduler();
@@ -95,7 +96,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DefaultIfEmpty_Empty2()
         {
             var scheduler = new TestScheduler();
@@ -118,7 +119,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DefaultIfEmpty_Throw1()
         {
             var ex = new Exception();
@@ -142,7 +143,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DefaultIfEmpty_Throw2()
         {
             var ex = new Exception();

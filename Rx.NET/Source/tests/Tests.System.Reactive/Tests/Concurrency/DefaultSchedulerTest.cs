@@ -6,14 +6,16 @@ using System;
 using System.Reactive.Concurrency;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class DefaultSchedulerTest
     {
-        [Fact]
+        [TestMethod]
         public void Schedule_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule(42, default));
@@ -23,37 +25,37 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => DefaultScheduler.Instance.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
         }
 
-        [Fact]
+        [TestMethod]
         public void Get_Now()
         {
             var res = DefaultScheduler.Instance.Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
-#if !NO_THREAD
-        [Fact]
+
+        [TestMethod]
         public void ScheduleAction()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = DefaultScheduler.Instance;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(() => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(() => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleActionDue()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = DefaultScheduler.Instance;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
-        [Fact]
+        [TestMethod]
         public void ScheduleActionCancel()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var nt = DefaultScheduler.Instance;
             var set = false;
             var d = nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.True(false); set = true; });
@@ -62,7 +64,7 @@ namespace ReactiveTests.Tests
             Assert.False(set);
         }
 
-        [Fact]
+        [TestMethod]
         public void Periodic_NonReentrant()
         {
             var n = 0;
@@ -92,10 +94,9 @@ namespace ReactiveTests.Tests
 
             Assert.False(fail);
         }
-#endif
 #if DESKTOPCLR
-        [Trait("SkipCI", "true")]
-        [Fact]
+        [TestCategory("SkipCI")]
+        [TestMethod]
         public void No_ThreadPool_Starvation_Dispose()
         {
             ThreadPool.GetAvailableThreads(out var bwt, out var bio);

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,6 +13,9 @@ using System.Reflection;
 
 namespace System.Reactive
 {
+#if HAS_TRIMMABILITY_ATTRIBUTES
+    [RequiresUnreferencedCode(Constants_Core.AsQueryableTrimIncompatibilityMessage)]
+#endif
     internal class ObservableQueryProvider : IQbservableProvider, IQueryProvider
     {
         public IQbservable<TResult> CreateQuery<TResult>(Expression expression)
@@ -42,7 +46,7 @@ namespace System.Reactive
             //
             //   observable.AsQbservable().<operators>.ToEnumerable().AsQueryable()
             //
-            if (!(expression is MethodCallExpression call) ||
+            if (expression is not MethodCallExpression call ||
                 call.Method.DeclaringType != typeof(Qbservable) ||
                 call.Method.Name != nameof(Qbservable.ToQueryable))
             {
@@ -91,6 +95,9 @@ namespace System.Reactive
         }
     }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+    [RequiresUnreferencedCode(Constants_Core.AsQueryableTrimIncompatibilityMessage)]
+#endif
     internal class ObservableQuery
     {
         protected object? _source;
@@ -112,6 +119,9 @@ namespace System.Reactive
         public Expression Expression => _expression;
     }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+    [RequiresUnreferencedCode(Constants_Core.AsQueryableTrimIncompatibilityMessage)]
+#endif
     internal class ObservableQuery<TSource> : ObservableQuery, IQbservable<TSource>
     {
         internal ObservableQuery(IObservable<TSource> source)
@@ -159,6 +169,9 @@ namespace System.Reactive
             return _expression.ToString();
         }
 
+#if HAS_TRIMMABILITY_ATTRIBUTES
+        [RequiresUnreferencedCode(Constants_Core.AsQueryableTrimIncompatibilityMessage)]
+#endif
         private class ObservableRewriter : ExpressionVisitor
         {
             protected override Expression VisitConstant(ConstantExpression/*!*/ node)
@@ -181,11 +194,7 @@ namespace System.Reactive
             {
                 var method = node.Method;
                 var declaringType = method.DeclaringType;
-#if (CRIPPLED_REFLECTION && HAS_WINRT)
-                var baseType = declaringType?.GetTypeInfo().BaseType;
-#else
                 var baseType = declaringType?.BaseType;
-#endif
                 if (baseType == typeof(QueryablePattern))
                 {
                     if (method.Name == "Then")
@@ -307,21 +316,25 @@ namespace System.Reactive
                 //
                 if (method.Name == "When")
                 {
+#pragma warning disable CA1851 // (Possible multiple enumerations of 'IEnumerable'.) Simple fixes could actually make things worse (e.g., by making an unnecessary copy), so unless specific perf issues become apparent here, we will tolerate this.
                     var lastArgument = arguments.Last();
+#pragma warning restore CA1851
                     if (lastArgument.NodeType == ExpressionType.NewArrayInit)
                     {
                         var paramsArray = (NewArrayExpression)lastArgument;
-                        return new List<Expression>
-                        {
+                        return
+                        [
                             Expression.NewArrayInit(
                                 typeof(Plan<>).MakeGenericType(method.GetGenericArguments()[0]),
                                 paramsArray.Expressions.Select(param => Visit(param))
                             )
-                        };
+                        ];
                     }
                 }
 
+#pragma warning disable CA1851 // Possible multiple enumerations of 'IEnumerable' collection
                 return arguments.Select(arg => Visit(arg)).ToList();
+#pragma warning restore CA1851
             }
 
             private class Lazy<T>
@@ -353,7 +366,7 @@ namespace System.Reactive
                 }
             }
 
-            private static readonly Lazy<ILookup<string, MethodInfo>> ObservableMethods = new Lazy<ILookup<string, MethodInfo>>(() => GetMethods(typeof(Observable)));
+            private static readonly Lazy<ILookup<string, MethodInfo>> ObservableMethods = new(() => GetMethods(typeof(Observable)));
 
             private static MethodCallExpression FindObservableMethod(MethodInfo method, IList<Expression> arguments)
             {
@@ -373,20 +386,11 @@ namespace System.Reactive
                 {
                     targetType = method.DeclaringType!; // NB: These methods were found from a declaring type.
 
-#if (CRIPPLED_REFLECTION && HAS_WINRT)
-                    var typeInfo = targetType.GetTypeInfo();
-                    if (typeInfo.IsDefined(typeof(LocalQueryMethodImplementationTypeAttribute), false))
-                    {
-                        var mapping = (LocalQueryMethodImplementationTypeAttribute)typeInfo.GetCustomAttributes(typeof(LocalQueryMethodImplementationTypeAttribute), false).Single();
-                        targetType = mapping.TargetType;
-                    }
-#else
                     if (targetType.IsDefined(typeof(LocalQueryMethodImplementationTypeAttribute), false))
                     {
                         var mapping = (LocalQueryMethodImplementationTypeAttribute)targetType.GetCustomAttributes(typeof(LocalQueryMethodImplementationTypeAttribute), false)[0];
                         targetType = mapping.TargetType;
                     }
-#endif
 
                     methods = GetMethods(targetType);
                 }
@@ -395,11 +399,8 @@ namespace System.Reactive
                 // From all the operators with the method's name, find the one that matches all arguments.
                 //
                 var typeArgs = method.IsGenericMethod ? method.GetGenericArguments() : null;
-                var targetMethod = methods[method.Name].FirstOrDefault(candidateMethod => ArgsMatch(candidateMethod, arguments, typeArgs));
-                if (targetMethod == null)
-                {
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Providers.NO_MATCHING_METHOD_FOUND, method.Name, targetType.Name));
-                }
+                var targetMethod = methods[method.Name].FirstOrDefault(candidateMethod => ArgsMatch(candidateMethod, arguments, typeArgs))
+                    ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Providers.NO_MATCHING_METHOD_FOUND, method.Name, targetType.Name));
 
                 //
                 // Restore generic arguments.
@@ -426,11 +427,7 @@ namespace System.Reactive
 
             private static ILookup<string, MethodInfo> GetMethods(Type type)
             {
-#if !(CRIPPLED_REFLECTION && HAS_WINRT)
-                return type.GetMethods(BindingFlags.Static | BindingFlags.Public).ToLookup(m => m.Name);
-#else
                 return type.GetTypeInfo().DeclaredMethods.Where(m => m.IsStatic && m.IsPublic).ToLookup(m => m.Name);
-#endif
             }
 
             private static bool ArgsMatch(MethodInfo method, IList<Expression> arguments, Type[]? typeArgs)

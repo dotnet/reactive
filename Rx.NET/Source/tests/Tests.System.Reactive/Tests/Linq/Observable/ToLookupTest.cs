@@ -8,14 +8,17 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ToLookupTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ToLookup_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToLookup(null, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
@@ -33,7 +36,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void ToLookup_Completed()
         {
             var scheduler = new TestScheduler();
@@ -55,8 +58,8 @@ namespace ReactiveTests.Tests
                 OnNext<ILookup<int, int>>(660, d =>
                 {
                     return d.Count == 2
-                        && d[0].SequenceEqual(new[] { 4, 8 })
-                        && d[1].SequenceEqual(new[] { 6, 10 });
+                        && d[0].SequenceEqual([4, 8])
+                        && d[1].SequenceEqual([6, 10]);
                 }),
                 OnCompleted<ILookup<int, int>>(660)
             );
@@ -66,7 +69,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToLookup_Error()
         {
             var scheduler = new TestScheduler();
@@ -95,7 +98,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToLookup_KeySelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -124,7 +127,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToLookup_ElementSelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -153,7 +156,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToLookup_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -178,7 +181,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToLookup_Default()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
@@ -191,7 +194,7 @@ namespace ReactiveTests.Tests
             d3["0"].AssertEqual(2, 4, 6, 8, 10);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToLookup_Contains()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
@@ -199,15 +202,23 @@ namespace ReactiveTests.Tests
             Assert.False(d1.Contains("2"));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToLookup_Hides_Internal_List()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
-            Assert.False(d1["0"] is ICollection<int>);
-            Assert.False(d1["0"] is IList<int>);
+
+            // Up to .NET 7.0, the wrapper returned by LINQ to Objects' Skip (which is
+            // what Rx uses today to hide the list) used not to implement IList or
+            // ICollection. As of .NET 8.0 it does, but we can check we don't have
+            // access to the underlying list by checking that we are unable to modify
+            // it. Before .NET 8.0, these tests succeed because the wrapped list
+            // doesn't implement the interfaces. On .NET 8.0 they succeed because it
+            // provides a read-only implementation of them.
+            Assert.False(d1["0"] is ICollection<int> coll && !coll.IsReadOnly);
+            Assert.False(d1["0"] is IList<int> list && !list.IsReadOnly);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToLookup_Groups()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
@@ -229,7 +240,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void ToLookup_Groups_2()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
@@ -263,7 +274,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void ToLookup_IndexerForInvalidKey()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();

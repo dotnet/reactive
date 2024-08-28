@@ -209,12 +209,30 @@ namespace System.Reactive.Linq
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
         public static IObservable<TResult> Defer<TResult>(Func<Task<IObservable<TResult>>> observableFactoryAsync)
         {
+            return Defer(observableFactoryAsync, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Returns an observable sequence that starts the specified asynchronous factory function whenever a new observer subscribes.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the elements in the sequence returned by the factory function, and in the resulting sequence.</typeparam>
+        /// <param name="observableFactoryAsync">Asynchronous factory function to start for each observer that subscribes to the resulting sequence.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence whose observers trigger the given asynchronous observable factory function to be started.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="observableFactoryAsync"/> is null.</exception>
+        /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
+        public static IObservable<TResult> Defer<TResult>(Func<Task<IObservable<TResult>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe)
+        {
             if (observableFactoryAsync == null)
             {
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
             }
 
-            return s_impl.Defer(observableFactoryAsync);
+            return s_impl.Defer(observableFactoryAsync, ignoreExceptionsAfterUnsubscribe);
         }
 
         /// <summary>
@@ -229,12 +247,32 @@ namespace System.Reactive.Linq
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous observable factory function will be signaled.</remarks>
         public static IObservable<TResult> DeferAsync<TResult>(Func<CancellationToken, Task<IObservable<TResult>>> observableFactoryAsync)
         {
+            return DeferAsync(observableFactoryAsync, ignoreExceptionsAfterUnsubscribe: false);
+        }
+
+        /// <summary>
+        /// Returns an observable sequence that starts the specified cancellable asynchronous factory function whenever a new observer subscribes.
+        /// The CancellationToken passed to the asynchronous factory function is tied to the returned disposable subscription, allowing best-effort cancellation.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the elements in the sequence returned by the factory function, and in the resulting sequence.</typeparam>
+        /// <param name="observableFactoryAsync">Asynchronous factory function to start for each observer that subscribes to the resulting sequence.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">
+        /// If true, exceptions that occur after cancellation has been initiated by unsubscribing from the observable
+        /// this method returns will be handled and silently ignored. If false, they will go unobserved, meaning they
+        /// will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/>.
+        /// </param>
+        /// <returns>An observable sequence whose observers trigger the given asynchronous observable factory function to be started.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="observableFactoryAsync"/> is null.</exception>
+        /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
+        /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous observable factory function will be signaled.</remarks>
+        public static IObservable<TResult> DeferAsync<TResult>(Func<CancellationToken, Task<IObservable<TResult>>> observableFactoryAsync, bool ignoreExceptionsAfterUnsubscribe)
+        {
             if (observableFactoryAsync == null)
             {
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
             }
 
-            return s_impl.Defer(observableFactoryAsync);
+            return s_impl.Defer(observableFactoryAsync, ignoreExceptionsAfterUnsubscribe);
         }
 
         #endregion
@@ -257,7 +295,9 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>An observable sequence with no elements.</returns>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static IObservable<TResult> Empty<TResult>(TResult witness)
+#pragma warning restore IDE0060
         {
             return s_impl.Empty<TResult>(); // Pure inference - no specialized target method.
         }
@@ -287,7 +327,9 @@ namespace System.Reactive.Linq
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>An observable sequence with no elements.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static IObservable<TResult> Empty<TResult>(IScheduler scheduler, TResult witness)
+#pragma warning restore IDE0060
         {
             if (scheduler == null)
             {
@@ -389,7 +431,9 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>An observable sequence whose observers will never get called.</returns>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static IObservable<TResult> Never<TResult>(TResult witness)
+#pragma warning restore IDE0060
         {
             return s_impl.Never<TResult>(); // Pure inference - no specialized target method.
         }
@@ -579,7 +623,9 @@ namespace System.Reactive.Linq
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>The observable sequence that terminates exceptionally with the specified exception object.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="exception"/> is null.</exception>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static IObservable<TResult> Throw<TResult>(Exception exception, TResult witness)
+#pragma warning restore IDE0060
         {
             if (exception == null)
             {
@@ -621,7 +667,9 @@ namespace System.Reactive.Linq
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>The observable sequence that terminates exceptionally with the specified exception object.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="exception"/> or <paramref name="scheduler"/> is null.</exception>
+#pragma warning disable IDE0060 // (Remove unused parameter.) Required for type inference
         public static IObservable<TResult> Throw<TResult>(Exception exception, IScheduler scheduler, TResult witness)
+#pragma warning restore IDE0060
         {
             if (exception == null)
             {

@@ -8,31 +8,33 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public class ImmediateSchedulerTest
     {
-        [Fact]
+        [TestMethod]
         public void Immediate_Now()
         {
             var res = Scheduler.Immediate.Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
+
         }
-#if !NO_THREAD
-        [Fact]
+
+        [TestMethod]
         public void Immediate_ScheduleAction()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
-            Scheduler.Immediate.Schedule(() => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            Scheduler.Immediate.Schedule(() => { Assert.Equal(id, Environment.CurrentManagedThreadId); ran = true; });
             Assert.True(ran);
         }
-#endif
 
-        [Fact]
+        [TestMethod]
         public void Immediate_ScheduleActionError()
         {
             var ex = new Exception();
@@ -48,7 +50,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void Immediate_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule(42, default));
@@ -56,7 +58,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule(42, TimeSpan.Zero, default));
         }
 
-        [Fact]
+        [TestMethod]
         public void Immediate_Simple1()
         {
             var _x = 0;
@@ -64,7 +66,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(42, _x);
         }
 
-        [Fact]
+        [TestMethod]
         public void Immediate_Simple2()
         {
             var _x = 0;
@@ -72,7 +74,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(42, _x);
         }
 
-        [Fact]
+        [TestMethod]
         public void Immediate_Simple3()
         {
             var _x = 0;
@@ -80,7 +82,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(42, _x);
         }
 
-        [Fact]
+        [TestMethod]
         public void Immediate_Recursive1()
         {
             var _x = 0;
@@ -90,7 +92,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(43, _y);
         }
 
-        [Fact]
+        [TestMethod]
         public void Immediate_Recursive2()
         {
             var _x = 0;
@@ -100,7 +102,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(43, _y);
         }
 
-        [Fact]
+        [TestMethod]
         public void Immediate_Recursive3()
         {
             var _x = 0;
@@ -110,7 +112,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(43, _y);
         }
 
-        [Fact]
+        [TestMethod]
         public void Immediate_ArgumentChecking_More()
         {
             Scheduler.Immediate.Schedule(42, (self, state) =>
@@ -144,15 +146,13 @@ namespace ReactiveTests.Tests
             });
         }
 
-#if !NO_THREAD
-        [Fact]
+        [TestMethod]
         public void Immediate_ScheduleActionDue()
         {
-            var id = Thread.CurrentThread.ManagedThreadId;
+            var id = Environment.CurrentManagedThreadId;
             var ran = false;
-            Scheduler.Immediate.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            Scheduler.Immediate.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Equal(id, Environment.CurrentManagedThreadId); ran = true; });
             Assert.True(ran, "ran");
         }
-#endif
     }
 }

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ProduceOnlyReferenceAssembly>true</ProduceOnlyReferenceAssembly>
+    
+    <Description>Interactive Extensions Main Library used to express queries over enumerable sequences.</Description>
+    <AssemblyTitle>Interactive Extensions - Main Library</AssemblyTitle>
+    <Authors>Microsoft</Authors>
+
+    <!--
+    This TFM list does not match the main project. That is deliberate.
+  
+    See ../../Documentation/adr/0001-Ix-Ref-Assembly-Mismatches.md
+    -->
+    <TargetFrameworks>net48;netstandard2.1;net6.0</TargetFrameworks>
+    <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\System.Interactive\**\*.cs" Exclude="..\..\System.Interactive\obj\**" />
+  </ItemGroup>
+  
+</Project>

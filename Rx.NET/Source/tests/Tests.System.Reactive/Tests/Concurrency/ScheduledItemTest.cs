@@ -7,25 +7,29 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests
 {
-
+    [TestClass]
     public class ScheduledItemTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void ArgumentChecking()
         {
+#pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(default, 42, (x, y) => Disposable.Empty, DateTimeOffset.Now));
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, default, DateTimeOffset.Now));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(default, 42, (x, y) => Disposable.Empty, DateTimeOffset.Now, Comparer<DateTimeOffset>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, default, DateTimeOffset.Now, Comparer<DateTimeOffset>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, (x, y) => Disposable.Empty, DateTimeOffset.Now, default));
+#pragma warning restore CA1806
         }
 
-        [Fact]
+        [TestMethod]
         public void Inequalities()
         {
             var si1 = new SI(42);
@@ -79,13 +83,12 @@ namespace ReactiveTests
             Assert.False(si5 <= si4);
         }
 
-        [Fact]
+        [TestMethod]
         public void Equalities()
         {
             var si1 = new SI2(42, 123);
             var si2 = new SI2(42, 123);
             var si3 = new SI2(42, 321);
-            var si4 = new SI2(43, 123);
 
 #pragma warning disable 1718
             Assert.False(si1 != si1);
@@ -122,12 +125,9 @@ namespace ReactiveTests
 
         private class SI2 : ScheduledItem<int>
         {
-            private readonly int _value;
-
-            public SI2(int dueTime, int value)
+            public SI2(int dueTime, int _)
                 : base(dueTime, Comparer<int>.Default)
             {
-                _value = value;
             }
 
             protected override IDisposable InvokeCore()

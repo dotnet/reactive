@@ -14,9 +14,7 @@ namespace System.Reactive.Linq
 
         private static IQueryServices Initialize()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
             return PlatformEnlightenmentProvider.Current.GetService<IQueryServices>() ?? new DefaultQueryServices();
-#pragma warning restore CS0618 // Type or member is obsolete
         }
     }
 

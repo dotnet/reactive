@@ -8,7 +8,7 @@ namespace System.Reactive.Joins
 {
     internal abstract class ActivePlan
     {
-        private readonly Dictionary<IJoinObserver, IJoinObserver> _joinObservers = new Dictionary<IJoinObserver, IJoinObserver>();
+        private readonly Dictionary<IJoinObserver, IJoinObserver> _joinObservers = [];
 
         protected readonly Action _onCompleted;
 

@@ -1,8 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
-    <NoWarn>$(NoWarn);CS0618;CS8603;CS8625</NoWarn>
+    <!-- See NetCore31TestReadme.txt for why we still use netcoreapp3.1 -->
+    <TargetFrameworks>net48;net8.0;net6.0;netcoreapp3.1</TargetFrameworks>
+
+    <!--
+      CA1822: Make member static. Not necessary for test code.
+      CA1861: Extract constant arrays to 'static readonly' fields. With these tests we generally prioritize readability over performance.
+    -->
+    <NoWarn>$(NoWarn);CS0618;CS8603;CS8625;CA1822;CA1861</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,12 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="FluentAssertions" Version="6.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
+    <PackageReference Include="FluentAssertions" Version="6.4.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
   </ItemGroup>
 

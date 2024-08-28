@@ -7,20 +7,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class ToListTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ToList_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToList<int>(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ToList_Completed()
         {
             var scheduler = new TestScheduler();
@@ -39,7 +40,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<int>>(660, l => l.SequenceEqual(new[] { 2, 3, 4, 5 })),
+                OnNext<IList<int>>(660, l => l.SequenceEqual([2, 3, 4, 5])),
                 OnCompleted<IList<int>>(660)
             );
 
@@ -48,7 +49,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToList_Error()
         {
             var scheduler = new TestScheduler();
@@ -77,7 +78,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void ToList_Disposed()
         {
             var scheduler = new TestScheduler();

@@ -11,14 +11,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class SelectManyTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Then_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyObservable<string>.Instance));
@@ -26,7 +29,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyObservable<string>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Then_Complete_Complete()
         {
             var scheduler = new TestScheduler();
@@ -83,7 +86,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Then_Complete_Complete_2()
         {
             var scheduler = new TestScheduler();
@@ -140,7 +143,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Then_Never_Complete()
         {
             var scheduler = new TestScheduler();
@@ -204,7 +207,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Then_Complete_Never()
         {
             var scheduler = new TestScheduler();
@@ -259,7 +262,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Then_Complete_Error()
         {
             var scheduler = new TestScheduler();
@@ -310,7 +313,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Then_Error_Complete()
         {
             var scheduler = new TestScheduler();
@@ -365,7 +368,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Then_Error_Error()
         {
             var scheduler = new TestScheduler();
@@ -413,7 +416,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, IObservable<int>>.Instance));
@@ -421,7 +424,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, IObservable<int>>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Complete()
         {
             var scheduler = new TestScheduler();
@@ -499,7 +502,7 @@ namespace ReactiveTests.Tests
                 Subscribe(850, 950));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Complete_InnerNotComplete()
         {
             var scheduler = new TestScheduler();
@@ -575,7 +578,7 @@ namespace ReactiveTests.Tests
                 Subscribe(850, 950));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Complete_OuterNotComplete()
         {
             var scheduler = new TestScheduler();
@@ -651,7 +654,7 @@ namespace ReactiveTests.Tests
                 Subscribe(850, 950));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Error_Outer()
         {
             var scheduler = new TestScheduler();
@@ -729,7 +732,7 @@ namespace ReactiveTests.Tests
                 Subscribe(850, 900));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Error_Inner()
         {
             var scheduler = new TestScheduler();
@@ -805,7 +808,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -878,7 +881,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Throw()
         {
             var scheduler = new TestScheduler();
@@ -961,7 +964,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_UseFunction()
         {
             var scheduler = new TestScheduler();
@@ -1000,7 +1003,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, int, IObservable<int>>.Instance));
@@ -1008,7 +1011,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, IObservable<int>>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Index()
         {
             var scheduler = new TestScheduler();
@@ -1040,7 +1043,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Complete()
         {
             var scheduler = new TestScheduler();
@@ -1118,7 +1121,7 @@ namespace ReactiveTests.Tests
                 Subscribe(850, 950));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Complete_InnerNotComplete()
         {
             var scheduler = new TestScheduler();
@@ -1194,7 +1197,7 @@ namespace ReactiveTests.Tests
                 Subscribe(850, 950));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Complete_OuterNotComplete()
         {
             var scheduler = new TestScheduler();
@@ -1270,7 +1273,7 @@ namespace ReactiveTests.Tests
                 Subscribe(850, 950));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Error_Outer()
         {
             var scheduler = new TestScheduler();
@@ -1348,7 +1351,7 @@ namespace ReactiveTests.Tests
                 Subscribe(850, 900));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Error_Inner()
         {
             var scheduler = new TestScheduler();
@@ -1424,7 +1427,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -1497,7 +1500,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Throw()
         {
             var scheduler = new TestScheduler();
@@ -1580,7 +1583,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_UseFunction()
         {
             var scheduler = new TestScheduler();
@@ -1619,7 +1622,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, IEnumerable<int>>.Instance));
@@ -1631,7 +1634,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, IEnumerable<int>>.Instance, (Func<int, int, int>)null));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_Complete()
         {
             var scheduler = new TestScheduler();
@@ -1693,7 +1696,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_Complete_ResultSelector()
         {
             var scheduler = new TestScheduler();
@@ -1730,7 +1733,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_Error()
         {
             var scheduler = new TestScheduler();
@@ -1769,7 +1772,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_Error_ResultSelector()
         {
             var scheduler = new TestScheduler();
@@ -1808,7 +1811,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -1840,7 +1843,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_Dispose_ResultSelector()
         {
             var scheduler = new TestScheduler();
@@ -1872,7 +1875,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_SelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -1918,7 +1921,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_ResultSelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -1984,7 +1987,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_ResultSelector_GetEnumeratorThrows()
         {
             var scheduler = new TestScheduler();
@@ -2012,7 +2015,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_SelectorThrows_ResultSelector()
         {
             var scheduler = new TestScheduler();
@@ -2063,7 +2066,7 @@ namespace ReactiveTests.Tests
 
         private class CurrentThrowsEnumerable<T> : IEnumerable<T>
         {
-            private IEnumerable<T> _e;
+            private readonly IEnumerable<T> _e;
             private readonly Exception _ex;
 
             public CurrentThrowsEnumerable(IEnumerable<T> e, Exception ex)
@@ -2084,7 +2087,7 @@ namespace ReactiveTests.Tests
 
             private class Enumerator : IEnumerator<T>
             {
-                private IEnumerator<T> _e;
+                private readonly IEnumerator<T> _e;
                 private readonly Exception _ex;
 
                 public Enumerator(IEnumerator<T> e, Exception ex)
@@ -2120,7 +2123,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_CurrentThrows()
         {
             var scheduler = new TestScheduler();
@@ -2148,7 +2151,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_CurrentThrows_ResultSelector()
         {
             var scheduler = new TestScheduler();
@@ -2178,7 +2181,7 @@ namespace ReactiveTests.Tests
 
         private class MoveNextThrowsEnumerable<T> : IEnumerable<T>
         {
-            private IEnumerable<T> _e;
+            private readonly IEnumerable<T> _e;
             private readonly Exception _ex;
 
             public MoveNextThrowsEnumerable(IEnumerable<T> e, Exception ex)
@@ -2199,7 +2202,7 @@ namespace ReactiveTests.Tests
 
             private class Enumerator : IEnumerator<T>
             {
-                private IEnumerator<T> _e;
+                private readonly IEnumerator<T> _e;
                 private readonly Exception _ex;
 
                 public Enumerator(IEnumerator<T> e, Exception ex)
@@ -2235,7 +2238,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_GetEnumeratorThrows()
         {
             var scheduler = new TestScheduler();
@@ -2263,7 +2266,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_MoveNextThrows()
         {
             var scheduler = new TestScheduler();
@@ -2291,7 +2294,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Enumerable_MoveNextThrows_ResultSelector()
         {
             var scheduler = new TestScheduler();
@@ -2319,7 +2322,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, int, IEnumerable<int>>.Instance));
@@ -2331,7 +2334,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, IEnumerable<int>>.Instance, (Func<int, int, int, int, int>)null));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_Index()
         {
             var scheduler = new TestScheduler();
@@ -2363,7 +2366,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_ResultSelector_Index()
         {
             var scheduler = new TestScheduler();
@@ -2401,7 +2404,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_Complete()
         {
             var scheduler = new TestScheduler();
@@ -2463,7 +2466,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_Complete_ResultSelector()
         {
             var scheduler = new TestScheduler();
@@ -2500,7 +2503,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_Error()
         {
             var scheduler = new TestScheduler();
@@ -2539,7 +2542,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_Error_ResultSelector()
         {
             var scheduler = new TestScheduler();
@@ -2578,7 +2581,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -2610,7 +2613,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_Dispose_ResultSelector()
         {
             var scheduler = new TestScheduler();
@@ -2642,7 +2645,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_SelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -2688,7 +2691,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_ResultSelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -2754,7 +2757,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_ResultSelector_GetEnumeratorThrows()
         {
             var scheduler = new TestScheduler();
@@ -2782,7 +2785,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_SelectorThrows_ResultSelector()
         {
             var scheduler = new TestScheduler();
@@ -2831,7 +2834,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_CurrentThrows()
         {
             var scheduler = new TestScheduler();
@@ -2859,7 +2862,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_CurrentThrows_ResultSelector()
         {
             var scheduler = new TestScheduler();
@@ -2887,7 +2890,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_GetEnumeratorThrows()
         {
             var scheduler = new TestScheduler();
@@ -2915,7 +2918,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_MoveNextThrows()
         {
             var scheduler = new TestScheduler();
@@ -2943,7 +2946,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Enumerable_MoveNextThrows_ResultSelector()
         {
             var scheduler = new TestScheduler();
@@ -2971,7 +2974,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_QueryOperator_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, int, int>.Instance));
@@ -2994,7 +2997,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, CancellationToken, Task<int>>)null));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_QueryOperator_CompleteOuterFirst()
         {
             var scheduler = new TestScheduler();
@@ -3036,7 +3039,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_QueryOperator_CompleteInnerFirst()
         {
             var scheduler = new TestScheduler();
@@ -3078,7 +3081,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_QueryOperator_ErrorOuter()
         {
             var scheduler = new TestScheduler();
@@ -3114,7 +3117,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_QueryOperator_ErrorInner()
         {
             var scheduler = new TestScheduler();
@@ -3148,7 +3151,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_QueryOperator_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -3185,7 +3188,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_QueryOperator_ThrowSelector()
         {
             var scheduler = new TestScheduler();
@@ -3215,7 +3218,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_QueryOperator_ThrowResult()
         {
             var scheduler = new TestScheduler();
@@ -3245,7 +3248,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_QueryOperator_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, int, IObservable<int>>.Instance, DummyFunc<int, int, int, int, int>.Instance));
@@ -3254,7 +3257,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, IObservable<int>>.Instance, DummyFunc<int, int, int, int, int>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_QueryOperator_Index()
         {
             var scheduler = new TestScheduler();
@@ -3292,7 +3295,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_QueryOperator_CompleteOuterFirst()
         {
             var scheduler = new TestScheduler();
@@ -3332,7 +3335,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_QueryOperator_CompleteInnerFirst()
         {
             var scheduler = new TestScheduler();
@@ -3372,7 +3375,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_QueryOperator_ErrorOuter()
         {
             var scheduler = new TestScheduler();
@@ -3406,7 +3409,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_QueryOperator_ErrorInner()
         {
             var scheduler = new TestScheduler();
@@ -3441,7 +3444,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_QueryOperator_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -3470,7 +3473,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_QueryOperator_ThrowSelector()
         {
             var scheduler = new TestScheduler();
@@ -3498,7 +3501,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_QueryOperator_ThrowResult()
         {
             var scheduler = new TestScheduler();
@@ -3527,7 +3530,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(null, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<Exception, IObservable<int>>.Instance, DummyFunc<IObservable<int>>.Instance));
@@ -3537,7 +3540,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(DummyObservable<int>.Instance, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<Exception, IObservable<int>>.Instance, DummyFunc<IObservable<int>>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_Identity()
         {
             var scheduler = new TestScheduler();
@@ -3573,7 +3576,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_InnersWithTiming1()
         {
             var scheduler = new TestScheduler();
@@ -3652,7 +3655,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_InnersWithTiming2()
         {
             var scheduler = new TestScheduler();
@@ -3731,7 +3734,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_InnersWithTiming3()
         {
             var scheduler = new TestScheduler();
@@ -3810,7 +3813,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_Error_Identity()
         {
             var scheduler = new TestScheduler();
@@ -3848,7 +3851,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_SelectMany()
         {
             var scheduler = new TestScheduler();
@@ -3890,7 +3893,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_Concat()
         {
             var scheduler = new TestScheduler();
@@ -3929,7 +3932,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_Catch()
         {
             var scheduler = new TestScheduler();
@@ -3965,7 +3968,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_Error_Catch()
         {
             var scheduler = new TestScheduler();
@@ -4004,7 +4007,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_All()
         {
             var scheduler = new TestScheduler();
@@ -4047,7 +4050,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_Error_All()
         {
             var scheduler = new TestScheduler();
@@ -4090,7 +4093,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_All_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -4130,7 +4133,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_All_Dispose_Before_First()
         {
             var scheduler = new TestScheduler();
@@ -4163,7 +4166,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_OnNextThrow()
         {
             var scheduler = new TestScheduler();
@@ -4196,7 +4199,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_OnErrorThrow()
         {
             var scheduler = new TestScheduler();
@@ -4233,7 +4236,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Triple_OnCompletedThrow()
         {
             var scheduler = new TestScheduler();
@@ -4270,7 +4273,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(null, DummyFunc<int, int, IObservable<int>>.Instance, DummyFunc<Exception, IObservable<int>>.Instance, DummyFunc<IObservable<int>>.Instance));
@@ -4280,7 +4283,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(DummyObservable<int>.Instance, DummyFunc<int, int, IObservable<int>>.Instance, DummyFunc<Exception, IObservable<int>>.Instance, DummyFunc<IObservable<int>>.Instance).Subscribe(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_Index()
         {
             var scheduler = new TestScheduler();
@@ -4318,7 +4321,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_Identity()
         {
             var scheduler = new TestScheduler();
@@ -4354,7 +4357,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_InnersWithTiming1()
         {
             var scheduler = new TestScheduler();
@@ -4433,7 +4436,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_InnersWithTiming2()
         {
             var scheduler = new TestScheduler();
@@ -4512,7 +4515,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_InnersWithTiming3()
         {
             var scheduler = new TestScheduler();
@@ -4591,7 +4594,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_Error_Identity()
         {
             var scheduler = new TestScheduler();
@@ -4629,7 +4632,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_SelectMany()
         {
             var scheduler = new TestScheduler();
@@ -4671,7 +4674,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_Concat()
         {
             var scheduler = new TestScheduler();
@@ -4710,7 +4713,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_Catch()
         {
             var scheduler = new TestScheduler();
@@ -4746,7 +4749,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_Error_Catch()
         {
             var scheduler = new TestScheduler();
@@ -4785,7 +4788,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_All()
         {
             var scheduler = new TestScheduler();
@@ -4828,7 +4831,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_Error_All()
         {
             var scheduler = new TestScheduler();
@@ -4871,7 +4874,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_All_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -4911,7 +4914,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_All_Dispose_Before_First()
         {
             var scheduler = new TestScheduler();
@@ -4944,7 +4947,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_OnNextThrow()
         {
             var scheduler = new TestScheduler();
@@ -4977,7 +4980,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_OnErrorThrow()
         {
             var scheduler = new TestScheduler();
@@ -5014,7 +5017,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Triple_OnCompletedThrow()
         {
             var scheduler = new TestScheduler();
@@ -5051,7 +5054,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Task_ArgumentChecking()
         {
             var t = new Task<int>(() => 42);
@@ -5071,21 +5074,21 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(DummyObservable<int>.Instance, (x, ct) => t, default(Func<int, int, int>)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Task1()
         {
             var res = Observable.Range(0, 10).SelectMany(x => Task.Factory.StartNew(() => x + 1)).ToEnumerable();
             Assert.True(Enumerable.Range(0, 10).SelectMany(x => new[] { x + 1 }).SequenceEqual(res.OrderBy(x => x)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Task2()
         {
             var res = Observable.Range(0, 10).SelectMany((x, ct) => Task.Factory.StartNew(() => x + 1, ct)).ToEnumerable();
             Assert.True(Enumerable.Range(0, 10).SelectMany(x => new[] { x + 1 }).SequenceEqual(res.OrderBy(x => x)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Task_TaskThrows()
         {
             var ex = new Exception();
@@ -5109,7 +5112,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Task_SelectorThrows()
         {
             var ex = new Exception();
@@ -5133,21 +5136,21 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Task_ResultSelector1()
         {
             var res = Observable.Range(0, 10).SelectMany(x => Task.Factory.StartNew(() => x + 1), (x, y) => x + y).ToEnumerable();
             Assert.True(Enumerable.Range(0, 10).SelectMany(x => new[] { 2 * x + 1 }).SequenceEqual(res.OrderBy(x => x)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Task_ResultSelector2()
         {
             var res = Observable.Range(0, 10).SelectMany((x, ct) => Task.Factory.StartNew(() => x + 1, ct), (x, y) => x + y).ToEnumerable();
             Assert.True(Enumerable.Range(0, 10).SelectMany(x => new[] { 2 * x + 1 }).SequenceEqual(res.OrderBy(x => x)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_Task_ResultSelectorThrows()
         {
             var ex = new Exception();
@@ -5171,7 +5174,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_Simple_RanToCompletion_Async()
         {
             var tcss = new TaskCompletionSource<int>[2];
@@ -5190,10 +5193,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43 });
+            lst.OrderBy(x => x).AssertEqual([42, 43]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_Simple_RanToCompletion_Sync()
         {
             var tcss = new TaskCompletionSource<int>[2];
@@ -5212,10 +5215,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43 });
+            lst.OrderBy(x => x).AssertEqual([42, 43]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_Simple_Faulted_Async()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -5236,11 +5239,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_Simple_Faulted_Sync()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -5261,11 +5264,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_Simple_Canceled_Async()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -5285,11 +5288,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            lst.AssertEqual([]);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_Simple_Canceled_Sync()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -5309,11 +5312,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            lst.AssertEqual([]);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_Simple_InnerCompleteBeforeOuter()
         {
             var xs = new Subject<int>();
@@ -5343,10 +5346,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_Simple_OuterCompleteBeforeInner()
         {
             var xs = new Subject<int>();
@@ -5375,10 +5378,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_Simple_Cancellation_NeverInvoked()
         {
             var xs = new Subject<int>();
@@ -5414,10 +5417,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_Simple_Cancellation_Invoked()
         {
             var xs = new Subject<int>();
@@ -5457,13 +5460,13 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // never observed because xs.OnNext(2) happened after dispose
 
-            lst.AssertEqual(new[] { 42 });
+            lst.AssertEqual([42]);
             Assert.False(done);
             Assert.Equal(2, n);
             Assert.Equal(1, m); // tcss[1] was already finished
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_Simple_Cancellation_AfterOuterError()
         {
             var xs = new Subject<int>();
@@ -5502,14 +5505,14 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // no-op
 
-            lst.AssertEqual(new[] { 42 });
+            lst.AssertEqual([42]);
             Assert.Same(ex, err);
             Assert.False(done);
             Assert.Equal(2, n);
             Assert.Equal(1, m); // tcss[1] was already finished
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_Simple_Cancellation_AfterSelectorThrows()
         {
             var xs = new Subject<int>();
@@ -5564,7 +5567,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, m);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_WithResultSelector_RanToCompletion_Async()
         {
             var tcss = new TaskCompletionSource<int>[2];
@@ -5583,10 +5586,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 0, 43 + 1 });
+            lst.OrderBy(x => x).AssertEqual([42 + 0, 43 + 1]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_WithResultSelector_RanToCompletion_Sync()
         {
             var tcss = new TaskCompletionSource<int>[2];
@@ -5605,10 +5608,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 0, 43 + 1 });
+            lst.OrderBy(x => x).AssertEqual([42 + 0, 43 + 1]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_WithResultSelector_Faulted_Async()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -5629,11 +5632,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_WithResultSelector_Faulted_Sync()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -5654,11 +5657,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_WithResultSelector_Canceled_Async()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -5678,11 +5681,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            lst.AssertEqual([]);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_WithResultSelector_Canceled_Sync()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -5702,11 +5705,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            lst.AssertEqual([]);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_WithResultSelector_InnerCompleteBeforeOuter()
         {
             var xs = new Subject<int>();
@@ -5736,10 +5739,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 1, 43 + 0, 44 + 2 });
+            lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_WithResultSelector_OuterCompleteBeforeInner()
         {
             var xs = new Subject<int>();
@@ -5768,10 +5771,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 1, 43 + 0, 44 + 2 });
+            lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_WithResultSelector_Cancellation_NeverInvoked()
         {
             var xs = new Subject<int>();
@@ -5807,10 +5810,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 1, 43 + 0, 44 + 2 });
+            lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_WithResultSelector_Cancellation_Invoked()
         {
             var xs = new Subject<int>();
@@ -5850,13 +5853,13 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // never observed because xs.OnNext(2) happened after dispose
 
-            lst.AssertEqual(new[] { 42 + 1 });
+            lst.AssertEqual([42 + 1]);
             Assert.False(done);
             Assert.Equal(2, n);
             Assert.Equal(1, m); // tcss[1] was already finished
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_WithResultSelector_Cancellation_AfterOuterError()
         {
             var xs = new Subject<int>();
@@ -5895,14 +5898,14 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // no-op
 
-            lst.AssertEqual(new[] { 42 + 1 });
+            lst.AssertEqual([42 + 1]);
             Assert.Same(ex, err);
             Assert.False(done);
             Assert.Equal(2, n);
             Assert.Equal(1, m); // tcss[1] was already finished
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectMany_TaskWithCompletionSource_WithResultSelector_Cancellation_AfterSelectorThrows()
         {
             var xs = new Subject<int>();
@@ -5957,7 +5960,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, m);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Task_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, int, Task<int>>.Instance));
@@ -5975,49 +5978,49 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, CancellationToken, Task<int>>.Instance, ((Func<int, int, int, int>)null)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Task_Index()
         {
             var res = Observable.Range(0, 10).SelectMany((int x, int i) => Task.Factory.StartNew(() => new { x, i })).ToEnumerable();
             Assert.True(Enumerable.Range(0, 10).SelectMany((x, i) => new[] { new { x, i } }).SequenceEqual(res.OrderBy(v => v.i)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Task_Cancellation_Index()
         {
             var res = Observable.Range(0, 10).SelectMany((x, i, ctx) => Task.Factory.StartNew(() => new { x, i }, ctx)).ToEnumerable();
             Assert.True(Enumerable.Range(0, 10).SelectMany((x, i) => new[] { new { x, i } }).SequenceEqual(res.OrderBy(v => v.i)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Task_ResultSelector_Index()
         {
             var res = Observable.Range(0, 10).SelectMany((int x, int i) => Task.Factory.StartNew(() => new { x, i }), (x, i, r) => r).ToEnumerable();
             Assert.True(Enumerable.Range(0, 10).SelectMany((x, i) => new[] { new { x, i } }).SequenceEqual(res.OrderBy(v => v.i)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Task_ResultSelector_Cancellation_Index()
         {
             var res = Observable.Range(0, 10).SelectMany((x, i, ctx) => Task.Factory.StartNew(() => new { x, i }, ctx), (x, i, r) => r).ToEnumerable();
             Assert.True(Enumerable.Range(0, 10).SelectMany((x, i) => new[] { new { x, i } }).SequenceEqual(res.OrderBy(v => v.i)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Task1()
         {
             var res = Observable.Range(0, 10).SelectMany((int x, int _) => Task.Factory.StartNew(() => x + 1)).ToEnumerable();
             Assert.True(Enumerable.Range(0, 10).SelectMany(x => new[] { x + 1 }).SequenceEqual(res.OrderBy(x => x)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Task2()
         {
             var res = Observable.Range(0, 10).SelectMany((x, _, ct) => Task.Factory.StartNew(() => x + 1, ct)).ToEnumerable();
             Assert.True(Enumerable.Range(0, 10).SelectMany(x => new[] { x + 1 }).SequenceEqual(res.OrderBy(x => x)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Task_TaskThrows()
         {
             var ex = new Exception();
@@ -6041,7 +6044,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Task_SelectorThrows()
         {
             var ex = new Exception();
@@ -6065,21 +6068,21 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Task_ResultSelector1()
         {
             var res = Observable.Range(0, 10).SelectMany((x, _) => Task.Factory.StartNew(() => x + 1), (x, _, y) => x + y).ToEnumerable();
             Assert.True(Enumerable.Range(0, 10).SelectMany(x => new[] { 2 * x + 1 }).SequenceEqual(res.OrderBy(x => x)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Task_ResultSelector2()
         {
             var res = Observable.Range(0, 10).SelectMany((x, _, ct) => Task.Factory.StartNew(() => x + 1, ct), (x, _, y) => x + y).ToEnumerable();
             Assert.True(Enumerable.Range(0, 10).SelectMany(x => new[] { 2 * x + 1 }).SequenceEqual(res.OrderBy(x => x)));
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_Task_ResultSelectorThrows()
         {
             var ex = new Exception();
@@ -6103,7 +6106,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_Simple_RanToCompletion_Async()
         {
             var tcss = new TaskCompletionSource<int>[2];
@@ -6122,10 +6125,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43 });
+            lst.OrderBy(x => x).AssertEqual([42, 43]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_Simple_RanToCompletion_Sync()
         {
             var tcss = new TaskCompletionSource<int>[2];
@@ -6144,10 +6147,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43 });
+            lst.OrderBy(x => x).AssertEqual([42, 43]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_Simple_Faulted_Async()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -6168,11 +6171,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_Simple_Faulted_Sync()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -6193,11 +6196,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_Simple_Canceled_Async()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -6217,11 +6220,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            lst.AssertEqual([]);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_Simple_Canceled_Sync()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -6241,11 +6244,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            lst.AssertEqual([]);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_Simple_InnerCompleteBeforeOuter()
         {
             var xs = new Subject<int>();
@@ -6275,10 +6278,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_Simple_OuterCompleteBeforeInner()
         {
             var xs = new Subject<int>();
@@ -6307,10 +6310,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_Simple_Cancellation_NeverInvoked()
         {
             var xs = new Subject<int>();
@@ -6346,10 +6349,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42, 43, 44 });
+            lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_Simple_Cancellation_Invoked()
         {
             var xs = new Subject<int>();
@@ -6389,13 +6392,13 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // never observed because xs.OnNext(2) happened after dispose
 
-            lst.AssertEqual(new[] { 42 });
+            lst.AssertEqual([42]);
             Assert.False(done);
             Assert.Equal(2, n);
             Assert.Equal(1, m); // tcss[1] was already finished
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_Simple_Cancellation_AfterOuterError()
         {
             var xs = new Subject<int>();
@@ -6434,14 +6437,14 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // no-op
 
-            lst.AssertEqual(new[] { 42 });
+            lst.AssertEqual([42]);
             Assert.Same(ex, err);
             Assert.False(done);
             Assert.Equal(2, n);
             Assert.Equal(1, m); // tcss[1] was already finished
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_Simple_Cancellation_AfterSelectorThrows()
         {
             var xs = new Subject<int>();
@@ -6496,7 +6499,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, m);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_RanToCompletion_Async()
         {
             var tcss = new TaskCompletionSource<int>[2];
@@ -6515,10 +6518,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 0, 43 + 1 });
+            lst.OrderBy(x => x).AssertEqual([42 + 0, 43 + 1]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_RanToCompletion_Sync()
         {
             var tcss = new TaskCompletionSource<int>[2];
@@ -6537,10 +6540,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 0, 43 + 1 });
+            lst.OrderBy(x => x).AssertEqual([42 + 0, 43 + 1]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Faulted_Async()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -6561,11 +6564,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Faulted_Sync()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -6586,11 +6589,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
+            lst.AssertEqual([]);
             Assert.Same(ex, err);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Canceled_Async()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -6610,11 +6613,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            lst.AssertEqual([]);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Canceled_Sync()
         {
             var tcss = new TaskCompletionSource<int>[3];
@@ -6634,11 +6637,11 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.AssertEqual(new int[0]);
-            Assert.True(err is TaskCanceledException && ((TaskCanceledException)err).Task == tcss[1].Task);
+            lst.AssertEqual([]);
+            Assert.True(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_InnerCompleteBeforeOuter()
         {
             var xs = new Subject<int>();
@@ -6668,10 +6671,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 1, 43 + 0, 44 + 2 });
+            lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_OuterCompleteBeforeInner()
         {
             var xs = new Subject<int>();
@@ -6700,10 +6703,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 1, 43 + 0, 44 + 2 });
+            lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Cancellation_NeverInvoked()
         {
             var xs = new Subject<int>();
@@ -6739,10 +6742,10 @@ namespace ReactiveTests.Tests
 
             done.WaitOne();
 
-            lst.OrderBy(x => x).AssertEqual(new[] { 42 + 1, 43 + 0, 44 + 2 });
+            lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Cancellation_Invoked()
         {
             var xs = new Subject<int>();
@@ -6782,13 +6785,13 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // never observed because xs.OnNext(2) happened after dispose
 
-            lst.AssertEqual(new[] { 42 + 1 });
+            lst.AssertEqual([42 + 1]);
             Assert.False(done);
             Assert.Equal(2, n);
             Assert.Equal(1, m); // tcss[1] was already finished
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Cancellation_AfterOuterError()
         {
             var xs = new Subject<int>();
@@ -6827,14 +6830,14 @@ namespace ReactiveTests.Tests
             Assert.False(tcss[0].TrySetResult(43));
             tcss[2].SetResult(44); // no-op
 
-            lst.AssertEqual(new[] { 42 + 1 });
+            lst.AssertEqual([42 + 1]);
             Assert.Same(ex, err);
             Assert.False(done);
             Assert.Equal(2, n);
             Assert.Equal(1, m); // tcss[1] was already finished
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Cancellation_AfterSelectorThrows()
         {
             var xs = new Subject<int>();

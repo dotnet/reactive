@@ -2,15 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#pragma warning disable 1591
-
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Joins;
-#if !CRIPPLED_REFLECTION
 using System.Reflection;
-#endif
 
 namespace System.Reactive.Linq
 {
@@ -42,11 +38,9 @@ namespace System.Reactive.Linq
             return new QueryablePattern<TLeft, TRight>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => And<TLeft, TRight>(default, default)),
-#else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TLeft), typeof(TRight)),
-#endif
+#pragma warning restore IL2060
                     left.Expression,
                     GetSourceExpression(right)
                 )
@@ -77,11 +71,9 @@ namespace System.Reactive.Linq
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Then<TSource, TResult>(default, default)),
-#else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
-#endif
+#pragma warning restore IL2060
                     source.Expression,
                     selector
                 )
@@ -111,11 +103,9 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => When<TResult>(default, default)),
-#else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
-#endif
+#pragma warning restore IL2060
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.NewArrayInit(
                         typeof(QueryablePlan<TResult>),
@@ -148,11 +138,9 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => When(default, default(IEnumerable<QueryablePlan<TResult>>))),
-#else
+#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
                     ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
-#endif
+#pragma warning restore IL2060
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(plans, typeof(IEnumerable<QueryablePlan<TResult>>))
                 )
@@ -160,5 +148,3 @@ namespace System.Reactive.Linq
         }
     }
 }
-
-#pragma warning restore 1591

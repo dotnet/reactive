@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ProduceOnlyReferenceAssembly>true</ProduceOnlyReferenceAssembly>
+
+    <Description>Interactive Extensions Providers Library used to build query providers and express queries over enumerable sequences.</Description>
+    <AssemblyTitle>Interactive Extensions - Providers Library</AssemblyTitle>
+
+    <!--
+    This TFM list does not match the main project. That is deliberate.
+  
+    See ../../Documentation/adr/0001-Ix-Ref-Assembly-Mismatches.md
+    -->
+    <TargetFrameworks>net48;netstandard2.1;net6.0</TargetFrameworks>
+    <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Interactive\System.Interactive.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\System.Interactive.Providers\**\*.cs" Exclude="..\..\System.Interactive.Providers\obj\**" />
+  </ItemGroup>
+
+</Project>

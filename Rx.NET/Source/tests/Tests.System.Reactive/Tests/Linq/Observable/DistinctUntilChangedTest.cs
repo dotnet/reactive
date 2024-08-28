@@ -6,14 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class DistinctUntilChangedTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -28,7 +29,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged(someObservable, null, EqualityComparer<int>.Default));
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_Never()
         {
             var scheduler = new TestScheduler();
@@ -43,7 +44,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_Empty()
         {
             var scheduler = new TestScheduler();
@@ -66,7 +67,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_Return()
         {
             var scheduler = new TestScheduler();
@@ -91,7 +92,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_Throw()
         {
             var scheduler = new TestScheduler();
@@ -115,7 +116,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_AllChanges()
         {
             var scheduler = new TestScheduler();
@@ -146,7 +147,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_AllSame()
         {
             var scheduler = new TestScheduler();
@@ -174,7 +175,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_SomeChanges()
         {
             var scheduler = new TestScheduler();
@@ -209,7 +210,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_Comparer_AllEqual()
         {
             var scheduler = new TestScheduler();
@@ -237,7 +238,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_Comparer_AllDifferent()
         {
             var scheduler = new TestScheduler();
@@ -268,7 +269,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_KeySelector_Div2()
         {
             var scheduler = new TestScheduler();
@@ -317,7 +318,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_KeySelectorThrows()
         {
             var ex = new Exception();
@@ -339,7 +340,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_ComparerThrows()
         {
             var ex = new Exception();
@@ -383,7 +384,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void DistinctUntilChanged_KeySelector_Comparer()
         {
             var scheduler = new TestScheduler();

@@ -5,20 +5,23 @@
 using System;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class AsObservableTest : ReactiveTest
     {
 
-        [Fact]
+        [TestMethod]
         public void AsObservable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.AsObservable<int>(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void AsObservable_AsObservable()
         {
             var scheduler = new TestScheduler();
@@ -47,7 +50,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AsObservable_Hides()
         {
             var xs = Observable.Empty<int>();
@@ -57,7 +60,7 @@ namespace ReactiveTests.Tests
             Assert.NotSame(xs, res);
         }
 
-        [Fact]
+        [TestMethod]
         public void AsObservable_Never()
         {
             var scheduler = new TestScheduler();
@@ -72,7 +75,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AsObservable_Empty()
         {
             var scheduler = new TestScheduler();
@@ -95,7 +98,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AsObservable_Throw()
         {
             var scheduler = new TestScheduler();
@@ -119,7 +122,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AsObservable_Return()
         {
             var scheduler = new TestScheduler();
@@ -144,7 +147,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void AsObservable_IsNotEager()
         {
             var scheduler = new TestScheduler();

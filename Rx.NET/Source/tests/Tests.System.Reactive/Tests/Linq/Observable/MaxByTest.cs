@@ -8,15 +8,16 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ReactiveTests.Tests
 {
+    [TestClass]
     public class MaxByTest : ReactiveTest
     {
         #region + MaxBy +
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MaxBy(default(IObservable<int>), x => x));
@@ -26,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MaxBy(DummyObservable<int>.Instance, x => x, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_Empty()
         {
             var scheduler = new TestScheduler();
@@ -50,7 +51,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_Return()
         {
             var scheduler = new TestScheduler();
@@ -66,9 +67,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual(new[] {
+                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual([
                     new KeyValuePair<int, string>(2, "a"),
-                })),
+                ])),
                 OnCompleted<IList<KeyValuePair<int, string>>>(250)
             );
 
@@ -77,7 +78,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_Some()
         {
             var scheduler = new TestScheduler();
@@ -95,9 +96,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual(new[] {
+                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual([
                     new KeyValuePair<int, string>(4, "c"),
-                })),
+                ])),
                 OnCompleted<IList<KeyValuePair<int, string>>>(250)
             );
 
@@ -106,7 +107,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_Multiple()
         {
             var scheduler = new TestScheduler();
@@ -127,10 +128,10 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual(new[] {
+                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual([
                     new KeyValuePair<int, string>(4, "a"),
                     new KeyValuePair<int, string>(4, "r"),
-                })),
+                ])),
                 OnCompleted<IList<KeyValuePair<int, string>>>(250)
             );
 
@@ -138,7 +139,7 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 250)
             );
         }
-        [Fact]
+        [TestMethod]
         public void MaxBy_Throw()
         {
             var ex = new Exception();
@@ -163,7 +164,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_Never()
         {
             var ex = new Exception();
@@ -186,7 +187,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_Comparer_Empty()
         {
             var scheduler = new TestScheduler();
@@ -210,7 +211,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_Comparer_Return()
         {
             var scheduler = new TestScheduler();
@@ -226,9 +227,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual(new[] {
+                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual([
                     new KeyValuePair<int, string>(2, "a"),
-                })),
+                ])),
                 OnCompleted<IList<KeyValuePair<int, string>>>(250)
             );
 
@@ -237,7 +238,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_Comparer_Some()
         {
             var scheduler = new TestScheduler();
@@ -255,9 +256,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual(new[] {
+                OnNext<IList<KeyValuePair<int, string>>>(250, x => x.SequenceEqual([
                     new KeyValuePair<int, string>(2, "a"),
-                })),
+                ])),
                 OnCompleted<IList<KeyValuePair<int, string>>>(250)
             );
 
@@ -266,7 +267,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_Comparer_Throw()
         {
             var ex = new Exception();
@@ -291,7 +292,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_Comparer_Never()
         {
             var ex = new Exception();
@@ -314,7 +315,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_SelectorThrows()
         {
             var ex = new Exception();
@@ -342,7 +343,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact]
+        [TestMethod]
         public void MaxBy_ComparerThrows()
         {
             var ex = new Exception();

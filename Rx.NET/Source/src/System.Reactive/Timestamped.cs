@@ -12,9 +12,7 @@ namespace System.Reactive
     /// The timestamp typically represents the time the value was received, using an IScheduler's clock to obtain the current time.
     /// </summary>
     /// <typeparam name="T">The type of the value being timestamped.</typeparam>
-#if !NO_SERIALIZABLE
     [Serializable]
-#endif
     [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Timestamped", Justification = "Reviewed and agreed upon.")]
     public readonly struct Timestamped<T> : IEquatable<Timestamped<T>>
     {
@@ -74,7 +72,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current <see cref="Timestamped{T}" />.</param>
         /// <returns><c>true</c> if the specified System.Object is equal to the current <see cref="Timestamped{T}" />; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object? obj) => obj is Timestamped<T> && Equals((Timestamped<T>)obj);
+        public override bool Equals(object? obj) => obj is Timestamped<T> timestamped && Equals(timestamped);
 
         /// <summary>
         /// Returns the hash code for the current <see cref="Timestamped{T}" /> value.

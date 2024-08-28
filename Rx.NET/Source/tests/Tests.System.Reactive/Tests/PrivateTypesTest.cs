@@ -7,14 +7,16 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using Microsoft.Reactive.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Assert = Xunit.Assert;
 
 namespace ReactiveTests.Tests
 {
-
+    [TestClass]
     public partial class PrivateTypesTest : ReactiveTest
     {
-        [Fact]
+        [TestMethod]
         public void EitherValueRoundtrip()
         {
             {
@@ -29,7 +31,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EitherEqualsEquatable()
         {
             {
@@ -54,7 +56,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EitherEqualsObject()
         {
             {
@@ -79,7 +81,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EitherGetHashCode()
         {
             {
@@ -94,7 +96,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EitherToString()
         {
             {
@@ -107,7 +109,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EitherSwitchFunc()
         {
             {
@@ -122,7 +124,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void EitherSwitchAction()
         {
             {
@@ -149,7 +151,7 @@ namespace ReactiveTests.Tests
         public override bool Equals(object obj)
         {
             var equ = _value.GetType().GetMethods().Where(m => m.Name == "Equals" && m.GetParameters()[0].ParameterType == typeof(object)).Single();
-            return (bool)equ.Invoke(_value, new object[] { obj is EitherBase ? ((EitherBase)obj)._value : obj });
+            return (bool)equ.Invoke(_value, [obj is EitherBase eitherBase ? eitherBase._value : obj]);
         }
 
         public override int GetHashCode()
@@ -169,7 +171,7 @@ namespace ReactiveTests.Tests
         {
             var tpe = typeof(Observable).GetTypeInfo().Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
             var mth = tpe.GetMethod(nameof(CreateLeft));
-            var res = mth.Invoke(null, new object[] { value });
+            var res = mth.Invoke(null, [value]);
             return new Left(res);
         }
 
@@ -177,22 +179,23 @@ namespace ReactiveTests.Tests
         {
             var tpe = typeof(Observable).GetTypeInfo().Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
             var mth = tpe.GetMethod(nameof(CreateRight));
-            var res = mth.Invoke(null, new object[] { value });
+            var res = mth.Invoke(null, [value]);
             return new Right(res);
         }
 
         public TResult Switch<TResult>(Func<TLeft, TResult> caseLeft, Func<TRight, TResult> caseRight)
         {
             var mth = _value.GetType().GetMethods().Where(m => m.Name == nameof(Switch) && m.ReturnType != typeof(void)).Single().MakeGenericMethod(typeof(TResult));
-            return (TResult)mth.Invoke(_value, new object[] { caseLeft, caseRight });
+            return (TResult)mth.Invoke(_value, [caseLeft, caseRight]);
         }
 
         public void Switch(Action<TLeft> caseLeft, Action<TRight> caseRight)
         {
             var mth = _value.GetType().GetMethods().Where(m => m.Name == nameof(Switch) && m.ReturnType == typeof(void)).Single();
-            mth.Invoke(_value, new object[] { caseLeft, caseRight });
+            mth.Invoke(_value, [caseLeft, caseRight]);
         }
 
+#pragma warning disable CA1067 // (Override Object.Equals(object) when implementing IEquatable<T>) - not required in the tests that use this type
         public sealed class Left : Either<TLeft, TRight>, IEquatable<Left>
         {
             public TLeft Value
@@ -211,7 +214,7 @@ namespace ReactiveTests.Tests
             public bool Equals(Left other)
             {
                 var equ = _value.GetType().GetMethods().Where(m => m.Name == nameof(Equals) && m.GetParameters()[0].ParameterType != typeof(object)).Single();
-                return (bool)equ.Invoke(_value, new object[] { other?._value });
+                return (bool)equ.Invoke(_value, [other?._value]);
             }
         }
 
@@ -233,8 +236,9 @@ namespace ReactiveTests.Tests
             public bool Equals(Right other)
             {
                 var equ = _value.GetType().GetMethods().Where(m => m.Name == nameof(Equals) && m.GetParameters()[0].ParameterType != typeof(object)).Single();
-                return (bool)equ.Invoke(_value, new object[] { other?._value });
+                return (bool)equ.Invoke(_value, [other?._value]);
             }
         }
+#pragma warning restore CA1067
     }
 }
