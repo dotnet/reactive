@@ -3,17 +3,18 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Diagnostics;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Threading
 {
-    public sealed class AsyncGate
+    public sealed class AsyncGate : IAsyncGate
     {
         private readonly object _gate = new();
         private readonly SemaphoreSlim _semaphore = new(1, 1);
         private readonly AsyncLocal<int> _recursionCount = new();
 
-        public ValueTask<Releaser> LockAsync()
+        public ValueTask<AsyncGateReleaser> LockAsync()
         {
             var shouldAcquire = false;
 
@@ -32,13 +33,13 @@ namespace System.Threading
 
             if (shouldAcquire)
             {
-                return new ValueTask<Releaser>(_semaphore.WaitAsync().ContinueWith(_ => new Releaser(this)));
+                return new ValueTask<AsyncGateReleaser>(_semaphore.WaitAsync().ContinueWith(_ => new AsyncGateReleaser(this)));
             }
 
-            return new ValueTask<Releaser>(new Releaser(this));
+            return new ValueTask<AsyncGateReleaser>(new AsyncGateReleaser(this));
         }
 
-        private void Release()
+        void IAsyncGate.Release()
         {
             lock (_gate)
             {
@@ -49,15 +50,6 @@ namespace System.Threading
                     _semaphore.Release();
                 }
             }
-        }
-
-        public readonly struct Releaser : IDisposable
-        {
-            private readonly AsyncGate _parent;
-
-            public Releaser(AsyncGate parent) => _parent = parent;
-
-            public void Dispose() => _parent.Release();
         }
     }
 }
