@@ -112,24 +112,36 @@ stages:
       runOnce:
         deploy:
           steps:
+
+          - task: UseDotNet@2
+            displayName: Use .NET 8.0.x SDK
+            inputs:
+              version: 8.0.x
+              performMultiLevelLookup: true
+
           - task: DotNetCoreCLI@2
+            displayName: Install SignTool tool
             inputs:
               command: custom
               custom: tool
-              arguments: install --tool-path . SignClient
-            displayName: Install SignTool tool
+              arguments: install --tool-path . sign --version 0.9.1-beta.24406.1
 
-          - pwsh: |
-              .\SignClient "Sign" `
-              --baseDirectory "$(Pipeline.Workspace)\BuildPackages" `
-              --input "**/*.nupkg" `
-              --config "$(Pipeline.Workspace)\config\signclient.json" `
-              --user "$(SignClientUser)" `
-              --secret "$(SignClientSecret)" `
-              --name "Ix.NET" `
-              --description "Ix.NET" `
-              --descriptionUrl "https://github.com/dotnet/reactive"
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'Rx.NET Sign Service Connection'
+              scriptType: pscore
+              scriptLocation: inlineScript
+              inlineScript: |
+                .\sign code azure-key-vault `
+                "**/*.nupkg" `
+                --base-directory "$(Pipeline.Workspace)\BuildPackages" `
+                --publisher-name "Reactive Extensions for .NET (.NET Foundation)" `
+                --description "Ix.NET" `
+                --description-url "https://github.com/dotnet/reactive" `
+                --azure-key-vault-url "$(SignKeyVaultUrl)" `
+                --azure-key-vault-certificate "$(SignKeyVaultCertificateName)"
             displayName: Sign packages
+
           - publish: $(Pipeline.Workspace)/BuildPackages
             displayName: Publish Signed Packages
             artifact: SignedPackages
