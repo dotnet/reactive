@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -20,23 +21,44 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return new ToObservableObservable<TSource>(source);
+            return new ToObservableObservable<TSource>(source, false);
         }
+
+
+        /// <summary>
+        /// Converts an async-enumerable sequence to an observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Enumerable sequence to convert to an observable sequence.</param>
+        /// <param name="ignoreExceptionsAfterUnsubscribe">If this is <c>true</c>, exceptions that occur after all observers have unsubscribed will be handled and silently ignored.
+        /// If <c>false</c>, they will go unobserved, meaning they will eventually emerge through <see cref="TaskScheduler.UnobservedTaskException"/></param>
+        /// <returns>The observable sequence whose elements are pulled from the given enumerable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static IObservable<TSource> ToObservable<TSource>(this IAsyncEnumerable<TSource> source, bool ignoreExceptionsAfterUnsubscribe)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+
+            return new ToObservableObservable<TSource>(source, ignoreExceptionsAfterUnsubscribe);
+        }
+
 
         private sealed class ToObservableObservable<T> : IObservable<T>
         {
             private readonly IAsyncEnumerable<T> _source;
+            private readonly bool _ignoreExceptionsAfterUnsubscribe;
 
-            public ToObservableObservable(IAsyncEnumerable<T> source)
+            public ToObservableObservable(IAsyncEnumerable<T> source, bool ignoreExceptionsAfterUnsubscribe)
             {
                 _source = source;
+                _ignoreExceptionsAfterUnsubscribe = ignoreExceptionsAfterUnsubscribe;
             }
 
             public IDisposable Subscribe(IObserver<T> observer)
             {
                 var ctd = new CancellationTokenDisposable();
 
-                async void Core()
+                async ValueTask Core()
                 {
                     IAsyncEnumerator<T> e;
 
@@ -54,7 +76,8 @@ namespace System.Linq
                         return;
                     }
 
-                    await using (e)
+
+                    try
                     {
                         do
                         {
@@ -86,13 +109,33 @@ namespace System.Linq
                             }
 
                             observer.OnNext(value);
+                        } while (!ctd.Token.IsCancellationRequested);
+                    }
+                    finally
+                    {
+                        if (_ignoreExceptionsAfterUnsubscribe)
+                        {
+                            try
+                            {
+                                await e.DisposeAsync().ConfigureAwait(false);
+                            }
+                            catch
+                            {
+                                // Ignored
+                            }
                         }
-                        while (!ctd.Token.IsCancellationRequested);
+                        else
+                        {
+                            // Exceptions will go in TaskScheduler.UnobservedTaskException.
+                            // This behavior is similar to Observable.FromAsync
+
+                            await e.DisposeAsync().ConfigureAwait(false);
+                        }
                     }
                 }
 
                 // Fire and forget
-                Core();
+                _ = Core();
 
                 return ctd;
             }

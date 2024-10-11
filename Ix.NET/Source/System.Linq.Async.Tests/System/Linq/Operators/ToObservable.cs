@@ -19,14 +19,16 @@ namespace Tests
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ToObservable<int>(null));
         }
 
-        [Fact]
-        public void ToObservable1()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ToObservable1(bool ignoreExceptionsAfterUnsubscribe)
         {
             using var evt = new ManualResetEvent(false);
 
             var fail = false;
 
-            var xs = AsyncEnumerable.Empty<int>().ToObservable();
+            var xs = AsyncEnumerable.Empty<int>().ToObservable(ignoreExceptionsAfterUnsubscribe);
             xs.Subscribe(new MyObserver<int>(
                 x =>
                 {
@@ -47,15 +49,17 @@ namespace Tests
             Assert.False(fail);
         }
 
-        [Fact]
-        public void ToObservable2()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ToObservable2(bool ignoreExceptionsAfterUnsubscribe)
         {
             using var evt = new ManualResetEvent(false);
 
             var lst = new List<int>();
             var fail = false;
 
-            var xs = Return42.ToObservable();
+            var xs = Return42.ToObservable(ignoreExceptionsAfterUnsubscribe);
             xs.Subscribe(new MyObserver<int>(
                 x =>
                 {
@@ -77,15 +81,17 @@ namespace Tests
             Assert.True(lst.SequenceEqual([42]));
         }
 
-        [Fact]
-        public void ToObservable3()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ToObservable3(bool ignoreExceptionsAfterUnsubscribe)
         {
             using var evt = new ManualResetEvent(false);
 
             var lst = new List<int>();
             var fail = false;
 
-            var xs = AsyncEnumerable.Range(0, 10).ToObservable();
+            var xs = AsyncEnumerable.Range(0, 10).ToObservable(ignoreExceptionsAfterUnsubscribe);
             xs.Subscribe(new MyObserver<int>(
                 x =>
                 {
@@ -107,8 +113,10 @@ namespace Tests
             Assert.True(lst.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [Fact]
-        public void ToObservable_ThrowOnMoveNext()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ToObservable_ThrowOnMoveNext(bool ignoreExceptionsAfterUnsubscribe)
         {
             using var evt = new ManualResetEvent(false);
 
@@ -116,7 +124,7 @@ namespace Tests
             var ex_ = default(Exception);
             var fail = false;
 
-            var xs = Throw<int>(ex1).ToObservable();
+            var xs = Throw<int>(ex1).ToObservable(ignoreExceptionsAfterUnsubscribe);
             xs.Subscribe(new MyObserver<int>(
                 x =>
                 {
@@ -139,8 +147,10 @@ namespace Tests
             Assert.Equal(ex1, ex_);
         }
 
-        [Fact]
-        public void ToObservable_ThrowOnCurrent()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ToObservable_ThrowOnCurrent(bool ignoreExceptionsAfterUnsubscribe)
         {
             var ex1 = new Exception("Bang!");
             var ex_ = default(Exception);
@@ -150,7 +160,7 @@ namespace Tests
                 _ => new ThrowOnCurrentAsyncEnumerator(ex1)
             );
 
-            ae.ToObservable()
+            ae.ToObservable(ignoreExceptionsAfterUnsubscribe)
                 .Subscribe(new MyObserver<int>(
                 x =>
                 {
@@ -170,8 +180,10 @@ namespace Tests
             Assert.Equal(ex1, ex_);
         }
 
-        [Fact]
-        public void ToObservable_DisposesEnumeratorOnCompletion()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ToObservable_DisposesEnumeratorOnCompletion(bool ignoreExceptionsAfterUnsubscribe)
         {
             using var evt = new ManualResetEvent(false);
 
@@ -184,7 +196,7 @@ namespace Tests
                     () => { evt.Set(); return default; }));
 
             ae
-                .ToObservable()
+                .ToObservable(ignoreExceptionsAfterUnsubscribe)
                 .Subscribe(new MyObserver<int>(
                     x =>
                     {
@@ -203,8 +215,10 @@ namespace Tests
             Assert.False(fail);
         }
 
-        [Fact]
-        public void ToObservable_DisposesEnumeratorWhenSubscriptionIsDisposed()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ToObservable_DisposesEnumeratorWhenSubscriptionIsDisposed(bool ignoreExceptionsAfterUnsubscribe)
         {
             using var evt = new ManualResetEvent(false);
 
@@ -227,7 +241,7 @@ namespace Tests
                     }));
 
             subscription = ae
-                .ToObservable()
+                .ToObservable(ignoreExceptionsAfterUnsubscribe)
                 .Subscribe(new MyObserver<int>(
                     x =>
                     {
@@ -250,8 +264,10 @@ namespace Tests
             Assert.False(fail);
         }
 
-        [Fact]
-        public void ToObservable_DesNotCallMoveNextAgainWhenSubscriptionIsDisposed()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ToObservable_DesNotCallMoveNextAgainWhenSubscriptionIsDisposed(bool ignoreExceptionsAfterUnsubscribe)
         {
             using var evt = new ManualResetEvent(false);
 
@@ -277,7 +293,7 @@ namespace Tests
                     }));
 
             subscription = ae
-                .ToObservable()
+                .ToObservable(ignoreExceptionsAfterUnsubscribe)
                 .Subscribe(new MyObserver<int>(
                     x =>
                     {
@@ -301,14 +317,16 @@ namespace Tests
             Assert.False(fail);
         }
         
-        [Fact]
-        public void ToObservable_SupportsLargeEnumerable()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ToObservable_SupportsLargeEnumerable(bool ignoreExceptionsAfterUnsubscribe)
         {
             using var evt = new ManualResetEvent(false);
 
             var fail = false;
 
-            var xs = AsyncEnumerable.Range(0, 10000).ToObservable();
+            var xs = AsyncEnumerable.Range(0, 10000).ToObservable(ignoreExceptionsAfterUnsubscribe);
             xs.Subscribe(new MyObserver<int>(
                 x =>
                 {
@@ -329,15 +347,46 @@ namespace Tests
             Assert.False(fail);
         }
 
-        [Fact]
-        public void ToObservable_ShouldForwardExceptionOnGetEnumeratorAsync()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ToObservable_ShouldNotCrashOnEnumeratorDispose(bool ignoreExceptionsAfterUnsubscribe)
+        {
+            var exception = new Exception("Exception message");
+            Exception? received = null;
+            var enumerable = AsyncEnumerable.Create<int>(_ => throw exception);
+            using var evt = new ManualResetEvent(false);
+
+            var observable = enumerable.ToObservable(ignoreExceptionsAfterUnsubscribe);
+            observable.Subscribe(new MyObserver<int>(_ =>
+                                                     {
+                                                         evt.Set();
+                                                     },
+                                                     e =>
+                                                     {
+                                                         received = e;
+                                                         evt.Set();
+                                                     }, () =>
+                                                     {
+                                                         evt.Set();
+                                                     }));
+
+            evt.WaitOne();
+            Assert.NotNull(received);
+            Assert.Equal(exception.Message, received!.Message);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ToObservable_ShouldForwardExceptionOnGetEnumeratorAsync(bool ignoreExceptionsAfterUnsubscribe)
         {
             var exception = new Exception("Exception message");
             Exception? recievedException = null;
             var enumerable = AsyncEnumerable.Create<int>(_ => throw exception);
             using var evt = new ManualResetEvent(false);
 
-            var observable = enumerable.ToObservable();
+            var observable = enumerable.ToObservable(ignoreExceptionsAfterUnsubscribe);
             observable.Subscribe(new MyObserver<int>(_ =>
                                                      {
                                                          evt.Set();
