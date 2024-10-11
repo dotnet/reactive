@@ -38,39 +38,57 @@ namespace System.Linq
 
                 async void Core()
                 {
-                    await using var e = _source.GetAsyncEnumerator(ctd.Token);
-                    do
+                    IAsyncEnumerator<T> e;
+
+                    try
                     {
-                        bool hasNext;
-                        var value = default(T)!;
-
-                        try
-                        {
-                            hasNext = await e.MoveNextAsync().ConfigureAwait(false);
-                            if (hasNext)
-                            {
-                                value = e.Current;
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            if (!ctd.Token.IsCancellationRequested)
-                            {
-                                observer.OnError(ex);
-                            }
-
-                            return;
-                        }
-
-                        if (!hasNext)
-                        {
-                            observer.OnCompleted();
-                            return;
-                        }
-
-                        observer.OnNext(value);
+                        e = _source.GetAsyncEnumerator(ctd.Token);
                     }
-                    while (!ctd.Token.IsCancellationRequested);
+                    catch (Exception ex)
+                    {
+                        if (!ctd.Token.IsCancellationRequested)
+                        {
+                            observer.OnError(ex);
+                        }
+
+                        return;
+                    }
+
+                    await using (e)
+                    {
+                        do
+                        {
+                            bool hasNext;
+                            var value = default(T)!;
+
+                            try
+                            {
+                                hasNext = await e.MoveNextAsync().ConfigureAwait(false);
+                                if (hasNext)
+                                {
+                                    value = e.Current;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                if (!ctd.Token.IsCancellationRequested)
+                                {
+                                    observer.OnError(ex);
+                                }
+
+                                return;
+                            }
+
+                            if (!hasNext)
+                            {
+                                observer.OnCompleted();
+                                return;
+                            }
+
+                            observer.OnNext(value);
+                        }
+                        while (!ctd.Token.IsCancellationRequested);
+                    }
                 }
 
                 // Fire and forget

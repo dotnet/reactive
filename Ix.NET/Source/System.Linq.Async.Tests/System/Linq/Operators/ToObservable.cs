@@ -329,6 +329,33 @@ namespace Tests
             Assert.False(fail);
         }
 
+        [Fact]
+        public void ToObservable_ShouldForwardExceptionOnGetEnumeratorAsync()
+        {
+            var exception = new Exception("Exception message");
+            Exception? recievedException = null;
+            var enumerable = AsyncEnumerable.Create<int>(_ => throw exception);
+            using var evt = new ManualResetEvent(false);
+
+            var observable = enumerable.ToObservable();
+            observable.Subscribe(new MyObserver<int>(_ =>
+                                                     {
+                                                         evt.Set();
+                                                     },
+                                                     e =>
+                                                     {
+                                                         recievedException = e;
+                                                         evt.Set();
+                                                     }, () =>
+                                                     {
+                                                         evt.Set();
+                                                     }));
+
+            evt.WaitOne();
+            Assert.NotNull(recievedException);
+            Assert.Equal(exception.Message, recievedException!.Message);
+        }
+
         private sealed class MyObserver<T> : IObserver<T>
         {
             private readonly Action<T> _onNext;
