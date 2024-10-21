@@ -40,13 +40,13 @@ stages:
         performMultiLevelLookup: true
         includePreviewVersions: true
 
-    # We need .NET 8.0 to be able to run all tests.
-    # We can't just use the runtime package is sufficient because we need the desktop framework,
-    # and the only way to get that into a build agent seems to be to install the SDK.
-    - task: UseDotNet@2
-      displayName: Use .NET 8.0 SDK
-      inputs:
-        version: '8.0.x'
+    # # We need .NET 8.0 to be able to run all tests.
+    # # We can't just use the runtime package is sufficient because we need the desktop framework,
+    # # and the only way to get that into a build agent seems to be to install the SDK.
+    # - task: UseDotNet@2
+    #   displayName: Use .NET 8.0 SDK
+    #   inputs:
+    #     version: '8.0.x'
 
     - task: DotNetCoreCLI@2
       inputs:
