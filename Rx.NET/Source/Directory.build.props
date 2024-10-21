@@ -75,6 +75,9 @@
     IDE0056 - Use of index/range syntax - relevant types not available on all targets, so we can't
     IDE0057     do this.
 
+    IDE0130 - Namespace does not match folder structure. Conforming to this would be a significant
+                upheaval, and it's not clear that it would be an improvement.
+
     IDE0290 - Primary ctors. This diagnostic suggests them in a lot of places where we don't want
                 them. E.g., in most types with multiple constructors I find I prefer not to have
                 a primary ctor. Since this is all or nothing, we turn it off.
@@ -88,7 +91,7 @@
     CA1510 - use ArgumentNullException.ThrowIf (not available on all targets)
     CA1513 - use ObjectDisposedException.ThrowIf (not available on all targets)
     -->
-    <NoWarn>$(NoWarn);CA1001;CA2213;CA1510;CA1513;IDE0056;IDE0057;IDE0290;IDE0305</NoWarn>
+    <NoWarn>$(NoWarn);CA1001;CA2213;CA1510;CA1513;IDE0056;IDE0057;IDE0130;IDE0290;IDE0305</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

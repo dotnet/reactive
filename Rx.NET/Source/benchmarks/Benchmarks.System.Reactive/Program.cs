@@ -14,7 +14,7 @@ namespace Benchmarks.System.Reactive
         {
             Console.WriteLine("Effective Rx-version: " + typeof(Observable).Assembly.GetName().Version);
 
-            var switcher = new BenchmarkSwitcher(new[] {
+            var switcher = new BenchmarkSwitcher([
                 typeof(ZipBenchmark),
                 typeof(CombineLatestBenchmark),
                 typeof(SwitchBenchmark),
@@ -33,7 +33,7 @@ namespace Benchmarks.System.Reactive
                 ,typeof(AppendPrependBenchmark)
                 ,typeof(PrependVsStartWtihBenchmark)
 #endif
-            });
+            ]);
 
             switcher.Run();
             Console.ReadLine();

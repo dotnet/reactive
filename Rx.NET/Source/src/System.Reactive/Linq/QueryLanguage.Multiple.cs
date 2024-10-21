@@ -61,7 +61,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Catch<TSource>(IObservable<TSource> first, IObservable<TSource> second)
         {
-            return Catch_(new[] { first, second });
+            return Catch_((IObservable<TSource>[])[first, second]);
         }
 
         public virtual IObservable<TSource> Catch<TSource>(params IObservable<TSource>[] sources)
@@ -114,7 +114,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Concat<TSource>(IObservable<TSource> first, IObservable<TSource> second)
         {
-            return Concat_(new[] { first, second });
+            return Concat_((IObservable<TSource>[])[first, second]);
         }
 
         public virtual IObservable<TSource> Concat<TSource>(params IObservable<TSource>[] sources)
@@ -222,7 +222,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> OnErrorResumeNext<TSource>(IObservable<TSource> first, IObservable<TSource> second)
         {
-            return OnErrorResumeNext_(new[] { first, second });
+            return OnErrorResumeNext_((IObservable<TSource>[])[first, second]);
         }
 
         public virtual IObservable<TSource> OnErrorResumeNext<TSource>(params IObservable<TSource>[] sources)
