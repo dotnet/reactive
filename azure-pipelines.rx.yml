@@ -38,6 +38,7 @@ stages:
       inputs:
         version: 9.0.x
         performMultiLevelLookup: true
+        includePreviewVersions: true
 
     # We need .NET 8.0 to be able to run all tests.
     # We can't just use the runtime package is sufficient because we need the desktop framework,
