@@ -19,13 +19,25 @@
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0')) or $(TargetFramework.StartsWith('net7.0')) or $(TargetFramework.StartsWith('net8.0'))">
     <DefineConstants>$(DefineConstants);HAS_TRIMMABILITY_ATTRIBUTES</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows')) or $(TargetFramework.StartsWith('net8.0-windows'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
     <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'uap10.0.18362' or '$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(CsWinRTEnabled)' == 'true'">
+    <!--
+    In the 9.0.100-rc.2.24474.11 SDK, the build tools attempt to perform code generation for a whole load of our types to support WinRT interop.
+    It's looking like it does this for any public type that implements IDisposable!
+    It's possible that this is a bug in the SDK, but it's also possible that this will be resolved as by design.
+    For the .NET 9.0 RC2 SDK at least, we need to opt out the CsWinRT AOT optimizer.
+    We need to check whether this is definitely OK. I think this is only meant for types that are intended to be used from WinRT,
+    which isn't he case here, but we need to verify this.
+    -->
+    <CsWinRTAotOptimizerEnabled>false</CsWinRTAotOptimizerEnabled>
+  </PropertyGroup>
 
   <Target Name="AddCommitHashToAssemblyAttributes" BeforeTargets="GetAssemblyAttributes">
     <ItemGroup>
