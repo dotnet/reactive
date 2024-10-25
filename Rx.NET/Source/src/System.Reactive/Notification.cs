@@ -13,6 +13,11 @@ using System.Reactive.Concurrency;
 #pragma warning disable CS0659
 #pragma warning disable CS0661
 
+#if LEGACY_WINRT
+#pragma warning disable CA1724 // Name conflicts with Windows.Phone.Devices.Notification
+#endif
+
+
 namespace System.Reactive
 {
     /// <summary>

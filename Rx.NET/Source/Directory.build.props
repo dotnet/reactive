@@ -52,6 +52,27 @@
     <PackageReference Include="coverlet.collector" Version="3.2.0" />
   </ItemGroup>
 
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
+    <!--
+    See 0003-uap-targets.md ADR in documentation for the reasons behind these settings.
+    -->
+    <NoStdLib>True</NoStdLib>
+
+    <TargetPlatformMinVersion>10.0.18362</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
+
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetFrameworkMoniker>.NETCore,Version=v5.0</TargetFrameworkMoniker>
+    <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <NugetTargetMoniker>UAP,Version=v10.0</NugetTargetMoniker>
+
+    <DefineConstants>$(DefineConstants);WINDOWS_UWP</DefineConstants>
+
+  </PropertyGroup>
+
+
   <PropertyGroup>
     <AnalysisLevelDesign>7.0-default</AnalysisLevelDesign>
     <AnalysisLevelNaming>7.0-all</AnalysisLevelNaming>
