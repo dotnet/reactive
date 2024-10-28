@@ -58,13 +58,13 @@ stages:
     - script: nbgv cloud -a -p Rx.NET/Source
       displayName: Set Version
 
-    - task: MSBuild@1
+    - task: DotNetCoreCLI@2
       displayName: Build System.Reactive.sln
       inputs:
-        solution: Rx.NET/Source/System.Reactive.sln
-        msbuildArguments: /restore /t:build /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
+        command: build
+        projects: Rx.NET/Source/System.Reactive.sln
+        arguments: -p:CreatePackage=true -p:NoPackageAnalysis=true -p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
         configuration: $(BuildConfiguration)
-        maximumCpuCount: false
 
     - task: NuGetCommand@2
       displayName: Pack compatibility package
