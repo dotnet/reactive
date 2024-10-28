@@ -34,7 +34,10 @@
 # reported as unnecessary on ObservableEx, but it is, so we've squelched it.
 # IL2060 is considered unnecessary on targets that don't support trimming, but we don't want to wrap every
 # single one in a conditional, so we also suppress warnings about unnecessary suppressions on those.
-dotnet_remove_unnecessary_suppression_exclusions = CA1704,CA1711,IL2060
+# Since moving to .NET SDK 9.0, we now get a lot more of these inexplicable IDE0079 warnings, where
+# if we remove the suppression that it complains about, we immediately get the warning that the suppression
+# is there to prevent. So we just have to squelch a whole load of them nowq.
+dotnet_remove_unnecessary_suppression_exclusions = CA1000,CA1003,CA1033,CA1063,CA1068,CA1704,CA1710,CA1711,CA1716,CA1720,CA1815,CA1816,CA1851,CA2201,IL2060,CS0659,CS0661
 
 
 # Prevent IDE1006 (Naming rule violation) errors for non-public fields.
