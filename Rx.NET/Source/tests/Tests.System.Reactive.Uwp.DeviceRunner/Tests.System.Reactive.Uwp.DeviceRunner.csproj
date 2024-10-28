@@ -140,8 +140,8 @@
     Windows API version they select, and I don't want to upgrade those to a newer version.)
     -->
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.12" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.3.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.3.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.6.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.6.1" />
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.3</Version>
     </PackageReference>
