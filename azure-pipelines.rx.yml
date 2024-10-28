@@ -63,7 +63,8 @@ stages:
       inputs:
         command: build
         projects: Rx.NET/Source/System.Reactive.sln
-        arguments: -p:CreatePackage=true -p:NoPackageAnalysis=true -p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
+        # TODO: work out why the build doesn't set TargetPlatformSdkPath correctly on the build agent
+        arguments: -p:CreatePackage=true -p:NoPackageAnalysis=true -p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts p:TargetPlatformSdkPath="C:\Program Files (x86)\Windows Kits\10\"
         configuration: $(BuildConfiguration)
 
     - task: NuGetCommand@2
