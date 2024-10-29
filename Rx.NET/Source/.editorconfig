@@ -34,10 +34,18 @@
 # reported as unnecessary on ObservableEx, but it is, so we've squelched it.
 # IL2060 is considered unnecessary on targets that don't support trimming, but we don't want to wrap every
 # single one in a conditional, so we also suppress warnings about unnecessary suppressions on those.
+#
+# dotnet_remove_unnecessary_suppression_exclusions = CA1704,CA1711,IL2060
+#
 # Since moving to .NET SDK 9.0, we now get a lot more of these inexplicable IDE0079 warnings, where
 # if we remove the suppression that it complains about, we immediately get the warning that the suppression
-# is there to prevent. So we just have to squelch a whole load of them nowq.
-dotnet_remove_unnecessary_suppression_exclusions = CA1000,CA1003,CA1033,CA1063,CA1068,CA1704,CA1710,CA1711,CA1716,CA1720,CA1815,CA1816,CA1851,CA2201,IL2060,CS0659,CS0661
+# is there to prevent. As far as I can tell, every suppression now causes a spurious IDE0079, so we
+# just have to disable IDE0079. Presumably there's something odd about this codebase that is confusing
+# the IDE0079 diagnostic - it can't be completely broken for everyone, because someone would have
+# noticed. I guess this may be related to the curse placed on this codebase by The Great Unification,
+# and in particular the corresponding requirement for putting a uap10.0.xxxx TFM on packages that
+# really shouldn't have them.
+dotnet_diagnostic.IDE0079.severity = silent
 
 
 # Prevent IDE1006 (Naming rule violation) errors for non-public fields.

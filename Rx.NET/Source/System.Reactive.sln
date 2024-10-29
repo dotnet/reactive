@@ -16,7 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{870348D0-C0A0-4352-8A02-E00AB0CCB919}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\.editorconfig = ..\..\.editorconfig
-		src\.editorconfig = src\.editorconfig
+		.editorconfig = .editorconfig
 		analyzers.globalconfig = analyzers.globalconfig
 		..\..\azure-pipelines.rx.yml = ..\..\azure-pipelines.rx.yml
 		Directory.build.props = Directory.build.props
