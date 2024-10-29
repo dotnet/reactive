@@ -28,7 +28,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform"
-                    Version="6.2.12" />
+                    Version="6.2.14" />
   </ItemGroup>
 
 
@@ -39,7 +39,7 @@
     It's possible that this is a bug in the SDK, but it's also possible that this will be resolved as by design.
     For the .NET 9.0 RC2 SDK at least, we need to opt out the CsWinRT AOT optimizer.
     We need to check whether this is definitely OK. I think this is only meant for types that are intended to be used from WinRT,
-    which isn't he case here, but we need to verify this.
+    which isn't the case here, but we need to verify this.
     -->
     <CsWinRTAotOptimizerEnabled>false</CsWinRTAotOptimizerEnabled>
   </PropertyGroup>
