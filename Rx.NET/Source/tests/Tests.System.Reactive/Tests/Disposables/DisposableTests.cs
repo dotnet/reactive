@@ -416,6 +416,19 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void CompositeDisposable_DisposeWith()
+        {
+            var c = new CompositeDisposable();
+            var d = new BooleanDisposable();
+            d.DisposeWith(c);
+            Assert.True(c.Contains(d));
+
+            c.Dispose();
+            Assert.True(d.IsDisposed);
+            Assert.True(c.IsDisposed);
+        }
+
+        [TestMethod]
         public void CompositeDisposable_NonCollection_Enumerable_Init()
         {
             var d = new BooleanDisposable();
