@@ -600,6 +600,11 @@ namespace System.Reactive.Disposables
         public static System.IDisposable Create(System.Action dispose) { }
         public static System.IDisposable Create<TState>(TState state, System.Action<TState> dispose) { }
     }
+    public static class DisposableMixins
+    {
+        public static T DisposeWith<T>(this T item, System.Collections.Generic.ICollection<System.IDisposable> disposableCollection)
+            where T : System.IDisposable { }
+    }
     public interface ICancelable : System.IDisposable
     {
         bool IsDisposed { get; }
