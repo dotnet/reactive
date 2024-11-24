@@ -903,5 +903,35 @@ namespace ReactiveTests.Tests
             Assert.True(disp3);
             Assert.True(d.IsDisposed);
         }
+
+        [TestMethod]
+        public void ObservableDisposable_Observed()
+        {
+            var disp1 = false;
+
+            var observableDisposable = new ObservableDisposable();
+
+            var sub = observableDisposable
+                .Subscribe(_ => { Assert.False(disp1); disp1 = true; });
+
+            observableDisposable.Dispose();
+
+            Assert.True(disp1);
+            Assert.True(observableDisposable.IsDisposed);
+        }
+
+        [TestMethod]
+        public void ObservableDisposable_ObservationCancelled()
+        {
+            var disp1 = false;
+
+            var observableDisposable = new ObservableDisposable();
+
+            var sub = observableDisposable
+                .Subscribe(_ => { Assert.False(disp1); disp1 = true; });
+
+            sub.Dispose();
+
+        }
     }
 }
