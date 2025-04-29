@@ -34,7 +34,7 @@ public class OverSimplifiedWhereObserver<T> : IObserver<T>
 
     public void OnError(Exception x)
     {
-        this.downstreamSubscriber.OnCompleted(x);
+        this.downstreamSubscriber.OnError(x);
     }
 }
 ```
@@ -51,7 +51,7 @@ However, the grammar for `IObservable<T>` is not the only place where Rx relies 
 
 Standard LINQ operators can be expressed purely in terms of these three ideas.
 
-These concepts come from [category theory](https://en.wikipedia.org/wiki/Category_theory), a pretty abstract branch of mathematics concerned with mathematical structures. In the late 1980s, a few computer scientists were exploring this area of maths with a view to using them to model the behaviour of programs. [Eugenio Moggi](https://en.wikipedia.org/wiki/Eugenio_Moggi) (an Italian computer scientist who was, at the time, working at the University of Edinburgh) is generally credited for realising that monads in particular are well suited to describing computations, as his 1991 paper, [Notions of computations and monads](https://person.dibris.unige.it/moggi-eugenio/ftp/ic91.pdf) explains. These theoretical ideas and were incorporated into the Haskell programming language, primarily by Philip Wadler and Simon Peyton Jones, who published a proposal for [monadic handling of IO](https://www.microsoft.com/en-us/research/wp-content/uploads/1993/01/imperative.pdf) in 1992. By 1996, this had been fully incorporated into Haskell in its v1.3 release to enable programs' handling of input and output (e.g., handling user input, or writing data to files) to work in a way that was underpinned by strong mathematical foundations. This has widely been recognized as a significant improvement on Haskell's earlier attempts to model the messy realities of IO in a purely functional language.
+These concepts come from [category theory](https://en.wikipedia.org/wiki/Category_theory), a pretty abstract branch of mathematics concerned with mathematical structures. In the late 1980s, a few computer scientists were exploring this area of maths with a view to using them to model the behaviour of programs. [Eugenio Moggi](https://en.wikipedia.org/wiki/Eugenio_Moggi) (an Italian computer scientist who was, at the time, working at the University of Edinburgh) is generally credited for realising that monads in particular are well suited to describing computations, as his 1991 paper, [Notions of computations and monads](https://person.dibris.unige.it/moggi-eugenio/ftp/ic91.pdf) explains. These theoretical ideas and concepts were incorporated into the Haskell programming language, primarily by Philip Wadler and Simon Peyton Jones, who published a proposal for [monadic handling of IO](https://www.microsoft.com/en-us/research/wp-content/uploads/1993/01/imperative.pdf) in 1992. By 1996, this had been fully incorporated into Haskell in its v1.3 release to enable programs' handling of input and output (e.g., handling user input, or writing data to files) to work in a way that was underpinned by strong mathematical foundations. This has widely been recognized as a significant improvement on Haskell's earlier attempts to model the messy realities of IO in a purely functional language.
 
 Why does any of this matter? These mathematical foundations are exactly why LINQ operators can be freely composed.
 
@@ -136,7 +136,7 @@ It would be odd if `SelectMany` did anything else. If `o1` were different in som
 
 So this law essentially formalizes the idea that `SelectMany` shouldn't add or remove items, or fail to preserve characteristics that the monad in use would normally preserve such as ordering. (Note that in .NET LINQ providers, this doesn't generally require these to be exactly the same objects. They normally won't be. It just means that they must represent exactly the same thing. For example, in this case `o1` and `o2` are both `IEnumerable<bool>`, so it means they should each produce exactly the same sequence of `bool` values.)
 
-#### Monadic law 2: `Return` is a 'left-identity' for `SelectMany`
+#### Monadic law 2: `Return` is a 'right-identity' for `SelectMany`
 
 This law means that if you pass `Return` as the function input to `SelectMany`, and then pass some value of the constructed monadic type in as the other argument, you should get that same value as the output. For example:
 
