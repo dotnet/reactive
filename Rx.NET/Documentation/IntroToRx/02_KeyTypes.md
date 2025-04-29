@@ -287,7 +287,7 @@ If you're wondering whether the relationship between `IObservable<T>` and `IObse
 
 The difference reflects the fundamental _pull vs push_ difference between `IEnumerable<T>` and `IObservable<T>`. Whereas with `IEnumerable<T>` we ask the source to create an `IEnumerator<T>` for us which we can then use to retrieve items (which is what a C# `foreach` loop does), with `IObservable<T>`, the source does not _implement_ `IObserver<T>`: it expects _us_ to supply an `IObserver<T>` and it will then push its values into that observer.
 
-So why does `IObserver<T>` have these three methods? Remember when I said that in an abstract sense, `IObserver<T>` represents the same thing as `IEnumerato<T>`? I meant it. It might be an abstract sense, but it is precise: `IObservable<T>` and `IObserver<T>` were designed to preserve the exact meaning of `IEnumerable<T>` and `IEnumerator<T>`, changing only the detailed mechanism of consumption.
+So why does `IObserver<T>` have these three methods? Remember when I said that in an abstract sense, `IObserver<T>` represents the same thing as `IEnumerator<T>`? I meant it. It might be an abstract sense, but it is precise: `IObservable<T>` and `IObserver<T>` were designed to preserve the exact meaning of `IEnumerable<T>` and `IEnumerator<T>`, changing only the detailed mechanism of consumption.
 
 To see what that means, think about what happens when you iterate over an `IEnumerable<T>` (with, say, a `foreach` loop). With each iteration (and more precisely, on each call to the enumerator's [`MoveNext`](https://learn.microsoft.com/en-us/dotnet/api/system.collections.ienumerator.movenext) method) there are three things that could happen:
 
