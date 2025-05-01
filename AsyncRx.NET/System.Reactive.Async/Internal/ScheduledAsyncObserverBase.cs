@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Reactive.Threading;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace System.Reactive
     {
         private readonly IAsyncObserver<T> _observer;
 
-        private readonly AsyncGate _lock = new();
+        private readonly IAsyncGate _lock = AsyncGate.Create();
         private readonly Queue<T> _queue = new();
 
         private bool _hasFaulted = false;
