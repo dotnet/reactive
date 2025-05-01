@@ -3,18 +3,43 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Diagnostics;
-using System.Reactive.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace System.Threading
+namespace System.Reactive.Threading
 {
-    public sealed class AsyncGate : IAsyncGate
+    /// <summary>
+    /// Provides an implementation of <see cref="IAsyncGate"/>, enabling mutually exclusive locking
+    /// in async code.
+    /// </summary>
+    public sealed class AsyncGate : IAsyncGate, IAsyncGateReleaser
     {
         private readonly object _gate = new();
         private readonly SemaphoreSlim _semaphore = new(1, 1);
         private readonly AsyncLocal<int> _recursionCount = new();
 
-        public ValueTask<AsyncGateReleaser> LockAsync()
+        /// <summary>
+        /// Creates an <see cref="AsyncGate"/>.
+        /// </summary>
+        /// <remarks>
+        /// This is private because we hope that one day, the .NET runtime will provide a built-in
+        /// asynchronous mutual exclusion primitive, and that we might be able to use that instead of
+        /// our own implementation. Although that might be something we could do by modifying this
+        /// class, it might prove useful to be able to provide the old implementation for backwards
+        /// compatibility, so we don't want AsyncRx.NET consumers to depend on a specific concrete type
+        /// as the <see cref="IAsyncGate"/> implementation.
+        /// </remarks>
+        private AsyncGate()
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of an <see cref="IAsyncGate"/> implementation.
+        /// </summary>
+        /// <returns></returns>
+        public static IAsyncGate Create() => new AsyncGate();
+
+        ValueTask<IAsyncGateReleaser> IAsyncGate.AcquireAsync()
         {
             var shouldAcquire = false;
 
@@ -33,13 +58,18 @@ namespace System.Threading
 
             if (shouldAcquire)
             {
-                return new ValueTask<AsyncGateReleaser>(_semaphore.WaitAsync().ContinueWith(_ => new AsyncGateReleaser(this)));
+                Task acquireTask = _semaphore.WaitAsync();
+                if (acquireTask.IsCompleted)
+                {
+                    return new ValueTask<IAsyncGateReleaser>(this);
+                }
+                return new ValueTask<IAsyncGateReleaser>(acquireTask.ContinueWith<IAsyncGateReleaser>(_ => this));
             }
 
-            return new ValueTask<AsyncGateReleaser>(new AsyncGateReleaser(this));
+            return new ValueTask<IAsyncGateReleaser>(this);
         }
 
-        void IAsyncGate.Release()
+        void IAsyncGateReleaser.Release()
         {
             lock (_gate)
             {

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Threading
@@ -49,25 +48,16 @@ namespace System.Reactive.Threading
         /// Acquires the lock.
         /// </summary>
         /// <returns>
-        /// A task that completes when the lock has been acquired, returning an <see cref="AsyncGateReleaser"/>
-        /// which can be disposed to release the lock.
+        /// A task that completes when the lock has been acquired, returning an <see cref="IAsyncGateReleaser"/>
+        /// with which to release the lock.
         /// </returns>
         /// <remarks>
         /// <para>
-        /// Applications release the lock by disposing the <see cref="AsyncGateReleaser"/> returned by this
-        /// method. Typically this is done with a <c>using</c> statement or declaration.
+        /// Applications release the lock by calling <see cref="IAsyncGateReleaser.Release"/> on the object
+        /// returned by this method. Typically this is done with a <c>using</c> statement or declaration by
+        /// using the <see cref="AsyncGateExtensions.LockAsync(IAsyncGate)"/> extension method.
         /// </para>
         /// </remarks>
-        public ValueTask<AsyncGateReleaser> LockAsync();
-
-        /// <summary>
-        /// Releases the lock. Applications typically won't call this directly, and will use
-        /// the <see cref="AsyncGateReleaser"/> returned by <see cref="LockAsync"/> instead.
-        /// </summary>
-        /// <remarks>
-        /// This method needs to be publicly accessible so that a single <see cref="AsyncGateReleaser"/>
-        /// can be shared by all implementations of this interface.
-        /// </remarks>
-        public void Release();
+        public ValueTask<IAsyncGateReleaser> AcquireAsync();
     }
 }

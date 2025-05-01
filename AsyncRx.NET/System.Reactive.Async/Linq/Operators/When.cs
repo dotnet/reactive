@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Joins;
-using System.Threading;
+using System.Reactive.Threading;
 
 namespace System.Reactive.Linq
 {
@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
             return Create<TResult>(async observer =>
             {
                 var externalSubscriptions = new Dictionary<object, IAsyncJoinObserver>();
-                var gate = new AsyncGate();
+                var gate = AsyncGate.Create();
                 var activePlans = new List<ActiveAsyncPlan>();
 
                 var outputObserver = AsyncObserver.Create<TResult>(

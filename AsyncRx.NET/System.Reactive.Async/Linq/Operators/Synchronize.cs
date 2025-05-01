@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Threading;
-using System.Threading;
 
 namespace System.Reactive.Linq
 {
@@ -38,7 +37,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            return Synchronize(observer, new AsyncGate());
+            return Synchronize(observer, AsyncGate.Create());
         }
 
         public static IAsyncObserver<TSource> Synchronize<TSource>(IAsyncObserver<TSource> observer, IAsyncGate gate)
