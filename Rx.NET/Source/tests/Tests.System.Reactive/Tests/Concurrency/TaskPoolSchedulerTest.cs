@@ -39,30 +39,36 @@ namespace ReactiveTests.Tests
         public void TaskPool_ScheduleAction()
         {
             var id = Environment.CurrentManagedThreadId;
+            int taskTid = 0;
             var nt = TaskPoolScheduler.Default;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(() => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
+            nt.Schedule(() => { taskTid = Environment.CurrentManagedThreadId; evt.Set(); });
             evt.WaitOne();
+            Assert.NotEqual(id, taskTid);
         }
 
         [TestMethod]
         public void TaskPool_ScheduleActionDueNow()
         {
             var id = Environment.CurrentManagedThreadId;
+            int taskTid = 0;
             var nt = TaskPoolScheduler.Default;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(TimeSpan.Zero, () => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
+            nt.Schedule(TimeSpan.Zero, () => { taskTid = Environment.CurrentManagedThreadId; evt.Set(); });
             evt.WaitOne();
+            Assert.NotEqual(id, taskTid);
         }
 
         [TestMethod]
         public void TaskPool_ScheduleActionDue()
         {
             var id = Environment.CurrentManagedThreadId;
+            int taskTid = 0;
             var nt = TaskPoolScheduler.Default;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(TimeSpan.FromMilliseconds(1), () => { Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
+            nt.Schedule(TimeSpan.FromMilliseconds(1), () => { taskTid = Environment.CurrentManagedThreadId; evt.Set(); });
             evt.WaitOne();
+            Assert.NotEqual(id, taskTid);
         }
 
         [TestMethod]
@@ -71,7 +77,7 @@ namespace ReactiveTests.Tests
             var id = Environment.CurrentManagedThreadId;
             var nt = TaskPoolScheduler.Default;
             var set = false;
-            var d = nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.True(false); set = true; });
+            var d = nt.Schedule(TimeSpan.FromSeconds(0.2), () => { set = true; });
             d.Dispose();
             Thread.Sleep(400);
             Assert.False(set);
