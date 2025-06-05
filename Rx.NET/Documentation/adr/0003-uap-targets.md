@@ -64,7 +64,7 @@ These next sections explain some of the contextual information required to under
 
 The precise TFM recent versions have targetted for UWP is `uap10.0.18362`. The version number determines the UWP API version that is available to the code. We moved to this (from `uap10.0.16299`) in March 2023 as part of the work required to get Rx.NET building on Visual Studio 2022. This was a very conservative choice: it was the lowest version we could use that would work with the current tooling. The most recent version of Windows not to support 18362 had already been out of support for several years back when we did this.
 
-Weith this latest update to move off `MSBuild.SDK.Extras` we don't see any reason to change. Visual Studio 2022 is still the latest version, and it continues to support 10.0.18362 as a target version.
+With this latest update to move off `MSBuild.SDK.Extras` we don't see any reason to change. Visual Studio 2022 is still the latest version, and it continues to support 10.0.18362 as a target version.
 
 Note that the Windows version in a version-specific TFM doesn't strictly determine the OS minimum version. It determines which OS API version you build against, so in fact it determines how recent a set of OS APIs you can _attempt_ to use, but it is technically possible to write code that attempts to use an OS API but gracefully downgrades behaviour if that API is not present. So it is possible for components to specify a lower `TargetPlatformMinVersion` than the version in their TFM.
 
