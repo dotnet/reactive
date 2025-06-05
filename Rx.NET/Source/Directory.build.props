@@ -118,7 +118,7 @@
     CA1510 - use ArgumentNullException.ThrowIf (not available on all targets)
     CA1513 - use ObjectDisposedException.ThrowIf (not available on all targets)
     -->
-    <NoWarn>$(NoWarn);CA1001;CA2213;CA1510;CA1513;IDE0056;IDE0057;IDE0130;IDE0290;IDE0305;IDE0306</NoWarn>
+    <NoWarn>$(NoWarn);CA1001;CA2213;CA1510;CA1513;IDE0028;IDE0056;IDE0057;IDE0130;IDE0290;IDE0305;IDE0306</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
