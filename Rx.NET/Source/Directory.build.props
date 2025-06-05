@@ -93,6 +93,10 @@
                 a chance to shut down. Each of these likely needs individual review:
                 https://github.com/dotnet/reactive/issues/1927
 
+    IDE0028 - Suggests Collection expressions in place of construction, e.g. replaces new List<int>(x)
+              [.. x]. To me, this is less readable, and it doesn't improve performance, as far as we know.
+              Annoyingly, we don't seem to be able to configure this to apply only when it would not
+              introduce a spread.
     IDE0056 - Use of index/range syntax - relevant types not available on all targets, so we can't
     IDE0057     do this.
 
