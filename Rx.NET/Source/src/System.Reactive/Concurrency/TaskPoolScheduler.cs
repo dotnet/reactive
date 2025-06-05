@@ -102,7 +102,7 @@ namespace System.Reactive.Concurrency
                 TaskHelpers.Delay(dueTime, ct.Token).ContinueWith(
                     static (_, args) =>
                     {
-                        (var thisObject, var scheduler, int launchingThreadId) =
+                        (var thisObject, var scheduler, var launchingThreadId) =
                             ((SlowlyScheduledWorkItem<TState>, TaskScheduler, int))args!;
                         if (Environment.CurrentManagedThreadId == launchingThreadId)
                         {

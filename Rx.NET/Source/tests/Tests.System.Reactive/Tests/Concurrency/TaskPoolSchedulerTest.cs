@@ -39,7 +39,7 @@ namespace ReactiveTests.Tests
         public void TaskPool_ScheduleAction()
         {
             var id = Environment.CurrentManagedThreadId;
-            int taskTid = 0;
+            var taskTid = 0;
             var nt = TaskPoolScheduler.Default;
             var evt = new ManualResetEvent(false);
             nt.Schedule(() => { taskTid = Environment.CurrentManagedThreadId; evt.Set(); });
@@ -51,7 +51,7 @@ namespace ReactiveTests.Tests
         public void TaskPool_ScheduleActionDueNow()
         {
             var id = Environment.CurrentManagedThreadId;
-            int taskTid = 0;
+            var taskTid = 0;
             var nt = TaskPoolScheduler.Default;
             var evt = new ManualResetEvent(false);
             nt.Schedule(TimeSpan.Zero, () => { taskTid = Environment.CurrentManagedThreadId; evt.Set(); });
@@ -63,7 +63,7 @@ namespace ReactiveTests.Tests
         public void TaskPool_ScheduleActionDue()
         {
             var id = Environment.CurrentManagedThreadId;
-            int taskTid = 0;
+            var taskTid = 0;
             var nt = TaskPoolScheduler.Default;
             var evt = new ManualResetEvent(false);
             nt.Schedule(TimeSpan.FromMilliseconds(1), () => { taskTid = Environment.CurrentManagedThreadId; evt.Set(); });
