@@ -78,7 +78,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                Observable.OnErrorResumeNext(new[] { xs1, xs2, xs3 })
+                Observable.OnErrorResumeNext([xs1, xs2, xs3])
             );
 
             res.Messages.AssertEqual(

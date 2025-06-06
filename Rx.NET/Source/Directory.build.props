@@ -39,7 +39,7 @@
     -->
     <PackageReference
       Include="Nerdbank.GitVersioning"
-      Version="3.6.128"
+      Version="3.6.143"
       PrivateAssets="all"
       Condition="$(ProjectName) != 'Tests.System.Reactive.Uwp.DeviceRunner'" />
   </ItemGroup>
@@ -51,6 +51,27 @@
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
     <PackageReference Include="coverlet.collector" Version="3.2.0" />
   </ItemGroup>
+
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
+    <!--
+    See 0003-uap-targets.md ADR in documentation for the reasons behind these settings.
+    -->
+    <NoStdLib>True</NoStdLib>
+
+    <TargetPlatformMinVersion>10.0.18362</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
+
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetFrameworkMoniker>.NETCore,Version=v5.0</TargetFrameworkMoniker>
+    <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <NugetTargetMoniker>UAP,Version=v10.0</NugetTargetMoniker>
+
+    <DefineConstants>$(DefineConstants);WINDOWS_UWP</DefineConstants>
+
+  </PropertyGroup>
+
 
   <PropertyGroup>
     <AnalysisLevelDesign>7.0-default</AnalysisLevelDesign>
@@ -72,8 +93,15 @@
                 a chance to shut down. Each of these likely needs individual review:
                 https://github.com/dotnet/reactive/issues/1927
 
+    IDE0028 - Suggests Collection expressions in place of construction, e.g. replaces new List<int>(x)
+              [.. x]. To me, this is less readable, and it doesn't improve performance, as far as we know.
+              Annoyingly, we don't seem to be able to configure this to apply only when it would not
+              introduce a spread.
     IDE0056 - Use of index/range syntax - relevant types not available on all targets, so we can't
     IDE0057     do this.
+
+    IDE0130 - Namespace does not match folder structure. Conforming to this would be a significant
+                upheaval, and it's not clear that it would be an improvement.
 
     IDE0290 - Primary ctors. This diagnostic suggests them in a lot of places where we don't want
                 them. E.g., in most types with multiple constructors I find I prefer not to have
@@ -84,11 +112,13 @@
                   [.. readyList]
               This won't improve performance as far as we know (sometimes a reason for using that
               syntax), and it's not obviously an improvement in readability.
+    IDE0306 - Suggests Collection expressions in place of construction, e.g. replaces new List<int>(x)
+              [.. x]. To me, this is less readable, and it doesn't improve performance, as far as we know.
 
     CA1510 - use ArgumentNullException.ThrowIf (not available on all targets)
     CA1513 - use ObjectDisposedException.ThrowIf (not available on all targets)
     -->
-    <NoWarn>$(NoWarn);CA1001;CA2213;CA1510;CA1513;IDE0056;IDE0057;IDE0290;IDE0305</NoWarn>
+    <NoWarn>$(NoWarn);CA1001;CA2213;CA1510;CA1513;IDE0028;IDE0056;IDE0057;IDE0130;IDE0290;IDE0305;IDE0306</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

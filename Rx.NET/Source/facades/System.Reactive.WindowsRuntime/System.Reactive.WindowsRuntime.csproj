@@ -1,7 +1,12 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>uap10.0.18362</TargetFramework>
+    <!--
+    Note: this targets just one framework, we need to use the TargetFrameworks property because
+    the way we enable uap TFMs despite the .NET SDK not fully supporting only works when the build
+    is in multi-target mode. See ../../../Documentation/adr/0003-uap-targets.md for details.
+    -->
+    <TargetFrameworks>uap10.0.18362</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -89,17 +89,48 @@ namespace System.Reactive.Concurrency
                 var ct = new CancellationDisposable();
                 _cancel.Disposable = ct;
 
-                TaskHelpers.Delay(dueTime, ct.Token).ContinueWith(
-                    (_, thisObject) =>
-                    {
-                        var @this = (SlowlyScheduledWorkItem<TState>)thisObject!;
+                static void RunWork(object? thisObject)
+                {
+                    var @this = (SlowlyScheduledWorkItem<TState>)thisObject!;
 
-                        if (!@this._cancel.IsDisposed)
+                    if (!@this._cancel.IsDisposed)
+                    {
+                        @this._cancel.Disposable = @this._action(@this._scheduler, @this._state);
+                    }
+                };
+
+                TaskHelpers.Delay(dueTime, ct.Token).ContinueWith(
+                    static (_, args) =>
+                    {
+                        (var thisObject, var scheduler, var launchingThreadId) =
+                            ((SlowlyScheduledWorkItem<TState>, TaskScheduler, int))args!;
+                        if (Environment.CurrentManagedThreadId == launchingThreadId)
                         {
-                            @this._cancel.Disposable = @this._action(@this._scheduler, @this._state);
+                            // Our request to run this continuation sychronously might have worked slightly too well:
+                            // we are on the same thread that called ContinueWith. This usually indicates that
+                            // the Delay completed before we added the continuation, so we're running inside
+                            // the call to ContinueWith. This can happen from time to time when a very short
+                            // delay has been requested. (This only seems to have started happening with .NET 9.0.)
+                            // Code may be relying on us not invoking work items inside the call to
+                            // IScheduler.Schedule - often work is delivered via the scheduler to avoid stack
+                            // overflows, so we now to run this asynchronously.
+                            // Note that it's possible that we're not in fact in this situation: it's possible
+                            // that we are being invoked asynchronously, and simply happen to be on the same thread
+                            // that initially queued the work. In that case, this asynchronous scheduling of the
+                            // work adds some unnecessary overhead, but won't cause harm.
+                            // (A simpler fix would be to remove the TaskContinuationOptions.ExecuteSynchronously
+                            // below, but that would increase overhead in the common case: the task completion
+                            // login in the CLR would _always_ end up scheduling a new task for us. This more
+                            // complex logic avoids that overhead in most cases.)
+                            var t = new Task(RunWork, thisObject);
+                            t.Start(scheduler);
+                        }
+                        else
+                        {
+                            RunWork(thisObject);
                         }
                     },
-                    this,
+                    (this, scheduler._taskFactory.Scheduler ?? TaskScheduler.Default, Environment.CurrentManagedThreadId),
                     CancellationToken.None,
                     TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion,
                     scheduler._taskFactory.Scheduler ?? TaskScheduler.Default);

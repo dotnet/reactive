@@ -484,7 +484,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void For_ArgumentNullChecks()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.For(null, new[] { 1 }, i => _qbMy));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.For(null, [1], i => _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.For(_qbp, default(IEnumerable<int>), i => _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.For(_qbp, [1], default(Expression<Func<int, IObservable<int>>>)));
         }
@@ -492,7 +492,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void For()
         {
-            _qbp.For(new[] { 1 }, i => _qbMy);
+            _qbp.For([1], i => _qbMy);
         }
 
         [TestMethod]
@@ -1421,18 +1421,18 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void ToObservable_ArgumentNullChecks()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(null, new[] { 1 }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(null, [1]));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(_qbp, default(IEnumerable<int>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(null, new[] { 1 }, Scheduler.Immediate));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(null, [1], Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(_qbp, default(IEnumerable<int>), Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(_qbp, new[] { 1 }, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(_qbp, [1], default));
         }
 
         [TestMethod]
         public void ToObservable()
         {
-            _qbp.ToObservable(new[] { 1 });
-            _qbp.ToObservable(new[] { 1 }, Scheduler.Immediate);
+            _qbp.ToObservable([1]);
+            _qbp.ToObservable([1], Scheduler.Immediate);
         }
 
         [TestMethod]
@@ -1533,7 +1533,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbNull, _qbMy, (a, b) => a + b));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbMy, _qbNull, (a, b) => a + b));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbMy, _qbMy, default(Expression<Func<int, int, int>>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbNull, new[] { 1 }, (a, b) => a + b));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbNull, [1], (a, b) => a + b));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbMy, default(IEnumerable<int>), (a, b) => a + b));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbMy, [1], default(Expression<Func<int, int, int>>)));
         }
@@ -1542,7 +1542,7 @@ namespace ReactiveTests.Tests
         public void Zip()
         {
             _qbMy.Zip(_qbMy, (a, b) => a + b);
-            _qbMy.Zip(new[] { 1 }, (a, b) => a + b);
+            _qbMy.Zip([1], (a, b) => a + b);
         }
 
         [TestMethod]

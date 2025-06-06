@@ -117,7 +117,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                Observable.Concat(new[] { xs1, xs2, xs3 })
+                Observable.Concat([xs1, xs2, xs3])
             );
 
             res.Messages.AssertEqual(
