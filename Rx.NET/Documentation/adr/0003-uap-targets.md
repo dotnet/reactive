@@ -171,7 +171,7 @@ You might be wondering about that 19041 in there. Why is that not 18362, consist
 
 #### Prevent Over-Zealous WinRT Interop Code Generation
 
-The .NET SDK has a feature by which it can generate WinRT versions of .NET types to enable interop between .NET and WinRT code. Unfortunately, the way we've rigged things up to be able to build for `uap10.0.18362.0` seems to cause this to generate these interop types for any .NET class that implements `IDisposable`! This is not helpful. So we disable the feature:
+The .NET SDK has a feature by which it can generate WinRT versions of .NET types to enable interop between .NET and WinRT code. Unfortunately, the way we've rigged things up to be able to build for `uap10.0.18362.0` seems to cause this to generate these interop types for any .NET class that implements `IDisposable`! This is not helpful. So we disable the feature in `Directory.build.targets`:
 
 ```xml
 <CsWinRTAotOptimizerEnabled>false</CsWinRTAotOptimizerEnabled>
