@@ -52,28 +52,21 @@ namespace System.Linq.Async.SourceGenerator
 
         private static string GenerateOverloads(AsyncMethodGrouping grouping, GenerationOptions options)
         {
-            var usings = grouping.SyntaxTree.GetRoot() is CompilationUnitSyntax compilationUnit
-                ? compilationUnit.Usings.ToString()
-                : string.Empty;
+            var compilationRoot = grouping.SyntaxTree.GetCompilationUnitRoot();
+            var namespaceDeclaration = compilationRoot.ChildNodes().OfType<NamespaceDeclarationSyntax>().Single();
+            var classDeclaration = namespaceDeclaration.ChildNodes().OfType<ClassDeclarationSyntax>().Single();
 
-            var overloads = new StringBuilder();
-            overloads.AppendLine("#nullable enable");
-            overloads.AppendLine(usings);
-            overloads.AppendLine("namespace System.Linq");
-            overloads.AppendLine("{");
-            overloads.AppendLine("    partial class AsyncEnumerable");
-            overloads.AppendLine("    {");
-
-            foreach (var method in grouping.Methods)
-                overloads.AppendLine(GenerateOverload(method, options));
-
-            overloads.AppendLine("    }");
-            overloads.AppendLine("}");
-
-            return overloads.ToString();
+            return CompilationUnit()
+                .WithUsings(List(compilationRoot.Usings.Select(@using => @using.WithoutTrivia())))
+                .AddMembers(NamespaceDeclaration(namespaceDeclaration.Name)
+                    .AddMembers(ClassDeclaration(classDeclaration.Identifier)
+                        .AddModifiers(Token(SyntaxKind.PartialKeyword))
+                        .WithMembers(List(grouping.Methods.Select(method => GenerateOverload(method, options))))))
+                .NormalizeWhitespace()
+                .ToFullString();
         }
 
-        private static string GenerateOverload(AsyncMethod method, GenerationOptions options)
+        private static MemberDeclarationSyntax GenerateOverload(AsyncMethod method, GenerationOptions options)
             => MethodDeclaration(method.Syntax.ReturnType, GetMethodName(method.Symbol, options))
                 .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
                 .WithTypeParameterList(method.Syntax.TypeParameterList)
@@ -87,9 +80,7 @@ namespace System.Linq.Async.SourceGenerator
                                 method.Syntax.ParameterList.Parameters
                                     .Select(p => Argument(IdentifierName(p.Identifier))))))))
                 .WithSemicolonToken(Token(SyntaxKind.SemicolonToken))
-                .WithLeadingTrivia(method.Syntax.GetLeadingTrivia().Where(t => t.GetStructure() is not DirectiveTriviaSyntax))
-                .NormalizeWhitespace()
-                .ToFullString();
+                .WithLeadingTrivia(method.Syntax.GetLeadingTrivia().Where(t => t.GetStructure() is not DirectiveTriviaSyntax));
 
         private static INamedTypeSymbol GetAsyncOverloadAttributeSymbol(GeneratorExecutionContext context)
             => context.Compilation.GetTypeByMetadataName("System.Linq.GenerateAsyncOverloadAttribute") ?? throw new InvalidOperationException();
