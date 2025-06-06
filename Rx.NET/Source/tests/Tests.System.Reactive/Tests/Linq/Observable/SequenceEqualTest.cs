@@ -25,7 +25,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, default(IObservable<int>), EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, DummyObservable<int>.Instance, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(default, new[] { 42 }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(default, [42]));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, default(IEnumerable<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(default, [42], EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, default(IEnumerable<int>), EqualityComparer<int>.Default));

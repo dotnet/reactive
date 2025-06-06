@@ -29,7 +29,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void AnonymousDisposable_CreateNull()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => Disposable.Create(null));
+            Assert.Throws<ArgumentNullException>(() => Disposable.Create(null));
         }
 
         [TestMethod]
