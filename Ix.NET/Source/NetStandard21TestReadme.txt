@@ -1,0 +1,5 @@
+Ix.NET 6.0 offers a .NET Standard 2.1 target, but currently, we have no way of testing this.
+
+We used to test this target by running tests in .NET Core 3.1. Unfortunately, the test runners now crash when running tests in .NET Core 3.1. .NET Core 3.1 has long since been out of support, so there's not much we can do about this. (It now reports the absence of ssllib on the hosted build agents.)
+
+Although current versions of .NET (but not .NET Framework) support .NET Standard 2.1, they are all going to prefer the net6.0 target. It might be possible to test via Mono instead, or possibly even Unity, but this would likely involve additional CI/CD work. But for now this target is untested. If we can't find a way to test netstandard2.1, that suggests there's no scenario in which it is useful now, so we may remove it in a future release.
