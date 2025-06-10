@@ -5,7 +5,8 @@
     "^refs/heads/rel/v\\d+\\.\\d+", // we also release branches starting with vN.N
     "^refs/heads/rel/ix-v\\d+\\.\\d+" // we also release branches starting with vN.N
   ],
-  "nugetPackageVersion":{
+  "nugetPackageVersion": {
     "semVer": 2
-  }
+  },
+  "versionHeightOffset": -6
 }
