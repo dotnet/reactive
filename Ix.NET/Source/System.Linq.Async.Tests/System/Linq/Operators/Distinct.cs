@@ -52,8 +52,9 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
 
-            var res = new[] { 1, 2, 3, 5, 4 };
-            Assert.True(res.SequenceEqual(await xs.ToArrayAsync()));
+            var expected = new[] { 1, 2, 3, 5, 4 };
+            var actual = await xs.ToArrayAsync();
+            Assert.True(expected.SequenceEqual(actual));
         }
 
         [Fact]

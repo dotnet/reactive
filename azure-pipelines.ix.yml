@@ -29,7 +29,7 @@ stages:
   jobs:
   - job: Build
     pool:
-      vmImage: ubuntu-latest
+      vmImage: windows-latest
     steps:
     - task: UseDotNet@2
       displayName: Use .NET Core 8.x SDK
@@ -42,12 +42,6 @@ stages:
         version: '6.x'
         packageType: runtime
 
-    - task: UseDotNet@2
-      displayName: .NET Core 3.1 runtime
-      inputs:
-        version: '3.1.x'
-        packageType: runtime
-
     - task: DotNetCoreCLI@2
       inputs:
         command: custom
@@ -55,7 +49,7 @@ stages:
         arguments: install --tool-path . nbgv
       displayName: Install NBGV tool
 
-    - script: ./nbgv cloud -p Ix.NET/Source
+    - script: nbgv cloud -a -p Ix.NET/Source
       displayName: Set Version
 
     - task: DotNetCoreCLI@2
@@ -97,7 +91,7 @@ stages:
         arguments: -c $(BuildConfiguration) --settings Ix.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
       displayName: Run Tests
 
-    - script: ./reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
+    - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
       displayName: Create reports
 
     - task: PublishCodeCoverageResults@1
