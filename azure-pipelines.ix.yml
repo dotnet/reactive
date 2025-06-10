@@ -49,7 +49,7 @@ stages:
         arguments: install --tool-path . nbgv
       displayName: Install NBGV tool
 
-    - script: ./nbgv cloud -p Ix.NET/Source
+    - script: nbgv cloud -a -p Ix.NET/Source
       displayName: Set Version
 
     - task: DotNetCoreCLI@2
