@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- See NetCore31TestReadme.txt for why we still use netcoreapp3.1 -->
-    <TargetFrameworks>net48;net8.0;net6.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net48;net8.0;net6.0</TargetFrameworks>
 
     <!--
       CA1822: Make member static. Not necessary for test code.

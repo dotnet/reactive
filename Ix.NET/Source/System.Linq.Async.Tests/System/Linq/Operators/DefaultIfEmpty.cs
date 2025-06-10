@@ -136,9 +136,10 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
 
-            var res = new[] { 42 };
+            var expected = new[] { 42 };
+            var actual = await xs.ToArrayAsync();
 
-            Assert.True(res.SequenceEqual(await xs.ToArrayAsync()));
+            Assert.True(expected.SequenceEqual(actual));
         }
 
         [Fact]
@@ -156,9 +157,10 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty();
 
-            var res = new[] { 1, 2, 3, 4 };
+            var expected = new[] { 1, 2, 3, 4 };
 
-            Assert.True(res.SequenceEqual(await xs.ToArrayAsync()));
+            var actual = await xs.ToArrayAsync();
+            Assert.True(expected.SequenceEqual(actual));
         }
 
         [Fact]
