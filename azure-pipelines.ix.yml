@@ -130,8 +130,8 @@ stages:
               performMultiLevelLookup: true
 
           - task: DotNetCoreCLI@2
+            displayName: Install sign tool
             inputs:
-            displayName: Install SignTool tool
               command: custom
               custom: tool
               arguments: install --tool-path . sign --version 0.9.1-beta.24406.1
