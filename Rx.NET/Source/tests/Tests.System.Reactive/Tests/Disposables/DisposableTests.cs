@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -413,6 +414,19 @@ namespace ReactiveTests.Tests
             var composite = new CompositeDisposable();
 
             Assert.False(composite.GetEnumerator().MoveNext());
+        }
+
+        [TestMethod]
+        public void CompositeDisposable_DisposeWith()
+        {
+            var c = new CompositeDisposable();
+            var d = new BooleanDisposable();
+            d.DisposeWith(c);
+            Assert.True(c.Contains(d));
+
+            c.Dispose();
+            Assert.True(d.IsDisposed);
+            Assert.True(c.IsDisposed);
         }
 
         [TestMethod]
