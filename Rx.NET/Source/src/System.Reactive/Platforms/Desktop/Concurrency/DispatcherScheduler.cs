@@ -9,11 +9,17 @@ using System.Threading;
 namespace System.Reactive.Concurrency
 {
     /// <summary>
-    /// Represents an object that schedules units of work on a <see cref="System.Windows.Threading.Dispatcher"/>.
+    /// Obsolete. The <c>System.Reactive.For.Wpf</c> NuGet package defines a
+    /// <c>DispatcherScheduler</c> class in the <c>System.Reactive.Wpf</c>
+    /// namespace that replaces this class.
     /// </summary>
     /// <remarks>
-    /// This scheduler type is typically used indirectly through the <see cref="Linq.DispatcherObservable.ObserveOnDispatcher{TSource}(IObservable{TSource})"/> and <see cref="Linq.DispatcherObservable.SubscribeOnDispatcher{TSource}(IObservable{TSource})"/> methods that use the Dispatcher on the calling thread.
+    /// This will eventually be removed because all UI-framework-specific functionality is being
+    /// removed from <c>System.Reactive</c>. This is necessary to fix problems in which
+    /// <c>System.Reactive</c> causes applications to end up with dependencies on Windows Forms and
+    /// WPF whether they want them or not.
     /// </remarks>
+    [Obsolete("Use System.Reactive.Wpf.DispatcherScheduler in the System.Reactive.For.Wpf package instead", error: false)]
     public class DispatcherScheduler : LocalScheduler, ISchedulerPeriodic
     {
         /// <summary>
