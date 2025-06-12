@@ -23,7 +23,7 @@ namespace System.Linq
             // Not an expression representation obtained from the async enumerable query provider,
             // so just a plain constant that can be returned as-is.
             //
-            if (!(node.Value is AsyncEnumerableQuery enumerableQuery))
+            if (node.Value is not AsyncEnumerableQuery enumerableQuery)
             {
                 return node;
             }
@@ -46,7 +46,7 @@ namespace System.Linq
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
-            var obj = Visit(node.Object);
+            var obj = Visit(node.Object)!;
             var args = Visit(node.Arguments);
 
             //
@@ -396,10 +396,7 @@ namespace System.Linq
             //
             // Ensure the cached lookup table for AsyncEnumerable methods is initialized.
             //
-            if (_methods == null)
-            {
-                _methods = typeof(AsyncEnumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).ToLookup(m => m.Name);
-            }
+            _methods ??= typeof(AsyncEnumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).ToLookup(m => m.Name);
 
             //
             // Find a match based on the method name and the argument types.

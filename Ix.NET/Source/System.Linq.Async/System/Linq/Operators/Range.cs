@@ -48,7 +48,7 @@ namespace System.Linq
 
             public override AsyncIteratorBase<int> Clone() => new RangeAsyncIterator(_start, _end - _start);
 
-            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(_end - _start);
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new(_end - _start);
 
             public IAsyncPartition<int> Skip(int count)
             {
@@ -110,9 +110,9 @@ namespace System.Linq
                 return new ValueTask<Maybe<int>>(new Maybe<int>());
             }
 
-            public ValueTask<Maybe<int>> TryGetFirstAsync(CancellationToken cancellationToken) => new ValueTask<Maybe<int>>(new Maybe<int>(_start));
+            public ValueTask<Maybe<int>> TryGetFirstAsync(CancellationToken cancellationToken) => new(new Maybe<int>(_start));
 
-            public ValueTask<Maybe<int>> TryGetLastAsync(CancellationToken cancellationToken) => new ValueTask<Maybe<int>>(new Maybe<int>(_end - 1));
+            public ValueTask<Maybe<int>> TryGetLastAsync(CancellationToken cancellationToken) => new(new Maybe<int>(_end - 1));
 
             protected override ValueTask<bool> MoveNextCore()
             {

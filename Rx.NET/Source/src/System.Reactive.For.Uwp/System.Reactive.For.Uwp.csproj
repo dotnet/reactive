@@ -1,9 +1,5 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <!--
-  TODO: should this be an old-style project so we don't take yet another
-  dependency on MSBuild.Sdk.Extras, which we'd like to stop using?
-  -->
   <PropertyGroup>
     <TargetFramework>uap10.0.18362</TargetFramework>
 
@@ -31,7 +27,7 @@
 
   <ItemGroup>
     <Compile Update="Strings_PlatformServices.Designer.cs">
-      <DependentUpon>$([MSBuild]::ValueOrDefault('%(Filename)', '').Replace('$(ExtrasDefaultDesignerFileSuffix)', '.resx'))</DependentUpon>
+      <DependentUpon>$([MSBuild]::ValueOrDefault('%(Filename)', '').Replace('.Designer.cs', '.resx'))</DependentUpon>
     </Compile>
   </ItemGroup>
 

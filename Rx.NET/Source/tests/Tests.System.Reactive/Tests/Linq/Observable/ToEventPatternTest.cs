@@ -50,7 +50,7 @@ namespace ReactiveTests.Tests
 
             src.OnNext(new EventPattern<EventArgs<int>>(snd, new EventArgs<int>(44)));
 
-            Assert.True(lst.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(lst.SequenceEqual([42, 43]));
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws(ex, () => src.OnError(ex));
 
-            Assert.True(lst.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(lst.SequenceEqual([42, 43]));
         }
 
         [TestMethod]
@@ -102,7 +102,7 @@ namespace ReactiveTests.Tests
 
             src.OnCompleted();
 
-            Assert.True(lst.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(lst.SequenceEqual([42, 43]));
         }
 
         private class EventSrc
@@ -151,7 +151,7 @@ namespace ReactiveTests.Tests
 
             src.On("qux");
 
-            Assert.True(lst.SequenceEqual(new[] { "foo", "baz" }));
+            Assert.True(lst.SequenceEqual(["foo", "baz"]));
         }
 
         [TestMethod]

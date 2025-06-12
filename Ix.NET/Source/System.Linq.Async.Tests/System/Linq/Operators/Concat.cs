@@ -104,8 +104,9 @@ namespace Tests
 
             var c = xs.Concat(ys).Concat(zs);
 
-            var res = new[] { 1, 2, 3, 4, 5, 6, 7, 8 };
-            Assert.True(res.SequenceEqual(await c.ToArrayAsync()));
+            var expected = new[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+            var actual = await c.ToArrayAsync();
+            Assert.True(expected.SequenceEqual(actual));
         }
 
         [Fact]

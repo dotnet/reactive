@@ -694,13 +694,13 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Delay_TimeSpan_DefaultScheduler()
         {
-            Assert.True(Observable.Return(1).Delay(TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual(new[] { 1 }));
+            Assert.True(Observable.Return(1).Delay(TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual([1]));
         }
 
         [TestMethod]
         public void Delay_DateTimeOffset_DefaultScheduler()
         {
-            Assert.True(Observable.Return(1).Delay(DateTimeOffset.UtcNow + TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual(new[] { 1 }));
+            Assert.True(Observable.Return(1).Delay(DateTimeOffset.UtcNow + TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual([1]));
         }
 
         [TestMethod]
@@ -761,7 +761,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.Delay(x => scheduler.CreateColdObservable(new[] { OnNext(x, "!") }))
+                xs.Delay(x => scheduler.CreateColdObservable([OnNext(x, "!")]))
             );
 
             res.Messages.AssertEqual(
@@ -1515,7 +1515,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.Delay(ys, x => scheduler.CreateColdObservable(new[] { OnNext(x, "!") }))
+                xs.Delay(ys, x => scheduler.CreateColdObservable([OnNext(x, "!")]))
             );
 
             res.Messages.AssertEqual(
@@ -1555,7 +1555,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.Delay(ys, x => scheduler.CreateColdObservable(new[] { OnNext(x, "!") }))
+                xs.Delay(ys, x => scheduler.CreateColdObservable([OnNext(x, "!")]))
             );
 
             res.Messages.AssertEqual(
@@ -1595,7 +1595,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.Delay(ys, x => scheduler.CreateColdObservable(new[] { OnNext(x, "!") })),
+                xs.Delay(ys, x => scheduler.CreateColdObservable([OnNext(x, "!")])),
                 255
             );
 
@@ -1632,7 +1632,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.Delay(ys, x => scheduler.CreateColdObservable(new[] { OnNext(x, "!") })),
+                xs.Delay(ys, x => scheduler.CreateColdObservable([OnNext(x, "!")])),
                 255
             );
 
@@ -1669,7 +1669,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.Delay(ys, x => scheduler.CreateColdObservable(new[] { OnNext(x, "!") }))
+                xs.Delay(ys, x => scheduler.CreateColdObservable([OnNext(x, "!")]))
             );
 
             res.Messages.AssertEqual(

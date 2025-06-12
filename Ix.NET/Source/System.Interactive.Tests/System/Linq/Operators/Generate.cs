@@ -22,7 +22,7 @@ namespace Tests
         public void Generate1()
         {
             var res = EnumerableEx.Generate(0, x => x < 5, x => x + 1, x => x * x).ToList();
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 0, 1, 4, 9, 16 }));
+            Assert.True(Enumerable.SequenceEqual(res, [0, 1, 4, 9, 16]));
         }
     }
 }

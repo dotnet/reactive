@@ -38,7 +38,7 @@ For nightly builds, configure NuGet to use this feed: `https://pkgs.dev.azure.co
 
 ### Join the conversation
 
-Catch us in the #rxnet channel over at http://reactiveui.net/slack
+Catch us in the #rxnet channel over at https://reactivex.slack.com/
 
 ## A Brief Introduction to Rx
 
@@ -51,7 +51,8 @@ Rx elevates the support for live streams of information to the same level as we 
 ```cs
 var bigTrades =
     from trade in trades
-    where trade.Volume > 1_000_000;
+    where trade.Volume > 1_000_000
+    select trade;
 ```
 
 This uses C#'s LINQ feature to filter `trades` down to those entities with a volume greater than one million. This query expression syntax is just a shorthand for method calls, so we could also write it this way:

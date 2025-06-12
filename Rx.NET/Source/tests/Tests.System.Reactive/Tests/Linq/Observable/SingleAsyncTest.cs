@@ -266,7 +266,7 @@ namespace ReactiveTests.Tests
             {
                 static void AssertException(Exception e)
                 {
-                    Assert.IsType(typeof(InvalidOperationException), e);
+                    Assert.IsType<InvalidOperationException>(e);
 
                     Assert.NotNull(e.StackTrace);
                     Assert.NotEqual("", e.StackTrace);

@@ -29,7 +29,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void AnonymousDisposable_CreateNull()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => Disposable.Create(null));
+            Assert.Throws<ArgumentNullException>(() => Disposable.Create(null));
         }
 
         [TestMethod]
@@ -196,7 +196,7 @@ namespace ReactiveTests.Tests
             var g = new CompositeDisposable(d1, d2);
             Assert.Equal(2, g.Count);
             var x = Enumerable.ToArray(g);
-            Assert.True(g.ToArray().SequenceEqual(new[] { d1, d2 }));
+            Assert.True(g.ToArray().SequenceEqual([d1, d2]));
         }
 
         [TestMethod]
@@ -211,7 +211,7 @@ namespace ReactiveTests.Tests
                 lst.Add(x);
             }
 
-            Assert.True(lst.SequenceEqual(new[] { d1, d2 }));
+            Assert.True(lst.SequenceEqual([d1, d2]));
         }
 
         [TestMethod]
@@ -226,7 +226,7 @@ namespace ReactiveTests.Tests
                 lst.Add(x);
             }
 
-            Assert.True(lst.SequenceEqual(new[] { d1, d2 }));
+            Assert.True(lst.SequenceEqual([d1, d2]));
         }
 
         [TestMethod]
@@ -252,7 +252,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void CompositeDisposable_AddNull_via_IEnum_ctor()
         {
-            IEnumerable<IDisposable> values = new IDisposable[] { null };
+            IEnumerable<IDisposable> values = [null];
 #pragma warning disable CA1806 // (Unused new instance.) We expect the constructor to throw.
             ReactiveAssert.Throws<ArgumentException>(() => new CompositeDisposable(values));
 #pragma warning restore CA1806
@@ -882,7 +882,7 @@ namespace ReactiveTests.Tests
             var disp3 = false;
             var d3 = Disposable.Create(() => { Assert.False(disp3); disp3 = true; });
 
-            var d = StableCompositeDisposable.Create(new List<IDisposable>(new[] { d1, d2, d3 }));
+            var d = StableCompositeDisposable.Create(new List<IDisposable>([d1, d2, d3]));
 
             Assert.False(disp1);
             Assert.False(disp2);

@@ -10,7 +10,11 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)ReactiveX.snk</AssemblyOriginatorKeyFile>
-    <NoWarn>$(NoWarn);1701;1702;CS1591;NU5105</NoWarn>
+    <!--
+    IDE0056 Suggests using range-based indexing, which doesn't work on .NET 4.8 (even in cases where it would compile down to code with no dependency on Index or Range).
+    IDE0270 Null check can be simplified. Tends to suggest using for exception throwing cases even when the resulting code would be overly complex.
+    -->
+    <NoWarn>$(NoWarn);1701;1702;CS1591;NU5105;IDE0056;IDE0270</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>

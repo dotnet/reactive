@@ -25,11 +25,11 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, default(IObservable<int>), EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, DummyObservable<int>.Instance, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(default, new[] { 42 }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(default, [42]));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, default(IEnumerable<int>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(default, new[] { 42 }, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(default, [42], EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, default(IEnumerable<int>), EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, new[] { 42 }, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual(DummyObservable<int>.Instance, [42], default));
         }
 
         [TestMethod]
@@ -733,7 +733,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3, 4, 5, 6, 7 })
+                xs.SequenceEqual([3, 4, 5, 6, 7])
             );
 
             res.Messages.AssertEqual(
@@ -763,7 +763,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3, 4, 9, 6, 7 })
+                xs.SequenceEqual([3, 4, 9, 6, 7])
             );
 
             res.Messages.AssertEqual(
@@ -793,7 +793,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3 - 2, 4, 5, 6 + 42, 7 - 6 }, new OddEvenComparer())
+                xs.SequenceEqual([3 - 2, 4, 5, 6 + 42, 7 - 6], new OddEvenComparer())
             );
 
             res.Messages.AssertEqual(
@@ -823,7 +823,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3 - 2, 4, 5 + 9, 6 + 42, 7 - 6 }, new OddEvenComparer())
+                xs.SequenceEqual([3 - 2, 4, 5 + 9, 6 + 42, 7 - 6], new OddEvenComparer())
             );
 
             res.Messages.AssertEqual(
@@ -868,7 +868,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3, 4, 5, 6, 7 }, new ThrowingComparer(5, ex))
+                xs.SequenceEqual([3, 4, 5, 6, 7], new ThrowingComparer(5, ex))
             );
 
             res.Messages.AssertEqual(
@@ -924,7 +924,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3, 4, 5, 6, 7, 8 })
+                xs.SequenceEqual([3, 4, 5, 6, 7, 8])
             );
 
             res.Messages.AssertEqual(
@@ -954,7 +954,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3, 4, 5, 6 })
+                xs.SequenceEqual([3, 4, 5, 6])
             );
 
             res.Messages.AssertEqual(
@@ -983,7 +983,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.SequenceEqual(new[] { 3, 4 })
+                xs.SequenceEqual([3, 4])
             );
 
             res.Messages.AssertEqual(

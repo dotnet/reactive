@@ -31,28 +31,24 @@ stages:
       BuildConfiguration: Release
       BuildPlatform: Any CPU
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      # TODO: work out why the build doesn't set TargetPlatformSdkPath correctly on the build agent
+      TargetPlatformSdkPath: 'C:\Program Files (x86)\Windows Kits\10\'
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET 8.0.x SDK
+      displayName: Use .NET 9.0.x SDK
       inputs:
-        version: 8.0.x
+        version: 9.0.x
         performMultiLevelLookup: true
+        includePreviewVersions: true
 
-    # We need .NET 7.0 and 6.0 to be able to run all tests.
-    # For .NET 7.0, the runtime package is sufficient because we don't need to build anything.
-    # That doesn't work for 6.0, because we need the desktop framework, and the only way to
-    # get that into a build agent seems to be to install the SDK.
+    # We need .NET 8.0 to be able to run all tests.
+    # We can't just use the runtime package because we need the desktop framework,
+    # and the only way to get that into a build agent seems to be to install the SDK.
     - task: UseDotNet@2
-      displayName: Use .NET 7.0 runtime
+      displayName: Use .NET 8.0 SDK
       inputs:
-        version: '7.0.x'
-        packageType: runtime
-
-    - task: UseDotNet@2
-      displayName: Use .NET 6.0 SDK
-      inputs:
-        version: '6.0.x'
+        version: '8.0.x'
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -64,13 +60,12 @@ stages:
     - script: nbgv cloud -a -p Rx.NET/Source
       displayName: Set Version
 
-    - task: MSBuild@1
+    - task: DotNetCoreCLI@2
       displayName: Build System.Reactive.sln
       inputs:
-        solution: Rx.NET/Source/System.Reactive.sln
-        msbuildArguments: /restore /t:build /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
-        configuration: $(BuildConfiguration)
-        maximumCpuCount: false
+        command: build
+        projects: Rx.NET/Source/System.Reactive.sln
+        arguments: -c $(BuildConfiguration) -p:CreatePackage=true -p:NoPackageAnalysis=true -p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
 
     - task: NuGetCommand@2
       displayName: Pack compatibility package
@@ -89,7 +84,7 @@ stages:
       inputs:
         command: test
         projects: Rx.NET/Source/tests/Tests.System.Reactive/*.csproj
-        arguments: -c $(BuildConfiguration) --filter "TestCategory!=SkipCI" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
+        arguments: -c $(BuildConfiguration) --no-build --filter "TestCategory!=SkipCI" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
       displayName: Run Unit Tests
 
     - task: DotNetCoreCLI@2
@@ -264,23 +259,36 @@ stages:
       runOnce:
         deploy:
           steps:
+
+          - task: UseDotNet@2
+            displayName: Use .NET 8.0.x SDK
+            inputs:
+              version: 8.0.x
+              performMultiLevelLookup: true
+
           - task: DotNetCoreCLI@2
+            displayName: Install SignTool tool
             inputs:
               command: custom
               custom: tool
-              arguments: install --tool-path . SignClient
-            displayName: Install SignTool tool
+              arguments: install --tool-path . sign --version 0.9.1-beta.24406.1
 
-          - pwsh: |
-              .\SignClient "Sign" `
-              --baseDirectory "$(Pipeline.Workspace)\BuildPackages" `
-              --input "**/*.nupkg" `
-              --config "$(Pipeline.Workspace)\config\signclient.json" `
-              --user "$(SignClientUser)" `
-              --secret "$(SignClientSecret)" `
-              --name "Rx.NET" `
-              --description "Rx.NET" `
-              --descriptionUrl "https://github.com/dotnet/reactive"
+          # Run the signing command
+
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'Rx.NET Sign Service Connection'
+              scriptType: pscore
+              scriptLocation: inlineScript
+              inlineScript: |
+                .\sign code azure-key-vault `
+                "**/*.nupkg" `
+                --base-directory "$(Pipeline.Workspace)\BuildPackages" `
+                --publisher-name "Reactive Extensions for .NET (.NET Foundation)" `
+                --description "Rx.NET" `
+                --description-url "https://github.com/dotnet/reactive" `
+                --azure-key-vault-url "$(SignKeyVaultUrl)" `
+                --azure-key-vault-certificate "$(SignKeyVaultCertificateName)"
             displayName: Sign packages
 
           - publish: $(Pipeline.Workspace)/BuildPackages

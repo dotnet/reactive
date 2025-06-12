@@ -21,10 +21,10 @@ namespace ReactiveTests.Tests
         {
             var xs = Observable.Return(1).AsQbservable();
 
-            Assert.True(xs.Filter(x => true).ToEnumerable().SequenceEqual(new[] { 1 }), "Filter");
-            Assert.True(xs.Filter(x => true).Concat(xs.Filter(x => false)).ToEnumerable().SequenceEqual(new[] { 1 }), "Concat/Filter");
-            Assert.True(xs.Map(x => x.ToString()).ToEnumerable().SequenceEqual(new[] { "1" }), "Map");
-            Assert.True(xs.FlatMap(x => xs).ToEnumerable().SequenceEqual(new[] { 1 }), "FlatMap");
+            Assert.True(xs.Filter(x => true).ToEnumerable().SequenceEqual([1]), "Filter");
+            Assert.True(xs.Filter(x => true).Concat(xs.Filter(x => false)).ToEnumerable().SequenceEqual([1]), "Concat/Filter");
+            Assert.True(xs.Map(x => x.ToString()).ToEnumerable().SequenceEqual(["1"]), "Map");
+            Assert.True(xs.FlatMap(x => xs).ToEnumerable().SequenceEqual([1]), "FlatMap");
         }
     }
 }

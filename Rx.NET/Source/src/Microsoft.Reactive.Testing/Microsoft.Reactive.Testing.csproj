@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net6.0</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
@@ -9,7 +9,7 @@
     <Description>Reactive Extensions (Rx) for .NET - Testing Library</Description>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <!-- NB: A lot of CA and IDE warnings are disabled because of the .cs files included from xunit.assert.source. -->
-    <NoWarn>$(NoWarn);IDE0054;IDE0066;CA1305;CA1307;CA1032;CA1064;CA1704;CA1822;CA1812;CA1820;CA1823;CA1825;CA1845;CA2249;IDE0016;IDE0018;IDE0019;IDE0020;IDE0031;IDE0039;IDE0044;IDE0059;IDE0074;IDE0270</NoWarn>
+    <NoWarn>$(NoWarn);IDE0054;IDE0066;CA1305;CA1307;CA1032;CA1064;CA1704;CA1822;CA1812;CA1820;CA1823;CA1825;CA1845;CA2249;IDE0016;IDE0018;IDE0019;IDE0020;IDE0028;IDE0031;IDE0039;IDE0044;IDE0059;IDE0074;IDE0090;IDE0270;IDE0300</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -18,16 +18,11 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Properties\*.xml" />
-    <PackageReference Include="xunit.assert.source" Version="2.4.2" PrivateAssets="All" /> 
+    <PackageReference Include="xunit.assert.source" Version="2.8.1" PrivateAssets="All" /> 
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md"/>
-
-    <!--
-    Workaround for https://github.com/xunit/xunit/issues/2703
-    -->
-    <Compile Remove="$(NuGetPackageRoot)xunit.assert.source\**\contentFiles\cs\**\Asserts\Sdk\IAssertionException.cs" />
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
   </ItemGroup>
 </Project>

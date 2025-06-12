@@ -50,17 +50,17 @@ namespace ReactiveTests.Tests.Api
         {
             ApiGeneratorOptions options = new()
             {
-                AllowNamespacePrefixes = new[] { "System", "Microsoft" }
+                AllowNamespacePrefixes = ["System", "Microsoft"]
             };
             return Filter(ApiGenerator.GeneratePublicApi(assembly, options));
         }
 
         private static string Filter(string text)
         {
-            return string.Join(Environment.NewLine, text.Split(new[]
-                                                        {
+            return string.Join(Environment.NewLine, text.Split(
+                                                        [
                                                             Environment.NewLine
-                                                        }, StringSplitOptions.RemoveEmptyEntries)
+                                                        ], StringSplitOptions.RemoveEmptyEntries)
                                                         .Where(l => !l.StartsWith("[assembly: AssemblyVersion("))
                                                         .Where(l => !l.StartsWith("[assembly: AssemblyFileVersion("))
                                                         .Where(l => !l.StartsWith("[assembly: AssemblyInformationalVersion("))

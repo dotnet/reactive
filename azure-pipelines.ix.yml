@@ -29,17 +29,17 @@ stages:
   jobs:
   - job: Build
     pool:
-      vmImage: ubuntu-latest
+      vmImage: windows-latest
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 6.x SDK
+      displayName: Use .NET Core 8.x SDK
       inputs:
-        version: 6.x
+        version: 8.x
 
     - task: UseDotNet@2
-      displayName: .NET Core 3.1 runtime
+      displayName: .NET 6.0 runtime
       inputs:
-        version: '3.1.x'
+        version: '6.x'
         packageType: runtime
 
     - task: DotNetCoreCLI@2
@@ -49,7 +49,7 @@ stages:
         arguments: install --tool-path . nbgv
       displayName: Install NBGV tool
 
-    - script: ./nbgv cloud -p Ix.NET/Source
+    - script: nbgv cloud -a -p Ix.NET/Source
       displayName: Set Version
 
     - task: DotNetCoreCLI@2
@@ -57,6 +57,16 @@ stages:
         command: restore
         projects: Ix.NET/Source/**/*.csproj
       displayName: Restore
+
+    # Since we can no longer use MSBuild.Extras.SDK, the reference assembly projects don't get built automatically
+    # when the corresponding main project run, so we need this extra build step to ensure that the files exist by
+    # the time pack runs
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: build
+        arguments: -c $(BuildConfiguration)
+        projects: Ix.NET/Source/refs/**/*.csproj
+      displayName: Build reference assemblies
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -81,7 +91,7 @@ stages:
         arguments: -c $(BuildConfiguration) --settings Ix.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
       displayName: Run Tests
 
-    - script: ./reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
+    - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
       displayName: Create reports
 
     - task: PublishCodeCoverageResults@1
@@ -112,24 +122,36 @@ stages:
       runOnce:
         deploy:
           steps:
+
+          - task: UseDotNet@2
+            displayName: Use .NET 8.0.x SDK
+            inputs:
+              version: 8.0.x
+              performMultiLevelLookup: true
+
           - task: DotNetCoreCLI@2
+            displayName: Install SignTool tool
             inputs:
               command: custom
               custom: tool
-              arguments: install --tool-path . SignClient
-            displayName: Install SignTool tool
+              arguments: install --tool-path . sign --version 0.9.1-beta.24406.1
 
-          - pwsh: |
-              .\SignClient "Sign" `
-              --baseDirectory "$(Pipeline.Workspace)\BuildPackages" `
-              --input "**/*.nupkg" `
-              --config "$(Pipeline.Workspace)\config\signclient.json" `
-              --user "$(SignClientUser)" `
-              --secret "$(SignClientSecret)" `
-              --name "Ix.NET" `
-              --description "Ix.NET" `
-              --descriptionUrl "https://github.com/dotnet/reactive"
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'Rx.NET Sign Service Connection'
+              scriptType: pscore
+              scriptLocation: inlineScript
+              inlineScript: |
+                .\sign code azure-key-vault `
+                "**/*.nupkg" `
+                --base-directory "$(Pipeline.Workspace)\BuildPackages" `
+                --publisher-name "Reactive Extensions for .NET (.NET Foundation)" `
+                --description "Ix.NET" `
+                --description-url "https://github.com/dotnet/reactive" `
+                --azure-key-vault-url "$(SignKeyVaultUrl)" `
+                --azure-key-vault-certificate "$(SignKeyVaultCertificateName)"
             displayName: Sign packages
+
           - publish: $(Pipeline.Workspace)/BuildPackages
             displayName: Publish Signed Packages
             artifact: SignedPackages

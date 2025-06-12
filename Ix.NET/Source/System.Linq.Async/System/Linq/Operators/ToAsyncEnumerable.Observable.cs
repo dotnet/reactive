@@ -30,7 +30,7 @@ namespace System.Linq
         {
             private readonly IObservable<TSource> _source;
 
-            private ConcurrentQueue<TSource>? _values = new ConcurrentQueue<TSource>();
+            private ConcurrentQueue<TSource>? _values = new();
             private Exception? _error;
             private bool _completed;
             private TaskCompletionSource<bool>? _signal;

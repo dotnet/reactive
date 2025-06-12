@@ -95,6 +95,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Create_ArgumentChecking()
         {
+#pragma warning disable IDE0350 // Use implicitly typed lambda - we want to be explicit here for clarity
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, default(Action)));
@@ -103,6 +104,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default, (Exception _) => { }, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, default, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, (Exception _) => { }, default));
+#pragma warning restore IDE0350
         }
 
         [TestMethod]
@@ -849,7 +851,7 @@ namespace ReactiveTests.Tests
             p.Report(42);
             p.Report(43);
 
-            Assert.True(xs.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(xs.SequenceEqual([42, 43]));
         }
 
         [TestMethod]
@@ -892,7 +894,7 @@ namespace ReactiveTests.Tests
             o.OnNext(42);
             o.OnNext(43);
 
-            Assert.True(xs.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(xs.SequenceEqual([42, 43]));
         }
 
         private class MyProgress<T> : IProgress<T>

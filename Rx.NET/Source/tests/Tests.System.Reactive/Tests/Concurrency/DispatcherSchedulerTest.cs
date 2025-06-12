@@ -3,6 +3,9 @@
 // See the LICENSE file in the project root for more information. 
 
 #if HAS_WPF
+
+#pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overload being tested.
+
 using System;
 using System.Diagnostics;
 using System.Reactive.Concurrency;

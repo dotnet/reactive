@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- File name extension must be .runsettings -->
 <RunSettings>
-  <RunConfiguration>
+  <!--
+    Workaround for failure to run tests on .NET FX on v3.3.1 MSTest packages
+  -->
+  <RunConfiguration>  
+    <DisableAppDomain>True</DisableAppDomain>
     <ExecutionThreadApartmentState>STA</ExecutionThreadApartmentState>
   </RunConfiguration>
-	
+
   <DataCollectionRunSettings>
     <DataCollectors>
        <DataCollector friendlyName="XPlat code coverage">

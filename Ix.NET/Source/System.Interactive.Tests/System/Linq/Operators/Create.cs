@@ -16,7 +16,7 @@ namespace Tests
         [Fact]
         public void Create_Arguments()
         {
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Create<int>(default(Func<IEnumerator<int>>)));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Create<int>(default));
         }
 
         [Fact]

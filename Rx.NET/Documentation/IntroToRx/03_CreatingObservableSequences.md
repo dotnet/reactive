@@ -118,7 +118,7 @@ public class RxFsEvents : IObservable<FileSystemEventArgs>
             {
                 // The FileSystemWatcher might report multiple errors, but
                 // we're only allowed to report one to IObservable<T>.
-                if (onErrorAlreadyCalled)
+                if (!onErrorAlreadyCalled)
                 {
                     observer.OnError(e.GetException());
                     onErrorAlreadyCalled = true; 
@@ -149,7 +149,7 @@ IObservable<FileSystemEventArgs> deletions =
     fs.Where(e => e.ChangeType == WatcherChangeTypes.Deleted);
 ```
 
-When you call `Subscribe` on the `IObservable<T>` returned by the `Where` operator, it will call `Subscribe` on its input. So in this case, if we call `Subscribe` on both `configChanges` and `deletions`, that will result in _two_ calls to `Subscribe` on `rs`. So if `rs` is an instance of our `RxFsEvents` type above, each one will construct its own `FileSystemEventWatcher`, which is inefficient.
+When you call `Subscribe` on the `IObservable<T>` returned by the `Where` operator, it will call `Subscribe` on its input. So in this case, if we call `Subscribe` on both `configChanges` and `deletions`, that will result in _two_ calls to `Subscribe` on `fs`. So if `fs` is an instance of our `RxFsEvents` type above, each one will construct its own `FileSystemEventWatcher`, which is inefficient.
 
 Rx offers a few ways to deal with this. It provides operators designed specifically to take an `IObservable<T>` that does not tolerate multiple subscribers and wrap it in an adapter that can:
 
@@ -402,7 +402,7 @@ You provide this with a delegate that will be executed each time a subscription 
 private IObservable<int> SomeNumbers()
 {
     return Observable.Create<int>(
-        (IObserver<string> observer) =>
+        (IObserver<int> observer) =>
         {
             observer.OnNext(1);
             observer.OnNext(2);
@@ -416,7 +416,7 @@ private IObservable<int> SomeNumbers()
 
 Your delegate must return either an `IDisposable` or an `Action` to enable unsubscription. When the subscriber disposes their subscription in order to unsubscribe, Rx will invoke `Dispose()` on the `IDisposable` you returned, or in the case where you returned an `Action`, it will invoke that.
 
-This example is reminiscent of the `MySequenceOfNumbers` example from the start of this chapter, in that it immediately produces a few fixed values. The main difference in this case is that Rx adds some wrappers that can handle awkward situations such as re-entrancy. Rx will sometimes automatically defer work to prevent deadlocks, so it's possible that code consuming the `IObservable<string>` returned by this method will see a call to `Subscribe` return before the callback in the code above runs, in which case it would be possible for them to unsubscribe inside their `OnNext` handler.
+This example is reminiscent of the `MySequenceOfNumbers` example from the start of this chapter, in that it immediately produces a few fixed values. The main difference in this case is that Rx adds some wrappers that can handle awkward situations such as re-entrancy. Rx will sometimes automatically defer work to prevent deadlocks, so it's possible that code consuming the `IObservable<int>` returned by this method will see a call to `Subscribe` return before the callback in the code above runs, in which case it would be possible for them to unsubscribe inside their `OnNext` handler.
 
 The following sequence diagram shows how this could occur in practice. Suppose the `IObservable<int>` returned by `SomeNumbers` has been wrapped by Rx in a way that ensures that subscription occurs in some different execution context. We'd typically determine the context by using a suitable [scheduler](11_SchedulingAndThreading.md#schedulers). (The [`SubscribeOn`](11_SchedulingAndThreading.md#subscribeon-and-observeon) operator creates such a wrapper.) We might use the [`TaskPoolScheduler`](11_SchedulingAndThreading.md#taskpoolscheduler) in order to ensure that the subscription occurs on some task pool thread. So when our application code calls `Subscribe`, the wrapper `IObservable<int>` doesn't immediately subscribe to the underlying observable. Instead it queues up a work item with the scheduler to do that, and then immediately returns without waiting for that work to run. This is how our subscriber can be in possession of an `IDisposable` representing the subscription before `Observable.Create` invokes our callback. The diagram shows the subscriber then making this available to the observer.
 
@@ -811,7 +811,7 @@ Although we've now seen two very general ways to produce arbitrary sequences—`
 
 ### From delegates
 
-The `Observable.Start` method allows you to turn a long running `Func<T>` or `Action` into a single value observable sequence. By default, the processing will be done asynchronously on a ThreadPool thread. If the overload you use is a `Func<T>` then the return type will be `IObservable<T>`. When the function returns its value, that value will be published and then the sequence completed. If you use the overload that takes an `Action`, then the returned sequence will be of type `IObservable<Unit>`. The `Unit` type represents the absence of information, so it's somewhat analogous to `void`, except you can have an instance of the `Unit` type. It's particularly useful in Rx because we often care only about when something has happened, and there might not be any information besides timing. In these cases, we often use an `IObservable<Unit>` so that it's possible to produce definite events even though there's no meaningful data in them. (The name comes from the world of functional programming, where this kind of construct is used a lot.) In this case, `Unit` is used to publish an acknowledgement that the `Action` is complete, because an `Action` does not return any information. The `Unit` type itself has no value; it just serves as an empty payload for the `OnNext` notification. Below is an example of using both overloads.
+The `Observable.Start` method allows you to turn a long running `Func<T>` or `Action` into a single value observable sequence. The action is invoked through a [scheduler](11_SchedulingAndThreading.md#schedulers). If you don't pass a scheduler explicitly, this will use the [`DefaultScheduler`](11_SchedulingAndThreading.md#defaultscheduler), which invokes the callback via the thread pool. If the overload you use is a `Func<T>` then the return type will be `IObservable<T>`. When the function returns its value, the `IObservable<T>`, will supply that value to subscribers and then complete immediately after supplying the value. (The `IObservable<T>` that `Start` returns is based on [`AsyncSubject`](#asyncsubjectt), so if you subscribe to it after the callback has completed, it will immediately supply the value and then complete.) If you use the overload that takes an `Action`, then the returned sequence will be of type `IObservable<Unit>`. The `Unit` type represents the absence of information, so it's somewhat analogous to `void`, except you can have an instance of the `Unit` type. It's particularly useful in Rx because we often care only about when something has happened, and there might not be any information besides timing. In these cases, we often use an `IObservable<Unit>` so that it's possible to produce definite events even though there's no meaningful data in them. (The name comes from the world of functional programming, where this kind of construct is used a lot.) In this case, `Unit` is used to publish an acknowledgement that the `Action` is complete, because an `Action` does not return any information. The `Unit` type itself has no value; it just serves as an empty payload for the `OnNext` notification. Below is an example of using both overloads.
 
 ```csharp
 static void StartAction()
@@ -850,9 +850,9 @@ static void StartFunc()
 }
 ```
 
-Note the difference between `Observable.Start` and `Observable.Return`. The `Start` method invokes our callback only upon subscription, so it is an example of a 'lazy' operation. Conversely, `Return` requires us to supply the value up front.
+Note the difference between `Observable.Start` and `Observable.Return`. `Return` requires us to supply the value up front, whereas `Start` returns an observable sequence immediately, without needing the value to be available. (Although `Start` doesn't wait for the callback to complete, it does invoke it immediately. So this is not lazy evaluation—if you want to supply a callback that will be invoked only when someone subscribes to the source, use [`Defer`](#observabledefer).)
 
-The observable returned by `Start` may seem to have a superficial resemblance to `Task` or `Task<T>` (depending on whether you use the `Action` or `Func<T>` overload). Each represents work that may take some time before eventually completing, perhaps producing a result. However, there's a significant difference: `Start` doesn't begin the work until you subscribe to it. Moreover, it will re-execute the callback every time you subscribe to it. So it is more like a factory for a task-like entity.
+The observable returned by `Start` can be thought of as representing the same basic idea as `Task` or `Task<T>` (depending on whether you use the `Action` or `Func<T>` overload). Each represents work that may take some time before eventually completing, perhaps producing a result. So `Start` is useful if you want that basic idea, but for it to be represented as an `IObservable<T>` instead of a `Task` or `Task<T>`.
 
 ### From events
 

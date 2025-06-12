@@ -16,7 +16,7 @@ namespace System.Linq
     {
         private static MethodInfo? s_Amb__TSource__2__0;
         
-        private static MethodInfo? Amb__TSource__2__0(Type TSource) =>
+        private static MethodInfo Amb__TSource__2__0(Type TSource) =>
             (s_Amb__TSource__2__0 ??
             (s_Amb__TSource__2__0 = new Func<IAsyncQueryable<object>, IAsyncEnumerable<object>, IAsyncQueryable<object>>(Amb<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -32,7 +32,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Buffer__TSource__2__0;
         
-        private static MethodInfo? Buffer__TSource__2__0(Type TSource) =>
+        private static MethodInfo Buffer__TSource__2__0(Type TSource) =>
             (s_Buffer__TSource__2__0 ??
             (s_Buffer__TSource__2__0 = new Func<IAsyncQueryable<object>, int, IAsyncQueryable<IList<object>>>(Buffer<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -46,7 +46,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Buffer__TSource__3__0;
         
-        private static MethodInfo? Buffer__TSource__3__0(Type TSource) =>
+        private static MethodInfo Buffer__TSource__3__0(Type TSource) =>
             (s_Buffer__TSource__3__0 ??
             (s_Buffer__TSource__3__0 = new Func<IAsyncQueryable<object>, int, int, IAsyncQueryable<IList<object>>>(Buffer<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -60,7 +60,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Catch__TSource__2__0;
         
-        private static MethodInfo? Catch__TSource__2__0(Type TSource) =>
+        private static MethodInfo Catch__TSource__2__0(Type TSource) =>
             (s_Catch__TSource__2__0 ??
             (s_Catch__TSource__2__0 = new Func<IAsyncQueryable<object>, IAsyncEnumerable<object>, IAsyncQueryable<object>>(Catch<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -76,7 +76,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Catch__TSource_TException__2__0;
         
-        private static MethodInfo? Catch__TSource_TException__2__0(Type TSource, Type TException) =>
+        private static MethodInfo Catch__TSource_TException__2__0(Type TSource, Type TException) =>
             (s_Catch__TSource_TException__2__0 ??
             (s_Catch__TSource_TException__2__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<IAsyncEnumerable<object>>>>, IAsyncQueryable<object>>(Catch<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TException);
 
@@ -92,7 +92,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Catch__TSource_TException__2__1;
         
-        private static MethodInfo? Catch__TSource_TException__2__1(Type TSource, Type TException) =>
+        private static MethodInfo Catch__TSource_TException__2__1(Type TSource, Type TException) =>
             (s_Catch__TSource_TException__2__1 ??
             (s_Catch__TSource_TException__2__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, IAsyncEnumerable<object>>>, IAsyncQueryable<object>>(Catch<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TException);
 
@@ -108,7 +108,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Catch__TSource_TException__2__2;
         
-        private static MethodInfo? Catch__TSource_TException__2__2(Type TSource, Type TException) =>
+        private static MethodInfo Catch__TSource_TException__2__2(Type TSource, Type TException) =>
             (s_Catch__TSource_TException__2__2 ??
             (s_Catch__TSource_TException__2__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<IAsyncEnumerable<object>>>>, IAsyncQueryable<object>>(Catch<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TException);
 
@@ -124,7 +124,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Concat__TSource__1__0;
         
-        private static MethodInfo? Concat__TSource__1__0(Type TSource) =>
+        private static MethodInfo Concat__TSource__1__0(Type TSource) =>
             (s_Concat__TSource__1__0 ??
             (s_Concat__TSource__1__0 = new Func<IAsyncQueryable<IAsyncEnumerable<object>>, IAsyncQueryable<object>>(Concat<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -138,7 +138,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Distinct__TSource_TKey__2__0;
         
-        private static MethodInfo? Distinct__TSource_TKey__2__0(Type TSource, Type TKey) =>
+        private static MethodInfo Distinct__TSource_TKey__2__0(Type TSource, Type TKey) =>
             (s_Distinct__TSource_TKey__2__0 ??
             (s_Distinct__TSource_TKey__2__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, IAsyncQueryable<object>>(Distinct<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -154,7 +154,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Distinct__TSource_TKey__2__1;
         
-        private static MethodInfo? Distinct__TSource_TKey__2__1(Type TSource, Type TKey) =>
+        private static MethodInfo Distinct__TSource_TKey__2__1(Type TSource, Type TKey) =>
             (s_Distinct__TSource_TKey__2__1 ??
             (s_Distinct__TSource_TKey__2__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, IAsyncQueryable<object>>(Distinct<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -170,7 +170,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Distinct__TSource_TKey__2__2;
         
-        private static MethodInfo? Distinct__TSource_TKey__2__2(Type TSource, Type TKey) =>
+        private static MethodInfo Distinct__TSource_TKey__2__2(Type TSource, Type TKey) =>
             (s_Distinct__TSource_TKey__2__2 ??
             (s_Distinct__TSource_TKey__2__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, IAsyncQueryable<object>>(Distinct<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -186,7 +186,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Distinct__TSource_TKey__3__0;
         
-        private static MethodInfo? Distinct__TSource_TKey__3__0(Type TSource, Type TKey) =>
+        private static MethodInfo Distinct__TSource_TKey__3__0(Type TSource, Type TKey) =>
             (s_Distinct__TSource_TKey__3__0 ??
             (s_Distinct__TSource_TKey__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, IEqualityComparer<object>, IAsyncQueryable<object>>(Distinct<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -202,7 +202,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Distinct__TSource_TKey__3__1;
         
-        private static MethodInfo? Distinct__TSource_TKey__3__1(Type TSource, Type TKey) =>
+        private static MethodInfo Distinct__TSource_TKey__3__1(Type TSource, Type TKey) =>
             (s_Distinct__TSource_TKey__3__1 ??
             (s_Distinct__TSource_TKey__3__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, IEqualityComparer<object>, IAsyncQueryable<object>>(Distinct<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -218,7 +218,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Distinct__TSource_TKey__3__2;
         
-        private static MethodInfo? Distinct__TSource_TKey__3__2(Type TSource, Type TKey) =>
+        private static MethodInfo Distinct__TSource_TKey__3__2(Type TSource, Type TKey) =>
             (s_Distinct__TSource_TKey__3__2 ??
             (s_Distinct__TSource_TKey__3__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, IEqualityComparer<object>, IAsyncQueryable<object>>(Distinct<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -234,7 +234,7 @@ namespace System.Linq
 
         private static MethodInfo? s_DistinctUntilChanged__TSource__1__0;
         
-        private static MethodInfo? DistinctUntilChanged__TSource__1__0(Type TSource) =>
+        private static MethodInfo DistinctUntilChanged__TSource__1__0(Type TSource) =>
             (s_DistinctUntilChanged__TSource__1__0 ??
             (s_DistinctUntilChanged__TSource__1__0 = new Func<IAsyncQueryable<object>, IAsyncQueryable<object>>(DistinctUntilChanged<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -248,7 +248,7 @@ namespace System.Linq
 
         private static MethodInfo? s_DistinctUntilChanged__TSource__2__0;
         
-        private static MethodInfo? DistinctUntilChanged__TSource__2__0(Type TSource) =>
+        private static MethodInfo DistinctUntilChanged__TSource__2__0(Type TSource) =>
             (s_DistinctUntilChanged__TSource__2__0 ??
             (s_DistinctUntilChanged__TSource__2__0 = new Func<IAsyncQueryable<object>, IEqualityComparer<object>, IAsyncQueryable<object>>(DistinctUntilChanged<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -262,7 +262,7 @@ namespace System.Linq
 
         private static MethodInfo? s_DistinctUntilChanged__TSource_TKey__2__0;
         
-        private static MethodInfo? DistinctUntilChanged__TSource_TKey__2__0(Type TSource, Type TKey) =>
+        private static MethodInfo DistinctUntilChanged__TSource_TKey__2__0(Type TSource, Type TKey) =>
             (s_DistinctUntilChanged__TSource_TKey__2__0 ??
             (s_DistinctUntilChanged__TSource_TKey__2__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, IAsyncQueryable<object>>(DistinctUntilChanged<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -278,7 +278,7 @@ namespace System.Linq
 
         private static MethodInfo? s_DistinctUntilChanged__TSource_TKey__2__1;
         
-        private static MethodInfo? DistinctUntilChanged__TSource_TKey__2__1(Type TSource, Type TKey) =>
+        private static MethodInfo DistinctUntilChanged__TSource_TKey__2__1(Type TSource, Type TKey) =>
             (s_DistinctUntilChanged__TSource_TKey__2__1 ??
             (s_DistinctUntilChanged__TSource_TKey__2__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, IAsyncQueryable<object>>(DistinctUntilChanged<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -294,7 +294,7 @@ namespace System.Linq
 
         private static MethodInfo? s_DistinctUntilChanged__TSource_TKey__2__2;
         
-        private static MethodInfo? DistinctUntilChanged__TSource_TKey__2__2(Type TSource, Type TKey) =>
+        private static MethodInfo DistinctUntilChanged__TSource_TKey__2__2(Type TSource, Type TKey) =>
             (s_DistinctUntilChanged__TSource_TKey__2__2 ??
             (s_DistinctUntilChanged__TSource_TKey__2__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, IAsyncQueryable<object>>(DistinctUntilChanged<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -310,7 +310,7 @@ namespace System.Linq
 
         private static MethodInfo? s_DistinctUntilChanged__TSource_TKey__3__0;
         
-        private static MethodInfo? DistinctUntilChanged__TSource_TKey__3__0(Type TSource, Type TKey) =>
+        private static MethodInfo DistinctUntilChanged__TSource_TKey__3__0(Type TSource, Type TKey) =>
             (s_DistinctUntilChanged__TSource_TKey__3__0 ??
             (s_DistinctUntilChanged__TSource_TKey__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, IEqualityComparer<object>, IAsyncQueryable<object>>(DistinctUntilChanged<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -326,7 +326,7 @@ namespace System.Linq
 
         private static MethodInfo? s_DistinctUntilChanged__TSource_TKey__3__1;
         
-        private static MethodInfo? DistinctUntilChanged__TSource_TKey__3__1(Type TSource, Type TKey) =>
+        private static MethodInfo DistinctUntilChanged__TSource_TKey__3__1(Type TSource, Type TKey) =>
             (s_DistinctUntilChanged__TSource_TKey__3__1 ??
             (s_DistinctUntilChanged__TSource_TKey__3__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, IEqualityComparer<object>, IAsyncQueryable<object>>(DistinctUntilChanged<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -342,7 +342,7 @@ namespace System.Linq
 
         private static MethodInfo? s_DistinctUntilChanged__TSource_TKey__3__2;
         
-        private static MethodInfo? DistinctUntilChanged__TSource_TKey__3__2(Type TSource, Type TKey) =>
+        private static MethodInfo DistinctUntilChanged__TSource_TKey__3__2(Type TSource, Type TKey) =>
             (s_DistinctUntilChanged__TSource_TKey__3__2 ??
             (s_DistinctUntilChanged__TSource_TKey__3__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, IEqualityComparer<object>, IAsyncQueryable<object>>(DistinctUntilChanged<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -358,7 +358,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__2__0;
         
-        private static MethodInfo? Do__TSource__2__0(Type TSource) =>
+        private static MethodInfo Do__TSource__2__0(Type TSource) =>
             (s_Do__TSource__2__0 ??
             (s_Do__TSource__2__0 = new Func<IAsyncQueryable<object>, Expression<Action<object>>, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -374,7 +374,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__2__1;
         
-        private static MethodInfo? Do__TSource__2__1(Type TSource) =>
+        private static MethodInfo Do__TSource__2__1(Type TSource) =>
             (s_Do__TSource__2__1 ??
             (s_Do__TSource__2__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, Task>>, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -390,7 +390,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__2__2;
         
-        private static MethodInfo? Do__TSource__2__2(Type TSource) =>
+        private static MethodInfo Do__TSource__2__2(Type TSource) =>
             (s_Do__TSource__2__2 ??
             (s_Do__TSource__2__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, Task>>, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -406,7 +406,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__2__3;
         
-        private static MethodInfo? Do__TSource__2__3(Type TSource) =>
+        private static MethodInfo Do__TSource__2__3(Type TSource) =>
             (s_Do__TSource__2__3 ??
             (s_Do__TSource__2__3 = new Func<IAsyncQueryable<object>, IObserver<object>, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -422,7 +422,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__3__0;
         
-        private static MethodInfo? Do__TSource__3__0(Type TSource) =>
+        private static MethodInfo Do__TSource__3__0(Type TSource) =>
             (s_Do__TSource__3__0 ??
             (s_Do__TSource__3__0 = new Func<IAsyncQueryable<object>, Expression<Action<object>>, Action, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -440,7 +440,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__3__1;
         
-        private static MethodInfo? Do__TSource__3__1(Type TSource) =>
+        private static MethodInfo Do__TSource__3__1(Type TSource) =>
             (s_Do__TSource__3__1 ??
             (s_Do__TSource__3__1 = new Func<IAsyncQueryable<object>, Expression<Action<object>>, Expression<Action<Exception>>, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -458,7 +458,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__3__2;
         
-        private static MethodInfo? Do__TSource__3__2(Type TSource) =>
+        private static MethodInfo Do__TSource__3__2(Type TSource) =>
             (s_Do__TSource__3__2 ??
             (s_Do__TSource__3__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, Task>>, Expression<Func<CancellationToken, Task>>, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -476,7 +476,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__3__3;
         
-        private static MethodInfo? Do__TSource__3__3(Type TSource) =>
+        private static MethodInfo Do__TSource__3__3(Type TSource) =>
             (s_Do__TSource__3__3 ??
             (s_Do__TSource__3__3 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, Task>>, Expression<Func<Exception, CancellationToken, Task>>, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -494,7 +494,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__3__4;
         
-        private static MethodInfo? Do__TSource__3__4(Type TSource) =>
+        private static MethodInfo Do__TSource__3__4(Type TSource) =>
             (s_Do__TSource__3__4 ??
             (s_Do__TSource__3__4 = new Func<IAsyncQueryable<object>, Expression<Func<object, Task>>, Expression<Func<Exception, Task>>, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -512,7 +512,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__3__5;
         
-        private static MethodInfo? Do__TSource__3__5(Type TSource) =>
+        private static MethodInfo Do__TSource__3__5(Type TSource) =>
             (s_Do__TSource__3__5 ??
             (s_Do__TSource__3__5 = new Func<IAsyncQueryable<object>, Expression<Func<object, Task>>, Expression<Func<Task>>, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -530,7 +530,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__4__0;
         
-        private static MethodInfo? Do__TSource__4__0(Type TSource) =>
+        private static MethodInfo Do__TSource__4__0(Type TSource) =>
             (s_Do__TSource__4__0 ??
             (s_Do__TSource__4__0 = new Func<IAsyncQueryable<object>, Expression<Action<object>>, Expression<Action<Exception>>, Action, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -550,7 +550,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__4__1;
         
-        private static MethodInfo? Do__TSource__4__1(Type TSource) =>
+        private static MethodInfo Do__TSource__4__1(Type TSource) =>
             (s_Do__TSource__4__1 ??
             (s_Do__TSource__4__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, Task>>, Expression<Func<Exception, CancellationToken, Task>>, Expression<Func<CancellationToken, Task>>, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -570,7 +570,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Do__TSource__4__2;
         
-        private static MethodInfo? Do__TSource__4__2(Type TSource) =>
+        private static MethodInfo Do__TSource__4__2(Type TSource) =>
             (s_Do__TSource__4__2 ??
             (s_Do__TSource__4__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, Task>>, Expression<Func<Exception, Task>>, Expression<Func<Task>>, IAsyncQueryable<object>>(Do<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -590,7 +590,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Expand__TSource__2__0;
         
-        private static MethodInfo? Expand__TSource__2__0(Type TSource) =>
+        private static MethodInfo Expand__TSource__2__0(Type TSource) =>
             (s_Expand__TSource__2__0 ??
             (s_Expand__TSource__2__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<IAsyncEnumerable<object>>>>, IAsyncQueryable<object>>(Expand<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -606,7 +606,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Expand__TSource__2__1;
         
-        private static MethodInfo? Expand__TSource__2__1(Type TSource) =>
+        private static MethodInfo Expand__TSource__2__1(Type TSource) =>
             (s_Expand__TSource__2__1 ??
             (s_Expand__TSource__2__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, IAsyncEnumerable<object>>>, IAsyncQueryable<object>>(Expand<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -622,7 +622,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Expand__TSource__2__2;
         
-        private static MethodInfo? Expand__TSource__2__2(Type TSource) =>
+        private static MethodInfo Expand__TSource__2__2(Type TSource) =>
             (s_Expand__TSource__2__2 ??
             (s_Expand__TSource__2__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<IAsyncEnumerable<object>>>>, IAsyncQueryable<object>>(Expand<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -638,7 +638,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Finally__TSource__2__0;
         
-        private static MethodInfo? Finally__TSource__2__0(Type TSource) =>
+        private static MethodInfo Finally__TSource__2__0(Type TSource) =>
             (s_Finally__TSource__2__0 ??
             (s_Finally__TSource__2__0 = new Func<IAsyncQueryable<object>, Action, IAsyncQueryable<object>>(Finally<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -654,7 +654,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Finally__TSource__2__1;
         
-        private static MethodInfo? Finally__TSource__2__1(Type TSource) =>
+        private static MethodInfo Finally__TSource__2__1(Type TSource) =>
             (s_Finally__TSource__2__1 ??
             (s_Finally__TSource__2__1 = new Func<IAsyncQueryable<object>, Expression<Func<Task>>, IAsyncQueryable<object>>(Finally<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -670,7 +670,7 @@ namespace System.Linq
 
         private static MethodInfo? s_IgnoreElements__TSource__1__0;
         
-        private static MethodInfo? IgnoreElements__TSource__1__0(Type TSource) =>
+        private static MethodInfo IgnoreElements__TSource__1__0(Type TSource) =>
             (s_IgnoreElements__TSource__1__0 ??
             (s_IgnoreElements__TSource__1__0 = new Func<IAsyncQueryable<object>, IAsyncQueryable<object>>(IgnoreElements<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -684,7 +684,7 @@ namespace System.Linq
 
         private static MethodInfo? s_IsEmptyAsync__TSource__2__0;
         
-        private static MethodInfo? IsEmptyAsync__TSource__2__0(Type TSource) =>
+        private static MethodInfo IsEmptyAsync__TSource__2__0(Type TSource) =>
             (s_IsEmptyAsync__TSource__2__0 ??
             (s_IsEmptyAsync__TSource__2__0 = new Func<IAsyncQueryable<object>, CancellationToken, ValueTask<bool>>(IsEmptyAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -698,7 +698,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MaxAsync__TSource__3__0;
         
-        private static MethodInfo? MaxAsync__TSource__3__0(Type TSource) =>
+        private static MethodInfo MaxAsync__TSource__3__0(Type TSource) =>
             (s_MaxAsync__TSource__3__0 ??
             (s_MaxAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, IComparer<object>, CancellationToken, ValueTask<object>>(MaxAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -712,7 +712,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MaxByAsync__TSource_TKey__3__0;
         
-        private static MethodInfo? MaxByAsync__TSource_TKey__3__0(Type TSource, Type TKey) =>
+        private static MethodInfo MaxByAsync__TSource_TKey__3__0(Type TSource, Type TKey) =>
             (s_MaxByAsync__TSource_TKey__3__0 ??
             (s_MaxByAsync__TSource_TKey__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, CancellationToken, ValueTask<IList<object>>>(MaxByAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -728,7 +728,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MaxByAsync__TSource_TKey__3__1;
         
-        private static MethodInfo? MaxByAsync__TSource_TKey__3__1(Type TSource, Type TKey) =>
+        private static MethodInfo MaxByAsync__TSource_TKey__3__1(Type TSource, Type TKey) =>
             (s_MaxByAsync__TSource_TKey__3__1 ??
             (s_MaxByAsync__TSource_TKey__3__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, CancellationToken, ValueTask<IList<object>>>(MaxByAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -744,7 +744,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MaxByAsync__TSource_TKey__3__2;
         
-        private static MethodInfo? MaxByAsync__TSource_TKey__3__2(Type TSource, Type TKey) =>
+        private static MethodInfo MaxByAsync__TSource_TKey__3__2(Type TSource, Type TKey) =>
             (s_MaxByAsync__TSource_TKey__3__2 ??
             (s_MaxByAsync__TSource_TKey__3__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, CancellationToken, ValueTask<IList<object>>>(MaxByAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -760,7 +760,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MaxByAsync__TSource_TKey__4__0;
         
-        private static MethodInfo? MaxByAsync__TSource_TKey__4__0(Type TSource, Type TKey) =>
+        private static MethodInfo MaxByAsync__TSource_TKey__4__0(Type TSource, Type TKey) =>
             (s_MaxByAsync__TSource_TKey__4__0 ??
             (s_MaxByAsync__TSource_TKey__4__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MaxByAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -776,7 +776,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MaxByAsync__TSource_TKey__4__1;
         
-        private static MethodInfo? MaxByAsync__TSource_TKey__4__1(Type TSource, Type TKey) =>
+        private static MethodInfo MaxByAsync__TSource_TKey__4__1(Type TSource, Type TKey) =>
             (s_MaxByAsync__TSource_TKey__4__1 ??
             (s_MaxByAsync__TSource_TKey__4__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MaxByAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -792,7 +792,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MaxByAsync__TSource_TKey__4__2;
         
-        private static MethodInfo? MaxByAsync__TSource_TKey__4__2(Type TSource, Type TKey) =>
+        private static MethodInfo MaxByAsync__TSource_TKey__4__2(Type TSource, Type TKey) =>
             (s_MaxByAsync__TSource_TKey__4__2 ??
             (s_MaxByAsync__TSource_TKey__4__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MaxByAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -808,7 +808,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Merge__TSource__1__0;
         
-        private static MethodInfo? Merge__TSource__1__0(Type TSource) =>
+        private static MethodInfo Merge__TSource__1__0(Type TSource) =>
             (s_Merge__TSource__1__0 ??
             (s_Merge__TSource__1__0 = new Func<IAsyncQueryable<IAsyncEnumerable<object>>, IAsyncQueryable<object>>(Merge<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -822,7 +822,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MinAsync__TSource__3__0;
         
-        private static MethodInfo? MinAsync__TSource__3__0(Type TSource) =>
+        private static MethodInfo MinAsync__TSource__3__0(Type TSource) =>
             (s_MinAsync__TSource__3__0 ??
             (s_MinAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, IComparer<object>, CancellationToken, ValueTask<object>>(MinAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -836,7 +836,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MinByAsync__TSource_TKey__3__0;
         
-        private static MethodInfo? MinByAsync__TSource_TKey__3__0(Type TSource, Type TKey) =>
+        private static MethodInfo MinByAsync__TSource_TKey__3__0(Type TSource, Type TKey) =>
             (s_MinByAsync__TSource_TKey__3__0 ??
             (s_MinByAsync__TSource_TKey__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, CancellationToken, ValueTask<IList<object>>>(MinByAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -852,7 +852,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MinByAsync__TSource_TKey__3__1;
         
-        private static MethodInfo? MinByAsync__TSource_TKey__3__1(Type TSource, Type TKey) =>
+        private static MethodInfo MinByAsync__TSource_TKey__3__1(Type TSource, Type TKey) =>
             (s_MinByAsync__TSource_TKey__3__1 ??
             (s_MinByAsync__TSource_TKey__3__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, CancellationToken, ValueTask<IList<object>>>(MinByAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -868,7 +868,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MinByAsync__TSource_TKey__3__2;
         
-        private static MethodInfo? MinByAsync__TSource_TKey__3__2(Type TSource, Type TKey) =>
+        private static MethodInfo MinByAsync__TSource_TKey__3__2(Type TSource, Type TKey) =>
             (s_MinByAsync__TSource_TKey__3__2 ??
             (s_MinByAsync__TSource_TKey__3__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, CancellationToken, ValueTask<IList<object>>>(MinByAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -884,7 +884,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MinByAsync__TSource_TKey__4__0;
         
-        private static MethodInfo? MinByAsync__TSource_TKey__4__0(Type TSource, Type TKey) =>
+        private static MethodInfo MinByAsync__TSource_TKey__4__0(Type TSource, Type TKey) =>
             (s_MinByAsync__TSource_TKey__4__0 ??
             (s_MinByAsync__TSource_TKey__4__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MinByAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -900,7 +900,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MinByAsync__TSource_TKey__4__1;
         
-        private static MethodInfo? MinByAsync__TSource_TKey__4__1(Type TSource, Type TKey) =>
+        private static MethodInfo MinByAsync__TSource_TKey__4__1(Type TSource, Type TKey) =>
             (s_MinByAsync__TSource_TKey__4__1 ??
             (s_MinByAsync__TSource_TKey__4__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MinByAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -916,7 +916,7 @@ namespace System.Linq
 
         private static MethodInfo? s_MinByAsync__TSource_TKey__4__2;
         
-        private static MethodInfo? MinByAsync__TSource_TKey__4__2(Type TSource, Type TKey) =>
+        private static MethodInfo MinByAsync__TSource_TKey__4__2(Type TSource, Type TKey) =>
             (s_MinByAsync__TSource_TKey__4__2 ??
             (s_MinByAsync__TSource_TKey__4__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MinByAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
@@ -932,7 +932,7 @@ namespace System.Linq
 
         private static MethodInfo? s_OnErrorResumeNext__TSource__2__0;
         
-        private static MethodInfo? OnErrorResumeNext__TSource__2__0(Type TSource) =>
+        private static MethodInfo OnErrorResumeNext__TSource__2__0(Type TSource) =>
             (s_OnErrorResumeNext__TSource__2__0 ??
             (s_OnErrorResumeNext__TSource__2__0 = new Func<IAsyncQueryable<object>, IAsyncEnumerable<object>, IAsyncQueryable<object>>(OnErrorResumeNext<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -948,7 +948,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Repeat__TSource__1__0;
         
-        private static MethodInfo? Repeat__TSource__1__0(Type TSource) =>
+        private static MethodInfo Repeat__TSource__1__0(Type TSource) =>
             (s_Repeat__TSource__1__0 ??
             (s_Repeat__TSource__1__0 = new Func<IAsyncQueryable<object>, IAsyncQueryable<object>>(Repeat<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -962,7 +962,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Repeat__TSource__2__0;
         
-        private static MethodInfo? Repeat__TSource__2__0(Type TSource) =>
+        private static MethodInfo Repeat__TSource__2__0(Type TSource) =>
             (s_Repeat__TSource__2__0 ??
             (s_Repeat__TSource__2__0 = new Func<IAsyncQueryable<object>, int, IAsyncQueryable<object>>(Repeat<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -976,7 +976,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Retry__TSource__1__0;
         
-        private static MethodInfo? Retry__TSource__1__0(Type TSource) =>
+        private static MethodInfo Retry__TSource__1__0(Type TSource) =>
             (s_Retry__TSource__1__0 ??
             (s_Retry__TSource__1__0 = new Func<IAsyncQueryable<object>, IAsyncQueryable<object>>(Retry<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -990,7 +990,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Retry__TSource__2__0;
         
-        private static MethodInfo? Retry__TSource__2__0(Type TSource) =>
+        private static MethodInfo Retry__TSource__2__0(Type TSource) =>
             (s_Retry__TSource__2__0 ??
             (s_Retry__TSource__2__0 = new Func<IAsyncQueryable<object>, int, IAsyncQueryable<object>>(Retry<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -1004,7 +1004,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Scan__TSource__2__0;
         
-        private static MethodInfo? Scan__TSource__2__0(Type TSource) =>
+        private static MethodInfo Scan__TSource__2__0(Type TSource) =>
             (s_Scan__TSource__2__0 ??
             (s_Scan__TSource__2__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, object, CancellationToken, ValueTask<object>>>, IAsyncQueryable<object>>(Scan<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -1020,7 +1020,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Scan__TSource__2__1;
         
-        private static MethodInfo? Scan__TSource__2__1(Type TSource) =>
+        private static MethodInfo Scan__TSource__2__1(Type TSource) =>
             (s_Scan__TSource__2__1 ??
             (s_Scan__TSource__2__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object, object>>, IAsyncQueryable<object>>(Scan<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -1036,7 +1036,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Scan__TSource__2__2;
         
-        private static MethodInfo? Scan__TSource__2__2(Type TSource) =>
+        private static MethodInfo Scan__TSource__2__2(Type TSource) =>
             (s_Scan__TSource__2__2 ??
             (s_Scan__TSource__2__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, object, ValueTask<object>>>, IAsyncQueryable<object>>(Scan<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -1052,7 +1052,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Scan__TSource_TAccumulate__3__0;
         
-        private static MethodInfo? Scan__TSource_TAccumulate__3__0(Type TSource, Type TAccumulate) =>
+        private static MethodInfo Scan__TSource_TAccumulate__3__0(Type TSource, Type TAccumulate) =>
             (s_Scan__TSource_TAccumulate__3__0 ??
             (s_Scan__TSource_TAccumulate__3__0 = new Func<IAsyncQueryable<object>, object, Expression<Func<object, object, CancellationToken, ValueTask<object>>>, IAsyncQueryable<object>>(Scan<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TAccumulate);
 
@@ -1068,7 +1068,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Scan__TSource_TAccumulate__3__1;
         
-        private static MethodInfo? Scan__TSource_TAccumulate__3__1(Type TSource, Type TAccumulate) =>
+        private static MethodInfo Scan__TSource_TAccumulate__3__1(Type TSource, Type TAccumulate) =>
             (s_Scan__TSource_TAccumulate__3__1 ??
             (s_Scan__TSource_TAccumulate__3__1 = new Func<IAsyncQueryable<object>, object, Expression<Func<object, object, object>>, IAsyncQueryable<object>>(Scan<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TAccumulate);
 
@@ -1084,7 +1084,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Scan__TSource_TAccumulate__3__2;
         
-        private static MethodInfo? Scan__TSource_TAccumulate__3__2(Type TSource, Type TAccumulate) =>
+        private static MethodInfo Scan__TSource_TAccumulate__3__2(Type TSource, Type TAccumulate) =>
             (s_Scan__TSource_TAccumulate__3__2 ??
             (s_Scan__TSource_TAccumulate__3__2 = new Func<IAsyncQueryable<object>, object, Expression<Func<object, object, ValueTask<object>>>, IAsyncQueryable<object>>(Scan<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TAccumulate);
 
@@ -1100,7 +1100,7 @@ namespace System.Linq
 
         private static MethodInfo? s_SelectMany__TSource_TOther__2__0;
         
-        private static MethodInfo? SelectMany__TSource_TOther__2__0(Type TSource, Type TOther) =>
+        private static MethodInfo SelectMany__TSource_TOther__2__0(Type TSource, Type TOther) =>
             (s_SelectMany__TSource_TOther__2__0 ??
             (s_SelectMany__TSource_TOther__2__0 = new Func<IAsyncQueryable<object>, IAsyncEnumerable<object>, IAsyncQueryable<object>>(SelectMany<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TOther);
 
@@ -1116,7 +1116,7 @@ namespace System.Linq
 
         private static MethodInfo? s_StartWith__TSource__2__0;
         
-        private static MethodInfo? StartWith__TSource__2__0(Type TSource) =>
+        private static MethodInfo StartWith__TSource__2__0(Type TSource) =>
             (s_StartWith__TSource__2__0 ??
             (s_StartWith__TSource__2__0 = new Func<IAsyncQueryable<object>, object[], IAsyncQueryable<object>>(StartWith<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
@@ -1132,7 +1132,7 @@ namespace System.Linq
 
         private static MethodInfo? s_Timeout__TSource__2__0;
         
-        private static MethodInfo? Timeout__TSource__2__0(Type TSource) =>
+        private static MethodInfo Timeout__TSource__2__0(Type TSource) =>
             (s_Timeout__TSource__2__0 ??
             (s_Timeout__TSource__2__0 = new Func<IAsyncQueryable<object>, TimeSpan, IAsyncQueryable<object>>(Timeout<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 

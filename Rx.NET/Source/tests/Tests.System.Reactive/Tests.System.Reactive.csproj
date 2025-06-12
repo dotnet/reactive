@@ -1,11 +1,11 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net472;net6.0;net7.0;net6.0-windows10.0.19041;net8.0;net8.0-windows10.0.19041</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0;net8.0-windows10.0.19041;net9.0;net9.0-windows10.0.19041</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows')) or '$(TargetFramework)' == 'net472'">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows')) or '$(TargetFramework)' == 'net472'">
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
@@ -28,10 +28,10 @@
     Before that PR was merged, the test runner wouldn't work if the host specified a TFM with a
     specific Windows version.
 -->
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
-    <PackageReference Include="xunit.assert" Version="2.4.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.6.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.6.1" />
+    <PackageReference Include="xunit.assert" Version="2.8.0" />
     <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
     <ProjectReference Include="..\..\src\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
@@ -40,5 +40,10 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net8.0-windows'))">
     <ProjectReference Include="..\..\src\System.Reactive.For.WindowsForms\System.Reactive.For.WindowsForms.csproj" />
     <ProjectReference Include="..\..\src\System.Reactive.For.Wpf\System.Reactive.For.Wpf.csproj" />
+    <PackageReference Update="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
+
 </Project>

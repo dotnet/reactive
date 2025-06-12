@@ -35,13 +35,13 @@ namespace Tests
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MaxByAsync(x => x / 2);
             var res = await xs;
 
-            Assert.True(res.SequenceEqual(new[] { 7, 6 }));
+            Assert.True(res.SequenceEqual([7, 6]));
         }
 
         [Fact]
         public async Task MaxBy2()
         {
-            var xs = new int[0].ToAsyncEnumerable().MaxByAsync(x => x / 2);
+            var xs = Array.Empty<int>().ToAsyncEnumerable().MaxByAsync(x => x / 2);
 
             await AssertThrowsAsync<InvalidOperationException>(xs.AsTask());
         }

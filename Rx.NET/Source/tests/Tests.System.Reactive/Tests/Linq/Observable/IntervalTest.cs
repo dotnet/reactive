@@ -113,7 +113,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Interval_TimeSpan_DefaultScheduler()
         {
-            Assert.True(Observable.Interval(TimeSpan.FromMilliseconds(1)).ToEnumerable().Take(3).SequenceEqual(new[] { 0L, 1L, 2L }));
+            Assert.True(Observable.Interval(TimeSpan.FromMilliseconds(1)).ToEnumerable().Take(3).SequenceEqual([0L, 1L, 2L]));
         }
 
     }

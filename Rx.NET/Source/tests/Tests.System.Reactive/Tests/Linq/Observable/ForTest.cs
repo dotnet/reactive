@@ -27,7 +27,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var results = scheduler.Start(() => Observable.For(new[] { 1, 2, 3 }, x => scheduler.CreateColdObservable(
+            var results = scheduler.Start(() => Observable.For([1, 2, 3], x => scheduler.CreateColdObservable(
                 OnNext((ushort)(x * 100 + 10), x * 10 + 1),
                 OnNext((ushort)(x * 100 + 20), x * 10 + 2),
                 OnNext((ushort)(x * 100 + 30), x * 10 + 3),
@@ -89,7 +89,7 @@ namespace ReactiveTests.Tests
 
             var ex = new Exception();
 
-            var results = scheduler.Start(() => Observable.For(new[] { 1, 2, 3 }, x => Observable.Throw<int>(ex)));
+            var results = scheduler.Start(() => Observable.For([1, 2, 3], x => Observable.Throw<int>(ex)));
 
             results.Messages.AssertEqual(
                 OnError<int>(200, ex)
@@ -103,7 +103,7 @@ namespace ReactiveTests.Tests
 
             var ex = new Exception();
 
-            var results = scheduler.Start(() => Observable.For(new[] { 1, 2, 3 }, x => Throw<IObservable<int>>(ex)));
+            var results = scheduler.Start(() => Observable.For([1, 2, 3], x => Throw<IObservable<int>>(ex)));
 
             results.Messages.AssertEqual(
                 OnError<int>(200, ex)

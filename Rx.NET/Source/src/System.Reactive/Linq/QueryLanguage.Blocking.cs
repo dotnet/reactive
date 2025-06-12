@@ -16,7 +16,7 @@ namespace System.Reactive.Linq
 
         public virtual IEnumerable<IList<TSource>> Chunkify<TSource>(IObservable<TSource> source)
         {
-            return source.Collect<TSource, IList<TSource>>(() => new List<TSource>(), (lst, x) => { lst.Add(x); return lst; }, _ => new List<TSource>());
+            return source.Collect<TSource, IList<TSource>>(() => [], (lst, x) => { lst.Add(x); return lst; }, _ => []);
         }
 
         #endregion

@@ -22,8 +22,8 @@ namespace Tests
         public void MemoizeLimited_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Memoize<int>(null, 2));
-            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.Memoize<int>(new[] { 1 }, 0));
-            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.Memoize<int>(new[] { 1 }, -1));
+            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.Memoize<int>([1], 0));
+            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.Memoize<int>([1], -1));
         }
 
         [Fact]
@@ -227,7 +227,7 @@ namespace Tests
 
             var e1 = ((IEnumerable)rng).GetEnumerator();
             Assert.True(e1.MoveNext());
-            Assert.Equal(0, (int)e1.Current);
+            Assert.Equal(0, (int)e1.Current!);
         }
 
         [Fact]
@@ -251,7 +251,7 @@ namespace Tests
         public void MemoizeLambda_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Memoize<int, int>(null, xs => xs));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Memoize<int, int>(new[] { 1 }, null));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Memoize<int, int>([1], null));
         }
 
         [Fact]
@@ -267,9 +267,9 @@ namespace Tests
         public void MemoizeLimitedLambda_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Memoize<int, int>(null, 2, xs => xs));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Memoize<int, int>(new[] { 1 }, 2, null));
-            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.Memoize<int, int>(new[] { 1 }, 0, xs => xs));
-            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.Memoize<int, int>(new[] { 1 }, -1, xs => xs));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Memoize<int, int>([1], 2, null));
+            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.Memoize<int, int>([1], 0, xs => xs));
+            AssertThrows<ArgumentOutOfRangeException>(() => EnumerableEx.Memoize<int, int>([1], -1, xs => xs));
         }
 
         [Fact]
@@ -281,12 +281,12 @@ namespace Tests
             Assert.Equal(4, n);
         }
 
-        private static readonly Random s_rand = new Random();
+        private static readonly Random RandSource = new();
 
         private static IEnumerable<int> Rand()
         {
             while (true)
-                yield return s_rand.Next();
+                yield return RandSource.Next();
         }
 
         private sealed class MyException : Exception

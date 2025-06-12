@@ -103,7 +103,7 @@ namespace System.Linq
             public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var array = await _source.ToArrayAsync(cancellationToken).ConfigureAwait(false);
-                return array.Length == 0 ? new[] { _defaultValue } : array;
+                return array.Length == 0 ? [_defaultValue] : array;
             }
 
             public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
