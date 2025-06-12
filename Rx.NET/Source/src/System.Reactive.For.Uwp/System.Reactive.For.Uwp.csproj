@@ -1,7 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>uap10.0.18362</TargetFramework>
+    <!-- Note: our workaround for the lack of uap10.0.xxxxx support requires use of TargetFrameworks (plural)
+    even when there's just a single target. -->
+    <TargetFrameworks>uap10.0.18362</TargetFrameworks>
+    <RootNamespace>System.Reactive.Uwp</RootNamespace>
 
   <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events;Windows Forms</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
@@ -12,6 +15,10 @@
   <PropertyGroup>
     <Nullable>enable</Nullable>    
   </PropertyGroup>
+
+  <ItemGroup>
+    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.18362.0\Windows.winmd" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
