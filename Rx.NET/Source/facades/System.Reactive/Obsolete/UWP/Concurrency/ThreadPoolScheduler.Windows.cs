@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-#if WINDOWS_UWP
 extern alias SystemReactiveNet;
 
 using System.ComponentModel;
@@ -10,6 +9,7 @@ using Windows.System.Threading;
 
 using SystemReactiveNet::System.Reactive.Concurrency;
 using System.Reactive.Uwp;
+using System.Reactive.WindowsRuntime;
 
 namespace System.Reactive.Concurrency
 {
@@ -223,4 +223,3 @@ namespace System.Reactive.Concurrency
         }
     }
 }
-#endif

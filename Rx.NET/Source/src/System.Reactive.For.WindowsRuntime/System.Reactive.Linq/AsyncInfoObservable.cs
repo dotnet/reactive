@@ -2,20 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Disposables;
 using System.Reactive.Threading.Tasks;
 using System.Reactive.WindowsRuntime;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+
 using Windows.Foundation;
 
 namespace System.Reactive.Linq
 {
     /// <summary>
-    /// Provides a set of extension methods to expose observable sequences as Windows Runtime
-    /// asynchronous actions and operations.
+    /// Provides a set of extension methods to expose observable sequences as Windows Runtime asynchronous actions and operations.
     /// </summary>
     [CLSCompliant(false)]
-    public static class WindowsRuntimeAsyncInfoObservable
+    public static class AsyncInfoObservable
     {
         #region IAsyncAction
 
@@ -27,7 +28,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to expose as an asynchronous action.</param>
         /// <returns>Windows Runtime asynchronous action object representing the completion of the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IAsyncAction ToIAsyncAction<TSource>(this IObservable<TSource> source)
+        public static IAsyncAction ToAsyncAction<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
             {
@@ -47,7 +48,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to expose as an asynchronous action.</param>
         /// <returns>Windows Runtime asynchronous action object representing the completion of the observable sequence, reporting incremental progress for each source sequence element.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IAsyncActionWithProgress<int> ToIAsyncActionWithProgress<TSource>(this IObservable<TSource> source)
+        public static IAsyncActionWithProgress<int> ToAsyncActionWithProgress<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
             {
@@ -71,7 +72,7 @@ namespace System.Reactive.Linq
         /// <param name="progressSelector">Selector function to map the source sequence on a progress reporting sequence.</param>
         /// <returns>Windows Runtime asynchronous action object representing the completion of the result sequence, reporting progress computed through the progress sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="progressSelector"/> is null.</exception>
-        public static IAsyncActionWithProgress<TProgress> ToIAsyncActionWithProgress<TSource, TProgress>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TProgress>> progressSelector)
+        public static IAsyncActionWithProgress<TProgress> ToAsyncActionWithProgress<TSource, TProgress>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TProgress>> progressSelector)
         {
             if (source == null)
             {
@@ -95,7 +96,7 @@ namespace System.Reactive.Linq
                     var dataSubscription = data.DefaultIfEmpty().Subscribe(obs);
                     var connection = data.Connect();
 
-                    return StableUncheckedCompositeDisposable.CreateTrusted(progressSubscription, dataSubscription, connection);
+                    return StableCompositeDisposable.CreateTrusted(progressSubscription, dataSubscription, connection);
                 }).ToTask(ct);
             });
         }
@@ -114,7 +115,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to expose as an asynchronous operation.</param>
         /// <returns>Windows Runtime asynchronous operation object that returns the last element of the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IAsyncOperation<TSource> ToIAsyncOperation<TSource>(this IObservable<TSource> source)
+        public static IAsyncOperation<TSource> ToAsyncOperation<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
             {
@@ -132,7 +133,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to expose as an asynchronous operation.</param>
         /// <returns>Windows Runtime asynchronous operation object that returns the last element of the observable sequence, reporting incremental progress for each source sequence element.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IAsyncOperationWithProgress<TSource, int> ToIAsyncOperationWithProgress<TSource>(this IObservable<TSource> source)
+        public static IAsyncOperationWithProgress<TSource, int> ToAsyncOperationWithProgress<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
             {
@@ -158,7 +159,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Selector function to map the source sequence on a result sequence.</param>
         /// <returns>Windows Runtime asynchronous operation object that returns the last element of the result sequence, reporting incremental progress for each source sequence element.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="resultSelector"/> is null.</exception>
-        public static IAsyncOperationWithProgress<TResult, int> ToIAsyncOperationWithProgress<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> resultSelector)
+        public static IAsyncOperationWithProgress<TResult, int> ToAsyncOperationWithProgress<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> resultSelector)
         {
             if (source == null)
             {
@@ -189,7 +190,7 @@ namespace System.Reactive.Linq
         /// <param name="progressSelector">Selector function to map the source sequence on a progress reporting sequence.</param>
         /// <returns>Windows Runtime asynchronous operation object that returns the last element of the result sequence, reporting progress computed through the progress sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="resultSelector"/> or <paramref name="progressSelector"/> is null.</exception>
-        public static IAsyncOperationWithProgress<TResult, TProgress> ToIAsyncOperationWithProgress<TSource, TResult, TProgress>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> resultSelector, Func<IObservable<TSource>, IObservable<TProgress>> progressSelector)
+        public static IAsyncOperationWithProgress<TResult, TProgress> ToAsyncOperationWithProgress<TSource, TResult, TProgress>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> resultSelector, Func<IObservable<TSource>, IObservable<TProgress>> progressSelector)
         {
             if (source == null)
             {
@@ -218,7 +219,7 @@ namespace System.Reactive.Linq
                     var dataSubscription = resultSelector(data).Subscribe(obs);
                     var connection = data.Connect();
 
-                    return StableUncheckedCompositeDisposable.CreateTrusted(progressSubscription, dataSubscription, connection);
+                    return StableCompositeDisposable.CreateTrusted(progressSubscription, dataSubscription, connection);
                 }).ToTask(ct);
             });
         }

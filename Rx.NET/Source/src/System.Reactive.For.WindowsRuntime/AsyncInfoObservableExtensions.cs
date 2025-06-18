@@ -2,10 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#if HAS_WINRT
 using System.Reactive.Linq;
+using System.Reactive.WindowsRuntime;
+
 using Windows.Foundation;
 
-namespace System.Reactive.WindowsRuntime
+namespace System.Reactive.Windows.Foundation
 {
     /// <summary>
     /// Provides conversions from Windows Runtime asynchronous actions and operations to observable sequences.
@@ -274,3 +277,4 @@ namespace System.Reactive.WindowsRuntime
         #endregion
     }
 }
+#endif

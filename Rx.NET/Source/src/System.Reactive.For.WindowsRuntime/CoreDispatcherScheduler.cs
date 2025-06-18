@@ -2,21 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#if WINDOWS
 using System.Reactive.Disposables;
-using System.Reactive.Concurrency;
 using System.Runtime.ExceptionServices;
 using System.Threading;
+
 using Windows.System;
 using Windows.UI.Core;
+#if HAS_OS_XAML
+using Windows.UI.Xaml;
+#endif
 
-namespace System.Reactive.WindowsRuntime
+namespace System.Reactive.Concurrency
 {
     /// <summary>
-    /// Schedules units of work on a <see cref="CoreDispatcher"/>.
+    /// Represents an object that schedules units of work on a <see cref="CoreDispatcher"/>.
     /// </summary>
     /// <remarks>
-    /// This scheduler type is typically used indirectly through the extension methods defined by
-    /// <see cref="Linq.WindowsRuntimeCoreDispatcherObservable"/>.
+    /// This scheduler type is typically used indirectly through the <see cref="Linq.CoreDispatcherObservable.ObserveOnCoreDispatcher{TSource}(IObservable{TSource})"/> and <see cref="Linq.CoreDispatcherObservable.SubscribeOnCoreDispatcher{TSource}(IObservable{TSource})"/> methods that use the current CoreDispatcher.
     /// </remarks>
     [CLSCompliant(false)]
     public sealed class CoreDispatcherScheduler : LocalScheduler, ISchedulerPeriodic
@@ -107,7 +110,7 @@ namespace System.Reactive.WindowsRuntime
                         // For scheduler implementation guidance rules, see TaskPoolScheduler.cs
                         // in System.Reactive.PlatformServices\Reactive\Concurrency.
                         //
-                        
+
                         var timer = CreateDispatcherQueue().CreateTimer();
                         timer.Interval = TimeSpan.Zero;
 
@@ -130,12 +133,12 @@ namespace System.Reactive.WindowsRuntime
 
         private DispatcherQueue CreateDispatcherQueue()
         {
-            if(_dispatcherQueue != null)
+            if (_dispatcherQueue != null)
             {
                 return _dispatcherQueue;
             }
 
-            if(Dispatcher.HasThreadAccess)
+            if (Dispatcher.HasThreadAccess)
             {
                 _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
                 return _dispatcherQueue;
@@ -264,3 +267,4 @@ namespace System.Reactive.WindowsRuntime
         }
     }
 }
+#endif

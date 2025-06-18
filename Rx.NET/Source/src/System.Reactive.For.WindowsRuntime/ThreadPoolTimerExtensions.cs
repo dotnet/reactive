@@ -3,9 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 #if WINDOWS
-extern alias SystemReactiveNet;
-
-using SystemReactiveNet::System.Reactive.Disposables;
+using System.Reactive.Disposables;
 using Windows.System.Threading;
 using Windows.Foundation;
 

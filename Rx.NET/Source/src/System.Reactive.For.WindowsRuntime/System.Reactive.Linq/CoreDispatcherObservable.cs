@@ -2,14 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#if WINDOWS
+using System.Reactive.Concurrency;
+
 using Windows.UI.Core;
 
 #if HAS_OS_XAML
 using Windows.UI.Xaml;
 #endif
-
-using CoreDispatcherScheduler = System.Reactive.WindowsRuntime.CoreDispatcherScheduler;
-using Synchronization = System.Reactive.Concurrency.Synchronization;
 
 namespace System.Reactive.Linq
 {
@@ -17,9 +17,9 @@ namespace System.Reactive.Linq
     /// Provides a set of extension methods for scheduling actions performed through observable sequences on UI dispatchers.
     /// </summary>
     [CLSCompliant(false)]
-    public static class WindowsRuntimeCoreDispatcherObservable
+    public static class CoreDispatcherObservable
     {
-        #region ObserveOn[Current]CoreDispatcher
+        #region ObserveOn[CoreDispatcher]
 
         /// <summary>
         /// Wraps the source sequence in order to run its observer callbacks on the specified dispatcher.
@@ -29,7 +29,7 @@ namespace System.Reactive.Linq
         /// <param name="dispatcher">Dispatcher whose associated message loop is used to notify observers on.</param>
         /// <returns>The source sequence whose observations happen on the specified dispatcher.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="dispatcher"/> is null.</exception>
-        public static IObservable<TSource> ObserveOnWindowsRuntimeCoreDispatcher<TSource>(this IObservable<TSource> source, CoreDispatcher dispatcher)
+        public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, CoreDispatcher dispatcher)
         {
             if (source == null)
             {
@@ -53,7 +53,7 @@ namespace System.Reactive.Linq
         /// <param name="priority">Priority to schedule work items at.</param>
         /// <returns>The source sequence whose observations happen on the specified dispatcher.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="dispatcher"/> is null.</exception>
-        public static IObservable<TSource> ObserveOnWindowsRuntimeCoreDispatcher<TSource>(this IObservable<TSource> source, CoreDispatcher dispatcher, CoreDispatcherPriority priority)
+        public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, CoreDispatcher dispatcher, CoreDispatcherPriority priority)
         {
             if (source == null)
             {
@@ -77,7 +77,7 @@ namespace System.Reactive.Linq
         /// <param name="dependencyObject">Object to get the dispatcher from.</param>
         /// <returns>The source sequence whose observations happen on the specified object's dispatcher.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="dependencyObject"/> is null.</exception>
-        public static IObservable<TSource> ObserveOnWindowsRuntimeCoreDispatcher<TSource>(this IObservable<TSource> source, DependencyObject dependencyObject)
+        public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, DependencyObject dependencyObject)
         {
             if (source == null)
             {
@@ -101,7 +101,7 @@ namespace System.Reactive.Linq
         /// <param name="priority">Priority to schedule work items at.</param>
         /// <returns>The source sequence whose observations happen on the specified object's dispatcher.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="dependencyObject"/> is null.</exception>
-        public static IObservable<TSource> ObserveOnWindowsRuntimeCoreDispatcher<TSource>(this IObservable<TSource> source, DependencyObject dependencyObject, CoreDispatcherPriority priority)
+        public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, DependencyObject dependencyObject, CoreDispatcherPriority priority)
         {
             if (source == null)
             {
@@ -123,7 +123,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <returns>The source sequence whose observations happen on the current window's dispatcher.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IObservable<TSource> ObserveOnCurrentWindowsRuntimeCoreDispatcher<TSource>(this IObservable<TSource> source)
+        public static IObservable<TSource> ObserveOnCoreDispatcher<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
             {
@@ -141,7 +141,7 @@ namespace System.Reactive.Linq
         /// <param name="priority">Priority to schedule work items at.</param>
         /// <returns>The source sequence whose observations happen on the current window's dispatcher.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IObservable<TSource> ObserveOnCurrentWindowsRuntimeCoreDispatcher<TSource>(this IObservable<TSource> source, CoreDispatcherPriority priority)
+        public static IObservable<TSource> ObserveOnDispatcher<TSource>(this IObservable<TSource> source, CoreDispatcherPriority priority)
         {
             if (source == null)
             {
@@ -165,9 +165,9 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="dispatcher"/> is null.</exception>
         /// <remarks>
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the specified dispatcher.
-        /// In order to invoke observer callbacks on the specified dispatcher, e.g. to render results in a control, use <see cref="WindowsRuntimeCoreDispatcherObservable.ObserveOnWindowsRuntimeCoreDispatcher{TSource}(IObservable{TSource}, CoreDispatcher)"/>.
+        /// In order to invoke observer callbacks on the specified dispatcher, e.g. to render results in a control, use <see cref="CoreDispatcherObservable.ObserveOn{TSource}(IObservable{TSource}, CoreDispatcher)"/>.
         /// </remarks>
-        public static IObservable<TSource> SubscribeOnWindowsRuntimeCoreDispatcher<TSource>(this IObservable<TSource> source, CoreDispatcher dispatcher)
+        public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, CoreDispatcher dispatcher)
         {
             if (source == null)
             {
@@ -193,9 +193,9 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="dispatcher"/> is null.</exception>
         /// <remarks>
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the specified dispatcher.
-        /// In order to invoke observer callbacks on the specified dispatcher, e.g. to render results in a control, use <see cref="WindowsRuntimeCoreDispatcherObservable.ObserveOnWindowsRuntimeCoreDispatcher{TSource}(IObservable{TSource}, CoreDispatcher, CoreDispatcherPriority)"/>.
+        /// In order to invoke observer callbacks on the specified dispatcher, e.g. to render results in a control, use <see cref="CoreDispatcherObservable.ObserveOn{TSource}(IObservable{TSource}, CoreDispatcher, CoreDispatcherPriority)"/>.
         /// </remarks>
-        public static IObservable<TSource> SubscribeOnWindowsRuntimeCoreDispatcher<TSource>(this IObservable<TSource> source, CoreDispatcher dispatcher, CoreDispatcherPriority priority)
+        public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, CoreDispatcher dispatcher, CoreDispatcherPriority priority)
         {
             if (source == null)
             {
@@ -221,9 +221,9 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="dependencyObject"/> is null.</exception>
         /// <remarks>
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the dispatcher associated with the specified object.
-        /// In order to invoke observer callbacks on the dispatcher associated with the specified object, e.g. to render results in a control, use <see cref="WindowsRuntimeCoreDispatcherObservable.ObserveOnWindowsRuntimeCoreDispatcher{TSource}(IObservable{TSource}, DependencyObject)"/>.
+        /// In order to invoke observer callbacks on the dispatcher associated with the specified object, e.g. to render results in a control, use <see cref="CoreDispatcherObservable.ObserveOn{TSource}(IObservable{TSource}, DependencyObject)"/>.
         /// </remarks>
-        public static IObservable<TSource> SubscribeOnWindowsRuntimeCoreDispatcher<TSource>(this IObservable<TSource> source, DependencyObject dependencyObject)
+        public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, DependencyObject dependencyObject)
         {
             if (source == null)
             {
@@ -249,9 +249,9 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="dependencyObject"/> is null.</exception>
         /// <remarks>
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the dispatcher associated with the specified object.
-        /// In order to invoke observer callbacks on the dispatcher associated with the specified object, e.g. to render results in a control, use <see cref="WindowsRuntimeCoreDispatcherObservable.ObserveOnWindowsRuntimeCoreDispatcher{TSource}(IObservable{TSource}, DependencyObject, CoreDispatcherPriority)"/>.
+        /// In order to invoke observer callbacks on the dispatcher associated with the specified object, e.g. to render results in a control, use <see cref="CoreDispatcherObservable.ObserveOn{TSource}(IObservable{TSource}, DependencyObject, CoreDispatcherPriority)"/>.
         /// </remarks>
-        public static IObservable<TSource> SubscribeOnWindowsRuntimeCoreDispatcher<TSource>(this IObservable<TSource> source, DependencyObject dependencyObject, CoreDispatcherPriority priority)
+        public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, DependencyObject dependencyObject, CoreDispatcherPriority priority)
         {
             if (source == null)
             {
@@ -276,9 +276,9 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the dispatcher associated with the current window.
-        /// In order to invoke observer callbacks on the dispatcher associated with the current window, e.g. to render results in a control, use <see cref="WindowsRuntimeCoreDispatcherObservable.ObserveOnCurrentWindowsRuntimeCoreDispatcher{TSource}(IObservable{TSource})"/>.
+        /// In order to invoke observer callbacks on the dispatcher associated with the current window, e.g. to render results in a control, use <see cref="CoreDispatcherObservable.ObserveOnCoreDispatcher{TSource}(IObservable{TSource})"/>.
         /// </remarks>
-        public static IObservable<TSource> SubscribeOnCurrentWindowsRuntimeCoreDispatcher<TSource>(this IObservable<TSource> source)
+        public static IObservable<TSource> SubscribeOnCoreDispatcher<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
             {
@@ -298,9 +298,9 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the dispatcher associated with the current window.
-        /// In order to invoke observer callbacks on the dispatcher associated with the current window, e.g. to render results in a control, use <see cref="WindowsRuntimeCoreDispatcherObservable.ObserveOnCurrentWindowsRuntimeCoreDispatcher{TSource}(IObservable{TSource}, CoreDispatcherPriority)"/>.
+        /// In order to invoke observer callbacks on the dispatcher associated with the current window, e.g. to render results in a control, use <see cref="CoreDispatcherObservable.ObserveOnDispatcher{TSource}(IObservable{TSource}, CoreDispatcherPriority)"/>.
         /// </remarks>
-        public static IObservable<TSource> SubscribeOnCurrentWindowsRuntimeCoreDispatcher<TSource>(this IObservable<TSource> source, CoreDispatcherPriority priority)
+        public static IObservable<TSource> SubscribeOnDispatcher<TSource>(this IObservable<TSource> source, CoreDispatcherPriority priority)
         {
             if (source == null)
             {
@@ -313,3 +313,4 @@ namespace System.Reactive.Linq
         #endregion
     }
 }
+#endif

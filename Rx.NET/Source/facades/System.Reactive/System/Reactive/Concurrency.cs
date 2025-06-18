@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
@@ -60,12 +60,12 @@ using System.Runtime.CompilerServices;
 // deprecating them. This would enable us to avoid making working types obsolete which might reduce confusion.
 // It does remove the opportunity to fix up some naming issues, but maybe it would be better to live with that
 // to minimize disruption.
-//#if WINDOWS
-//[assembly:TypeForwardedToAttribute(typeof(CoreDispatcherScheduler))]
-//#endif
-//#if HAS_WINFORMS
-//[assembly:TypeForwardedToAttribute(typeof(ControlScheduler))]
-//#endif
+#if WINDOWS
+[assembly:TypeForwardedToAttribute(typeof(System.Reactive.Concurrency.CoreDispatcherScheduler))]
+#endif
+#if HAS_WINFORMS
+[assembly:TypeForwardedToAttribute(typeof(System.Reactive.Concurrency.ControlScheduler))]
+#endif
 //#if HAS_DISPATCHER
 //[assembly:TypeForwardedToAttribute(typeof(DispatcherScheduler))]
 //#endif
