@@ -3,28 +3,24 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Disposables;
-using System.Reactive.Concurrency;
 using System.Threading;
-using System.Windows.Threading;
 
-namespace System.Reactive.Wpf
+namespace System.Reactive.Concurrency
 {
     /// <summary>
     /// Represents an object that schedules units of work on a <see cref="System.Windows.Threading.Dispatcher"/>.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// This scheduler type is typically used indirectly through extension methods such as
-    /// <see cref="Linq.WpfDispatcherObservable.ObserveOnWpfDispatcher{TSource}(IObservable{TSource}, Dispatcher)"/> and
-    /// <see cref="Linq.WpfDispatcherObservable.SubscribeOnWpfDispatcher{TSource}(IObservable{TSource}, Dispatcher)"/>
-    /// in cases where you have a <see cref="Dispatcher"/> you want to use, or methods such as
-    /// <see cref="Linq.WpfDispatcherObservable.ObserveOnCurrentWpfDispatcher{TSource}(IObservable{TSource})"/>,
-    /// <see cref="Linq.WpfDispatcherObservable.ObserveOnCurrentWpfDispatcher{TSource}(IObservable{TSource})"/>
-    /// when you want to use the calling thread's Dispatcher.
-    /// </para>
+    /// This scheduler type is typically used indirectly through the <see cref="Linq.DispatcherObservable.ObserveOnDispatcher{TSource}(IObservable{TSource})"/> and <see cref="Linq.DispatcherObservable.SubscribeOnDispatcher{TSource}(IObservable{TSource})"/> methods that use the Dispatcher on the calling thread.
     /// </remarks>
     public class DispatcherScheduler : LocalScheduler, ISchedulerPeriodic
     {
+        /// <summary>
+        /// Gets the scheduler that schedules work on the current <see cref="System.Windows.Threading.Dispatcher"/>.
+        /// </summary>
+        [Obsolete(Constants_WindowsThreading.OBSOLETE_INSTANCE_PROPERTY)]
+        public static DispatcherScheduler Instance => new(System.Windows.Threading.Dispatcher.CurrentDispatcher);
+
         /// <summary>
         /// Gets the scheduler that schedules work on the <see cref="System.Windows.Threading.Dispatcher"/> for the current thread.
         /// </summary>

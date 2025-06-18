@@ -4,16 +4,16 @@
 
 using Windows.Foundation;
 
-namespace System.Reactive.WindowsRuntime
+namespace System.Reactive
 {
-    internal sealed class EventPatternSource<TSender, TEventArgs> : EventPatternSourceBase<TSender, TEventArgs>, ITypedEventPatternSource<TSender, TEventArgs>
+    internal sealed class EventPatternSource<TSender, TEventArgs> : EventPatternSourceBase<TSender, TEventArgs>, IEventPatternSource<TSender, TEventArgs>
     {
         public EventPatternSource(IObservable<EventPattern<TSender, TEventArgs>> source, Action<Action<TSender, TEventArgs>, /*object,*/ EventPattern<TSender, TEventArgs>> invokeHandler)
             : base(source, invokeHandler)
         {
         }
 
-        event TypedEventHandler<TSender, TEventArgs> ITypedEventPatternSource<TSender, TEventArgs>.OnNext
+        event TypedEventHandler<TSender, TEventArgs> IEventPatternSource<TSender, TEventArgs>.OnNext
         {
             add
             {

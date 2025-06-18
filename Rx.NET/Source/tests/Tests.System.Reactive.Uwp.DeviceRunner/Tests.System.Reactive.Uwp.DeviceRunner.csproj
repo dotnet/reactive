@@ -148,6 +148,18 @@
     <PackageReference Include="xunit.assert" Version="2.8.0" />
   </ItemGroup>
   <ItemGroup>
+    <!--
+    Nerdbank.GitVersioning 3.6.128 injects a reference to a .proj file that doesn't work inside the
+    UWP test runner project. We don't ship that as a NuGet package, so it doesn't matter what its
+    version number is.
+    However, this doesn't seem to work. And excluding this project in the Directory.Build.props file
+    where we add this reference in the first place also doesn't work. I think this is coming in
+    transitively. So we need to work out exactly how .nuget\packages\nerdbank.gitversioning\3.6.143\build\PrivateP2PCaching.proj
+    is getting included, and work out how to stop that.
+    -->
+    <PackageReference Remove="Nerdbank.GitVersioning" />
+  </ItemGroup>
+  <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -158,9 +170,9 @@
       <Project>{cb5e4ffa-f510-43f1-b378-b3d7ba7c8396}</Project>
       <Name>System.Reactive.Observable.Aliases</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj">
+    <ProjectReference Include="..\..\src\System.Reactive.Net\System.Reactive.Net.csproj">
       <Project>{01706a0f-8a63-4fd6-af45-0bc0bed3c0d9}</Project>
-      <Name>System.Reactive</Name>
+      <Name>System.Reactive.Net</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj">
       <Project>{73078FB5-6038-4674-B4C4-32FD81B88055}</Project>

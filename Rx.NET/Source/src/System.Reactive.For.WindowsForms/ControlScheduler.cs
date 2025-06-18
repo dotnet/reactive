@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
-using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace System.Reactive.WindowsForms
+namespace System.Reactive.Concurrency
 {
     /// <summary>
     /// Represents an object that schedules units of work on the message loop associated with a Windows Forms control.
@@ -22,7 +21,7 @@ namespace System.Reactive.WindowsForms
         /// <param name="control">Windows Forms control to get the message loop from.</param>
         /// <exception cref="ArgumentNullException"><paramref name="control"/> is null.</exception>
         /// <remarks>
-        /// This scheduler type is typically used indirectly through the <see cref="Linq.WindowsFormsControlObservable.ObserveOnWindowsFormsControl{TSource}"/> and <see cref="Linq.WindowsFormsControlObservable.SubscribeOnWindowFormsControl{TSource}"/> method overloads that take a Windows Forms control.
+        /// This scheduler type is typically used indirectly through the <see cref="Linq.ControlObservable.ObserveOn{TSource}"/> and <see cref="Linq.ControlObservable.SubscribeOn{TSource}"/> method overloads that take a Windows Forms control.
         /// </remarks>
         public ControlScheduler(Control control)
         {

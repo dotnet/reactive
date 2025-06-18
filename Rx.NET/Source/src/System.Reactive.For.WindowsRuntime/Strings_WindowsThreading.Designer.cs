@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace System.Reactive.WindowsRuntime {
+namespace System.Reactive {
     using System;
     
     

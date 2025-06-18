@@ -11,7 +11,7 @@ namespace System.Reactive.WindowsRuntime
     /// </summary>
     /// <remarks>
     /// This is a copy from <c>System.Reactive</c> and then trimmed down to provide just the one
-    /// feature <see cref="System.Reactive.Linq.WindowsRuntimeAsyncInfoObservable"/>
+    /// feature <see cref="Linq.AsyncInfoObservable"/>
     /// needs: access to the internal CreateTrusted method. I didn't want to make that a
     /// public-facing part of the main library. (And <c>InternalsVisibleTo</c> effectively makes it
     /// somewhat public: it means changes to the internals could break this library.) Better, then

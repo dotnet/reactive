@@ -17,12 +17,21 @@
     supported by tooling (e.g., the .NET SDK), which is why we've chosen it here.
     For UWP we need a newer version because Visual Studio 2022 supports nothing older than 18362.
     -->
-    <TargetFrameworks>net6.0-windows10.0.17763.0;uap10.0.18362</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows10.0.17763.0;uap10.0.18362</TargetFrameworks>
 
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events;Windows Forms</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
 
     <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.18362'">
+    <!--
+    The .NET SDK doesn't expect TargetFrameworks to include uap10.0.18362, so it doesn't understand
+    that this project is capable of using projects that target .NET Standard 2.0. We set this property
+    to work around that.
+    -->
+    <ReferringTargetFrameworkForProjectReferences>netstandard2.0</ReferringTargetFrameworkForProjectReferences>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -38,7 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
+    <ProjectReference Include="..\System.Reactive.Net\System.Reactive.Net.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -21,10 +21,10 @@
     We need to be on a sufficiently recent version of the test framework, because we need this fix:
       https://github.com/microsoft/testfx/pull/1071
     Without this, the test runner fails to process Windows-version-specific TFMs for .NET 6.0.
-    Since the various libraries that require net6.0-windows all specify a minimum version (10.0.19041
+    Since the various libraries that require net8.0-windows all specify a minimum version (10.0.19041
     for reasons not currently clear to me; idg10) this test project needs to specify at least as new
-    a version. If we write just net6.0-windows, that turns out to imply Windows 7.0, so it is not
-    considered compatible with a net6.0-windows10.0.19041 library.
+    a version. If we write just net8.0-windows, that turns out to imply Windows 7.0, so it is not
+    considered compatible with a net8.0-windows10.0.19041 library.
     Before that PR was merged, the test runner wouldn't work if the host specified a TFM with a
     specific Windows version.
 -->
@@ -32,12 +32,13 @@
     <PackageReference Include="MSTest.TestAdapter" Version="3.6.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.6.1" />
     <PackageReference Include="xunit.assert" Version="2.8.0" />
-    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
+    <ProjectReference Include="..\..\facades\System.Reactive\System.Reactive.csproj" />
+    <ProjectReference Include="..\..\src\System.Reactive.Net\System.Reactive.Net.csproj" />
     <ProjectReference Include="..\..\src\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+  <ItemGroup Condition="('$(TargetFramework)' == 'net472') or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
     <ProjectReference Include="..\..\src\System.Reactive.For.WindowsForms\System.Reactive.For.WindowsForms.csproj" />
     <ProjectReference Include="..\..\src\System.Reactive.For.Wpf\System.Reactive.For.Wpf.csproj" />
     <PackageReference Update="coverlet.collector" Version="6.0.2">
