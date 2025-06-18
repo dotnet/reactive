@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
+    <ProjectReference Include="..\System.Reactive.Net\System.Reactive.Net.csproj" />
   </ItemGroup>
 
   <ItemGroup>

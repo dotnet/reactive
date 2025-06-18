@@ -1,0 +1,97 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net6.0;net6.0-windows10.0.19041</TargetFrameworks>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>Legacy facade for Reactive Extensions (Rx) for .NET</Description>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\NuGet.Facades.Readme.md" Pack="true" PackagePath="\readme.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+    This facade is much newer than the others. The rest were created
+    at the time of the Great Unification (Rx 4.0) to provide backwards
+    compatibility with Rx 3.1, so they need to retain the same assembly
+    version number hack that Rx 3.1 introduced in an attempt to solve
+    the plug-in problem described in https://github.com/dotnet/reactive/issues/97
+
+    System.Reactive became a facade much later (Rx 7.0) in order to
+    partially unwind the Great Unification. Since we had long since stopped
+    using the assembly version number hack, we don't want to apply
+    it here. The Directory.build.props file in the facades folder applies
+    this, so we need to remove it.
+    -->
+    <Compile Remove="..\GlobalAssemblyVersion.cs" Link="GlobalAssemblyVersion.cs" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Re-instate the normal versioning behaviour. -->
+    <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyVersionInfo>true</GenerateAssemblyVersionInfo>
+  </PropertyGroup>
+
+  <!--
+  The various platform-specific APIs that System.Reactive used to support are now deprecated,
+  because we've moved to a more modular approach with separate packages for each platform, and
+  this entails some changes to naming conventions. These deprecated types now live in this facade.
+  -->
+  <ItemGroup>
+    <Compile Remove="Obsolete\**\*.*" />
+    <EmbeddedResource Remove="Obsolete\**\*.*" />
+    <!-- Workaround so the files appear in VS -->
+    <None Include="Obsolete\**\*.*" />
+    <Compile Include="..\..\src\System.Reactive.For.Uwp\Stubs.cs" Link="Obsolete\UWP\Stubs.cs" />
+    <None Update="Linq\QbservableEx.NAry.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>QbservableEx.NAry.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+
+  <!-- UWP -->
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+    <Compile Include="Obsolete\UWP\**\*.cs" />
+    <EmbeddedResource Include="Obsolete\UWP\Strings_PlatformServices.resx" />
+    <Compile Include="..\..\src\System.Reactive.For.WindowsRuntime\AsyncInfoExtensions.cs" Link="Obsolete\UWP\AsyncInfoExtensions.cs" />
+  </ItemGroup>
+
+  <!-- Windows includes for Desktop and UWP -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+    <Compile Include="Obsolete\Windows\**\*.cs" />
+    <EmbeddedResource Include="Obsolete\Windows\**\*.resx" />
+  </ItemGroup>
+
+  <!-- .NET FX -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472'">
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
+    
+    <Compile Include="Obsolete\Remoting\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+    <Compile Include="Obsolete\Desktop\**\*.cs" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\System.Reactive.Net\System.Reactive.Net.csproj">
+      <Aliases>SystemReactiveNet</Aliases>
+    </ProjectReference>
+    <ProjectReference Condition="('$(TargetFramework)' == 'net472') or $(TargetFramework.StartsWith('net6.0-windows'))" Include="..\..\src\System.Reactive.For.WindowsForms\System.Reactive.For.WindowsForms.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
+    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.19041.0\Windows.winmd" />
+  </ItemGroup>
+
+</Project>

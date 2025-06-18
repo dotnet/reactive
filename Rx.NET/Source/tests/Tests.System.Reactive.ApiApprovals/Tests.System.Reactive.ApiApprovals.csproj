@@ -19,7 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
+    <ProjectReference Include="..\..\facades\System.Reactive\System.Reactive.csproj" />
+    <ProjectReference Include="..\..\src\System.Reactive.Net\System.Reactive.Net.csproj" />
     <ProjectReference Include="..\..\src\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
   </ItemGroup>
@@ -33,7 +34,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="DiffPlex" Version="1.7.2" />
-    <PackageReference Include="PublicApiGenerator" Version="11.0.0" />
+    <PackageReference Include="PublicApiGenerator" Version="11.4.6" />
   </ItemGroup>
 
   <ItemGroup>

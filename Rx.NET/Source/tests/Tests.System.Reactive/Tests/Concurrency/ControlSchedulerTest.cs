@@ -16,6 +16,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Reactive.Testing;
 
 using Assert = Xunit.Assert;
+// TODO: separate out legacy tests into different project? Or, maybe this doesn't need to be legacy.
 using LegacyControlScheduler = System.Reactive.Concurrency.ControlScheduler;
 using ControlScheduler = System.Reactive.WindowsForms.ControlScheduler;
 

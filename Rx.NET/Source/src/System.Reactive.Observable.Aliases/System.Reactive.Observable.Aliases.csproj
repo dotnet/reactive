@@ -11,11 +11,11 @@
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
   </ItemGroup>  
   <ItemGroup>    
-    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
+    <ProjectReference Include="..\System.Reactive.Net\System.Reactive.Net.csproj" />
   </ItemGroup>  
 
   <ItemGroup>
-    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md"/>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">

@@ -31,6 +31,23 @@
                     Version="6.2.14" />
   </ItemGroup>
 
+  <!-- Ensure correct resx file handling -->
+  <ItemGroup>
+    <!-- Runs code generator to produce strongly-typed resx wrapper type. -->
+    <EmbeddedResource Update="**\*.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>System.Reactive</CustomToolNamespace>
+      <LastGenOutput>$([System.IO.Path]::GetFileNameWithoutExtension('%(Filename)')).Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+
+    <!-- Gets the correct grouping in VS -->
+    <Compile Update="@(EmbeddedResource -> '%(LastGenOutput)')">
+      <DependentUpon>$([System.IO.Path]::GetFileNameWithoutExtension('$([System.IO.Path]::GetFileNameWithoutExtension('%(Identity)'))')).resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
 
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
     <!--

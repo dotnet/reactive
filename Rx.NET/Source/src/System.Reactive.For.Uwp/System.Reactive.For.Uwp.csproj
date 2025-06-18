@@ -23,12 +23,12 @@
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
     <Compile Include="..\System.Reactive.For.WindowsRuntime\AsyncInfoExtensions.cs" Link="AsyncInfoExtensions.cs" />
-    <Compile Include="..\System.Reactive\Concurrency\UserWorkItem.cs" Link="UserWorkItem.cs" />
-    <Compile Include="..\System.Reactive\Diagnostics\CodeAnalysis\NullableAttributes.cs" Link="NullableAttributes.cs" />
+    <Compile Include="..\System.Reactive.Net\Concurrency\UserWorkItem.cs" Link="UserWorkItem.cs" />
+    <Compile Include="..\System.Reactive.Net\Diagnostics\CodeAnalysis\NullableAttributes.cs" Link="NullableAttributes.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
+    <ProjectReference Include="..\System.Reactive.Net\System.Reactive.Net.csproj" />
     <ProjectReference Include="..\System.Reactive.For.WindowsRuntime\System.Reactive.For.WindowsRuntime.csproj" />
   </ItemGroup>
 

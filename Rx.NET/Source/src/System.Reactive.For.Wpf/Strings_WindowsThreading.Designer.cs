@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace System.Reactive.Wpf {
+namespace System.Reactive {
     using System;
     
     

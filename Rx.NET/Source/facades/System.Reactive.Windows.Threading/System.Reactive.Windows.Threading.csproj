@@ -10,11 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\NuGet.Facades.Readme.md" Pack="true" PackagePath="\readme.md"/>
+    <None Include="..\NuGet.Facades.Readme.md" Pack="true" PackagePath="\readme.md" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
+    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
     
 </Project>

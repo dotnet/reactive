@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace System.Reactive.Uwp {
+namespace System.Reactive {
     using System;
     using System.Reflection;
     
