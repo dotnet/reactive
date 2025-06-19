@@ -17,7 +17,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.18362.0\Windows.winmd" />
+    <!-- 19041 not 18362 because the Azure DevOps hosted build agents don't offer 18362, and there appears
+         not to be any official supported way to get it on there.
+         We end up with a reference to Windows 255.255.255.255 in any case, so as far as I can tell, this
+         produces results indistinguishable from what we would get with 18362. The only issue here is that
+         in theory it makes it possible for the code to refer to an API that is not available on 18362. In
+         practice, we're not doing that, and we don't expect to change this code much in the future, so it
+         shouldn't happen.
+    -->
+    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.19041.0\Windows.winmd" />
   </ItemGroup>
 
   <ItemGroup>
