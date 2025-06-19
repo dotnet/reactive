@@ -16,13 +16,6 @@ using Microsoft.Reactive.Testing;
 
 #if HAS_WINFORMS
 using System.Windows.Forms;
-using LegacyControlScheduler = System.Reactive.Concurrency.ControlScheduler;
-using ControlScheduler = System.Reactive.WindowsForms.ControlScheduler;
-#endif
-
-#if HAS_WPF
-using LegacyDispatcherScheduler = System.Reactive.Concurrency.DispatcherScheduler;
-using DispatcherScheduler = System.Reactive.Wpf.DispatcherScheduler;
 #endif
 
 using System.Threading.Tasks;
@@ -34,14 +27,6 @@ namespace ReactiveTests.Tests
     [TestClass]
     public class SchedulerTest : ReactiveTest
     {
-#if HAS_DISPATCHER
-        [TestInitialize]
-        public void EnsureDispatcherAvailable()
-        {
-            _ = new System.Windows.DependencyObject();
-        }
-#endif
-
         #region IScheduler
 
         [TestMethod]
@@ -74,14 +59,10 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(DateTimeOffset.MaxValue, default(Action)));
 #if DESKTOPCLR
-            ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Current.Schedule(default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Current.ScheduleAction(new object(), default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Current.Schedule(TimeSpan.Zero, default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Current.Schedule(DateTimeOffset.MaxValue, default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => LegacyDispatcherScheduler.Current.Schedule(default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => LegacyDispatcherScheduler.Current.ScheduleAction(new object(), default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => LegacyDispatcherScheduler.Current.Schedule(TimeSpan.Zero, default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => LegacyDispatcherScheduler.Current.Schedule(DateTimeOffset.MaxValue, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.Schedule(default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.ScheduleAction(new object(), default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.Schedule(TimeSpan.Zero, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.Schedule(DateTimeOffset.MaxValue, default(Action)));
 #endif
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule(default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.ScheduleAction(new object(), default));
@@ -107,10 +88,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new ControlScheduler(lbl).ScheduleAction(new object(), default(Action<object>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => new ControlScheduler(lbl).Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => new ControlScheduler(lbl).Schedule(DateTimeOffset.MaxValue, default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new LegacyControlScheduler(lbl).Schedule(default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new LegacyControlScheduler(lbl).ScheduleAction(new object(), default(Action<object>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new LegacyControlScheduler(lbl).Schedule(TimeSpan.Zero, default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new LegacyControlScheduler(lbl).Schedule(DateTimeOffset.MaxValue, default(Action)));
 #endif
             var ctx = new SynchronizationContext();
             ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(ctx).Schedule(default(Action)));

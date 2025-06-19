@@ -14,7 +14,9 @@ namespace ReactiveTests.Tests
     [TestClass]
     public class HalfSerializerTest
     {
+#pragma warning disable IDE0044 // Spurious suggestion to add readonly. Not appropriate because this is passed by ref
         private int _wip;
+#pragma warning restore IDE0044
         private Exception _error;
         private readonly Consumer _consumer = new();
 

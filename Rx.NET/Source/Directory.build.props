@@ -32,16 +32,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
     
-    <!--
-    Nerdbank.GitVersioning 3.6.128 injects a reference to a .proj file that doesn't work inside the
-    UWP test runner project. We don't ship that as a NuGet package, so it doesn't matter what its
-    version number is.
-    -->
     <PackageReference
       Include="Nerdbank.GitVersioning"
       Version="3.6.143"
-      PrivateAssets="all"
-      Condition="$(ProjectName) != 'Tests.System.Reactive.Uwp.DeviceRunner'" />
+      PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

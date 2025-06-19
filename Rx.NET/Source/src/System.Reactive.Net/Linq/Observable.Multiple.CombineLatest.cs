@@ -1193,7 +1193,9 @@ namespace System.Reactive.Linq
 
     }
 
+#pragma warning disable CA1711 // Identifiers should not have incorrect suffix. It has always been called this, so we can't change it now.
     public static partial class ObservableEx
+#pragma warning restore CA1711 // Identifiers should not have incorrect suffix
     {
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence of tuple values whenever any of the observable sequences produces an element.

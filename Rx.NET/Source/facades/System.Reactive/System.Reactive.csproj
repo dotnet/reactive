@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net6.0;net6.0-windows10.0.19041</TargetFrameworks>
     <Nullable>enable</Nullable>
+
+    <DefineConstants>$(DefineConstants);LEGACY_SYSTEM_REACTIVE_FACADE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -44,9 +46,16 @@
   -->
   <ItemGroup>
     <Compile Remove="Obsolete\**\*.*" />
+    <Compile Remove="Obsolete\UWP\Linq\**" />
     <EmbeddedResource Remove="Obsolete\**\*.*" />
+    <EmbeddedResource Remove="Obsolete\UWP\Linq\**" />
     <!-- Workaround so the files appear in VS -->
     <None Include="Obsolete\**\*.*" />
+    <None Include="..\..\src\System.Reactive.For.WindowsRuntime\AsyncInfoExtensions.cs" Link="Obsolete\UWP\AsyncInfoExtensions.cs" />
+    <None Remove="Obsolete\UWP\Linq\**" />
+    <None Update="Obsolete\UWP\Strings_PlatformServices.Designer.cs">
+      <DependentUpon>Obsolete\UWP\Strings_PlatformServices.resx</DependentUpon>
+    </None>
     <None Include="..\..\src\System.Reactive.For.Uwp\Stubs.cs" Link="Obsolete\UWP\Stubs.cs" />
     <None Include="..\..\src\System.Reactive.For.Uwp\ThreadPoolTimerExtensions.cs" Link="Obsolete\UWP\Concurrency\ThreadPoolTimerExtensions.cs" />
     <None Update="Linq\QbservableEx.NAry.tt">
@@ -65,14 +74,20 @@
     <!-- WindowsRuntime (netX.0-windows and UWP) -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
     <EmbeddedResource Include="Obsolete\UWP\Strings_PlatformServices.resx" />
+    <Compile Update="Obsolete\UWP\Strings_PlatformServices.Designer.cs">
+      <DependentUpon>Obsolete\UWP\Strings_PlatformServices.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="..\..\src\System.Reactive.For.WindowsRuntime\AsyncInfoExtensions.cs" Link="Obsolete\UWP\AsyncInfoExtensions.cs" />
 
     <ProjectReference Include="..\..\src\System.Reactive.For.WindowsRuntime\System.Reactive.For.WindowsRuntime.csproj" />
   </ItemGroup>
 
-  <!-- Windows Forms -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+  <!-- Windows Forms and WPF -->
+  <ItemGroup Condition="('$(TargetFramework)' == 'net472') or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
     <ProjectReference Include="..\..\src\System.Reactive.For.WindowsForms\System.Reactive.For.WindowsForms.csproj" />
+    <ProjectReference Include="..\..\src\System.Reactive.For.Wpf\System.Reactive.For.Wpf.csproj" />
   </ItemGroup>
   
   <!-- Windows includes for Desktop and UWP -->
@@ -100,16 +115,10 @@
     <ProjectReference Include="..\..\src\System.Reactive.Net\System.Reactive.Net.csproj">
       <Aliases>SystemReactiveNet</Aliases>
     </ProjectReference>
-
-    <ProjectReference Condition="('$(TargetFramework)' == 'net472') or $(TargetFramework.StartsWith('net6.0-windows'))" Include="..\..\src\System.Reactive.For.WindowsForms\System.Reactive.For.WindowsForms.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
     <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.19041.0\Windows.winmd" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Obsolete\UWP\Linq\" />
   </ItemGroup>
 
 </Project>
