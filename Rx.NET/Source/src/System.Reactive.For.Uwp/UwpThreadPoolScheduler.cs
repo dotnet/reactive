@@ -13,9 +13,14 @@ namespace System.Reactive.Uwp
     /// </summary>
     /// <seealso cref="Instance">Singleton instance of this type exposed through this static property.</seealso>
     [CLSCompliant(false)]
-    public sealed class UwpThreadPoolScheduler : LocalScheduler, ISchedulerPeriodic
+    public sealed class UwpThreadPoolScheduler : LocalScheduler, ISchedulerPeriodic, ISchedulerPeriodNoSubMs
     {
         private static readonly Lazy<UwpThreadPoolScheduler> LazyDefault = new(static () => new UwpThreadPoolScheduler());
+
+        static UwpThreadPoolScheduler()
+        {
+            System.Reactive.PlatformServices.HostLifecycleService.TrySetHostLifecycleNotifications(new System.Reactive.PlatformServices.HostLifecycleNotifications());
+        }
 
         /// <summary>
         /// Constructs a ThreadPoolScheduler that schedules units of work on the Windows ThreadPool.

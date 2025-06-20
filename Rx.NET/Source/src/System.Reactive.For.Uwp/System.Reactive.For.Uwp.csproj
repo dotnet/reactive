@@ -6,10 +6,27 @@
     <TargetFrameworks>uap10.0.18362</TargetFrameworks>
     <RootNamespace>System.Reactive.Uwp</RootNamespace>
 
-  <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events;Windows Forms</PackageTags>
+    <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events;Windows Forms</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
 
     <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.18362'">
+    <!--
+    The .NET SDK doesn't expect TargetFrameworks to include uap10.0.18362, so it doesn't understand
+    that this project is capable of using projects that target .NET Standard 2.0, so it thinks that
+    the reference to System.Reactive.Net is invalid.
+    In most cases we work around this by setting ReferringTargetFrameworkForProjectReferences to
+    netstandard2.0, which makes the SDK handle this project as though it were targeting netstandard2.0,
+    making it happy to resolve the reference to System.Reactive.Net. Unfortunately that won't work here
+    because this also references System.Reactive.For.WindowsRuntime, which does not target netstandard2.0.
+    For that reference, we need to use the uap10.0.18362.
+
+    Instead, we have to completely disable the SDK's normal target framework resolution (which is executed
+    by the GetReferenceNearestTargetFrameworkTask task) for this project.
+    -->
+    <!--<ReferringTargetFrameworkForProjectReferences></ReferringTargetFrameworkForProjectReferences>-->
   </PropertyGroup>
 
   <PropertyGroup>
@@ -33,10 +50,19 @@
     <Compile Include="..\System.Reactive.For.WindowsRuntime\AsyncInfoExtensions.cs" Link="AsyncInfoExtensions.cs" />
     <Compile Include="..\System.Reactive.Net\Concurrency\UserWorkItem.cs" Link="UserWorkItem.cs" />
     <Compile Include="..\System.Reactive.Net\Diagnostics\CodeAnalysis\NullableAttributes.cs" Link="NullableAttributes.cs" />
+    <Compile Include="..\System.Reactive.Net\Internal\HostLifecycleNotifications.Windows.cs" Link="HostLifecycleNotifications.Windows.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\System.Reactive.Net\System.Reactive.Net.csproj" />
+    <!--
+    The .NET SDK doesn't expect TargetFrameworks to include uap10.0.18362, so it doesn't understand
+    that this project is capable of using projects that target .NET Standard 2.0, with the result
+    that it reports an error when trying to resolve the reference to System.Reactive.Net. So
+    when building for UWP, we explicitly set the target framework here.
+    -->
+    <ProjectReference Include="..\System.Reactive.Net\System.Reactive.Net.csproj">
+      <SetTargetFramework>TargetFramework=netstandard2.0</SetTargetFramework>
+    </ProjectReference>
     <ProjectReference Include="..\System.Reactive.For.WindowsRuntime\System.Reactive.For.WindowsRuntime.csproj" />
   </ItemGroup>
 

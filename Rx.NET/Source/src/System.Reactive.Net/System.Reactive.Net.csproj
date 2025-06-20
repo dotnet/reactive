@@ -1,7 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
-    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net8.0;net8.0-windows10.0.19041</TargetFrameworks>
+    <!--
+    Rx 7.0 moved all UI-framework-specific code into separate packages. This reduces the number of distinct TFMs
+    required. Here's why each of the remaining ones now exists:
+      * netstandard2.0: this is now how we support .NET Framework (>= net472) and old-style UWP apps (with
+          uap10.0.18362 TFMs). Of course, this could support the remaining targets, but there are reasons
+          we need more specialized builds for those
+      * net8.0: enables trimming support. As of v7.0, Rx.NET's feature set in netstandard2.0 is complete:
+          the net8.0 target doesn't offer any addition Rx functionality. However, it's not possible to
+          annotate a netstandard2.0 component for trimming, which is (currently) the only reason we need
+          to supply a net8.0 target.
+      * net8.0-windows10.0.19041: provides suspend/resume-aware scheduling. 
+    -->
+    <TargetFrameworks>netstandard2.0;net8.0;net8.0-windows10.0.19041</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
@@ -17,15 +28,6 @@
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0')) or $(TargetFramework.StartsWith('net9.0'))">
     <IsTrimmable>true</IsTrimmable>
   </PropertyGroup>
-
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
-    <UseWPF>true</UseWPF>
-    <UseWindowsForms>true</UseWindowsForms>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
-    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.19041.0\Windows.winmd" />
-  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />

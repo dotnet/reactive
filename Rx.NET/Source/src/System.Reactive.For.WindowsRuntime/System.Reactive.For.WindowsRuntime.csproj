@@ -25,6 +25,15 @@
     <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.18362'">
+    <!--
+    The .NET SDK doesn't expect TargetFrameworks to include uap10.0.18362, so it doesn't understand
+    that this project is capable of using projects that target .NET Standard 2.0. We set this property
+    to work around that.
+    -->
+    <ReferringTargetFrameworkForProjectReferences>netstandard2.0</ReferringTargetFrameworkForProjectReferences>
+  </PropertyGroup>
+
   <PropertyGroup>
     <Nullable>enable</Nullable>
   </PropertyGroup>

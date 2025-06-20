@@ -18,7 +18,7 @@ namespace System.Reactive.Concurrency
     /// </summary>
     /// <seealso cref="Default">Singleton instance of this type exposed through this static property.</seealso>
     [CLSCompliant(false)]
-    public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerPeriodic
+    public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerPeriodic, ISchedulerPeriodNoSubMs
     {
 #pragma warning disable CS0618 // Type or member is obsolete. The non-UWP ThreadPoolScheduler (which will eventually supersede this) defines the zero-args constructor as private, so it's only the accessibility of "public" that is obsolete, not the presence of the constructor. So this warning is spurious in this particular case.
         private static readonly Lazy<ThreadPoolScheduler> LazyDefault = new(static () => new ThreadPoolScheduler());

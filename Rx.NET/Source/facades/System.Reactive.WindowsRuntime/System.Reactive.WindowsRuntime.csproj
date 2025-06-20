@@ -19,6 +19,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!--
+    The .NET SDK doesn't expect TargetFrameworks to include uap10.0.18362, so it doesn't understand
+    that this project is capable of using projects that target .NET Standard 2.0, with the result
+    that it reports an error when trying to resolve the reference to System.Reactive.Net. So
+    when building for UWP, we explicitly set the target framework here.
+    -->
+    <ProjectReference Include="..\..\src\System.Reactive.Net\System.Reactive.Net.csproj">
+      <SetTargetFramework>TargetFramework=netstandard2.0</SetTargetFramework>
+    </ProjectReference>
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
   
