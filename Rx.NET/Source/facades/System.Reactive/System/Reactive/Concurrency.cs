@@ -66,6 +66,6 @@ using System.Runtime.CompilerServices;
 #if HAS_WINFORMS
 [assembly:TypeForwardedToAttribute(typeof(System.Reactive.Concurrency.ControlScheduler))]
 #endif
-//#if HAS_DISPATCHER
-//[assembly:TypeForwardedToAttribute(typeof(DispatcherScheduler))]
-//#endif
+#if HAS_DISPATCHER
+[assembly:TypeForwardedToAttribute(typeof(System.Reactive.Concurrency.DispatcherScheduler))]
+#endif

@@ -7,6 +7,30 @@
     <DefineConstants>$(DefineConstants);LEGACY_SYSTEM_REACTIVE_FACADE</DefineConstants>
   </PropertyGroup>
 
+  <!--
+  API compatibility validation.
+
+  See ADR 0006-api-compatibility-verification.md for more information about this configuration.
+  -->
+
+  <PropertyGroup>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <PackageValidationBaselineVersion>6.0.1</PackageValidationBaselineVersion>
+
+    <!-- TODO: not sure what the errors we get without this are telling us: -->
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <ApiCompatSuppressionFile Include="ApiCompatSuppressions.xml" />
+  </ItemGroup>
+
+  <Target Name="_SetUwpTfmForPackageValidation" BeforeTargets="RunPackageValidation">
+    <ItemGroup>
+      <PackageValidationReferencePath Condition="%(PackageValidationReferencePath.TargetFrameworkMoniker) == '.NETCore,Version=v5.0'" TargetFrameworkMoniker="UAP,Version=10.0.18362.0" TargetPlatformMoniker="Windows,Version=10.0.18362.0" />
+    </ItemGroup>
+  </Target>
+  
   <PropertyGroup>
     <Description>Legacy facade for Reactive Extensions (Rx) for .NET</Description>
     <PackageReadmeFile>readme.md</PackageReadmeFile>

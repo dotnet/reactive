@@ -20,16 +20,16 @@ using System.Runtime.CompilerServices;
 [assembly:TypeForwardedToAttribute(typeof(QueryDebugger))]
 
 #if WINDOWS
-//[assembly:TypeForwardedToAttribute(typeof(AsyncInfoObservable))]
+[assembly:TypeForwardedToAttribute(typeof(System.Reactive.Linq.AsyncInfoObservable))]
 [assembly:TypeForwardedToAttribute(typeof(System.Reactive.Linq.CoreDispatcherObservable))]
 [assembly:TypeForwardedToAttribute(typeof(System.Reactive.Linq.WindowsObservable))]
 #endif
 #if HAS_WINFORMS
 [assembly:TypeForwardedToAttribute(typeof(System.Reactive.Linq.ControlObservable))]
 #endif
-//#if HAS_DISPATCHER
-//[assembly:TypeForwardedToAttribute(typeof(DispatcherObservable))]
-//#endif
+#if HAS_DISPATCHER
+[assembly: TypeForwardedToAttribute(typeof(System.Reactive.Linq.DispatcherObservable))]
+#endif
 //#if HAS_REMOTING
 //[assembly: TypeForwardedTo(typeof(RemotingObservable))]
 //#endif

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://learn.microsoft.com/dotnet/fundamentals/package-validation/diagnostic-ids -->
+<Suppressions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--
+  CP0008: Type 'System.Reactive.Concurrency.ThreadPoolScheduler' does not implement interface
+          'System.Reactive.Concurrency.ISchedulerLongRunning' on lib/uap10.0.18362/System.Reactive.dll but it does on
+          lib/netstandard2.0/System.Reactive.dll
+  
+  This difference already existed in Rx 6.0. It is because when UWP first introduced its version of the
+  ThreadPoolScheduler, it was based on the Windows Runtime thread pool, making it slightly differnt from the
+  ThreadPoolScheduler available on all other targets. This UWP-specific scheduler has never directly supported
+  long-running tasks.
+  -->
+  <Suppression>
+    <DiagnosticId>CP0008</DiagnosticId>
+    <Target>T:System.Reactive.Concurrency.ThreadPoolScheduler</Target>
+    <Left>lib/netstandard2.0/System.Reactive.dll</Left>
+    <Right>lib/uap10.0.18362/System.Reactive.dll</Right>
+  </Suppression>
+
+  <!--
+  CP0002: Member 'System.IDisposable System.Reactive.Concurrency.ThreadPoolScheduler
+         .ScheduleLongRunning<TState>(TState, System.Action<TState, System.Reactive.Disposables.ICancelable>)' exists
+         on lib/netstandard2.0/System.Reactive.dll but not on lib/uap10.0.18362/System.Reactive.dll
+  
+  This is essentially another facet of the preceding issue: this ScheduleLongRunning method is the additional method
+  that ISchedulerLongRunning defines. So this difference also already existed in Rx 6.0.
+  -->
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:System.Reactive.Concurrency.ThreadPoolScheduler.ScheduleLongRunning``1(``0,System.Action{``0,System.Reactive.Disposables.ICancelable})</Target>
+    <Left>lib/netstandard2.0/System.Reactive.dll</Left>
+    <Right>lib/uap10.0.18362/System.Reactive.dll</Right>
+  </Suppression>
+
+</Suppressions>
