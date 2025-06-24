@@ -28,24 +28,16 @@ namespace ReactiveTests.Tests.Api
         {
         }
 
-        [Fact]
-        public Task Core()
-        {
-            var publicApi = GeneratePublicApi(typeof(System.Reactive.Unit).Assembly);
-            return Verify(publicApi, "cs");
-        }
-
-        [Fact]
-        public Task Facade()
-        {
-            var facadeName = typeof(System.Reactive.Unit).Assembly.GetName().Name
-                .Replace("System.Reactive.Net", "System.Reactive");
-
-            var facadeAssembly = Assembly.Load(facadeName);
-            var publicApi = GeneratePublicApiIncludingTypeForwarders(facadeAssembly);
-
-            return Verify(publicApi, "cs");
-        }
+        // Note:
+        //  System.Reactive (now a facade) uses the .NET SDK's built in package validation, specifically the
+        //      PackageValidationBaselineVersion feature to ensure backwards compatibility
+        //  System.Reactive.Net is using Microsoft.CodeAnalysis.PublicApiAnalyzers to ensure stability of
+        //      its public API.
+        // TODO:
+        //  Move Aliases and Testing packages over to one of the mechanisms above
+        //  Add similar API checking to:
+        //      The old facade packages
+        //      The new FrameworkIntegrations packages
 
         [Fact]
         public Task Aliases()

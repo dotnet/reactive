@@ -19,11 +19,25 @@
     <PackageReadmeFile>readme.md</PackageReadmeFile>
 
     <RootNamespace>System.Reactive</RootNamespace>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Nullable>enable</Nullable>
+    <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Same public API for all TFMs, so we don't have per-TargetFramework API files. -->
+    <AdditionalFiles Include=".PublicAPI/PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include=".PublicAPI/PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="4.14.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0')) or $(TargetFramework.StartsWith('net9.0'))">
     <IsTrimmable>true</IsTrimmable>
