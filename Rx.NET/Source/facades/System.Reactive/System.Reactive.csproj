@@ -16,10 +16,6 @@
   <PropertyGroup>
     <EnablePackageValidation>true</EnablePackageValidation>
     <PackageValidationBaselineVersion>6.0.1</PackageValidationBaselineVersion>
-    <!--<ApiCompatGenerateSuppressionFile>true</ApiCompatGenerateSuppressionFile>-->
-
-    <!-- TODO: not sure what the errors we get without this are telling us: -->
-    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
     
   <ItemGroup>
