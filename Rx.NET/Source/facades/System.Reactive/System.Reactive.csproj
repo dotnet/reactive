@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <Target Name="_SetUwpTfmForPackageValidation" BeforeTargets="RunPackageValidation">
+    <!-- See ADR 0003-uap-targets.md for an explanation of this. (In short, the package validation tooling doesn't understand UWP.) -->
     <ItemGroup>
       <PackageValidationReferencePath Condition="%(PackageValidationReferencePath.TargetFrameworkMoniker) == '.NETCore,Version=v5.0'" TargetFrameworkMoniker="UAP,Version=10.0.18362.0" TargetPlatformMoniker="Windows,Version=10.0.18362.0" />
     </ItemGroup>
