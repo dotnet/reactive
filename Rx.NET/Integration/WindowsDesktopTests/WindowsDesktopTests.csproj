@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net6.0-windows10.0.19041;net7.0;net7.0-windows10.0.19041;net8.0;net8.0-windows10.0.19041</TargetFrameworks>
+    <TargetFrameworks>net8.0;net8.0-windows10.0.19041;net9.0;net9.0-windows10.0.19041</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Tests.System.Reactive</AssemblyName>
@@ -9,7 +9,7 @@
     <AssemblyOriginatorKeyFile>..\..\Source\ReactiveX.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows')) or $(TargetFramework.StartsWith('net8.0-windows'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
