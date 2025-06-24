@@ -1,10 +1,106 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- https://learn.microsoft.com/dotnet/fundamentals/package-validation/diagnostic-ids -->
 <Suppressions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <!--
+  There are various internal (same package) inconsistencies that were already in Rx 6.0, because the API surface
+  area was different across targets. There doesn't seem to be a 'baseline-only' mode, so we need to suppress
+  the various validation errors that describe differences that we must preserve for compatibility with Rx 6.0.
+
+  Essentially these all arise because netstandard2.0 is a viable target for frameworks in which other targets
+  are better matches. (E.g., if you target net6.0-windows10-0.19041, then you can actually tell the build system
+  to give you the .NET Standard 2.0 target of System.Reactive.dll, because you're on a runtime that supports
+  .NET Standard 2.0. By default you'd get net6.0-windows10-0.19041 because that's a better match (a precise match
+  in fact), but since you can override that and get the netstandard2.0 target instead, package validation sees
+  fit to tell us all the ways in which the netstandard2.0 target differs from the net6.0-windows10-0.19041 target.
+  Similarly, uap10.0.1836 is a framework that supports netstandard2.0, so again, the package validation tells
+  us about the differences between the netstandard2.0 and uap10.0.18362 targets.
+
+  We only care about differences between the baseline (6.0.1) and the current package, so we don't really want
+  to hear about internal inconstencies, but apparently, suppressing them is the only option.
+
+  The CP0001 errors all describes types that are present in one DLL but not another.
+  -->
+
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Concurrency.ControlScheduler</Target>
+    <Left>lib/net6.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/netstandard2.0/System.Reactive.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Concurrency.CoreDispatcherScheduler</Target>
+    <Left>lib/net6.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/netstandard2.0/System.Reactive.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Concurrency.DispatcherScheduler</Target>
+    <Left>lib/net6.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/netstandard2.0/System.Reactive.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.IEventPatternSource`2</Target>
+    <Left>lib/net6.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/netstandard2.0/System.Reactive.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Linq.AsyncInfoObservable</Target>
+    <Left>lib/net6.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/netstandard2.0/System.Reactive.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Linq.ControlObservable</Target>
+    <Left>lib/net6.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/netstandard2.0/System.Reactive.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Linq.CoreDispatcherObservable</Target>
+    <Left>lib/net6.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/netstandard2.0/System.Reactive.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Linq.DispatcherObservable</Target>
+    <Left>lib/net6.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/netstandard2.0/System.Reactive.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Linq.WindowsObservable</Target>
+    <Left>lib/net6.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/netstandard2.0/System.Reactive.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Windows.Foundation.AsyncInfoObservableExtensions</Target>
+    <Left>lib/net6.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/netstandard2.0/System.Reactive.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+
+
   <!--
   CP0008: Type 'System.Reactive.Concurrency.ThreadPoolScheduler' does not implement interface
           'System.Reactive.Concurrency.ISchedulerLongRunning' on lib/uap10.0.18362/System.Reactive.dll but it does on
           lib/netstandard2.0/System.Reactive.dll
+
+  This is slightly different from the CP0001 errors above, because the relevant type is present in both
+  targets, but it is slightly different.
   
   This difference already existed in Rx 6.0. It is because when UWP first introduced its version of the
   ThreadPoolScheduler, it was based on the Windows Runtime thread pool, making it slightly differnt from the
@@ -33,4 +129,30 @@
     <Right>lib/uap10.0.18362/System.Reactive.dll</Right>
   </Suppression>
 
+
+  <!--
+  CP0008: Type 'System.Reactive.NotificationKind' does not implement interface
+          'System.Reactive.NotificationKind' on lib/uap10.0.18362/System.Reactive.dll but it does on
+          lib/netstandard2.0/System.Reactive.dll
+
+  This is slightly different from the above because it is reported as a baseline difference.
+
+  .NET 6 introduced ISpanFormattable, and since .NET 8.0 all enums automatically implement it. The package validation
+  baselining considers this to be an API difference. That's a little odd, given that there's no actual difference in
+  the way the two targets implement the enum - it's actually a difference in the base System.Enum type.
+  -->
+  <Suppression>
+    <DiagnosticId>CP0008</DiagnosticId>
+    <Target>T:System.Reactive.NotificationKind</Target>
+    <Left>lib/net6.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/netstandard2.0/System.Reactive.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0008</DiagnosticId>
+    <Target>T:System.Reactive.NotificationKind</Target>
+    <Left>lib/net6.0/System.Reactive.dll</Left>
+    <Right>lib/netstandard2.0/System.Reactive.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
 </Suppressions>
