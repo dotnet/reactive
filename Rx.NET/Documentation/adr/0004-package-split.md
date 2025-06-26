@@ -465,6 +465,22 @@ The WPF ones are a bit more weird. These two overloads refer to types defined in
 
 We are unaware of any good way around this. You can invoke the extension methods directly with static method syntax but this is a very unsatisfactory solution.
 
+If we want to satisfy all of the following criteria:
+
+* an application has reference (direct or transitive) to a package using Rx 6  or older
+* the application itself wishes to use Rx.NET (and in particular, to use extension methods where `System.Reactive` has defined UI-framework-specific overloads, but the application only wants to use the less specialized overrides)
+* the application has a Windows-specific TFM of 10.0.19041 or later
+* the application wants to use self-contained deployment without including a copy of WPF and Windows Forms
+
+then the following have to be true:
+
+* the component that uses Rx 6 needs a reference to some assembly defining the full legacy `System.Reactive` API
+* the application needs a reference to some assembly defining the Rx API but which does _not_ include the UI-framework-specific 
+
+In other words, the application and the Rx-6-using component have requirements that are apparently mutually exclusive. It is not impossible to resolve this. The proposed solution handles this by making `System.Reactive` 7.0 a backwards-compatibility facade, defining a new main `System.Reactive.Net` component that does not the UI-framework-specific items. This provides a partial solution by supplying the application with access to the Rx.NET API through a different assembly than the one used by components depending on legacy versions of Rx. However, it requires us to pull some tricks to ensure that the `System.Reactive` v7 facade is available at runtime but not visible to the compiler when the application is built.
+
+A critical element of this solution is that the existence of an assembly that does not offer the UI-framework-specific items. We think that this might be what prevents us from retaining `System.Reactive` as the main Rx.NET NuGet package: it _has_ to provide the full legacy API to maintain backwards compatibility. (The only possible way out would be if we could work out how to package with-UI-framework and without-UI-framework versions of `System.Reactive.dll` into a single `System.Reactive` NuGet package. Note though that we still need a `-windows` version, because even without UI framework support, we still want the application suspend/resume detection to work. So we'd actually want two -windows targets in there! If there were some way to package a reference assembly that excluded these types, then perhaps?)
+
 
 ### Community input
 
@@ -1040,6 +1056,8 @@ This was discussed at https://github.com/dotnet/reactive/discussions/2038#discus
 **TODO**: now the main plan. Also note the main downside: this doesn't help people who have acquired a transitive dependency on Rx 6.0: until the components they depend on upgrade to Rx 7, they're still going to have this issue. But maybe they can add an explicit reference to System.Reactive with `PrivateAssets="all"`?
 
 OMG... can we just use the `TargetFramework=` override? No, because that only works with ProjectReference, not PackageReference.
+
+(Note: I also just discovered the trick at https://blog.maartenballiauw.be/post/2020/04/22/referencing-specific-assembly-nuget-package.html so that's also a thing I need to look into.)
 
 So... to be able to test this, we need a NuGet package that depends on `System.Reactive` 6.0.x.
 
