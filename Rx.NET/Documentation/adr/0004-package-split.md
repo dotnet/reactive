@@ -1046,9 +1046,11 @@ So for all these reasons, we are rejecting this design option.
 
 In this design, we introduce a new NuGet package that supersedes `System.Reactive` (much as `System.Reactive` superseded `Rx-Main` back in Rx v4.0). This new package would essentially be `System.Reactive` with all the UI-specific functionality removed. We would add new per-UI-framework packages and the UI-specific functionality would move into these. We would continue to build and publish `System.Reactive`, which would become a facade, containing nothing but type forwarders. `System.Reactive` would continue to support the same targets. Its use would be deprecated, but we would likely continue to support it for a very long time—we still build the type facades that were added to enable pre-great-unification code to continue to use the older package structure.
 
-The main appeal of this option was that it offered a fairly quick fix for the main problem in this ADR. We could immediately publish a package that made Rx's core functionality available in a way that would definitely not add any unwanted UI framework references. Before we discovered the [workaround](#the-workaround), we thought we needed a solution urgently, because there didn't seem to be any way to work around the problems that this ADR addresses. This seemed like the fastest way to get to that point. However, now that we have a workaround, this removes the time pressure.
+One significant appeal of this option is that it offers a fairly quick fix for the main problem in this ADR. We could immediately publish a package that makes Rx's core functionality available in a way that would definitely not add any unwanted UI framework references.
 
-The biggest downside of this approach is that it's yet another change in how to use Rx.NET, so this conflicts with the constraint of [minimizing confusion](#minimize-confusion-as-far-as-possible). If it had been the only way to unblock projects that wanted to use Rx.NET on `net6.0-windows.10.*` targets without bringing in WPF and Windows Forms, this might have been an acceptable downside. But that availability of a workaround effectively removes this option's unique upside, at which point the downside looks less acceptable.
+The biggest downside of this approach is that it's yet another change in how to use Rx.NET, so this conflicts with the constraint of [minimizing confusion](#minimize-confusion-as-far-as-possible). In particular, it creates the potential to have references to two different versions of Rx: as a result of transitive references you could end up depending on `System.Reactive` 6 and `System.Reactive.Net` 7, and if the application then tries to use Rx itself, there will be compiler errors due to ambiguous extension methods. It's easy to resolve: the application just needs to add a reference to `System.Reactive` 7 and the problem will go away, but we would once again be creating baffling problems for people which they'd then have to work out how to fix.
+
+When we thought a workaround existed for dealing with the current problem, this downside looked like too high a price to pay. However, we now know about problems with the workaround. Alternatives that avoid this rename are all either unworkable or problematic, so this might be the least bad option.
 
 This was discussed at https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7557014 and we built  a prototype on https://github.com/dotnet/reactive/pull/2034 (back before we knew about the workaround).
 
@@ -1200,6 +1202,57 @@ In this option, `System.Reactive` would continue to be the package through which
 We would need to define brand new types in these new frameworks to replace the ones that will ultimately be removed. We can't use type forwarders because it's not possible to deprecate use of a type through a type forwarder, but not have it be deprecated if you use it directly.
 
 This also has a similar unresolved question around `ThreadPoolScheduler` was was discussed in [option 4](#option-4-systemreactive-remains-the-primary-package-and-becomes-a-facade). The most likely solution would be to deprecate the members of `ThreadPoolScheduler` that are unique to UWP, and to add a new type with the same functionality (but non-deprecated) in a separate component. This would be the first step on a path that would eventually see UWP get the same `ThreadPoolScheduler` as everything else.
+
+
+#### Option 7: UI-framework specific packages, deprecating and hiding the `System.Reactive` versions
+
+This is option 6 with one important variation: although we keep the existing UI-framework-specific types available for binary compatibility purposes, we hide them from the public API. `System.Reactive` would no longer force `UseWPF` or `UseWindowsForms`.
+
+The way in which we would hide the UI-framework-specific types is that the NuGet package would have [_reference assemblies_](https://learn.microsoft.com/en-us/dotnet/standard/assembly/reference-assemblies), e.g. `ref\net8.0\System.Reactive.dll`, `ref\net8.0-windows10.0.19041\System.Reactive.dll`, etc. defining the publicly available API. The reference assemblies would omit the UI-specific types. However, the runtime assemblies in the package's `lib` folder would, for the relevant targets, include these types. E.g. `lib\net8.0-windows10.0.19041\System.Reactive.dll` _would_ include WPF, Windows Forms, and Windows Runtime support.
+
+New projects using Rx 7 or later would see Rx as a component with no UI-framework-specific types, because the build system will give the compiler assemblies in the package's `ref` folder in preference to those in the `lib` folder. But binary compatibility is retained because the types are present in the `lib` folder.
+
+We had hoped that the runtime assemblies in `lib` might be able to have type forwarders pointing to the new homes for the UI-specific types, the various `System.Reactive.For.*`. Unfortunately that doesn't work in this case because those packages need references to the main Rx assembly (to get the definition of `IScheduler` at a minimum, and as it happens they use the `LocalScheduler` bas type). If `System.Reactive` remains as the main Rx component then it's not possible for it to refer to the UI-framework-specific components because that creates a circular reference.
+
+```mermaid
+graph TD
+  wpf["System.Reactive.For.Wpf
+  (also contains DispatcherScheduler)"] -->|IScheduler type reference| rx
+  rx["System.Reactive"] -->|TypeForwarder to DispatcherScheduler| wpf
+```
+
+The .NET SDK won't let you build such a thing. It's not completely impossible to concoct this sort of structure with some build-time skulduggery but working around the tooling to create something unsupported seems like a bad idea.
+
+So if we go with this design option, we would require
+
+```mermaid
+graph TD
+  wpf["System.Reactive.For.Wpf
+  (home of publicly-visible DispatcherScheduler)"] -->|IScheduler type reference| rx
+  rx["System.Reactive
+  (lib folder defines additional DispatcherScheduler etc. for binary compatibility)"]
+```
+
+So we'd have _two_ definitions of each of the UI-framework-specific types that exist in `System.Reactive` v6. The only publicly visible ones would be in the new `System.Reactive.For.*` components, but to ensure binary compatibility `System.Reactive` would need to include duplicate definitions of these in the `lib\net472\System.Reactive.dll`, `lib\net8.0-windows10.0.19041\System.Reactive.dll`, and `lib\uap10.0.18362\System.Reactive.dll` assemblies.
+
+(This highlights another significant downside of this approach: `System.Reactive` continues to have to supply a `uap10.0.18362` target. That will be true for any solution, but for designs where `System.Reactive` remains the primary assembly, it is irritating because legacy UWP targets cause problems.)
+
+Compare that to what we can do if `System.Reactive` is just a legacy facade, with, say, `System.Reactive.Net` being the new 'main' component:
+
+```mermaid
+---
+title: Only possible with certain other design options
+---
+graph TD
+  rxf["System.Reactive
+  (legacy facade)"] --> |TypeFowarder to DispatcherScheduler| wpf
+  wpf["System.Reactive.For.Wpf
+  (sole definition of DispatcherScheduler)"] -->|IScheduler type reference| rxn
+
+  rxn["System.Reactive.Net"]
+```
+
+
 
 
 ### Other options less seriously considered
