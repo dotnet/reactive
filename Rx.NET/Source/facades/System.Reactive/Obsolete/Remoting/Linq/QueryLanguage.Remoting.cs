@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-// TODO: does this belong in here or System.Reactive.Net?
-// We might be able to completely remove the net472 target from System.Reactive.Net, in which case this would have
-// to come out, but that does raise the question of where the thing should live. Back in System.Reactive.Runtime.Remoting?
-// Or does that risk creating circular type forwarders if versions get out of alignment?
-// We don't really want it to remain in System.Reactive since we're trying to deprecate this component.
+// See comment in Observable.Remoting.cs for why we build this code into System.Reactive, which is mostly
+// just a type forwarding legacy facade.
 
 #if HAS_REMOTING
 extern alias SystemReactiveNet;

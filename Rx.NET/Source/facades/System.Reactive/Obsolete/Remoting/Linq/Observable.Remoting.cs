@@ -2,6 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+// Remoting types now live only in the System.Reactive legacy facade package (meaning that this isn't
+// strictly a pure facade package).
+// Nobody should be using Remoting any more. And the new System.Reactive.Net package does not include
+// a net472 target. If this type remained in there, that would be the only reason it would need to offer
+// that target.
+// We could move this into a separate package entirely, but unless we discover that people really want it,
+// the addition of a whole new package just to provide .NET Remoting support would seem like we were
+// encouraging people to use a feature that they should not. it can remain in here. If nobody complains,
+// we can mark it as obsolete in a future release.
+// (We can't put it back into the old System.Reactive.Runtime.Remoting package and forward to there from
+// here, because existing versions of that package contain type forwarders back to this to System.Reactive,
+// package, and if people managed to get a slightly weird combination of versions of different Rx packages
+// - and that's certainly a thing that has happened in the past to disastrous effect - they would end up
+// with circular type forwarders.)
+
 #if HAS_REMOTING
 extern alias SystemReactiveNet;
 

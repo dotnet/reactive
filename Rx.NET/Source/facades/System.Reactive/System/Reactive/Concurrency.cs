@@ -54,12 +54,9 @@ using System.Runtime.CompilerServices;
 [assembly:TypeForwardedToAttribute(typeof(VirtualTimeScheduler<,>))]
 [assembly:TypeForwardedToAttribute(typeof(VirtualTimeSchedulerExtensions))]
 
-// TODO: currently we've moved these three types into this assembly, with the intention of deprecating them all,
-// and preferring the newer types in the platform-specific packages.
-// An alternative would be to have the types retain their original names and live in those new packages without
-// deprecating them. This would enable us to avoid making working types obsolete which might reduce confusion.
-// It does remove the opportunity to fix up some naming issues, but maybe it would be better to live with that
-// to minimize disruption.
+// Seem comments in Reactive\Linq.cs for why we exclude forwarders for these types in some reference assemblies.
+#if !(BUILDING_REFERENCE_ASSEMBLY && NET8_0_OR_GREATER)
+
 #if WINDOWS
 [assembly:TypeForwardedToAttribute(typeof(System.Reactive.Concurrency.CoreDispatcherScheduler))]
 #endif
@@ -68,4 +65,5 @@ using System.Runtime.CompilerServices;
 #endif
 #if HAS_DISPATCHER
 [assembly:TypeForwardedToAttribute(typeof(System.Reactive.Concurrency.DispatcherScheduler))]
+#endif
 #endif

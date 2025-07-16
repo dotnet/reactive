@@ -48,8 +48,11 @@
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
     <Compile Include="..\System.Reactive.For.WindowsRuntime\AsyncInfoExtensions.cs" Link="AsyncInfoExtensions.cs" />
-    <Compile Include="..\System.Reactive.Net\Concurrency\UserWorkItem.cs" Link="UserWorkItem.cs" />
-    <Compile Include="..\System.Reactive.Net\Diagnostics\CodeAnalysis\NullableAttributes.cs" Link="NullableAttributes.cs" />
+
+    <!--
+    Although System.Reactive.Net makes its internals available to us, we get the netstandard2.0 target when running
+    on UWP, which doesn't include this particular file, so we need to build our own copy.
+    -->
     <Compile Include="..\System.Reactive.Net\Internal\HostLifecycleNotifications.Windows.cs" Link="HostLifecycleNotifications.Windows.cs" />
   </ItemGroup>
 

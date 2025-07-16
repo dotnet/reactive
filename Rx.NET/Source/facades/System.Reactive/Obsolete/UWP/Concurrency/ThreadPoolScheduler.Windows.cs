@@ -30,6 +30,12 @@ namespace System.Reactive.Concurrency
         [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the UwpThreadPoolScheduler in the System.Reactive.For.Uwp package. Otherwise, use the Instance property, because this constructor will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
         public ThreadPoolScheduler()
         {
+            // The next step for obsolescence is to omit this constructor and all the other
+            // Obsolete methods when BUILDING_REFERENCE_ASSEMBLY is defined.
+            // That way, they will remain available at runtime, providing binary backwards compatibility,
+            // but it will force anyone building against the latest Rx to use the replacement
+            // UwpThreadPoolScheduler type.
+            // But we're not doing that yet, because we want an obsolete-but-available period.
         }
 
         /// <summary>

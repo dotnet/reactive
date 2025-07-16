@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <authors>$authors$</authors>
+    <license type="expression">$licenseExpression$</license>
+    <icon>$icon$</icon>
+    <readme>readme.md</readme>
+    <projectUrl>$projectUrl$</projectUrl>
+    <description>$description$</description>
+    <copyright>$copyright$</copyright>
+    <tags>$tags$</tags>
+    <repository type="git" url="$repository$" commit="$commit$" />
+    <references>
+      <group targetFramework="net8.0">
+        <reference file="System.Reactive.dll" />
+      </group>
+      <group targetFramework="net8.0-windows10.0.19041">
+        <reference file="System.Reactive.dll" />
+      </group>
+      <group targetFramework="netstandard2.0">
+        <reference file="System.Reactive.dll" />
+      </group>
+      <group targetFramework="net472">
+        <reference file="System.Reactive.dll" />
+      </group>
+      <group targetFramework="uap10.0.18362">
+        <reference file="System.Reactive.dll" />
+      </group>
+    </references>
+    <dependencies>
+      <group targetFramework=".NETFramework4.7.2">
+        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net8.0" />
+      <group targetFramework="net8.0-windows10.0.19041" />
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="UAP10.0.18362">
+        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkReferences>
+      <group targetFramework="net8.0" />
+      <group targetFramework="net8.0-windows10.0.19041">
+        <frameworkReference name="Microsoft.WindowsDesktop.App" />
+      </group>
+      <group targetFramework=".NETFramework4.7.2" />
+      <group targetFramework=".NETStandard2.0" />
+      <group targetFramework="UAP10.0.18362" />
+    </frameworkReferences>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Windows" targetFramework=".NETFramework4.7.2" />
+      <frameworkAssembly assemblyName="System.Windows.Forms" targetFramework=".NETFramework4.7.2" />
+      <frameworkAssembly assemblyName="WindowsBase" targetFramework=".NETFramework4.7.2" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="$outputpath$net472\System.Reactive.dll" target="lib\net472\System.Reactive.dll" />
+    <file src="$outputpath$net8.0\System.Reactive.dll" target="lib\net8.0\System.Reactive.dll" />
+    <file src="$outputpath$net8.0-windows10.0.19041\System.Reactive.dll" target="lib\net8.0-windows10.0.19041\System.Reactive.dll" />
+    <file src="$outputpath$netstandard2.0\System.Reactive.dll" target="lib\netstandard2.0\System.Reactive.dll" />
+    <file src="$outputpath$uap10.0.18362\System.Reactive.dll" target="lib\uap10.0.18362\System.Reactive.dll" />
+    <file src="$refassemblypath$net472\System.Reactive.dll" target="ref\net472\System.Reactive.dll" />
+    <file src="$refassemblypath$net8.0\System.Reactive.dll" target="ref\net8.0\System.Reactive.dll" />
+    <file src="$refassemblypath$net8.0-windows10.0.19041\System.Reactive.dll" target="ref\net8.0-windows10.0.19041\System.Reactive.dll" />
+    <file src="$refassemblypath$netstandard2.0\System.Reactive.dll" target="ref\netstandard2.0\System.Reactive.dll" />
+    <file src="$refassemblypath$uap10.0.18362\System.Reactive.dll" target="ref\uap10.0.18362\System.Reactive.dll" />
+    <file src="..\..\..\Resources\Artwork\Logo.png" target="icon.png" />
+    <file src="..\NuGet.Facades.Readme.md" target="readme.md" />
+    <file src="$outputpath$net472\System.Reactive.pdb" target="lib\net472\System.Reactive.pdb" />
+    <file src="$outputpath$net8.0\System.Reactive.pdb" target="lib\net8.0\System.Reactive.pdb" />
+    <file src="$outputpath$net8.0-windows10.0.19041\System.Reactive.pdb" target="lib\net8.0-windows10.0.19041\System.Reactive.pdb" />
+    <file src="$outputpath$netstandard2.0\System.Reactive.pdb" target="lib\netstandard2.0\System.Reactive.pdb" />
+    <file src="$outputpath$uap10.0.18362\System.Reactive.pdb" target="lib\uap10.0.18362\System.Reactive.pdb" />
+  </files>
+</package>

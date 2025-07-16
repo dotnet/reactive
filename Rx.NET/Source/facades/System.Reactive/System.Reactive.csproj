@@ -155,4 +155,35 @@
     <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.19041.0\Windows.winmd" />
   </ItemGroup>
 
+  <!--
+  Put the reference assemblies built by System.Reactive.MakeRefAssemblies into the 'ref' folder of our
+  NuGet package.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.MakeRefAssemblies\System.Reactive.MakeRefAssemblies.csproj" PrivateAssets="all">
+      <!--
+      If we don't set an alias here, all the types exposed by the reference assembly become available in the global namespace,
+      which causes compiler errors when the UAP target tries to build a specialized ThreadPoolScheduler.
+      -->
+      <Aliases>SystemReactiveRefAssembly</Aliases>
+    </ProjectReference>
+  </ItemGroup>
+
+  <!--
+  We need to supply our own nuspec file, because the SDK doesn't appear to be able to populate the <references> section,
+  and without that we get NU5131 warnings. (I think this is only strictly necessary for package.config scenarios, but
+  Rx has a lot of users, so we'll probably break someone if we don't get this right.)
+  We use tokenization so that we can pass package metadata (which include the version number). But it turns out that
+  the various NuGet package metadata build properties we want to pass in don't get defined until quite late in the build,
+  so we need to set <NuspecProperties> in a custom target that runs just before the GenerateNuspec target.
+  -->
+  <PropertyGroup>
+    <NuspecFile>System.Reactive.nuspec</NuspecFile>
+  </PropertyGroup>
+  <Target Name="_SetNuspecProperties" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);licenseExpression=$(PackageLicenseExpression);icon=$(PackageIcon);projectUrl=$(PackageProjectUrl);description=$(PackageDescription);copyright=$(Copyright);tags=$(PackageTags);repository=$(RepositoryUrl);commit=$(RepositoryCommit);outputpath=$(OutputPath);refassemblypath=..\System.Reactive.MakeRefAssemblies\bin\$(Configuration)\</NuspecProperties>
+    </PropertyGroup>
+  </Target>
+
 </Project>
