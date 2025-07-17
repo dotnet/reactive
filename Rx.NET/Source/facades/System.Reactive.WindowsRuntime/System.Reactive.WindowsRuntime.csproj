@@ -19,6 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!--
+    TODO: do we want to do this, or should we just stop producing new versions of these facades? Do we want
+    this to point into the new package, or just continue pointing to the (now hidden) legacy types in System.Reactive?
+    -->
+    <ProjectReference Include="..\..\src\System.Reactive.For.WindowsRuntime\System.Reactive.For.WindowsRuntime.csproj">
+      <Aliases>SystemReactiveForWindowsRuntime</Aliases>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
   

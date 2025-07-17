@@ -14,7 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
+    <!--
+    TODO: do we want to do this, or should we just stop producing new versions of these facades? Do we want
+    this to point into the new package, or just continue pointing to the (now hidden) legacy types in System.Reactive?
+    -->
+    <ProjectReference Include="..\..\src\System.Reactive.For.WindowsForms\System.Reactive.For.WindowsForms.csproj" />
   </ItemGroup>
 
 </Project>

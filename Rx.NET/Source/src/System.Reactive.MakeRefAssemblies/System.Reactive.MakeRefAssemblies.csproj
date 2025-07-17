@@ -83,15 +83,16 @@
   -->
   <ItemGroup Condition="$(TargetFramework.StartsWith('uap10.0'))">
     <Compile Include="..\System.Reactive\Platforms\UWP\Concurrency\ThreadPoolScheduler.Windows.cs" />
+    <Compile Include="..\System.Reactive\Platforms\Windows\ThreadPooltimerExtensions.cs" />
+    <Compile Include="..\System.Reactive\Platforms\UWP\Strings_PlatformServices.Designer.cs" />
     <Compile Include="..\..\src\System.Reactive.For.Uwp\Stubs.cs" Link="Platforms\UWP\Stubs.cs" />
     <Compile Include="..\..\src\System.Reactive.For.Uwp\ThreadPoolTimerExtensions.cs" Link="Platforms\UWP\Concurrency\ThreadPoolTimerExtensions.cs" />
   </ItemGroup>
 
   <!-- Windows includes for Desktop and UWP -->
-  <!-- <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
-    <Compile Include="..\System.Reactive\Platforms\Windows\**\*.cs" />
-    <EmbeddedResource Include="..\System.Reactive\Platforms\Windows\**\*.resx" />
-  </ItemGroup> -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <!--<Compile Include="Platforms\Windows\Strings_WindowsThreading.Designer.cs" />-->
+  </ItemGroup> 
 
   <!-- .NET FX -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472'">
@@ -99,7 +100,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" /> -->
     
-    <Compile Include="..\System.Reactive\Platforms\DEsktop\Linq\**\*.Remoting.cs" />
+    <Compile Include="..\System.Reactive\Platforms\Desktop\Linq\**\*.Remoting.cs" />
   </ItemGroup>
 
   <!-- <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">

@@ -72,8 +72,14 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>QbservableEx.NAry.cs</LastGenOutput>
     </None>
-    <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />
-    <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />
+    <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx">
+      <DependentUpon>Platforms\Windows\Strings_WindowsThreading.resx</DependentUpon>
+    </None>
+    <None Update="Platforms\Windows\Strings_PlatformServices.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
+    <None Update="Platforms\UWP\Strings_PlatformServices.Designer.cs" DesignTime="True" AutoGen="True">
+      <DependentUpon>Strings_PlatformServices.resx</DependentUpon>
+    </None>
+    <None Update="Platforms\UWP\Strings_PlatformServices.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
   </ItemGroup>
 
 
@@ -88,12 +94,20 @@
   <!-- UWP -->
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0'))">
     <Compile Include="Platforms\UWP\**\*.cs" />
+
+    <Compile Update="Platforms\UWP\Strings_PlatformServices.Designer.cs" DesignTime="True" AutoGen="True">
+      <DependentUpon>Strings_PlatformServices.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Platforms\UWP\Strings_PlatformServices.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
   </ItemGroup>
 
   <!-- Windows includes for Desktop and UWP -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
     <Compile Include="Platforms\Windows\**\*.cs" />
-    <EmbeddedResource Include="Platforms\Windows\**\*.resx" />
+    <Compile Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx">
+      <DependentUpon>Platforms\Windows\Strings_WindowsThreading.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
   </ItemGroup>
 
   <!-- Desktop -->
@@ -199,7 +213,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md"/>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
     <None Include="Linq\QbservableEx.NAry.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -224,6 +238,23 @@
       <Aliases>SystemReactiveRefAssembly</Aliases>
     </ProjectReference>
   </ItemGroup>
+
+  <Target Name="DiscoverFilteredTypesReferenceAssemblyPath" BeforeTargets="GetTargetPathWithTargetPlatformMoniker">
+    <ItemGroup>
+      <_MatchingRefPath Include="@(ReferencePath)" Condition=" '%(ReferencePath.ProjectReferenceOriginalItemSpec)' == '..\System.Reactive.MakeRefAssemblies\System.Reactive.MakeRefAssemblies.csproj' " />
+    </ItemGroup>
+    <PropertyGroup>
+      <_RefAssemblyWithFilteredTypes>@(_MatchingRefPath->'%(Identity)')</_RefAssemblyWithFilteredTypes>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="_SetPathOnOutput" AfterTargets="GetTargetPathWithTargetPlatformMoniker">
+    <ItemGroup>
+      <TargetPathWithTargetPlatformMoniker Include="$(TargetPath)">
+        <ReferenceAssembly>$(_RefAssemblyWithFilteredTypes)</ReferenceAssembly>
+      </TargetPathWithTargetPlatformMoniker>
+    </ItemGroup>
+  </Target>
 
   <!--
   We need to supply our own nuspec file, because the SDK doesn't appear to be able to populate the <references> section,

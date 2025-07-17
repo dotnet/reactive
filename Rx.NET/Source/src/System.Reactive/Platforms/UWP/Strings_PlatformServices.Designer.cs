@@ -8,11 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace System.Reactive
-{
-    using System.Reflection;
-
-
+namespace System.Reactive {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -40,7 +39,7 @@ namespace System.Reactive
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Uwp.Strings_PlatformServices", typeof(Strings_PlatformServices).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Platforms.UWP.Strings_PlatformServices", typeof(Strings_PlatformServices).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
