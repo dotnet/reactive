@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\facades\System.Reactive\System.Reactive.csproj" />
     <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
     <ProjectReference Include="..\..\src\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
