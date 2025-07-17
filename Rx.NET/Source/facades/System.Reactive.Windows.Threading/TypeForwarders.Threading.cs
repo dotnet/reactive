@@ -3,10 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 #if WINDOWS
-[assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Concurrency.CoreDispatcherScheduler))]
-[assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Linq.CoreDispatcherObservable))]
+extern alias SystemReactiveForWindowsRuntime;
+[assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(SystemReactiveForWindowsRuntime::System.Reactive.Concurrency.CoreDispatcherScheduler))]
+[assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(SystemReactiveForWindowsRuntime::System.Reactive.Linq.CoreDispatcherObservable))]
 #else
-[assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Concurrency.DispatcherScheduler))]
-[assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Linq.DispatcherObservable))]
+extern alias SystemReactiveForWpf;
+[assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(SystemReactiveForWpf::System.Reactive.Concurrency.DispatcherScheduler))]
+[assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(SystemReactiveForWpf::System.Reactive.Linq.DispatcherObservable))]
 #endif
 

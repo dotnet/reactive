@@ -3,8 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 #if HAS_WPF
-using System.Reactive.Concurrency;
+extern alias SystemReactive;
+
+using SystemReactive::System.Reactive.Concurrency;
 using System.Windows.Threading;
+
+using DispatcherScheduler = System.Reactive.Concurrency.DispatcherScheduler;
 
 namespace System.Reactive.Linq
 {

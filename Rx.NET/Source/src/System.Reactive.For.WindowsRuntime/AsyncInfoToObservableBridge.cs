@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive.Subjects;
+extern alias SystemReactive;
+using SystemReactive::System.Reactive.Subjects;
 using Windows.Foundation;
 
 namespace System.Reactive.WindowsRuntime
 {
-    internal sealed class AsyncInfoToObservableBridge<TResult, TProgress> : ObservableBase<TResult>
+    internal sealed class AsyncInfoToObservableBridge<TResult, TProgress> : SystemReactive::System.Reactive.ObservableBase<TResult>
     {
         private readonly Action<IAsyncInfo, Action<IAsyncInfo, AsyncStatus>> _onCompleted;
         private readonly Func<IAsyncInfo, TResult> _getResult;

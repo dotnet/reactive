@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Net", "src\System.Reactive.Net\System.Reactive.Net.csproj", "{01706A0F-8A63-4FD6-AF45-0BC0BED3C0D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive", "src\System.Reactive\System.Reactive.csproj", "{01706A0F-8A63-4FD6-AF45-0BC0BED3C0D9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Reactive.Testing", "src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj", "{73078FB5-6038-4674-B4C4-32FD81B88055}"
 EndProject
@@ -76,9 +76,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.For.Uwp", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.For.WindowsRuntime", "src\System.Reactive.For.WindowsRuntime\System.Reactive.For.WindowsRuntime.csproj", "{EB27A089-56EC-4621-BF88-E3B0DA8E6557}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive", "facades\System.Reactive\System.Reactive.csproj", "{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.MakeRefAssemblies", "facades\System.Reactive.MakeRefAssemblies\System.Reactive.MakeRefAssemblies.csproj", "{20DF1979-FD74-DD5D-60B3-CE5874101E31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.MakeRefAssemblies", "src\System.Reactive.MakeRefAssemblies\System.Reactive.MakeRefAssemblies.csproj", "{20DF1979-FD74-DD5D-60B3-CE5874101E31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -602,30 +600,6 @@ Global
 		{EB27A089-56EC-4621-BF88-E3B0DA8E6557}.Release|x64.Build.0 = Release|Any CPU
 		{EB27A089-56EC-4621-BF88-E3B0DA8E6557}.Release|x86.ActiveCfg = Release|Any CPU
 		{EB27A089-56EC-4621-BF88-E3B0DA8E6557}.Release|x86.Build.0 = Release|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug (with UWP)|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug (with UWP)|Any CPU.Build.0 = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug (with UWP)|ARM.ActiveCfg = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug (with UWP)|ARM.Build.0 = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug (with UWP)|x64.ActiveCfg = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug (with UWP)|x64.Build.0 = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug (with UWP)|x86.ActiveCfg = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug (with UWP)|x86.Build.0 = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug|ARM.Build.0 = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug|x64.Build.0 = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Debug|x86.Build.0 = Debug|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Release|ARM.ActiveCfg = Release|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Release|ARM.Build.0 = Release|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Release|x64.ActiveCfg = Release|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Release|x64.Build.0 = Release|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Release|x86.ActiveCfg = Release|Any CPU
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1}.Release|x86.Build.0 = Release|Any CPU
 		{20DF1979-FD74-DD5D-60B3-CE5874101E31}.Debug (with UWP)|Any CPU.ActiveCfg = Debug|Any CPU
 		{20DF1979-FD74-DD5D-60B3-CE5874101E31}.Debug (with UWP)|Any CPU.Build.0 = Debug|Any CPU
 		{20DF1979-FD74-DD5D-60B3-CE5874101E31}.Debug (with UWP)|ARM.ActiveCfg = Debug|Any CPU
@@ -673,7 +647,6 @@ Global
 		{D548C2CA-5C32-4FFF-B9E9-A251971ED7B4} = {1873A545-87AA-4C22-BA1A-8A6602F65749}
 		{C3FC6098-AC7F-4825-B292-4049BC6FC76E} = {1873A545-87AA-4C22-BA1A-8A6602F65749}
 		{EB27A089-56EC-4621-BF88-E3B0DA8E6557} = {1873A545-87AA-4C22-BA1A-8A6602F65749}
-		{BC5F1E6F-858E-4AF8-80CD-DBB5B6CE5FE1} = {A0F39260-B8F8-4FCB-9679-0ED917A22BDF}
 		{20DF1979-FD74-DD5D-60B3-CE5874101E31} = {A0F39260-B8F8-4FCB-9679-0ED917A22BDF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

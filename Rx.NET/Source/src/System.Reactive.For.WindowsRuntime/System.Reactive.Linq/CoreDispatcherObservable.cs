@@ -3,13 +3,16 @@
 // See the LICENSE file in the project root for more information. 
 
 #if WINDOWS
-using System.Reactive.Concurrency;
+extern alias SystemReactive;
+using SystemReactive::System.Reactive.Concurrency;
 
 using Windows.UI.Core;
 
 #if HAS_OS_XAML
 using Windows.UI.Xaml;
 #endif
+
+using CoreDispatcherScheduler = System.Reactive.Concurrency.CoreDispatcherScheduler;
 
 namespace System.Reactive.Linq
 {

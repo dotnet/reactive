@@ -2,9 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive.Concurrency;
+extern alias SystemReactive;
+
 using System.Reactive.WindowsRuntime;
 using Windows.System.Threading;
+
+using AsyncLock = SystemReactive::System.Reactive.Concurrency.AsyncLock;
+using IScheduler = SystemReactive::System.Reactive.Concurrency.IScheduler;
+using ISchedulerPeriodic = SystemReactive::System.Reactive.Concurrency.ISchedulerPeriodic;
+using ISchedulerPeriodNoSubMs = SystemReactive::System.Reactive.Concurrency.ISchedulerPeriodNoSubMs;
+using LocalScheduler = SystemReactive::System.Reactive.Concurrency.LocalScheduler;
+using Scheduler = SystemReactive::System.Reactive.Concurrency.Scheduler;
 
 namespace System.Reactive.Uwp
 {
@@ -19,7 +27,7 @@ namespace System.Reactive.Uwp
 
         static UwpThreadPoolScheduler()
         {
-            System.Reactive.PlatformServices.HostLifecycleService.TrySetHostLifecycleNotifications(new System.Reactive.PlatformServices.HostLifecycleNotifications());
+            SystemReactive::System.Reactive.PlatformServices.HostLifecycleService.TrySetHostLifecycleNotifications(new SystemReactive::System.Reactive.PlatformServices.HostLifecycleNotifications());
         }
 
         /// <summary>
@@ -78,14 +86,14 @@ namespace System.Reactive.Uwp
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var userWorkItem = new UserWorkItem<TState>(this, state, action);
+            var userWorkItem = new SystemReactive::System.Reactive.Concurrency.UserWorkItem<TState>(this, state, action);
             
             var res = ThreadPool.RunAsync(
                 iaa => userWorkItem.Run(),
                 Priority,
                 Options);
 
-            userWorkItem.CancelQueueDisposable =  res.AsDisposable();
+            userWorkItem.CancelQueueDisposable = res.AsDisposable();
 
             return userWorkItem;
         }
@@ -116,7 +124,7 @@ namespace System.Reactive.Uwp
 
         private IDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
-            var userWorkItem = new UserWorkItem<TState>(this, state, action);
+            var userWorkItem = new SystemReactive::System.Reactive.Concurrency.UserWorkItem<TState>(this, state, action);
 
             var res = ThreadPoolTimer.CreateTimer(
                 tpt => userWorkItem.Run(),

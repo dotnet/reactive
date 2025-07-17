@@ -1,0 +1,138 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net8.0;net8.0-windows10.0.19041</TargetFrameworks>
+    <Nullable>enable</Nullable>
+
+    <!--
+    We seem to get spurious CA1812 warnings (internal class apparently never instantiated. The same code compiles
+    without warnings when built as a normal library, so this seems to be an issue with the refernce assembly build.
+    -->
+    <NoWarn>$(NoWarn);CA1812</NoWarn>
+
+    <DefineConstants>$(DefineConstants);LEGACY_SYSTEM_REACTIVE_FACADE;BUILDING_REFERENCE_ASSEMBLY</DefineConstants>
+
+    <ProduceOnlyReferenceAssembly>true</ProduceOnlyReferenceAssembly>
+
+    <TargetName>System.Reactive</TargetName>
+  </PropertyGroup>
+
+
+  <!--
+  Since the reference assemblies define the public API, this is where we would
+  want to use the public API analyzers. (The analyzers don't seem to be aware of reference
+  assemblies, so when we put this in System.Reactive, the analyzers look at
+  what's in the runtime assemblies, which intentionally include things not
+  available any more through the public API.)
+
+  Unfortunately, the public API analyzers don't appear to understand type
+  forwarders!
+  -->
+  <!-- <PropertyGroup>
+    <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
+  </PropertyGroup> -->
+
+  <ItemGroup>
+    <!-- Same public API for all TFMs, so we don't have per-TargetFramework API files. -->
+    <!-- <AdditionalFiles Include=".PublicAPI/PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include=".PublicAPI/PublicAPI.Unshipped.txt" /> -->
+  </ItemGroup>
+
+  <!-- <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="4.14.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup> -->
+
+  <ItemGroup>
+    <!--
+    See comments in System.Reactive for explanation of this and the
+    PropertyGroup that follows.
+    -->
+    <!-- <Compile Remove="..\GlobalAssemblyVersion.cs" Link="GlobalAssemblyVersion.cs" /> -->
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Re-instate the normal versioning behaviour. -->
+    <!-- <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyVersionInfo>true</GenerateAssemblyVersionInfo> -->
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <Compile Include="..\System.Reactive\**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);..\System.Reactive\obj\**\*;..\System.Reactive\bin\**\*" />
+    <Compile Remove="..\System.Reactive\Platforms\**\*.*" />
+    <!-- Workaround so the files appear in VS -->
+    <None Include="..\System.Reactive\Platforms\**\*.*" />
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <!--
+  For UWP, the ThreadPoolScheduler presents a problem. For all the other
+  UI-framework-specific types, we can just omit them from the reference
+  assemblies, but we can't do that for the ThreadPoolScheduler, because
+  there's also a non-UI-specific version of it. It has to be present in
+  some form in both the reference and the normal assemblies. And the tricky
+  part is that neither the UWP ThreadPoolScheduler nor the non-UI-specific
+  ThreadPoolScheduler's APIs are subsets of one another. If we were to put
+  the general-purpose ThreadPoolScheduler in the reference assembly, it would
+  advertise ISchedulerLongRunning, but the UWP version does not implement that,
+  which creates the possibility of runtime failures.
+
+  -->
+  <ItemGroup Condition="$(TargetFramework.StartsWith('uap10.0'))">
+    <Compile Include="..\System.Reactive\Platforms\UWP\Concurrency\ThreadPoolScheduler.Windows.cs" />
+    <Compile Include="..\..\src\System.Reactive.For.Uwp\Stubs.cs" Link="Platforms\UWP\Stubs.cs" />
+    <Compile Include="..\..\src\System.Reactive.For.Uwp\ThreadPoolTimerExtensions.cs" Link="Platforms\UWP\Concurrency\ThreadPoolTimerExtensions.cs" />
+  </ItemGroup>
+
+  <!-- Windows includes for Desktop and UWP -->
+  <!-- <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <Compile Include="..\System.Reactive\Platforms\Windows\**\*.cs" />
+    <EmbeddedResource Include="..\System.Reactive\Platforms\Windows\**\*.resx" />
+  </ItemGroup> -->
+
+  <!-- .NET FX -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472'">
+    <!-- <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" /> -->
+    
+    <Compile Include="..\System.Reactive\Platforms\DEsktop\Linq\**\*.Remoting.cs" />
+  </ItemGroup>
+
+  <!-- <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <Compile Include="..\System.Reactive\Platforms\Desktop\**\*.cs" />
+  </ItemGroup> -->
+
+
+    <!-- WindowsRuntime (netX.0-windows and UWP) -->
+  <!-- <ItemGroup Condition="$(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <ProjectReference Include="..\..\src\System.Reactive.For.WindowsRuntime\System.Reactive.For.WindowsRuntime.csproj" />
+  </ItemGroup> -->
+
+  <!-- Windows Forms and WPF -->
+  <!-- <ItemGroup Condition="('$(TargetFramework)' == 'net472') or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <ProjectReference Include="..\..\src\System.Reactive.For.WindowsForms\System.Reactive.For.WindowsForms.csproj" />
+    <ProjectReference Include="..\..\src\System.Reactive.For.Wpf\System.Reactive.For.Wpf.csproj" />
+  </ItemGroup> -->
+
+  <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
+    <!--
+    The .NET SDK doesn't expect TargetFrameworks to include uap10.0.18362, so it doesn't understand
+    that this project is capable of using projects that target .NET Standard 2.0, with the result
+    that it reports an error when trying to resolve the reference to System.Reactive. So
+    when building for UWP, we explicitly set the target framework here.
+    -->
+    <!-- <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj">
+      <Aliases>SystemReactiveNet</Aliases>
+      <SetTargetFramework>TargetFramework=netstandard2.0</SetTargetFramework>
+    </ProjectReference> -->
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
+    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.19041.0\Windows.winmd" />
+  </ItemGroup>
+
+</Project>

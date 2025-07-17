@@ -2,6 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+extern alias SystemReactive;
+using SystemReactive::System.Reactive;
+
 using Windows.Foundation;
 
 namespace System.Reactive

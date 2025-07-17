@@ -2,9 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
-using System.Reactive.Disposables;
+extern alias SystemReactive;
+using SystemReactive::System.Reactive.Disposables;
 using System.Threading;
 using System.Windows.Forms;
+
+using IScheduler = SystemReactive::System.Reactive.Concurrency.IScheduler;
+using ISchedulerPeriodic = SystemReactive::System.Reactive.Concurrency.ISchedulerPeriodic;
+using LocalScheduler = SystemReactive::System.Reactive.Concurrency.LocalScheduler;
+using Scheduler = SystemReactive::System.Reactive.Concurrency.Scheduler;
 
 namespace System.Reactive.Concurrency
 {

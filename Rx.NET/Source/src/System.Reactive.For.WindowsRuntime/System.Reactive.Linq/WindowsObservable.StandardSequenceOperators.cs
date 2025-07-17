@@ -3,6 +3,9 @@
 // See the LICENSE file in the project root for more information. 
 
 #if HAS_WINRT
+extern alias SystemReactive;
+using SystemReactive::System.Reactive.Linq;
+
 using System.Reactive.Windows.Foundation;
 
 using Windows.Foundation;

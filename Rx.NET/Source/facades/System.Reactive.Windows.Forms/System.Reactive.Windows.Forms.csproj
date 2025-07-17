@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
+    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
 
 </Project>

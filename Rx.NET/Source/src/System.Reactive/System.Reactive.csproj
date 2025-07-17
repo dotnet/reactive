@@ -1,0 +1,245 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!--
+    Rx 7.0 moved all UI-framework-specific code into separate packages. This would have reduced
+    the number of distinct TFMs required to just netstandard2.0;net8.0;net8.0-windows10.0.19041.
+    However, because we maintain binary compatibility with Rx 6.0.1, the runtime libraries
+    need to continue to offer the UI-framework-specific code. It's just that we've removed that
+    from the ref assemblies so that it _looks_ like those APIs are no longer in this package.
+    (This is necessary for it to be possible for apps that targets Windows-specific TFMs to
+    use this package without a reference to the Microsoft.WindowsDesktop.App framework.)
+    -->
+    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net8.0;net8.0-windows10.0.19041</TargetFrameworks>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
+    <Description>Reactive Extensions (Rx) for .NET</Description>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+
+    <RootNamespace>System.Reactive</RootNamespace>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <!--
+  API compatibility validation.
+
+  See ADR 0006-api-compatibility-verification.md for more information about this configuration.
+  -->
+
+  <PropertyGroup>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <PackageValidationBaselineVersion>6.0.1</PackageValidationBaselineVersion>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <ApiCompatSuppressionFile Include="ApiCompatSuppressions.xml" />
+  </ItemGroup>
+
+  <Target Name="_SetUwpTfmForPackageValidation" BeforeTargets="RunPackageValidation">
+    <!-- See ADR 0003-uap-targets.md for an explanation of this. (In short, the package validation tooling doesn't understand UWP.) -->
+    <ItemGroup>
+      <PackageValidationReferencePath Condition="%(PackageValidationReferencePath.TargetFrameworkMoniker) == '.NETCore,Version=v5.0'" TargetFrameworkMoniker="UAP,Version=10.0.18362.0" TargetPlatformMoniker="Windows,Version=10.0.18362.0" />
+    </ItemGroup>
+  </Target>
+
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0')) or $(TargetFramework.StartsWith('net9.0'))">
+    <IsTrimmable>true</IsTrimmable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <!--
+    Note: although this will bring in the Microsoft.WindowsDesktop.App framework, this no
+    longer forces this framework dependency on users of this package. That's because we control
+    the nuspec file directl, and do not include that framework dependency.
+    We need it here to be able to build the UI-framework-specific legacy API features that need
+    to be available at runtime for binary compatibility with Rx 6.0.1, but which we have removed
+    from the ref assemblies so that they are not visible in the public API for Rx 7.0.0 and later. 
+    -->
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
+    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.19041.0\Windows.winmd" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Platforms\**\*.*" />
+    <EmbeddedResource Remove="Platforms\**\*.*" />
+    <!-- Workaround so the files appear in VS -->
+    <None Include="Platforms\**\*.*" />
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+    <None Update="Linq\QbservableEx.NAry.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>QbservableEx.NAry.cs</LastGenOutput>
+    </None>
+    <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />
+    <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />
+  </ItemGroup>
+
+
+  <!--
+  UI-framework-specific code for binary compatibility with Rx 6.0.1.
+
+  Note that the reference assemblies built by System.Reactive.MakeRefAssemblies do not include these files,
+  so these are not visible in the public API for Rx 7.0.0 and later, but they
+  remain in the runtime assemblies for backwards compatibility.
+  -->
+
+  <!-- UWP -->
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0'))">
+    <Compile Include="Platforms\UWP\**\*.cs" />
+  </ItemGroup>
+
+  <!-- Windows includes for Desktop and UWP -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <Compile Include="Platforms\Windows\**\*.cs" />
+    <EmbeddedResource Include="Platforms\Windows\**\*.resx" />
+  </ItemGroup>
+
+  <!-- Desktop -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472'">
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <Compile Include="Platforms\Desktop\**\*.cs" />
+  </ItemGroup>
+
+  <!-- Designer support -->
+  <ItemGroup>
+    <Compile Update="Linq\IQueryLanguage.NAry.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IQueryLanguage.NAry.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Joins\Pattern.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Pattern.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Joins\QueryablePattern.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QueryablePattern.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Linq\Observable\CombineLatest.NAry.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CombineLatest.NAry.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Linq\Observable\Zip.NAry.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Zip.NAry.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Linq\Observable.Multiple.CombineLatest.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Observable.Multiple.CombineLatest.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Linq\Observable.Multiple.Zip.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Observable.Multiple.Zip.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Linq\QbservableEx.NAry.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QbservableEx.NAry.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Linq\QueryLanguage.Multiple.CombineLatest.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QueryLanguage.Multiple.CombineLatest.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Linq\QueryLanguage.Multiple.Zip.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QueryLanguage.Multiple.Zip.tt</DependentUpon>
+    </Compile>
+
+    <None Update="Linq\IQueryLanguage.NAry.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IQueryLanguage.NAry.cs</LastGenOutput>
+    </None>
+    <None Update="Joins\Pattern.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Pattern.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="Joins\QueryablePattern.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>QueryablePattern.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="Linq\Observable\CombineLatest.NAry.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CombineLatest.NAry.cs</LastGenOutput>
+    </None>
+    <None Update="Linq\Observable\Zip.NAry.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Zip.NAry.cs</LastGenOutput>
+    </None>
+    <None Update="Linq\Observable.Multiple.CombineLatest.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Observable.Multiple.CombineLatest.cs</LastGenOutput>
+    </None>
+    <None Update="Linq\Observable.Multiple.Zip.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Observable.Multiple.Zip.cs</LastGenOutput>
+    </None>
+    <None Update="Linq\QueryLanguage.Multiple.CombineLatest.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>QueryLanguage.Multiple.CombineLatest.cs</LastGenOutput>
+    </None>
+    <None Update="Linq\QueryLanguage.Multiple.Zip.tt">
+      <LastGenOutput>QueryLanguage.Multiple.Zip.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md"/>
+    <None Include="Linq\QbservableEx.NAry.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QbservableEx.NAry.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <!--
+  Put the reference assemblies built by System.Reactive.MakeRefAssemblies into the 'ref' folder of our
+  NuGet package.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.MakeRefAssemblies\System.Reactive.MakeRefAssemblies.csproj" PrivateAssets="all">
+      <!--
+      If we don't set an alias here, all the types exposed by the reference assembly become available in the global namespace,
+      which causes compiler errors when the UAP target tries to build a specialized ThreadPoolScheduler.
+      -->
+      <Aliases>SystemReactiveRefAssembly</Aliases>
+    </ProjectReference>
+  </ItemGroup>
+
+  <!--
+  We need to supply our own nuspec file, because the SDK doesn't appear to be able to populate the <references> section,
+  and without that we get NU5131 warnings. (I think this is only strictly necessary for package.config scenarios, but
+  Rx has a lot of users, so we'll probably break someone if we don't get this right.)
+  We use tokenization so that we can pass package metadata (which include the version number). But it turns out that
+  the various NuGet package metadata build properties we want to pass in don't get defined until quite late in the build,
+  so we need to set <NuspecProperties> in a custom target that runs just before the GenerateNuspec target.
+  -->
+  <PropertyGroup>
+    <NuspecFile>System.Reactive.nuspec</NuspecFile>
+  </PropertyGroup>
+  <Target Name="_SetNuspecProperties" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);licenseExpression=$(PackageLicenseExpression);icon=$(PackageIcon);projectUrl=$(PackageProjectUrl);description=$(PackageDescription);copyright=$(Copyright);tags=$(PackageTags.Split('%20'));repository=$(RepositoryUrl);commit=$(RepositoryCommit);outputpath=$(OutputPath);refassemblypath=..\System.Reactive.MakeRefAssemblies\bin\$(Configuration)\</NuspecProperties>
+    </PropertyGroup>
+  </Target>
+
+</Project>

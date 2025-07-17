@@ -2,8 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive.Disposables;
-using System.Reactive.Threading.Tasks;
+extern alias SystemReactive;
+using SystemReactive::System;
+using SystemReactive::System.Reactive;
+using SystemReactive::System.Reactive.Disposables;
+using SystemReactive::System.Reactive.Linq;
+using SystemReactive::System.Reactive.Threading.Tasks;
 using System.Reactive.WindowsRuntime;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;

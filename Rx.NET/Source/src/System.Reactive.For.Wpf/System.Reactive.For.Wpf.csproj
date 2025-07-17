@@ -19,7 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\System.Reactive.Net\System.Reactive.Net.csproj" />
+    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj">
+      <Aliases>SystemReactive</Aliases>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
