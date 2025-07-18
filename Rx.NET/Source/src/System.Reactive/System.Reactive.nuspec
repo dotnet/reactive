@@ -44,9 +44,7 @@
     </dependencies>
     <frameworkReferences>
       <group targetFramework="net8.0" />
-      <group targetFramework="net8.0-windows10.0.19041">
-        <frameworkReference name="Microsoft.WindowsDesktop.App" />
-      </group>
+      <group targetFramework="net8.0-windows10.0.19041" />
       <group targetFramework=".NETFramework4.7.2" />
       <group targetFramework=".NETStandard2.0" />
       <group targetFramework="UAP10.0.18362" />
