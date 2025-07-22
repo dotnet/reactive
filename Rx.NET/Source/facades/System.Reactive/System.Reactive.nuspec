@@ -31,14 +31,21 @@
     </references>
     <dependencies>
       <group targetFramework=".NETFramework4.7.2">
+        <dependency id="System.Reactive.Net" version="$version$" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
-      <group targetFramework="net8.0" />
-      <group targetFramework="net8.0-windows10.0.19041" />
+      <group targetFramework="net8.0">
+        <dependency id="System.Reactive.Net" version="$version$" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net8.0-windows10.0.19041">
+        <dependency id="System.Reactive.Net" version="$version$" exclude="Build,Analyzers" />
+      </group>
       <group targetFramework=".NETStandard2.0">
+        <dependency id="System.Reactive.Net" version="$version$" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="UAP10.0.18362">
+        <dependency id="System.Reactive.Net" version="$version$" exclude="Build,Analyzers" />
         <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
       </group>
     </dependencies>
