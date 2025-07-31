@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rx Gauntlet Logging Schema - Workaround Extension Method Failures",
+  "$id": "http://endjin.com/schemas/rx-gauntlet/extensionmethodsworkaroundfaillog",
+
+  "$defs": {
+    "extensionMethodsWorkaroundTestRun": {
+      "allOf": [
+        { "$ref": "./CommonSchema.json#/$defs/testRun" },
+        { "$ref": "./CommonSchema.json#/$defs/buildResults" },
+        { "$ref": "./CommonSchema.json#/$defs/bloatTestResults" }
+      ],
+      "properties": {
+        "config": {
+          "$ref": "#/$defs/extensionMethodsWorkaroundTestRunConfig"
+        }
+      },
+      "required": [
+        "config"
+      ]
+    },
+
+    "extensionMethodsWorkaroundTestRunConfig": {
+      "$ref": "./CommonSchema.json#/$defs/testRunConfigWithUiFrameworkSettings"
+    }
+  }
+}

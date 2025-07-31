@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Note: this gets overwritten when the PlugIn.HostDriver creates a plug-in for a specific PlugInDescriptor -->
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <Nullable>enable</Nullable>
+    <LangVersion>13.0</LangVersion>
+
+    <!--
+    This causes the plug-in's dependencies to be copied to the output directory. (That seems to happen anyway when
+    the TFM is .NET FX, but not when it is .NET Core or .NET 5+.)
+    -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Reactive" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PlugIn.Api\PlugIn.Api.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,12 @@
+[*.cs]
+# Primary constructors
+# We find these something of a mixed bag.
+dotnet_diagnostic.IDE0290.severity = none
+
+# IDE0063: Use simple 'using' statement
+dotnet_diagnostic.IDE0063.severity = silent
+
+# These wants to use [.. expr] instead of new(expr)
+dotnet_diagnostic.IDE0028.severity = none
+dotnet_diagnostic.IDE0305.severity = none
+dotnet_diagnostic.IDE0306.severity = none

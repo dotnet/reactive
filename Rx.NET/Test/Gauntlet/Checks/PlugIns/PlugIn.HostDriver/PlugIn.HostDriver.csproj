@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\RxGauntlet.Common\RxGauntlet.Common.csproj" />
+    <ProjectReference Include="..\PlugIn.HostSerialization\PlugIn.HostSerialization.csproj" />
+  </ItemGroup>
+
+</Project>

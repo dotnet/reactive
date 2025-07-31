@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rx Gauntlet Logging Schema - PlugIn Issue97",
+  "$id": "http://endjin.com/schemas/rx-gauntlet/pluginissue97log",
+  "$defs": {
+    "issue97TestRun": {
+      "$ref": "./CommonSchema.json#/$defs/testRun",
+      "properties": {
+        "config": { "$ref": "#/$defs/issue97TestRunConfig" },
+        "plugIn1": {
+          "description": "The results reported by the first plug-in.",
+          "$ref": "#/$defs/plugInResult"
+        },
+        "plugIn2": {
+          "description": "The results reported by the second plug-in.",
+          "$ref": "#/$defs/plugInResult"
+        }
+      },
+      "required": [
+        "plugIn1",
+        "plugIn2"
+      ]
+    },
+
+    "issue97TestRunConfig": {
+      "$ref": "./CommonSchema.json#/$defs/testRunConfig",
+      "properties": {
+        "hostTfm": {
+          "description": "The TFM of the plug-in host process.",
+          "type": "string"
+        },
+        "plugIn1": {
+          "description": "The first plug-in used in the test run.",
+          "$ref": "#/$defs/plugInConfig"
+        },
+        "plugIn2": {
+          "description": "The second plug-in used in the test run.",
+          "$ref": "#/$defs/plugInConfig"
+        }
+      },
+      "required": [
+        "hostTfm",
+        "plugIn1",
+        "plugIn2"
+      ]
+    },
+
+    "plugInConfig": {
+      "type": "object",
+      "properties": {
+        "tfm": {
+          "description": "The TFM for which the plug-in was built.",
+          "type": "string"
+        },
+        "rxVersion": {
+          "description": "The version of Rx that the plug-in was built against.",
+          "$ref": "./CommonSchema.json#/$defs/rxVersion"
+        }
+      },
+      "required": [ "tfm", "rxVersion" ]
+    },
+
+    "plugInResult": {
+      "type": "object",
+      "properties": {
+        "rxFullAssemblyName": {
+          "description": "The full name of the Rx assembly used by the plug-in.",
+          "type": "string"
+        },
+        "rxLocation": {
+          "description": "The filesystem location of the Rx assembly used by the plug-in.",
+          "type": "string"
+        },
+        "rxTargetFramework": {
+          "description": "The target framework of the Rx assembly used by the plug-in (as described by its TargetFrameworkAttribute).",
+          "type": "string"
+        },
+        "plugInlocation": {
+          "description": "The filesystem location of the plug-in assembly.",
+          "type": "string"
+        },
+        "flowsCancellationTokenToOperationCancelledException": {
+          "description": "Indicates whether the plug-in found that Rx's Foreach correctly flows the CancellationToken to OperationCanceledException.",
+          "type": "boolean"
+        },
+        "supportsWindowsForms": {
+          "description": "Indicates whether the plug-in supports Windows Forms.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "rxFullAssemblyName",
+        "rxLocation",
+        "rxTargetFramework",
+        "plugInLocation",
+        "flowsCancellationTokenToOperationCancelledException",
+        "supportsWindowsForms"
+      ]
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rx Gauntlet Logging Schema - Transitive Framework References",
+  "$id": "http://endjin.com/schemas/rx-gauntlet/transitiveframeworkcheck",
+  "$defs": {
+    "transitiveFrameworkReferenceTestRun": {
+      "allOf": [
+        { "$ref": "./CommonSchema.json#/$defs/testRun" }
+      ],
+      "properties": {
+        "config": { "$ref": "#/$defs/transitiveFrameworkReferenceTestRunConfig" },
+
+        "resultsBefore": {
+          "description": "The results in the scenario's initial configuration'.",
+          "$ref": "#/$defs/transitiveFrameworkReferenceTestPartResult"
+        },
+        "resultsAfter": {
+          "description": "The results after whatever change this scenario makes.",
+          "$ref": "#/$defs/transitiveFrameworkReferenceTestPartResult"
+        }
+      },
+      "required": [
+        "config",
+        "resultsBefore",
+        "resultsAfter"
+      ]
+    },
+
+    "transitiveFrameworkReferenceTestPartResult": {
+      "description": "The bloat results pre-upgrade.",
+      "allOf": [
+        { "$ref": "./CommonSchema.json#/$defs/buildResults" },
+        { "$ref": "./CommonSchema.json#/$defs/executionResults" },
+        { "$ref": "./CommonSchema.json#/$defs/bloatTestResults" }
+      ]
+    },
+
+    "transitiveFrameworkReferenceTestRunConfig": {
+      "$ref": "./CommonSchema.json#/$defs/testRunConfig",
+      "properties": {
+        "appUsesRxNonUiDirectly": { "type": "boolean" },
+        "appUsesRxUiDirectly": { "type": "boolean" },
+        "appUsesRxNonUiViaLibrary": { "type": "boolean" },
+        "appUsesRxUiViaLibrary": { "type": "boolean" },
+
+        "before": { "$ref": "#/$defs/testRunPartConfig" },
+        "after": { "$ref": "#/$defs/testRunPartConfig" }
+      },
+      "required": [
+        "appUsesRxNonUiDirectly",
+        "appUsesRxUiDirectly",
+        "appUsesRxNonUiViaLibrary",
+        "appUsesRxUiViaLibrary",
+        "before",
+        "after"
+      ]
+    },
+
+    "testRunPartConfig": {
+      "properties": {
+        "appTfm": {
+          "description": "The TFM of the application.",
+          "type": "string"
+        },
+
+        "libTfms": {
+          "description": "The TFM list of any libraries that provide a transitive reference to Rx.",
+          "type": "string"
+        },
+
+        "directRefToOldRx": { "type": "boolean" },
+        "directRefToNewRxMain": { "type": "boolean" },
+        "directRefToNewRxLegacyFacade": { "type": "boolean" },
+        "directRefToNewRxUiPackages": { "type": "boolean" },
+
+        "transitiveRefToOldRx": { "type": "boolean" },
+        "transitiveRefToNewRxMain": { "type": "boolean" },
+        "transitiveRefToNewRxLegacyFacade": { "type": "boolean" },
+        "transitiveRefToNewRxUiPackages": { "type": "boolean" },
+        "transitiveRefUsesRxUiFeatures": { "type": "boolean" },
+        "transitiveLibraryTfms": { "type": "string" },
+
+        "useWpf": { "type": "boolean" },
+        "useWindowsForms": { "type": "boolean" },
+        "disableTransitiveFrameworkReferences": { "type": "boolean" }
+      },
+      "required": [
+        "directRefToOldRx",
+        "directRefToNewRxMain",
+        "directRefToNewRxLegacyFacade",
+        "directRefToNewRxUiPackages",
+
+        "transitiveRefToOldRx",
+        "transitiveRefToNewRxMain",
+        "transitiveRefToNewRxLegacyFacade",
+        "transitiveRefToNewRxUiPackages",
+        "transitiveRefUsesRxUiFeatures",
+
+        "useWpf",
+        "useWindowsForms",
+        "disableTransitiveFrameworkReferences"
+      ]
+    }
+  }
+}

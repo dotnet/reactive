@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rx Gauntlet Logging Schema - Common Types",
+  "$id": "http://endjin.com/schemas/rx-gauntlet/common",
+
+  "$defs": {
+    "testRun": {
+      "properties": {
+        "testRunId": {
+          "description": "A unique identifier for the test run.",
+          "type": "string",
+          "format": "uuid"
+        },
+        "testRunDateTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "config": { "$ref": "#/$defs/testRunConfig" }
+      },
+      "required": [
+        "testRunId",
+        "testRunDateTime",
+        "config"
+      ]
+    },
+
+    "testRunConfig": {
+      "type": "object",
+      "properties": {
+        "rxVersion": { "$ref": "./CommonSchema.json#/$defs/nuGetPackage" }
+      },
+      "required": [ "rxVersion" ]
+    },
+
+    "testRunConfigSingleBuildTarget": {
+      "$comment": "Most test scenarios build a single artifact, so it makes sense to describe the base TFM and, where applicable, Windows version for the test run. But this is not in the base testRunConfig because some test scenarios (notably the Plug-in repro) involve multiple build outputs with different TFMs.",
+      "$ref": "./CommonSchema.json#/$defs/testRunConfig",
+      "properties": {
+        "baseNetTfm": { "type": "string" },
+        "windowsVersion": { "type": "string" }
+      },
+      "required": [
+        "baseNetTfm",
+        "rxVersion"
+      ]
+    },
+
+    "testRunConfigWithUiFrameworkSettings": {
+      "$ref": "./CommonSchema.json#/$defs/testRunConfigSingleBuildTarget",
+      "properties": {
+        "useWpf": { "type": "boolean" },
+        "useWindowsForms": { "type": "boolean" },
+        "EmitDisableTransitiveFrameworkReferences": { "type": "boolean" }
+      },
+      "required": [ "EmitDisableTransitiveFrameworkReferences" ]
+    },
+
+
+    "rxVersion": {
+      "properties": {
+        "mainRxPackage": {
+          "description": "The main Rx package used. If multiple packages were used, this is the first",
+          "$ref": "#/$defs/nuGetPackage"
+        },
+        "allPackages": {
+          "description": "A list of all NuGet packages used in the test run (including the one specified ",
+          "type": "array",
+          "items": { "$ref": "#/$defs/nuGetPackage" }
+        }
+      },
+      "required": [ "mainRxPackage", "allPackages" ]
+    },
+
+    "nuGetPackage": {
+      "properties": {
+        "id": { "type": "string" },
+        "version": { "type": "string" },
+        "packageSource": { "type": "string" }
+      },
+      "required": [
+        "id",
+        "version"
+      ]
+    },
+
+    "bloatTestResults": {
+      "properties": {
+        "deployedWpf": { "type": "boolean" },
+        "deployedWindowsForms": { "type": "boolean" }
+      },
+      "required": [
+        "deployedWpf",
+        "deployedWindowsForms"
+      ]
+    },
+
+    "buildResults": {
+      "properties": {
+        "buildSucceeded": { "type": "boolean" },
+        "buildStdOut": {
+          "$comment": "Optional - typically only present if build failed",
+          "type": "string"
+        }
+      },
+      "required": [
+        "buildSucceeded"
+      ]
+    },
+
+    "executionResults": {
+      "properties": {
+        "executionExitCode": {
+          "$comment": "Optional because execution may not even have happened. (A build might have failed.)",
+          "type": "integer"
+        },
+        "executionStdOut": {
+          "$comment": "Optional - typically only present if execution failed",
+          "type": "string"
+        },
+        "executionStdErr": {
+          "$comment": "Optional - typically only present if execution failed",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

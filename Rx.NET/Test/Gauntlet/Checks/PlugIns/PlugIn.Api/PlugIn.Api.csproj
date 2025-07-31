@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.1</TargetFramework>
+    <LangVersion>13.0</LangVersion>
+
+    <!--
+    NETSDK1215: .NET Standard prior to 2.0 not recommended.
+    Unfortunately, the test suite needs to cover .NET 4.5, which doesn't support .NET Standard 2.0.
+    -->
+    <NoWarn>$(NoWarn);NETSDK1215</NoWarn>
+  </PropertyGroup>
+
+</Project>

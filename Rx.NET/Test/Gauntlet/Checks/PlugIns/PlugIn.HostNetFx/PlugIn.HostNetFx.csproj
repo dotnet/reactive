@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net462;net472;net481</TargetFrameworks>
+
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PlugIn.Api\PlugIn.Api.csproj" />
+    <ProjectReference Include="..\PlugIn.HostSerialization\PlugIn.HostSerialization.csproj" />
+  </ItemGroup>
+
+</Project>

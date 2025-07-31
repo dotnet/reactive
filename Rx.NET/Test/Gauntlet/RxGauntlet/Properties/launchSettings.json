@@ -1,0 +1,28 @@
+{
+  "profiles": {
+    "RxGauntlet --all-published-rx": {
+      "commandName": "Project",
+      "commandLineArgs": "test-all-published-rx"
+    },
+    "System.Reactive.Net preview.17": {
+      "commandName": "Project",
+      "commandLineArgs": "test-candidate\r\n--package-source https://pkgs.dev.azure.com/dotnet/Rx.NET/_packaging/RxNet/nuget/v3/index.json\r\n--rx-main-package System.Reactive.Net,7.0.0-preview.17.g58342773bd --rx-legacy-package System.Reactive,7.0.0-preview.17.g58342773bd --rx-ui-package System.Reactive.For.Wpf,7.0.0-preview.17.g58342773bd --rx-ui-package System.Reactive.For.WindowsForms,7.0.0-preview.17.g58342773bd"
+    },
+    "legacyfacade": {
+      "commandName": "Project",
+      "commandLineArgs": "test-candidate\r\n--package-source https://pkgs.dev.azure.com/dotnet/Rx.NET/_packaging/RxNet/nuget/v3/index.json\r\n--rx-main-package System.Reactive.Net,7.0.0-preview-legacyfacade.1.ga1159cd7f3 --rx-legacy-package System.Reactive,7.0.0-preview-legacyfacade.1.ga1159cd7f3 --rx-ui-package System.Reactive.For.Wpf,7.0.0-preview-legacyfacade.1.ga1159cd7f3 --rx-ui-package System.Reactive.For.WindowsForms,7.0.0-preview-legacyfacade.1.ga1159cd7f3"
+    },
+    "legacyfacade-refnoui": {
+      "commandName": "Project",
+      "commandLineArgs": "test-candidate\r\n--package-source https://pkgs.dev.azure.com/dotnet/Rx.NET/_packaging/RxNet/nuget/v3/index.json\r\n--rx-main-package System.Reactive.Net,7.0.0-preview-legacyfacade-refnoui.3.g7492bd514e --rx-legacy-package System.Reactive,7.0.0-preview-legacyfacade-refnoui.3.g7492bd514e --rx-ui-package System.Reactive.For.Wpf,7.0.0-preview-legacyfacade-refnoui.3.g7492bd514e --rx-ui-package System.Reactive.For.WindowsForms,7.0.0-preview-legacyfacade-refnoui.3.g7492bd514e"
+    },
+    "legacyfacade-refnoui-withfxref": {
+      "commandName": "Project",
+      "commandLineArgs": "test-candidate\r\n--package-source https://pkgs.dev.azure.com/dotnet/Rx.NET/_packaging/RxNet/nuget/v3/index.json\r\n--rx-main-package System.Reactive.Net,7.0.0-preview-legacyfacade-refnoui-withfxref.1.g307e3b7f27 --rx-legacy-package System.Reactive,7.0.0-preview-legacyfacade-refnoui-withfxref.1.g307e3b7f27 --rx-ui-package System.Reactive.For.Wpf,7.0.0-preview-legacyfacade-refnoui-withfxref.1.g307e3b7f27 --rx-ui-package System.Reactive.For.WindowsForms,7.0.0-preview-legacyfacade-refnoui-withfxref.1.g307e3b7f27"
+    },
+    "nofacade-refnoui": {
+      "commandName": "Project",
+      "commandLineArgs": "test-candidate\r\n--package-source https://pkgs.dev.azure.com/dotnet/Rx.NET/_packaging/RxNet/nuget/v3/index.json\r\n--rx-main-package System.Reactive,7.0.0-preview-nofacade-refnoui.5.gc59ebd3e22 --rx-ui-package System.Reactive.For.Wpf,7.0.0-preview-nofacade-refnoui.5.gc59ebd3e22 --rx-ui-package System.Reactive.For.WindowsForms,7.0.0-preview-nofacade-refnoui.5.gc59ebd3e22"
+    }
+  }
+}

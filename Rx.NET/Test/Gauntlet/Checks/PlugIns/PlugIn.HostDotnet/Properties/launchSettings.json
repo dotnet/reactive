@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "oldfirst v4.4": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx44 net6.0 Rx44 net8.0"
+    },
+    "Rx3.0 net5.0 net5.0-windows10.0.19041": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx50 net5.0 Rx50 net5.0-windows10.0.19041"
+    },
+    "Rx4.4 net5.0 net6.0-windows10.0.19041": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx44 net5.0 Rx44 net6.0-windows10.0.19041"
+    },
+    "Rx5.0 net5.0 net5.0-windows10.0.19041": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx50 net5.0 Rx50 net5.0-windows10.0.19041"
+    }
+  }
+}

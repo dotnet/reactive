@@ -1,0 +1,44 @@
+{
+  "profiles": {
+    "Rx3.0 net45 net46": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\ian\\AppData\\Local\\Temp\\RxGauntlet\\PlugInHost\\20250703-131339\\bin\\Release\\net45\\PlugIn.dll C:\\Users\\ian\\AppData\\Local\\Temp\\RxGauntlet\\PlugInHost\\20250703-131344\\bin\\Release\\net46\\PlugIn.dll"
+    },
+    "Rx3.0 net46 net45": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx30 net46 Rx30 net45"
+    },
+    "Rx3.1 net45 net46": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx31 net45 Rx31 net46"
+    },
+    "Rx3.1 net46 net45": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx31 net46 Rx31 net45"
+    },
+    "Rx4.4 net46 net462": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx44 net46 Rx44 net462"
+    },
+    "Rx4.4 net462 net46": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx44 net462 Rx44 net46"
+    },
+    "Rx5.0 net462 net472": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx50 net462 Rx50 net472"
+    },
+    "Rx5.0 net472 net462": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx50 net472 Rx50 net462"
+    },
+    "Rx6.0 net462 net472": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx60 net462 Rx60 net472"
+    },
+    "Rx6.0 net472 net462": {
+      "commandName": "Project",
+      "commandLineArgs": "Rx60 net472 Rx60 net462"
+    }
+  }
+}

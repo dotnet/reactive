@@ -1,0 +1,24 @@
+{
+  "profiles": {
+    "Rx 3.0.0": {
+      "commandName": "Project",
+      "commandLineArgs": "--rx-main-package System.Reactive.Linq,3.0.0"
+    },
+    "Rx 3.1.0": {
+      "commandName": "Project",
+      "commandLineArgs": "--rx-main-package System.Reactive.Linq,3.1.0"
+    },
+    "Rx 4.4.1": {
+      "commandName": "Project",
+      "commandLineArgs": "--rx-main-package System.Reactive,4.4.1"
+    },
+    "Rx 6.0.1": {
+      "commandName": "Project",
+      "commandLineArgs": "--rx-main-package System.Reactive,6.0.1"
+    },
+    "Preview": {
+      "commandName": "Project",
+      "commandLineArgs": "--rx-main-package System.Reactive.Net,7.0.0-preview.17.g58342773bd --package-source https://pkgs.dev.azure.com/dotnet/Rx.NET/_packaging/RxNet/nuget/v3/index.json"
+    }
+  }
+}

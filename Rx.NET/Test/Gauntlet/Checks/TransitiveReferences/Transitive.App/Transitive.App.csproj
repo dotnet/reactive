@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    
+    <!-- This may be overwritten for each scenario. -->
+    <TargetFramework>net8.0-windows10.0.19041</TargetFramework>
+    
+    <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- We check for bloat, so we need to be able to do a self-contained deployment. -->
+    <SelfContained>true</SelfContained>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--
+    Thes may be overwritten for each scenario.
+    -->
+    <_ScenarioDefineConstants>InvokeLibraryMethodThatUsesNonFrameworkSpecificRxFeature;UseNonUiFrameworkSpecificRxDirectly</_ScenarioDefineConstants>
+    <_ScenarioWindowsDefineConstants>InvokeLibraryMethodThatUsesUiFrameworkSpecificRxFeature;UseUiFrameworkSpecificRxDirectly</_ScenarioWindowsDefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);$(_ScenarioDefineConstants)</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(TargetFramework.Contains('windows'))">
+    <DefineConstants>$(DefineConstants);$(_ScenarioWindowsDefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <Target Name="_SetWpfDefineConstant" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <_WindowsDesktopFrameworkReference Include="@(FrameworkReference)"
+                                                   Condition="'%(Identity)' == 'Microsoft.WindowsDesktop.App' Or
+                                                              '%(Identity)' == 'Microsoft.WindowsDesktop.App.WPF' Or
+                                                              '%(Identity)' == 'Microsoft.WindowsDesktop.App.WindowsForms'" />
+    </ItemGroup>
+    <PropertyGroup Condition="@(_WindowsDesktopFrameworkReference) != ''">
+      <_WpfDetected>true</_WpfDetected>
+    </PropertyGroup>
+
+    <Message Text="WPF setting: $(_WpfDetected)" />
+    <PropertyGroup>
+      <DefineConstants>$(DefineConstants);TESTED_WPF</DefineConstants>
+    </PropertyGroup>
+    <!--
+    <PropertyGroup>
+    -->
+    <PropertyGroup Condition="'$(_WpfDetected)' == 'true'">
+      <DefineConstants>$(DefineConstants);WPF_AVAILABLE</DefineConstants>
+    </PropertyGroup>
+  </Target>
+
+  <ItemGroup>
+    <!--
+    This is here so that this project builds without errors in Visual Studio.
+    When CheckTransitiveReferences runs, it replaces this with a PackageReference referring to a
+    dynamically-built package installed in a temporary local NuGet source.
+    -->
+    <ProjectReference Include="..\Transitive.Lib.UsesRx\Transitive.Lib.UsesRx.csproj" />
+  </ItemGroup>
+
+</Project>

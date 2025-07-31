@@ -1,0 +1,23 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rx Gauntlet Logging Schema - Bloat",
+  "$id": "http://endjin.com/schemas/rx-gauntlet/bloatlog",
+  "$defs": {
+    "issue1745TestRun": {
+      "allOf": [
+        { "$ref": "./CommonSchema.json#/$defs/testRun" },
+        { "$ref": "./CommonSchema.json#/$defs/bloatTestResults" }
+      ],
+      "properties": {
+        "config": { "$ref": "#/$defs/issue1745TestRunConfig" }
+      },
+      "required": [
+        "config"
+      ]
+    },
+
+    "issue1745TestRunConfig": {
+      "$ref": "./CommonSchema.json#/$defs/testRunConfigWithUiFrameworkSettings"
+    }
+  }
+}

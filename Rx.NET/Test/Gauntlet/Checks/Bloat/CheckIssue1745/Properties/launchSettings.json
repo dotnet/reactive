@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Rx 6.0.1": {
+      "commandName": "Project",
+      "commandLineArgs": "--rx-main-package System.Reactive,6.0.1"
+    },
+    "legacyfacade-refnoui-withfxref": {
+      "commandName": "Project",
+      "commandLineArgs": "--package-source https://pkgs.dev.azure.com/dotnet/Rx.NET/_packaging/RxNet/nuget/v3/index.json\r\n--rx-main-package System.Reactive.Net,7.0.0-preview-legacyfacade-refnoui-withfxref.1.g307e3b7f27 --rx-legacy-package System.Reactive,7.0.0-preview-legacyfacade-refnoui-withfxref.1.g307e3b7f27 --rx-ui-package System.Reactive.For.Wpf,7.0.0-preview-legacyfacade-refnoui-withfxref.1.g307e3b7f27 --rx-ui-package System.Reactive.For.WindowsForms,7.0.0-preview-legacyfacade-refnoui-withfxref.1.g307e3b7f27"
+    }
+  }
+}

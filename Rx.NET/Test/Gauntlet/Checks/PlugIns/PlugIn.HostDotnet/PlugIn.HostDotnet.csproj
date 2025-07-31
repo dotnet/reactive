@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PlugIn.Api\PlugIn.Api.csproj" />
+    <ProjectReference Include="..\PlugIn.HostSerialization\PlugIn.HostSerialization.csproj" />
+  </ItemGroup>
+
+</Project>

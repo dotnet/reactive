@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+    This may be replaced when checks need to build a version that does not use UI features.
+    -->
+    <TargetFrameworks>net8.0;net8.0-windows10.0.19041</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--
+    Thes may be overwritten for each scenario.
+    -->
+    <_ScenarioDefineConstants></_ScenarioDefineConstants>
+    <_ScenarioWindowsDefineConstants>UseNonUiFrameworkRx</_ScenarioWindowsDefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);$(_ScenarioDefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(TargetFramework.Contains('windows'))">
+    <DefineConstants>$(DefineConstants);$(_ScenarioWindowsDefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <!--
+    This may be replaced when checks build a specific
+    -->
+    <PackageReference Include="System.Reactive" Version="6.0.1" />
+  </ItemGroup>
+
+</Project>
