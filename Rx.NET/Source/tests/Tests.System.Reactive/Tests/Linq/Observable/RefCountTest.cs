@@ -553,5 +553,181 @@ namespace ReactiveTests.Tests
             Assert.Equal(expected, list1);
             Assert.Equal(expected, list2);
         }
+
+        [TestMethod]
+        public void RefCount_minObservers_remains_connected_below_threshold_Lazy()
+        {
+            var sourceAfterInitial = new Subject<int>();
+            var connected = 0;
+            var source = Observable.Defer(() =>
+            {
+                connected++;
+                return Observable.Range(1, 5).Concat(sourceAfterInitial);
+            })
+            .Publish()
+            .RefCount(2, TimeSpan.FromMinutes(1));
+
+
+            Assert.Equal(0, connected);
+
+            var list1 = new List<int>();
+            var sub1 = source.Subscribe(list1.Add);
+
+            Assert.Equal(0, connected);
+            Assert.Empty(list1);
+
+            var list2 = new List<int>();
+            var sub2 = source.Subscribe(list2.Add);
+
+            Assert.Equal(1, connected);
+
+            sourceAfterInitial.OnNext(6);
+
+            sub1.Dispose();
+            sourceAfterInitial.OnNext(7);
+
+            var expectedSub1 = new List<int>([1, 2, 3, 4, 5, 6]);
+            var expectedSub2 = new List<int>([1, 2, 3, 4, 5, 6, 7]);
+
+            Assert.Equal(expectedSub1, list1);
+            Assert.Equal(expectedSub2, list2);
+        }
+
+        [TestMethod]
+        public void RefCount_does_not_reconnect_when_minObservers_drops_below_threshold_then_goes_above_Lazy()
+        {
+            var sourceAfterInitial = new Subject<int>();
+            var connected = 0;
+            var source = Observable.Defer(() =>
+            {
+                connected++;
+                return Observable.Range(1, 5).Concat(sourceAfterInitial);
+            })
+            .Publish()
+            .RefCount(2, TimeSpan.FromMinutes(1));
+
+
+            Assert.Equal(0, connected);
+
+            var list1 = new List<int>();
+            var sub1 = source.Subscribe(list1.Add);
+
+            Assert.Equal(0, connected);
+            Assert.Empty(list1);
+
+            var list2 = new List<int>();
+            var sub2 = source.Subscribe(list2.Add);
+
+            Assert.Equal(1, connected);
+
+            sourceAfterInitial.OnNext(6);
+
+            sub1.Dispose();
+            sourceAfterInitial.OnNext(7);
+
+            Assert.Equal(1, connected);
+
+            var list3 = new List<int>();
+            var sub3 = source.Subscribe(list3.Add);
+
+            Assert.Equal(1, connected);
+            sourceAfterInitial.OnNext(8);
+
+            var expectedSub1 = new List<int>([1, 2, 3, 4, 5, 6]);
+            var expectedSub2 = new List<int>([1, 2, 3, 4, 5, 6, 7, 8]);
+            var expectedSub3 = new List<int>([8]);
+
+            Assert.Equal(expectedSub1, list1);
+            Assert.Equal(expectedSub2, list2);
+            Assert.Equal(expectedSub3, list3);
+        }
+
+        [TestMethod]
+        public void RefCount_minObservers_remains_connected_below_threshold_Eager()
+        {
+            var sourceAfterInitial = new Subject<int>();
+            var connected = 0;
+            var source = Observable.Defer(() =>
+            {
+                connected++;
+                return Observable.Range(1, 5).Concat(sourceAfterInitial);
+            })
+            .Publish()
+            .RefCount(2);
+
+
+            Assert.Equal(0, connected);
+
+            var list1 = new List<int>();
+            var sub1 = source.Subscribe(list1.Add);
+
+            Assert.Equal(0, connected);
+            Assert.Empty(list1);
+
+            var list2 = new List<int>();
+            var sub2 = source.Subscribe(list2.Add);
+
+            Assert.Equal(1, connected);
+
+            sourceAfterInitial.OnNext(6);
+
+            sub1.Dispose();
+            sourceAfterInitial.OnNext(7);
+
+            var expectedSub1 = new List<int>([1, 2, 3, 4, 5, 6]);
+            var expectedSub2 = new List<int>([1, 2, 3, 4, 5, 6, 7]);
+
+            Assert.Equal(expectedSub1, list1);
+            Assert.Equal(expectedSub2, list2);
+        }
+
+        [TestMethod]
+        public void RefCount_does_not_reconnect_when_minObservers_drops_below_threshold_then_goes_above_Eager()
+        {
+            var sourceAfterInitial = new Subject<int>();
+            var connected = 0;
+            var source = Observable.Defer(() =>
+            {
+                connected++;
+                return Observable.Range(1, 5).Concat(sourceAfterInitial);
+            })
+            .Publish()
+            .RefCount(2);
+
+
+            Assert.Equal(0, connected);
+
+            var list1 = new List<int>();
+            var sub1 = source.Subscribe(list1.Add);
+
+            Assert.Equal(0, connected);
+            Assert.Empty(list1);
+
+            var list2 = new List<int>();
+            var sub2 = source.Subscribe(list2.Add);
+
+            Assert.Equal(1, connected);
+
+            sourceAfterInitial.OnNext(6);
+
+            sub1.Dispose();
+            sourceAfterInitial.OnNext(7);
+
+            Assert.Equal(1, connected);
+
+            var list3 = new List<int>();
+            var sub3 = source.Subscribe(list3.Add);
+
+            Assert.Equal(1, connected);
+            sourceAfterInitial.OnNext(8);
+
+            var expectedSub1 = new List<int>([1, 2, 3, 4, 5, 6]);
+            var expectedSub2 = new List<int>([1, 2, 3, 4, 5, 6, 7, 8]);
+            var expectedSub3 = new List<int>([8]);
+
+            Assert.Equal(expectedSub1, list1);
+            Assert.Equal(expectedSub2, list2);
+            Assert.Equal(expectedSub3, list3);
+        }
     }
 }

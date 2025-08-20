@@ -72,8 +72,9 @@ namespace System.Reactive.Linq.ObservableImpl
                             _parent._connection = conn;
                         }
 
-                        // this is the first observer, then connect
-                        doConnect = ++conn._count == _parent._minObservers;
+                        // if this is the first time the observer count has reached the minimum
+                        // observer count since we last had no observers, then connect
+                        doConnect = ++conn._count == _parent._minObservers && conn._disposable.Disposable is null;
 
                         // save the current connection for this observer
                         _targetConnection = conn;
