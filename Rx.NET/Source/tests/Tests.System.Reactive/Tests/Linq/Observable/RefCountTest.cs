@@ -999,7 +999,7 @@ namespace ReactiveTests.Tests
             terminated1 = terminated2 = false;
 
             // Now we go back to the initial behaviour in which the source produces one value and does not complete.
-            connectable.Connections[1].ReplaceSource(new BehaviorSubject<int>(42));
+            connectable.SetNotificationForNextConnect(Notification.CreateOnNext(42));
 
             using (refCount.Subscribe(value => seen1 = value, () => terminated1 = true))
             {
