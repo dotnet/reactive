@@ -242,9 +242,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     lock (parent._gate)
                     {
-                        int observerCount = ++parent._count;
-                        bool shouldConnect = false;
-                        bool shouldCancelDelayedDisconnect = false;
+                        var observerCount = ++parent._count;
+                        var shouldConnect = false;
+                        var shouldCancelDelayedDisconnect = false;
                         switch (parent._state)
                         {
                             case State.DisconnectedNoSubscribers:

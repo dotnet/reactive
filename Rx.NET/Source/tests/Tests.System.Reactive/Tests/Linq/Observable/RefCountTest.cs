@@ -108,7 +108,7 @@ namespace ReactiveTests.Tests
                 return connection.Source.Subscribe(observer);
             }
 
-            public class Connection(IObservable<T> source) : IDisposable
+            public sealed class Connection(IObservable<T> source) : IDisposable
             {
                 /// <summary>
                 /// Gets a value indicating whether this connection has been disposed.
@@ -138,7 +138,6 @@ namespace ReactiveTests.Tests
                 public void Dispose()
                 {
                     Disposed = true;
-                    //connection.Dispose();
                 }
             }
         }
@@ -166,13 +165,11 @@ namespace ReactiveTests.Tests
 
             public SerialConnectableIgnoringConnect(IObservable<T> initialSource)
             {
-                //_sourcePublished = initialSource.Publish();
                 _source = initialSource;
             }
 
             public void SetSource(IObservable<T> source)
             {
-                //_sourcePublished = source.Publish();
                 _source = source;
             }
 
@@ -180,7 +177,6 @@ namespace ReactiveTests.Tests
 
             public IDisposable Connect()
             {
-                //var connection = new Connection(_sourcePublished.Connect());
                 var connection = new Connection();
                 Connections.Add(connection);
                 return connection;
@@ -188,27 +184,19 @@ namespace ReactiveTests.Tests
 
             public IDisposable Subscribe(IObserver<T> observer)
             {
-                //return _sourcePublished.Subscribe(observer);
                 return _source.Subscribe(observer);
             }
 
-            //public class Connection(IDisposable connection) : IDisposable
-            public class Connection() : IDisposable
+            public sealed class Connection() : IDisposable
             {
                 /// <summary>
                 /// Gets a value indicating whether this connection has been disposed.
                 /// </summary>
                 public bool Disposed { get; private set; }
 
-                /////// <summary>
-                /////// Gets the source that was the <see cref="CurrentSource"/> when <see cref="Connect"/> was called.
-                /////// </summary>
-                ////public IObservable<T> Source { get; } = source;
-
                 public void Dispose()
                 {
                     Disposed = true;
-                    //connection.Dispose();
                 }
             }
         }
