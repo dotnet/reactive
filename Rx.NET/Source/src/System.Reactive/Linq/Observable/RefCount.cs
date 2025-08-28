@@ -140,7 +140,8 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class Lazy : Producer<TSource, Lazy._>
         {
             // This operator's state transitions are easily misunderstood, as bugs #2214 and #2215
-            // testify. In particular, there are tricky cases around
+            // testify. In particular, there are tricky cases around:
+            //
             //  * a transition to 0 subscribers followed by the arrival of a new subscriber before
             //      the disconnect delay elapses
             //  * sources that complete before returning from Connect
@@ -149,7 +150,8 @@ namespace System.Reactive.Linq.ObservableImpl
             //
             // This is further complicated by the need to handle multithreading. Although Rx
             // requires notifications to an individual observer to be sequential, there are two
-            // reasons concurrency may occur:
+            // reasons concurrency may occur here:
+            //
             //  * each subscription to RefCount causes a subscription to the underlying source.
             //      (RefCount only aggregates the calls to Connect. In the common usage of the
             //      form source.Publish().RefCount(), these subscriptions all go to a single
@@ -167,32 +169,26 @@ namespace System.Reactive.Linq.ObservableImpl
             //      have always guarded against such calls, so for backwards compatibility we must
             //      continue to do so.)
             //
-            // Each call to RefCount(disconnectDelay: ts) creates a single instance of this Lazy
-            // class. When we get one instance of the nested Lazy._ sink for each subscriber.
-            // The outer Lazy class will be in one of these states:
+            // Each call to RefCount(disconnectDelay) creates a single instance of this Lazy class.
+            // Then we get one instance of the nested Lazy._ sink for each subscriber. The outer
+            // Lazy class will be in one of the states described in the State enumeration.
             //
-            // * Disconnected with 0 subscribers (the initial state, and also the state we return
-            //      to after the subscriber count drops to zero, and the disconnect delay elapses
-            //      without further subscriptions being added)
-            // * Disconnected with 0 < subscribers < minObservers (the state we enter when we get
-            //      our first subscriber and minObservers is >= 2).
-            // * Connected with at least one subscriber
-            // * Connected with 0 subscribers (in which we are typically waiting for the disconnect
-            //      delay to elapse, but we can also return to the preceding state if new
-            //      subscriptions come in before that delay completes)
-            //
-            // Where it gets tricky is the transitions between these states. Although we can use
-            // lock to protect against concurrency, re-entrancy causes problems: when we call
-            // Subscribe or Connect, those can complete their subscribers (including ones already
-            // set up, and the one we're trying to set up when calling Subscribe or Connect).
-            // So even though we may hold a lock to protect the operator's state, calling these
-            // methods can cause completion to occur, and the completion logic may try to acquire
-            // the same lock. It will succeed (because re-entrant lock acquisition is supported,
-            // because the alternative is deadlock or failure) and so we end up with a block of
-            // code owning a lock and modifying data protected by that lock right in the middle of
-            // the execution of another block of code that also owns that same lock.
-            // So we typically want to avoid any calls that could trigger such re-entrancy while
-            // updating shared state.
+            // State transitions are tricky. Although we can use a lock to protect against
+            // concurrency, re-entrancy causes problems: when we call Subscribe or Connect, those
+            // can complete subscribers (either ones already set up, or the one we're trying to set
+            // up when calling Subscribe or Connect). So even though we may hold a lock to protect
+            // the operator's state, calling these methods can cause completion to occur, and the
+            // completion logic may try to acquire the same lock. It will succeed (because
+            // re-entrant lock acquisition is supported, since the alternative is deadlock or
+            // failure) and so we end up with a block of code owning a lock and modifying data
+            // protected by that lock right in the middle of the execution of another block of code
+            // that also owns that same lock. That is exactly the situation we normally expect lock
+            // to prevent, but it can't help us when re-entrancy occurs. So we typically want to
+            // avoid any calls that could trigger such re-entrancy while updating shared state, but
+            // that's not always possible, so in cases where we need to call out to user code while
+            // holding the _gate lock, we need to remember that state might have changed during
+            // that call.
+
             private readonly object _gate;
             private readonly IScheduler _scheduler;
             private readonly TimeSpan _disconnectTime;
@@ -204,11 +200,37 @@ namespace System.Reactive.Linq.ObservableImpl
             private int _count;
             private IDisposable? _connectableSubscription;
 
+            /// <summary>
+            /// Represents the <see cref="Lazy"/> instances state (shared across all subscriptions
+            /// to that instance).
+            /// </summary>
             private enum State
             {
+                /// <summary>
+                /// Disconnected with 0 subscribers. This is the initial state, and also the state
+                /// we return to after the subscriber count drops to zero, and the disconnect delay
+                /// elapses without further subscriptions being added).
+                /// </summary>
                 DisconnectedNoSubscribers,
+
+                /// <summary>
+                /// Disconnected with 0 &lt; subscribers &lt; minObservers. This is the state we
+                /// enter when we get our first subscriber and minObservers is >= 2).
+                /// </summary>
                 DisconnectedWithSubscribers,
+
+                /// <summary>
+                /// Connected with at least one subscriber. We enter this state when the number of
+                /// subscribers first reaches minObservers (or when it reached it again after
+                /// disconnecting). If minObservers = 1, we enter this state from
+                /// <see cref="DisconnectedNoSubscribers"/> as soon as we get a subscriber.
+                /// </summary>
                 ConnectedWithSubscribers,
+
+                /// <summary>
+                /// Connected with 0 subscribers, and waiting for the disconnect delay to elapse,
+                /// or for new subscriptions come in before that delay completes.
+                /// </summary>
                 ConnectedWithNoSubscribers
             }
 
@@ -254,6 +276,8 @@ namespace System.Reactive.Linq.ObservableImpl
                                 parent._state = shouldConnect ? State.ConnectedWithSubscribers : State.DisconnectedWithSubscribers;
                                 break;
 
+                            // If we're ConnectedWithSubscribers, we have no further work to do.
+
                             case State.ConnectedWithNoSubscribers:
                                 shouldCancelDelayedDisconnect = true;
                                 parent._state = State.ConnectedWithSubscribers;
@@ -284,10 +308,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (shouldConnect || shouldCancelDelayedDisconnect)
                         {
-                            // If a delayed disconnect work item has been scheduled, it will already be in
-                            // _serial, so this will cancel it. In any case, this ensures that an unused
-                            // SingleAssignmentDisposable is available for the upstream disposal callback
-                            // to use when it needs to set up the delayed disconnect work item.
+                            // If a delayed disconnect work item has been scheduled, it will
+                            // already be in _serial, so this will cancel it. In any case, this
+                            // ensures that an unused SingleAssignmentDisposable is available for
+                            // the upstream disposal callback to use when it needs to set up the
+                            // delayed disconnect work item.
                             Disposable.TrySetSerial(ref parent._serial, new SingleAssignmentDisposable());
                         }
                     }
@@ -304,12 +329,14 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 if (--closureParent._count == 0)
                                 {
-                                    // It's possible for the count to reach 0 without ever having gone above the
-                                    // minObservers threshold, in which case we won't ever have called Connect.
-                                    // More subtly, when sources call OnComplete inside Subscribe, it's possible for
-                                    // this Disposable callback to run *inside* the call to Connect above.
-                                    // So we only want to schedule the disconnection work item if we have already
-                                    // connected.
+                                    // It's possible for the count to reach 0 without ever having
+                                    // gone above the minObservers threshold, in which case we
+                                    // won't ever have called Connect. More subtly, when sources
+                                    // call OnComplete inside Subscribe, it's possible for this
+                                    // Disposable callback to run *inside* the call to Connect
+                                    // above.
+                                    // So we only want to schedule the disconnection work item if
+                                    // we have already connected.
                                     if (closureParent._state == State.ConnectedWithSubscribers)
                                     {
                                         closureParent._state = State.ConnectedWithNoSubscribers;
@@ -333,9 +360,11 @@ namespace System.Reactive.Linq.ObservableImpl
                                             }
                                         });
                                     }
-                                    else
+                                    else // closureParent._state == State.ConnectedWithSubscribers
                                     {
-                                        // This callback should only run when we have at least one subscriber.
+                                        // This callback should only run when we have at least one subscriber,
+                                        // so if we weren't in ConnectedWithSubscribers, we'd should be in
+                                        // DisconnectedWithSubscribers.
                                         Debug.Assert(closureParent._state == State.DisconnectedWithSubscribers);
 
                                         closureParent._state = State.DisconnectedNoSubscribers;
