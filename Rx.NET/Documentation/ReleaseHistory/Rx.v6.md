@@ -1,5 +1,15 @@
 # Rx Release History v6.0
 
+## v6.0.2
+
+This release fixes:
+
+* [Issue #2173: "RefCount with MinObservers > 1 Behaves Unexpectedly"](https://github.com/dotnet/reactive/issues/2173)
+* [Issue #2214: "RefCount with disconnect delay and minObservers throws InvalidOperationException when resubscribing to synchronously completing source"](https://github.com/dotnet/reactive/issues/2214)
+* [Issue #2215: "RefCount with disconnect delay and minObservers disconnects prematurely if observer count drops to zero and then goes back up"](https://github.com/dotnet/reactive/issues/2215)
+
+Note: the test suite now tests on .NET 9.0. No changes were required as a result of this.
+
 ## v6.0.1
 
 This release fixes:
