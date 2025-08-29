@@ -132,11 +132,11 @@ stages:
       displayName: Use .NET 9.0 SDK
       inputs:
         version: '9.0.x'
-        packageType: runtime
 
     - task: UseDotNet@2
       inputs:
         version: 8.0.x
+        packageType: runtime
 
     - task: DotNetCoreCLI@2
       inputs:
