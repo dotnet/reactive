@@ -129,19 +129,13 @@ stages:
 
     steps:
     - task: UseDotNet@2
+      displayName: Use .NET 9.0 SDK
+      inputs:
+        version: '9.0.x'
+
+    - task: UseDotNet@2
       inputs:
         version: 8.0.x
-
-    - task: UseDotNet@2
-      displayName: Use .NET 7.0 SDK
-      inputs:
-        version: '7.0.x'
-        packageType: runtime
-
-    - task: UseDotNet@2
-      displayName: Use .NET 6.0 SDK
-      inputs:
-        version: '6.0.x'
         packageType: runtime
 
     - task: DotNetCoreCLI@2
@@ -179,15 +173,8 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f net7.0 --filter "TestCategory!=SkipCI"
-      displayName: Run 7.0 Tests on Linux
-
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: test
-        projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f net6.0 --filter "TestCategory!=SkipCI"
-      displayName: Run 6.0 Tests on Linux
+        arguments: -c $(BuildConfiguration) -f net9.0 --filter "TestCategory!=SkipCI"
+      displayName: Run 9.0 Tests on Linux
 
   - job: WindowsDesktop    
     pool:
@@ -205,14 +192,9 @@ stages:
         performMultiLevelLookup: true
 
     - task: UseDotNet@2
-      displayName: Use .NET 7.0 SDK
+      displayName: Use .NET 9.0 SDK
       inputs:
-        version: '7.0.x'
-
-    - task: UseDotNet@2
-      displayName: Use .NET 6.0 SDK
-      inputs:
-        version: '6.0.x'
+        version: '9.0.x'
 
     - task: DotNetCoreCLI@2
       inputs:
