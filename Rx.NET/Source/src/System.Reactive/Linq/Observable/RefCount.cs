@@ -201,7 +201,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private IDisposable? _connectableSubscription;
 
             /// <summary>
-            /// Represents the <see cref="Lazy"/> instances state (shared across all subscriptions
+            /// Represents the <see cref="Lazy"/> instance's state (shared across all subscriptions
             /// to that instance).
             /// </summary>
             private enum State

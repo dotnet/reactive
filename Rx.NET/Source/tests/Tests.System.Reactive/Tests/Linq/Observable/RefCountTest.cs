@@ -264,7 +264,7 @@ namespace ReactiveTests.Tests
 
             var d1 = default(IDisposable);
             var o1 = scheduler.CreateObserver<int>();
-            scheduler.ScheduleAbsolute(210, () => { d1 = res.Subscribe(o1); });
+            scheduler.ScheduleAbsolute(205, () => { d1 = res.Subscribe(o1); });
 
             var d2 = default(IDisposable);
             var o2 = scheduler.CreateObserver<int>();
@@ -282,7 +282,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void RefCount_NoDelay_SourceProducesValuesAndCompletesInSubscribe()
+        public void RefCount_NoDelay_SourceProducesValuesAndCompletesInConnect()
         {
             var connected = 0;
             var source = Observable.Defer(() =>
@@ -312,7 +312,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void RefCount_NoDelay_minObservers_SourceProducesValuesAndCompletesInSubscribe()
+        public void RefCount_NoDelay_minObservers_SourceProducesValuesAndCompletesInConnect()
         {
             var connected = 0;
             var source = Observable.Defer(() =>
@@ -343,80 +343,53 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void RefCount_NoDelay_SourceCompletesWithNoValuesInSubscribe()
+        public void RefCount_NoDelay_SourceCompletesWithNoValuesInConnect()
         {
-            var subscribed = 0;
-            var unsubscribed = 0;
+            var connectable = new SerialSingleNotificationConnectable<int>(Notification.CreateOnCompleted<int>());
+            var refCount = connectable.RefCount();
 
-            var o1 = Observable.Create<string>(observer =>
-            {
-                subscribed++;
-                observer.OnCompleted();
+            var s1 = refCount.Subscribe();
+            Assert.Equal(1, connectable.Connections.Count);
 
-                return Disposable.Create(() => unsubscribed++);
-            });
+            // Since the source immediately completed, the RefCount goes back to zero subscribers
+            // inside the call to Connect, so we expect to be disconnected.
+            Assert.True(connectable.Connections[0].Disposed);
 
-            var o2 = o1.Publish().RefCount();
-
-            var s1 = o2.Subscribe();
-            Assert.Equal(1, subscribed);
-            Assert.Equal(1, unsubscribed);
-
-            var s2 = o2.Subscribe();
-            Assert.Equal(1, subscribed);
-            Assert.Equal(1, unsubscribed);
+            var s2 = refCount.Subscribe();
+            Assert.Equal(2, connectable.Connections.Count);
+            Assert.True(connectable.Connections[1].Disposed);
         }
 
         [TestMethod]
-        public void RefCount_NoDelay_minObservers_SourceCompletesWithNoValuesInSubscribe()
+        public void RefCount_NoDelay_minObservers_SourceCompletesWithNoValuesInConnect()
         {
-            var subscribed = 0;
-            var unsubscribed = 0;
+            var connectable = new SerialSingleNotificationConnectable<int>(Notification.CreateOnCompleted<int>());
+            var refCount = connectable.RefCount(2);
 
-            var o1 = Observable.Create<string>(observer =>
-            {
-                subscribed++;
-                observer.OnCompleted();
+            var s1 = refCount.Subscribe();
+            Assert.Equal(0, connectable.Connections.Count);
 
-                return Disposable.Create(() => unsubscribed++);
-            });
+            var s2 = refCount.Subscribe();
+            Assert.Equal(1, connectable.Connections.Count);
 
-            var o2 = o1.Publish().RefCount(2);
-
-            var s1 = o2.Subscribe();
-            Assert.Equal(0, subscribed);
-            Assert.Equal(0, unsubscribed);
-
-            var s2 = o2.Subscribe();
-            Assert.Equal(1, subscribed);
-            Assert.Equal(1, unsubscribed);
+            // Since the source completes immediately, we will have no active subscribers, so
+            // we expect to be disconnected.
+            Assert.True(connectable.Connections[0].Disposed);
 
             s1.Dispose();
             s2.Dispose();
 
-            // At this point, the RefCount has 0 subscribers, and will have disconnected from
-            // its source. When we add a new subscriber, the count will be at 0, which is below
-            // minObservers, so we don't expect a new connection. RefCount _will_ call Subscribe
-            // on its source, but that source is the Subject created by Publish(). And since
-            // o1 already delivered an OnComplete, that Subject is now in a completed state, so
-            // it will immediately complete any further subscriptions. RefCount sees this, so
-            // although the connection count briefly goes up to 1, it will then go back down to
-            // 0 before this call to Subscribe returns.
-            // Basically, because this test uses o1.Publish(), once our connectable source source
-            // completes is it incapable of restarting. That's why we have other tests that use
-            // SerialSingleNotificationConnectable - that enables us to build a source that resets
-            var s3 = o2.Subscribe();
-            Assert.Equal(1, subscribed);
-            Assert.Equal(1, unsubscribed);
+            // Disposing subscriptions should change nothing because they self-completed.
+            Assert.Equal(1, connectable.Connections.Count);
 
-            // While it might look like adding a second subscriber should tip us back over the threshold
-            // and trigger a reconnect, for the reasons described above o2 immdiately completed in the
-            // last call to subscribe, so the RefCount is zero at this point. This is a limitation of
-            // Publish(). It doesn't really matter for this test, but it's why some tests use
-            // SerialSingleNotificationConnectable.
-            var s4 = o2.Subscribe();
-            Assert.Equal(1, subscribed);
-            Assert.Equal(1, unsubscribed);
+            // We're now back in the initial disconnected state, so nothing more should
+            // happen until we get up to minObservers.
+            var s3 = refCount.Subscribe();
+            Assert.Equal(1, connectable.Connections.Count);
+
+            var s4 = refCount.Subscribe();
+            Assert.Equal(2, connectable.Connections.Count);
+            Assert.True(connectable.Connections[1].Disposed);
         }
 
         [TestMethod]
