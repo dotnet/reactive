@@ -661,6 +661,14 @@ namespace System.Reactive.Disposables
         public static System.Reactive.Disposables.ICancelable Create(System.IDisposable disposable1, System.IDisposable disposable2) { }
     }
 }
+namespace System.Reactive.Disposables.Fluent
+{
+    public static class DisposableExtensions
+    {
+        public static T DisposeWith<T>(this T item, System.Reactive.Disposables.CompositeDisposable compositeDisposable)
+            where T : System.IDisposable { }
+    }
+}
 namespace System.Reactive.Joins
 {
     public abstract class Pattern { }
