@@ -170,7 +170,7 @@ namespace System.Reactive.Linq.ObservableImpl
             //      continue to do so.)
             //
             // Each call to RefCount(disconnectDelay) creates a single instance of this Lazy class.
-            // Then we get one instance of the nested Lazy._ sink for each subscriber. The outer
+            // Then we get one instance of the nested Lazy._sink for each subscriber. The outer
             // Lazy class will be in one of the states described in the State enumeration.
             //
             // State transitions are tricky. Although we can use a lock to protect against
