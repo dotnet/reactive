@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Internal;
 using System.Threading.Tasks;
 
 namespace System.Reactive
@@ -124,7 +125,7 @@ namespace System.Reactive
                         return;
                     }
 
-                    _task = _observer.OnCompletedAsync();
+                    _task = _observer.OnCompletedAsync_EnsureAsync();
                 }
 
                 try
@@ -146,7 +147,7 @@ namespace System.Reactive
                         return;
                     }
 
-                    _task = _observer.OnErrorAsync(error);
+                    _task = _observer.OnErrorAsync_EnsureAsync(error);
                 }
 
                 try
@@ -168,7 +169,7 @@ namespace System.Reactive
                         return;
                     }
 
-                    _task = _observer.OnNextAsync(value);
+                    _task = _observer.OnNextAsync_EnsureAsync(value);
                 }
 
                 try
