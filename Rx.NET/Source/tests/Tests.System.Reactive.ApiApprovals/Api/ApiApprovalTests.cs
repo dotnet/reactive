@@ -17,7 +17,7 @@ namespace ReactiveTests.Tests.Api
     {
         static ApiApprovalTests()
         {
-            VerifierSettings.OnVerifyMismatch((filePair, message) => DiffPlexReporter.Report(filePair.ReceivedPath, filePair.VerifiedPath, message));
+            VerifierSettings.OnVerifyMismatch((filePair, message, autoVerify) => DiffPlexReporter.Report(filePair.ReceivedPath, filePair.VerifiedPath, message));
         }
 
         public ApiApprovalTests()
