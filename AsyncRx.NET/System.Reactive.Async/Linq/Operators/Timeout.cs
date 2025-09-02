@@ -4,7 +4,7 @@
 
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Threading;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
@@ -159,7 +159,7 @@ namespace System.Reactive.Linq
 
             async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
             {
-                var gate = new AsyncGate();
+                var gate = AsyncGate.Create();
 
                 var switched = false;
                 var id = 0UL;

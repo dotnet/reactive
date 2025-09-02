@@ -4,14 +4,14 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Disposables
 {
     public sealed class CompositeAsyncDisposable : IAsyncDisposable
     {
-        private readonly AsyncGate _gate = new();
+        private readonly IAsyncGate _gate = AsyncGate.Create();
         private readonly List<IAsyncDisposable> _disposables;
         private bool _disposed;
 
