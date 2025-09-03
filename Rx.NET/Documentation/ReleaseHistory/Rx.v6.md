@@ -1,4 +1,12 @@
-# Rx Release History v6.0
+﻿# Rx Release History v6.0
+
+## 6.1.0
+
+This release adds:
+
+* A `DisposeWith`extension method for `IDisposable` to simplify disposal in conjunction with `CompositeDisposable` (see [#2178](https://github.com/dotnet/reactive/pull/2178) thanks to [Chris Pulman](https://github.com/ChrisPulman)
+* A new overload of `TakeUntil` accepting a `CancellationToken` (see [#2181](https://github.com/dotnet/reactive/issues/2181) thanks to [Nils Aufschläger](https://github.com/nilsauf)
+
 
 ## v6.0.2
 
