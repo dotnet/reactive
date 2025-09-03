@@ -864,7 +864,7 @@ namespace System.Reactive.Linq
         ///     .Subscribe(Console.WriteLine);
         /// </code>
         /// </example>
-        /// <exception cref="ArgumentException">If <typeparamref name="TSource"/> or <paramref name="stopPredicate"/> is <code>null</code>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="stopPredicate"/> is <code>null</code>.</exception>
         public static IObservable<TSource> TakeUntil<TSource>(this IObservable<TSource> source, Func<TSource, bool> stopPredicate)
         {
             if (source == null)
@@ -888,7 +888,7 @@ namespace System.Reactive.Linq
         /// <param name="source">The source sequence to relay elements of.</param>
         /// <param name="cancellationToken">The cancellation token to complete the target observable sequence on.</param>
         /// <returns>The observable sequence with the source elements until the provided <paramref name="cancellationToken"/> is cancelled.</returns>
-        /// <exception cref="ArgumentException">If <typeparamref name="TSource"/> is <code>null</code>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is <code>null</code>.</exception>
         public static IObservable<TSource> TakeUntil<TSource>(this IObservable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
