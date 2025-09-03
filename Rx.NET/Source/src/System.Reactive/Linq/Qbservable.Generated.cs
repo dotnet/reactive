@@ -13762,6 +13762,31 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
+        /// Relays elements from the source observable sequence until the provided <paramref name="cancellationToken" /> is cancelled.
+        /// Completes immediately if the provided <paramref name="cancellationToken" /> is already cancelled upon subscription.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source and result sequences.</typeparam>
+        /// <param name="source">The source sequence to relay elements of.</param>
+        /// <param name="cancellationToken">The cancellation token to complete the target observable sequence on.</param>
+        /// <returns>The observable sequence with the source elements until the provided <paramref name="cancellationToken" /> is cancelled.</returns>
+        /// <exception cref="ArgumentException">If <typeparamref name="TSource" /> is <code>null</code>.</exception>
+        public static IQbservable<TSource> TakeUntil<TSource>(this IQbservable<TSource> source, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    source.Expression,
+                    Expression.Constant(cancellationToken, typeof(CancellationToken))
+                )
+            );
+        }
+
+
+        /// <summary>
         /// Takes elements for the specified duration until the specified end time.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
