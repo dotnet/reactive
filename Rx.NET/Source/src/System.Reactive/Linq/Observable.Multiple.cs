@@ -881,7 +881,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Relays elements from the source observable sequence until the provided <paramref name="cancellationToken"/> is canceled.
+        /// Relays elements from the source observable sequence until the provided <paramref name="cancellationToken"/> is cancelled.
         /// Completes immediately if the provided <paramref name="cancellationToken"/> is already cancelled upon subscription.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source and result sequences.</typeparam>
