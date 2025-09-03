@@ -35,8 +35,5 @@
   <ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
     <PackageReference Include="System.Reactive.For.WindowsForms" Version="7.0.0-preview*" />
     <PackageReference Include="System.Reactive.For.Wpf" Version="7.0.0-preview*" />
-    <PackageReference Include="System.Reactive" Version="6.1.0-preview*" />
-    <PackageReference Include="Microsoft.Reactive.Testing" Version="6.1.0-preview*" />
-    <PackageReference Include="System.Reactive.Observable.Aliases" Version="6.1.0-preview*" />
   </ItemGroup>
 </Project>
