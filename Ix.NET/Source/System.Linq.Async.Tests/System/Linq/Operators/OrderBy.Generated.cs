@@ -7498,8 +7498,10 @@ namespace Tests
         private async Task AssertSorted<T>(IAsyncEnumerable<T> asyncRes, IEnumerable<T> syncRes)
         {
             Assert.True(await syncRes.ToAsyncEnumerable().SequenceEqualAsync(asyncRes));
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            var toListResult = await asyncRes.ToListAsync();
+            Assert.True(syncRes.ToList().SequenceEqual(toListResult));
+            var toArrayResult = await asyncRes.ToArrayAsync();
+            Assert.True(syncRes.ToArray().SequenceEqual(toArrayResult));
 
             int syncCount = syncRes.Count();
             int asyncCount = await asyncRes.CountAsync();

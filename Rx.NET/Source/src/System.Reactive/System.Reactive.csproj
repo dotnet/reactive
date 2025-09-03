@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net6.0;net6.0-windows10.0.19041</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
@@ -20,6 +20,10 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
+    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.19041.0\Windows.winmd" />
+
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Platforms\**\*.*" />
@@ -150,7 +154,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md"/>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
     <None Include="build\_._" PackagePath="build\net6.0;build\net6.0-windows10.0.19041" Pack="true" />
     <None Include="build\_._" PackagePath="buildTransitive\net6.0;buildTransitive\net6.0-windows10.0.19041" Pack="true" />
     <None Include="Linq\QbservableEx.NAry.cs">

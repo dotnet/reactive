@@ -27,12 +27,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, null, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, x => { }, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, x => { }, (Action<Exception>)null));
+#pragma warning disable IDE0350 // Use implicitly typed lambda - we want to be explicit here for clarity
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, null, (Exception _) => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, x => { }, (Exception _) => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, x => { }, (Exception _) => { }, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, x => { }, null, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, null, (Exception _) => { }, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, x => { }, (Exception _) => { }, () => { }));
+#pragma warning restore IDE0350
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(null, Observer.Create<int>(i => { })));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, default(IObserver<int>)));
         }

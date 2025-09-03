@@ -206,8 +206,8 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, (_0, _1) => 42)
@@ -227,9 +227,9 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, (_0, _1, _2) => 42)
@@ -249,10 +249,10 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, (_0, _1, _2, _3) => 42)
@@ -272,11 +272,11 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => 42)
@@ -296,12 +296,12 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => 42)
@@ -321,13 +321,13 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => 42)
@@ -347,14 +347,14 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => 42)
@@ -374,15 +374,15 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => 42)
@@ -402,16 +402,16 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => 42)
@@ -431,17 +431,17 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => 42)
@@ -461,18 +461,18 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => 42)
@@ -492,19 +492,19 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) => 42)
@@ -524,20 +524,20 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(
                 () => Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => 42)
@@ -557,21 +557,21 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) => 42)
@@ -591,22 +591,22 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
-            var e15 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e15 = scheduler.CreateHotObservable([OnNext(150, 1)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => 42)
@@ -726,8 +726,8 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, (_0, _1) => 42)
@@ -749,9 +749,9 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, (_0, _1, _2) => 42)
@@ -773,10 +773,10 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, (_0, _1, _2, _3) => 42)
@@ -798,11 +798,11 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(250) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => 42)
@@ -824,12 +824,12 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(250) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(260) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => 42)
@@ -851,13 +851,13 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(250) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(260) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(270) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => 42)
@@ -879,14 +879,14 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(250) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(260) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(270) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(280) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => 42)
@@ -908,15 +908,15 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(250) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(260) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(270) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(280) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(290) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => 42)
@@ -938,16 +938,16 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(250) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(260) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(270) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(280) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(290) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(300) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => 42)
@@ -969,17 +969,17 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(250) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(260) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(270) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(280) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(290) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(300) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(310) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(310)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => 42)
@@ -1001,18 +1001,18 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(250) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(260) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(270) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(280) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(290) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(300) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(310) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(320) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(310)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(320)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => 42)
@@ -1034,19 +1034,19 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(250) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(260) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(270) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(280) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(290) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(300) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(310) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(320) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(330) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(310)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(320)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(330)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) => 42)
@@ -1068,20 +1068,20 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(250) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(260) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(270) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(280) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(290) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(300) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(310) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(320) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(330) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(340) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(310)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(320)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(330)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(340)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => 42)
@@ -1103,21 +1103,21 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(250) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(260) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(270) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(280) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(290) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(300) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(310) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(320) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(330) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(340) });
-            var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(350) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(310)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(320)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(330)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(340)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(350)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) => 42)
@@ -1139,22 +1139,22 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(210) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(220) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(230) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(240) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(250) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(260) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(270) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(280) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(290) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(300) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(310) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(320) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(330) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(340) });
-            var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(350) });
-            var e15 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnCompleted<int>(360) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(310)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(320)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(330)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(340)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(350)]);
+            var e15 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(360)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => 42)
@@ -1752,8 +1752,8 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, (_0, _1) => _0 + _1)
@@ -1775,9 +1775,9 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, (_0, _1, _2) => _0 + _1 + _2)
@@ -1799,10 +1799,10 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, (_0, _1, _2, _3) => _0 + _1 + _2 + _3)
@@ -1824,11 +1824,11 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => _0 + _1 + _2 + _3 + _4)
@@ -1850,12 +1850,12 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => _0 + _1 + _2 + _3 + _4 + _5)
@@ -1877,13 +1877,13 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => _0 + _1 + _2 + _3 + _4 + _5 + _6)
@@ -1905,14 +1905,14 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7)
@@ -1934,15 +1934,15 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8)
@@ -1964,16 +1964,16 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9)
@@ -1995,17 +1995,17 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10)
@@ -2027,18 +2027,18 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11)
@@ -2060,19 +2060,19 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12)
@@ -2094,20 +2094,20 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13)
@@ -2129,21 +2129,21 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400) });
-            var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14)
@@ -2165,22 +2165,22 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400) });
-            var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400) });
-            var e15 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(360, 16), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400)]);
+            var e15 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(360, 16), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14 + _15)
@@ -2336,8 +2336,8 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2362,9 +2362,9 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2389,10 +2389,10 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2417,11 +2417,11 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2446,12 +2446,12 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2476,13 +2476,13 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2507,14 +2507,14 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2539,15 +2539,15 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2572,16 +2572,16 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2606,17 +2606,17 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2641,18 +2641,18 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2677,19 +2677,19 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2714,20 +2714,20 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2752,21 +2752,21 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400) });
-            var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2791,22 +2791,22 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400) });
-            var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400) });
-            var e15 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(360, 16), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400)]);
+            var e15 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(360, 16), OnCompleted<int>(400)]);
 
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
@@ -2866,8 +2866,8 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, (_0, _1) => _0 + _1)
@@ -2896,9 +2896,9 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, (_0, _1, _2) => _0 + _1 + _2)
@@ -2927,10 +2927,10 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, (_0, _1, _2, _3) => _0 + _1 + _2 + _3)
@@ -2959,11 +2959,11 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => _0 + _1 + _2 + _3 + _4)
@@ -2992,12 +2992,12 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => _0 + _1 + _2 + _3 + _4 + _5)
@@ -3026,13 +3026,13 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => _0 + _1 + _2 + _3 + _4 + _5 + _6)
@@ -3061,14 +3061,14 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7)
@@ -3097,15 +3097,15 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8)
@@ -3134,16 +3134,16 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9)
@@ -3172,17 +3172,17 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10)
@@ -3211,18 +3211,18 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11)
@@ -3251,19 +3251,19 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnCompleted<int>(340) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnCompleted<int>(340)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12)
@@ -3292,20 +3292,20 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnCompleted<int>(340) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnCompleted<int>(350) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnCompleted<int>(340)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnCompleted<int>(350)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13)
@@ -3334,21 +3334,21 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnCompleted<int>(340) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnCompleted<int>(350) });
-            var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnNext(350, 19), OnCompleted<int>(360) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnCompleted<int>(340)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnCompleted<int>(350)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnNext(350, 19), OnCompleted<int>(360)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14)
@@ -3377,22 +3377,22 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250) });
-            var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260) });
-            var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270) });
-            var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280) });
-            var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290) });
-            var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300) });
-            var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310) });
-            var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320) });
-            var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330) });
-            var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnCompleted<int>(340) });
-            var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnCompleted<int>(350) });
-            var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnNext(350, 19), OnCompleted<int>(360) });
-            var e15 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnNext(350, 19), OnNext(360, 20), OnCompleted<int>(370) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnCompleted<int>(340)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnCompleted<int>(350)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnNext(350, 19), OnCompleted<int>(360)]);
+            var e15 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnNext(350, 19), OnNext(360, 20), OnCompleted<int>(370)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14 + _15)
@@ -4273,9 +4273,9 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnNext(250, 4), OnCompleted<int>(420) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnCompleted<int>(410) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnNext(250, 4), OnCompleted<int>(420)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnCompleted<int>(410)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2)
@@ -4305,12 +4305,12 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnNext(250, 4), OnCompleted<int>(420) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnCompleted<int>(410) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnNext(250, 4), OnCompleted<int>(420)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnCompleted<int>(410)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
-                Observable.Zip(new[] { e0, e1, e2 }, xs => xs.Sum())
+                Observable.Zip([e0, e1, e2], xs => xs.Sum())
             );
 
             res.Messages.AssertEqual(
@@ -4337,9 +4337,9 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnNext(250, 4), OnCompleted<int>(270) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnNext(290, 7), OnNext(310, 9), OnCompleted<int>(410) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnNext(280, 8), OnCompleted<int>(300) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnNext(250, 4), OnCompleted<int>(270)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnNext(290, 7), OnNext(310, 9), OnCompleted<int>(410)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnNext(280, 8), OnCompleted<int>(300)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2)
@@ -4369,12 +4369,12 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnNext(250, 4), OnCompleted<int>(270) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnNext(290, 7), OnNext(310, 9), OnCompleted<int>(410) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnNext(280, 8), OnCompleted<int>(300) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnNext(250, 4), OnCompleted<int>(270)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnNext(290, 7), OnNext(310, 9), OnCompleted<int>(410)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnNext(280, 8), OnCompleted<int>(300)]);
 
             var res = scheduler.Start(() =>
-                Observable.Zip(new[] { e0, e1, e2 }, xs => xs.Sum())
+                Observable.Zip([e0, e1, e2], xs => xs.Sum())
             );
 
             res.Messages.AssertEqual(
@@ -4403,9 +4403,9 @@ namespace ReactiveTests.Tests
 
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnError<int>(250, ex) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnCompleted<int>(410) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnError<int>(250, ex)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnCompleted<int>(410)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2)
@@ -4436,12 +4436,12 @@ namespace ReactiveTests.Tests
 
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnError<int>(250, ex) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnCompleted<int>(410) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnError<int>(250, ex)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnCompleted<int>(410)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
-                Observable.Zip(new[] { e0, e1, e2 }, xs => xs.Sum())
+                Observable.Zip([e0, e1, e2], xs => xs.Sum())
             );
 
             res.Messages.AssertEqual(
@@ -4467,9 +4467,9 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnNext(250, 4), OnCompleted<int>(420) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnCompleted<int>(410) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnNext(250, 4), OnCompleted<int>(420)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnNext(240, 5), OnCompleted<int>(410)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnCompleted<int>(400)]);
 
             var started = default(long);
             var xss = GetSources(() => started = scheduler.Clock, e0, e1, e2).Select(xs => (IObservable<int>)xs);
@@ -4540,10 +4540,10 @@ namespace ReactiveTests.Tests
 
             var scheduler = new TestScheduler();
 
-            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
-            var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnError<int>(230, ex) });
-            var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnError<int>(230, ex)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, (_0, _1, _2, _3) => 42)

@@ -71,6 +71,7 @@ namespace Tests.System.Reactive
         public IDisposable SuscribeWithoutKeepingSourceReachable<T>(
             Func<Func<Task<T>, Task<T>>, Exception, IDisposable> subscribe)
         {
+#pragma warning disable IDE0350 // Use implicitly typed lambda - we want to be explicit here for clarity
             return SuscribeWithoutKeepingSourceReachable(
                 (Func<Task, Task> setTask, Exception ex) => subscribe(
                     t =>
@@ -78,6 +79,7 @@ namespace Tests.System.Reactive
                         setTask(t);
                         return t;
                     }, ex));
+#pragma warning restore IDE0350
         }
 
 

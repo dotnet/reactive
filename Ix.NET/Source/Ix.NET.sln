@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32131.331
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{87534290-A7A6-47A4-9A3A-D0D21A9AD1D4}"
 	ProjectSection(SolutionItems) = preProject
-		NetCore31TestReadme.txt = NetCore31TestReadme.txt
+		NetStandard21TestReadme.txt = NetStandard21TestReadme.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B733D97A-F1ED-4FC3-BF8E-9AC47A89DE96}"

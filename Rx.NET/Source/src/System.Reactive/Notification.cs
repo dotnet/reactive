@@ -7,8 +7,16 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reactive.Concurrency;
 
-#pragma warning disable 0659
-#pragma warning disable 0661
+// Notification<T> defines Equals, ==, and !=, but not GetHashCode.
+// This seems like an oversight, but changing this would technically be a breaking change,
+// so we suprpress the warnings.
+#pragma warning disable CS0659
+#pragma warning disable CS0661
+
+#if LEGACY_WINRT
+#pragma warning disable CA1724 // Name conflicts with Windows.Phone.Devices.Notification
+#endif
+
 
 namespace System.Reactive
 {
@@ -710,5 +718,5 @@ namespace System.Reactive
     }
 }
 
-#pragma warning restore 0659
-#pragma warning restore 0661
+#pragma warning restore CS0659
+#pragma warning restore CS0661

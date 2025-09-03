@@ -4,6 +4,8 @@
 
 #if HAS_WINFORMS
 
+#pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overload being tested.
+
 using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;

@@ -17,7 +17,7 @@ namespace ReactiveTests.Tests.Api
     {
         static ApiApprovalTests()
         {
-            VerifierSettings.OnVerifyMismatch((filePair, message) => DiffPlexReporter.Report(filePair.ReceivedPath, filePair.VerifiedPath, message));
+            VerifierSettings.OnVerifyMismatch((filePair, message, autoVerify) => DiffPlexReporter.Report(filePair.ReceivedPath, filePair.VerifiedPath, message));
         }
 
         public ApiApprovalTests()
@@ -57,10 +57,10 @@ namespace ReactiveTests.Tests.Api
 
         private static string Filter(string text)
         {
-            return string.Join(Environment.NewLine, text.Split(new[]
-                                                        {
+            return string.Join(Environment.NewLine, text.Split(
+                                                        [
                                                             Environment.NewLine
-                                                        }, StringSplitOptions.RemoveEmptyEntries)
+                                                        ], StringSplitOptions.RemoveEmptyEntries)
                                                         .Where(l => !l.StartsWith("[assembly: AssemblyVersion("))
                                                         .Where(l => !l.StartsWith("[assembly: AssemblyFileVersion("))
                                                         .Where(l => !l.StartsWith("[assembly: AssemblyInformationalVersion("))
