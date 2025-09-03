@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Threading.Tasks;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
@@ -280,6 +281,11 @@ namespace System.Reactive.Linq
         public virtual IObservable<TSource> TakeUntil<TSource>(IObservable<TSource> source, Func<TSource, bool> stopPredicate)
         {
             return new TakeUntilPredicate<TSource>(source, stopPredicate);
+        }
+
+        public virtual IObservable<TSource> TakeUntil<TSource>(IObservable<TSource> source, CancellationToken cancellationToken)
+        {
+            return new TakeUntilCancellationToken<TSource>(source, cancellationToken);
         }
 
         #endregion

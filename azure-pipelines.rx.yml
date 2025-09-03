@@ -131,7 +131,7 @@ stages:
     - task: UseDotNet@2
       displayName: Use .NET 9.0 SDK
       inputs:
-        version: 9.0.x
+        version: '9.0.x'
 
     - task: UseDotNet@2
       displayName: Use .NET 8.0 runtime
@@ -162,6 +162,13 @@ stages:
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
         custom: restore
         arguments: --configfile $(System.DefaultWorkingDirectory)/Rx.NET/Integration/NuGet.Config
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: test
+        projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
+        arguments: -c $(BuildConfiguration) -f net9.0 --filter "TestCategory!=SkipCI"
+      displayName: Run 9.0 Tests on Linux
 
     - task: DotNetCoreCLI@2
       inputs:

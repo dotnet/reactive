@@ -257,6 +257,10 @@ csharp_space_between_square_brackets = false
 # We find these something of a mixed bag.
 dotnet_diagnostic.IDE0290.severity = none
 
+# Namespace style.
+csharp_style_namespace_declarations = block_scoped
+dotnet_diagnostic.IDE0290.severity = none
+
 # Target-typed new expressions
 # We will probably adopt these at some point, but for some reason the IDE only just started complaining about them,
 # and I don't want to deal with all these while in the middle of the Slight Deunification.

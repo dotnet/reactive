@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Configuration;
 using System.Reactive.Concurrency;
 using System.Threading;
 using System.Threading.Tasks;
@@ -865,7 +864,7 @@ namespace System.Reactive.Linq
         ///     .Subscribe(Console.WriteLine);
         /// </code>
         /// </example>
-        /// <exception cref="ArgumentException">If <typeparamref name="TSource"/> or <paramref name="stopPredicate"/> is <code>null</code>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="stopPredicate"/> is <code>null</code>.</exception>
         public static IObservable<TSource> TakeUntil<TSource>(this IObservable<TSource> source, Func<TSource, bool> stopPredicate)
         {
             if (source == null)
@@ -879,6 +878,25 @@ namespace System.Reactive.Linq
             }
 
             return s_impl.TakeUntil(source, stopPredicate);
+        }
+
+        /// <summary>
+        /// Relays elements from the source observable sequence until the provided <paramref name="cancellationToken"/> is cancelled.
+        /// Completes immediately if the provided <paramref name="cancellationToken"/> is already cancelled upon subscription.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source and result sequences.</typeparam>
+        /// <param name="source">The source sequence to relay elements of.</param>
+        /// <param name="cancellationToken">The cancellation token to complete the target observable sequence on.</param>
+        /// <returns>The observable sequence with the source elements until the provided <paramref name="cancellationToken"/> is cancelled.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is <code>null</code>.</exception>
+        public static IObservable<TSource> TakeUntil<TSource>(this IObservable<TSource> source, CancellationToken cancellationToken)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            return s_impl.TakeUntil(source, cancellationToken);
         }
 
         #endregion
