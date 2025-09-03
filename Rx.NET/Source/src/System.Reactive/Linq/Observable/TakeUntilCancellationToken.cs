@@ -8,7 +8,7 @@ using System.Threading;
 namespace System.Reactive.Linq.ObservableImpl
 {
     /// <summary>
-    /// Relays items to the downstream until the CancellationToken is cancled.
+    /// Relays items to the downstream until the CancellationToken is cancelled.
     /// </summary>
     /// <typeparam name="TSource">The element type of the sequence</typeparam>
     internal sealed class TakeUntilCancellationToken<TSource> :

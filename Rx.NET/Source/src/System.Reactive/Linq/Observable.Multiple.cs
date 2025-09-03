@@ -882,12 +882,12 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Relays elements from the source observable sequence until the provided <paramref name="cancellationToken"/> is canceled.
-        /// Completes immediately if the provided <paramref name="cancellationToken"/> is already canceled upon subscription.
+        /// Completes immediately if the provided <paramref name="cancellationToken"/> is already cancelled upon subscription.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source and result sequences.</typeparam>
         /// <param name="source">The source sequence to relay elements of.</param>
         /// <param name="cancellationToken">The cancellation token to complete the target observable sequence on.</param>
-        /// <returns>The observable sequence with the source elements until the provided <paramref name="cancellationToken"/> is canceled.</returns>
+        /// <returns>The observable sequence with the source elements until the provided <paramref name="cancellationToken"/> is cancelled.</returns>
         /// <exception cref="ArgumentException">If <typeparamref name="TSource"/> is <code>null</code>.</exception>
         public static IObservable<TSource> TakeUntil<TSource>(this IObservable<TSource> source, CancellationToken cancellationToken)
         {
