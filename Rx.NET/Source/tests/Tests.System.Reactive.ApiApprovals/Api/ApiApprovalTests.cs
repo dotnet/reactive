@@ -67,58 +67,6 @@ namespace ReactiveTests.Tests.Api
             };
         }
 
-        private string GeneratePublicApiIncludingTypeForwarders(Assembly assembly)
-        {
-            var ts = assembly.GetTypes();
-            var ets = assembly.GetExportedTypes();
-            var ets2 = assembly.ExportedTypes;
-            var attrs = assembly.GetCustomAttributes();
-
-            var asmDef = Mono.Cecil.AssemblyDefinition.ReadAssembly(assembly.Location);
-            //foreach (var exportedType in asmDef.MainModule.ExportedTypes)
-            //{
-            //    if (exportedType.IsForwarder)
-            //    {
-            //        Console.WriteLine($"Forwarded Type: {exportedType.FullName}");
-            //    }
-            //}
-
-
-            var options = MakeGeneratorOptions();
-            Type[] types = asmDef.MainModule.ExportedTypes
-                .Where(t => t.IsForwarder)
-                .Select(t =>
-                {
-                    var type = assembly.GetType(t.FullName);
-                    if (type == null)
-                    {
-                        Debugger.Break();
-                    }
-                    return type;
-                })
-                .Concat(assembly.ExportedTypes) // DOESN'T WORK!
-                .ToArray();
-
-            return Filter(ApiGenerator.GeneratePublicApi(types, options));
-
-                //.GroupBy(t => t.Namespace)
-                //.OrderBy(ns => ns.Key)
-                //.Select(ns =>
-                //{
-                //    StringBuilder sb = new();
-                //    sb.AppendLine($"namespace {ns.Key}");
-                //    sb.AppendLine("{");
-                //    foreach (var type in ns.OrderBy(t => t.Name))
-                //    {v
-                //        string typePublicApi = ApiGenerator.GeneratePublicApi(type, options);
-                //        sb.AppendLine(typePublicApi);
-                //    }
-                //    sb.AppendLine("}");
-
-            //    return sb.ToString();
-            //}));
-        }
-
         private static string Filter(string text)
         {
             return string.Join(Environment.NewLine, text.Split(

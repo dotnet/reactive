@@ -348,14 +348,14 @@ namespace ReactiveTests.Tests
             var connectable = new SerialSingleNotificationConnectable<int>(Notification.CreateOnCompleted<int>());
             var refCount = connectable.RefCount();
 
-            var s1 = refCount.Subscribe();
+            using var s1 = refCount.Subscribe();
             Assert.Equal(1, connectable.Connections.Count);
 
             // Since the source immediately completed, the RefCount goes back to zero subscribers
             // inside the call to Connect, so we expect to be disconnected.
             Assert.True(connectable.Connections[0].Disposed);
 
-            var s2 = refCount.Subscribe();
+            using var s2 = refCount.Subscribe();
             Assert.Equal(2, connectable.Connections.Count);
             Assert.True(connectable.Connections[1].Disposed);
         }
@@ -384,10 +384,10 @@ namespace ReactiveTests.Tests
 
             // We're now back in the initial disconnected state, so nothing more should
             // happen until we get up to minObservers.
-            var s3 = refCount.Subscribe();
+            using var s3 = refCount.Subscribe();
             Assert.Equal(1, connectable.Connections.Count);
 
-            var s4 = refCount.Subscribe();
+            using var s4 = refCount.Subscribe();
             Assert.Equal(2, connectable.Connections.Count);
             Assert.True(connectable.Connections[1].Disposed);
         }
