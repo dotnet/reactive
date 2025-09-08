@@ -1300,12 +1300,12 @@ The biggest problem with this is that any projects already using Rx.NET that hav
 We will go with [option 7](#option-7-ui-framework-specific-packages-hiding-the-systemreactive-versions):
 
 * `System.Reactive` will remain as the main package for using Rx.NET
-* we will add a new NuGet packages for each UI framework, and put UI-framework-specific support in these
-* there will be an additional package for functionality specific to Windows Runtime that is not UI-framework-specific
-* the UI-frameworks-specific and Windows-Runtime-specific types in `System.Reactive` will continue to be available in the runtime libraries (`lib` folder), ensuring binary compatibility
-* those same UI-frameworks-specific and Windows-Runtime-specific types in `System.Reactive` will be hidden from the public API by putting reference assemblies in the `ref` folder that omit these types
-* we have the [very long-term](#minimum-acceptable-path-for-breaking-changes) intention of removing these types entirely, likely not before 2030
-* the UWP-specific members of its `ThreadPoolScheduler` will be marked as `[Obsolete]` and will also be removed in the long term, but possibly sooner than 2030
+* we will add a new NuGet packages for each UI framework, and put UI-framework-specific support in these (and from the developer's perspective, the existing types will have 'moved' into these new libraries, but as described below, that's not quite true, for binary compatability reasons)
+* functionality specific to Windows Runtime that is not UI-framework-specific (e.g. `IAsyncOperation<T>` support) will remain available in `System.Reactive`
+* the UI-frameworks-specific types in `System.Reactive` will continue to be available in the runtime libraries (`lib` folder), ensuring binary compatibility
+* those same UI-frameworks-specific and Windows-Runtime-specific types in `System.Reactive` will be hidden from the public API by putting reference assemblies in the `ref` folder that omit these types (but types with exactly the same names and APIs are available in the new packages, so developers just need to add suitable new package references)
+* we have the [very long-term](#minimum-acceptable-path-for-breaking-changes) aspiration of removing these types entirely, likely not before 2030
+* the UWP-specific members of its `ThreadPoolScheduler` in the `uap10.0.18362` target will remain publicly visible but will be marked as `[Obsolete]` and will also be removed in the long term, but possibly sooner than 2030
 
 As it says in [the announcement for the first Rx release](https://cc.bingj.com/cache.aspx?q=microsoft+download+reactive+extension+sdk&d=5018270206749605&mkt=en-GB&setlang=en-GB&w=LCqKaZy3VgjqC_Zlig1e4qmTo82s8qt5):
 
