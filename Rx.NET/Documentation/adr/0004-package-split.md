@@ -27,7 +27,7 @@ then this will be far more detail than is necessary.
 If you want to understand the problem, the preferred solution, and its consequences, you do not need to read everything. It is sufficient to read the following:
 
 * the [Overview](#overview) section
-* the [preferred design option](#option-6-ui-framework-specific-packages-deprecating-the-systemreactive-versions)
+* the [preferred design option](#option-7-ui-framework-specific-packages-hiding-the-systemreactive-versions)
 * the [Decision](#decision) section
 * the [Consequences](#consequences) section
 
@@ -1222,7 +1222,7 @@ We would need to define brand new types in these new frameworks to replace the o
 This also has a similar unresolved question around `ThreadPoolScheduler` was was discussed in [option 4](#option-4-systemreactive-remains-the-primary-package-and-becomes-a-facade). The most likely solution would be to deprecate the members of `ThreadPoolScheduler` that are unique to UWP, and to add a new type with the same functionality (but non-deprecated) in a separate component. This would be the first step on a path that would eventually see UWP get the same `ThreadPoolScheduler` as everything else.
 
 
-#### Option 7: UI-framework specific packages, hiding the `System.Reactive` versions
+#### Option 7: UI-framework specific packages, hiding the `System.Reactive` versions (`System.Reactive` is _not_ deprecated)
 
 This is option 6 with one important variation: although we keep the existing UI-framework-specific types available for binary compatibility purposes, we hide them from the public API. `System.Reactive` would no longer force `UseWPF` or `UseWindowsForms`.
 
@@ -1230,7 +1230,7 @@ The way in which we would hide the UI-framework-specific types is that the NuGet
 
 New projects using Rx 7 or later would see Rx as a component with no UI-framework-specific types, because the build system will give the compiler assemblies in the package's `ref` folder in preference to those in the `lib` folder. But binary compatibility is retained because the types are present in the `lib` folder.
 
-We had hoped that the runtime assemblies in `lib` might be able to have type forwarders pointing to the new homes for the UI-specific types, the various `System.Reactive.For.*`. Unfortunately that doesn't work in this case because those packages need references to the main Rx assembly (to get the definition of `IScheduler` at a minimum, and as it happens they use the `LocalScheduler` bas type). If `System.Reactive` remains as the main Rx component then it's not possible for it to refer to the UI-framework-specific components because that creates a circular reference.
+We had hoped that the runtime assemblies in `lib` might be able to have type forwarders pointing to the new homes for the UI-specific types, the various `System.Reactive.For.*`. Unfortunately that doesn't work in this case because those packages need references to the main Rx assembly (to get the definition of `IScheduler` at a minimum, and as it happens they use the `LocalScheduler` base type). If `System.Reactive` remains as the main Rx component then it's not possible for it to refer to the UI-framework-specific components because that creates a circular reference.
 
 ```mermaid
 graph TD
@@ -1270,7 +1270,7 @@ graph TD
   rxn["System.Reactive.Net"]
 ```
 
-An unknown: what are the consequences of the fact that the package does still, at some level, effectively have a dependency on WPF and Windows Forms?
+An unknown: what are the consequences of the fact that the package does still, at some level, effectively have a dependency on WPF and Windows Forms? It seems like there are only two possibilities: 1) nothing in the application is actually using any WPF or Windows Forms features, so the code in the runtime assemblies that has these dependencies will never come into play; 2) the application does use WPF or Windows Forms, so it will have a reference to `Microsoft.Desktop.App`, in which case this code will run without problems. It is possible that an application is using WPF or Windows Forms but did not state this explicitly in its own project file, and happened to be relying on the fact that Rx automatically supplies that framework reference. I'm of the view that applications doing this should really be stating their framework dependencies explicitly anyway, so I'm OK with putting these applications into a position where they now need to declare this explicitly.
 
 
 ### Other options less seriously considered
