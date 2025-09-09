@@ -61,7 +61,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a reference to the System.Reactive.For.WindowsFormsa NuGet Package to continue using Rx.NET Windows Forms support..
+        ///   Looks up a localized string similar to Add a reference to the System.Reactive.For.WindowsForms NuGet Package to continue using Rx.NET Windows Forms support..
         /// </summary>
         internal static string ReferenceToRxWindowsFormsRequiredAnalyzerDescription {
             get {
@@ -84,6 +84,33 @@ namespace System.Reactive {
         internal static string ReferenceToRxWindowsFormsRequiredAnalyzerTitle {
             get {
                 return ResourceManager.GetString("ReferenceToRxWindowsFormsRequiredAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add a reference to the System.Reactive.For.Wpf NuGet Package to continue using Rx.NET WPF support..
+        /// </summary>
+        internal static string ReferenceToRxWpfRequiredAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("ReferenceToRxWpfRequiredAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; extension method has moved. Add a reference to the System.Reactive.For.Wpf NuGet package..
+        /// </summary>
+        internal static string ReferenceToRxWpfRequiredAnalyzerExtensionMethodMessageFormat {
+            get {
+                return ResourceManager.GetString("ReferenceToRxWpfRequiredAnalyzerExtensionMethodMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rx.NET WPF support is now in System.Reactive.For.Wpf.
+        /// </summary>
+        internal static string ReferenceToRxWpfRequiredAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ReferenceToRxWpfRequiredAnalyzerTitle", resourceCulture);
             }
         }
     }

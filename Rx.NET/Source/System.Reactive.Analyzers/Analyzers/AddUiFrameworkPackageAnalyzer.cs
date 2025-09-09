@@ -56,6 +56,9 @@ namespace System.Reactive.Analyzers
     {
         // TODO: VB.NET?
         public const string ReferenceToRxWindowsFormsRequiredDiagnosticId = "RXNET0001";
+        public const string ReferenceToRxWpfRequiredDiagnosticId = "RXNET0002";
+
+        private const string PackagingCategory = "NuGet";
 
         private static readonly LocalizableString ReferenceToRxWindowsFormsRequiredTitle = new LocalizableResourceString(
             nameof(Resources.ReferenceToRxWindowsFormsRequiredAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
@@ -63,7 +66,6 @@ namespace System.Reactive.Analyzers
             nameof(Resources.ReferenceToRxWindowsFormsRequiredAnalyzerExtensionMethodMessageFormat), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString ReferenceToRxWindowsFormsRequiredDescription = new LocalizableResourceString(
             nameof(Resources.ReferenceToRxWindowsFormsRequiredAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
-        private const string PackagingCategory = "NuGet";
         internal static readonly DiagnosticDescriptor ReferenceToRxWindowsFormsRequiredRule = new(
             ReferenceToRxWindowsFormsRequiredDiagnosticId,
             ReferenceToRxWindowsFormsRequiredTitle,
@@ -74,11 +76,28 @@ namespace System.Reactive.Analyzers
             description: ReferenceToRxWindowsFormsRequiredDescription,
             helpLinkUri: "https://github.com/dotnet/reactive");
 
+
+        private static readonly LocalizableString ReferenceToRxWpfRequiredTitle = new LocalizableResourceString(
+            nameof(Resources.ReferenceToRxWpfRequiredAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
+        private static readonly LocalizableString ReferenceToRxWpfRequiredExtensionMethodMessageFormat = new LocalizableResourceString(
+            nameof(Resources.ReferenceToRxWpfRequiredAnalyzerExtensionMethodMessageFormat), Resources.ResourceManager, typeof(Resources));
+        private static readonly LocalizableString ReferenceToRxWpfRequiredDescription = new LocalizableResourceString(
+            nameof(Resources.ReferenceToRxWpfRequiredAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
+        internal static readonly DiagnosticDescriptor ReferenceToRxWpfRequiredRule = new(
+            ReferenceToRxWpfRequiredDiagnosticId,
+            ReferenceToRxWpfRequiredTitle,
+            ReferenceToRxWpfRequiredExtensionMethodMessageFormat,
+            PackagingCategory,
+            DiagnosticSeverity.Warning,
+            isEnabledByDefault: true,
+            description: ReferenceToRxWpfRequiredDescription,
+            helpLinkUri: "https://github.com/dotnet/reactive");
+
         /// <inheritdoc/>
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(
         [
-            //Rule,
-            ReferenceToRxWindowsFormsRequiredRule
+            ReferenceToRxWindowsFormsRequiredRule,
+            ReferenceToRxWpfRequiredRule
         ]);
 
         /// <inheritdoc/>
