@@ -10,3 +10,11 @@ dotnet_diagnostic.IDE0063.severity = silent
 dotnet_diagnostic.IDE0028.severity = none
 dotnet_diagnostic.IDE0305.severity = none
 dotnet_diagnostic.IDE0306.severity = none
+
+# While removing var in the main Rx.NET codebase would be a) not the highest priority
+# use of time and b) unpopular, I have to live with that horror, but since RxGauntlet is
+# a self-contained project that was written without var from the start, there's no
+# sense wasting time making it conform to the time-and-energy-consuming var-everywhere
+# conventions of the rest of the project
+csharp_style_var_elsewhere = false
+csharp_style_var_for_built_in_types = false

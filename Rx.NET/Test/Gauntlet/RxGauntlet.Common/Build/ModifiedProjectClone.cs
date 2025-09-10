@@ -4,14 +4,14 @@ namespace RxGauntlet.Build;
 
 public sealed class ModifiedProjectClone : IDisposable
 {
-    private readonly string copyPath;
+    private readonly string _copyPath;
 
     private ModifiedProjectClone(string copyPath)
     {
-        this.copyPath = copyPath;
+        _copyPath = copyPath;
     }
 
-    public string ClonedProjectFolderPath => copyPath;
+    public string ClonedProjectFolderPath => _copyPath;
 
     public static ModifiedProjectClone Create(
         string sourceProjectFolder,
@@ -43,7 +43,7 @@ public sealed class ModifiedProjectClone : IDisposable
                         break;
 
                     case ".csproj":
-                        ProjectFileRewriter projectFileRewriter = ProjectFileRewriter.CreateForCsProj(file);
+                        var projectFileRewriter = ProjectFileRewriter.CreateForCsProj(file);
                         modifyProjectFile(projectFileRewriter);
                         projectFileRewriter.WriteModified(destinationPath);
                         break;
@@ -94,9 +94,9 @@ public sealed class ModifiedProjectClone : IDisposable
 
     public void Dispose()
     {
-        if (Directory.Exists(copyPath))
+        if (Directory.Exists(_copyPath))
         {
-            Directory.Delete(copyPath, true);
+            Directory.Delete(_copyPath, true);
         }
     }
 
@@ -127,7 +127,7 @@ public sealed class ModifiedProjectClone : IDisposable
             // Comment this out to see the output in the console window
             //CreateNoWindow = true,
             Arguments = args,
-            WorkingDirectory = copyPath,
+            WorkingDirectory = _copyPath,
         };
 
         using var process = new Process { StartInfo = startInfo };

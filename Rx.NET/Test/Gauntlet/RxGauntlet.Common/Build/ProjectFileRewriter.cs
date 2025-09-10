@@ -6,16 +6,16 @@ namespace RxGauntlet.Build;
 
 public class ProjectFileRewriter
 {
-    private readonly XmlDocument document = new();
+    private readonly XmlDocument _document = new();
 
     private ProjectFileRewriter(string template)
     {
-        document.Load(template);
+        _document.Load(template);
     }
 
     public void SetTargetFramework(string targetFrameworkMoniker)
     {
-        XmlNode targetFrameworkNode = document.GetRequiredNode("/Project/PropertyGroup/TargetFramework");
+        XmlNode targetFrameworkNode = _document.GetRequiredNode("/Project/PropertyGroup/TargetFramework");
         targetFrameworkNode.InnerText = targetFrameworkMoniker;
     }
 
@@ -31,13 +31,13 @@ public class ProjectFileRewriter
 
     public void ReplaceProperty(string propertyName, string newValue)
     {
-        XmlNode propertyNode = document.GetRequiredNode($"/Project/PropertyGroup/{propertyName}");
+        XmlNode propertyNode = _document.GetRequiredNode($"/Project/PropertyGroup/{propertyName}");
         propertyNode.InnerText = newValue;
     }
 
     public void ReplacePackageReference(string packageId, PackageIdAndVersion[] replacementPackages)
     {
-        XmlNode packageRefNode = document.GetRequiredNode($"/Project/ItemGroup/PackageReference[@Include='{packageId}']");
+        XmlNode packageRefNode = _document.GetRequiredNode($"/Project/ItemGroup/PackageReference[@Include='{packageId}']");
 
         if (replacementPackages is [PackageIdAndVersion singleReplacement])
         {
@@ -56,21 +56,21 @@ public class ProjectFileRewriter
         string targetCsProjNameWithoutDirectory,
         PackageIdAndVersion[] replacementPackages)
     {
-        XmlNode projectRefNode = document.GetRequiredNode($"/Project/ItemGroup/ProjectReference[contains(@Include, '{targetCsProjNameWithoutDirectory}')]");
+        XmlNode projectRefNode = _document.GetRequiredNode($"/Project/ItemGroup/ProjectReference[contains(@Include, '{targetCsProjNameWithoutDirectory}')]");
         ReplaceNodeWithPackageReferences(projectRefNode, replacementPackages);
     }
 
     public void AddPropertyGroup(IEnumerable<KeyValuePair<string, string>> properties)
     {
-        XmlNode propertyGroupNode = document.CreateElement("PropertyGroup");
+        XmlNode propertyGroupNode = _document.CreateElement("PropertyGroup");
         foreach ((string name, string value) in properties)
         {
-            XmlNode propertyNode = document.CreateElement(name);
+            XmlNode propertyNode = _document.CreateElement(name);
             propertyNode.InnerText = value;
             propertyGroupNode.AppendChild(propertyNode);
         }
 
-        document.SelectSingleNode("/Project")!.AppendChild(propertyGroupNode);
+        _document.SelectSingleNode("/Project")!.AppendChild(propertyGroupNode);
     }
 
     public void AddUseUiFrameworksIfRequired(bool? useWpf, bool? useWindowsForms)
@@ -95,7 +95,7 @@ public class ProjectFileRewriter
 
     internal void WriteModified(string destinationPath)
     {
-        document.Save(destinationPath);
+        _document.Save(destinationPath);
     }
 
     private static void ReplaceNodeWithPackageReferences(
@@ -121,7 +121,7 @@ public class ProjectFileRewriter
 
     public void FixUpProjectReferences(string templateProjectFolder)
     {
-        if (document.SelectNodes("/Project/ItemGroup/ProjectReference") is XmlNodeList projectReferences)
+        if (_document.SelectNodes("/Project/ItemGroup/ProjectReference") is XmlNodeList projectReferences)
         {
             foreach (XmlElement projectReference in projectReferences.OfType<XmlElement>())
             {
