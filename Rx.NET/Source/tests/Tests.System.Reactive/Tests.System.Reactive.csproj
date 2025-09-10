@@ -2,7 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>net472;net8.0;net8.0-windows10.0.19041;net9.0;net9.0-windows10.0.19041</TargetFrameworks>
-    <NoWarn>$(NoWarn);CS0618</NoWarn>
+
+    <!-- IDE0330: Prefer 'System.Threading.Lock': not applicable for as long as we support .NET 8.0 or .NET FX, because it is unavailable on those targets.
+         MSTEST0049: Consider overload accepting a CancellationToken - there are 136 of these, and since I've not yet run into a situation that this would have helped in, it's not a priority.
+    -->
+    <NoWarn>$(NoWarn);CS0618;IDE0330;MSTEST0049</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows')) or '$(TargetFramework)' == 'net472'">
@@ -28,19 +32,13 @@
     Before that PR was merged, the test runner wouldn't work if the host specified a TFM with a
     specific Windows version.
 -->
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.6.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.6.1" />
-    <PackageReference Include="xunit.assert" Version="2.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.10.3" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.10.3" />
+    <PackageReference Include="xunit.assert" Version="2.9.3" />
     <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
     <ProjectReference Include="..\..\src\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="coverlet.collector" Version="6.0.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
 </Project>

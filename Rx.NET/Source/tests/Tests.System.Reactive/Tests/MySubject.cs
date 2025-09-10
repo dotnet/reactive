@@ -18,11 +18,14 @@ namespace ReactiveTests.Tests
             _disposeOn[value] = disposable;
         }
 
-        private IObserver<int> _observer;
+        private readonly List<IObserver<int>> _observers = new();
 
         public void OnNext(int value)
         {
-            _observer.OnNext(value);
+            foreach (var observer in _observers.ToArray())
+            {
+                observer.OnNext(value); 
+            }
 
             if (_disposeOn.TryGetValue(value, out var disconnect))
             {
@@ -32,19 +35,29 @@ namespace ReactiveTests.Tests
 
         public void OnError(Exception exception)
         {
-            _observer.OnError(exception);
+            foreach (var observer in _observers.ToArray())
+            {
+                observer.OnError(exception);
+            }
         }
 
         public void OnCompleted()
         {
-            _observer.OnCompleted();
+            foreach (var observer in _observers.ToArray())
+            {
+                observer.OnCompleted();
+            }
         }
 
         public IDisposable Subscribe(IObserver<int> observer)
         {
             _subscribeCount++;
-            _observer = observer;
-            return Disposable.Create(() => { _disposed = true; });
+            _observers.Add(observer);
+            return Disposable.Create(() =>
+            {
+                _observers.Remove(observer);
+                _disposed = true;
+            });
         }
 
         private int _subscribeCount;

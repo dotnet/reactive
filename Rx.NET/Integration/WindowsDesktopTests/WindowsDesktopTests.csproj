@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net6.0-windows10.0.19041;net7.0;net7.0-windows10.0.19041;net8.0;net8.0-windows10.0.19041</TargetFrameworks>
+    <TargetFrameworks>net8.0;net8.0-windows10.0.19041;net9.0;net9.0-windows10.0.19041</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Tests.System.Reactive</AssemblyName>
@@ -9,7 +9,7 @@
     <AssemblyOriginatorKeyFile>..\..\Source\ReactiveX.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows')) or $(TargetFramework.StartsWith('net8.0-windows'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
@@ -27,8 +27,8 @@
     <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
     <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
     <PackageReference Include="xunit.assert" Version="2.4.2" />
-    <PackageReference Include="System.Reactive" Version="6.0.0-preview*" />
-    <PackageReference Include="Microsoft.Reactive.Testing" Version="6.0.0-preview*" />
-    <PackageReference Include="System.Reactive.Observable.Aliases" Version="6.0.0-preview*" />
+    <PackageReference Include="System.Reactive" Version="6.1.0-preview*" />
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="6.1.0-preview*" />
+    <PackageReference Include="System.Reactive.Observable.Aliases" Version="6.1.0-preview*" />
   </ItemGroup>
 </Project>

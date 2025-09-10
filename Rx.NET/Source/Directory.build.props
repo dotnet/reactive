@@ -49,7 +49,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="coverlet.collector" Version="3.2.0" />
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
   </ItemGroup>
 
 
@@ -70,6 +70,9 @@
 
     <DefineConstants>$(DefineConstants);WINDOWS_UWP</DefineConstants>
 
+    <!-- At some point, it looks like a fully-qualified version number stopped resolving the TargetPlatformSdkPath
+         and now it only works with 10.0, so the SDK no longer sets this for us in UAP targets. -->
+    <TargetPlatformSdkPath Condition="'$(TargetPlatformSdkPath)' == ''">$([Microsoft.Build.Utilities.ToolLocationHelper]::GetPlatformSDKLocation('Windows', '10.0'))</TargetPlatformSdkPath>
   </PropertyGroup>
 
 

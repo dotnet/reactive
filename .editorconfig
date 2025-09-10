@@ -256,3 +256,6 @@ csharp_space_between_square_brackets = false
 # Primary constructors
 # We find these something of a mixed bag.
 dotnet_diagnostic.IDE0290.severity = none
+
+# Namespace style.
+csharp_style_namespace_declarations = block_scoped
