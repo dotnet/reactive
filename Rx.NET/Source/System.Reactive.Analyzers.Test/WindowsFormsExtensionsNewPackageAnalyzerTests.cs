@@ -5,7 +5,7 @@
 namespace System.Reactive.Analyzers.Test
 {
     [TestClass]
-    public sealed class WindowsFormsNewPackageAnalyzerTests : TestExtensionMethodAnalyzerBase
+    public sealed class WindowsFormsExtensionsNewPackageAnalyzerTests : TestExtensionMethodAnalyzerBase
     {
         [TestMethod]
         public async Task DetectIObservableSubscribeOnControl()

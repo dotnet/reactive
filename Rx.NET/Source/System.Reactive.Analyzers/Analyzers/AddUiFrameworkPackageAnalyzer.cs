@@ -80,7 +80,7 @@ namespace System.Reactive.Analyzers
         private static readonly LocalizableString ReferenceToRxWpfRequiredTitle = new LocalizableResourceString(
             nameof(Resources.ReferenceToRxWpfRequiredAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString ReferenceToRxWpfRequiredExtensionMethodMessageFormat = new LocalizableResourceString(
-            nameof(Resources.ReferenceToRxWpfRequiredAnalyzerExtensionMethodMessageFormat), Resources.ResourceManager, typeof(Resources));
+            nameof(Resources.ReferenceToRxWpfRequiredAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString ReferenceToRxWpfRequiredDescription = new LocalizableResourceString(
             nameof(Resources.ReferenceToRxWpfRequiredAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         internal static readonly DiagnosticDescriptor ReferenceToRxWpfRequiredRule = new(
@@ -129,7 +129,10 @@ namespace System.Reactive.Analyzers
 
                 var node = diag.Location.SourceTree?.GetRoot().FindNode(diag.Location.SourceSpan);
 
-                UiFrameworkSpecificExtensionMethods.CheckForExtensionMethods(context, node, diag);
+                if (!UiFrameworkSpecificTypes.Check(context, node, diag))
+                {
+                    UiFrameworkSpecificExtensionMethods.CheckForExtensionMethods(context, node, diag);
+                }
             }
         }
     }

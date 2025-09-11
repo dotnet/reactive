@@ -2,12 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -103,8 +97,8 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                 {
                     var matchedName = ma2.Name.ToFullString() switch
                     {
-                        "ObserveOn" => "ObserveOnDispatcher",
-                        "SubscribeOn" => "SubscribeOnDispatcher",
+                        "ObserveOnDispatcher" => "ObserveOnDispatcher",
+                        "SubscribeOnDispatcher" => "SubscribeOnDispatcher",
                         _ => null
                     };
 
@@ -113,7 +107,40 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                         var targetType = context.SemanticModel.GetTypeInfo(ma2.Expression).Type;
                         if (targetType is not null && targetType.IsIObservable())
                         {
+                            context.ReportDiagnostic(Diagnostic.Create(
+                                    AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule,
+                                    diag.Location,
+                                    $"{matchedName}()",
+                                    Resources.ExtensionMethodText));
+                        }
+                    }
+                }
 
+                // Handle the case where the only argument is a DispatcherPriority
+                if (invocation2.ArgumentList.Arguments.Count == 1)
+                {
+                    var matchedName = ma2.Name.ToFullString() switch
+                    {
+                        "ObserveOnDispatcher" => "ObserveOnDispatcher",
+                        "SubscribeOnDispatcher" => "SubscribeOnDispatcher",
+                        _ => null
+                    };
+
+                    if (matchedName is not null)
+                    {
+                        var targetType = context.SemanticModel.GetTypeInfo(ma2.Expression).Type;
+                        if (targetType is not null && targetType.IsIObservable())
+                        {
+                            var argumentType = context.SemanticModel.GetTypeInfo(invocation2.ArgumentList.Arguments[0].Expression).Type;
+                            if (argumentType is not null &&
+                                argumentType.ToDisplayString() == "System.Windows.Threading.DispatcherPriority")
+                            {
+                                context.ReportDiagnostic(Diagnostic.Create(
+                                        AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule,
+                                        diag.Location,
+                                        $"{matchedName}(DispatcherPriority)",
+                                        Resources.ExtensionMethodText));
+                            }
                         }
                     }
                 }
@@ -186,7 +213,8 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                     context.ReportDiagnostic(Diagnostic.Create(
                             AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule,
                             diag.Location,
-                            $"{matchedName}({argumentTypes})"));
+                            $"{matchedName}({argumentTypes})",
+                            Resources.ExtensionMethodText));
                     return true;
                 }
             }

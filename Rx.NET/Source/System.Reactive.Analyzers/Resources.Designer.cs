@@ -61,6 +61,15 @@ namespace System.Reactive {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to extension method.
+        /// </summary>
+        internal static string ExtensionMethodText {
+            get {
+                return ResourceManager.GetString("ExtensionMethodText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a reference to the System.Reactive.For.WindowsForms NuGet Package to continue using Rx.NET Windows Forms support..
         /// </summary>
         internal static string ReferenceToRxWindowsFormsRequiredAnalyzerDescription {
@@ -97,11 +106,11 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;{0}&apos; extension method has moved. Add a reference to the System.Reactive.For.Wpf NuGet package..
+        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} has moved. Add a reference to the System.Reactive.For.Wpf NuGet package..
         /// </summary>
-        internal static string ReferenceToRxWpfRequiredAnalyzerExtensionMethodMessageFormat {
+        internal static string ReferenceToRxWpfRequiredAnalyzerMessageFormat {
             get {
-                return ResourceManager.GetString("ReferenceToRxWpfRequiredAnalyzerExtensionMethodMessageFormat", resourceCulture);
+                return ResourceManager.GetString("ReferenceToRxWpfRequiredAnalyzerMessageFormat", resourceCulture);
             }
         }
         
@@ -111,6 +120,15 @@ namespace System.Reactive {
         internal static string ReferenceToRxWpfRequiredAnalyzerTitle {
             get {
                 return ResourceManager.GetString("ReferenceToRxWpfRequiredAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to type.
+        /// </summary>
+        internal static string TypeText {
+            get {
+                return ResourceManager.GetString("TypeText", resourceCulture);
             }
         }
     }

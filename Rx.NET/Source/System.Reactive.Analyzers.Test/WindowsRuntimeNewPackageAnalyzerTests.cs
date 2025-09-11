@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Analyzers.Test
 {
-    internal class WindowsRuntimeNewPackageAnalyzerTests
+    internal sealed class WindowsRuntimeNewPackageAnalyzerTests
     {
         // This may need to look a bit different from the WPF and Windows Forms tests, because
         // this covers more types.

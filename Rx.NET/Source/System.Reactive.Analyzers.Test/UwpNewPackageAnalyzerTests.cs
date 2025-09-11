@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Analyzers.Test
 {
-    internal class UwpNewPackageAnalyzerTests
+    internal sealed class UwpNewPackageAnalyzerTests
     {
     }
 }

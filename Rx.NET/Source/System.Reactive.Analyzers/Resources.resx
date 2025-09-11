@@ -129,10 +129,16 @@
   <data name="ReferenceToRxWpfRequiredAnalyzerDescription" xml:space="preserve">
     <value>Add a reference to the System.Reactive.For.Wpf NuGet Package to continue using Rx.NET WPF support.</value>
   </data>
-  <data name="ReferenceToRxWpfRequiredAnalyzerExtensionMethodMessageFormat" xml:space="preserve">
-    <value>The '{0}' extension method has moved. Add a reference to the System.Reactive.For.Wpf NuGet package.</value>
-  </data>
   <data name="ReferenceToRxWpfRequiredAnalyzerTitle" xml:space="preserve">
     <value>Rx.NET WPF support is now in System.Reactive.For.Wpf</value>
+  </data>
+  <data name="TypeText" xml:space="preserve">
+    <value>type</value>
+  </data>
+  <data name="ExtensionMethodText" xml:space="preserve">
+    <value>extension method</value>
+  </data>
+  <data name="ReferenceToRxWpfRequiredAnalyzerMessageFormat" xml:space="preserve">
+    <value>The '{0}' {1} has moved. Add a reference to the System.Reactive.For.Wpf NuGet package.</value>
   </data>
 </root>
