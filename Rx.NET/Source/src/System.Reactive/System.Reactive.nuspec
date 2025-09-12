@@ -66,6 +66,7 @@
     <file src="$refassemblypath$net8.0-windows10.0.19041\System.Reactive.dll" target="ref\net8.0-windows10.0.19041\System.Reactive.dll" />
     <file src="$refassemblypath$netstandard2.0\System.Reactive.dll" target="ref\netstandard2.0\System.Reactive.dll" />
     <file src="$refassemblypath$uap10.0.18362\System.Reactive.dll" target="ref\uap10.0.18362\System.Reactive.dll" />
+    <file src="$analyzerassemblypath$netstandard2.0\System.Reactive.Analyzers.dll" target="analyzers\dotnet\System.Reactive.Analyzers.dll" />
     <file src="..\..\..\Resources\Artwork\Logo.png" target="icon.png" />
     <file src="build\NuGet.Readme.md" target="readme.md" />
     <file src="$outputpath$net472\System.Reactive.pdb" target="lib\net472\System.Reactive.pdb" />

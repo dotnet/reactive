@@ -271,7 +271,7 @@
   </PropertyGroup>
   <Target Name="_SetNuspecProperties" BeforeTargets="GenerateNuspec">
     <PropertyGroup>
-      <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);licenseExpression=$(PackageLicenseExpression);icon=$(PackageIcon);projectUrl=$(PackageProjectUrl);description=$(PackageDescription);copyright=$(Copyright);tags=$(PackageTags.Split('%20'));repository=$(RepositoryUrl);commit=$(RepositoryCommit);outputpath=$(OutputPath);refassemblypath=..\System.Reactive.MakeRefAssemblies\bin\$(Configuration)\</NuspecProperties>
+      <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);licenseExpression=$(PackageLicenseExpression);icon=$(PackageIcon);projectUrl=$(PackageProjectUrl);description=$(PackageDescription);copyright=$(Copyright);tags=$(PackageTags.Split('%20'));repository=$(RepositoryUrl);commit=$(RepositoryCommit);outputpath=$(OutputPath);refassemblypath=..\System.Reactive.MakeRefAssemblies\bin\$(Configuration)\;analyzerassemblypath=..\System.Reactive.Analyzers\bin\$(Configuration)\</NuspecProperties>
     </PropertyGroup>
   </Target>
 

@@ -1,4 +1,4 @@
-<Project Sdk="MSTest.Sdk/3.6.4">
+﻿<Project Sdk="MSTest.Sdk/3.6.4">
 
   <PropertyGroup>
     <TargetFramework>net481</TargetFramework>
@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\System.Reactive.MakeRefAssemblies\System.Reactive.MakeRefAssemblies.csproj" />
     <ProjectReference Include="..\System.Reactive.Analyzers\System.Reactive.Analyzers.csproj" />
+    <ProjectReference Include="..\System.Reactive.MakeRefAssemblies\System.Reactive.MakeRefAssemblies.csproj" />
   </ItemGroup>
 
 </Project>
