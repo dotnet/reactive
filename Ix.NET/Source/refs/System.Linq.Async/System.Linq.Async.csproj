@@ -20,7 +20,8 @@
 </PropertyGroup>
   <ItemGroup>
     <PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0'" Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
-    
+    <PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0'" Include="System.Collections.Immutable" Version="6.0.0" />
+
     <ProjectReference Include="..\..\System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
 

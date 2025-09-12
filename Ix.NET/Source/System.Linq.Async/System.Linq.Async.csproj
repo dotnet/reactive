@@ -57,6 +57,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1'" Include="System.Collections.Immutable" Version="6.0.0" />
+    <ReferenceAssemblyProjectReference Include="..\refs\System.Linq.Async.Ref\System.Linq.Async.Ref.csproj" />
     <PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0' " Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
     <ProjectReference Include="..\System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
