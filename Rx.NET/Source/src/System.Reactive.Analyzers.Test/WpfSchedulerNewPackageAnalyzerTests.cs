@@ -57,6 +57,46 @@ namespace System.Reactive.Analyzers.Test
         }
 
         [TestMethod]
+        public async Task DispatcherSchedulerCurrentFullyQualified()
+        {
+            await TestAsync($$"""
+                var scheduler = {|#0:System.Reactive.Concurrency.DispatcherScheduler|}.Current;
+                """,
+                "CS0234");
+        }
+
+        [TestMethod]
+        public async Task DispatcherSchedulerCurrentSchedulerWithUsing()
+        {
+            await TestAsync($$"""
+                using System.Reactive.Concurrency;
+
+                var scheduler = {|#0:DispatcherScheduler|}.Current;
+                """,
+                "CS0103");
+        }
+
+        [TestMethod]
+        public async Task DispatcherSchedulerCurrentSchedulerWithPartialUsingInNestedNamespace()
+        {
+            await TestAsync($$"""
+                namespace System.Reactive
+                {
+                    using Concurrency;
+
+                    public static class Program
+                    {
+                        public static void Main()
+                        {
+                            var scheduler = {|#0:DispatcherScheduler|}.Current;
+                        }
+                    }
+                }
+                """,
+                "CS0103");
+        }
+
+        [TestMethod]
         public async Task DispatcherSchedulerVariableFullyQualified()
         {
             await TestAsync($$"""

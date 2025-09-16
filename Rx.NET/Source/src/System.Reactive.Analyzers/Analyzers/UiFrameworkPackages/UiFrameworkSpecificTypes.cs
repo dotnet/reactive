@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -76,6 +77,41 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                         var importScopes = context.SemanticModel.GetImportScopes(diag.Location.SourceSpan.Start);
                         bool namespaceInScope = importScopes.SelectMany(s => s.Imports).Any(i => i.NamespaceOrType.ToDisplayString() == "System.Reactive.Concurrency");
                         if (namespaceInScope)
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(
+                                diagnostic,
+                                diag.Location,
+                                type,
+                                "type"));
+
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            if (node is MemberAccessExpressionSyntax memberAccess)
+            {
+                (DiagnosticDescriptor diagnostic, string type)? info = memberAccess.Name.Identifier.ValueText switch
+                {
+                    "DispatcherScheduler" =>
+                        (AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule, "DispatcherScheduler"),
+                    "ControlScheduler" =>
+                        (AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsFormsRequiredRule, "ControlScheduler"),
+                    _ => null
+                };
+                if (info is (DiagnosticDescriptor diagnostic, string type))
+                {
+                    // If the compiler has already determined what type this name represents, then the
+                    // problem can't be that the Rx DispatcherScheduler type is unavailable, so we only
+                    // proceed if the semantic model doesn't understand this identifier name's type.
+                    var ti = context.SemanticModel.GetTypeInfo(memberAccess.Name);
+                    if (ti.Type is null || ti.Type.TypeKind == TypeKind.Error)
+                    {
+                        ////var importScopes = context.SemanticModel.GetImportScopes(diag.Location.SourceSpan.Start);
+                        ////bool namespaceInScope = importScopes.SelectMany(s => s.Imports).Any(i => i.NamespaceOrType.ToDisplayString() == "System.Reactive.Concurrency");
+                        ////if (namespaceInScope)
+                        if (memberAccess.Expression.ToFullString() == "System.Reactive.Concurrency")
                         {
                             context.ReportDiagnostic(Diagnostic.Create(
                                 diagnostic,
