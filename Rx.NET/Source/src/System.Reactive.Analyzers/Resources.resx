@@ -141,4 +141,13 @@
   <data name="ReferenceToRxWpfRequiredAnalyzerMessageFormat" xml:space="preserve">
     <value>The '{0}' {1} has moved. Add a reference to the System.Reactive.For.Wpf NuGet package.</value>
   </data>
+  <data name="ReferenceToRxWindowsRuntimeRequiredAnalyzerDescription" xml:space="preserve">
+    <value>Add a reference to the System.Reactive.For.WindowsRuntime NuGet Package to continue using Rx.NET Windows Runtime support.</value>
+  </data>
+  <data name="ReferenceToRxWindowsRuntimeRequiredAnalyzerMessageFormat" xml:space="preserve">
+    <value>The '{0}' {1} extension method has moved. Add a reference to the System.Reactive.For.WindowsRuntime NuGet package.</value>
+  </data>
+  <data name="ReferenceToRxWindowsRuntimeRequiredAnalyzerTitle" xml:space="preserve">
+    <value>Rx.NET Windows Runtime support is now in System.Reactive.For.WindowsRuntime</value>
+  </data>
 </root>

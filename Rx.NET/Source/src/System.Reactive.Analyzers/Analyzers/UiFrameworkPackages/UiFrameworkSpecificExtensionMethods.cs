@@ -29,7 +29,7 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
         public static bool CheckForExtensionMethods(
             SemanticModelAnalysisContext context, SyntaxNode? node, Diagnostic diag)
         {
-            // TODO: WPF and UAP.
+            // TODO: Windows Runtime and UAP.
             // TODO: what if the diagnostic is in fact something else entirely?
 
             // When invoking single-argument overloads such as ObserveOn(Dispatcher), the
@@ -69,13 +69,19 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                             }
 
                             var dispatcherType = context.SemanticModel.Compilation.GetTypeByMetadataName("System.Windows.Threading.Dispatcher");
-                            if (CheckWithoutOrWithDispatcherPriority(withDispatcherPriority: false, context, diag, invocation, matchedName, argumentTypeSymbol, dispatcherType))
+                            if (CheckWpfDispatcherWithoutOrWithDispatcherPriority(withDispatcherPriority: false, context, diag, invocation, matchedName, argumentTypeSymbol, dispatcherType))
                             {
                                 return true;
                             }
 
                             var dispatcherObjectType = context.SemanticModel.Compilation.GetTypeByMetadataName("System.Windows.Threading.DispatcherObject");
-                            if (CheckWithoutOrWithDispatcherPriority(withDispatcherPriority: false, context, diag, invocation, matchedName, argumentTypeSymbol, dispatcherObjectType))
+                            if (CheckWpfDispatcherWithoutOrWithDispatcherPriority(withDispatcherPriority: false, context, diag, invocation, matchedName, argumentTypeSymbol, dispatcherObjectType))
+                            {
+                                return true;
+                            }
+
+                            var coreDispatcherType = context.SemanticModel.Compilation.GetTypeByMetadataName("Windows.UI.Core.CoreDispatcher");
+                            if (CheckCoreDispatcherWithoutOrWithDispatcherPriority(withDispatcherPriority: false, context, diag, invocation, matchedName, argumentTypeSymbol, coreDispatcherType))
                             {
                                 return true;
                             }
@@ -95,11 +101,13 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
             {
                 if (invocation2.ArgumentList.Arguments.Count == 0)
                 {
-                    var matchedName = ma2.Name.ToFullString() switch
+                    (string? matchedName, bool isWindowsRuntime) = ma2.Name.ToFullString() switch
                     {
-                        "ObserveOnDispatcher" => "ObserveOnDispatcher",
-                        "SubscribeOnDispatcher" => "SubscribeOnDispatcher",
-                        _ => null
+                        "ObserveOnDispatcher" => ("ObserveOnDispatcher", false),
+                        "SubscribeOnDispatcher" => ("SubscribeOnDispatcher", false),
+                        "ObserveOnCoreDispatcher" => ("ObserveOnCoreDispatcher", true),
+                        "SubscribeOnCoreDispatcher" => ("SubscribeOnCoreDispatcher", true),
+                        _ => (null, false)
                     };
 
                     if (matchedName is not null)
@@ -108,7 +116,9 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                         if (targetType is not null && targetType.IsIObservable())
                         {
                             context.ReportDiagnostic(Diagnostic.Create(
-                                    AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule,
+                                    isWindowsRuntime
+                                        ? AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule
+                                        : AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule,
                                     diag.Location,
                                     $"{matchedName}()",
                                     Resources.ExtensionMethodText));
@@ -119,11 +129,13 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                 // Handle the case where the only argument is a DispatcherPriority
                 if (invocation2.ArgumentList.Arguments.Count == 1)
                 {
-                    var matchedName = ma2.Name.ToFullString() switch
+                    (string? matchedName, bool isWindowsRuntime) = ma2.Name.ToFullString() switch
                     {
-                        "ObserveOnDispatcher" => "ObserveOnDispatcher",
-                        "SubscribeOnDispatcher" => "SubscribeOnDispatcher",
-                        _ => null
+                        "ObserveOnDispatcher" => ("ObserveOnDispatcher", false),
+                        "SubscribeOnDispatcher" => ("SubscribeOnDispatcher", false),
+                        "ObserveOnCoreDispatcher" => ("ObserveOnCoreDispatcher", true),
+                        "SubscribeOnCoreDispatcher" => ("SubscribeOnCoreDispatcher", true),
+                        _ => (null, false)
                     };
 
                     if (matchedName is not null)
@@ -131,14 +143,20 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                         var targetType = context.SemanticModel.GetTypeInfo(ma2.Expression).Type;
                         if (targetType is not null && targetType.IsIObservable())
                         {
+                            var expectedPriorityFullType = isWindowsRuntime
+                                ? "Windows.UI.Core.CoreDispatcherPriority"
+                                : "System.Windows.Threading.DispatcherPriority";
                             var argumentType = context.SemanticModel.GetTypeInfo(invocation2.ArgumentList.Arguments[0].Expression).Type;
                             if (argumentType is not null &&
-                                argumentType.ToDisplayString() == "System.Windows.Threading.DispatcherPriority")
+                                argumentType.ToDisplayString() == expectedPriorityFullType)
                             {
+                                var expectedPriorityType = isWindowsRuntime ? "CoreDispatcherPriority" : "DispatcherPriority";
                                 context.ReportDiagnostic(Diagnostic.Create(
-                                        AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule,
+                                        isWindowsRuntime
+                                            ? AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule
+                                            : AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule,
                                         diag.Location,
-                                        $"{matchedName}(DispatcherPriority)",
+                                        $"{matchedName}({expectedPriorityType})",
                                         Resources.ExtensionMethodText));
                             }
                         }
@@ -163,13 +181,19 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                             if (firstArgumentType.Type is ITypeSymbol firstArgumentTypeSymbol)
                             {
                                 var dispatcherType = context.SemanticModel.Compilation.GetTypeByMetadataName("System.Windows.Threading.Dispatcher");
-                                if (CheckWithoutOrWithDispatcherPriority(withDispatcherPriority: true, context, diag, invocation2, matchedName, firstArgumentTypeSymbol, dispatcherType))
+                                if (CheckWpfDispatcherWithoutOrWithDispatcherPriority(withDispatcherPriority: true, context, diag, invocation2, matchedName, firstArgumentTypeSymbol, dispatcherType))
                                 {
                                     return true;
                                 }
 
                                 var dispatcherObjectType = context.SemanticModel.Compilation.GetTypeByMetadataName("System.Windows.Threading.DispatcherObject");
-                                if (CheckWithoutOrWithDispatcherPriority(withDispatcherPriority: true, context, diag, invocation2, matchedName, firstArgumentTypeSymbol, dispatcherObjectType))
+                                if (CheckWpfDispatcherWithoutOrWithDispatcherPriority(withDispatcherPriority: true, context, diag, invocation2, matchedName, firstArgumentTypeSymbol, dispatcherObjectType))
+                                {
+                                    return true;
+                                }
+
+                                var coreDispatcherType = context.SemanticModel.Compilation.GetTypeByMetadataName("Windows.UI.Core.CoreDispatcher");
+                                if (CheckCoreDispatcherWithoutOrWithDispatcherPriority(withDispatcherPriority: true, context, diag, invocation2, matchedName, firstArgumentTypeSymbol, coreDispatcherType))
                                 {
                                     return true;
                                 }
@@ -181,7 +205,7 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
             return false;
         }
 
-        private static bool CheckWithoutOrWithDispatcherPriority(
+        private static bool CheckWpfDispatcherWithoutOrWithDispatcherPriority(
             bool withDispatcherPriority,
             SemanticModelAnalysisContext context,
             Diagnostic diag,
@@ -194,11 +218,11 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                 argumentTypeSymbol.InheritsFromOrEquals(candidateArgumentType, false))
             {
                 string? argumentTypes = null;
-                if (invocation.ArgumentList.Arguments.Count == 1)
+                if (!withDispatcherPriority && invocation.ArgumentList.Arguments.Count == 1)
                 {
                     argumentTypes = candidateArgumentType.Name;
                 }
-                else if (invocation.ArgumentList.Arguments.Count == 2)
+                else if (withDispatcherPriority && invocation.ArgumentList.Arguments.Count == 2)
                 {
                     var secondArgType = context.SemanticModel.GetTypeInfo(invocation.ArgumentList.Arguments[1].Expression).Type;
                     if (secondArgType is not null &&
@@ -212,6 +236,47 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                 {
                     context.ReportDiagnostic(Diagnostic.Create(
                             AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule,
+                            diag.Location,
+                            $"{matchedName}({argumentTypes})",
+                            Resources.ExtensionMethodText));
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool CheckCoreDispatcherWithoutOrWithDispatcherPriority(
+            bool withDispatcherPriority,
+            SemanticModelAnalysisContext context,
+            Diagnostic diag,
+            InvocationExpressionSyntax invocation,
+            string matchedName,
+            ITypeSymbol argumentTypeSymbol,
+            INamedTypeSymbol? candidateArgumentType)
+        {
+            if (candidateArgumentType is not null &&
+                argumentTypeSymbol.InheritsFromOrEquals(candidateArgumentType, false))
+            {
+                string? argumentTypes = null;
+                if (!withDispatcherPriority && invocation.ArgumentList.Arguments.Count == 1)
+                {
+                    argumentTypes = candidateArgumentType.Name;
+                }
+                else if (withDispatcherPriority && invocation.ArgumentList.Arguments.Count == 2)
+                {
+                    var secondArgType = context.SemanticModel.GetTypeInfo(invocation.ArgumentList.Arguments[1].Expression).Type;
+                    if (secondArgType is not null &&
+                        secondArgType.ToDisplayString() == "Windows.UI.Core.CoreDispatcherPriority")
+                    {
+                        argumentTypes = $"{candidateArgumentType.Name},CoreDispatcherPriority";
+                    }
+                }
+
+                if (argumentTypes is not null)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(
+                            AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule,
                             diag.Location,
                             $"{matchedName}({argumentTypes})",
                             Resources.ExtensionMethodText));

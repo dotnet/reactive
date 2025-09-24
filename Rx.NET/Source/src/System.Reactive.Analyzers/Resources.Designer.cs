@@ -97,6 +97,33 @@ namespace System.Reactive {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a reference to the System.Reactive.For.WindowsRuntime NuGet Package to continue using Rx.NET Windows Runtime support..
+        /// </summary>
+        internal static string ReferenceToRxWindowsRuntimeRequiredAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("ReferenceToRxWindowsRuntimeRequiredAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} extension method has moved. Add a reference to the System.Reactive.For.WindowsRuntime NuGet package..
+        /// </summary>
+        internal static string ReferenceToRxWindowsRuntimeRequiredAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("ReferenceToRxWindowsRuntimeRequiredAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rx.NET Windows Runtime support is now in System.Reactive.For.WindowsRuntime.
+        /// </summary>
+        internal static string ReferenceToRxWindowsRuntimeRequiredAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ReferenceToRxWindowsRuntimeRequiredAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a reference to the System.Reactive.For.Wpf NuGet Package to continue using Rx.NET WPF support..
         /// </summary>
         internal static string ReferenceToRxWpfRequiredAnalyzerDescription {

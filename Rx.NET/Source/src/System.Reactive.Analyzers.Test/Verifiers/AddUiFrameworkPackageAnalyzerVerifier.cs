@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections.Immutable;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
@@ -90,7 +92,17 @@ namespace System.Reactive.Analyzers.Test.Verifiers
                     return solution;
                 });
 
-                ReferenceAssemblies = ReferenceAssemblies.Net.Net80Windows;
+                // Somehow we need to add the winrt refs too.
+                var net80win = new ReferenceAssemblies(
+                        "net8.0-windows10.0.19041",
+                        new PackageIdentity(
+                            "Microsoft.NETCore.App.Ref",
+                            "8.0.0"),
+                        Path.Combine("ref", "net8.0"));
+                ReferenceAssemblies = net80win.AddPackages([
+                    new PackageIdentity("Microsoft.WindowsDesktop.App.Ref", "8.0.0"),
+                    new PackageIdentity("Microsoft.Windows.SDK.NET.Ref", "10.0.19041.57")]);
+                //ReferenceAssemblies = ReferenceAssemblies.Net.Net80Windows;
 
                 // Adding a NuGet reference to Rx would more directly represent real developer
                 // scenarios, but we don't build new packages in day to day dev in the IDE, so this
