@@ -4,9 +4,9 @@
 
 This release adds:
 
-* A `DisposeWith`extension method for `IDisposable` to simplify disposal in conjunction with `CompositeDisposable` (see [#2178](https://github.com/dotnet/reactive/pull/2178) thanks to [Chris Pulman](https://github.com/ChrisPulman)
+* A `DisposeWith` extension method for `IDisposable` to simplify disposal in conjunction with `CompositeDisposable` (see [#2178](https://github.com/dotnet/reactive/pull/2178) thanks to [Chris Pulman](https://github.com/ChrisPulman)
 * A new overload of `TakeUntil` accepting a `CancellationToken` (see [#2181](https://github.com/dotnet/reactive/issues/2181) thanks to [Nils Aufschläger](https://github.com/nilsauf)
-
+* A new `CaptureExceptionDispatchState` operator for use where a source that will provide the same `Exception` instance multiple times over (e.g., the `Throw` or `Repeat` operators) will be used in conjunction with a mechanism that turns `OnError` notifications into actual exceptions (e.g., the `await` support) to avoid the problem described in [#2187](https://github.com/dotnet/reactive/issues/2187) in which the exception's `StackTrace` gets longer and longer with each rethrowing of the exception
 
 ## v6.0.2
 

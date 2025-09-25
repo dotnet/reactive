@@ -77,6 +77,15 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + CaptureExceptionDispatchState +
+
+        public virtual IObservable<TSource> CaptureExceptionDispatchState<TSource>(IObservable<TSource> source)
+        {
+            return new CaptureExceptionDispatchState<TSource>(source);
+        }
+
+        #endregion
+
         #region + Dematerialize +
 
         public virtual IObservable<TSource> Dematerialize<TSource>(IObservable<Notification<TSource>> source)
