@@ -10,6 +10,10 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.aggregateasync?view=net-9.0-pp#system-linq-asyncenumerable-aggregateasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-0-0))-system-threading-cancellationtoken)
+        // public static ValueTask<TSource> AggregateAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> func, CancellationToken cancellationToken = default);
+
         /// <summary>
         /// Applies an accumulator function over an async-enumerable sequence, returning the result of the aggregation as a single element in the result sequence.
         /// For aggregation behavior with incremental intermediate results, see System.Interactive.Async.AsyncEnumerableEx.Scan{TSource}.
@@ -50,6 +54,7 @@ namespace System.Linq
                 return acc;
             }
         }
+#endif
 
         /// <summary>
         /// Applies an accumulator function over an async-enumerable sequence, returning the result of the aggregation as a single element in the result sequence.
@@ -63,6 +68,7 @@ namespace System.Linq
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use Aggregate. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ...Await... and ...WithCancellation... functionality now exists as overloads of Aggregate.")]
         private static ValueTask<TSource> AggregateAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -93,7 +99,16 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.aggregateasync?view=net-9.0-pp#system-linq-asyncenumerable-aggregateasync-3(system-collections-generic-iasyncenumerable((-0))-1-system-func((-1-0-system-threading-cancellationtoken-system-threading-tasks-valuetask((-1))))-system-func((-1-system-threading-cancellationtoken-system-threading-tasks-valuetask((-2))))-system-threading-cancellationtoken)
+        // public static ValueTask<TResult> AggregateAsync<TSource, TAccumulate, TResult>(
+        //  this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, CancellationToken, ValueTask<TAccumulate>> func, Func<TAccumulate, CancellationToken, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken = default);
+        // Corresponds to:
+        // public static ValueTask<TResult> AggregateAwaitWithCancellationAsync<TSource, TAccumulate, TResult>(
+        //  this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, CancellationToken, ValueTask<TAccumulate>> accumulator, Func<TAccumulate, CancellationToken, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken = default) { }
+
         [GenerateAsyncOverload]
+        [Obsolete("Use Aggregate. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ...Await... and ...WithCancellation... functionality now exists as overloads of Aggregate.")]
         private static ValueTask<TSource> AggregateAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, CancellationToken, ValueTask<TSource>> accumulator, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -123,6 +138,11 @@ namespace System.Linq
             }
         }
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.aggregateasync?view=net-9.0-pp#system-linq-asyncenumerable-aggregateasync-2(system-collections-generic-iasyncenumerable((-0))-1-system-func((-1-0-1))-system-threading-cancellationtoken)
+        //public static ValueTask<TAccumulate> AggregateAsync<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> func, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Applies an accumulator function over an async-enumerable sequence, returning the result of the aggregation as a single element in the result sequence. The specified seed value is used as the initial accumulator value.
@@ -158,6 +178,7 @@ namespace System.Linq
                 return acc;
             }
         }
+#endif
 
         /// <summary>
         /// Applies an accumulator function over an async-enumerable sequence, returning the result of the aggregation as a single element in the result sequence. The specified seed value is used as the initial accumulator value.
@@ -172,6 +193,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="accumulator"/> is <see langword="null"/>.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use Aggregate. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ...Await... and ...WithCancellation... functionality now exists as overloads of Aggregate.")]
         private static ValueTask<TAccumulate> AggregateAwaitAsyncCore<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -196,6 +218,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Aggregate. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ...Await... and ...WithCancellation... functionality now exists as overloads of Aggregate.")]
         private static ValueTask<TAccumulate> AggregateAwaitWithCancellationAsyncCore<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, CancellationToken, ValueTask<TAccumulate>> accumulator, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -218,6 +241,10 @@ namespace System.Linq
             }
         }
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.aggregateasync?view=net-9.0-pp#system-linq-asyncenumerable-aggregateasync-3(system-collections-generic-iasyncenumerable((-0))-1-system-func((-1-0-1))-system-func((-1-2))-system-threading-cancellationtoken)
+        // public static ValueTask<TResult> AggregateAsync<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> func, Func<TAccumulate, TResult> resultSelector, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Applies an accumulator function over an async-enumerable sequence, returning the result of the aggregation as a single element in the result sequence. The specified seed value is used as the initial accumulator value,
@@ -257,6 +284,7 @@ namespace System.Linq
                 return resultSelector(acc);
             }
         }
+#endif
 
         /// <summary>
         /// Applies an accumulator function over an async-enumerable sequence, returning the result of the aggregation as a single element in the result sequence. The specified seed value is used as the initial accumulator value,
@@ -273,6 +301,7 @@ namespace System.Linq
         /// <returns>A ValueTask containing the value obtained by applying the result selector to the final accumulator value.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="accumulator"/> or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use Aggregate. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ...Await... and ...WithCancellation... functionality now exists as overloads of Aggregate.")]
         private static ValueTask<TResult> AggregateAwaitAsyncCore<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, Func<TAccumulate, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken = default)
         {
             if (source == null)

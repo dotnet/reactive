@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Linq
 {
+    // TODO: System.Linq does this as an IAsyncEnumerable<IGrouping<TKey, TElement>>
     public interface IAsyncGrouping<out TKey, out TElement> : IAsyncEnumerable<TElement>
     {
         TKey Key { get; }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     /// <summary>
     /// Represents a sorted async-enumerable sequence.
     /// </summary>
@@ -45,5 +46,6 @@ namespace System.Linq
         /// <returns>An ordered async-enumerable whose elements are sorted according to a key.</returns>
         IOrderedAsyncEnumerable<TElement> CreateOrderedEnumerable<TKey>(Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey>? comparer, bool descending);
 #endif
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

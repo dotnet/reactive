@@ -12,14 +12,18 @@ namespace System.Linq
     /// An iterator that can produce an array or <see cref="List{TElement}"/> through an optimized path.
     /// </summary>
     /// <remarks>
-    /// This interface is primarily used for internal purposes as an optimization for LINQ operators. It was made public because
-    /// it was defined in the <c>System.Linq.Async</c> package but also used in <c>System.Interactive.Async</c>. Now that
-    /// <c>System.Linq.Async</c> is being retired in favor of .NET 10.0's <c>System.Linq.AsyncEnumerable</c>, the
-    /// <c>System.Interactive.Async</c> package no longer takes a dependency on <c>System.Linq.Async</c>, and therefore defines
-    /// its own version of this interface. We can't replace this with a type forwarder here because that would risk creating a
-    /// circular dependency in cases where an application managed to get out-of-sync versions of the two packages.
+    /// This interface is primarily used for internal purposes as an optimization for LINQ operators. Its use is discouraged.
+    /// It was made public because it was originally defined in the <c>System.Linq.Async</c> package but also used in
+    /// <c>System.Interactive.Async</c>. Now that <c>System.Linq.Async</c> is being retired in favor of .NET 10.0's
+    /// <c>System.Linq.AsyncEnumerable</c>, the <c>System.Interactive.Async</c> package no longer takes a dependency on
+    /// <c>System.Linq.Async</c>, which is why it now defines its own version of this interface here. We can't put a type
+    /// forwarder in <c>System.Interactive.Async</c> to here because that would risk creating a circular dependency in
+    /// cases where an application managed to get out-of-sync versions of the two packages, so this interface is not
+    /// backwards compatible with the old one. If you were implementing this in your own types to get the associated
+    /// optimizations, be aware that this is not supported, but implementing this copy of the interface (in place of
+    /// the old version defined in the deprecated <c>System.Linq.Async</c> package) will continue to provide the
+    /// same (unsupported) behaviour.
     /// </remarks>
-    [Obsolete("Use the definition of this type in the System.Interactive.Async NuGet package System.Linq.Async instead.")] // Can't use a type forwarder because 
     public interface IAsyncIListProvider<TElement> : IAsyncEnumerable<TElement>
     {
         /// <summary>

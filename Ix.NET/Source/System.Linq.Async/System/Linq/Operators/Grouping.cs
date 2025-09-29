@@ -10,6 +10,7 @@ using System.Threading;
 
 namespace System.Linq.Internal
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     /// Adapted from System.Linq.Grouping from .NET Framework
     /// Source: https://github.com/dotnet/corefx/blob/b90532bc97b07234a7d18073819d019645285f1c/src/System.Linq/src/System/Linq/Grouping.cs#L64
     internal class Grouping<TKey, TElement> : IGrouping<TKey, TElement>, IList<TElement>, IAsyncGrouping<TKey, TElement>
@@ -106,4 +107,5 @@ namespace System.Linq.Internal
             return this.ToAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
         }
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

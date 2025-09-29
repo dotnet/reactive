@@ -11,13 +11,13 @@
     <AssemblyName>System.Linq.Async</AssemblyName>
   </PropertyGroup>
 
-<PropertyGroup>
+  <PropertyGroup>
       <!--
     IDE0301 uses collection expressions in places where they don't necessarily have the same effect, which we want to avoid in case of possible compatibility issues.
     IDE0305 wants to turn things like list.ToArray into [..list], which we don't find to be an improvement in readability. -->
     <NoWarn>$(NoWarn);IDE0301;IDE0305</NoWarn>
 
-</PropertyGroup>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0'" Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
     

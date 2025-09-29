@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net48;net8.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net48;net10.0;net8.0</TargetFrameworks>
 
     <!--
       CA1510: Use ArgumentNullException.ThrowIfNull - not available on .NET 4.8
@@ -21,6 +21,25 @@
     <ProjectReference Include="..\System.Interactive.Async.Providers\System.Interactive.Async.Providers.csproj" />
     <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
   </ItemGroup>
+  
+  <!--
+  Since this tests the System.Interactive.Async.Providers package, which has a dependency on the legacy System.Linq.Async.Queryable package,
+  we need prevent the compiler from using the .NET runtime library System.Linq.AsyncEnumerable package.
+  So although we get this references transitively (or automatically on .NET 10.0+) we need to put them explicitly here to set aliases.
+  -->
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107"
+                      Aliases="SystemLinqAsyncEnumerable" />
+  </ItemGroup>
+
+  <Target Name="_SetAliasOnBuiltInSystemLinqAsyncEnumerable" BeforeTargets="ResolveAssemblyReferences">
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+      <Reference Condition="'%(Reference.AssemblyName)' == 'System.Linq.AsyncEnumerable'">
+        <Aliases>SystemLinqAsyncEnumerable</Aliases>
+      </Reference>
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />

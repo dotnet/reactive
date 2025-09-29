@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net10.0</TargetFrameworks>
     <Title>System.Linq.Async.Queryable</Title>
     <PackageTags>LINQ;async;streams;query;provider</PackageTags>
     <Description>Provides support for Language-Integrated Query (LINQ) over IAsyncQueryable&lt;T&gt; sequences with query providers.</Description>
@@ -10,6 +10,20 @@
   <ItemGroup>
     <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <!-- Although we get this transitively from System.Linq.Async, we need the alias to ensure we compile against the legacy System.Linq.Async -->
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107"
+                      Aliases="SystemLinqAsyncEnumerable" />
+  </ItemGroup>
+  <Target Name="_SetAliasOnBuiltInSystemLinqAsyncEnumerable" BeforeTargets="ResolveAssemblyReferences">
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+      <Reference Condition="'%(Reference.AssemblyName)' == 'System.Linq.AsyncEnumerable'">
+        <Aliases>SystemLinqAsyncEnumerable</Aliases>
+      </Reference>
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <Compile Update="System\Linq\AsyncQueryable.Generated.cs">

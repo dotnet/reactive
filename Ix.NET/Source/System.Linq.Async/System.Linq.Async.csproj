@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net10.0</TargetFrameworks>
     <Title>System.Linq.Async</Title>    
     <PackageTags>LINQ;async;streams;query</PackageTags>
     <Description>Provides support for Language-Integrated Query (LINQ) over IAsyncEnumerable&lt;T&gt; sequences.</Description>  
@@ -16,6 +16,17 @@
           Pack="true" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <!--
+    The ref assembly define the public API visible at compile time, so it should not include any methods for which
+    System.Linq.AsyncEnumerable defines source-compatible replacements, because their continued availability would
+    cause compile-time ambiguity.
+    We retain the code because we continue to make these methods availabe in the runtime assembly (in the lib folder)
+    to provide binary compatibility. This project builds the runtime assembly, so we need to include these methods.
+    -->
+    <DefineConstants>$(DefineConstants);INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES</DefineConstants>
+  </PropertyGroup>
+
   <!--
   These warnings occur because we are deliberately creating a lib/ref mismatch. There doesn't seem to be
   an official way to do that, so we have to suppress the warnings.
@@ -27,8 +38,9 @@
     <!--
     NU5128: lib/ref mismatch. This is deliberate, as explained in the ADR.
     NU5131: spurious missing file errors. It appears that the build is confused by what we're doing.
+    CS0618: Type or member is obsolete - this whole library is essentially obsolete, so internal use of obsolete features is OK and widespread.
     -->
-    <NoWarn>$(NoWarn);NU5128;NU5131</NoWarn>
+    <NoWarn>$(NoWarn);NU5128;NU5131;CS0618</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -57,9 +69,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0' " Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+    <!--<PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0' " Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />-->
     <ProjectReference Include="..\System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
+
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107"
+                      Aliases="SystemLinqAsyncEnumerable" />
+  </ItemGroup>
+
+  <Target Name="_SetAliasOnBuiltInSystemLinqAsyncEnumerable" BeforeTargets="ResolveAssemblyReferences">
+    
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+      <Reference Condition="'%(Reference.AssemblyName)' == 'System.Linq.AsyncEnumerable'">
+        <Aliases>SystemLinqAsyncEnumerable</Aliases>
+      </Reference>
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <Compile Update="System\Linq\AsyncEnumerable.AsyncOverloads.cs">
