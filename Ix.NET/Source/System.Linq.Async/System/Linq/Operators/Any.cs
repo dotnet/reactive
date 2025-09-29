@@ -10,6 +10,8 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.anyasync?view=net-9.0-pp#system-linq-asyncenumerable-anyasync-1(system-collections-generic-iasyncenumerable((-0))-system-threading-cancellationtoken)
         /// <summary>
         /// Determines whether an async-enumerable sequence contains any elements.
         /// </summary>
@@ -33,6 +35,8 @@ namespace System.Linq
                 return await e.MoveNextAsync();
             }
         }
+
+        //https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.anyasync?view=net-9.0-pp#system-linq-asyncenumerable-anyasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean))-system-threading-cancellationtoken)
 
         /// <summary>
         /// Determines whether any element of an async-enumerable sequence satisfies a condition.
@@ -66,6 +70,7 @@ namespace System.Linq
                 return false;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Determines whether any element in an async-enumerable sequence satisfies a condition.
@@ -78,6 +83,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use AnyAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the AnyAwaitAsyncCore functionality now exists as overloads of AnyAsync.")]
         private static ValueTask<bool> AnyAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -103,6 +109,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use AnyAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the AnyAwaitWithCancellationAsync functionality now exists as overloads of AnyAsync.")]
         internal static ValueTask<bool> AnyAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)

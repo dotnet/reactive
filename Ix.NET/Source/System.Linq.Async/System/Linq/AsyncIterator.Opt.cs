@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     internal partial class AsyncIteratorBase<TSource>
     {
         public virtual IAsyncEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector)
@@ -45,5 +44,4 @@ namespace System.Linq
         }
 #endif
     }
-#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

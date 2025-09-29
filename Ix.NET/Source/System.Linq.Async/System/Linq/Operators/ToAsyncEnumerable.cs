@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     public static partial class AsyncEnumerable
     {
         /// <summary>
@@ -301,4 +302,5 @@ namespace System.Linq
             bool ICollection<T>.IsReadOnly => _source.IsReadOnly;
         }
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

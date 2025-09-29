@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "System.Linq.Async.SourceGenerator": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\refs\\System.Linq.Async\\System.Linq.Async.csproj"
+    }
+  }
+}

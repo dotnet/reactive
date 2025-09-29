@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace System.Linq.Internal
 {
-#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     internal class Lookup<TKey, TElement> : ILookup<TKey, TElement>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
     {
         private readonly IEqualityComparer<TKey> _comparer;
@@ -648,5 +647,4 @@ namespace System.Linq.Internal
             return new ValueTask<IAsyncGrouping<TKey, TElement>[]>(array);
         }
     }
-#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }
