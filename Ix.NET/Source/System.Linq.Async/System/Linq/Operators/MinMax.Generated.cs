@@ -53,6 +53,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<int> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -88,6 +89,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="int"/> value.
@@ -176,6 +179,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Int}" /> values.
@@ -258,6 +262,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<int?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -332,6 +337,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Int}"/> value.
@@ -498,6 +505,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="long" /> values.
@@ -541,6 +549,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<long> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -576,6 +585,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="long"/> value.
@@ -664,6 +675,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Long}" /> values.
@@ -746,6 +758,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<long?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -820,6 +833,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Long}"/> value.
@@ -986,6 +1001,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="float" /> values.
@@ -1044,6 +1060,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<float> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1094,6 +1111,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="float"/> value.
@@ -1212,6 +1231,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Float}" /> values.
@@ -1290,6 +1310,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<float?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1360,6 +1381,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Float}"/> value.
@@ -1518,6 +1541,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="double" /> values.
@@ -1576,6 +1600,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<double> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1626,6 +1651,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="double"/> value.
@@ -1744,6 +1771,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Double}" /> values.
@@ -1822,6 +1850,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<double?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1892,6 +1921,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Double}"/> value.
@@ -2050,6 +2081,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="decimal" /> values.
@@ -2093,6 +2125,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<decimal> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2128,6 +2161,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="decimal"/> value.
@@ -2216,6 +2251,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Decimal}" /> values.
@@ -2272,6 +2308,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<decimal?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2320,6 +2357,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Decimal}"/> value.
@@ -2434,6 +2473,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="int" /> values.
@@ -2477,6 +2517,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<int> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2512,6 +2553,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="int"/> value.
@@ -2600,6 +2643,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Int}" /> values.
@@ -2658,6 +2702,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<int?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2708,6 +2753,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Int}"/> value.
@@ -2826,6 +2873,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="long" /> values.
@@ -2869,6 +2917,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<long> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2904,6 +2953,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="long"/> value.
@@ -2992,6 +3043,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Long}" /> values.
@@ -3050,6 +3102,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<long?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3100,6 +3153,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Long}"/> value.
@@ -3218,6 +3273,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="float" /> values.
@@ -3277,6 +3333,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<float> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3328,6 +3385,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="float"/> value.
@@ -3448,6 +3507,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Float}" /> values.
@@ -3522,6 +3582,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<float?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3588,6 +3649,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Float}"/> value.
@@ -3738,6 +3801,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="double" /> values.
@@ -3797,6 +3861,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<double> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3848,6 +3913,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="double"/> value.
@@ -3968,6 +4035,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Double}" /> values.
@@ -4042,6 +4110,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<double?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4108,6 +4177,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Double}"/> value.
@@ -4258,6 +4329,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="decimal" /> values.
@@ -4301,6 +4373,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<decimal> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4336,6 +4409,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="decimal"/> value.
@@ -4424,6 +4499,7 @@ namespace System.Linq
         }
 
 #endif
+
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Decimal}" /> values.
@@ -4480,6 +4556,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<decimal?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4528,6 +4605,8 @@ namespace System.Linq
                 return value;
             }
         }
+
+#endif
 
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Decimal}"/> value.
@@ -4642,5 +4721,6 @@ namespace System.Linq
         }
 
 #endif
+
     }
 }

@@ -10,6 +10,19 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.zip?view=net-9.0-pp#system-linq-asyncenumerable-zip-2(system-collections-generic-iasyncenumerable((-0))-system-collections-generic-iasyncenumerable((-1)))
+
+        /// <summary>
+        /// Merges two async-enumerable sequences into one async-enumerable sequence by combining their elements in a pairwise fashion.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the elements in the result sequence, returned by the selector function.</typeparam>
+        /// <param name="first">First async-enumerable source.</param>
+        /// <param name="second">Second async-enumerable source.</param>
+        /// <returns>An async-enumerable sequence containing the result of pairwise combining the elements of the first and second source using the specified result selector function.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> or <paramref name="selector"/> is null.</exception>
         public static IAsyncEnumerable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second)
         {
             if (first == null)
@@ -30,6 +43,8 @@ namespace System.Linq
                 }
             }
         }
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.zip?view=net-9.0-pp#system-linq-asyncenumerable-zip-3(system-collections-generic-iasyncenumerable((-0))-system-collections-generic-iasyncenumerable((-1))-system-func((-0-1-2)))
 
         /// <summary>
         /// Merges two async-enumerable sequences into one async-enumerable sequence by combining their elements in a pairwise fashion.
@@ -65,6 +80,8 @@ namespace System.Linq
             }
         }
 
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+
         /// <summary>
         /// Merges two async-enumerable sequences into one async-enumerable sequence by combining their elements in a pairwise fashion.
         /// </summary>
@@ -77,6 +94,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing the result of pairwise combining the elements of the first and second source using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> or <paramref name="selector"/> is null.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use Zip. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ZipAwait functionality now exists as overloads of Zip.")]
         private static IAsyncEnumerable<TResult> ZipAwaitCore<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector)
         {
             if (first == null)
@@ -102,6 +120,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Zip. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ZipAwaitWithCancellation functionality now exists as overloads of Zip.")]
         private static IAsyncEnumerable<TResult> ZipAwaitWithCancellationCore<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, CancellationToken, ValueTask<TResult>> selector)
         {
             if (first == null)

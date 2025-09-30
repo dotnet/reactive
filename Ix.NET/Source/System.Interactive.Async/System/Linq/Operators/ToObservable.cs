@@ -6,15 +6,8 @@ using System.Collections.Generic;
 
 namespace System.Linq
 {
-    public static partial class AsyncEnumerable
+    public static partial class AsyncEnumerableEx
     {
-#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
-
-        // Moved to AsyncEnumerableEx in System.Interactive.Async.
-        // System.Linq.AsyncEnumerable has chosen not to implement this. We continue to implement this because
-        // we believe it is a useful feature, but since it's now in the category of LINQ-adjacent functionality
-        // not built into the .NET runtime libraries, it now lives in System.Interactive.Async.
-
         /// <summary>
         /// Converts an async-enumerable sequence to an observable sequence.
         /// </summary>
@@ -86,6 +79,5 @@ namespace System.Linq
                 return ctd;
             }
         }
-#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

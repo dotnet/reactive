@@ -10,6 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Computes the sum of a sequence of <see cref="int" /> values.
         /// </summary>
@@ -40,6 +41,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Computes the sum of a sequence of <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
@@ -51,6 +53,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static ValueTask<int> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -78,18 +81,8 @@ namespace System.Linq
             }
         }
 
-        /// <summary>
-        /// Computes the sum of a sequence of <see cref="int"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        [GenerateAsyncOverload]
-        private static ValueTask<int> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<int> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -117,8 +110,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        [GenerateAsyncOverload]
-        private static ValueTask<int> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<int> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -146,6 +139,7 @@ namespace System.Linq
         }
 #endif
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Computes the sum of a sequence of <see cref="long" /> values.
         /// </summary>
@@ -176,6 +170,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Computes the sum of a sequence of <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
@@ -187,6 +182,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static ValueTask<long> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -214,18 +210,8 @@ namespace System.Linq
             }
         }
 
-        /// <summary>
-        /// Computes the sum of a sequence of <see cref="long"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        [GenerateAsyncOverload]
-        private static ValueTask<long> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<long> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -253,8 +239,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        [GenerateAsyncOverload]
-        private static ValueTask<long> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<long> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -282,6 +268,7 @@ namespace System.Linq
         }
 #endif
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Computes the sum of a sequence of <see cref="float" /> values.
         /// </summary>
@@ -309,6 +296,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Computes the sum of a sequence of <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
@@ -320,6 +308,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static ValueTask<float> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -344,18 +333,8 @@ namespace System.Linq
             }
         }
 
-        /// <summary>
-        /// Computes the sum of a sequence of <see cref="float"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        [GenerateAsyncOverload]
-        private static ValueTask<float> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<float> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -380,8 +359,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        [GenerateAsyncOverload]
-        private static ValueTask<float> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<float> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -406,6 +385,7 @@ namespace System.Linq
         }
 #endif
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Computes the sum of a sequence of <see cref="double" /> values.
         /// </summary>
@@ -433,6 +413,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Computes the sum of a sequence of <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
@@ -444,6 +425,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static ValueTask<double> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -468,18 +450,8 @@ namespace System.Linq
             }
         }
 
-        /// <summary>
-        /// Computes the sum of a sequence of <see cref="double"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        [GenerateAsyncOverload]
-        private static ValueTask<double> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<double> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -504,8 +476,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        [GenerateAsyncOverload]
-        private static ValueTask<double> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<double> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -530,6 +502,7 @@ namespace System.Linq
         }
 #endif
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Computes the sum of a sequence of <see cref="decimal" /> values.
         /// </summary>
@@ -557,6 +530,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Computes the sum of a sequence of <see cref="decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
@@ -568,6 +542,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static ValueTask<decimal> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -592,18 +567,8 @@ namespace System.Linq
             }
         }
 
-        /// <summary>
-        /// Computes the sum of a sequence of <see cref="decimal"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        [GenerateAsyncOverload]
-        private static ValueTask<decimal> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<decimal> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -628,8 +593,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        [GenerateAsyncOverload]
-        private static ValueTask<decimal> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<decimal> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -654,6 +619,7 @@ namespace System.Linq
         }
 #endif
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Int}" /> values.
         /// </summary>
@@ -684,6 +650,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Int}" /> values that are obtained by invoking a transform function on each element of the input sequence.
@@ -695,6 +662,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static ValueTask<int?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -722,18 +690,8 @@ namespace System.Linq
             }
         }
 
-        /// <summary>
-        /// Computes the sum of a sequence of <see cref="Nullable{Int}"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        [GenerateAsyncOverload]
-        private static ValueTask<int?> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<int?> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -761,8 +719,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        [GenerateAsyncOverload]
-        private static ValueTask<int?> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<int?> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -790,6 +748,7 @@ namespace System.Linq
         }
 #endif
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Long}" /> values.
         /// </summary>
@@ -820,6 +779,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Long}" /> values that are obtained by invoking a transform function on each element of the input sequence.
@@ -831,6 +791,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static ValueTask<long?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -858,18 +819,8 @@ namespace System.Linq
             }
         }
 
-        /// <summary>
-        /// Computes the sum of a sequence of <see cref="Nullable{Long}"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        [GenerateAsyncOverload]
-        private static ValueTask<long?> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<long?> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -897,8 +848,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        [GenerateAsyncOverload]
-        private static ValueTask<long?> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<long?> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -926,6 +877,7 @@ namespace System.Linq
         }
 #endif
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Float}" /> values.
         /// </summary>
@@ -953,6 +905,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Float}" /> values that are obtained by invoking a transform function on each element of the input sequence.
@@ -964,6 +917,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static ValueTask<float?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -988,18 +942,8 @@ namespace System.Linq
             }
         }
 
-        /// <summary>
-        /// Computes the sum of a sequence of <see cref="Nullable{Float}"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        [GenerateAsyncOverload]
-        private static ValueTask<float?> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<float?> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1024,8 +968,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        [GenerateAsyncOverload]
-        private static ValueTask<float?> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<float?> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1050,6 +994,7 @@ namespace System.Linq
         }
 #endif
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Double}" /> values.
         /// </summary>
@@ -1077,6 +1022,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Double}" /> values that are obtained by invoking a transform function on each element of the input sequence.
@@ -1088,6 +1034,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static ValueTask<double?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1112,18 +1059,8 @@ namespace System.Linq
             }
         }
 
-        /// <summary>
-        /// Computes the sum of a sequence of <see cref="Nullable{Double}"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        [GenerateAsyncOverload]
-        private static ValueTask<double?> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<double?> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1148,8 +1085,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        [GenerateAsyncOverload]
-        private static ValueTask<double?> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<double?> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1174,6 +1111,7 @@ namespace System.Linq
         }
 #endif
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Decimal}" /> values.
         /// </summary>
@@ -1201,6 +1139,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Decimal}" /> values that are obtained by invoking a transform function on each element of the input sequence.
@@ -1212,6 +1151,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static ValueTask<decimal?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1236,18 +1176,8 @@ namespace System.Linq
             }
         }
 
-        /// <summary>
-        /// Computes the sum of a sequence of <see cref="Nullable{Decimal}"/> values that are obtained by invoking a transform function on each element of the source sequence and awaiting the result.
-        /// </summary>
-        /// <typeparam name="TSource">The type of elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask containing the sum of the values in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        [GenerateAsyncOverload]
-        private static ValueTask<decimal?> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<decimal?> SumAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1272,8 +1202,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        [GenerateAsyncOverload]
-        private static ValueTask<decimal?> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
+        [Obsolete("Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        internal static ValueTask<decimal?> SumAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

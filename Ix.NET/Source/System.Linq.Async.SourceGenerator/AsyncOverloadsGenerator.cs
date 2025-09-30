@@ -63,7 +63,7 @@ namespace System.Linq.Async.SourceGenerator
             // to offer these even though we're decprecating System.Linq.Async, so they migrate into
             // System.Interactive.Async.) In those cases, the containing type is typically AsyncEnumerableEx,
             // but in System.Linq.Async it is AsyncEnumerable. So we need to discover the containing type name.
-            var containingTypeName = grouping.Methods.First().Symbol.ContainingType.Name;
+            var containingTypeName = grouping.Methods.FirstOrDefault()?.Symbol.ContainingType.Name ?? "AsyncEnumerable";
 
             var overloads = new StringBuilder();
             overloads.AppendLine("#nullable enable");

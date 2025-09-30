@@ -331,7 +331,12 @@ foreach (var overload in new[] {
 #>
         [Obsolete("Use <#=m#>ByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by <#=m#><#=suffix#>Async now exists as an overload of <#=m#>ByAsync.")]
 <#
+    } else {
+#>
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+<#
     }
+
 #>
         <#=visibility#> static ValueTask<<#=t#>> <#=m#><#=suffix#>Async<#=core#><TSource>(this IAsyncEnumerable<TSource> source, <#=overload.selector#> selector, CancellationToken cancellationToken = default)
         {
@@ -589,6 +594,15 @@ foreach (var overload in new[] {
     {
 #>
 #endif
+
+<#
+    }
+
+    if (!(isDeepCancellation || isAsync))
+    {
+#>
+#endif
+
 <#
     }
 }

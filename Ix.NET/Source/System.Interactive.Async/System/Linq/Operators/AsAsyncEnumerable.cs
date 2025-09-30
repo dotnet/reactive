@@ -10,7 +10,7 @@ namespace System.Linq
     {
         // NB: Synchronous LINQ to Objects doesn't hide the implementation of the source either.
 
-        // Note: this was previous in System.Linq.Async, but since .NET 10.0's System.Linq.AsyncEnumerable chose not to
+        // Note: this was previously in System.Linq.Async, but since .NET 10.0's System.Linq.AsyncEnumerable chose not to
         // implement it (even though Enumerable.AsEnumerable exists), we moved it into System.Interactive.Async so that
         // it remains available even after developers remove their dependency on the deprecated System.Linq.Async.
 
