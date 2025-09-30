@@ -24,7 +24,7 @@ namespace System.Linq
     /// the old version defined in the deprecated <c>System.Linq.Async</c> package) will continue to provide the
     /// same (unsupported) behaviour.
     /// </remarks>
-    public interface IAsyncIListProvider<TElement> : IAsyncEnumerable<TElement>
+    internal interface IAsyncIListProvider<TElement> : IAsyncEnumerable<TElement>
     {
         /// <summary>
         /// Produce an array of the sequence through an optimized path.

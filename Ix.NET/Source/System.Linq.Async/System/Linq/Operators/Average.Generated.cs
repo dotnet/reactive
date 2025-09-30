@@ -95,6 +95,7 @@ namespace System.Linq
                 }
             }
         }
+#endif
 
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="int"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
@@ -108,6 +109,7 @@ namespace System.Linq
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<double> AverageAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -144,6 +146,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<double> AverageAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -177,7 +180,6 @@ namespace System.Linq
                 }
             }
         }
-#endif
 #endif
 
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
@@ -265,6 +267,7 @@ namespace System.Linq
                 }
             }
         }
+#endif
 
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="int"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
@@ -278,6 +281,7 @@ namespace System.Linq
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<double> AverageAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -314,6 +318,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<double> AverageAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -347,7 +352,6 @@ namespace System.Linq
                 }
             }
         }
-#endif
 #endif
 
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
@@ -435,6 +439,7 @@ namespace System.Linq
                 }
             }
         }
+#endif
 
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="int"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
@@ -448,6 +453,7 @@ namespace System.Linq
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<float> AverageAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -484,6 +490,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<float> AverageAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -517,7 +524,6 @@ namespace System.Linq
                 }
             }
         }
-#endif
 #endif
 
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
@@ -605,6 +611,7 @@ namespace System.Linq
                 }
             }
         }
+#endif
 
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="int"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
@@ -618,6 +625,7 @@ namespace System.Linq
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<double> AverageAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -654,6 +662,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<double> AverageAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -687,7 +696,6 @@ namespace System.Linq
                 }
             }
         }
-#endif
 #endif
 
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
@@ -775,6 +783,7 @@ namespace System.Linq
                 }
             }
         }
+#endif
 
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="int"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
@@ -788,6 +797,7 @@ namespace System.Linq
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<decimal> AverageAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -824,6 +834,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<decimal> AverageAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -857,7 +868,6 @@ namespace System.Linq
                 }
             }
         }
-#endif
 #endif
 
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
@@ -961,6 +971,7 @@ namespace System.Linq
                 return null;
             }
         }
+#endif
 
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="int"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
@@ -974,6 +985,7 @@ namespace System.Linq
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<double?> AverageAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1018,6 +1030,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<double?> AverageAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1059,7 +1072,6 @@ namespace System.Linq
                 return null;
             }
         }
-#endif
 #endif
 
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
@@ -1163,6 +1175,7 @@ namespace System.Linq
                 return null;
             }
         }
+#endif
 
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="int"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
@@ -1176,6 +1189,7 @@ namespace System.Linq
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<double?> AverageAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1220,6 +1234,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<double?> AverageAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1261,7 +1276,6 @@ namespace System.Linq
                 return null;
             }
         }
-#endif
 #endif
 
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
@@ -1365,6 +1379,7 @@ namespace System.Linq
                 return null;
             }
         }
+#endif
 
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="int"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
@@ -1378,6 +1393,7 @@ namespace System.Linq
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<float?> AverageAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1422,6 +1438,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<float?> AverageAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1463,7 +1480,6 @@ namespace System.Linq
                 return null;
             }
         }
-#endif
 #endif
 
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
@@ -1567,6 +1583,7 @@ namespace System.Linq
                 return null;
             }
         }
+#endif
 
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="int"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
@@ -1580,6 +1597,7 @@ namespace System.Linq
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<double?> AverageAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1624,6 +1642,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<double?> AverageAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1665,7 +1684,6 @@ namespace System.Linq
                 return null;
             }
         }
-#endif
 #endif
 
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
@@ -1769,6 +1787,7 @@ namespace System.Linq
                 return null;
             }
         }
+#endif
 
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="int"/> values that are obtained by invoking an asynchronous transform function on each element of the source sequence and awaiting the result.
@@ -1782,6 +1801,7 @@ namespace System.Linq
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<decimal?> AverageAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1826,6 +1846,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         private static ValueTask<decimal?> AverageAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1867,7 +1888,6 @@ namespace System.Linq
                 return null;
             }
         }
-#endif
 #endif
 
     }

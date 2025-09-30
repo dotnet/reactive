@@ -18,11 +18,10 @@ namespace System.Linq
         /// </summary>
         /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
         /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
-        /// <typeparam name="TResult">The type of the elements in the result sequence, returned by the selector function.</typeparam>
         /// <param name="first">First async-enumerable source.</param>
         /// <param name="second">Second async-enumerable source.</param>
         /// <returns>An async-enumerable sequence containing the result of pairwise combining the elements of the first and second source using the specified result selector function.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> or <paramref name="selector"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
         public static IAsyncEnumerable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second)
         {
             if (first == null)

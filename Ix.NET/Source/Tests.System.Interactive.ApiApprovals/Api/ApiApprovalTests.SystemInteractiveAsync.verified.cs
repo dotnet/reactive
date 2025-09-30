@@ -1,7 +1,7 @@
 ﻿[assembly: System.CLSCompliant(true)]
 [assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName=".NET 6.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v8.0", FrameworkDisplayName=".NET 8.0")]
 namespace System.Linq
 {
     public static class AsyncEnumerableEx
@@ -9,6 +9,17 @@ namespace System.Linq
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Amb<TSource>(params System.Collections.Generic.IAsyncEnumerable<TSource>[] sources) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Amb<TSource>(this System.Collections.Generic.IEnumerable<System.Collections.Generic.IAsyncEnumerable<TSource>> sources) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Amb<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> first, System.Collections.Generic.IAsyncEnumerable<TSource> second) { }
+        public static System.Collections.Generic.IAsyncEnumerable<TSource> AsAsyncEnumerable<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source) { }
+        public static System.Threading.Tasks.ValueTask<decimal> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, decimal> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<float> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<decimal?> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, decimal?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double?> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<float?> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double?> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double?> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long?> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Collections.Generic.IAsyncEnumerable<System.Collections.Generic.IList<TSource>> Buffer<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, int count) { }
         public static System.Collections.Generic.IAsyncEnumerable<System.Collections.Generic.IList<TSource>> Buffer<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, int count, int skip) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Catch<TSource>(params System.Collections.Generic.IAsyncEnumerable<TSource>[] sources) { }
@@ -98,6 +109,9 @@ namespace System.Linq
         public static System.Collections.Generic.IAsyncEnumerable<TSource> StartWith<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, params TSource[] values) { }
         public static System.Collections.Generic.IAsyncEnumerable<TValue> Throw<TValue>(System.Exception exception) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Timeout<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.TimeSpan timeout) { }
+        public static System.Collections.Generic.IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this System.IObservable<TSource> source) { }
+        public static System.Collections.Generic.IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this System.Threading.Tasks.Task<TSource> task) { }
+        public static System.IObservable<TSource> ToObservable<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Using<TSource, TResource>(System.Func<System.Threading.Tasks.Task<TResource>> resourceFactory, System.Func<TResource, System.Threading.Tasks.ValueTask<System.Collections.Generic.IAsyncEnumerable<TSource>>> enumerableFactory)
             where TResource : System.IDisposable { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Using<TSource, TResource>(System.Func<TResource> resourceFactory, System.Func<TResource, System.Collections.Generic.IAsyncEnumerable<TSource>> enumerableFactory)

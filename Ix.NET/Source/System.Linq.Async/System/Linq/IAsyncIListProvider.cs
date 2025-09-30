@@ -19,7 +19,7 @@ namespace System.Linq
     /// its own version of this interface. We can't replace this with a type forwarder here because that would risk creating a
     /// circular dependency in cases where an application managed to get out-of-sync versions of the two packages.
     /// </remarks>
-    [Obsolete("Use the definition of this type in the System.Interactive.Async NuGet package System.Linq.Async instead.")] // Can't use a type forwarder because 
+    [Obsolete("This interface was always unsupported, and the IAsyncEnumerable<T> LINQ implementation in System.Linq.AsyncEnumerable does not recognize it, so this no longer serves a purpose")]
     public interface IAsyncIListProvider<TElement> : IAsyncEnumerable<TElement>
     {
         /// <summary>
