@@ -10,6 +10,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.longcountasync?view=net-9.0-pp#system-linq-asyncenumerable-longcountasync-1(system-collections-generic-iasyncenumerable((-0))-system-threading-cancellationtoken)
+
         /// <summary>
         /// Returns an async-enumerable sequence containing an <see cref="long" /> that represents the total number of elements in an async-enumerable sequence.
         /// </summary>
@@ -42,6 +45,8 @@ namespace System.Linq
                 return count;
             }
         }
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.longcountasync?view=net-9.0-pp#system-linq-asyncenumerable-longcountasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean))-system-threading-cancellationtoken)
 
         /// <summary>
         /// Returns an async-enumerable sequence containing an <see cref="long" /> that represents how many elements in the specified async-enumerable sequence satisfy a condition.
@@ -80,6 +85,7 @@ namespace System.Linq
                 return count;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Returns an async-enumerable sequence containing a <see cref="long" /> that represents the number of elements in the specified async-enumerable sequence that satisfy a condition.
@@ -92,6 +98,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use LongCountAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the LongCountAwaitAsync functionality now exists as overloads of LongCountAsync.")]
         private static ValueTask<long> LongCountAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -122,6 +129,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use LongCountAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the LongCountAwaitWithCancellationAsync functionality now exists as overloads of LongCountAsync.")]
         private static ValueTask<long> LongCountAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)

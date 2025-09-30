@@ -57,7 +57,7 @@ namespace System.Linq
         /// <returns>A sequence of async-enumerable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupByAwaitCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) =>
             new GroupedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer: null);
 
@@ -72,18 +72,18 @@ namespace System.Linq
         /// <returns>A sequence of async-enumerable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupByAwaitCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer) =>
             new GroupedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer);
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupByAwaitWithCancellationCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) =>
             new GroupedAsyncEnumerableWithTaskAndCancellation<TSource, TKey>(source, keySelector, comparer: null);
 
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupByAwaitWithCancellationCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer) =>
             new GroupedAsyncEnumerableWithTaskAndCancellation<TSource, TKey>(source, keySelector, comparer);
 #endif
@@ -140,7 +140,7 @@ namespace System.Linq
         /// <returns>A sequence of async-enumerable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupByAwaitCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector) =>
             new GroupedAsyncEnumerableWithTask<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null);
 
@@ -157,18 +157,18 @@ namespace System.Linq
         /// <returns>A sequence of async-enumerable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> or <paramref name="comparer"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupByAwaitCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer) =>
             new GroupedAsyncEnumerableWithTask<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupByAwaitWithCancellationCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector) =>
             new GroupedAsyncEnumerableWithTaskAndCancellation<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null);
 
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupByAwaitWithCancellationCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer) =>
             new GroupedAsyncEnumerableWithTaskAndCancellation<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
 #endif
@@ -194,7 +194,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence of results obtained by invoking and awaiting the result-selector function on each group.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<TResult> GroupByAwaitCore<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, ValueTask<TResult>> resultSelector) =>
             new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer: null);
 
@@ -211,18 +211,18 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence of results obtained by invoking and awaiting the result-selector function on each group.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="resultSelector"/> or <paramref name="comparer"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<TResult> GroupByAwaitCore<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer) =>
             new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer);
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<TResult> GroupByAwaitWithCancellationCore<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, CancellationToken, ValueTask<TResult>> resultSelector) =>
             new GroupedResultAsyncEnumerableWithTaskAndCancellation<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer: null);
 
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<TResult> GroupByAwaitWithCancellationCore<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, CancellationToken, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer) =>
             new GroupedResultAsyncEnumerableWithTaskAndCancellation<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer);
 #endif
@@ -252,7 +252,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence of results obtained by invoking the result selector function on each group and awaiting the result.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<TResult> GroupByAwaitCore<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, ValueTask<TResult>> resultSelector) =>
             new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TElement, TResult>(source, keySelector, elementSelector, resultSelector, comparer: null);
 
@@ -271,18 +271,18 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence of results obtained by invoking the result selector function on each group and awaiting the result.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> or <paramref name="resultSelector"/> or <paramref name="comparer"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<TResult> GroupByAwaitCore<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer) =>
             new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TElement, TResult>(source, keySelector, elementSelector, resultSelector, comparer);
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<TResult> GroupByAwaitWithCancellationCore<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, CancellationToken, ValueTask<TResult>> resultSelector) =>
             new GroupedResultAsyncEnumerableWithTaskAndCancellation<TSource, TKey, TElement, TResult>(source, keySelector, elementSelector, resultSelector, comparer: null);
 
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwait and GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
+        [Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupByAwaitWithCancellationAsync functionality now exists as overloads of GroupBy.")]
         private static IAsyncEnumerable<TResult> GroupByAwaitWithCancellationCore<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, CancellationToken, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer) =>
             new GroupedResultAsyncEnumerableWithTaskAndCancellation<TSource, TKey, TElement, TResult>(source, keySelector, elementSelector, resultSelector, comparer);
 #endif

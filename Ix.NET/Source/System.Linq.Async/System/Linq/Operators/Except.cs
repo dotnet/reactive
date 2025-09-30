@@ -10,6 +10,11 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.except?view=net-9.0-pp
+        //
+        // These two overloads are replaced by the single method above, which takes a comparer, but supplies a default
+        // value of null.
         /// <summary>
         /// Produces the set difference of two async-enumerable sequences by using the default equality comparer to compare values.
         /// </summary>
@@ -57,5 +62,6 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

@@ -83,7 +83,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
-        [Obsolete("Use AnyAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the AnyAwaitAsyncCore functionality now exists as overloads of AnyAsync.")]
+        [Obsolete("Use AnyAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the AnyAwaitAsync functionality now exists as overloads of AnyAsync.")]
         private static ValueTask<bool> AnyAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)

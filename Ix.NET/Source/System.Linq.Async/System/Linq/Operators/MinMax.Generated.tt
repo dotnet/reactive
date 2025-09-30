@@ -33,6 +33,7 @@ foreach (var m in new[] { "Max", "Min" })
             typeStr = "Nullable{" + t.Substring(0, 1).ToUpper() + t.Substring(1, t.Length - 2) + "}";
         }
 #>
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the <#=extremum#> value in an async-enumerable sequence of <see cref="<#=typeStr#>" /> values.
         /// </summary>
@@ -288,6 +289,7 @@ foreach (var m in new[] { "Max", "Min" })
 #>
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
 <#
 foreach (var overload in new[] {
@@ -299,7 +301,7 @@ foreach (var overload in new[] {
     var isAsync = overload.invoke.StartsWith("await");
     var isDeepCancellation = overload.selector.Contains("CancellationToken");
     var suffix = isAsync ? "Await" : "";
-    var visibility = isAsync ? "internal" : "public";
+    var visibility = isAsync ? "private" : "public";
     var core = isAsync ? "Core" : "";
 
     if (isDeepCancellation)
@@ -307,6 +309,27 @@ foreach (var overload in new[] {
         suffix += "WithCancellation";
 #>
 #if !NO_DEEP_CANCELLATION
+        [GenerateAsyncOverload]
+<#
+    } else if (isAsync)
+    {
+#>
+        /// <summary>
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="<#=typeStr#>"/> value.
+        /// </summary>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
+        [GenerateAsyncOverload]
+<#
+    }
+    if (isDeepCancellation || isAsync)
+    {
+#>
+        [Obsolete("Use <#=m#>ByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by <#=m#><#=suffix#>Async now exists as an overload of <#=m#>ByAsync.")]
 <#
     }
 #>

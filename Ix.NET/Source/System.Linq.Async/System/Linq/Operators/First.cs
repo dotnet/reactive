@@ -10,6 +10,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.firstasync?view=net-9.0-pp#system-linq-asyncenumerable-firstasync-1(system-collections-generic-iasyncenumerable((-0))-system-threading-cancellationtoken)
+
         /// <summary>
         /// Returns the first element of an async-enumerable sequence.
         /// </summary>
@@ -33,6 +36,8 @@ namespace System.Linq
                 return first.HasValue ? first.Value : throw Error.NoElements();
             }
         }
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.firstasync?view=net-9.0-pp#system-linq-asyncenumerable-firstasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean))-system-threading-cancellationtoken)
 
         /// <summary>
         /// Returns the first element of an async-enumerable sequence that satisfies the condition in the predicate.
@@ -60,6 +65,10 @@ namespace System.Linq
                 return first.HasValue ? first.Value : throw Error.NoElements();
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.firstasync?view=net-9.0-pp#system-linq-asyncenumerable-firstasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-threading-cancellationtoken-system-threading-tasks-valuetask((system-boolean))))-system-threading-cancellationtoken)
+        // That only offers the async-with-cancellation callback overload, but the simpler form offers no additional functionality.
 
         /// <summary>
         /// Returns the first element of an async-enumerable sequence that satisfies the condition in the predicate.
@@ -72,6 +81,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         /// <exception cref="InvalidOperationException">No element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use FirstAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the FirstAwaitAsync functionality now exists as overloads of FirstAsync.")]
         private static ValueTask<TSource> FirstAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -91,6 +101,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use FirstAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the FirstAwaitWithCancellationAsync functionality now exists as overloads of FirstAsync.")]
         internal static ValueTask<TSource> FirstAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)

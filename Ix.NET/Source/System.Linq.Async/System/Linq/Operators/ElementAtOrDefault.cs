@@ -10,6 +10,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.elementatordefaultasync?view=net-9.0-pp#system-linq-asyncenumerable-elementatordefaultasync-1(system-collections-generic-iasyncenumerable((-0))-system-int32-system-threading-cancellationtoken)
+
         /// <summary>
         /// Returns the element at a specified index in a sequence or a default value if the index is out of range.
         /// </summary>
@@ -65,5 +68,6 @@ namespace System.Linq
                 return default;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

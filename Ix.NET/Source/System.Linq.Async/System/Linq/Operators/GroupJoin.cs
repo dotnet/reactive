@@ -10,6 +10,10 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.groupjoin?view=net-9.0-pp#system-linq-asyncenumerable-groupjoin-4(system-collections-generic-iasyncenumerable((-0))-system-collections-generic-iasyncenumerable((-1))-system-func((-0-2))-system-func((-1-2))-system-func((-0-system-collections-generic-ienumerable((-1))-3))-system-collections-generic-iequalitycomparer((-2)))
+        // The method above covers the next two overloads because it supplies a default null value for comparer.
+
         /// <summary>
         /// Correlates the elements of two async-enumerable sequences based on equality of keys and groups the results. The default equality comparer is used to compare keys.
         /// </summary>
@@ -75,12 +79,15 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         [GenerateAsyncOverload]
+        [Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupJoinAwait functionality now exists as overloads of GroupJoin.")]
         private static IAsyncEnumerable<TResult> GroupJoinAwaitCore<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector) =>
             GroupJoinAwaitCore<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer: null);
 
         [GenerateAsyncOverload]
+        [Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupJoinAwait functionality now exists as overloads of GroupJoin.")]
         private static IAsyncEnumerable<TResult> GroupJoinAwaitCore<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer)
         {
             if (outer == null)
@@ -117,10 +124,12 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupJoinAwaitWithCancellation functionality now exists as overloads of GroupJoin.")]
         private static IAsyncEnumerable<TResult> GroupJoinAwaitWithCancellationCore<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector, Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, CancellationToken, ValueTask<TResult>> resultSelector) =>
             GroupJoinAwaitWithCancellationCore<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer: null);
 
         [GenerateAsyncOverload]
+        [Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupJoinAwaitWithCancellation functionality now exists as overloads of GroupJoin.")]
         private static IAsyncEnumerable<TResult> GroupJoinAwaitWithCancellationCore<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector, Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, CancellationToken, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer)
         {
             if (outer == null)
