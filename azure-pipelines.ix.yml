@@ -35,6 +35,7 @@ stages:
       displayName: Use .NET Core 10.x SDK
       inputs:
         version: 10.x
+        includePreviewVersions: true
 
     - task: UseDotNet@2
       displayName: .NET 8.0 runtime
