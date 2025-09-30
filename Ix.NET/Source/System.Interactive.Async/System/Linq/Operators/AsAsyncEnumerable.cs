@@ -6,15 +6,13 @@ using System.Collections.Generic;
 
 namespace System.Linq
 {
-    public static partial class AsyncEnumerable
-        // NB: Synchronous LINQ to Objects doesn't hide the implementation of the source either.
+    public static partial class AsyncEnumerableEx
     {
-#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
-        // Note: this one isn't actually in the System.Linq.AsyncEnumerable package, so we've moved it
-        // to System.Interactive.Async because that's the home for LINQ-like implementations for
-        // IAsyncEnumerable<T> that aren't in the runtime libraries.
-        // It therefore remains available only for runtime binary compatibility, and is no longer
-        // visible in System.Linq.Async at compile time.
+        // NB: Synchronous LINQ to Objects doesn't hide the implementation of the source either.
+
+        // Note: this was previous in System.Linq.Async, but since .NET 10.0's System.Linq.AsyncEnumerable chose not to
+        // implement it (even though Enumerable.AsEnumerable exists), we moved it into System.Interactive.Async so that
+        // it remains available even after developers remove their dependency on the deprecated System.Linq.Async.
 
         /// <summary>
         /// Hides the identity of an async-enumerable sequence.
@@ -24,6 +22,5 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence that hides the identity of the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IAsyncEnumerable<TSource> AsAsyncEnumerable<TSource>(this IAsyncEnumerable<TSource> source) => source;
-#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

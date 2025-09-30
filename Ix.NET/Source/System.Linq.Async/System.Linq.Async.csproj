@@ -70,13 +70,22 @@
 
   <ItemGroup>
     <!--<PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0' " Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />-->
+
+    <!--
+    System.Linq.Async is being deprecated by System.Linq.AsyncEnumerable (part of .NET 10, but available to older runtimes via NuGet)
+    but System.Linq.AsyncEnumerable does not include all of System.Linq.Async's functionality. We're moving that functionality into
+    System.Interactive.Async, because that is the home of IAsyncEnumerable features that are LINQ-adjacent but not build into
+    the .NET runtime libraries.
+    By referencing System.Interactive.Async here, we make that functionality available to users of System.Linq.Async until such
+    time as they remove their reference to this library.
+    -->
+    <ProjectReference Include="..\System.Interactive.Async\System.Interactive.Async.csproj" Aliases="SystemInteractiveAsync" />
     <ProjectReference Include="..\System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
 
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
-    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107"
-                      Aliases="SystemLinqAsyncEnumerable" />
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107" Aliases="SystemLinqAsyncEnumerable" />
   </ItemGroup>
 
   <Target Name="_SetAliasOnBuiltInSystemLinqAsyncEnumerable" BeforeTargets="ResolveAssemblyReferences">
@@ -146,6 +155,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Where.Opt.Generated.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
 </Project>

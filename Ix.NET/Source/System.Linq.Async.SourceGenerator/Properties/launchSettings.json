@@ -1,11 +1,12 @@
 {
   "profiles": {
-    "System.Linq.Async.SourceGenerator": {
-      "commandName": "Project"
-    },
-    "Profile 1": {
+    "System.Linq.Async": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "..\\refs\\System.Linq.Async\\System.Linq.Async.csproj"
+      "targetProject": "..\\System.Linq.Async\\System.Linq.Async.csproj"
+    },
+    "System.Interactive.Async": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\System.Interactive.Async\\System.Interactive.Async.csproj"
     }
   }
 }

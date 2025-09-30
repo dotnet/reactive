@@ -41,6 +41,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!--
+    System.Linq.Async brings in a transitive dependency on System.Interactive.Async, because in normal use,
+    the methods in System.Linq.Async that are not in System.Linq.AsyncEnumerable are now used via their new
+    home in System.Interactive.Async. However, there's a complication: for binary compatibility we retain these
+    methods in the System.Linq.Async runtime assemblies (lib), removing them from the ref assemblies so that
+    they are invisible at compile time. However, that trick works only for references via the NuGet package; this
+    test project has a direct project reference to System.Linq.Async meaning that it can see all the methods that
+    are deliberately hidden at compile time in normal use. This particular test project actually wants to test
+    those hidden methods (because we still need to ensure that code relying on the binary compatibility will work).
+    So we set an alias on System.Interactive.Async to avoid picking up its extension methods unless we explicitly want to.
+    -->
+    <ProjectReference Include="..\System.Interactive.Async\System.Interactive.Async.csproj">
+      <Aliases>SystemInteractiveAsync</Aliases>
+    </ProjectReference>
     <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
   </ItemGroup>
 
@@ -50,8 +64,7 @@
   So although we get this references transitively (or automatically on .NET 10.0+) we need to put them explicitly here to set aliases.
   -->
   <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
-    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107"
-                      Aliases="SystemLinqAsyncEnumerable" />
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107" Aliases="SystemLinqAsyncEnumerable" />
   </ItemGroup>
 
   <Target Name="_SetAliasOnBuiltInSystemLinqAsyncEnumerable" BeforeTargets="ResolveAssemblyReferences">

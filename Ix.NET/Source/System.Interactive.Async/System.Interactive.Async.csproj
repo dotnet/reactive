@@ -28,4 +28,27 @@
     <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="System\Linq\Operators\Average.Generated.cs">
+      <DependentUpon>Average.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="System\Linq\Operators\Average.Generated.tt">
+      <LastGenOutput>Average.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
 </Project>

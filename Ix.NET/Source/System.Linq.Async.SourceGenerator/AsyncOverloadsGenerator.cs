@@ -57,12 +57,20 @@ namespace System.Linq.Async.SourceGenerator
                 ? compilationUnit.Usings.ToString()
                 : string.Empty;
 
+            // This source generator gets used not just in System.Linq.Async, but also for code that has migrated from
+            // System.Linq.Async to System.Interactive.Async. (E.g., we define overloads of AverageAsync that accept
+            // selector callbacks. The .NET runtime library implementation offers no equivalents. We want to continue
+            // to offer these even though we're decprecating System.Linq.Async, so they migrate into
+            // System.Interactive.Async.) In those cases, the containing type is typically AsyncEnumerableEx,
+            // but in System.Linq.Async it is AsyncEnumerable. So we need to discover the containing type name.
+            var containingTypeName = grouping.Methods.First().Symbol.ContainingType.Name;
+
             var overloads = new StringBuilder();
             overloads.AppendLine("#nullable enable");
             overloads.AppendLine(usings);
             overloads.AppendLine("namespace System.Linq");
             overloads.AppendLine("{");
-            overloads.AppendLine("    partial class AsyncEnumerable");
+            overloads.AppendLine($"    partial class {containingTypeName}");
             overloads.AppendLine("    {");
 
             foreach (var method in grouping.Methods)

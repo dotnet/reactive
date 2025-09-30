@@ -14,7 +14,19 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    public static partial class AsyncEnumerable
+<#
+// Although .NET 10.0's System.Linq.AsyncEnumerable defines AverageAsync, it is missing some features that were previously defined in System.Linq.Async:
+//  Overloads of AverageAsync accepting a selector function (e.g. xs.AverageAsync(x => x.Value))
+//  The AverageAwaitAsync variants accepting an async selector function returning a ValueTask
+//  The AverageAwaitWithCancellationAsync variant where an async selector function accepts a CancellationToken
+// Since we are deprecating System.Linq.Async, these methods are now available there only in the runtime (lib) assemblies and not the
+// ref assemblies. So they are available for binary backwards compatibility, but are not visible during compilation. This is necessary
+// to ensure that code now gets the .NET 10 implementations of AverageAsync where available. But we want to enable code that was using
+// the functionality that .NET 10 did not replicate to be able to continue to work after removing the reference to System.Linq.Async.
+// So we've moved the relevant functionality back into System.Interactive.Async because that has always been the home of LINQ-like
+// features for IAsyncEnumerable<T> that aren't part of the core LINQ functionality.
+#>
+    public static partial class AsyncEnumerableEx
     {
 <#
 var os = new[]
@@ -50,86 +62,6 @@ foreach (var o in os)
         typeStr = "Nullable{" + o.type.Substring(0, 1).ToUpper() + o.type.Substring(1, o.type.Length - 2) + "}";
     }
 #>
-#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
-        /// <summary>
-        /// Computes the average of an async-enumerable sequence of <see cref="<#=typeStr#>" /> values.
-        /// </summary>
-        /// <param name="source">A sequence of <see cref="<#=typeStr#>" /> values to calculate the average of.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>An async-enumerable sequence containing a single element with the average of the sequence of values.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
-        public static ValueTask<<#=o.res#>> AverageAsync(this IAsyncEnumerable<<#=o.type#>> source, CancellationToken cancellationToken = default)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return Core(source, cancellationToken);
-
-            static async ValueTask<<#=o.res#>> Core(IAsyncEnumerable<<#=o.type#>> source, CancellationToken cancellationToken)
-            {
-<#
-if (isNullable)
-{
-#>
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
-                {
-                    while (await e.MoveNextAsync())
-                    {
-                        var v = e.Current;
-                        if (v.HasValue)
-                        {
-                            <#=o.sum#> sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync())
-                                {
-                                    v = e.Current;
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return <#=res#>;
-                        }
-                    }
-                }
-
-                return null;
-<#
-}
-else
-{
-#>
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
-                {
-                    if (!await e.MoveNextAsync())
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    <#=o.sum#> sum = e.Current;
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync())
-                        {
-                            sum += e.Current;
-                            ++count;
-                        }
-                    }
-
-                    return <#=res#>;
-                }
-<#
-}
-#>
-            }
-        }
 
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="<#=typeStr#>" /> values that are obtained by invoking a transform function on each element of the input sequence.
@@ -377,7 +309,6 @@ else
 #>
             }
         }
-#endif
 #endif
 
 <#

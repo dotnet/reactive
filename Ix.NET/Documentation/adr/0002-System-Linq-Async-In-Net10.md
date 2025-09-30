@@ -41,4 +41,10 @@ The next `System.Linq.Async` release will:
 5. TBD `IAsyncIListProvider` relocate?
 6. continue to provide the full API in the `lib` assemblies to provide binary compatibility
 
+Note that not all of the XxxAwaitAsync and XxxAwaitWithCancellationAsync are handled the same way. In some cases, these now have replacements. E.g. System.Linq.AsyncEnumerable replaces AggregateAwaitAsync with an overload of AggregateAsync. So System.Linq.Async's ref assembly continues to make AggregateAwaitAsync available but marks it as Obsolete, telling you to use AggregateAsync instead. But there are some methods for which no replacement exists. We move these into System.Interactive.Async, because that's where `IAsyncEnumerable<T>` features that have no equivalents in the .NET runtime libraries live. E.g., although `System.Linq.AsyncEnumerable` defines `AverageAsync`, it does not offer the same range of functionality as `System.Linq.Async` previously did: overloads taking selectors (both sync and async). These methods become hidden in `System.Linq.Async` (available only for binary compatibility) and they have moved to `AsyncEnumerableEx` in `System.Interactive.Async`, and `System.Linq.Async` now adds a transitive reference to `System.Interactive.Async` in order to ensure continued source compatibility until such time as people update their NuGet references.
 
+combinations:
+
+* Method hidden in ref, available in `System.Linq.AsyncEnumerable`
+* Method hidden in ref, available in `System.Interactive.Async`
+* Method visible but marked as `Obsolete`
