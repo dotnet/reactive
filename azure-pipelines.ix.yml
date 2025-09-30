@@ -32,14 +32,14 @@ stages:
       vmImage: windows-latest
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 8.x SDK
+      displayName: Use .NET Core 10.x SDK
       inputs:
-        version: 8.x
+        version: 10.x
 
     - task: UseDotNet@2
-      displayName: .NET 6.0 runtime
+      displayName: .NET 8.0 runtime
       inputs:
-        version: '6.x'
+        version: '8.x'
         packageType: runtime
 
     - task: DotNetCoreCLI@2
