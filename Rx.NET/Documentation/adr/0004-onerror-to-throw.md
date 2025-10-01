@@ -27,9 +27,9 @@ Proposed
 
 ## Context
 
-Exceptions may appear to be ordinary .NET objects, but they get special handling from the runtime. MSIL has a [`throw`](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.emit.opcodes.throw?view=net-9.0) instruction for the purpose of raising exceptions, and there is C++ code inside the CLR that directly manipulates certains fields defined by the `Exception` class. Certain expectations around the use of exception types are baked deeply into the runtime.
+Exceptions may appear to be ordinary .NET objects, but they get special handling from the runtime. MSIL has a [`throw`](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.emit.opcodes.throw?view=net-9.0) instruction for the purpose of raising exceptions, and there is C++ code inside the CLR that directly manipulates fields defined by the `Exception` class. Certain expectations around the use of exception types are baked deeply into the runtime.
 
-Rx does not generally use exceptions in the way the runtime expects. In particular it does not use the MSIL `throw` instruction to raise an exception. Instead, when an Rx `IObservable<T>` wants to report an error, it just passes an exception object as an argument to the `IObserver<T>.OnError` method.
+Rx does not generally use exceptions in the way the runtime expects. In particular it does not normally use the MSIL `throw` instruction to raise an exception. Instead, when an Rx `IObservable<T>` wants to report an error, it just passes an exception object as an argument to the `IObserver<T>.OnError` method.
 
 This causes no problems when an application remains entirely within Rx's world. But when we want to move into the more conventional .NET approach of throwing exceptions, it raises an interesting question: where should the exception appear to originate from? 
 
@@ -196,7 +196,7 @@ System.Exception: Kaboom!
 
 This appending of exception data is by design: `ExceptionDispatchInfo.Throw` is intended to append the current context to whatever was captured in the `ExceptionDispatchInfo`. The .NET runtime assumes that if you want to represent a new exceptional event that you will execute a `throw`. Rx does not do this in `await` (or other mechanisms that can rethrow an exception delivered through `OnError` such as `ToEnumerable`) precisely because it preserves whatever context was present when it received the exception. It does not perform a `throw` (or do anything else to reset the exception context) because this would prevent the full context being preserved in examples such as the `FileNotFoundException` handling shown earlier.
 
-This behaviour makes sense in the context for which it was designed—capturing the context in which an exception was initially thrown and augmenting it with additional information if it is rethrown from a different context. But unless you are aware of that, it's not at all obvious that although there's nothing inherently wrong with using `Observable.Throw<int>()`, it is not compatible with subscribers that will rethrow the exception.
+This behaviour makes sense in the context for which it was designed—capturing the context in which an exception was initially thrown and augmenting it with additional information if it is rethrown from a different context. But unless you are aware of that, it's not at all obvious that although there's nothing inherently wrong with using `Observable.Throw<int>()`, it is not compatible with having multiple subscribers that will each rethrow the exception.
 
 
 ## Decision
@@ -207,9 +207,9 @@ Rx.NET will explicitly adopt this position: if a developer using Rx chooses to u
 
 or
 
-* the exception's dispatch state is reset prior to being supplied to Rx (e.g., by executing a `throw`)
+* the exception's dispatch state is reset prior to being supplied to the observer that will be rethrowing it (e.g., by executing a `throw`)
 
-Since Rx defines operators that won't conform to the first option (notably `Observable.Throw`, but also `ReplaySubject` and the related `Observable.Replay`) Rx 6.1 introduces a new operator, `CaptureExceptionDispatchState`, which passes all notifications through, but effectively performs a `throw` on any `Exception` before forwarding it. It can be used like this:
+Since Rx defines operators that won't conform to the first option (notably `Observable.Throw`, but also `ReplaySubject` and the related `Observable.Replay`) Rx 6.1 introduces a new operator, `CaptureExceptionDispatchState`. This passes all notifications through, but effectively performs a `throw` on any `Exception` before forwarding it. It can be used like this:
 
 ```cs
 var ts = Observable.Throw<int>(new Exception("Aaargh!")).CaptureExceptionDispatchState();
@@ -222,6 +222,6 @@ When an observer subscribes to this, the `Throw` immediately calls `OnError`, an
 
 By adopting this position, we make it clear that examples such as the one in [#2187](https://github.com/dotnet/reactive/issues/2187) are not expected to work correctly.
 
-More generally, this clarifies that observable sources that repeatedly produce the same exception object (e.g. `Observable.Throw` or `Observable.Repeat`) are incompatible with `await`.
+More generally, this clarifies that observable sources that repeatedly produce the same exception object (e.g. `Observable.Throw` or `Observable.Repeat`) are incompatible with multiple calls to `await`.
 
 The addition of the `CaptureExceptionDispatchState` operator provides a clear, simple way to fix code that runs into this problem.
