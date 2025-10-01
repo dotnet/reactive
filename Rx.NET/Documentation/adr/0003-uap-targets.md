@@ -161,12 +161,12 @@ The provides references to the .NET runtime library components. (So this provide
 So this enables normal .NET code to compile. However, Rx.NET also includes code that uses some UWP-specific APIs. (After all, a large part of the issue we're dealing with here exists because of features like schedulers that support UWP dispatchers.) And for that to work, the compiler needs access to `.winmd` files with the metadata for these APIs. So we have this:
 
 ```xml
-<ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.19041.0\Windows.winmd" />
+<ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.22621.0\Windows.winmd" />
 ```
 
 This relies on the `TargetPlatformSdkPath` build variable being set. When building locally (either in Visual Studio, or with `dotnet build` from the command line) this variable is set correctly, but for some reason it doesn't seem to be set on the build agents. So we set this as an environment variable in the `azure-pipelines.rx.yml` build pipeline definition.
 
-You might be wondering about that 19041 in there. Why is that not 18362, consistent with the TFM? This is because, as mentioned earlier, Azure DevOps Windows build agents have only certain Windows SDK versions installed. They don't have 18362. but they do have the 19041 version, and we can use that to target `10.0.18362`.
+You might be wondering about that 22621 in there. Why is that not 18362, consistent with the TFM? This is because, as mentioned earlier, Azure DevOps Windows build agents have only certain Windows SDK versions installed. They don't have 18362. but the `windows-2025` image does have the 22621 version, and we can use that to target `10.0.18362`.
 
 
 #### Prevent Over-Zealous WinRT Interop Code Generation

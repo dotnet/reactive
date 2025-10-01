@@ -2354,7 +2354,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Min(x => new string(x.ToCharArray().Reverse().ToArray())));
+            var res = scheduler.Start(() => xs.Min(x => new string(x.ToCharArray().AsEnumerable().Reverse().ToArray())));
 
             res.Messages.AssertEqual(
                 OnNext(240, "oof"),
@@ -2378,7 +2378,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Min(x => new string(x.ToCharArray().Reverse().ToArray()), new ReverseComparer<string>(Comparer<string>.Default)));
+            var res = scheduler.Start(() => xs.Min(x => new string(x.ToCharArray().AsEnumerable().Reverse().ToArray()), new ReverseComparer<string>(Comparer<string>.Default)));
 
             res.Messages.AssertEqual(
                 OnNext(240, "xuq"),

@@ -25,7 +25,7 @@ stages:
   jobs:
   - job: Build
     pool:
-      vmImage: windows-latest
+      vmImage: windows-2025
 
     variables:
       BuildConfiguration: Release
