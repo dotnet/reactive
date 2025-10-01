@@ -32,7 +32,7 @@ stages:
       BuildPlatform: Any CPU
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
       # TODO: work out why the build doesn't set TargetPlatformSdkPath correctly on the build agent
-      TargetPlatformSdkPath: 'C:\Program Files (x86)\Windows Kits\10\'
+      #TargetPlatformSdkPath: 'C:\Program Files (x86)\Windows Kits\10\'
 
     steps:
     - powershell: |
