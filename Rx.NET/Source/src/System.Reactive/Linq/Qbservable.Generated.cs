@@ -2,6 +2,7 @@
  * WARNING: Auto-generated file (merged on 04/19/2023)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
+
 #nullable enable
 #pragma warning disable 1591
 
@@ -1236,6 +1237,30 @@ namespace System.Reactive.Linq
                     source.Expression,
                     GetSourceExpression(bufferOpenings),
                     bufferClosingSelector
+                )
+            );
+        }
+
+        /// <summary>
+        /// Propagates all messages, but if <paramref name="source" /> produces an error, this updates the dispatch state
+        /// of the <see cref="Exception" /> to reflect the current execution context (by executing a
+        /// <see langword="throw" /> or equivalent operation) before passing the notification on.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <returns>The source sequence with the exception dispatch state modifying behavior applied.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is null.</exception>
+        public static IQbservable<TSource> ResetExceptionDispatchState<TSource>(this IQbservable<TSource> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    source.Expression
                 )
             );
         }
@@ -10794,10 +10819,10 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Projects each element of an observable sequence to an observable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
+        /// Projects each element of an observable sequence to an enumerable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <typeparam name="TCollection">The type of the elements in the projected intermediate sequences.</typeparam>
+        /// <typeparam name="TCollection">The type of the elements in the projected intermediate enumerable sequences.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate sequence elements.</typeparam>
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="collectionSelector">A transform function to apply to each element.</param>
@@ -10826,10 +10851,10 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Projects each element of an observable sequence to an observable sequence by incorporating the element's index, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
+        /// Projects each element of an observable sequence to an enumerable sequence by incorporating the element's index, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <typeparam name="TCollection">The type of the elements in the projected intermediate sequences.</typeparam>
+        /// <typeparam name="TCollection">The type of the elements in the projected intermediate enumerable sequences.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate sequence elements.</typeparam>
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="collectionSelector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
@@ -10858,10 +10883,10 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Projects each element of an observable sequence to an enumerable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
+        /// Projects each element of an observable sequence to an observable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <typeparam name="TCollection">The type of the elements in the projected intermediate enumerable sequences.</typeparam>
+        /// <typeparam name="TCollection">The type of the elements in the projected intermediate sequences.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate sequence elements.</typeparam>
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="collectionSelector">A transform function to apply to each element.</param>
