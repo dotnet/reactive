@@ -2354,6 +2354,11 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
+            // Note: AsEnumerable required because on .NET 10 SDK (C# 14) but when targetting .NET 8, we hit the
+            // issue at https://github.com/dotnet/runtime/issues/107723 and don't have access to the fix
+            // implemented in https://github.com/dotnet/runtime/pull/107957
+            // When test projects no longer target any version of .NET older than 10.0, we can revert this,
+            // removing the AsEnumerable.
             var res = scheduler.Start(() => xs.Min(x => new string(x.ToCharArray().AsEnumerable().Reverse().ToArray())));
 
             res.Messages.AssertEqual(
@@ -2378,6 +2383,11 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
+            // Note: AsEnumerable required because on .NET 10 SDK (C# 14) but when targetting .NET 8, we hit the
+            // issue at https://github.com/dotnet/runtime/issues/107723 and don't have access to the fix
+            // implemented in https://github.com/dotnet/runtime/pull/107957
+            // When test projects no longer target any version of .NET older than 10.0, we can revert this,
+            // removing the AsEnumerable.
             var res = scheduler.Start(() => xs.Min(x => new string(x.ToCharArray().AsEnumerable().Reverse().ToArray()), new ReverseComparer<string>(Comparer<string>.Default)));
 
             res.Messages.AssertEqual(
