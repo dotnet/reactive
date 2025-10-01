@@ -36,8 +36,9 @@ stages:
 
     steps:
     - powershell: |
-        gci -r 'C:\Program Files (x86)\'
-        gci -r 'C:\Program Files\'
+        gci 'C:\Program Files (x86)\'
+        gci 'C:\Program Files\'
+        gci -r 'C:\Program Files (x86)\Windows Kits\'
 
     - task: UseDotNet@2
       displayName: Use .NET 9.0.x SDK
