@@ -31,15 +31,8 @@ stages:
       BuildConfiguration: Release
       BuildPlatform: Any CPU
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-      # TODO: work out why the build doesn't set TargetPlatformSdkPath correctly on the build agent
-      #TargetPlatformSdkPath: 'C:\Program Files (x86)\Windows Kits\10\'
 
     steps:
-    - powershell: |
-        gci 'C:\Program Files (x86)\'
-        gci 'C:\Program Files\'
-        gci -r 'C:\Program Files (x86)\Windows Kits\'
-
     - task: UseDotNet@2
       displayName: Use .NET 9.0.x SDK
       inputs:
