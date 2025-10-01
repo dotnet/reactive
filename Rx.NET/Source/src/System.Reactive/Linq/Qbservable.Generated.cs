@@ -1251,7 +1251,7 @@ namespace System.Reactive.Linq
         /// <returns>The source sequence with the exception dispatch state modifying behavior applied.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        public static IQbservable<TSource> CaptureExceptionDispatchState<TSource>(this IQbservable<TSource> source)
+        public static IQbservable<TSource> ResetExceptionDispatchState<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

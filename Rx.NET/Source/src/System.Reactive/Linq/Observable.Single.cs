@@ -134,7 +134,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region + CaptureExceptionDispatchState +
+        #region + ResetExceptionDispatchState +
 
         /// <summary>
         /// Propagates all messages, but if <paramref name="source"/> produces an error, this updates the dispatch state
@@ -145,14 +145,14 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <returns>The source sequence with the exception dispatch state modifying behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IObservable<TSource> CaptureExceptionDispatchState<TSource>(this IObservable<TSource> source)
+        public static IObservable<TSource> ResetExceptionDispatchState<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.CaptureExceptionDispatchState(source);
+            return s_impl.ResetExceptionDispatchState(source);
         }
 
         #endregion

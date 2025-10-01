@@ -209,13 +209,13 @@ or
 
 * the exception's dispatch state is reset prior to being supplied to the observer that will be rethrowing it (e.g., by executing a `throw`)
 
-Since Rx defines operators that won't conform to the first option (notably `Observable.Throw`, but also `ReplaySubject` and the related `Observable.Replay`) Rx 6.1 introduces a new operator, `CaptureExceptionDispatchState`. This passes all notifications through, but effectively performs a `throw` on any `Exception` before forwarding it. It can be used like this:
+Since Rx defines operators that won't conform to the first option (notably `Observable.Throw`, but also `ReplaySubject` and the related `Observable.Replay`) Rx 6.1 introduces a new operator, `ResetExceptionDispatchState`. This passes all notifications through, but effectively performs a `throw` on any `Exception` before forwarding it. It can be used like this:
 
 ```cs
-var ts = Observable.Throw<int>(new Exception("Aaargh!")).CaptureExceptionDispatchState();
+var ts = Observable.Throw<int>(new Exception("Aaargh!")).ResetExceptionDispatchState();
 ```
 
-When an observer subscribes to this, the `Throw` immediately calls `OnError`, and the `CaptureExceptionDispatchState` will throw (and immediately catch) that exception before passing it on to the subscriber. (You would _not_ use this in scenarios such as the `Create` example shown earlier, because in that case each exception is freshly thrown, and has useful contextual information so we don't want to reset that. This is for use specifically in cases where the exception would not otherwise be thrown.)
+When an observer subscribes to this, the `Throw` immediately calls `OnError`, and the `ResetExceptionDispatchState` will throw (and immediately catch) that exception before passing it on to the subscriber. (You would _not_ use this in scenarios such as the `Create` example shown earlier, because in that case each exception is freshly thrown, and has useful contextual information so we don't want to reset that. This is for use specifically in cases where the exception would not otherwise be thrown.)
 
 
 ## Consequences
@@ -224,4 +224,4 @@ By adopting this position, we make it clear that examples such as the one in [#2
 
 More generally, this clarifies that observable sources that repeatedly produce the same exception object (e.g. `Observable.Throw` or `Observable.Repeat`) are incompatible with multiple calls to `await`.
 
-The addition of the `CaptureExceptionDispatchState` operator provides a clear, simple way to fix code that runs into this problem.
+The addition of the `ResetExceptionDispatchState` operator provides a clear, simple way to fix code that runs into this problem.

@@ -582,7 +582,7 @@ namespace System.Reactive.Linq
         IObservable<TSource> AsObservable<TSource>(IObservable<TSource> source);
         IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, int count);
         IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, int count, int skip);
-        IObservable<TSource> CaptureExceptionDispatchState<TSource>(IObservable<TSource> source);
+        IObservable<TSource> ResetExceptionDispatchState<TSource>(IObservable<TSource> source);
         IObservable<TSource> Dematerialize<TSource>(IObservable<Notification<TSource>> source);
         IObservable<TSource> DistinctUntilChanged<TSource>(IObservable<TSource> source);
         IObservable<TSource> DistinctUntilChanged<TSource>(IObservable<TSource> source, IEqualityComparer<TSource> comparer);

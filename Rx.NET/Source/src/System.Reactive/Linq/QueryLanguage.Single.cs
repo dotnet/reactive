@@ -77,11 +77,11 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region + CaptureExceptionDispatchState +
+        #region + ResetExceptionDispatchState +
 
-        public virtual IObservable<TSource> CaptureExceptionDispatchState<TSource>(IObservable<TSource> source)
+        public virtual IObservable<TSource> ResetExceptionDispatchState<TSource>(IObservable<TSource> source)
         {
-            return new CaptureExceptionDispatchState<TSource>(source);
+            return new ResetExceptionDispatchState<TSource>(source);
         }
 
         #endregion

@@ -4,11 +4,11 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal class CaptureExceptionDispatchState<TSource> : Producer<TSource, CaptureExceptionDispatchState<TSource>._>
+    internal class ResetExceptionDispatchState<TSource> : Producer<TSource, ResetExceptionDispatchState<TSource>._>
     {
         private readonly IObservable<TSource> _source;
 
-        public CaptureExceptionDispatchState(IObservable<TSource> source)
+        public ResetExceptionDispatchState(IObservable<TSource> source)
         {
             _source = source;
         }
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     // ExceptionDispatchInfo.Throw in scenarios where we convert an OnError to the raising of an
                     // actual exception (e.g., when code uses await on an IObservable<T>), the use of a singleton
                     // exception object results in ever-growing StackTrace strings. The purpose of the
-                    // CaptureExceptionDispatchState is to execute the throw that ExceptionDispatchInfo.Throw
+                    // ResetExceptionDispatchState is to execute the throw that ExceptionDispatchInfo.Throw
                     // expects to have happened.
                     throw error;
                 }

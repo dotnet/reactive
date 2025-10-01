@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 namespace ReactiveTests.Tests
 {
     [TestClass]
-    public class CaptureExceptionDispatchStateTest
+    public class ResetExceptionDispatchStateTest
     {
 
         [TestMethod]
-        public async Task CaptureExceptionDispatchState_Throw_Consistent_StackTrace_On_Await()
+        public async Task ResetExceptionDispatchState_Throw_Consistent_StackTrace_On_Await()
         {
-            var ts = Observable.Throw<int>(new Exception("Aaargh!")).CaptureExceptionDispatchState();
+            var ts = Observable.Throw<int>(new Exception("Aaargh!")).ResetExceptionDispatchState();
 
             string stackTrace = null;
             for (int i = 0; i < 3; i++)
@@ -43,11 +43,11 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public async Task CaptureExceptionDispatchState_Replay_Consistent_StackTrace_On_Await()
+        public async Task ResetExceptionDispatchState_Replay_Consistent_StackTrace_On_Await()
         {
             var cts = Observable.Throw<int>(new Exception("Aaargh!"), CurrentThreadScheduler.Instance).Replay(1);
             cts.Connect();
-            var ts = cts.CaptureExceptionDispatchState();
+            var ts = cts.ResetExceptionDispatchState();
 
             string stackTrace = null;
             for (int i = 0; i < 3; i++)
