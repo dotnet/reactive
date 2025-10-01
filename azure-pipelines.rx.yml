@@ -35,6 +35,9 @@ stages:
       TargetPlatformSdkPath: 'C:\Program Files (x86)\Windows Kits\10\'
 
     steps:
+    - powershell: |
+        gci -r -i Windows.md 'C:\Program Files (x86)\'
+
     - task: UseDotNet@2
       displayName: Use .NET 9.0.x SDK
       inputs:
