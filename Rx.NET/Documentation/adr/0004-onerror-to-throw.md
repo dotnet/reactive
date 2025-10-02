@@ -69,7 +69,7 @@ File name: 'c:\temp\test.txt'
    at System.Reactive.Subjects.AsyncSubject`1.GetResult()
    at Program.<Main>$(String[] args) in D:\source\RxThrowExamples\RxThrowExamples\Program.cs:line 13
    at Program.<Main>(String[] args)
-   ```
+```
 
 This is straightforward because the exception here is thrown in the conventional .NET manner. It happens to be caught by Rx—this overload of `Observable.Create` wraps the `Task` returned by the callback in an adapter that detects when the `Task` enters a faulted state, in which case it extracts the exception and passes it to the subscribing `IObserver<T>`. And then the awaiter that Rx provides when you `await` an observable rethrows this same exception.
 
@@ -154,7 +154,7 @@ It occurs as a direct result of the steps Rx takes to produce the stack trace we
 
 This behaviour is not peculiar to Rx. It originates from `ExceptionDispatchInfo.Throw` and we can create a `Task`-based version of this behaviour without using Rx:
 
-```
+```cs
 Exception ox = new("Kaboom!");
 
 for (int i = 0; i < 3; ++i)
