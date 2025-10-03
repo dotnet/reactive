@@ -1,11 +1,12 @@
 {
-  "version": "6.1.0-preview.{height}",
+  "version": "6.1",
   "publicReleaseRefSpec": [
     "^refs/heads/main$", // we release out of main
     "^refs/heads/rel/v\\d+\\.\\d+", // we also release branches starting with rel/vN.N
     "^refs/heads/rel/rx-v\\d+\\.\\d+" // we also release branches starting with rel/vN.N
   ],
-  "nugetPackageVersion":{
+  "nugetPackageVersion": {
     "semVer": 2
-  }
+  },
+  "versionHeightOffset": -1 // For reasons I continue not to understand, without this nbgv makes the first version 6.1.1 instead of 6.1.0
 }
