@@ -21,7 +21,20 @@ The `CancellationDisposable` class offers an integration point between the .NET 
 
 ## `CompositeDisposable`
 
-The `CompositeDisposable` type allows you to treat many disposable resources as one. You can create an instance of `CompositeDisposable` by passing in a <code>params</code> array of disposable resources. Calling `Dispose` on the `CompositeDisposable` will call dispose on each of these resources in the order they were provided. Additionally, the `CompositeDisposable` class implements `ICollection<IDisposable>`; this allows you to add and remove resources from the collection. After the `CompositeDisposable` has been disposed of, any further resources that are added to this collection will be disposed of instantly. Any item that is removed from the collection is also disposed of, regardless of whether the collection itself has been disposed of. This includes usage of both the `Remove` and `Clear` methods.
+The `CompositeDisposable` type allows you to treat many disposable resources as one. You can create an instance of `CompositeDisposable` by passing in a <code>params</code> array of disposable resources. You can also add disposable resources to an existing `CompositeDisposable` instance by calling its `Add` method. Calling `Dispose` on the `CompositeDisposable` will call dispose on each of these resources in the order they were provided. Additionally, the `CompositeDisposable` class implements `ICollection<IDisposable>`; this allows you to add and remove resources from the collection. After the `CompositeDisposable` has been disposed of, any further resources that are added to this collection will be disposed of instantly. Any item that is removed from the collection is also disposed of, regardless of whether the collection itself has been disposed of. This includes usage of both the `Remove` and `Clear` methods.
+
+The `System.Reactive.Disposables.Fluent` namespace defines an extension method called `DisposeWith`, available on any `IDisposable`, for use with `CompositeDisposable`, providing another way to add disposable resources. The typical usage for this is to add subscriptions, e.g.:
+
+```cs
+CompositeDisposable d = new();
+
+someObservable1.Subscribe(myObserver1)
+    .DisposeWith(d);
+someObservable2.Subscribe(myObserver2)
+    .DisposeWith(d);
+```
+
+This has exactly the same effect as if we had used `Add`, but it supports the 'fluent' style of development in which we build up behaviour by chaining together multiple method calls. `DisposeWith` returns its argument, enabling further calls to be chained on if you wish.
 
 ## `ContextDisposable`
 `ContextDisposable` allows you to enforce that disposal of a resource is performed on a given `SynchronizationContext`. The constructor requires both a `SynchronizationContext` and an `IDisposable` resource. When the `Dispose` method is invoked on the `ContextDisposable`, the provided resource will be disposed of on the specified context.
