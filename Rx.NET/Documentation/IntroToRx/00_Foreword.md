@@ -51,4 +51,23 @@ The version that this book has been written against is `System.Reactive` version
 
 So, fire up Visual Studio and let's get started.
 
+# Edition History
+
+## 1st edition
+
+The original book written by Lee Campbell.
+
+## 2nd edition
+
+Updated and revised by Ian Griffiths to align with the Rx v6.0 release.
+
+## 3rd edition
+
+Updates for Rx v6.1:
+
+* Documented new `TakeUntil(CancellationToken)` overload
+* Documented new `DiposeWith` extension method for `IDisposable`
+* Documented new `ResetExceptionDispatchState` operator
+* Added guidance to clarify rules around reusing exception objects in scenarios where Rx will rethrow them
+
 ---
