@@ -77,6 +77,15 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + ResetExceptionDispatchState +
+
+        public virtual IObservable<TSource> ResetExceptionDispatchState<TSource>(IObservable<TSource> source)
+        {
+            return new ResetExceptionDispatchState<TSource>(source);
+        }
+
+        #endregion
+
         #region + Dematerialize +
 
         public virtual IObservable<TSource> Dematerialize<TSource>(IObservable<Notification<TSource>> source)
