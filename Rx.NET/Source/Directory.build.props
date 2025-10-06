@@ -34,8 +34,9 @@
     
     <PackageReference
       Include="Nerdbank.GitVersioning"
-      Version="3.6.143"
-      PrivateAssets="all" />
+      Version="3.8.118"
+      PrivateAssets="all"
+      Condition="$(ProjectName) != 'Tests.System.Reactive.Uwp.DeviceRunner'" />
   </ItemGroup>
 
   <ItemGroup>
