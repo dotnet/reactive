@@ -25,7 +25,7 @@
          practice, we're not doing that, and we don't expect to change this code much in the future, so it
          shouldn't happen.
     -->
-    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.19041.0\Windows.winmd" />
+    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.26100.0\Windows.winmd" />
   </ItemGroup>
 
   <ItemGroup>
