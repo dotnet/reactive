@@ -133,7 +133,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
-    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.19041.0\Windows.winmd" />
+    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.26100.0\Windows.winmd" />
   </ItemGroup>
 
 </Project>
