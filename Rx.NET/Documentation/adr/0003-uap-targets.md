@@ -137,7 +137,7 @@ Also note that the package validation tooling (which we use to ensure that `Syst
 </Target>
 ```
 
-This also set the target platform moniker to indicate that this is a Windows-specific TFM, something that the package validation tooling doesn't seem to understand otherwise. (But we do need the target platform identifier to be `UAP` earlier on in the build for various other things to work, which is why we only switch this just before package validation runs.)
+This also sets the target platform moniker to indicate that this is a Windows-specific TFM, something that the package validation tooling doesn't seem to understand otherwise. (But we do need the target platform identifier to be `UAP` earlier on in the build for various other things to work, which is why we only switch this just before package validation runs.)
 
 
 #### Compiler Constants
