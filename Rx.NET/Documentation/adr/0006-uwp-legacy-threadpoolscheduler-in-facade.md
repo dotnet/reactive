@@ -14,7 +14,7 @@ Proposed
 
 ## Context
 
-As described in [ADR 0004](0004-package-split.md), the [`System.Reactive` NuGet package](https://www.nuget.org/packages/System.Reactive/) is no longer the main Rx.NET package. `System.Reactive.Net` is now the main package, with all UI-framework-specific functionality moved into separate packages. This means applications only get support for a UI framework if they asked for it. This fixes a long-standing problem in which self-contained applications using Rx would get a complete copy of the WPF and Windows Forms frameworks even if they used neither.
+As described in [ADR 0005](0005-package-split.md), the [`System.Reactive` NuGet package](https://www.nuget.org/packages/System.Reactive/) is no longer the main Rx.NET package. `System.Reactive.Net` is now the main package, with all UI-framework-specific functionality moved into separate packages. This means applications only get support for a UI framework if they asked for it. This fixes a long-standing problem in which self-contained applications using Rx would get a complete copy of the WPF and Windows Forms frameworks even if they used neither.
 
 The [`System.Reactive`](https://www.nuget.org/packages/System.Reactive/) package still exists of course, but its purpose is now backwards compatibility. It is marked as obsolete, to encourage people to move on to the new `System.Reactive.Net` component (and, if required, to add reference to whichever UI-framework-specific Rx.NET integration components they require).
 

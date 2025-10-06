@@ -21,7 +21,7 @@
   <!--
   API compatibility validation.
 
-  See ADR 0006-api-compatibility-verification.md for more information about this configuration.
+  See ADR 0007-api-compatibility-verification.md for more information about this configuration.
   -->
 
   <PropertyGroup>

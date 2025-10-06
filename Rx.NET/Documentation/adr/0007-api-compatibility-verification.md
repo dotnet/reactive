@@ -15,7 +15,7 @@ Proposed
 
 ## Context
 
-The `System.Reactive` component was previously the main Rx.NET component. Unfortunately, for the reasons described in [ADR-0004](0004-package-split.md), it was necessary to demote this package, to enable the UI-framework-specific components to be removed from the main Rx.NET package. `System.Reactive` now has just one job: to provide backwards compatibility. This means it must offer the same API surface area as the v6.0 release.
+The `System.Reactive` component was previously the main Rx.NET component. Unfortunately, for the reasons described in [ADR-0005](0005-package-split.md), it was necessary to demote this package, to enable the UI-framework-specific components to be removed from the main Rx.NET package. `System.Reactive` now has just one job: to provide backwards compatibility. This means it must offer the same API surface area as the v6.0 release.
 
 Additionally, we require that the new main Rx.NET component, `System.Reactive.Net`, maintains backwards compatibility with previous versions. Of course, the very first version to ship will be a special case: there are no older versions with which to maintain binary compatibility. For this first version, the mechanism guaranteeing that `System.Reactive.Net` provides full Rx.NET functionality is the fact that the v7 `System.Reactive` legacy component is compatible with its v6 predecessor: in order for that component to provide full backwards compatibility, all of the Rx.NET v6 functionality must be present _somewhere_ in Rx.NET v7. But once v7.0.0 ships, we will need a mechanism to ensure that all future versions are compatible.
 
