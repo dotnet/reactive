@@ -32,7 +32,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="DiffPlex" Version="1.8.0" />
+    <PackageReference Include="DiffPlex" Version="1.9.0" />
     <PackageReference Include="PublicApiGenerator" Version="11.4.6" />
   </ItemGroup>
 
@@ -41,8 +41,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="DiffPlex" Version="1.9.0" />
-    <PackageReference Include="PublicApiGenerator" Version="11.4.6" />
   </ItemGroup>
 
 </Project>
