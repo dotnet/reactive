@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#if HAS_WPF
 extern alias SystemReactive;
 using SystemReactive::System.Reactive.Concurrency;
 using SystemReactive::System.Reactive.Disposables;
@@ -32,7 +33,7 @@ namespace System.Reactive.Concurrency
             get
             {
                 var dispatcher = System.Windows.Threading.Dispatcher.FromThread(Thread.CurrentThread)
-                    ?? throw new InvalidOperationException(Strings_WindowsThreading.NO_DISPATCHER_CURRENT_THREAD);
+                    ?? throw new InvalidOperationException(Strings_Wpf_WindowsThreading.NO_DISPATCHER_CURRENT_THREAD);
                 return new DispatcherScheduler(dispatcher);
             }
         }
@@ -212,3 +213,4 @@ namespace System.Reactive.Concurrency
         }
     }
 }
+#endif

@@ -100,7 +100,7 @@ namespace System.Reactive.Linq
                     var dataSubscription = data.DefaultIfEmpty().Subscribe(obs);
                     var connection = data.Connect();
 
-                    return StableCompositeDisposable.CreateTrusted(progressSubscription, dataSubscription, connection);
+                    return StableUncheckedCompositeDisposable.CreateTrusted(progressSubscription, dataSubscription, connection);
                 }).ToTask(ct);
             });
         }
@@ -223,7 +223,7 @@ namespace System.Reactive.Linq
                     var dataSubscription = resultSelector(data).Subscribe(obs);
                     var connection = data.Connect();
 
-                    return StableCompositeDisposable.CreateTrusted(progressSubscription, dataSubscription, connection);
+                    return StableUncheckedCompositeDisposable.CreateTrusted(progressSubscription, dataSubscription, connection);
                 }).ToTask(ct);
             });
         }

@@ -25,21 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Strings_WindowsThreading.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Strings_WindowsThreading.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Strings_WindowsThreading.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings_WindowsThreading.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
   </ItemGroup>
 

@@ -3,24 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 #if WINDOWS
-
-extern alias SystemReactive;
-using SystemReactive::System.Reactive.Disposables;
-using System.Reactive.WindowsRuntime;
+using System.Reactive.Disposables;
 using System.Runtime.ExceptionServices;
 using System.Threading;
-
 using Windows.System;
 using Windows.UI.Core;
-#if HAS_OS_XAML
-using Windows.UI.Xaml;
-#endif
-
-using IScheduler = SystemReactive::System.Reactive.Concurrency.IScheduler;
-using ISchedulerPeriodic = SystemReactive::System.Reactive.Concurrency.ISchedulerPeriodic;
-using LocalScheduler = SystemReactive::System.Reactive.Concurrency.LocalScheduler;
-using Scheduler = SystemReactive::System.Reactive.Concurrency.Scheduler;
-
 
 namespace System.Reactive.Concurrency
 {
@@ -41,7 +28,7 @@ namespace System.Reactive.Concurrency
         public CoreDispatcherScheduler(CoreDispatcher dispatcher)
         {
             Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
-            Priority = CoreDispatcherPriority.Normal;
+            Priority = CoreDispatcherPriority.Normal;           
         }
 
         /// <summary>
@@ -119,7 +106,7 @@ namespace System.Reactive.Concurrency
                         // For scheduler implementation guidance rules, see TaskPoolScheduler.cs
                         // in System.Reactive.PlatformServices\Reactive\Concurrency.
                         //
-
+                        
                         var timer = CreateDispatcherQueue().CreateTimer();
                         timer.Interval = TimeSpan.Zero;
 
@@ -142,12 +129,12 @@ namespace System.Reactive.Concurrency
 
         private DispatcherQueue CreateDispatcherQueue()
         {
-            if (_dispatcherQueue != null)
+            if(_dispatcherQueue != null)
             {
                 return _dispatcherQueue;
             }
 
-            if (Dispatcher.HasThreadAccess)
+            if(Dispatcher.HasThreadAccess)
             {
                 _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
                 return _dispatcherQueue;

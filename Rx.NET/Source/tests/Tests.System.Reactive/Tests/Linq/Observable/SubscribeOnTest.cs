@@ -10,7 +10,7 @@ using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-#if HAS_DISPATCHER
+#if HAS_WPF
 using System.Windows.Threading;
 using System.Reactive;
 using System.Reactive.Subjects;
@@ -45,7 +45,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => ControlObservable.SubscribeOn<int>(someObservable, default(Label)));
 #pragma warning restore IDE0034
 #endif
-#if HAS_DISPATCHER
+#if HAS_WPF
 #pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overload being tested.
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default(IObservable<int>), new DispatcherScheduler(Dispatcher.CurrentDispatcher)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(someObservable, default(DispatcherScheduler)));
@@ -130,7 +130,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#if HAS_DISPATCHER
+#if HAS_WPF
         [TestMethod]
         [Asynchronous]
         public void SubscribeOn_Dispatcher()

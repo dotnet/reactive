@@ -19,17 +19,17 @@ namespace System.Reactive {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Strings_WindowsThreading {
+    internal class Strings_PlatformServices {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Strings_WindowsThreading() {
+        internal Strings_PlatformServices() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace System.Reactive {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.For.WindowsRuntime.Strings_WindowsThreading", typeof(Strings_WindowsThreading).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Platforms.WinRT.Strings_PlatformServices", typeof(Strings_PlatformServices).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,20 +61,11 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disposables collection can not contain null values..
+        ///   Looks up a localized string similar to The WinRT thread pool doesn&apos;t support creating periodic timers with a period below 1 millisecond..
         /// </summary>
-        internal static string DISPOSABLES_CANT_CONTAIN_NULL {
+        internal static string WINRT_NO_SUB1MS_TIMERS {
             get {
-                return ResourceManager.GetString("DISPOSABLES_CANT_CONTAIN_NULL", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No current Window object found to obtain a CoreDispatcher from..
-        /// </summary>
-        internal static string NO_WINDOW_CURRENT {
-            get {
-                return ResourceManager.GetString("NO_WINDOW_CURRENT", resourceCulture);
+                return ResourceManager.GetString("WINRT_NO_SUB1MS_TIMERS", resourceCulture);
             }
         }
     }

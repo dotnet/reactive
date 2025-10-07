@@ -3,16 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 #if WINDOWS
-extern alias SystemReactive;
-using SystemReactive::System.Reactive.Concurrency;
-
+using System.Reactive.Concurrency;
 using Windows.UI.Core;
 
-#if HAS_OS_XAML
+#if IS_UAP
 using Windows.UI.Xaml;
 #endif
-
-using CoreDispatcherScheduler = System.Reactive.Concurrency.CoreDispatcherScheduler;
 
 namespace System.Reactive.Linq
 {
@@ -71,7 +67,7 @@ namespace System.Reactive.Linq
             return Synchronization.ObserveOn(source, new CoreDispatcherScheduler(dispatcher, priority));
         }
 
-#if HAS_OS_XAML
+#if IS_UAP
         /// <summary>
         /// Wraps the source sequence in order to run its observer callbacks on the dispatcher associated with the specified object.
         /// </summary>
@@ -213,7 +209,7 @@ namespace System.Reactive.Linq
             return Synchronization.SubscribeOn(source, new CoreDispatcherScheduler(dispatcher, priority));
         }
 
-#if HAS_OS_XAML
+#if IS_UAP
         /// <summary>
         /// Wraps the source sequence in order to run its subscription and unsubscription logic on the dispatcher associated with the specified object.
         /// </summary>

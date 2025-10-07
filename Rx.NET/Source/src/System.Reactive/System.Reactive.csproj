@@ -58,6 +58,13 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
+    <!-- TODO:
+    Should we be using
+    <CsWinRTWindowsMetadata>10.0.19041.0</CsWinRTWindowsMetadata>
+    See
+    https://learn.microsoft.com/en-us/windows/apps/develop/platform/csharp-winrt/#common-errors-and-troubleshooting
+    Or https://github.com/microsoft/CsWinRT ?
+    -->
     <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.26100.0\Windows.winmd" />
 
   </ItemGroup>
@@ -76,10 +83,10 @@
       <DependentUpon>Platforms\Windows\Strings_WindowsThreading.resx</DependentUpon>
     </None>
     <None Update="Platforms\Windows\Strings_PlatformServices.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
-    <None Update="Platforms\UWP\Strings_PlatformServices.Designer.cs" DesignTime="True" AutoGen="True">
+    <None Update="Platforms\WinRT\Strings_PlatformServices.Designer.cs" DesignTime="True" AutoGen="True">
       <DependentUpon>Strings_PlatformServices.resx</DependentUpon>
     </None>
-    <None Update="Platforms\UWP\Strings_PlatformServices.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
+    <None Update="Platforms\WinRT\Strings_PlatformServices.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
   </ItemGroup>
 
 
@@ -92,13 +99,13 @@
   -->
 
   <!-- UWP -->
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0'))">
-    <Compile Include="Platforms\UWP\**\*.cs" />
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <Compile Include="Platforms\WinRT\**\*.cs" />
 
-    <Compile Update="Platforms\UWP\Strings_PlatformServices.Designer.cs" DesignTime="True" AutoGen="True">
+    <Compile Update="Platforms\WinRT\Strings_PlatformServices.Designer.cs" DesignTime="True" AutoGen="True">
       <DependentUpon>Strings_PlatformServices.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Platforms\UWP\Strings_PlatformServices.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
+    <EmbeddedResource Include="Platforms\WinRT\Strings_PlatformServices.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
   </ItemGroup>
 
   <!-- Windows includes for Desktop and UWP -->

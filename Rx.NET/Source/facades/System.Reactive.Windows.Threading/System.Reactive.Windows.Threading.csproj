@@ -12,20 +12,23 @@
   <ItemGroup>
     <None Include="..\NuGet.Facades.Readme.md" Pack="true" PackagePath="\readme.md" />
   </ItemGroup>
+  
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.18362'">
-    <ProjectReference Include="..\..\src\System.Reactive.For.WindowsRuntime\System.Reactive.For.WindowsRuntime.csproj">
+  <ItemGroup Condition="'$(RxHasWpf)' == 'true'">
+    <ProjectReference Include="..\..\src\System.Reactive.Wpf\System.Reactive.Wpf.csproj">
+      <Aliases>SystemReactiveForWpf</Aliases>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(RxHasWinRT)' == 'true'">
+    <ProjectReference Include="..\..\src\System.Reactive.WindowsRuntime\System.Reactive.WindowsRuntime.csproj">
       <Aliases>SystemReactiveForWindowsRuntime</Aliases>
     </ProjectReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'uap10.0.18362'">
+  <ItemGroup>
     <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj">
       <Aliases>SystemReactive</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\System.Reactive.For.Wpf\System.Reactive.For.Wpf.csproj">
-      <Aliases>SystemReactiveForWpf</Aliases>
-    </ProjectReference>
   </ItemGroup>
-    
 </Project>

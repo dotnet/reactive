@@ -11,4 +11,3 @@ extern alias SystemReactiveForWpf;
 [assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(SystemReactiveForWpf::System.Reactive.Concurrency.DispatcherScheduler))]
 [assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(SystemReactiveForWpf::System.Reactive.Linq.DispatcherObservable))]
 #endif
-

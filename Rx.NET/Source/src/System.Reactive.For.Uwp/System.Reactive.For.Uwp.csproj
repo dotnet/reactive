@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- 19041 not 18362 because the Azure DevOps hosted build agents don't offer 18362, and there appears
+    <!-- 26100 not 18362 because the Azure DevOps hosted build agents don't offer 18362, and there appears
          not to be any official supported way to get it on there.
          We end up with a reference to Windows 255.255.255.255 in any case, so as far as I can tell, this
          produces results indistinguishable from what we would get with 18362. The only issue here is that
@@ -30,16 +30,15 @@
 
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
-    <Compile Include="..\System.Reactive.For.WindowsRuntime\AsyncInfoExtensions.cs" Link="AsyncInfoExtensions.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\System.Reactive\Platforms\UWP\Strings_PlatformServices.Designer.cs" Link="Strings_PlatformServices.Designer.cs">
+    <Compile Include="..\System.Reactive\Platforms\WinRT\Strings_PlatformServices.Designer.cs" Link="Strings_PlatformServices.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Strings_PlatformServices.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="..\System.Reactive\Platforms\UWP\Strings_PlatformServices.resx" Link="Strings_PlatformServices.resx">
+    <EmbeddedResource Include="..\System.Reactive\Platforms\WinRT\Strings_PlatformServices.resx" Link="Strings_PlatformServices.resx">
       <!-- Note: we don't want the code gen here because it's done by the System.Reactive project, and running it again here would just mess up the namespaces. -->
     </EmbeddedResource>
   </ItemGroup>
@@ -52,6 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="AsyncInfoExtensions.cs" />
     <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
   </ItemGroup>
 </Project>

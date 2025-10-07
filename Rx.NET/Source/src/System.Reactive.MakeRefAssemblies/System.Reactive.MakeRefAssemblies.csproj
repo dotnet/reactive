@@ -82,11 +82,11 @@
 
   -->
   <ItemGroup Condition="$(TargetFramework.StartsWith('uap10.0'))">
-    <Compile Include="..\System.Reactive\Platforms\UWP\Concurrency\ThreadPoolScheduler.Windows.cs" />
+    <Compile Include="..\System.Reactive\Platforms\WinRT\Concurrency\ThreadPoolScheduler.Windows.cs" />
     <Compile Include="..\System.Reactive\Platforms\Windows\ThreadPooltimerExtensions.cs" />
-    <Compile Include="..\System.Reactive\Platforms\UWP\Strings_PlatformServices.Designer.cs" />
-    <Compile Include="..\..\src\System.Reactive.For.Uwp\Stubs.cs" Link="Platforms\UWP\Stubs.cs" />
-    <Compile Include="..\..\src\System.Reactive.For.Uwp\ThreadPoolTimerExtensions.cs" Link="Platforms\UWP\Concurrency\ThreadPoolTimerExtensions.cs" />
+    <Compile Include="..\System.Reactive\Platforms\WinRT\Strings_PlatformServices.Designer.cs" />
+    <Compile Include="..\..\src\System.Reactive.For.Uwp\Stubs.cs" Link="Platforms\WinRT\Stubs.cs" />
+    <Compile Include="..\..\src\System.Reactive.For.Uwp\ThreadPoolTimerExtensions.cs" Link="Platforms\WinRT\Concurrency\ThreadPoolTimerExtensions.cs" />
   </ItemGroup>
 
   <!-- Windows includes for Desktop and UWP -->

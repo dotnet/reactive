@@ -42,8 +42,8 @@
   </ItemGroup>
 
   <ItemGroup Condition="('$(TargetFramework)' == 'net472') or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
-    <ProjectReference Include="..\..\src\System.Reactive.For.WindowsForms\System.Reactive.For.WindowsForms.csproj" />
-    <ProjectReference Include="..\..\src\System.Reactive.For.Wpf\System.Reactive.For.Wpf.csproj" />
+    <ProjectReference Include="..\..\src\System.Reactive.Windows.Forms\System.Reactive.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\src\System.Reactive.Wpf\System.Reactive.Wpf.csproj" />
     <PackageReference Update="coverlet.collector" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
