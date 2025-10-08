@@ -6,7 +6,7 @@
     <Description>LINQ Standard Query Operators used to express queries over asynchronous enumerable sequences.</Description>
     <AssemblyTitle>System.Linq.Async</AssemblyTitle>
     <Authors>Microsoft</Authors>
-    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net10.0</TargetFrameworks>
     <PackageTags>Enumerable;Asynchronous;LINQ</PackageTags>
     <AssemblyName>System.Linq.Async</AssemblyName>
   </PropertyGroup>
@@ -21,8 +21,6 @@
 
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0'" Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
-    
     <ProjectReference Include="..\..\System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
 

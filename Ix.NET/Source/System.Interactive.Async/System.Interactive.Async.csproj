@@ -3,7 +3,16 @@
   <PropertyGroup>
     <Description>Interactive Extensions Async Library used to express queries over asynchronous enumerable sequences.</Description>
     <AssemblyTitle>Interactive Extensions - Async Library</AssemblyTitle>
-    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+
+    <!--
+    .NET 10.0 gets its own target because that doesn't need a transitive reference
+    to System.Linq.AsyncEnumerable - it's built in from .NET 10.0 and later -
+    but all other targets do need that reference.
+    Even though we support back to .NET 8.0 for v7, we don't build targets for
+    any versions older than net10.0 because net8.0 and net9.0 are both covered
+    by the netstandard2.0 target.
+    -->
+    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net10.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
   </PropertyGroup>
 
@@ -29,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0'" Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
     <ProjectReference Include="..\System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
 

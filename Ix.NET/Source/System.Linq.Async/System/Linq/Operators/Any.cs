@@ -36,7 +36,7 @@ namespace System.Linq
             }
         }
 
-        //https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.anyasync?view=net-9.0-pp#system-linq-asyncenumerable-anyasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean))-system-threading-cancellationtoken)
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.anyasync?view=net-9.0-pp#system-linq-asyncenumerable-anyasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean))-system-threading-cancellationtoken)
 
         /// <summary>
         /// Determines whether any element of an async-enumerable sequence satisfies a condition.

@@ -85,10 +85,6 @@ namespace System.Linq.Async.SourceGenerator
             return overloads.ToString();
         }
 
-        //var allLeadingTrivia = method.Syntax.GetLeadingTrivia();
-        //var allLeadingTriviaStructure = method.Syntax.GetLeadingTrivia().Select(t => t.GetStructure());
-        //var leadingTrivia = method.Syntax.GetLeadingTrivia().Where(t => !t.IsKind(SyntaxKind.DisabledTextTrivia) && t.GetStructure() is not DirectiveTriviaSyntax);
-
         private static string GenerateOverload(AsyncMethod method, GenerationOptions options, SemanticModel model, INamedTypeSymbol attributeSymbol)
         {
             var attributeListsWithGenerateAsyncOverloadRemoved = SyntaxFactory.List(method.Syntax.AttributeLists
