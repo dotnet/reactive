@@ -28,8 +28,7 @@
   So although we get this references transitively (or automatically on .NET 10.0+) we need to put them explicitly here to set aliases.
   -->
   <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
-    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107"
-                      Aliases="SystemLinqAsyncEnumerable" />
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107" Aliases="SystemLinqAsyncEnumerable" />
   </ItemGroup>
 
   <Target Name="_SetAliasOnBuiltInSystemLinqAsyncEnumerable" BeforeTargets="ResolveAssemblyReferences">
@@ -42,7 +41,7 @@
   </Target>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
     <PackageReference Include="FluentAssertions" Version="6.4.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
