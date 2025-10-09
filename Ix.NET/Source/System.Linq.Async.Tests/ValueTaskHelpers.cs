@@ -97,10 +97,10 @@ namespace Xunit
             }
 
             if (exception == null)
-                throw new ThrowsException(exceptionType);
+                throw ThrowsException.ForNoException(exceptionType);
 
             if (!exceptionType.Equals(exception.GetType()))
-                throw new ThrowsException(exceptionType, exception);
+                throw ThrowsException.ForIncorrectExceptionType(exceptionType, exception);
 
             return exception;
         }
