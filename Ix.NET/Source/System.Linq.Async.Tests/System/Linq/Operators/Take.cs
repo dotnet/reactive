@@ -143,8 +143,9 @@ namespace Tests
             Assert.Equal(1, await ys.ElementAtAsync(0));
             Assert.Equal(2, await ys.ElementAtAsync(1));
 
-            Assert.Equal([1, 2], await ys.ToArrayAsync());
-            Assert.Equal(new[] { 1, 2 }, await ys.ToListAsync());
+            int[] expected = [1, 2];
+            Assert.Equal(expected, await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToListAsync());
         }
 
         [Fact]
@@ -161,8 +162,9 @@ namespace Tests
             Assert.Equal(1, await ys.ElementAtAsync(0));
             Assert.Equal(2, await ys.ElementAtAsync(1));
 
-            Assert.Equal([1, 2], await ys.ToArrayAsync());
-            Assert.Equal(new[] { 1, 2 }, await ys.ToListAsync());
+            int[] expected = [1, 2];
+            Assert.Equal(expected, await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToListAsync());
         }
 
         [Fact]
@@ -179,8 +181,9 @@ namespace Tests
             Assert.Equal(3, await ys.ElementAtAsync(0));
             Assert.Equal(4, await ys.ElementAtAsync(1));
 
-            Assert.Equal([3, 4], await ys.ToArrayAsync());
-            Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
+            int[] expected = [3, 4];
+            Assert.Equal(expected, await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToListAsync());
         }
 
         [Fact]
@@ -233,8 +236,9 @@ namespace Tests
             Assert.Equal(1, await ys.ElementAtAsync(0));
             Assert.Equal(2, await ys.ElementAtAsync(1));
 
-            Assert.Equal([1, 2], await ys.ToArrayAsync());
-            Assert.Equal(new[] { 1, 2 }, await ys.ToListAsync());
+            int[] expected = [1, 2];
+            Assert.Equal(expected, await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToListAsync());
         }
 
         [Fact]
@@ -251,8 +255,9 @@ namespace Tests
             Assert.Equal(1, await ys.ElementAtAsync(0));
             Assert.Equal(2, await ys.ElementAtAsync(1));
 
-            Assert.Equal([1, 2], await ys.ToArrayAsync());
-            Assert.Equal(new[] { 1, 2 }, await ys.ToListAsync());
+            int[] expected = [1, 2];
+            Assert.Equal(expected, await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToListAsync());
         }
 
         [Fact]
@@ -269,8 +274,9 @@ namespace Tests
             Assert.Equal(3, await ys.ElementAtAsync(0));
             Assert.Equal(4, await ys.ElementAtAsync(1));
 
-            Assert.Equal([3, 4], await ys.ToArrayAsync());
-            Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
+            int[] expected = [3, 4];
+            Assert.Equal(expected, await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToListAsync());
         }
 
         [Fact]

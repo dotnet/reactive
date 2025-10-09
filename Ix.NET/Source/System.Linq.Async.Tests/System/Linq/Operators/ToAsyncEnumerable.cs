@@ -189,7 +189,7 @@ namespace Tests
             xc.CopyTo(arr, 0);
             Assert.True(arr.SequenceEqual(xc));
             xc.Clear();
-            Assert.Equal(0, xc.Count);
+            Assert.Empty(xc);
         }
 
         [Fact]
@@ -223,7 +223,7 @@ namespace Tests
             xl.CopyTo(arr, 0);
             Assert.True(arr.SequenceEqual(xl));
             xl.Clear();
-            Assert.Equal(0, xl.Count);
+            Assert.Empty(xl);
         }
 
         [Fact]
@@ -314,7 +314,7 @@ namespace Tests
             }
 
             await e.DisposeAsync();
-            stop.WaitOne();
+            await Task.Run(stop.WaitOne);
         }
 
         [Fact]
@@ -352,7 +352,7 @@ namespace Tests
             }
 
             await e.DisposeAsync();
-            stop.WaitOne();
+            await Task.Run(stop.WaitOne);
 
             Assert.Equal(2, subCount);
         }
@@ -390,7 +390,17 @@ namespace Tests
             }
 
             c.Cancel();
-            stop.WaitOne();
+
+            // Note that the continuation for the await of HasNextAsync will
+            // typically occur synchronously inside the source's call to OnNext.
+            // Older versions of xUnit ran tests in a synchronization context
+            // that would cause that await to run the continuation via a Post,
+            // but newer versions don't do that, and so that call to OnNext is
+            // above us in the call stack, and so the call to stop.Set can't
+            // run until we return. So that's why we kick off a separate task
+            // here - it enables this thread to return back up to the source,
+            // giving the stop.Set a chance to run.
+            await Task.Run(stop.WaitOne);
         }
 
         [Fact]
@@ -453,7 +463,7 @@ namespace Tests
             }
 
             await e.DisposeAsync();
-            stop.WaitOne();
+            await Task.Run(stop.WaitOne);
         }
 
         // TODO: Add more tests for Observable conversion.
