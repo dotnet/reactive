@@ -108,12 +108,12 @@ namespace System.Linq
         public static System.Linq.IQueryable<int> Range(int start, int count) { }
         public static System.Linq.IQueryable<int> Range(this System.Linq.IQueryProvider provider, int start, int count) { }
         public static System.Collections.Generic.IEnumerable<TSource> Repeat<TSource>(System.Collections.Generic.IEnumerable<TSource> source) { }
-        public static System.Linq.IQueryable<TResult> Repeat<TResult>(TResult value) { }
         public static System.Linq.IQueryable<TSource> Repeat<TSource>(this System.Linq.IQueryable<TSource> source) { }
+        public static System.Linq.IQueryable<TResult> Repeat<TResult>(TResult value) { }
         public static System.Collections.Generic.IEnumerable<TSource> Repeat<TSource>(System.Collections.Generic.IEnumerable<TSource> source, int count) { }
-        public static System.Linq.IQueryable<TResult> Repeat<TResult>(TResult element, int count) { }
         public static System.Collections.Generic.IEnumerable<TResult> Repeat<TResult>(this System.Linq.IQueryProvider provider, TResult value) { }
         public static System.Linq.IQueryable<TSource> Repeat<TSource>(this System.Linq.IQueryable<TSource> source, int count) { }
+        public static System.Linq.IQueryable<TResult> Repeat<TResult>(TResult element, int count) { }
         public static System.Linq.IQueryable<TResult> Repeat<TResult>(this System.Linq.IQueryProvider provider, TResult element, int count) { }
         public static System.Collections.Generic.IEnumerable<TSource> Retry<TSource>(System.Collections.Generic.IEnumerable<TSource> source) { }
         public static System.Linq.IQueryable<TSource> Retry<TSource>(this System.Linq.IQueryable<TSource> source) { }
