@@ -242,7 +242,7 @@ namespace Tests
             {
                 await xs.MoveNextAsync();
 
-                Assert.Fail("Should not have gotten here");
+                Assert.False(true, "Should not have gotten here");
             }
             catch (InvalidOperationException)
             {
@@ -265,7 +265,7 @@ namespace Tests
             {
                 await xs.MoveNextAsync();
 
-                Assert.Fail("Should not have gotten here");
+                Assert.False(true, "Should not have gotten here");
             }
             catch (InvalidOperationException)
             {
@@ -292,7 +292,7 @@ namespace Tests
             {
                 await xs.MoveNextAsync();
 
-                Assert.Fail("Should not have gotten here");
+                Assert.False(true, "Should not have gotten here");
             }
             catch (InvalidOperationException)
             {
@@ -319,7 +319,7 @@ namespace Tests
             {
                 await xs.MoveNextAsync();
 
-                Assert.Fail("Should not have gotten here");
+                Assert.False(true, "Should not have gotten here");
             }
             catch (InvalidOperationException)
             {

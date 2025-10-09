@@ -22,7 +22,7 @@ namespace Tests
             }
             catch (AggregateException)
             {
-                Assert.Fail("AggregateException has been thrown instead of InvalidOperationException");
+                Assert.True(false, "AggregateException has been thrown instead of InvalidOperationException");
             }
             catch (InvalidOperationException)
             {
@@ -45,7 +45,7 @@ namespace Tests
             }
             catch (AggregateException)
             {
-                Assert.Fail("AggregateException has been thrown instead of InvalidOperationException");
+                Assert.True(false, "AggregateException has been thrown instead of InvalidOperationException");
             }
             catch (InvalidOperationException)
             {

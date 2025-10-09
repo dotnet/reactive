@@ -63,9 +63,8 @@ namespace Tests
             Assert.Equal(2, await xs.Take(1024).FirstAsync());
             Assert.Equal(6, await xs.Take(1024).LastAsync());
 
-            int[] expected = [2, 3, 4, 5, 6];
-            Assert.Equal(expected, await xs.ToArrayAsync());
-            Assert.Equal(expected, await xs.ToListAsync());
+            Assert.Equal([2, 3, 4, 5, 6], await xs.ToArrayAsync());
+            Assert.Equal(new[] { 2, 3, 4, 5, 6 }, await xs.ToListAsync());
         }
 
         [Fact]

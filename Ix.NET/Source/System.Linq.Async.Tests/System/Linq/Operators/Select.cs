@@ -278,7 +278,7 @@ namespace Tests
             var xs = ToAsyncEnumerableIList([1, 2, 3, 4, 5]);
             var ys = xs.Select(x => x * 2);
 
-            Assert.Equal((int[])[2, 4, 6, 8, 10], await ys.ToArrayAsync());
+            Assert.Equal([2, 4, 6, 8, 10], await ys.ToArrayAsync());
         }
 
         [Fact]
@@ -545,7 +545,7 @@ namespace Tests
             var xs = ToAsyncEnumerableIList([1, 2, 3, 4, 5]);
             var ys = xs.SelectAwait(x => new ValueTask<int>(x * 2));
 
-            Assert.Equal((int[])[2, 4, 6, 8, 10], await ys.ToArrayAsync());
+            Assert.Equal([2, 4, 6, 8, 10], await ys.ToArrayAsync());
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -814,7 +814,7 @@ namespace Tests
             var xs = ToAsyncEnumerableIList([1, 2, 3, 4, 5]);
             var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<int>(x * 2));
 
-            Assert.Equal((int[])[2, 4, 6, 8, 10], await ys.ToArrayAsync());
+            Assert.Equal([2, 4, 6, 8, 10], await ys.ToArrayAsync());
         }
 
 #endif
