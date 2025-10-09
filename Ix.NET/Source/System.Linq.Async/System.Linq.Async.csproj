@@ -77,8 +77,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--<PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0' " Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />-->
-
     <!--
     System.Linq.Async is being deprecated by System.Linq.AsyncEnumerable (part of .NET 10, but available to older runtimes via NuGet)
     but System.Linq.AsyncEnumerable does not include all of System.Linq.Async's functionality. We're moving that functionality into
