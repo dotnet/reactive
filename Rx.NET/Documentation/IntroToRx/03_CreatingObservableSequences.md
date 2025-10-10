@@ -461,7 +461,7 @@ IObservable<string> ReadFileLines(string path) =>
     {
         using (StreamReader reader = File.OpenText(path))
         {
-            while (cancellationToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 string? line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false);
                 if (line is null)
