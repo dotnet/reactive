@@ -8,6 +8,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.skip?view=net-9.0-pp
+
         /// <summary>
         /// Bypasses a specified number of elements in an async-enumerable sequence and then returns the remaining elements.
         /// </summary>
@@ -44,5 +47,6 @@ namespace System.Linq
 
             return new AsyncEnumerablePartition<TSource>(source, count, -1);
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

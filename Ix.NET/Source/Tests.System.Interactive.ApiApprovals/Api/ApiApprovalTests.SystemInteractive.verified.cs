@@ -1,7 +1,7 @@
 ﻿[assembly: System.CLSCompliant(true)]
 [assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName=".NET 6.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v8.0", FrameworkDisplayName=".NET 8.0")]
 namespace System.Linq
 {
     public static class EnumerableEx
@@ -10,13 +10,13 @@ namespace System.Linq
         public static System.Collections.Generic.IEnumerable<System.Collections.Generic.IList<TSource>> Buffer<TSource>(this System.Collections.Generic.IEnumerable<TSource> source, int count, int skip) { }
         public static System.Collections.Generic.IEnumerable<TResult> Case<TValue, TResult>(System.Func<TValue> selector, System.Collections.Generic.IDictionary<TValue, System.Collections.Generic.IEnumerable<TResult>> sources) { }
         public static System.Collections.Generic.IEnumerable<TResult> Case<TValue, TResult>(System.Func<TValue> selector, System.Collections.Generic.IDictionary<TValue, System.Collections.Generic.IEnumerable<TResult>> sources, System.Collections.Generic.IEnumerable<TResult> defaultSource) { }
-        public static System.Collections.Generic.IEnumerable<TSource> Catch<TSource>(params System.Collections.Generic.IEnumerable<TSource>[] sources) { }
         public static System.Collections.Generic.IEnumerable<TSource> Catch<TSource>(this System.Collections.Generic.IEnumerable<System.Collections.Generic.IEnumerable<TSource>> sources) { }
+        public static System.Collections.Generic.IEnumerable<TSource> Catch<TSource>(params System.Collections.Generic.IEnumerable<TSource>[] sources) { }
         public static System.Collections.Generic.IEnumerable<TSource> Catch<TSource>(this System.Collections.Generic.IEnumerable<TSource> first, System.Collections.Generic.IEnumerable<TSource> second) { }
         public static System.Collections.Generic.IEnumerable<TSource> Catch<TSource, TException>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TException, System.Collections.Generic.IEnumerable<TSource>> handler)
             where TException : System.Exception { }
-        public static System.Collections.Generic.IEnumerable<TSource> Concat<TSource>(params System.Collections.Generic.IEnumerable<TSource>[] sources) { }
         public static System.Collections.Generic.IEnumerable<TSource> Concat<TSource>(this System.Collections.Generic.IEnumerable<System.Collections.Generic.IEnumerable<TSource>> sources) { }
+        public static System.Collections.Generic.IEnumerable<TSource> Concat<TSource>(params System.Collections.Generic.IEnumerable<TSource>[] sources) { }
         public static System.Collections.Generic.IEnumerable<T> Create<T>(System.Action<System.Linq.IYielder<T>> create) { }
         public static System.Collections.Generic.IEnumerable<TResult> Create<TResult>(System.Func<System.Collections.Generic.IEnumerator<TResult>> getEnumerator) { }
         public static System.Collections.Generic.IEnumerable<TResult> Defer<TResult>(System.Func<System.Collections.Generic.IEnumerable<TResult>> enumerableFactory) { }
@@ -61,15 +61,15 @@ namespace System.Linq
         public static System.Collections.Generic.IList<TSource> MinBy<TSource, TKey>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
         public static System.Collections.Generic.IList<TSource> MinByWithTies<TSource, TKey>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector) { }
         public static System.Collections.Generic.IList<TSource> MinByWithTies<TSource, TKey>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
-        public static System.Collections.Generic.IEnumerable<TSource> OnErrorResumeNext<TSource>(params System.Collections.Generic.IEnumerable<TSource>[] sources) { }
         public static System.Collections.Generic.IEnumerable<TSource> OnErrorResumeNext<TSource>(this System.Collections.Generic.IEnumerable<System.Collections.Generic.IEnumerable<TSource>> sources) { }
+        public static System.Collections.Generic.IEnumerable<TSource> OnErrorResumeNext<TSource>(params System.Collections.Generic.IEnumerable<TSource>[] sources) { }
         public static System.Collections.Generic.IEnumerable<TSource> OnErrorResumeNext<TSource>(this System.Collections.Generic.IEnumerable<TSource> first, System.Collections.Generic.IEnumerable<TSource> second) { }
         public static System.Linq.IBuffer<TSource> Publish<TSource>(this System.Collections.Generic.IEnumerable<TSource> source) { }
         public static System.Collections.Generic.IEnumerable<TResult> Publish<TSource, TResult>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<System.Collections.Generic.IEnumerable<TSource>, System.Collections.Generic.IEnumerable<TResult>> selector) { }
-        public static System.Collections.Generic.IEnumerable<TResult> Repeat<TResult>(TResult value) { }
         public static System.Collections.Generic.IEnumerable<TSource> Repeat<TSource>(this System.Collections.Generic.IEnumerable<TSource> source) { }
-        public static System.Collections.Generic.IEnumerable<TResult> Repeat<TResult>(TResult element, int count) { }
+        public static System.Collections.Generic.IEnumerable<TResult> Repeat<TResult>(TResult value) { }
         public static System.Collections.Generic.IEnumerable<TSource> Repeat<TSource>(this System.Collections.Generic.IEnumerable<TSource> source, int count) { }
+        public static System.Collections.Generic.IEnumerable<TResult> Repeat<TResult>(TResult element, int count) { }
         public static System.Collections.Generic.IEnumerable<TSource> Retry<TSource>(this System.Collections.Generic.IEnumerable<TSource> source) { }
         public static System.Collections.Generic.IEnumerable<TSource> Retry<TSource>(this System.Collections.Generic.IEnumerable<TSource> source, int retryCount) { }
         public static System.Collections.Generic.IEnumerable<TResult> Return<TResult>(TResult value) { }

@@ -10,6 +10,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.singleordefaultasync?view=net-9.0-pp#system-linq-asyncenumerable-singleordefaultasync-1(system-collections-generic-iasyncenumerable((-0))-system-threading-cancellationtoken)
+
         /// <summary>
         /// Returns the only element of an async-enumerable sequence, or a default value if the async-enumerable sequence is empty; this method reports an exception if there is more than one element in the async-enumerable sequence.
         /// </summary>
@@ -57,6 +60,8 @@ namespace System.Linq
             }
         }
 
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.singleordefaultasync?view=net-9.0-pp#system-linq-asyncenumerable-singleordefaultasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean))-system-threading-cancellationtoken)
+
         /// <summary>
         /// Returns the only element of an async-enumerable sequence that matches the predicate, or a default value if no such element exists; this method reports an exception if there is more than one element in the async-enumerable sequence.
         /// </summary>
@@ -102,6 +107,7 @@ namespace System.Linq
                 return default;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Returns the only element of an async-enumerable sequence that satisfies the condition in the asynchronous predicate, or a default value if no such element exists, and reports an exception if there is more than one element in the async-enumerable sequence that matches the predicate.
@@ -114,6 +120,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) More than one element satisfies the condition in the predicate.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use SingleOrDefaultAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SingleOrDefaultAwaitAsync functionality now exists as overloads of SingleOrDefaultAsync.")]
         private static ValueTask<TSource?> SingleOrDefaultAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -152,6 +159,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use SingleOrDefaultAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SingleOrDefaultAwaitWithCancellationAsync functionality now exists as overloads of SingleOrDefaultAsync.")]
         private static ValueTask<TSource?> SingleOrDefaultAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)

@@ -11,6 +11,13 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+
+        // Moved to AsyncEnumerableEx in System.Interactive.Async.
+        // System.Linq.AsyncEnumerable has chosen not to implement this. We continue to implement this because
+        // we believe it is a useful feature, but since it's now in the category of LINQ-adjacent functionality
+        // not built into the .NET runtime libraries, it now lives in System.Interactive.Async.
+
         /// <summary>
         /// Converts an observable sequence to an async-enumerable sequence.
         /// </summary>
@@ -218,5 +225,6 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

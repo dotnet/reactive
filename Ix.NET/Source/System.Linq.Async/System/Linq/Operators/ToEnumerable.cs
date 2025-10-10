@@ -19,6 +19,7 @@ namespace System.Linq
         /// <param name="source">An async-enumerable sequence to convert to an enumerable sequence.</param>
         /// <returns>The enumerable sequence containing the elements in the async-enumerable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        [Obsolete("IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and it does not implement this method because 'sync over async' of this kind is an anti-pattern. Please use a different strategy.")]
         public static IEnumerable<TSource> ToEnumerable<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)

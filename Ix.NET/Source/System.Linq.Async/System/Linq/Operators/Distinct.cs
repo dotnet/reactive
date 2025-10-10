@@ -10,6 +10,11 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.distinct?view=net-9.0-pp
+        // These two overloads are covered by a single method in System.Linq.AsyncEnumerable. Its only method
+        // takes a comparer, but specifies a default value of null.
+
         /// <summary>
         /// Returns an async-enumerable sequence that contains only distinct elements.
         /// </summary>
@@ -139,5 +144,6 @@ namespace System.Linq
                 return AsyncEnumerableHelpers.ToSet(_source, _comparer, cancellationToken);
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

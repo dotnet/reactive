@@ -10,6 +10,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.lastordefaultasync?view=net-9.0-pp#system-linq-asyncenumerable-lastordefaultasync-1(system-collections-generic-iasyncenumerable((-0))-system-threading-cancellationtoken)
+
         /// <summary>
         /// Returns the last element of an async-enumerable sequence, or a default value if no such element exists.
         /// </summary>
@@ -32,6 +35,8 @@ namespace System.Linq
                 return last.HasValue ? last.Value : default;
             }
         }
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.lastordefaultasync?view=net-9.0-pp#system-linq-asyncenumerable-lastordefaultasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean))-system-threading-cancellationtoken)
 
         /// <summary>
         /// Returns the last element of an async-enumerable sequence that satisfies the condition in the predicate, or a default value if no such element exists.
@@ -58,6 +63,9 @@ namespace System.Linq
                 return last.HasValue ? last.Value : default;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.lastordefaultasync?view=net-9.0-pp#system-linq-asyncenumerable-lastordefaultasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-threading-cancellationtoken-system-threading-tasks-valuetask((system-boolean))))-system-threading-cancellationtoken)
 
         /// <summary>
         /// Returns the last element of an async-enumerable sequence that satisfies the condition in the predicate, or a default value if no such element exists.
@@ -69,6 +77,7 @@ namespace System.Linq
         /// <returns>ValueTask containing the last element in the async-enumerable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use LastOrDefaultAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the LastOrDefaultAwaitAsync functionality now exists as overloads of LastOrDefaultAsync.")]
         private static ValueTask<TSource?> LastOrDefaultAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -88,6 +97,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use LastOrDefaultAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the LastOrDefaultAwaitWithCancellationAsync functionality now exists as overloads of LastOrDefaultAsync.")]
         private static ValueTask<TSource?> LastOrDefaultAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)

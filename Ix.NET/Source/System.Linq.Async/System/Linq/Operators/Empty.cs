@@ -10,6 +10,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.empty?view=net-9.0-pp
+
         /// <summary>
         /// Returns an empty async-enumerable sequence.
         /// </summary>
@@ -50,5 +53,6 @@ namespace System.Linq
 
             public ValueTask DisposeAsync() => default;
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }
