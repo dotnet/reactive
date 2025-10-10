@@ -83,7 +83,7 @@ namespace ReactiveTests.Tests
                     };
                 })
                 .SubscribeOn(lbl)
-                .Subscribe(_ => {});
+                .Subscribe(_ => { });
 
                 evt2.WaitOne();
                 d.Dispose();
@@ -103,7 +103,7 @@ namespace ReactiveTests.Tests
             {
                 var evt2 = new ManualResetEvent(false);
                 var evt = new ManualResetEvent(false);
-                
+
                 var d = Observable.Create<int>(obs =>
                 {
                     lbl.Text = "Subscribe";

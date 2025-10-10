@@ -8,6 +8,9 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".Generated.cs" #>
+
+#nullable enable annotations
+
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 

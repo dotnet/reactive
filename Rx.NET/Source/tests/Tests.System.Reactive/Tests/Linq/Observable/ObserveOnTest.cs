@@ -662,8 +662,8 @@ namespace ReactiveTests.Tests
             Observable.Range(1, N)
                 .ObserveOn(scheduler)
                 .Subscribe(
-                    v => threads.Add(Environment.CurrentManagedThreadId), 
-                    e => cde.Signal(), 
+                    v => threads.Add(Environment.CurrentManagedThreadId),
+                    e => cde.Signal(),
                     () => cde.Signal()
                 );
 

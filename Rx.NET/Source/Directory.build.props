@@ -32,11 +32,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
     
-    <!--
-    Nerdbank.GitVersioning 3.6.128 injects a reference to a .proj file that doesn't work inside the
-    UWP test runner project. We don't ship that as a NuGet package, so it doesn't matter what its
-    version number is.
-    -->
     <PackageReference
       Include="Nerdbank.GitVersioning"
       Version="3.8.118"
@@ -119,9 +114,10 @@
               [.. x]. To me, this is less readable, and it doesn't improve performance, as far as we know.
 
     CA1510 - use ArgumentNullException.ThrowIf (not available on all targets)
+    CA1512 - use ArgumentOutOfRangeException.ThrowIfXxx (not available on all targets)
     CA1513 - use ObjectDisposedException.ThrowIf (not available on all targets)
     -->
-    <NoWarn>$(NoWarn);CA1001;CA2213;CA1510;CA1513;IDE0028;IDE0056;IDE0057;IDE0130;IDE0290;IDE0305;IDE0306</NoWarn>
+    <NoWarn>$(NoWarn);CA1001;CA2213;CA1510;CA1512;CA1513;IDE0028;IDE0056;IDE0057;IDE0130;IDE0290;IDE0305;IDE0306</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

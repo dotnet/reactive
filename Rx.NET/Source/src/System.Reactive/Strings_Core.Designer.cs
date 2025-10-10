@@ -8,11 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace System.Reactive
-{
-    using System.Reflection;
-
-
+namespace System.Reactive {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -20,150 +19,124 @@ namespace System.Reactive
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Strings_Core
-    {
-
+    internal class Strings_Core {
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Strings_Core()
-        {
+        internal Strings_Core() {
         }
-
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if (object.ReferenceEquals(resourceMan, null))
-                {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Strings_Core", typeof(Strings_Core).GetTypeInfo().Assembly);
+        internal static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Strings_Core", typeof(Strings_Core).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        internal static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Using the Scheduler.{0} property is no longer supported due to refactoring of the API surface and elimination of platform-specific dependencies. Please include System.Reactive.PlatformServices for your target platform and use the {0}Scheduler type instead. If you&apos;re building a Windows Store app, notice some schedulers are no longer supported. Consider using Scheduler.Default instead..
         /// </summary>
-        internal static string CANT_OBTAIN_SCHEDULER
-        {
-            get
-            {
+        internal static string CANT_OBTAIN_SCHEDULER {
+            get {
                 return ResourceManager.GetString("CANT_OBTAIN_SCHEDULER", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to OnCompleted notification doesn't have a value..
+        ///   Looks up a localized string similar to OnCompleted notification doesn&apos;t have a value..
         /// </summary>
-        internal static string COMPLETED_NO_VALUE
-        {
-            get
-            {
+        internal static string COMPLETED_NO_VALUE {
+            get {
                 return ResourceManager.GetString("COMPLETED_NO_VALUE", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Disposable has already been assigned..
         /// </summary>
-        internal static string DISPOSABLE_ALREADY_ASSIGNED
-        {
-            get
-            {
+        internal static string DISPOSABLE_ALREADY_ASSIGNED {
+            get {
                 return ResourceManager.GetString("DISPOSABLE_ALREADY_ASSIGNED", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Disposables collection can not contain null values..
         /// </summary>
-        internal static string DISPOSABLES_CANT_CONTAIN_NULL
-        {
-            get
-            {
+        internal static string DISPOSABLES_CANT_CONTAIN_NULL {
+            get {
                 return ResourceManager.GetString("DISPOSABLES_CANT_CONTAIN_NULL", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Failed to start monitoring system clock changes..
         /// </summary>
-        internal static string FAILED_CLOCK_MONITORING
-        {
-            get
-            {
+        internal static string FAILED_CLOCK_MONITORING {
+            get {
                 return ResourceManager.GetString("FAILED_CLOCK_MONITORING", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Heap is empty..
         /// </summary>
-        internal static string HEAP_EMPTY
-        {
-            get
-            {
+        internal static string HEAP_EMPTY {
+            get {
                 return ResourceManager.GetString("HEAP_EMPTY", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Observer has already terminated..
         /// </summary>
-        internal static string OBSERVER_TERMINATED
-        {
-            get
-            {
+        internal static string OBSERVER_TERMINATED {
+            get {
                 return ResourceManager.GetString("OBSERVER_TERMINATED", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Reentrancy has been detected..
         /// </summary>
-        internal static string REENTRANCY_DETECTED
-        {
-            get
-            {
+        internal static string REENTRANCY_DETECTED {
+            get {
                 return ResourceManager.GetString("REENTRANCY_DETECTED", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to This scheduler operation has already been awaited..
         /// </summary>
-        internal static string SCHEDULER_OPERATION_ALREADY_AWAITED
-        {
-            get
-            {
+        internal static string SCHEDULER_OPERATION_ALREADY_AWAITED {
+            get {
                 return ResourceManager.GetString("SCHEDULER_OPERATION_ALREADY_AWAITED", resourceCulture);
             }
         }
