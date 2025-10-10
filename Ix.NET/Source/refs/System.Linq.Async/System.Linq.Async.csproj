@@ -21,6 +21,7 @@
 
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\System.Interactive.Async\System.Interactive.Async.csproj" Aliases="SystemInteractiveAsync" />
     <ProjectReference Include="..\..\System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
 
