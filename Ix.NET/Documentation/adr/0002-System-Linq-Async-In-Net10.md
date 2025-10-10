@@ -39,7 +39,7 @@ The next `System.Linq.Async` release will:
 1. add a reference to `System.Linq.AsyncEnumerable` and `System.Interactive.Async`
 2. remove from publicly visible API (ref assemblies) all `IAsyncEnumerable<T>` extension methods for which direct replacements exist
 3. add [Obsolete] attribute for members of `AsyncEnumerable` for which `System.Linq.AsyncEnumerable` offers replacements that require code changes to use (e.g., `WhereAwait`, which is replaced by an overload of `Where`)
-4. `AsyncEnumerable` methods that are a bad idea and that should probably have never existing (the ones that do sync over async, e.g. `ToEnumerable`) are marked as `Obsolete` and will not be replaced
+4. `AsyncEnumerable` methods that are a bad idea and that should probably have never existing (the ones that do sync over async, e.g. `ToEnumerable`) are marked as `Obsolete` and will not be replaced; note that although `ToObservable` has issues that meant the .NET team decided not to replicate it, the main issue is that it embeds opinions, and not that there's anything fundamentally broken about it, so we do not include `ToObservable` in this category
 5. remaining methods of `AsyncEnumerable` (where `System.Linq.AsyncEnumerable` offers no equivalent) are removed from the publicly visible API of `System.Linq.Async`, with identical replacements being defined by `AsyncEnumerableEx` in `System.Interactive
 6. mark `IAsyncGrouping` as obsolete
 7. mark the public `IAsyncIListProvider` as obsolete, and define a non-public version for continued internal use in `System.Interactive.Linq`
