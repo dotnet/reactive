@@ -98,7 +98,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -346,7 +346,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -594,7 +594,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -842,7 +842,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -1120,7 +1120,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -1390,7 +1390,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -1660,7 +1660,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -1930,7 +1930,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -2170,7 +2170,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -2366,7 +2366,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -2562,7 +2562,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -2762,7 +2762,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -2962,7 +2962,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -3162,7 +3162,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -3394,7 +3394,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -3658,7 +3658,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -3922,7 +3922,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -4186,7 +4186,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -4418,7 +4418,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
@@ -4614,7 +4614,7 @@ namespace System.Linq
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
