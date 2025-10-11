@@ -1,11 +1,11 @@
 <Project>
 
   <!-- This props all need to be set in targets as they depend on the values set earlier -->
-  
-  <PropertyGroup>  
+
+  <PropertyGroup>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
   </PropertyGroup>
-    
+
   <PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
     <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_WPF;HAS_WINRT;HAS_DISPATCHER;HAS_REMOTING;DESKTOPCLR;NO_NULLABLE_ATTRIBUTES</DefineConstants>
   </PropertyGroup>

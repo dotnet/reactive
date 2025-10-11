@@ -99,14 +99,14 @@ Note that the specific version we actually want to target, 18362, isn't in there
 
 The following sections explain how we enable `uap10.0.18362` to be specified as a target framework, even though the tools do not support this.
 
-The project has `Directory.build.props` and `Directory.build.targets` files. The build tools search for these and automatically load them for all projects in the solution. The `Directory.build.props` file has a `<PropertyGroup>` with a `Condition` that means it runs only when the `uap10.0.18362` target is being built, and it sets numerous properties, as described in the following sections.
+The project has `Directory.Build.props` and `Directory.Build.targets` files. The build tools search for these and automatically load them for all projects in the solution. The `Directory.Build.props` file has a `<PropertyGroup>` with a `Condition` that means it runs only when the `uap10.0.18362` target is being built, and it sets numerous properties, as described in the following sections.
 
 
 #### Target Platform Version
 
 We make our minmum platform version match the one in the TFM:
 
-```xml   
+```xml
 <TargetPlatformMinVersion>10.0.18362</TargetPlatformMinVersion>
 <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
 ```
@@ -130,7 +130,7 @@ However, only _some_ properties should use the old name. We need to set _all_ of
 
 #### Compiler Constants
 
-When using the supported UWP build tools (with the old-form project system, which we can't use because we also need to build modern targets), the `WINDOWS_UWP` define constant is set, enabling source code compiled into multiple targets to detect that it is being built for UWP with a `#if WINDOWS_UWP`. So we need this in `Directory.build.props`:
+When using the supported UWP build tools (with the old-form project system, which we can't use because we also need to build modern targets), the `WINDOWS_UWP` define constant is set, enabling source code compiled into multiple targets to detect that it is being built for UWP with a `#if WINDOWS_UWP`. So we need this in `Directory.Build.props`:
 
 ```xml
 <DefineConstants>$(DefineConstants);WINDOWS_UWP</DefineConstants>
@@ -141,7 +141,7 @@ When using the supported UWP build tools (with the old-form project system, whic
 
 Normally, when you specify a TFM, the .NET SDK works out what framework library references are required and adds them for you. So if you write `<TargetFramework>net8.0<TargetFramework>` in a project file, you will automatically have access to all the .NET 8.0 runtime libraries. But because the .NET SDK does not support UWP, this doesn't work at all. So we need to do three things.
 
-First, we need to set this property in `Directory.build.props`:
+First, we need to set this property in `Directory.Build.props`:
 
 ```xml
 <NoStdLib>True</NoStdLib>
@@ -149,7 +149,7 @@ First, we need to set this property in `Directory.build.props`:
 
 Without this, the build tools attempt to add a reference to `mscorlib.dll`, but they don't seem to realise that a) this is the wrong thing and b) they don't actually have a correct location for that, so the reference ends up being `\mscorlib.dll` (i.e., it looks on the root of the hard drive).
 
-Second we need an `ItemGroup` in `Directory.build.targets` containing this:
+Second we need an `ItemGroup` in `Directory.bBild.targets` containing this:
 
 ```xml
 <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform"
@@ -171,7 +171,7 @@ You might be wondering about that 26100 in there. Why is that not 18362, consist
 
 #### Prevent Over-Zealous WinRT Interop Code Generation
 
-The .NET SDK has a feature by which it can generate WinRT versions of .NET types to enable interop between .NET and WinRT code. Unfortunately, the way we've rigged things up to be able to build for `uap10.0.18362.0` seems to cause this to generate these interop types for any .NET class that implements `IDisposable`! This is not helpful. So we disable the feature in `Directory.build.targets`:
+The .NET SDK has a feature by which it can generate WinRT versions of .NET types to enable interop between .NET and WinRT code. Unfortunately, the way we've rigged things up to be able to build for `uap10.0.18362.0` seems to cause this to generate these interop types for any .NET class that implements `IDisposable`! This is not helpful. So we disable the feature in `Directory.Build.targets`:
 
 ```xml
 <CsWinRTAotOptimizerEnabled>false</CsWinRTAotOptimizerEnabled>
