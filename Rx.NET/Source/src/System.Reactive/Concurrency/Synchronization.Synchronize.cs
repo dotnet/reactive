@@ -1,15 +1,16 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
-// See the LICENSE file in the project root for more information. 
+// See the LICENSE file in the project root for more information.
 
 namespace System.Reactive.Concurrency
 {
-    internal sealed class Synchronize<TSource> : Producer<TSource, Synchronize<TSource>._>
+    internal sealed class Synchronize<TSource, TGate> : Producer<TSource, Synchronize<TSource, TGate>._>
+        where TGate : notnull, new()
     {
         private readonly IObservable<TSource> _source;
-        private readonly object? _gate;
+        private readonly TGate? _gate;
 
-        public Synchronize(IObservable<TSource> source, object gate)
+        public Synchronize(IObservable<TSource> source, TGate gate)
         {
             _source = source;
             _gate = gate;
@@ -26,12 +27,12 @@ namespace System.Reactive.Concurrency
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private readonly object _gate;
+            private readonly TGate _gate;
 
-            public _(Synchronize<TSource> parent, IObserver<TSource> observer)
+            public _(Synchronize<TSource, TGate> parent, IObserver<TSource> observer)
                 : base(observer)
             {
-                _gate = parent._gate ?? new object();
+                _gate = parent._gate ?? new TGate();
             }
 
             public override void OnNext(TSource value)
