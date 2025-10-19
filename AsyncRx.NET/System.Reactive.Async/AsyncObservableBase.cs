@@ -153,7 +153,7 @@ namespace System.Reactive
 
                 if (onSomethingCall != null)
                 {
-                    await _pendingOnSomethingCallsTcs.Task.ConfigureAwait(false);
+                    await onSomethingCall.ConfigureAwait(false);
                 }
 
                 if (subscription != null)
