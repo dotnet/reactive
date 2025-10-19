@@ -105,7 +105,7 @@ namespace System.Reactive
 
                 try
                 {
-                    await task;
+                    await task.ConfigureAwait(false);
                 }
                 finally
                 {
