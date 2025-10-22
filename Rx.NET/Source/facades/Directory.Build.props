@@ -1,5 +1,5 @@
 <Project>
-  <Import Project="..\Directory.build.props" />
+  <Import Project="..\Directory.Build.props" />
   <PropertyGroup>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyVersionInfo>false</GenerateAssemblyVersionInfo>

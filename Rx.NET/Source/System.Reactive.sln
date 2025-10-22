@@ -19,8 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		analyzers.globalconfig = analyzers.globalconfig
 		..\..\azure-pipelines.rx.yml = ..\..\azure-pipelines.rx.yml
-		Directory.build.props = Directory.build.props
-		Directory.build.targets = Directory.build.targets
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
 		global.json = global.json
 		Rx.ruleset = Rx.ruleset
 		Test.ruleset = Test.ruleset
@@ -30,13 +30,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D324579D-CBE6-4867-8980-D7842C7C45A2}"
 	ProjectSection(SolutionItems) = preProject
 		tests\.editorconfig = tests\.editorconfig
-		tests\Directory.build.props = tests\Directory.build.props
-		tests\Directory.build.targets = tests\Directory.build.targets
+		tests\Directory.Build.props = tests\Directory.Build.props
+		tests\Directory.Build.targets = tests\Directory.Build.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Facades", "Facades", "{A0F39260-B8F8-4FCB-9679-0ED917A22BDF}"
 	ProjectSection(SolutionItems) = preProject
-		facades\Directory.build.props = facades\Directory.build.props
+		facades\Directory.Build.props = facades\Directory.Build.props
 		facades\System.Reactive.Compatibility.nuspec = facades\System.Reactive.Compatibility.nuspec
 	EndProjectSection
 EndProject

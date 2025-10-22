@@ -13,8 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\.editorconfig = ..\..\.editorconfig
 		..\..\azure-pipelines.ix.yml = ..\..\azure-pipelines.ix.yml
 		CodeCoverage.runsettings = CodeCoverage.runsettings
-		Directory.build.props = Directory.build.props
-		Directory.build.targets = Directory.build.targets
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
 		version.json = version.json
 	EndProjectSection
 EndProject
@@ -61,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasterLinq", "FasterLinq\Fa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Refs", "Refs", "{A3D72E6E-4ADA-42E0-8B2A-055B1F244281}"
 	ProjectSection(SolutionItems) = preProject
-		refs\Directory.build.props = refs\Directory.build.props
+		refs\Directory.Build.props = refs\Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive", "refs\System.Interactive\System.Interactive.csproj", "{2EC0C302-B029-4DDB-AC91-000BF11006AD}"

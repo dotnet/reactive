@@ -27,7 +27,7 @@ At the time of writing this, the current version of `System.Interactive` is 6.0.
     * `net6.0`
     * `netstandard2.1`
 
-  
+
 The use of `net4.8` in `ref` seems to have been a bug: that should have been `net48`. (The main reason I am confident it's a bug, and not a clever but obscure trick that we've not understood, is that the [commit of 2021/12/06 that added this](https://github.com/dotnet/reactive/commit/a2410b2267abe193191f3894d243771ae4b126fd) used [`net48` in reference assemblies for one of the other packages](https://github.com/dotnet/reactive/commit/a2410b2267abe193191f3894d243771ae4b126fd#diff-3b568c93a468dab1b1a619a450bf1c4d88d3ec9539737d09fa6fb7659bc0ae5fR7), so this just seems to have been a slip.)
 
 The other discrepancy is that we have `netstandard2.0` in the `lib` folder but `netstandard2.1` in the ref folder. At first glance, this too looks quite a lot like a mistake, particularly when you examine the history. Here is the point in the release history at which the `ref` folder first started having a `netstandard2.1` folder:
@@ -45,12 +45,12 @@ And yet, on closer inspection, this appears to be deliberate. Looking at this co
 
   https://github.com/dotnet/reactive/commit/0252fb537c9d335b9bc863b65291f152c07ba385
 
-  we see a [comment in Ix.NET/Source/refs/Directory.build.props](https://github.com/dotnet/reactive/commit/0252fb537c9d335b9bc863b65291f152c07ba385#diff-909504334cbab5c432709c95ae78c24fb2910d850958af2ef6de444b18e5c8ecR6) saying:
-  
+  we see a [comment in Ix.NET/Source/refs/Directory.Build.props](https://github.com/dotnet/reactive/commit/0252fb537c9d335b9bc863b65291f152c07ba385#diff-909504334cbab5c432709c95ae78c24fb2910d850958af2ef6de444b18e5c8ecR6) saying:
+
 > This is here so we can create a fake .NET Standard 2.1 facade
 
 I can only guess that they knew .NET Standard 2.1 was coming, and wanted to ensure that `System.Interactive` was ready for it when it shipped.
-  
+
 So it was deliberate. But offering reference assemblies for a platform without any corresponding implementation for that platform is an odd choice. (And although at the time this was a placholder for a forthcoming .NET Standard version, it continued to look like this after .NET Standard 2.1 shipped. All subsequent Ix.NET releases have continued to provide `netstandard2.1` in the `ref` folder with no matching folder in `lib`. So it wasn't just a temporary measure.) What purpose does this serve?
 
 Some of the features that Ix offers eventually became available in .NET Core, such as `EnumerableEx.SkipLast`. This method exists in the implementation assemblies for every TFM of Ix.NET, but the `netstandard2.1` and `net6.0` reference assemblies omit it. This has the effect that if you're targetting any version of .NET recent enough to have these methods built into the .NET runtime libraries, the Ix.NET equivalents will:
