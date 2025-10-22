@@ -1004,7 +1004,7 @@ public static IObservable<T> ToObservableOversimplified<T>(this IEnumerable<T> s
             o.OnNext(item);
         }
 
-        o.OnComplete();
+        o.OnCompleted();
 
         // Incorrectly ignoring unsubscription.
         return Disposable.Empty;
