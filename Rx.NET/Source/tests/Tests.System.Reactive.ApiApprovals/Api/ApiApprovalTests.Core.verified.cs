@@ -1297,7 +1297,7 @@ namespace System.Reactive.Linq
         public static System.Collections.Generic.IEnumerable<TSource> Next<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> ObserveOn<TSource>(this System.IObservable<TSource> source, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<TSource> ObserveOn<TSource>(this System.IObservable<TSource> source, System.Threading.SynchronizationContext context) { }
-        public static System.IObservable<TResult> OfType<TResult>(this System.IObservable<object> source) { }
+        public static System.IObservable<TResult> OfType<TResult>(this System.IObservable<object?> source) { }
         public static System.IObservable<TSource> OnErrorResumeNext<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
         public static System.IObservable<TSource> OnErrorResumeNext<TSource>(params System.IObservable<TSource>[] sources) { }
         public static System.IObservable<TSource> OnErrorResumeNext<TSource>(this System.IObservable<TSource> first, System.IObservable<TSource> second) { }

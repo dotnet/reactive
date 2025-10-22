@@ -64,6 +64,49 @@ namespace ReactiveTests.Tests
             );
         }
 
+#nullable enable
+        [TestMethod]
+        public void OfType_NullableSourceOfTypeNonNull()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext<A?>(210, new B(0)),
+                OnNext<A?>(220, new A(1)),
+                OnNext<A?>(230, default(A?)),
+                OnNext<A?>(240, new D(3)),
+                OnNext<A?>(250, new C(4)),
+                OnNext<A?>(260, new B(5)),
+                OnNext<A?>(270, new B(6)),
+                OnNext<A?>(280, new D(7)),
+                OnNext<A?>(290, new A(8)),
+                OnNext<A?>(340, new B(10)),
+                OnCompleted<A?>(350)
+            );
+
+            var res = scheduler.Start(() =>
+                xs.OfType<A>()
+            );
+
+            res.Messages.AssertEqual(
+                OnNext<A>(210, new B(0)),
+                OnNext<A>(220, new A(1)),
+                OnNext<A>(240, new D(3)),
+                OnNext<A>(250, new C(4)),
+                OnNext<A>(260, new B(5)),
+                OnNext<A>(270, new B(6)),
+                OnNext<A>(280, new D(7)),
+                OnNext<A>(290, new A(8)),
+                OnNext<A>(340, new B(10)),
+                OnCompleted<A>(350)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+        }
+#nullable restore
+
         [TestMethod]
         public void OfType_Error()
         {

@@ -929,7 +929,7 @@ namespace System.Reactive.Linq
         /// <param name="source">The observable sequence that contains the elements to be filtered.</param>
         /// <returns>An observable sequence that contains elements from the input sequence of type TResult.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IObservable<TResult> OfType<TResult>(this IObservable<object> source)
+        public static IObservable<TResult> OfType<TResult>(this IObservable<object?> source)
         {
             if (source == null)
             {
