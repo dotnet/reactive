@@ -9,6 +9,18 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107" Aliases="SystemLinqAsyncEnumerable" />
+  </ItemGroup>
+
+  <Target Name="_SetAliasOnBuiltInSystemLinqAsyncEnumerable" BeforeTargets="ResolveAssemblyReferences">
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+      <Reference Condition="'%(Reference.AssemblyName)' == 'System.Linq.AsyncEnumerable'">
+        <Aliases>SystemLinqAsyncEnumerable</Aliases>
+      </Reference>
+    </ItemGroup>
+  </Target>
+
   <ItemGroup>
     <Compile Remove="Api\*.verified.cs" />
     <Compile Remove="Api\*.received.cs" />
@@ -17,11 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="PublicApiGenerator" Version="11.1.0" />
-    <PackageReference Include="Verify.Xunit" Version="25.3.0" />
-    <PackageReference Include="xunit" Version="2.8.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
+    <PackageReference Include="PublicApiGenerator" Version="11.4.6" />
+    <PackageReference Include="Verify.Xunit" Version="30.20.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

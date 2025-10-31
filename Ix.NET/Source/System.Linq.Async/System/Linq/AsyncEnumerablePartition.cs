@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     /// <summary>
     /// An iterator that yields the items of part of an <see cref="IAsyncEnumerable{TSource}"/>.
     /// </summary>
@@ -379,4 +380,5 @@ namespace System.Linq
             return index;
         }
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

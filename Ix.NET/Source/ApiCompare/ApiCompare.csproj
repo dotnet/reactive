@@ -5,6 +5,20 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107"
+                      Aliases="SystemLinqAsyncEnumerable" />
+  </ItemGroup>
+
+  <Target Name="_SetAliasOnBuiltInSystemLinqAsyncEnumerable" BeforeTargets="ResolveAssemblyReferences">
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+      <Reference Condition="'%(Reference.AssemblyName)' == 'System.Linq.AsyncEnumerable'">
+        <Aliases>SystemLinqAsyncEnumerable</Aliases>
+      </Reference>
+    </ItemGroup>
+  </Target>
+
   <ItemGroup>
     <ProjectReference Include="..\System.Interactive.Async.Providers\System.Interactive.Async.Providers.csproj" />
     <ProjectReference Include="..\System.Interactive.Async\System.Interactive.Async.csproj" />

@@ -11,6 +11,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.skiplast?view=net-9.0-pp
+
         /// <summary>
         /// Bypasses a specified number of elements at the end of an async-enumerable sequence.
         /// </summary>
@@ -68,5 +71,6 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

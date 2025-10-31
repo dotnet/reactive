@@ -1,0 +1,155 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT License.
+// See the LICENSE file in the project root for more information.
+
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace System.Linq
+{
+<#
+// Although .NET 10.0's System.Linq.AsyncEnumerable defines AverageAsync, it is missing some features that were previously defined in System.Linq.Async:
+//  Overloads of AverageAsync accepting a selector function (e.g. xs.AverageAsync(x => x.Value))
+//  The AverageAwaitAsync variants accepting an async selector function returning a ValueTask
+//  The AverageAwaitWithCancellationAsync variant where an async selector function accepts a CancellationToken
+// Since we are deprecating System.Linq.Async, these methods are now available there only in the runtime (lib) assemblies and not the
+// ref assemblies. So they are available for binary backwards compatibility, but are not visible during compilation. This is necessary
+// to ensure that code now gets the .NET 10 implementations of AverageAsync where available. But we want to enable code that was using
+// the functionality that .NET 10 did not replicate to be able to continue to work after removing the reference to System.Linq.Async.
+// So we've moved the relevant functionality back into System.Interactive.Async because that has always been the home of LINQ-like
+// features for IAsyncEnumerable<T> that aren't part of the core LINQ functionality.
+#>
+    public static partial class AsyncEnumerableEx
+    {
+<#
+var os = new[]
+{
+    new { type = "int", res = "double", sum = "long" },
+    new { type = "long", res = "double", sum = "long" },
+    new { type = "float", res = "float", sum = "double" },
+    new { type = "double", res = "double", sum = "double" },
+    new { type = "decimal", res = "decimal", sum = "decimal" },
+    new { type = "int?", res = "double?", sum = "long" },
+    new { type = "long?", res = "double?", sum = "long" },
+    new { type = "float?", res = "float?", sum = "double" },
+    new { type = "double?", res = "double?", sum = "double" },
+    new { type = "decimal?", res = "decimal?", sum = "decimal" },
+};
+
+foreach (var o in os)
+{
+    var isNullable = o.type.EndsWith("?");
+    var t = o.type.TrimEnd('?');
+
+    string res = "";
+
+    if (t == "int" || t == "long")
+        res = "(double)sum / count";
+    else if (t == "double" || t == "decimal")
+        res = "sum / count";
+    else if (t == "float")
+        res = "(float)(sum / count)";
+
+    var typeStr = o.type;
+    if (isNullable) {
+        typeStr = "Nullable{" + o.type.Substring(0, 1).ToUpper() + o.type.Substring(1, o.type.Length - 2) + "}";
+    }
+#>
+
+        /// <summary>
+        /// Computes the average of an async-enumerable sequence of <see cref="<#=typeStr#>" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values to calculate the average of.</param>
+        /// <param name="selector">A transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>An async-enumerable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        public static ValueTask<<#=o.res#>> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=o.type#>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return Core(source, selector, cancellationToken);
+
+            static async ValueTask<<#=o.res#>> Core(IAsyncEnumerable<TSource> source, Func<TSource, <#=o.type#>> selector, CancellationToken cancellationToken)
+            {
+<#
+if (isNullable)
+{
+#>
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                {
+                    while (await e.MoveNextAsync())
+                    {
+                        var v = selector(e.Current);
+                        if (v.HasValue)
+                        {
+                            <#=o.sum#> sum = v.GetValueOrDefault();
+                            long count = 1;
+                            checked
+                            {
+                                while (await e.MoveNextAsync())
+                                {
+                                    v = selector(e.Current);
+                                    if (v.HasValue)
+                                    {
+                                        sum += v.GetValueOrDefault();
+                                        ++count;
+                                    }
+                                }
+                            }
+
+                            return <#=res#>;
+                        }
+                    }
+                }
+
+                return null;
+<#
+}
+else
+{
+#>
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    <#=o.sum#> sum = selector(e.Current);
+                    long count = 1;
+                    checked
+                    {
+                        while (await e.MoveNextAsync())
+                        {
+                            sum += selector(e.Current);
+                            ++count;
+                        }
+                    }
+
+                    return <#=res#>;
+                }
+<#
+}
+#>
+            }
+        }
+
+<#
+}
+#>
+    }
+}

@@ -17,6 +17,11 @@ namespace System.Linq
         //         the source is not an option, because it would require users to specify two type arguments, unlike
         //         what's done in Enumerable.OfType. Should we move this method to Ix, thus doing away with OfType
         //         in the API surface altogether?
+        // IDG 2025/09/30: System.Linq.AsyncEnumerable implemented this one despite the limitations (and despite
+        //         not implementing AsAsyncEnumerable).
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.oftype?view=net-9.0-pp
 
         /// <summary>
         /// Filters the elements of an async-enumerable sequence based on the specified type.
@@ -43,5 +48,6 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

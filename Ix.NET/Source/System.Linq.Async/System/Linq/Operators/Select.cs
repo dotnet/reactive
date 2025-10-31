@@ -10,6 +10,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.select?view=net-9.0-pp#system-linq-asyncenumerable-select-2(system-collections-generic-iasyncenumerable((-0))-system-func((-0-1)))
+
         /// <summary>
         /// Projects each element of an async-enumerable sequence into a new form.
         /// </summary>
@@ -33,6 +36,8 @@ namespace System.Linq
                 _ => new SelectEnumerableAsyncIterator<TSource, TResult>(source, selector),
             };
         }
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.select?view=net-9.0-pp#system-linq-asyncenumerable-select-2(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-int32-1)))
 
         /// <summary>
         /// Projects each element of an async-enumerable sequence into a new form by incorporating the element's index.
@@ -67,6 +72,7 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Projects each element of an async-enumerable sequence into a new form by applying an asynchronous selector function to each member of the source sequence and awaiting the result.
@@ -78,6 +84,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence whose elements are the result of invoking the transform function on each element of the source sequence and awaiting the result.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use Select. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectAwait functionality now exists as overloads of Select.")]
         private static IAsyncEnumerable<TResult> SelectAwaitCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
         {
             if (source == null)
@@ -95,6 +102,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Select. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectAwaitWithCancellation functionality now exists as overloads of Select.")]
         private static IAsyncEnumerable<TResult> SelectAwaitWithCancellationCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector)
         {
             if (source == null)
@@ -121,6 +129,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence whose elements are the result of invoking the transform function on each element and its index of the source sequence and awaiting the result.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use Select. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectAwait functionality now exists as overloads of Select.")]
         private static IAsyncEnumerable<TResult> SelectAwaitCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector)
         {
             if (source == null)
@@ -148,6 +157,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Select. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectAwaitWithCancellation functionality now exists as overloads of Select.")]
         private static IAsyncEnumerable<TResult> SelectAwaitWithCancellationCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<TResult>> selector)
         {
             if (source == null)

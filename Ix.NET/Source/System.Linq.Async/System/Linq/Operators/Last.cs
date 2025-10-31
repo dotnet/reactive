@@ -10,6 +10,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.lastasync?view=net-9.0-pp#system-linq-asyncenumerable-lastasync-1(system-collections-generic-iasyncenumerable((-0))-system-threading-cancellationtoken)
+
         /// <summary>
         /// Returns the last element of an async-enumerable sequence.
         /// </summary>
@@ -33,6 +36,8 @@ namespace System.Linq
                 return last.HasValue ? last.Value : throw Error.NoElements();
             }
         }
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.lastasync?view=net-9.0-pp#system-linq-asyncenumerable-lastasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean))-system-threading-cancellationtoken)
 
         /// <summary>
         /// Returns the last element of an async-enumerable sequence that satisfies the condition in the predicate.
@@ -61,6 +66,8 @@ namespace System.Linq
             }
         }
 
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+
         /// <summary>
         /// Returns the last element of an async-enumerable sequence that satisfies the condition in the predicate.
         /// </summary>
@@ -72,6 +79,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) No element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use LastAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the LastAwaitAsync functionality now exists as overloads of LastAsync.")]
         private static ValueTask<TSource> LastAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -91,6 +99,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use LastAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the LastAwaitWithCancellationAsync functionality now exists as overloads of LastAsync.")]
         private static ValueTask<TSource> LastAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)

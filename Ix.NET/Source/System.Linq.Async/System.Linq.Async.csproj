@@ -1,7 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+    <!--
+    .NET 10.0 gets its own target because that doesn't need a transitive reference
+    to System.Linq.AsyncEnumerable - it's built in from .NET 10.0 and later -
+    but all other targets do need that reference.
+    Even though we support back to .NET 8.0 for v7, we don't build targets for
+    any versions older than net10.0 because net8.0 and net9.0 are both covered
+    by the netstandard2.0 target.
+    -->
+    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;net10.0</TargetFrameworks>
     <Title>System.Linq.Async</Title>    
     <PackageTags>LINQ;async;streams;query</PackageTags>
     <Description>Provides support for Language-Integrated Query (LINQ) over IAsyncEnumerable&lt;T&gt; sequences.</Description>  
@@ -16,6 +24,17 @@
           Pack="true" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <!--
+    The ref assembly defines the public API visible at compile time, so it should not include any methods for which
+    System.Linq.AsyncEnumerable defines source-compatible replacements, because their continued availability would
+    cause compile-time ambiguity.
+    We retain the code because we continue to make these methods available in the runtime assembly (in the lib folder)
+    to provide binary compatibility. This project builds the runtime assembly, so we need to include these methods.
+    -->
+    <DefineConstants>$(DefineConstants);INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES</DefineConstants>
+  </PropertyGroup>
+
   <!--
   These warnings occur because we are deliberately creating a lib/ref mismatch. There doesn't seem to be
   an official way to do that, so we have to suppress the warnings.
@@ -27,8 +46,9 @@
     <!--
     NU5128: lib/ref mismatch. This is deliberate, as explained in the ADR.
     NU5131: spurious missing file errors. It appears that the build is confused by what we're doing.
+    CS0618: Type or member is obsolete - this whole library is essentially obsolete, so internal use of obsolete features is OK and widespread.
     -->
-    <NoWarn>$(NoWarn);NU5128;NU5131</NoWarn>
+    <NoWarn>$(NoWarn);NU5128;NU5131;CS0618</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -57,9 +77,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'netstandard2.0' " Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+    <!--
+    System.Linq.Async is being deprecated by System.Linq.AsyncEnumerable (part of .NET 10, but available to older runtimes via NuGet)
+    but System.Linq.AsyncEnumerable does not include all of System.Linq.Async's functionality. We're moving that functionality into
+    System.Interactive.Async, because that is the home of IAsyncEnumerable features that are LINQ-adjacent but not build into
+    the .NET runtime libraries.
+    By referencing System.Interactive.Async here, we make that functionality available to users of System.Linq.Async until such
+    time as they remove their reference to this library.
+    -->
+    <ProjectReference Include="..\System.Interactive.Async\System.Interactive.Async.csproj" Aliases="SystemInteractiveAsync" />
     <ProjectReference Include="..\System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
+
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107" Aliases="SystemLinqAsyncEnumerable" />
+  </ItemGroup>
+
+  <Target Name="_SetAliasOnBuiltInSystemLinqAsyncEnumerable" BeforeTargets="ResolveAssemblyReferences">
+    
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+      <Reference Condition="'%(Reference.AssemblyName)' == 'System.Linq.AsyncEnumerable'">
+        <Aliases>SystemLinqAsyncEnumerable</Aliases>
+      </Reference>
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <Compile Update="System\Linq\AsyncEnumerable.AsyncOverloads.cs">
@@ -119,6 +161,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Where.Opt.Generated.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
 </Project>

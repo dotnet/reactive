@@ -22,7 +22,7 @@ namespace Tests
         }
 
         [Fact]
-        public async void CorrectDispose()
+        public async Task CorrectDispose()
         {
             var disposed = new TaskCompletionSource<bool>();
 

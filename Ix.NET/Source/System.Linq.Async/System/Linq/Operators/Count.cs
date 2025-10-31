@@ -11,6 +11,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.countasync?view=net-9.0-pp#system-linq-asyncenumerable-countasync-1(system-collections-generic-iasyncenumerable((-0))-system-threading-cancellationtoken)
+
         /// <summary>
         /// Returns an async-enumerable sequence containing an <see cref="int" /> that represents the total number of elements in an async-enumerable sequence.
         /// </summary>
@@ -50,6 +53,8 @@ namespace System.Linq
             }
         }
 
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.countasync?view=net-9.0-pp#system-linq-asyncenumerable-countasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean))-system-threading-cancellationtoken)
+
         /// <summary>
         /// Returns an async-enumerable sequence containing an <see cref="int" /> that represents how many elements in the specified async-enumerable sequence satisfy a condition.
         /// </summary>
@@ -87,6 +92,14 @@ namespace System.Linq
                 return count;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.countasync?view=net-9.0-pp#system-linq-asyncenumerable-countasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-threading-cancellationtoken-system-threading-tasks-valuetask((system-boolean))))-system-threading-cancellationtoken)
+        // Two overloads here are replaced by a single method.
+        // System.Linq.AsyncEnumerable only supplies the async predicate form where the callback accepts a cancellation token, but
+        // the CountAwaitAsync version that does not take this does not add any additional functionality. Since developers will need
+        // to change their code in any case to move off these obsolete methods, it would not be particularly useful to add a
+        // non-cancellable async predicate overload in System.Interactive.Async.
 
         /// <summary>
         /// Counts the elements in an async-enumerable sequence that satisfy a condition.
@@ -98,6 +111,7 @@ namespace System.Linq
         /// <returns>A ValueTask containing the number of elements in the sequence that satisfy the predicate.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use CountAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the CountAwaitAsync functionality now exists as overloads of CountAsync.")]
         private static ValueTask<int> CountAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -127,6 +141,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
+        [Obsolete("Use CountAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the CountAwaitWithCancellationAsync functionality now exists as overloads of CountAsync.")]
         [GenerateAsyncOverload]
         private static ValueTask<int> CountAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {

@@ -10,6 +10,10 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.tolookupasync?view=net-9.0-pp#system-linq-asyncenumerable-tolookupasync-2(system-collections-generic-iasyncenumerable((-0))-system-func((-0-1))-system-collections-generic-iequalitycomparer((-1))-system-threading-cancellationtoken)
+        // That one overload covers the next two methods, because it supplieds a default comparer.
+
         /// <summary>
         /// Creates a lookup from an async-enumerable sequence according to a specified key selector function.
         /// </summary>
@@ -50,6 +54,7 @@ namespace System.Linq
                 return await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Creates a lookup from an async-enumerable sequence by invoking a key-selector function on each element and awaiting the result.
@@ -63,6 +68,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToLookupAwaitAsync functionality now exists as overloads of ToLookupAsync.")]
         private static ValueTask<ILookup<TKey, TSource>> ToLookupAwaitAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) =>
             ToLookupAwaitAsyncCore<TSource, TKey>(source, keySelector, comparer:null, cancellationToken);
 
@@ -79,6 +85,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToLookupAwaitAsync functionality now exists as overloads of ToLookupAsync.")]
         private static ValueTask<ILookup<TKey, TSource>> ToLookupAwaitAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -96,10 +103,12 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToLookupAwaitWithCancellationAsync functionality now exists as overloads of ToLookupAsync.")]
         private static ValueTask<ILookup<TKey, TSource>> ToLookupAwaitWithCancellationAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) =>
             ToLookupAwaitWithCancellationAsyncCore(source, keySelector, comparer: null, cancellationToken);
 
         [GenerateAsyncOverload]
+        [Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToLookupAwaitWithCancellationAsync functionality now exists as overloads of ToLookupAsync.")]
         private static ValueTask<ILookup<TKey, TSource>> ToLookupAwaitWithCancellationAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -115,6 +124,10 @@ namespace System.Linq
             }
         }
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.tolookupasync?view=net-9.0-pp#system-linq-asyncenumerable-tolookupasync-3(system-collections-generic-iasyncenumerable((-0))-system-func((-0-1))-system-func((-0-2))-system-collections-generic-iequalitycomparer((-1))-system-threading-cancellationtoken)
+        // That one overload covers the next two methods, because it supplieds a default comparer.
 
         /// <summary>
         /// Creates a lookup from an async-enumerable sequence according to a specified key selector function, and an element selector function.
@@ -162,6 +175,7 @@ namespace System.Linq
                 return await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Creates a lookup from an async-enumerable sequence by invoking key and element selector functions on each source element and awaiting the results.
@@ -177,6 +191,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToLookupAwaitAsync functionality now exists as overloads of ToLookupAsync.")]
         private static ValueTask<ILookup<TKey, TElement>> ToLookupAwaitAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) =>
             ToLookupAwaitAsyncCore<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null, cancellationToken);
 
@@ -195,6 +210,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> or <paramref name="comparer"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToLookupAwaitAsync functionality now exists as overloads of ToLookupAsync.")]
         private static ValueTask<ILookup<TKey, TElement>> ToLookupAwaitAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -214,10 +230,12 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToLookupAwaitWithCancellationAsync functionality now exists as overloads of ToLookupAsync.")]
         private static ValueTask<ILookup<TKey, TElement>> ToLookupAwaitWithCancellationAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) =>
             ToLookupAwaitWithCancellationAsyncCore(source, keySelector, elementSelector, comparer: null, cancellationToken);
 
         [GenerateAsyncOverload]
+        [Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToLookupAwaitWithCancellationAsync functionality now exists as overloads of ToLookupAsync.")]
         private static ValueTask<ILookup<TKey, TElement>> ToLookupAwaitWithCancellationAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)

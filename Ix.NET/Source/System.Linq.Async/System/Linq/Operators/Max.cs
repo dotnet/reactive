@@ -10,6 +10,16 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.maxasync?view=net-9.0-pp
+        // The method above has a slightly different signature: it takes a comparer. In cases where the cancellationToken
+        // has not been supplied, or has been passed by name, that method is source-compatible with this one.
+        // However, anyone calling this method with an unnamed cancellationToken argument will get an error because
+        // the comparer argument comes before the cancellationToken argument. There's not much we can do about
+        // this because if we continue to offer this method, it will result in ambiguous matches. The least bad
+        // option seems to be to hide this method, and anyone who was relying on it taking a positional
+        // cancellation token argument will need to deal with the compilation error.
+
         /// <summary>
         /// Returns the maximum element in an async-enumerable sequence.
         /// </summary>
@@ -95,6 +105,8 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
         /// Invokes a transform function on each element of a sequence and returns the maximum value.
         /// </summary>
@@ -106,6 +118,7 @@ namespace System.Linq
         /// <returns>A ValueTask containing a single element with the value that corresponds to the maximum element in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by the MaxAsync overload that took a selector callback now exists as an overload of MaxByAsync.")]
         public static ValueTask<TResult> MaxAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -196,6 +209,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<TResult> MaxAwaitAsyncCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -277,6 +291,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitWithCancellationAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<TResult> MaxAwaitWithCancellationAsyncCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
