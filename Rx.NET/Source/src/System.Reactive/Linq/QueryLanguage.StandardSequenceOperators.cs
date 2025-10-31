@@ -188,9 +188,9 @@ namespace System.Reactive.Linq
 
         #region + OfType +
 
-        public virtual IObservable<TResult> OfType<TResult>(IObservable<object> source)
+        public virtual IObservable<TResult> OfType<TResult>(IObservable<object?> source)
         {
-            return new OfType<object, TResult>(source);
+            return new OfType<object?, TResult>(source);
         }
 
         #endregion

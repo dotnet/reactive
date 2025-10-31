@@ -16,7 +16,7 @@ namespace System.Linq
 
         /// <summary>
         /// Applies an accumulator function over an async-enumerable sequence and returns each intermediate result.
-        /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource}"/>.
+        /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource}(IAsyncEnumerable{TSource}, Func{TSource, TSource, TSource}, CancellationToken)"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence and the result of the aggregation.</typeparam>
         /// <param name="source">An async-enumerable sequence to accumulate over.</param>
@@ -54,7 +54,7 @@ namespace System.Linq
 
         /// <summary>
         /// Applies an accumulator function over an async-enumerable sequence and returns each intermediate result. The specified seed value is used as the initial accumulator value.
-        /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource, Accumulate}"/>.
+        /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource, TAccumulate}(IAsyncEnumerable{TSource}, TAccumulate, Func{TAccumulate, TSource, TAccumulate}, CancellationToken)"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TAccumulate">The type of the result of the aggregation.</typeparam>
@@ -87,7 +87,7 @@ namespace System.Linq
 
         /// <summary>
         /// Applies an asynchronous accumulator function over an async-enumerable sequence and returns each intermediate result.
-        /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource}"/>.
+        /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource}(IAsyncEnumerable{TSource}, Func{TSource, TSource, CancellationToken, ValueTask{TSource}}, CancellationToken)"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence and the result of the aggregation.</typeparam>
         /// <param name="source">An async-enumerable sequence to accumulate over.</param>
@@ -126,7 +126,7 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         /// <summary>
         /// Applies an asynchronous (cancellable) accumulator function over an async-enumerable sequence and returns each intermediate result.
-        /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource}"/>.
+        /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource, TAccumulate}(IAsyncEnumerable{TSource}, TAccumulate, Func{TAccumulate, TSource, CancellationToken, ValueTask{TAccumulate}}, CancellationToken)"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence and the result of the aggregation.</typeparam>
         /// <param name="source">An async-enumerable sequence to accumulate over.</param>
@@ -165,7 +165,7 @@ namespace System.Linq
 
         /// <summary>
         /// Applies an asynchronous accumulator function over an async-enumerable sequence and returns each intermediate result. The specified seed value is used as the initial accumulator value.
-        /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource, Accumulate}"/>.
+        /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource, TAccumulate, TResult}(IAsyncEnumerable{TSource}, TAccumulate, Func{TAccumulate, TSource, CancellationToken, ValueTask{TAccumulate}}, Func{TAccumulate, CancellationToken, ValueTask{TResult}}, CancellationToken)"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TAccumulate">The type of the result of the aggregation.</typeparam>
@@ -199,7 +199,7 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         /// <summary>
         /// Applies an asynchronous (cancellable) accumulator function over an async-enumerable sequence and returns each intermediate result. The specified seed value is used as the initial accumulator value.
-        /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource, Accumulate}"/>.
+        /// For aggregation behavior with no intermediate results, see <see cref="AsyncEnumerable.AggregateAsync{TSource, TAccumulate, TResult}(IAsyncEnumerable{TSource}, TAccumulate, Func{TAccumulate, TSource, CancellationToken, ValueTask{TAccumulate}}, Func{TAccumulate, CancellationToken, ValueTask{TResult}}, CancellationToken)"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TAccumulate">The type of the result of the aggregation.</typeparam>

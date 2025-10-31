@@ -1,7 +1,7 @@
 ﻿[assembly: System.CLSCompliant(true)]
 [assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName=".NET 6.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.1", FrameworkDisplayName=".NET Standard 2.1")]
 namespace System.Collections.Generic
 {
     public static class AsyncEnumerator
@@ -18,60 +18,107 @@ namespace System.Linq
         public static System.Threading.Tasks.ValueTask<TSource> AggregateAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TSource, TSource> accumulator, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TAccumulate> AggregateAsync<TSource, TAccumulate>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, TAccumulate seed, System.Func<TAccumulate, TSource, TAccumulate> accumulator, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TResult> AggregateAsync<TSource, TAccumulate, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, TAccumulate seed, System.Func<TAccumulate, TSource, TAccumulate> accumulator, System.Func<TAccumulate, TResult> resultSelector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use AggregateAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, " +
+            "and the AggregateAwaitAsync now exists as overloads of AggregateAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource> AggregateAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TSource, System.Threading.Tasks.ValueTask<TSource>> accumulator, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use AggregateAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, " +
+            "and the AggregateAwaitAsync functionality now exists as overloads of AggregateAs" +
+            "ync.")]
         public static System.Threading.Tasks.ValueTask<TAccumulate> AggregateAwaitAsync<TSource, TAccumulate>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, TAccumulate seed, System.Func<TAccumulate, TSource, System.Threading.Tasks.ValueTask<TAccumulate>> accumulator, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use AggregateAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, " +
+            "and the AggregateAwaitAsync functionality now exists as overloads of AggregateAs" +
+            "ync.")]
         public static System.Threading.Tasks.ValueTask<TResult> AggregateAwaitAsync<TSource, TAccumulate, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, TAccumulate seed, System.Func<TAccumulate, TSource, System.Threading.Tasks.ValueTask<TAccumulate>> accumulator, System.Func<TAccumulate, System.Threading.Tasks.ValueTask<TResult>> resultSelector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use AggregateAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, " +
+            "and the AggregateAwaitWithCancellationAsync functionality now exists as overload" +
+            "s of AggregateAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource> AggregateAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TSource>> accumulator, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use AggregateAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, " +
+            "and the AggregateAwaitWithCancellationAsync functionality now exists as overload" +
+            "s of AggregateAsync.")]
         public static System.Threading.Tasks.ValueTask<TAccumulate> AggregateAwaitWithCancellationAsync<TSource, TAccumulate>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, TAccumulate seed, System.Func<TAccumulate, TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TAccumulate>> accumulator, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use AggregateAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, " +
+            "and the AggregateAwaitWithCancellationAsync functionality now exists as overload" +
+            "s of AggregateAsync.")]
         public static System.Threading.Tasks.ValueTask<TResult> AggregateAwaitWithCancellationAsync<TSource, TAccumulate, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, TAccumulate seed, System.Func<TAccumulate, TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TAccumulate>> accumulator, System.Func<TAccumulate, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> resultSelector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<bool> AllAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use AllAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and th" +
+            "e AllAwaitAsync functionality now exists as overloads of All.")]
         public static System.Threading.Tasks.ValueTask<bool> AllAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use AllAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and th" +
+            "e AllAwaitWithCancellationAsync functionality now exists as overloads of AllAsyn" +
+            "c.")]
         public static System.Threading.Tasks.ValueTask<bool> AllAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<bool> AnyAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<bool> AnyAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use AnyAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and th" +
+            "e AnyAwaitAsync functionality now exists as overloads of AnyAsync.")]
         public static System.Threading.Tasks.ValueTask<bool> AnyAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use AnyAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and th" +
+            "e AnyAwaitWithCancellationAsync functionality now exists as overloads of AnyAsyn" +
+            "c.")]
         public static System.Threading.Tasks.ValueTask<bool> AnyAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Append<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, TSource element) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> AsAsyncEnumerable<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source) { }
         public static System.Threading.Tasks.ValueTask<decimal> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<decimal> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<double> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<int> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<long> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<float> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<decimal?> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<decimal?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<double> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<double?> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<double?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<float> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<float> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<float?> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<float?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<int> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<double?> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<int?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<long> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<double?> AverageAsync(this System.Collections.Generic.IAsyncEnumerable<long?> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<decimal> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, decimal> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<decimal?> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, decimal?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<double?> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<float> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<float?> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<double?> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<double?> AverageAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<decimal> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<decimal>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<decimal?> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<decimal?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<double> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<double?> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<double?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<float> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<float?> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<float?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<double> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<double?> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<int?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<double> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<double?> AverageAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<long?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<decimal> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<decimal>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<decimal?> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<decimal?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<double> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<double?> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<double?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<float> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<float?> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<float?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<double> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<double?> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<int?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<double> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<double?> AverageAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<long?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> Cast<TResult>(this System.Collections.Generic.IAsyncEnumerable<object> source) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Concat<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> first, System.Collections.Generic.IAsyncEnumerable<TSource> second) { }
@@ -79,7 +126,12 @@ namespace System.Linq
         public static System.Threading.Tasks.ValueTask<bool> ContainsAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, TSource value, System.Collections.Generic.IEqualityComparer<TSource>? comparer, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<int> CountAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<int> CountAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use CountAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the CountAwaitAsync functionality now exists as overloads of CountAsync.")]
         public static System.Threading.Tasks.ValueTask<int> CountAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use CountAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the CountAwaitWithCancellationAsync functionality now exists as overloads of Cou" +
+            "ntAsync.")]
         public static System.Threading.Tasks.ValueTask<int> CountAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Collections.Generic.IAsyncEnumerable<T> Create<T>(System.Func<System.Threading.CancellationToken, System.Collections.Generic.IAsyncEnumerator<T>> getAsyncEnumerator) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> DefaultIfEmpty<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source) { }
@@ -93,17 +145,34 @@ namespace System.Linq
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Except<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> first, System.Collections.Generic.IAsyncEnumerable<TSource> second, System.Collections.Generic.IEqualityComparer<TSource>? comparer) { }
         public static System.Threading.Tasks.ValueTask<TSource> FirstAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TSource> FirstAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use FirstAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the FirstAwaitAsync functionality now exists as overloads of FirstAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource> FirstAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use FirstAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the FirstAwaitWithCancellationAsync functionality now exists as overloads of Fir" +
+            "stAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource> FirstAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TSource?> FirstOrDefaultAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TSource?> FirstOrDefaultAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use FirstOrDefaultAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumera" +
+            "ble, and the FirstOrDefaultAwaitAsync functionality now exists as overloads of F" +
+            "irstOrDefaultAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource?> FirstOrDefaultAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use FirstOrDefaultAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumera" +
+            "ble, and the FirstOrDefaultAwaitWithCancellationAsync functionality now exists a" +
+            "s overloads of FirstOrDefaultAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource?> FirstOrDefaultAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use the language support for async foreach instead.")]
         public static System.Threading.Tasks.Task ForEachAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Action<TSource> action, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use the language support for async foreach instead.")]
         public static System.Threading.Tasks.Task ForEachAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Action<TSource, int> action, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use the language support for async foreach instead.")]
         public static System.Threading.Tasks.Task ForEachAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.Task> action, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use the language support for async foreach instead.")]
         public static System.Threading.Tasks.Task ForEachAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.Tasks.Task> action, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use the language support for async foreach instead.")]
         public static System.Threading.Tasks.Task ForEachAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.Task> action, System.Threading.CancellationToken cancellationToken) { }
+        [System.Obsolete("Use the language support for async foreach instead.")]
         public static System.Threading.Tasks.Task ForEachAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.CancellationToken, System.Threading.Tasks.Task> action, System.Threading.CancellationToken cancellationToken) { }
         public static System.Collections.Generic.IAsyncEnumerable<System.Linq.IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector) { }
         public static System.Collections.Generic.IAsyncEnumerable<System.Linq.IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
@@ -113,148 +182,381 @@ namespace System.Linq
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TKey, System.Collections.Generic.IAsyncEnumerable<TSource>, TResult> resultSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector, System.Func<TKey, System.Collections.Generic.IAsyncEnumerable<TElement>, TResult> resultSelector) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector, System.Func<TKey, System.Collections.Generic.IAsyncEnumerable<TElement>, TResult> resultSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwait functionality now exists as overloads of GroupBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<System.Linq.IAsyncGrouping<TKey, TSource>> GroupByAwait<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwait functionality now exists as overloads of GroupBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<System.Linq.IAsyncGrouping<TKey, TSource>> GroupByAwait<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwait functionality now exists as overloads of GroupBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<System.Linq.IAsyncGrouping<TKey, TElement>> GroupByAwait<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TElement>> elementSelector) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwait functionality now exists as overloads of GroupBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupByAwait<TSource, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TKey, System.Collections.Generic.IAsyncEnumerable<TSource>, System.Threading.Tasks.ValueTask<TResult>> resultSelector) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwait functionality now exists as overloads of GroupBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<System.Linq.IAsyncGrouping<TKey, TElement>> GroupByAwait<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwait functionality now exists as overloads of GroupBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupByAwait<TSource, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TKey, System.Collections.Generic.IAsyncEnumerable<TSource>, System.Threading.Tasks.ValueTask<TResult>> resultSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwait functionality now exists as overloads of GroupBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupByAwait<TSource, TKey, TElement, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Func<TKey, System.Collections.Generic.IAsyncEnumerable<TElement>, System.Threading.Tasks.ValueTask<TResult>> resultSelector) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwait functionality now exists as overloads of GroupBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupByAwait<TSource, TKey, TElement, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Func<TKey, System.Collections.Generic.IAsyncEnumerable<TElement>, System.Threading.Tasks.ValueTask<TResult>> resultSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwaitWithCancellationAsync functionality now exists as overloads of Grou" +
+            "pBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<System.Linq.IAsyncGrouping<TKey, TSource>> GroupByAwaitWithCancellation<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwaitWithCancellationAsync functionality now exists as overloads of Grou" +
+            "pBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<System.Linq.IAsyncGrouping<TKey, TSource>> GroupByAwaitWithCancellation<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwaitWithCancellationAsync functionality now exists as overloads of Grou" +
+            "pBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<System.Linq.IAsyncGrouping<TKey, TElement>> GroupByAwaitWithCancellation<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TElement>> elementSelector) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwaitWithCancellationAsync functionality now exists as overloads of Grou" +
+            "pBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupByAwaitWithCancellation<TSource, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TKey, System.Collections.Generic.IAsyncEnumerable<TSource>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> resultSelector) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwaitWithCancellationAsync functionality now exists as overloads of Grou" +
+            "pBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<System.Linq.IAsyncGrouping<TKey, TElement>> GroupByAwaitWithCancellation<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwaitWithCancellationAsync functionality now exists as overloads of Grou" +
+            "pBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupByAwaitWithCancellation<TSource, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TKey, System.Collections.Generic.IAsyncEnumerable<TSource>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> resultSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwaitWithCancellationAsync functionality now exists as overloads of Grou" +
+            "pBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupByAwaitWithCancellation<TSource, TKey, TElement, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Func<TKey, System.Collections.Generic.IAsyncEnumerable<TElement>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> resultSelector) { }
+        [System.Obsolete("Use GroupBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " GroupByAwaitWithCancellationAsync functionality now exists as overloads of Grou" +
+            "pBy.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupByAwaitWithCancellation<TSource, TKey, TElement, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Func<TKey, System.Collections.Generic.IAsyncEnumerable<TElement>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> resultSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TOuter> outer, System.Collections.Generic.IAsyncEnumerable<TInner> inner, System.Func<TOuter, TKey> outerKeySelector, System.Func<TInner, TKey> innerKeySelector, System.Func<TOuter, System.Collections.Generic.IAsyncEnumerable<TInner>, TResult> resultSelector) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TOuter> outer, System.Collections.Generic.IAsyncEnumerable<TInner> inner, System.Func<TOuter, TKey> outerKeySelector, System.Func<TInner, TKey> innerKeySelector, System.Func<TOuter, System.Collections.Generic.IAsyncEnumerable<TInner>, TResult> resultSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        [System.Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he GroupJoinAwait functionality now exists as overloads of GroupJoin.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupJoinAwait<TOuter, TInner, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TOuter> outer, System.Collections.Generic.IAsyncEnumerable<TInner> inner, System.Func<TOuter, System.Threading.Tasks.ValueTask<TKey>> outerKeySelector, System.Func<TInner, System.Threading.Tasks.ValueTask<TKey>> innerKeySelector, System.Func<TOuter, System.Collections.Generic.IAsyncEnumerable<TInner>, System.Threading.Tasks.ValueTask<TResult>> resultSelector) { }
+        [System.Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he GroupJoinAwait functionality now exists as overloads of GroupJoin.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupJoinAwait<TOuter, TInner, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TOuter> outer, System.Collections.Generic.IAsyncEnumerable<TInner> inner, System.Func<TOuter, System.Threading.Tasks.ValueTask<TKey>> outerKeySelector, System.Func<TInner, System.Threading.Tasks.ValueTask<TKey>> innerKeySelector, System.Func<TOuter, System.Collections.Generic.IAsyncEnumerable<TInner>, System.Threading.Tasks.ValueTask<TResult>> resultSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        [System.Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he GroupJoinAwaitWithCancellation functionality now exists as overloads of Group" +
+            "Join.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupJoinAwaitWithCancellation<TOuter, TInner, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TOuter> outer, System.Collections.Generic.IAsyncEnumerable<TInner> inner, System.Func<TOuter, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> outerKeySelector, System.Func<TInner, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> innerKeySelector, System.Func<TOuter, System.Collections.Generic.IAsyncEnumerable<TInner>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> resultSelector) { }
+        [System.Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he GroupJoinAwaitWithCancellation functionality now exists as overloads of Group" +
+            "Join.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> GroupJoinAwaitWithCancellation<TOuter, TInner, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TOuter> outer, System.Collections.Generic.IAsyncEnumerable<TInner> inner, System.Func<TOuter, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> outerKeySelector, System.Func<TInner, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> innerKeySelector, System.Func<TOuter, System.Collections.Generic.IAsyncEnumerable<TInner>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> resultSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Intersect<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> first, System.Collections.Generic.IAsyncEnumerable<TSource> second) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Intersect<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> first, System.Collections.Generic.IAsyncEnumerable<TSource> second, System.Collections.Generic.IEqualityComparer<TSource>? comparer) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TOuter> outer, System.Collections.Generic.IAsyncEnumerable<TInner> inner, System.Func<TOuter, TKey> outerKeySelector, System.Func<TInner, TKey> innerKeySelector, System.Func<TOuter, TInner, TResult> resultSelector) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TOuter> outer, System.Collections.Generic.IAsyncEnumerable<TInner> inner, System.Func<TOuter, TKey> outerKeySelector, System.Func<TInner, TKey> innerKeySelector, System.Func<TOuter, TInner, TResult> resultSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        [System.Obsolete("Use Join. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the Jo" +
+            "inAwait functionality now exists as overloads of Join.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> JoinAwait<TOuter, TInner, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TOuter> outer, System.Collections.Generic.IAsyncEnumerable<TInner> inner, System.Func<TOuter, System.Threading.Tasks.ValueTask<TKey>> outerKeySelector, System.Func<TInner, System.Threading.Tasks.ValueTask<TKey>> innerKeySelector, System.Func<TOuter, TInner, System.Threading.Tasks.ValueTask<TResult>> resultSelector) { }
+        [System.Obsolete("Use Join. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the Jo" +
+            "inAwait functionality now exists as overloads of Join.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> JoinAwait<TOuter, TInner, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TOuter> outer, System.Collections.Generic.IAsyncEnumerable<TInner> inner, System.Func<TOuter, System.Threading.Tasks.ValueTask<TKey>> outerKeySelector, System.Func<TInner, System.Threading.Tasks.ValueTask<TKey>> innerKeySelector, System.Func<TOuter, TInner, System.Threading.Tasks.ValueTask<TResult>> resultSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
+        [System.Obsolete("Use Join. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the Jo" +
+            "inAwaitWithCancellation functionality now exists as overloads of Join.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> JoinAwaitWithCancellation<TOuter, TInner, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TOuter> outer, System.Collections.Generic.IAsyncEnumerable<TInner> inner, System.Func<TOuter, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> outerKeySelector, System.Func<TInner, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> innerKeySelector, System.Func<TOuter, TInner, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> resultSelector) { }
+        [System.Obsolete("Use Join. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the Jo" +
+            "inAwaitWithCancellation functionality now exists as overloads of Join.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> JoinAwaitWithCancellation<TOuter, TInner, TKey, TResult>(this System.Collections.Generic.IAsyncEnumerable<TOuter> outer, System.Collections.Generic.IAsyncEnumerable<TInner> inner, System.Func<TOuter, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> outerKeySelector, System.Func<TInner, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> innerKeySelector, System.Func<TOuter, TInner, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> resultSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer) { }
         public static System.Threading.Tasks.ValueTask<TSource> LastAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TSource> LastAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use LastAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he LastAwaitAsync functionality now exists as overloads of LastAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource> LastAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use LastAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he LastAwaitWithCancellationAsync functionality now exists as overloads of LastA" +
+            "sync.")]
         public static System.Threading.Tasks.ValueTask<TSource> LastAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TSource?> LastOrDefaultAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TSource?> LastOrDefaultAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use LastOrDefaultAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerab" +
+            "le, and the LastOrDefaultAwaitAsync functionality now exists as overloads of Las" +
+            "tOrDefaultAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource?> LastOrDefaultAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use LastOrDefaultAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerab" +
+            "le, and the LastOrDefaultAwaitWithCancellationAsync functionality now exists as " +
+            "overloads of LastOrDefaultAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource?> LastOrDefaultAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<long> LongCountAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<long> LongCountAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use LongCountAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, " +
+            "and the LongCountAwaitAsync functionality now exists as overloads of LongCountAs" +
+            "ync.")]
         public static System.Threading.Tasks.ValueTask<long> LongCountAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use LongCountAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, " +
+            "and the LongCountAwaitWithCancellationAsync functionality now exists as overload" +
+            "s of LongCountAsync.")]
         public static System.Threading.Tasks.ValueTask<long> LongCountAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<decimal> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<decimal> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<double> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<int> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<int> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<long> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<long> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<float> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<decimal?> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<decimal?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<double> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<double?> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<double?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<float> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<float> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<float?> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<float?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<int> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<int> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<int?> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<int?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<long> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<long> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<long?> MaxAsync(this System.Collections.Generic.IAsyncEnumerable<long?> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TSource> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<decimal> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, decimal> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<int> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<long> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<decimal?> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, decimal?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<double?> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<float> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<float?> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<int> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<int?> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<long> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<long?> MaxAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by the MaxAsync overload that took a selec" +
+            "tor callback now exists as an overload of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<TResult> MaxAsync<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TResult> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitAsync now exists as an overload" +
+            " of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<decimal> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<decimal>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<int> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<long> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitAsync now exists as an overload" +
+            " of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<decimal?> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<decimal?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitAsync now exists as an overload" +
+            " of MaxByAsync.")]
+        public static System.Threading.Tasks.ValueTask<double> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitAsync now exists as an overload" +
+            " of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<double?> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<double?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitAsync now exists as an overload" +
+            " of MaxByAsync.")]
+        public static System.Threading.Tasks.ValueTask<float> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitAsync now exists as an overload" +
+            " of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<float?> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<float?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitAsync now exists as an overload" +
+            " of MaxByAsync.")]
+        public static System.Threading.Tasks.ValueTask<int> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitAsync now exists as an overload" +
+            " of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<int?> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<int?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitAsync now exists as an overload" +
+            " of MaxByAsync.")]
+        public static System.Threading.Tasks.ValueTask<long> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitAsync now exists as an overload" +
+            " of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<long?> MaxAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<long?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitAsync now exists as an overload" +
+            " of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<TResult> MaxAwaitAsync<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TResult>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitWithCancellationAsync now exist" +
+            "s as an overload of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<decimal> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<decimal>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<int> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<long> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitWithCancellationAsync now exist" +
+            "s as an overload of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<decimal?> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<decimal?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitWithCancellationAsync now exist" +
+            "s as an overload of MaxByAsync.")]
+        public static System.Threading.Tasks.ValueTask<double> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitWithCancellationAsync now exist" +
+            "s as an overload of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<double?> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<double?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitWithCancellationAsync now exist" +
+            "s as an overload of MaxByAsync.")]
+        public static System.Threading.Tasks.ValueTask<float> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitWithCancellationAsync now exist" +
+            "s as an overload of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<float?> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<float?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitWithCancellationAsync now exist" +
+            "s as an overload of MaxByAsync.")]
+        public static System.Threading.Tasks.ValueTask<int> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitWithCancellationAsync now exist" +
+            "s as an overload of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<int?> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<int?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitWithCancellationAsync now exist" +
+            "s as an overload of MaxByAsync.")]
+        public static System.Threading.Tasks.ValueTask<long> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitWithCancellationAsync now exist" +
+            "s as an overload of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<long?> MaxAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<long?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MaxAwaitWithCancellationAsync now exist" +
+            "s as an overload of MaxByAsync.")]
         public static System.Threading.Tasks.ValueTask<TResult> MaxAwaitWithCancellationAsync<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<decimal> MinAsync(this System.Collections.Generic.IAsyncEnumerable<decimal> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> MinAsync(this System.Collections.Generic.IAsyncEnumerable<double> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<int> MinAsync(this System.Collections.Generic.IAsyncEnumerable<int> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<long> MinAsync(this System.Collections.Generic.IAsyncEnumerable<long> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> MinAsync(this System.Collections.Generic.IAsyncEnumerable<float> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<decimal?> MinAsync(this System.Collections.Generic.IAsyncEnumerable<decimal?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> MinAsync(this System.Collections.Generic.IAsyncEnumerable<double> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<double?> MinAsync(this System.Collections.Generic.IAsyncEnumerable<double?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<float> MinAsync(this System.Collections.Generic.IAsyncEnumerable<float> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<float?> MinAsync(this System.Collections.Generic.IAsyncEnumerable<float?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<int> MinAsync(this System.Collections.Generic.IAsyncEnumerable<int> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<int?> MinAsync(this System.Collections.Generic.IAsyncEnumerable<int?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<long> MinAsync(this System.Collections.Generic.IAsyncEnumerable<long> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<long?> MinAsync(this System.Collections.Generic.IAsyncEnumerable<long?> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TSource> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<decimal> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, decimal> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<int> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<long> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<decimal?> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, decimal?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<double?> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<float> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<float?> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<int> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<int?> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<long> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<long?> MinAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by the MinAsync overload that took a selec" +
+            "tor callback now exists as an overload of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<TResult> MinAsync<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TResult> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitAsync now exists as an overload" +
+            " of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<decimal> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<decimal>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<int> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<long> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitAsync now exists as an overload" +
+            " of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<decimal?> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<decimal?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitAsync now exists as an overload" +
+            " of MinByAsync.")]
+        public static System.Threading.Tasks.ValueTask<double> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitAsync now exists as an overload" +
+            " of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<double?> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<double?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitAsync now exists as an overload" +
+            " of MinByAsync.")]
+        public static System.Threading.Tasks.ValueTask<float> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitAsync now exists as an overload" +
+            " of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<float?> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<float?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitAsync now exists as an overload" +
+            " of MinByAsync.")]
+        public static System.Threading.Tasks.ValueTask<int> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitAsync now exists as an overload" +
+            " of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<int?> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<int?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitAsync now exists as an overload" +
+            " of MinByAsync.")]
+        public static System.Threading.Tasks.ValueTask<long> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitAsync now exists as an overload" +
+            " of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<long?> MinAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<long?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitAsync now exists as an overload" +
+            " of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<TResult> MinAwaitAsync<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TResult>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitWithCancellationAsync now exist" +
+            "s as an overload of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<decimal> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<decimal>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<int> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<long> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitWithCancellationAsync now exist" +
+            "s as an overload of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<decimal?> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<decimal?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitWithCancellationAsync now exist" +
+            "s as an overload of MinByAsync.")]
+        public static System.Threading.Tasks.ValueTask<double> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitWithCancellationAsync now exist" +
+            "s as an overload of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<double?> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<double?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitWithCancellationAsync now exist" +
+            "s as an overload of MinByAsync.")]
+        public static System.Threading.Tasks.ValueTask<float> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitWithCancellationAsync now exist" +
+            "s as an overload of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<float?> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<float?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitWithCancellationAsync now exist" +
+            "s as an overload of MinByAsync.")]
+        public static System.Threading.Tasks.ValueTask<int> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitWithCancellationAsync now exist" +
+            "s as an overload of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<int?> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<int?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitWithCancellationAsync now exist" +
+            "s as an overload of MinByAsync.")]
+        public static System.Threading.Tasks.ValueTask<long> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitWithCancellationAsync now exist" +
+            "s as an overload of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<long?> MinAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<long?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the functionality previously provided by MinAwaitWithCancellationAsync now exist" +
+            "s as an overload of MinByAsync.")]
         public static System.Threading.Tasks.ValueTask<TResult> MinAwaitWithCancellationAsync<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> OfType<TResult>(this System.Collections.Generic.IAsyncEnumerable<object?> source) { }
         public static System.Linq.IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector) { }
         public static System.Linq.IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
+        [System.Obsolete("Use OrderBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " OrderByAwait functionality now exists as overloads of OrderBy.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> OrderByAwait<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector) { }
+        [System.Obsolete("Use OrderBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " OrderByAwait functionality now exists as overloads of OrderBy.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> OrderByAwait<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
+        [System.Obsolete("Use OrderBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " OrderByAwaitWithCancellation functionality now exists as overloads of OrderBy.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> OrderByAwaitWithCancellation<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector) { }
+        [System.Obsolete("Use OrderBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the" +
+            " OrderByAwaitWithCancellation functionality now exists as overloads of OrderBy.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> OrderByAwaitWithCancellation<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
         public static System.Linq.IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector) { }
         public static System.Linq.IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
+        [System.Obsolete("Use OrderByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerabl" +
+            "e, and the OrderByDescendingAwait functionality now exists as overloads of Order" +
+            "ByDescending.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> OrderByDescendingAwait<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector) { }
+        [System.Obsolete("Use OrderByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerabl" +
+            "e, and the OrderByDescendingAwait functionality now exists as overloads of Order" +
+            "ByDescending.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> OrderByDescendingAwait<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
+        [System.Obsolete("Use OrderByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerabl" +
+            "e, and the OrderByDescendingAwaitWithCancellation functionality now exists as ov" +
+            "erloads of OrderByDescending.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> OrderByDescendingAwaitWithCancellation<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector) { }
+        [System.Obsolete("Use OrderByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerabl" +
+            "e, and the OrderByDescendingAwaitWithCancellation functionality now exists as ov" +
+            "erloads of OrderByDescending.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> OrderByDescendingAwaitWithCancellation<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Prepend<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, TSource element) { }
         public static System.Collections.Generic.IAsyncEnumerable<int> Range(int start, int count) { }
@@ -262,99 +564,208 @@ namespace System.Linq
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Reverse<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> Select<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TResult> selector) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> Select<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, TResult> selector) { }
+        [System.Obsolete("Use Select. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the " +
+            "SelectAwait functionality now exists as overloads of Select.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectAwait<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TResult>> selector) { }
+        [System.Obsolete("Use Select. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the " +
+            "SelectAwait functionality now exists as overloads of Select.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectAwait<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.Tasks.ValueTask<TResult>> selector) { }
+        [System.Obsolete("Use Select. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the " +
+            "SelectAwaitWithCancellation functionality now exists as overloads of Select.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectAwaitWithCancellation<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> selector) { }
+        [System.Obsolete("Use Select. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the " +
+            "SelectAwaitWithCancellation functionality now exists as overloads of Select.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectAwaitWithCancellation<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> selector) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Collections.Generic.IAsyncEnumerable<TResult>> selector) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Collections.Generic.IAsyncEnumerable<TResult>> selector) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Collections.Generic.IAsyncEnumerable<TCollection>> collectionSelector, System.Func<TSource, TCollection, TResult> resultSelector) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Collections.Generic.IAsyncEnumerable<TCollection>> collectionSelector, System.Func<TSource, TCollection, TResult> resultSelector) { }
+        [System.Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the SelectManyAwait functionality now exists as overloads of SelectMany.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectManyAwait<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<System.Collections.Generic.IAsyncEnumerable<TResult>>> selector) { }
+        [System.Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the SelectManyAwait functionality now exists as overloads of SelectMany.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectManyAwait<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.Tasks.ValueTask<System.Collections.Generic.IAsyncEnumerable<TResult>>> selector) { }
+        [System.Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the SelectManyAwait functionality now exists as overloads of SelectMany.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectManyAwait<TSource, TCollection, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<System.Collections.Generic.IAsyncEnumerable<TCollection>>> collectionSelector, System.Func<TSource, TCollection, System.Threading.Tasks.ValueTask<TResult>> resultSelector) { }
+        [System.Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the SelectManyAwait functionality now exists as overloads of SelectMany.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectManyAwait<TSource, TCollection, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.Tasks.ValueTask<System.Collections.Generic.IAsyncEnumerable<TCollection>>> collectionSelector, System.Func<TSource, TCollection, System.Threading.Tasks.ValueTask<TResult>> resultSelector) { }
+        [System.Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the SelectManyAwaitWithCancellation functionality now exists as overloads of Sel" +
+            "ectMany.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectManyAwaitWithCancellation<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Collections.Generic.IAsyncEnumerable<TResult>>> selector) { }
+        [System.Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the SelectManyAwaitWithCancellation functionality now exists as overloads of Sel" +
+            "ectMany.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectManyAwaitWithCancellation<TSource, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Collections.Generic.IAsyncEnumerable<TResult>>> selector) { }
+        [System.Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the SelectManyAwaitWithCancellation functionality now exists as overloads of Sel" +
+            "ectMany.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectManyAwaitWithCancellation<TSource, TCollection, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Collections.Generic.IAsyncEnumerable<TCollection>>> collectionSelector, System.Func<TSource, TCollection, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> resultSelector) { }
+        [System.Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and " +
+            "the SelectManyAwaitWithCancellation functionality now exists as overloads of Sel" +
+            "ectMany.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> SelectManyAwaitWithCancellation<TSource, TCollection, TResult>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Collections.Generic.IAsyncEnumerable<TCollection>>> collectionSelector, System.Func<TSource, TCollection, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> resultSelector) { }
         public static System.Threading.Tasks.ValueTask<bool> SequenceEqualAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> first, System.Collections.Generic.IAsyncEnumerable<TSource> second, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<bool> SequenceEqualAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> first, System.Collections.Generic.IAsyncEnumerable<TSource> second, System.Collections.Generic.IEqualityComparer<TSource>? comparer, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TSource> SingleAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TSource> SingleAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use SingleAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and" +
+            " the SingleAwaitAsync functionality now exists as overloads of SingleAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource> SingleAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use SingleAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and" +
+            " the SingleAwaitWithCancellationAsync functionality now exists as overloads of S" +
+            "ingleAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource> SingleAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TSource?> SingleOrDefaultAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<TSource?> SingleOrDefaultAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use SingleOrDefaultAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumer" +
+            "able, and the SingleOrDefaultAwaitAsync functionality now exists as overloads of" +
+            " SingleOrDefaultAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource?> SingleOrDefaultAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use SingleOrDefaultAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumer" +
+            "able, and the SingleOrDefaultAwaitWithCancellationAsync functionality now exists" +
+            " as overloads of SingleOrDefaultAsync.")]
         public static System.Threading.Tasks.ValueTask<TSource?> SingleOrDefaultAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Skip<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, int count) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> SkipLast<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, int count) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> SkipWhile<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> SkipWhile<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, bool> predicate) { }
+        [System.Obsolete("Use SkipWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he SkipWhileAwait functionality now exists as overloads of SkipWhile.")]
         public static System.Collections.Generic.IAsyncEnumerable<TSource> SkipWhileAwait<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate) { }
+        [System.Obsolete("Use SkipWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he SkipWhileAwait functionality now exists as overloads of SkipWhile.")]
         public static System.Collections.Generic.IAsyncEnumerable<TSource> SkipWhileAwait<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.Tasks.ValueTask<bool>> predicate) { }
+        [System.Obsolete("Use SkipWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he SkipWhileAwaitWithCancellation functionality now exists as overloads of SkipW" +
+            "hile.")]
         public static System.Collections.Generic.IAsyncEnumerable<TSource> SkipWhileAwaitWithCancellation<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate) { }
+        [System.Obsolete("Use SkipWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he SkipWhileAwaitWithCancellation functionality now exists as overloads of SkipW" +
+            "hile.")]
         public static System.Collections.Generic.IAsyncEnumerable<TSource> SkipWhileAwaitWithCancellation<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate) { }
         public static System.Threading.Tasks.ValueTask<decimal> SumAsync(this System.Collections.Generic.IAsyncEnumerable<decimal> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> SumAsync(this System.Collections.Generic.IAsyncEnumerable<double> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<int> SumAsync(this System.Collections.Generic.IAsyncEnumerable<int> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<long> SumAsync(this System.Collections.Generic.IAsyncEnumerable<long> source, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> SumAsync(this System.Collections.Generic.IAsyncEnumerable<float> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<decimal?> SumAsync(this System.Collections.Generic.IAsyncEnumerable<decimal?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<double> SumAsync(this System.Collections.Generic.IAsyncEnumerable<double> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<double?> SumAsync(this System.Collections.Generic.IAsyncEnumerable<double?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<float> SumAsync(this System.Collections.Generic.IAsyncEnumerable<float> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<float?> SumAsync(this System.Collections.Generic.IAsyncEnumerable<float?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<int> SumAsync(this System.Collections.Generic.IAsyncEnumerable<int> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<int?> SumAsync(this System.Collections.Generic.IAsyncEnumerable<int?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        public static System.Threading.Tasks.ValueTask<long> SumAsync(this System.Collections.Generic.IAsyncEnumerable<long> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<long?> SumAsync(this System.Collections.Generic.IAsyncEnumerable<long?> source, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<decimal> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, decimal> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<int> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<long> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<decimal?> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, decimal?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<double> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<double?> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, double?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<float> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<float?> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, float?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<int> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<int?> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<long> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<long?> SumAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, long?> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<decimal> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<decimal>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<int> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<long> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<decimal?> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<decimal?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<double> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<double?> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<double?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<float> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<float?> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<float?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<int> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<int?> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<int?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<long> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<long?> SumAwaitAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<long?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<decimal> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<decimal>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<double> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<int> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<long> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
-        public static System.Threading.Tasks.ValueTask<float> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<decimal?> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<decimal?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<double> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<double>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<double?> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<double?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<float> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<float>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<float?> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<float?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<int> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<int>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<int?> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<int?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
+        public static System.Threading.Tasks.ValueTask<long> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<long>> selector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete(@"Use Select then SumAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use SumAsync on the resulting sequence.")]
         public static System.Threading.Tasks.ValueTask<long?> SumAwaitWithCancellationAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<long?>> selector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Take<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, int count) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> TakeLast<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, int count) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> TakeWhile<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> TakeWhile<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, bool> predicate) { }
+        [System.Obsolete("Use TakeWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he TakeWhileAwait functionality now exists as overloads of TakeWhile.")]
         public static System.Collections.Generic.IAsyncEnumerable<TSource> TakeWhileAwait<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate) { }
+        [System.Obsolete("Use TakeWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he TakeWhileAwait functionality now exists as overloads of TakeWhile.")]
         public static System.Collections.Generic.IAsyncEnumerable<TSource> TakeWhileAwait<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.Tasks.ValueTask<bool>> predicate) { }
+        [System.Obsolete("Use TakeWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he TakeWhileAwaitWithCancellation functionality now exists as overloads of TakeW" +
+            "hile.")]
         public static System.Collections.Generic.IAsyncEnumerable<TSource> TakeWhileAwaitWithCancellation<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate) { }
+        [System.Obsolete("Use TakeWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and t" +
+            "he TakeWhileAwaitWithCancellation functionality now exists as overloads of TakeW" +
+            "hile.")]
         public static System.Collections.Generic.IAsyncEnumerable<TSource> TakeWhileAwaitWithCancellation<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate) { }
         public static System.Linq.IOrderedAsyncEnumerable<TSource> ThenBy<TSource, TKey>(this System.Linq.IOrderedAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector) { }
         public static System.Linq.IOrderedAsyncEnumerable<TSource> ThenBy<TSource, TKey>(this System.Linq.IOrderedAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
+        [System.Obsolete("Use ThenBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the " +
+            "ThenByAwait functionality now exists as overloads of ThenBy.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> ThenByAwait<TSource, TKey>(this System.Linq.IOrderedAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector) { }
+        [System.Obsolete("Use ThenBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the " +
+            "ThenByAwait functionality now exists as overloads of ThenBy.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> ThenByAwait<TSource, TKey>(this System.Linq.IOrderedAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
+        [System.Obsolete("Use ThenBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the " +
+            "ThenByAwaitWithCancellation functionality now exists as overloads of ThenBy.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> ThenByAwaitWithCancellation<TSource, TKey>(this System.Linq.IOrderedAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector) { }
+        [System.Obsolete("Use ThenBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the " +
+            "ThenByAwaitWithCancellation functionality now exists as overloads of ThenBy.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> ThenByAwaitWithCancellation<TSource, TKey>(this System.Linq.IOrderedAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
         public static System.Linq.IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this System.Linq.IOrderedAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector) { }
         public static System.Linq.IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this System.Linq.IOrderedAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
+        [System.Obsolete("Use ThenByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable" +
+            ", and the ThenByDescendingAwait functionality now exists as overloads of ThenByD" +
+            "escending.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> ThenByDescendingAwait<TSource, TKey>(this System.Linq.IOrderedAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector) { }
+        [System.Obsolete("Use ThenByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable" +
+            ", and the ThenByDescendingAwait functionality now exists as overloads of ThenByD" +
+            "escending.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> ThenByDescendingAwait<TSource, TKey>(this System.Linq.IOrderedAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
+        [System.Obsolete("Use ThenByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable" +
+            ", and the ThenByDescendingAwaitWithCancellation functionality now exists as over" +
+            "loads of ThenByDescending.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> ThenByDescendingAwaitWithCancellation<TSource, TKey>(this System.Linq.IOrderedAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector) { }
+        [System.Obsolete("Use ThenByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable" +
+            ", and the ThenByDescendingAwaitWithCancellation functionality now exists as over" +
+            "loads of ThenByDescending.")]
         public static System.Linq.IOrderedAsyncEnumerable<TSource> ThenByDescendingAwaitWithCancellation<TSource, TKey>(this System.Linq.IOrderedAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IComparer<TKey> comparer) { }
         public static System.Threading.Tasks.ValueTask<TSource[]> ToArrayAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this System.Collections.Generic.IEnumerable<TSource> source) { }
@@ -368,22 +779,49 @@ namespace System.Linq
             where TKey :  notnull { }
         public static System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer, System.Threading.CancellationToken cancellationToken = default)
             where TKey :  notnull { }
+        [System.Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerabl" +
+            "e, and the ToDictionaryAwaitAsync functionality now exists as overloads of ToDic" +
+            "tionaryAsync.")]
         public static System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TSource>> ToDictionaryAwaitAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Threading.CancellationToken cancellationToken = default)
             where TKey :  notnull { }
+        [System.Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerabl" +
+            "e, and the ToDictionaryAwaitAsync functionality now exists as overloads of ToDic" +
+            "tionaryAsync.")]
         public static System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TSource>> ToDictionaryAwaitAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer, System.Threading.CancellationToken cancellationToken = default)
             where TKey :  notnull { }
+        [System.Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerabl" +
+            "e, and the ToDictionaryAwaitAsync functionality now exists as overloads of ToDic" +
+            "tionaryAsync.")]
         public static System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TElement>> ToDictionaryAwaitAsync<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Threading.CancellationToken cancellationToken = default)
             where TKey :  notnull { }
+        [System.Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerabl" +
+            "e, and the ToDictionaryAwaitAsync functionality now exists as overloads of ToDic" +
+            "tionaryAsync.")]
         public static System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TElement>> ToDictionaryAwaitAsync<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer, System.Threading.CancellationToken cancellationToken = default)
             where TKey :  notnull { }
+        [System.Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerabl" +
+            "e, and the ToDictionaryAwaitWithCancellationAsync functionality now exists as ov" +
+            "erloads of ToDictionaryAsync.")]
         public static System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TSource>> ToDictionaryAwaitWithCancellationAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Threading.CancellationToken cancellationToken = default)
             where TKey :  notnull { }
+        [System.Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerabl" +
+            "e, and the ToDictionaryAwaitWithCancellationAsync functionality now exists as ov" +
+            "erloads of ToDictionaryAsync.")]
         public static System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TSource>> ToDictionaryAwaitWithCancellationAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer, System.Threading.CancellationToken cancellationToken = default)
             where TKey :  notnull { }
+        [System.Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerabl" +
+            "e, and the ToDictionaryAwaitWithCancellationAsync functionality now exists as ov" +
+            "erloads of ToDictionaryAsync.")]
         public static System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TElement>> ToDictionaryAwaitWithCancellationAsync<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Threading.CancellationToken cancellationToken = default)
             where TKey :  notnull { }
+        [System.Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerabl" +
+            "e, and the ToDictionaryAwaitWithCancellationAsync functionality now exists as ov" +
+            "erloads of ToDictionaryAsync.")]
         public static System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TElement>> ToDictionaryAwaitWithCancellationAsync<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer, System.Threading.CancellationToken cancellationToken = default)
             where TKey :  notnull { }
+        [System.Obsolete("IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and it does not impl" +
+            "ement this method because \'sync over async\' of this kind is an anti-pattern. Ple" +
+            "ase use a different strategy.")]
         public static System.Collections.Generic.IEnumerable<TSource> ToEnumerable<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source) { }
         public static System.Threading.Tasks.ValueTask<System.Collections.Generic.HashSet<TSource>> ToHashSetAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<System.Collections.Generic.HashSet<TSource>> ToHashSetAsync<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Collections.Generic.IEqualityComparer<TSource>? comparer, System.Threading.CancellationToken cancellationToken = default) { }
@@ -392,35 +830,74 @@ namespace System.Linq
         public static System.Threading.Tasks.ValueTask<System.Linq.ILookup<TKey, TSource>> ToLookupAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<System.Linq.ILookup<TKey, TElement>> ToLookupAsync<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.Threading.Tasks.ValueTask<System.Linq.ILookup<TKey, TElement>> ToLookupAsync<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, a" +
+            "nd the ToLookupAwaitAsync functionality now exists as overloads of ToLookupAsync" +
+            ".")]
         public static System.Threading.Tasks.ValueTask<System.Linq.ILookup<TKey, TSource>> ToLookupAwaitAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, a" +
+            "nd the ToLookupAwaitAsync functionality now exists as overloads of ToLookupAsync" +
+            ".")]
         public static System.Threading.Tasks.ValueTask<System.Linq.ILookup<TKey, TSource>> ToLookupAwaitAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, a" +
+            "nd the ToLookupAwaitAsync functionality now exists as overloads of ToLookupAsync" +
+            ".")]
         public static System.Threading.Tasks.ValueTask<System.Linq.ILookup<TKey, TElement>> ToLookupAwaitAsync<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, a" +
+            "nd the ToLookupAwaitAsync functionality now exists as overloads of ToLookupAsync" +
+            ".")]
         public static System.Threading.Tasks.ValueTask<System.Linq.ILookup<TKey, TElement>> ToLookupAwaitAsync<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, a" +
+            "nd the ToLookupAwaitWithCancellationAsync functionality now exists as overloads " +
+            "of ToLookupAsync.")]
         public static System.Threading.Tasks.ValueTask<System.Linq.ILookup<TKey, TSource>> ToLookupAwaitWithCancellationAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, a" +
+            "nd the ToLookupAwaitWithCancellationAsync functionality now exists as overloads " +
+            "of ToLookupAsync.")]
         public static System.Threading.Tasks.ValueTask<System.Linq.ILookup<TKey, TSource>> ToLookupAwaitWithCancellationAsync<TSource, TKey>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, a" +
+            "nd the ToLookupAwaitWithCancellationAsync functionality now exists as overloads " +
+            "of ToLookupAsync.")]
         public static System.Threading.Tasks.ValueTask<System.Linq.ILookup<TKey, TElement>> ToLookupAwaitWithCancellationAsync<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Threading.CancellationToken cancellationToken = default) { }
+        [System.Obsolete("Use ToLookupAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, a" +
+            "nd the ToLookupAwaitWithCancellationAsync functionality now exists as overloads " +
+            "of ToLookupAsync.")]
         public static System.Threading.Tasks.ValueTask<System.Linq.ILookup<TKey, TElement>> ToLookupAwaitWithCancellationAsync<TSource, TKey, TElement>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TKey>> keySelector, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TElement>> elementSelector, System.Collections.Generic.IEqualityComparer<TKey>? comparer, System.Threading.CancellationToken cancellationToken = default) { }
         public static System.IObservable<TSource> ToObservable<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Union<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> first, System.Collections.Generic.IAsyncEnumerable<TSource> second) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Union<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> first, System.Collections.Generic.IAsyncEnumerable<TSource> second, System.Collections.Generic.IEqualityComparer<TSource>? comparer) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Where<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, bool> predicate) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Where<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, bool> predicate) { }
+        [System.Obsolete("Use Where. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the W" +
+            "hereAwait functionality now exists as overloads of Where.")]
         public static System.Collections.Generic.IAsyncEnumerable<TSource> WhereAwait<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.Tasks.ValueTask<bool>> predicate) { }
+        [System.Obsolete("Use Where. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the W" +
+            "hereAwait functionality now exists as overloads of Where.")]
         public static System.Collections.Generic.IAsyncEnumerable<TSource> WhereAwait<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.Tasks.ValueTask<bool>> predicate) { }
+        [System.Obsolete("Use Where. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the W" +
+            "hereAwaitWithCancellation functionality now exists as overloads of Where.")]
         public static System.Collections.Generic.IAsyncEnumerable<TSource> WhereAwaitWithCancellation<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate) { }
+        [System.Obsolete("Use Where. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the W" +
+            "hereAwaitWithCancellation functionality now exists as overloads of Where.")]
         public static System.Collections.Generic.IAsyncEnumerable<TSource> WhereAwaitWithCancellation<TSource>(this System.Collections.Generic.IAsyncEnumerable<TSource> source, System.Func<TSource, int, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<bool>> predicate) { }
         [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
                 "First",
                 "Second"})]
         public static System.Collections.Generic.IAsyncEnumerable<System.ValueTuple<TFirst, TSecond>> Zip<TFirst, TSecond>(this System.Collections.Generic.IAsyncEnumerable<TFirst> first, System.Collections.Generic.IAsyncEnumerable<TSecond> second) { }
         public static System.Collections.Generic.IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this System.Collections.Generic.IAsyncEnumerable<TFirst> first, System.Collections.Generic.IAsyncEnumerable<TSecond> second, System.Func<TFirst, TSecond, TResult> selector) { }
+        [System.Obsolete("Use Zip. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the Zip" +
+            "Await functionality now exists as overloads of Zip.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> ZipAwait<TFirst, TSecond, TResult>(this System.Collections.Generic.IAsyncEnumerable<TFirst> first, System.Collections.Generic.IAsyncEnumerable<TSecond> second, System.Func<TFirst, TSecond, System.Threading.Tasks.ValueTask<TResult>> selector) { }
+        [System.Obsolete("Use Zip. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the Zip" +
+            "AwaitWithCancellation functionality now exists as overloads of Zip.")]
         public static System.Collections.Generic.IAsyncEnumerable<TResult> ZipAwaitWithCancellation<TFirst, TSecond, TResult>(this System.Collections.Generic.IAsyncEnumerable<TFirst> first, System.Collections.Generic.IAsyncEnumerable<TSecond> second, System.Func<TFirst, TSecond, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<TResult>> selector) { }
     }
     public interface IAsyncGrouping<out TKey, out TElement> : System.Collections.Generic.IAsyncEnumerable<TElement>
     {
         TKey Key { get; }
     }
+    [System.Obsolete("This interface was always unsupported, and the IAsyncEnumerable<T> LINQ implement" +
+        "ation in System.Linq.AsyncEnumerable does not recognize it, so this no longer se" +
+        "rves a purpose")]
     public interface IAsyncIListProvider<TElement> : System.Collections.Generic.IAsyncEnumerable<TElement>
     {
         System.Threading.Tasks.ValueTask<int> GetCountAsync(bool onlyIfCheap, System.Threading.CancellationToken cancellationToken);

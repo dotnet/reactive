@@ -13,6 +13,9 @@ namespace System.Linq
         // NB: This is a non-standard LINQ operator, because we don't have a non-generic IAsyncEnumerable.
         //     We're keeping it to enable `from T x in xs` binding in C#.
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.cast?view=net-9.0-pp
+
         /// <summary>
         /// Converts the elements of an async-enumerable sequence to the specified type.
         /// </summary>
@@ -40,5 +43,6 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

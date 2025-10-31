@@ -10,6 +10,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.allasync?view=net-9.0-pp#system-linq-asyncenumerable-allasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean))-system-threading-cancellationtoken)
+
         /// <summary>
         /// Determines whether all elements of an async-enumerable sequence satisfy a condition.
         /// </summary>
@@ -42,6 +45,7 @@ namespace System.Linq
                 return true;
             }
         }
+#endif
 
         /// <summary>
         /// Determines whether all elements in an async-enumerable sequence satisfy a condition.
@@ -54,6 +58,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use AllAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the AllAwaitAsync functionality now exists as overloads of All.")]
         private static ValueTask<bool> AllAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -79,6 +84,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use AllAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the AllAwaitWithCancellationAsync functionality now exists as overloads of AllAsync.")]
         internal static ValueTask<bool> AllAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)

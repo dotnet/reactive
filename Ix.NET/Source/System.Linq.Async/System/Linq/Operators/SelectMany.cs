@@ -10,6 +10,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.selectmany?view=net-9.0-pp#system-linq-asyncenumerable-selectmany-3(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-collections-generic-iasyncenumerable((-1))))-system-func((-0-1-2)))
+
         /// <summary>
         /// Projects each element of an async-enumerable sequence to an async-enumerable sequence and merges the resulting async-enumerable sequences into one async-enumerable sequence.
         /// </summary>
@@ -28,6 +31,7 @@ namespace System.Linq
 
             return new SelectManyAsyncIterator<TSource, TResult>(source, selector);
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         // REVIEW: Should we keep these overloads that return ValueTask<IAsyncEnumerable<TResult>>? One could argue the selector is async twice.
 
@@ -41,6 +45,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence whose elements are the result of invoking the one-to-many transform function on each element of the source sequence and awaiting the result.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectManyAwait functionality now exists as overloads of SelectMany.")]
         private static IAsyncEnumerable<TResult> SelectManyAwaitCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TResult>>> selector)
         {
             if (source == null)
@@ -53,6 +58,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectManyAwaitWithCancellation functionality now exists as overloads of SelectMany.")]
         private static IAsyncEnumerable<TResult> SelectManyAwaitWithCancellationCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TResult>>> selector)
         {
             if (source == null)
@@ -63,6 +69,9 @@ namespace System.Linq
             return new SelectManyAsyncIteratorWithTaskAndCancellation<TSource, TResult>(source, selector);
         }
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.selectmany?view=net-9.0-pp#system-linq-asyncenumerable-selectmany-2(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-int32-system-collections-generic-iasyncenumerable((-1)))))
 
         /// <summary>
         /// Projects each element of an async-enumerable sequence to an async-enumerable sequence by incorporating the element's index and merges the resulting async-enumerable sequences into one async-enumerable sequence.
@@ -102,6 +111,7 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Projects each element of an async-enumerable sequence into an async-enumerable sequence by incorporating the element's index and merges the resulting async-enumerable sequences into an async-enumerable sequence.
@@ -113,6 +123,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence who's elements are the result of invoking the one-to-many transform function on each element of the source sequence and awaiting the result.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectManyAwait functionality now exists as overloads of SelectMany.")]
         private static IAsyncEnumerable<TResult> SelectManyAwaitCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TResult>>> selector)
         {
             if (source == null)
@@ -145,6 +156,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectManyAwaitWithCancellation functionality now exists as overloads of SelectMany.")]
         private static IAsyncEnumerable<TResult> SelectManyAwaitWithCancellationCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<IAsyncEnumerable<TResult>>> selector)
         {
             if (source == null)
@@ -175,6 +187,9 @@ namespace System.Linq
             }
         }
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.selectmany?view=net-9.0-pp#system-linq-asyncenumerable-selectmany-3(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-collections-generic-iasyncenumerable((-1))))-system-func((-0-1-2)))
 
         /// <summary>
         /// Projects each element of an async-enumerable sequence to an async-enumerable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one async-enumerable sequence.
@@ -211,6 +226,7 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Projects each element of an async-enumerable sequence to an async-enumerable sequence by awaiting the result of a transform function, invokes the result selector for each of the source elements and each of the corrasponding inner-sequence's elements and awaits the result, and merges the results into one async-enumerable sequence.
@@ -224,6 +240,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence whose elements are the result of invoking the one-to-many transform function <paramref name="collectionSelector"/> on each element of the input sequence, awaiting the result, applying <paramref name="resultSelector"/> to each element of the intermediate sequences along with their corrasponding source element and awaiting the result.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="collectionSelector"/>, or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectManyAwait functionality now exists as overloads of SelectMany.")]
         private static IAsyncEnumerable<TResult> SelectManyAwaitCore<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
@@ -251,6 +268,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectManyAwaitWithCancellation functionality now exists as overloads of SelectMany.")]
         private static IAsyncEnumerable<TResult> SelectManyAwaitWithCancellationCore<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, CancellationToken, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
@@ -276,6 +294,9 @@ namespace System.Linq
             }
         }
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.selectmany?view=net-9.0-pp#system-linq-asyncenumerable-selectmany-3(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-int32-system-collections-generic-ienumerable((-1))))-system-func((-0-1-2)))
 
         /// <summary>
         /// Projects each element of an async-enumerable sequence to an async-enumerable sequence by incorporating the element's index, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one async-enumerable sequence.
@@ -319,6 +340,7 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Projects each element of an async-enumerable sequence to an async-enumerable sequence by awaiting the result of a transform function that incorporates each element's index,
@@ -333,6 +355,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence whose elements are the result of invoking the one-to-many transform function <paramref name="collectionSelector"/> on each element of the input sequence, awaiting the result, applying <paramref name="resultSelector"/> to each element of the intermediate sequences olong with their corrasponding source element and awaiting the result.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="collectionSelector"/>, or <paramref name="resultSelector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectManyAwait functionality now exists as overloads of SelectMany.")]
         private static IAsyncEnumerable<TResult> SelectManyAwaitCore<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
@@ -367,6 +390,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use SelectMany. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectManyAwaitWithCancellation functionality now exists as overloads of SelectMany.")]
         private static IAsyncEnumerable<TResult> SelectManyAwaitWithCancellationCore<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, CancellationToken, ValueTask<TResult>> resultSelector)
         {
             if (source == null)

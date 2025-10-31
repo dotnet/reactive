@@ -11,6 +11,10 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.takelast?view=net-9.0-pp
+
         /// <summary>
         /// Returns a specified number of contiguous elements from the end of an async-enumerable sequence.
         /// </summary>
@@ -77,5 +81,6 @@ namespace System.Linq
                 while (queue.Count > 0);
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

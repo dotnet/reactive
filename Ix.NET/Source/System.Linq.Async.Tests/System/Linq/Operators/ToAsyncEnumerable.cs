@@ -189,7 +189,7 @@ namespace Tests
             xc.CopyTo(arr, 0);
             Assert.True(arr.SequenceEqual(xc));
             xc.Clear();
-            Assert.Equal(0, xc.Count);
+            Assert.Empty(xc);
         }
 
         [Fact]
@@ -223,7 +223,7 @@ namespace Tests
             xl.CopyTo(arr, 0);
             Assert.True(arr.SequenceEqual(xl));
             xl.Clear();
-            Assert.Equal(0, xl.Count);
+            Assert.Empty(xl);
         }
 
         [Fact]
@@ -314,7 +314,7 @@ namespace Tests
             }
 
             await e.DisposeAsync();
-            stop.WaitOne();
+            await Task.Run(stop.WaitOne);
         }
 
         [Fact]
@@ -352,7 +352,7 @@ namespace Tests
             }
 
             await e.DisposeAsync();
-            stop.WaitOne();
+            await Task.Run(stop.WaitOne);
 
             Assert.Equal(2, subCount);
         }
@@ -390,7 +390,7 @@ namespace Tests
             }
 
             c.Cancel();
-            stop.WaitOne();
+            await Task.Run(stop.WaitOne);
         }
 
         [Fact]
@@ -453,7 +453,7 @@ namespace Tests
             }
 
             await e.DisposeAsync();
-            stop.WaitOne();
+            await Task.Run(stop.WaitOne);
         }
 
         // TODO: Add more tests for Observable conversion.
