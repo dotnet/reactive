@@ -1,11 +1,11 @@
 <Project>
 
   <!-- This props all need to be set in targets as they depend on the values set earlier -->
-  
-  <PropertyGroup>  
+
+  <PropertyGroup>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
   </PropertyGroup>
-    
+
   <PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
     <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_WPF;HAS_WINRT;HAS_DISPATCHER;HAS_REMOTING;DESKTOPCLR;NO_NULLABLE_ATTRIBUTES</DefineConstants>
   </PropertyGroup>
@@ -18,8 +18,11 @@
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0')) or $(TargetFramework.StartsWith('net7.0')) or $(TargetFramework.StartsWith('net8.0'))">
     <DefineConstants>$(DefineConstants);HAS_TRIMMABILITY_ATTRIBUTES</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows'))">
     <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net9.0'))">
+    <DefineConstants>$(DefineConstants);HAS_SYSTEM_THREADING_LOCK</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup Condition="('$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'uap10.0.18362' or '$(TargetFramework)' == 'netstandard2.0') and $(IsPackable)">
