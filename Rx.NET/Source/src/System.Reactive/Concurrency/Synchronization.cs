@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
-// See the LICENSE file in the project root for more information. 
+// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
 using System.Reactive.Disposables;
@@ -229,7 +229,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return new Synchronize<TSource>(source);
+            return new SynchronizeWithObject<TSource>(source);
         }
 
         /// <summary>
@@ -252,8 +252,33 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(gate));
             }
 
-            return new Synchronize<TSource>(source, gate);
+            return new SynchronizeWithObject<TSource>(source, gate);
         }
+
+        #if HAS_SYSTEM_THREADING_LOCK
+        /// <summary>
+        /// Wraps the source sequence in order to ensure observer callbacks are synchronized using the specified gate object.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="gate">Gate object to synchronize each observer call on.</param>
+        /// <returns>The source sequence whose outgoing calls to observers are synchronized on the given gate object.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="gate"/> is <c>null</c>.</exception>
+        public static IObservable<TSource> Synchronize<TSource>(IObservable<TSource> source, Lock gate)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (gate == null)
+            {
+                throw new ArgumentNullException(nameof(gate));
+            }
+
+            return new SynchronizeWithLock<TSource>(source, gate);
+        }
+        #endif
 
         #endregion
     }

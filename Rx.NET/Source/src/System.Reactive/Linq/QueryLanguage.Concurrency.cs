@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
-// See the LICENSE file in the project root for more information. 
+// See the LICENSE file in the project root for more information.
 
 using System.Reactive.Concurrency;
 using System.Threading;
@@ -48,6 +48,13 @@ namespace System.Reactive.Linq
         {
             return Synchronization.Synchronize(source, gate);
         }
+
+        #if HAS_SYSTEM_THREADING_LOCK
+        public virtual IObservable<TSource> Synchronize<TSource>(IObservable<TSource> source, Lock gate)
+        {
+            return Synchronization.Synchronize(source, gate);
+        }
+        #endif
 
         #endregion
     }

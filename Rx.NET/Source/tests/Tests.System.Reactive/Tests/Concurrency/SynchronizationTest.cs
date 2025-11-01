@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
-// See the LICENSE file in the project root for more information. 
+// See the LICENSE file in the project root for more information.
 
 using System;
 using System.Reactive.Concurrency;
@@ -37,7 +37,10 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Synchronization.Synchronize(default(IObservable<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Synchronization.Synchronize(default(IObservable<int>), new object()));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Synchronization.Synchronize(DummyObservable<int>.Instance, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Synchronization.Synchronize(DummyObservable<int>.Instance, (null as object)!));
+            #if HAS_SYSTEM_THREADING_LOCK
+            ReactiveAssert.Throws<ArgumentNullException>(() => Synchronization.Synchronize(DummyObservable<int>.Instance, (null as Lock)!));
+            #endif
         }
 
         private class MySyncCtx : SynchronizationContext

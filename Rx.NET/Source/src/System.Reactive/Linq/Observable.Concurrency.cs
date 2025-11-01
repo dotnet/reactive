@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
-// See the LICENSE file in the project root for more information. 
+// See the LICENSE file in the project root for more information.
 
 using System.Reactive.Concurrency;
 using System.Threading;
@@ -174,6 +174,32 @@ namespace System.Reactive.Linq
 
             return s_impl.Synchronize(source, gate);
         }
+
+        #if HAS_SYSTEM_THREADING_LOCK
+        /// <summary>
+        /// Synchronizes the observable sequence such that observer notifications cannot be delivered concurrently, using the specified gate object.
+        /// This overload is useful when writing n-ary query operators, in order to prevent concurrent callbacks from different sources by synchronizing on a common gate object.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="gate">Gate object to synchronize each observer call on.</param>
+        /// <returns>The source sequence whose outgoing calls to observers are synchronized on the given gate object.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="gate"/> is null.</exception>
+        public static IObservable<TSource> Synchronize<TSource>(this IObservable<TSource> source, Lock gate)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (gate == null)
+            {
+                throw new ArgumentNullException(nameof(gate));
+            }
+
+            return s_impl.Synchronize(source, gate);
+        }
+        #endif
 
         #endregion
     }
