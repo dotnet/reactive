@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
-    <PackageReference Include="System.Reactive.WindowsForms" Version="7.0.0-preview*" />
+    <PackageReference Include="System.Reactive.Windows.Forms" Version="7.0.0-preview*" />
     <PackageReference Include="System.Reactive.Wpf" Version="7.0.0-preview*" />
   </ItemGroup>
 </Project>
