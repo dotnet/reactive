@@ -47,7 +47,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\NuGet.Facades.Readme.md" Pack="true" PackagePath="\readme.md" />
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
     <None Include="AsyncInfoExtensions.cs" />
     <!--<EmbeddedResource Include="Features\WinRT\Strings_WindowsThreading.resx" />
     <Compile Update="Features\WinRT\Strings_WindowsThreading.Designer.cs">

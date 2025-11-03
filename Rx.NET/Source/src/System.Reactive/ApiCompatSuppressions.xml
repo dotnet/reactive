@@ -84,6 +84,42 @@
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.IEventPatternSource`2</Target>
+    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Concurrency.CoreDispatcherScheduler</Target>
+    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Linq.AsyncInfoObservable</Target>
+    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Linq.CoreDispatcherObservable</Target>
+    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Linq.WindowsObservable</Target>
+    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:System.Reactive.Windows.Foundation.AsyncInfoObservableExtensions</Target>
+    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Reactive.Linq.DispatcherObservable</Target>
     <Left>ref/net472/System.Reactive.dll</Left>
     <Right>lib/net472/System.Reactive.dll</Right>
@@ -106,39 +142,6 @@
     <Left>ref/uap10.0.18362/System.Reactive.dll</Left>
     <Right>lib/uap10.0.18362/System.Reactive.dll</Right>
   </Suppression>
-
-<!-- TODO: was expecting to need these
-  <Suppression>
-    <DiagnosticId>CP0001</DiagnosticId>
-    <Target>T:System.Reactive.Linq.AsyncInfoObservable</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0001</DiagnosticId>
-    <Target>T:System.Reactive.Windows.Foundation.AsyncInfoObservableExtensions</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0001</DiagnosticId>
-    <Target>T:System.Reactive.Linq.CoreDispatcherObservable</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0001</DiagnosticId>
-    <Target>T:System.Reactive.Concurrency.CoreDispatcherScheduler</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0001</DiagnosticId>
-    <Target>T:System.Reactive.Linq.WindowsObservable</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
-  </Suppression>
--->
 
   <!--
   TODO: not clear why these need to be in as a baseline suppressions.

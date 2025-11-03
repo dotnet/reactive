@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="build\NuGet.Readme.md" />
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
   </ItemGroup>
 
   <ItemGroup>

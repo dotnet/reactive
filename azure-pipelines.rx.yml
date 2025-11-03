@@ -63,7 +63,7 @@ stages:
       inputs:
         command: build
         projects: Rx.NET/Source/System.Reactive.sln
-        arguments: -c $(BuildConfiguration) -p:CreatePackage=true -p:NoPackageAnalysis=true -p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
+        arguments: -c $(BuildConfiguration) -p:CreatePackage=true -p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
 
     - task: NuGetCommand@2
       displayName: Pack compatibility package
