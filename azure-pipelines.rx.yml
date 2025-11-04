@@ -34,10 +34,9 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET 9.0.x SDK
+      displayName: Use .NET Core 10.x SDK
       inputs:
-        version: 9.0.x
-        performMultiLevelLookup: true
+        version: 10.x
         includePreviewVersions: true
 
     # We need .NET 8.0 to be able to run all tests.
