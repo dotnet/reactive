@@ -22,7 +22,7 @@ namespace ReactiveTests.Tests
             var ts = Observable.Throw<int>(new Exception("Aaargh!")).ResetExceptionDispatchState();
 
             string stackTrace = null;
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 try
                 {
@@ -50,7 +50,7 @@ namespace ReactiveTests.Tests
             var ts = cts.ResetExceptionDispatchState();
 
             string stackTrace = null;
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 try
                 {

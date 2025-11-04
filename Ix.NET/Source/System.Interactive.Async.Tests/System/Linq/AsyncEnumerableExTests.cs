@@ -63,7 +63,7 @@ namespace Tests
             var res1 = await enumerable.ToListAsync();
             var res2 = await enumerable.ToListAsync();
 
-            res1.Should().BeEquivalentTo(res2);
+            Assert.Equivalent(res1, res2, strict: true);
         }
     }
 }
