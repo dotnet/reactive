@@ -85,8 +85,8 @@
     <Compile Include="..\System.Reactive\Platforms\WinRT\Concurrency\ThreadPoolScheduler.Windows.cs" />
     <Compile Include="..\System.Reactive\Platforms\Windows\ThreadPooltimerExtensions.cs" />
     <Compile Include="..\System.Reactive\Platforms\WinRT\Strings_PlatformServices.Designer.cs" />
-    <Compile Include="..\..\src\System.Reactive.For.Uwp\Stubs.cs" Link="Platforms\WinRT\Stubs.cs" />
-    <Compile Include="..\..\src\System.Reactive.For.Uwp\ThreadPoolTimerExtensions.cs" Link="Platforms\WinRT\Concurrency\ThreadPoolTimerExtensions.cs" />
+    <Compile Include="..\..\src\System.Reactive.WindowsRuntime\Stubs.cs" Link="Platforms\WinRT\Stubs.cs" />
+    <Compile Include="..\..\src\System.Reactive.WindowsRuntime\ThreadPoolTimerExtensions.cs" Link="Platforms\WinRT\Concurrency\ThreadPoolTimerExtensions.cs" />
   </ItemGroup>
 
   <!-- Windows includes for Desktop and UWP -->
