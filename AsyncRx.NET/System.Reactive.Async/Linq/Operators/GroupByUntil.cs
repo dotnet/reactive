@@ -613,29 +613,20 @@ namespace System.Reactive.Linq
 
                 var nullGate = new object();
                 var nullGroup = default(IAsyncSubject<TElement>);
+                bool observerComplete = false;
 
                 async ValueTask OnErrorAsync(Exception ex)
                 {
-                    var nullGroupLocal = default(IAsyncSubject<TElement>);
-
-                    lock (nullGate)
-                    {
-                        nullGroupLocal = nullGroup;
-                    }
-
-                    if (nullGroupLocal != null)
-                    {
-                        await nullGroupLocal.OnErrorAsync(ex).ConfigureAwait(false);
-                    }
-
-                    foreach (var group in groups.Values)
-                    {
-                        await group.OnErrorAsync(ex).ConfigureAwait(false);
-                    }
+                    await ErrorAndRemoveNullGroupIfPresentAsync(ex);
+                    await ErrorAndRemoveAllGroupsIfPresentAsync(ex);
 
                     using (await gate.LockAsync().ConfigureAwait(false))
                     {
-                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        if (!observerComplete)
+                        {
+                            observerComplete = true;
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false); 
+                        }
                     }
                 }
 
@@ -714,7 +705,10 @@ namespace System.Reactive.Linq
 
                                     using (await gate.LockAsync().ConfigureAwait(false))
                                     {
-                                        await observer.OnNextAsync(g).ConfigureAwait(false);
+                                        if (!observerComplete)
+                                        {
+                                            await observer.OnNextAsync(g).ConfigureAwait(false); 
+                                        }
                                     }
 
                                     var durationSubscription = new SingleAssignmentAsyncDisposable();
@@ -723,18 +717,7 @@ namespace System.Reactive.Linq
                                     {
                                         if (key == null)
                                         {
-                                            var oldNullGroup = default(IAsyncSubject<TElement>);
-
-                                            lock (nullGate)
-                                            {
-                                                oldNullGroup = nullGroup;
-                                                nullGroup = null;
-                                            }
-
-                                            if (oldNullGroup != null)
-                                            {
-                                                await oldNullGroup.OnCompletedAsync().ConfigureAwait(false);
-                                            }
+                                            await CompleteAndRemoveNullGroupIfPresentAsync();
                                         }
                                         else
                                         {
@@ -778,22 +761,78 @@ namespace System.Reactive.Linq
                             {
                                 if (nullGroup != null)
                                 {
-                                    await nullGroup.OnCompletedAsync().ConfigureAwait(false);
+                                    await CompleteAndRemoveNullGroupIfPresentAsync();
                                 }
 
-                                foreach (var group in groups.Values)
-                                {
-                                    await group.OnCompletedAsync().ConfigureAwait(false);
-                                }
+                                await CompleteAndRemoveAllGroupsIfPresentAsync();
 
                                 using (await gate.LockAsync().ConfigureAwait(false))
                                 {
-                                    await observer.OnCompletedAsync().ConfigureAwait(false);
+                                    if (!observerComplete)
+                                    {
+                                        observerComplete = true;
+                                        await observer.OnCompletedAsync().ConfigureAwait(false); 
+                                    }
                                 }
                             }
                         ),
                         refCount
                     );
+
+                ValueTask CompleteAndRemoveNullGroupIfPresentAsync() => CompleteOrErrorAndRemoveNullGroupIfPresentAsync(null);
+                ValueTask ErrorAndRemoveNullGroupIfPresentAsync(Exception x) => CompleteOrErrorAndRemoveNullGroupIfPresentAsync(x);
+                async ValueTask CompleteOrErrorAndRemoveNullGroupIfPresentAsync(Exception x)
+                {
+                    var oldNullGroup = default(IAsyncSubject<TElement>);
+
+                    lock (nullGate)
+                    {
+                        oldNullGroup = nullGroup;
+                        nullGroup = null;
+                    }
+
+                    if (oldNullGroup != null)
+                    {
+                        if (x is null)
+                        {
+                            await oldNullGroup.OnCompletedAsync().ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            await oldNullGroup.OnErrorAsync(x).ConfigureAwait(false);
+                        }
+                    }
+                }
+
+                ValueTask CompleteAndRemoveAllGroupsIfPresentAsync() => CompleteOrErrorAndRemoveAllGroupsAsync(null);
+                ValueTask ErrorAndRemoveAllGroupsIfPresentAsync(Exception x) => CompleteOrErrorAndRemoveAllGroupsAsync(x);
+                async ValueTask CompleteOrErrorAndRemoveAllGroupsAsync(Exception x)
+                {
+                    foreach (var key in groups.Keys)
+                    {
+                        // The ConcurrentDictionary's Keys property is a snapshot, so
+                        // although this TryRemove should always succeed for the first
+                        // key in the dictionary (as long as our upstream observable is
+                        // obeying the rules, and not making multiple concurrent calls
+                        // to our observer) each await in this loop offers an opportunity
+                        // for one of the group duration observables to complete, which
+                        // will cause the Expire method above to run, meaning that an
+                        // entry that was present when we retrieved Keys at the start of
+                        // this loop might already have been completed and removed by the
+                        // time this loop reaches it.
+                        if (groups.TryRemove(key, out var group))
+                        {
+                            if (x is null)
+                            {
+                                await group.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                            else
+                            {
+                                await group.OnErrorAsync(x).ConfigureAwait(false);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
