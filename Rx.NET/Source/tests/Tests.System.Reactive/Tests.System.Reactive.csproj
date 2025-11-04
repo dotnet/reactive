@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net472;net8.0;net8.0-windows10.0.19041;net9.0;net9.0-windows10.0.19041</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0;net8.0-windows10.0.19041;net9.0;net9.0-windows10.0.19041;net10.0;net10.0-windows10.0.19041</TargetFrameworks>
 
     <!-- IDE0330: Prefer 'System.Threading.Lock': not applicable for as long as we support .NET 8.0 or .NET FX, because it is unavailable on those targets.
          MSTEST0049: Consider overload accepting a CancellationToken - there are 136 of these, and since I've not yet run into a situation that this would have helped in, it's not a priority.
