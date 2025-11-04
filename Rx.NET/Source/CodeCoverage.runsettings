@@ -5,7 +5,8 @@
     Workaround for failure to run tests on .NET FX on v3.3.1 MSTest packages
   -->
   <RunConfiguration>  
-    <DisableAppDomain>True</DisableAppDomain>   
+    <DisableAppDomain>True</DisableAppDomain>
+    <ExecutionThreadApartmentState>STA</ExecutionThreadApartmentState>
   </RunConfiguration>
 
   <DataCollectionRunSettings>

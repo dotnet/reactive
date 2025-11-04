@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#pragma warning disable IDE0350 // Simplify lambda - we want to keep the long form for clarity in tests.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
