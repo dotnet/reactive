@@ -15,7 +15,6 @@
   </ItemGroup>  
 
   <ItemGroup>
-    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
     <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md"/>
   </ItemGroup>
 
