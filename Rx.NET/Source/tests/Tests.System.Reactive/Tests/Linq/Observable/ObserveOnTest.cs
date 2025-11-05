@@ -27,7 +27,6 @@ using Assert = Xunit.Assert;
 namespace ReactiveTests.Tests
 {
     [TestClass]
-    [DoNotParallelize] // We've observed hangs since enabling concurrent test execution.
     public class ObserveOnTest : TestBase
     {
         #region + TestBase +
@@ -209,6 +208,7 @@ namespace ReactiveTests.Tests
     }
 
     [TestClass]
+    [DoNotParallelize] // We've observed hangs since enabling concurrent test execution.
     public class ObserveOnReactiveTest : ReactiveTest
     {
         private static readonly TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);

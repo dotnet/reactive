@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>System.Reactive</RootNamespace>
+    <IsPackable>false</IsPackable>
 
     <Nullable>enable</Nullable>
 
