@@ -7,7 +7,7 @@ namespace System.Reactive.Analyzers.Test
     /// <summary>
     /// Verify that the analyzer correctly reports when a problem is caused by code that was
     /// relying on WPF extension methods supplied by System.Reactive now needing a reference to
-    /// System.Reactive.For.Wpf because of an upgrade to Rx 7.
+    /// System.Reactive.Wpf because of an upgrade to Rx 7.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -41,7 +41,7 @@ namespace System.Reactive.Analyzers.Test
     /// <c>System.Reactive</c> v7 does not include this type, so attempting to use it will
     /// cause a compiler error. This can't be resolved simply by adding the Rx WPF package,
     /// because although that makes <c>DispatcherScheduler</c> available, it's defined in
-    /// the <c>System.Reactive.For.Wpf</c> assembly, so the CLR will consider it to be a
+    /// the <c>System.Reactive.Wpf</c> assembly, so the CLR will consider it to be a
     /// different type. (And we can't just define a type forwarder in <c>System.Reactive</c>,
     /// because that would mean the main Rx package would go back to imposing a dependency on
     /// WPF and Windows Forms, exactly the problem we're trying to fix.) In these cases, the

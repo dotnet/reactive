@@ -107,18 +107,6 @@
     <Compile Include="..\System.Reactive\Platforms\Desktop\**\*.cs" />
   </ItemGroup> -->
 
-
-    <!-- WindowsRuntime (netX.0-windows and UWP) -->
-  <!-- <ItemGroup Condition="$(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
-    <ProjectReference Include="..\..\src\System.Reactive.For.WindowsRuntime\System.Reactive.For.WindowsRuntime.csproj" />
-  </ItemGroup> -->
-
-  <!-- Windows Forms and WPF -->
-  <!-- <ItemGroup Condition="('$(TargetFramework)' == 'net472') or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
-    <ProjectReference Include="..\..\src\System.Reactive.For.WindowsForms\System.Reactive.For.WindowsForms.csproj" />
-    <ProjectReference Include="..\..\src\System.Reactive.For.Wpf\System.Reactive.For.Wpf.csproj" />
-  </ItemGroup> -->
-
   <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
     <!--
     The .NET SDK doesn't expect TargetFrameworks to include uap10.0.18362, so it doesn't understand

@@ -11,7 +11,7 @@ namespace System.Reactive.Analyzers.Test
     /// <summary>
     /// Verify that the analyzer correctly reports when a problem is caused by code that was
     /// relying on the <c>ControlScheduler</c> extension methods supplyed by System.Reactive now needing a reference to
-    /// System.Reactive.For.Wpf because of an upgrade to Rx 7.
+    /// System.Reactive.Wpf because of an upgrade to Rx 7.
     /// </summary>
     [TestClass]
     public sealed class WindowsFormsSchedulerNewPackageAnalyzerTests

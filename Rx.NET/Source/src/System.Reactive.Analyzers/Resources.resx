@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ReferenceToRxWindowsFormsRequiredAnalyzerDescription" xml:space="preserve">
-    <value>Add a reference to the System.Reactive.For.WindowsForms NuGet Package to continue using Rx.NET Windows Forms support.</value>
+    <value>Add a reference to the System.Reactive.WindowsForms NuGet Package to continue using Rx.NET Windows Forms support.</value>
   </data>
   <data name="ReferenceToRxWindowsFormsRequiredAnalyzerExtensionMethodMessageFormat" xml:space="preserve">
-    <value>The '{0}(Control)' extension method has moved. Add a reference to the System.Reactive.For.WindowsForms NuGet package.</value>
+    <value>The '{0}(Control)' extension method has moved. Add a reference to the System.Reactive.WindowsForms NuGet package.</value>
   </data>
   <data name="ReferenceToRxWindowsFormsRequiredAnalyzerTitle" xml:space="preserve">
-    <value>Rx.NET Windows Forms support is now in System.Reactive.For.WindowsForms</value>
+    <value>Rx.NET Windows Forms support is now in System.Reactive.WindowsForms</value>
   </data>
   <data name="ReferenceToRxWpfRequiredAnalyzerDescription" xml:space="preserve">
-    <value>Add a reference to the System.Reactive.For.Wpf NuGet Package to continue using Rx.NET WPF support.</value>
+    <value>Add a reference to the System.Reactive.Wpf NuGet Package to continue using Rx.NET WPF support.</value>
   </data>
   <data name="ReferenceToRxWpfRequiredAnalyzerTitle" xml:space="preserve">
-    <value>Rx.NET WPF support is now in System.Reactive.For.Wpf</value>
+    <value>Rx.NET WPF support is now in System.Reactive.Wpf</value>
   </data>
   <data name="TypeText" xml:space="preserve">
     <value>type</value>
@@ -139,15 +139,15 @@
     <value>extension method</value>
   </data>
   <data name="ReferenceToRxWpfRequiredAnalyzerMessageFormat" xml:space="preserve">
-    <value>The '{0}' {1} has moved. Add a reference to the System.Reactive.For.Wpf NuGet package.</value>
+    <value>The '{0}' {1} has moved. Add a reference to the System.Reactive.Wpf NuGet package.</value>
   </data>
   <data name="ReferenceToRxWindowsRuntimeRequiredAnalyzerDescription" xml:space="preserve">
-    <value>Add a reference to the System.Reactive.For.WindowsRuntime NuGet Package to continue using Rx.NET Windows Runtime support.</value>
+    <value>Add a reference to the System.Reactive.WindowsRuntime NuGet Package to continue using Rx.NET Windows Runtime support.</value>
   </data>
   <data name="ReferenceToRxWindowsRuntimeRequiredAnalyzerMessageFormat" xml:space="preserve">
-    <value>The '{0}' {1} extension method has moved. Add a reference to the System.Reactive.For.WindowsRuntime NuGet package.</value>
+    <value>The '{0}' {1} extension method has moved. Add a reference to the System.Reactive.WindowsRuntime NuGet package.</value>
   </data>
   <data name="ReferenceToRxWindowsRuntimeRequiredAnalyzerTitle" xml:space="preserve">
-    <value>Rx.NET Windows Runtime support is now in System.Reactive.For.WindowsRuntime</value>
+    <value>Rx.NET Windows Runtime support is now in System.Reactive.WindowsRuntime</value>
   </data>
 </root>

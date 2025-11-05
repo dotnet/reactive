@@ -23,7 +23,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Constructs a ThreadPoolScheduler that schedules units of work on the Windows ThreadPool.
         /// </summary>
-        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the WindowsRuntimeThreadPoolScheduler in the System.Reactive.For.Uwp package. Otherwise, use the Instance property, because this constructor will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
+        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the WindowsRuntimeThreadPoolScheduler in the System.Reactive.WindowsRuntime package. Otherwise, use the Instance property, because this constructor will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
         public ThreadPoolScheduler()
         {
             // The next step for obsolescence is to omit this constructor and all the other
@@ -38,7 +38,7 @@ namespace System.Reactive.Concurrency
         /// Constructs a ThreadPoolScheduler that schedules units of work on the Windows ThreadPool with the given priority.
         /// </summary>
         /// <param name="priority">Priority for scheduled units of work.</param>
-        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the WindowsRuntimeThreadPoolScheduler in the System.Reactive.For.Uwp package. Otherwise, use the Instance property, because this constructor will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
+        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the WindowsRuntimeThreadPoolScheduler in the System.Reactive.WindowsRuntime package. Otherwise, use the Instance property, because this constructor will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
         public ThreadPoolScheduler(WorkItemPriority priority)
         {
             Priority = priority;
@@ -50,7 +50,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="priority">Priority for scheduled units of work.</param>
         /// <param name="options">Options that configure how work is scheduled.</param>
-        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the WindowsRuntimeThreadPoolScheduler in the System.Reactive.For.Uwp package. Otherwise, use the Instance property, because this constructor will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
+        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the WindowsRuntimeThreadPoolScheduler in the System.Reactive.WindowsRuntime package. Otherwise, use the Instance property, because this constructor will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
         public ThreadPoolScheduler(WorkItemPriority priority, WorkItemOptions options)
         {
             Priority = priority;
@@ -72,13 +72,13 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the priority at which work is scheduled.
         /// </summary>
-        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the WindowsRuntimeThreadPoolScheduler in the System.Reactive.For.Uwp package. This property will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
+        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the WindowsRuntimeThreadPoolScheduler in the System.Reactive.WindowsRuntime package. This property will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
         public WorkItemPriority Priority { get; }
 
         /// <summary>
         /// Gets the options that configure how work is scheduled.
         /// </summary>
-        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the WindowsRuntimeThreadPoolScheduler in the System.Reactive.For.Uwp package. This property will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
+        [Obsolete("If you require the UWP-specific features of ThreadPoolScheduler use the WindowsRuntimeThreadPoolScheduler in the System.Reactive.WindowsRuntime package. This property will be removed in a future version (because UWP applications will end up with the same ThreadPoolScheduler as all other application types).")]
         public WorkItemOptions Options { get; }
 
         /// <summary>

@@ -19,7 +19,7 @@ namespace System.Reactive {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -70,7 +70,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a reference to the System.Reactive.For.WindowsForms NuGet Package to continue using Rx.NET Windows Forms support..
+        ///   Looks up a localized string similar to Add a reference to the System.Reactive.WindowsForms NuGet Package to continue using Rx.NET Windows Forms support..
         /// </summary>
         internal static string ReferenceToRxWindowsFormsRequiredAnalyzerDescription {
             get {
@@ -79,7 +79,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;{0}(Control)&apos; extension method has moved. Add a reference to the System.Reactive.For.WindowsForms NuGet package..
+        ///   Looks up a localized string similar to The &apos;{0}(Control)&apos; extension method has moved. Add a reference to the System.Reactive.WindowsForms NuGet package..
         /// </summary>
         internal static string ReferenceToRxWindowsFormsRequiredAnalyzerExtensionMethodMessageFormat {
             get {
@@ -88,7 +88,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rx.NET Windows Forms support is now in System.Reactive.For.WindowsForms.
+        ///   Looks up a localized string similar to Rx.NET Windows Forms support is now in System.Reactive.WindowsForms.
         /// </summary>
         internal static string ReferenceToRxWindowsFormsRequiredAnalyzerTitle {
             get {
@@ -97,7 +97,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a reference to the System.Reactive.For.WindowsRuntime NuGet Package to continue using Rx.NET Windows Runtime support..
+        ///   Looks up a localized string similar to Add a reference to the System.Reactive.WindowsRuntime NuGet Package to continue using Rx.NET Windows Runtime support..
         /// </summary>
         internal static string ReferenceToRxWindowsRuntimeRequiredAnalyzerDescription {
             get {
@@ -106,7 +106,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} extension method has moved. Add a reference to the System.Reactive.For.WindowsRuntime NuGet package..
+        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} extension method has moved. Add a reference to the System.Reactive.WindowsRuntime NuGet package..
         /// </summary>
         internal static string ReferenceToRxWindowsRuntimeRequiredAnalyzerMessageFormat {
             get {
@@ -115,7 +115,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rx.NET Windows Runtime support is now in System.Reactive.For.WindowsRuntime.
+        ///   Looks up a localized string similar to Rx.NET Windows Runtime support is now in System.Reactive.WindowsRuntime.
         /// </summary>
         internal static string ReferenceToRxWindowsRuntimeRequiredAnalyzerTitle {
             get {
@@ -124,7 +124,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a reference to the System.Reactive.For.Wpf NuGet Package to continue using Rx.NET WPF support..
+        ///   Looks up a localized string similar to Add a reference to the System.Reactive.Wpf NuGet Package to continue using Rx.NET WPF support..
         /// </summary>
         internal static string ReferenceToRxWpfRequiredAnalyzerDescription {
             get {
@@ -133,7 +133,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} has moved. Add a reference to the System.Reactive.For.Wpf NuGet package..
+        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} has moved. Add a reference to the System.Reactive.Wpf NuGet package..
         /// </summary>
         internal static string ReferenceToRxWpfRequiredAnalyzerMessageFormat {
             get {
@@ -142,7 +142,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rx.NET WPF support is now in System.Reactive.For.Wpf.
+        ///   Looks up a localized string similar to Rx.NET WPF support is now in System.Reactive.Wpf.
         /// </summary>
         internal static string ReferenceToRxWpfRequiredAnalyzerTitle {
             get {

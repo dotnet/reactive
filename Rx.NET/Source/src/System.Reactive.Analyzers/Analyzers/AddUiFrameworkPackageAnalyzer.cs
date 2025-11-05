@@ -26,7 +26,7 @@ namespace System.Reactive.Analyzers
     /// the reference assemblies, and remains present in the runtime libraries, but the types
     /// hidden in this way are present only for binary backwards compatibility. Code wishing to
     /// continue using these types when being built against current versions of Rx needs to use
-    /// their new homes: the UI-framework-specific packages such as System.Reactive.For.Wpf.
+    /// their new homes: the UI-framework-specific packages such as System.Reactive.Wpf.
     /// </para>
     /// <para>
     /// This analyzer detects when a build failure looks likely to have been caused by code trying
