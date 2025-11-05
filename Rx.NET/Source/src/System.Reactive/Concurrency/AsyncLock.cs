@@ -43,7 +43,7 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         /// <remarks>In case TState is a value type, this operation will involve boxing of <paramref name="state"/>.
         /// However, this is often an improvement over the allocation of a closure object and a delegate.</remarks>
-        public void Wait<TState>(TState state, Action<TState> action)
+        internal void Wait<TState>(TState state, Action<TState> action)
         {
             if (action == null)
             {
