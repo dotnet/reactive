@@ -29,7 +29,7 @@ Back in Rx 4.0 (the last time there was a major upheaval to the packaging), vari
 
 These packages existed to enable code built against older versions of Rx.NET to continue to work when upgraded to Rx 4.0 or later. We have continued to build new versions of these with each subsequent version of .NET, but all that has typically changed is the exact versions in the TFMs. Nobody should be using these facades any more so there is no reason to continue to produce new ones. (And anyone who is still using the old ones can continue to do so.)
 
-So we no longer produced new versions of these packages.
+So we no longer produce new versions of these packages.
 
 * `System.Reactive.Compatibility`
 * `System.Reactive.Core`
