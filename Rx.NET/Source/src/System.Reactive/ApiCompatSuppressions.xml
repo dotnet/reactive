@@ -14,13 +14,7 @@
   the Windows Forms and WPF assemblies to be able to determine that you aren't using ObserveOn(Control) or
   ObserveOn(Dispatcher).
 
-  That would make it impossible to use the System.Reactive legacy package, and also to use Rx in your app, without
-  also have a desktop framework dependency. And since the whole reason we're relegating System.Reactive to being
-  a legacy facade is to fix that very problem, this would be pointless.
-
   So we hide all the UI-specific types from the reference assemblies for the .NET Windows-specific targets.
-  (We don't have to do that for .NET FX or UAP targets because if you're building for those, you already have
-  the relevant UI frameworks installed.)
   -->
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>

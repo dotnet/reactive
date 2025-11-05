@@ -29,15 +29,13 @@ namespace ReactiveTests.Tests.Api
         }
 
         // Note:
-        //  System.Reactive (now a facade) uses the .NET SDK's built in package validation, specifically the
+        //  System.Reactive uses the .NET SDK's built in package validation, specifically the
         //      PackageValidationBaselineVersion feature to ensure backwards compatibility
         //  System.Reactive is using Microsoft.CodeAnalysis.PublicApiAnalyzers to ensure stability of
         //      its public API.
         // TODO:
         //  Move Aliases and Testing packages over to one of the mechanisms above
-        //  Add similar API checking to:
-        //      The old facade packages
-        //      The new FrameworkIntegrations packages
+        //  Add similar API checking to the new FrameworkIntegrations packages
 
         [Fact]
         public Task Aliases()

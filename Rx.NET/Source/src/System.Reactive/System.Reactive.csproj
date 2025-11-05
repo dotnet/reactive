@@ -3,11 +3,12 @@
     <!--
     Rx 7.0 moved all UI-framework-specific code into separate packages. This would have reduced
     the number of distinct TFMs required to just netstandard2.0;net8.0;net8.0-windows10.0.19041.
-    However, because we maintain binary compatibility with Rx 6.0.1, the runtime libraries
+    However, because we maintain binary compatibility with Rx 6.1.0, the runtime libraries
     need to continue to offer the UI-framework-specific code. It's just that we've removed that
     from the ref assemblies so that it _looks_ like those APIs are no longer in this package.
     (This is necessary for it to be possible for apps that targets Windows-specific TFMs to
     use this package without a reference to the Microsoft.WindowsDesktop.App framework.)
+    Consequently, we must continue to provide net472 and uap10.0.18362 targets.
     -->
     <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net8.0;net8.0-windows10.0.19041</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
@@ -26,7 +27,7 @@
 
   <PropertyGroup>
     <EnablePackageValidation>true</EnablePackageValidation>
-    <PackageValidationBaselineVersion>6.0.1</PackageValidationBaselineVersion>
+    <PackageValidationBaselineVersion>6.1.0</PackageValidationBaselineVersion>
   </PropertyGroup>
     
   <ItemGroup>

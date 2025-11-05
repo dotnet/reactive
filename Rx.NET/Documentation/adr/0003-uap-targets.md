@@ -127,7 +127,7 @@ Without these explicit settings, those first two values would have become `UAP,V
 
 However, only _some_ properties should use the old name. We need to set _all_ of these properties, because otherwise, other parts of the build system get confused (e.g., NuGet handling). So we need the ".NETCore" name in some places, and the "UAP" name in others.
 
-Also note that the package validation tooling (which we use to ensure that `System.Reactive` continues to present the same API as it always did despite now being mostly a facade DLL) turns out not to understand the `.NETCore,Version=v5.0` TFM. So for that to work, we need to put the TFM back how it was later in the build process, which is why we have this target:
+Also note that the package validation tooling (which we use to ensure that `System.Reactive` continues to present the same API as it always did) turns out not to understand the `.NETCore,Version=v5.0` TFM. So for that to work, we need to put the TFM back how it was later in the build process, which is why we have this target:
 
 ```xml
 <Target Name="_SetUwpTfmForPackageValidation" BeforeTargets="RunPackageValidation">

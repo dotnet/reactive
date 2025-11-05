@@ -10,7 +10,7 @@
     -->
     <NoWarn>$(NoWarn);CA1812</NoWarn>
 
-    <DefineConstants>$(DefineConstants);LEGACY_SYSTEM_REACTIVE_FACADE;BUILDING_REFERENCE_ASSEMBLY</DefineConstants>
+    <DefineConstants>$(DefineConstants);BUILDING_REFERENCE_ASSEMBLY</DefineConstants>
 
     <ProduceOnlyReferenceAssembly>true</ProduceOnlyReferenceAssembly>
 
