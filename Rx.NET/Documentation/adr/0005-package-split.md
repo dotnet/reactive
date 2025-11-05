@@ -1,6 +1,6 @@
-# Splitting `System.Reactive` into `System.Reactive.Net` and UI framework support packages
+# Moving UI framework support out of `System.Reactive`
 
-When a .NET project that targets Windows takes a dependency on `System.Reactive`, there are circumstances in which this causes unwanted dependencies on the WPF and Windows Forms frameworks. This can add many tens of megabytes to the deployable size of applications. This document describes how Rx 7.0 fixes this problem.
+Before Rx 7, when a .NET project that targets Windows took a dependency on `System.Reactive`, there were circumstances in which this caused unwanted dependencies on the WPF and Windows Forms frameworks. This could add many tens of megabytes to the deployable size of applications. This document describes how Rx 7.0 fixes this problem.
 
 
 ## Status
@@ -34,7 +34,7 @@ If you want to understand the problem, the preferred solution, and its consequen
 
 ## Overview
 
-This table shows the output sizes for a simple console app ,  targeting `net8.0-windows10.0.19041`, with various deployment models. (The problem this ADR addresses only afflicts applications with a Windows-specific TFM, and only those specifying a version of `10.0.19041` or later.) The console app calls some WinRT APIs, hence the need for the `-windows` TFM, but does not use any UI framework. The final column shows the impact of adding a reference to Rx (`System.Reactive` v6.0.1) and a single line of code using Rx.
+This table shows the output sizes for a simple console app  targeting `net8.0-windows10.0.19041`, with various deployment models. (The problem this ADR addresses only afflicts applications with a Windows-specific TFM, and only those specifying a version of `10.0.19041` or later.) The console app calls some WinRT APIs, hence the need for the `-windows` TFM, but does not use any UI framework. The final column shows the impact of adding a reference to Rx (`System.Reactive` v6.0.1) and a single line of code using Rx.
 
 | Deployment type | Size without Rx | Size with Rx |
 |--|--|--|
@@ -45,7 +45,7 @@ This table shows the output sizes for a simple console app ,  targeting `net8.0-
 
 The worst case, self-contained deployment, is widely used by applications that need a `-windows` TFM. It roughly doubles the size of this application, adding over 90MB! With trimming, the absolute impact is smaller (Rx adds 47.4MB) but the relative increase is even larger, at a factor of 3.6.
 
-The basic problem is that for applications with a Windows-specific TFM, `System.Reactive` imposes dependencies on WPF and Windows Forms. (To be precise, it causes a dependency on the `Microsoft.Desktop.App` framework, which is .NET's deployment vehicle for both WPF and Windows Forms.) Complete copies of these frameworks get included in self-contained deployments, and trimming has only a small effect on the impact.
+The basic problem is that for applications with a Windows-specific TFM, `System.Reactive` v6 imposes dependencies on WPF and Windows Forms. (To be precise, it causes a dependency on the `Microsoft.Desktop.App` framework, which is .NET's deployment vehicle for both WPF and Windows Forms.) Complete copies of these frameworks get included in self-contained deployments, and trimming has only a small effect on the impact.
 
 This issue has caused some projects to abandon Rx entirely.
 
@@ -95,7 +95,7 @@ The following sections address all of this before moving onto the [decision](#de
 
 The basic problem is described at the start of this document, but we can characterise it more precisely:
 
-> An application that references the [`System.Reactive` NuGet package](https://www.nuget.org/packages/System.Reactive) (directly or transitively) and which has a Windows-specific target specifying a version of `10.0.19041` or later will acquire a dependency on the [.NET Windows Desktop Runtime](https://github.com/dotnet/windowsdesktop) (sometimes referred to as just the ".NET Desktop Runtime" and also sometimes referred to by the technical _shared framework name_ `Microsoft.WindowsDesktop.App`).
+> An application that references v6 of the [`System.Reactive` NuGet package](https://www.nuget.org/packages/System.Reactive) (directly or transitively) and which has a Windows-specific target specifying a version of `10.0.19041` or later will acquire a dependency on the [.NET Windows Desktop Runtime](https://github.com/dotnet/windowsdesktop) (sometimes referred to as just the ".NET Desktop Runtime" and also sometimes referred to by the technical _shared framework name_ `Microsoft.WindowsDesktop.App`).
 >
 > This occurs because the `System.Reactive` package's `nuspec` file's `frameworkReferences` section states that this package's `net6.0-windows10.0.19041` target has a `frameworkReference` to `Microsoft.WindowsDesktop.App`. Here's the relevant section of the `nuspec` file in `System.Reactive` 6.0.1:
 >
@@ -125,7 +125,7 @@ TFMs can be very broad. A component with a TFM of `netstandard2.0` can run on an
 
 A version-specific TFM does not necessarily imply a minimum OS version requirement. A component must specify 10.0.19041 if it wants to attempt to use APIs introduced in that version of Windows, but the operative word here is "attempt". It's possible to detect failures and fall back to alternative behaviour when the API turns out to be unavailable. Thus, a component with a `net6.0-windows10.0.19041` TFM may well be able to run on Windows 10.0.18362.
 
-All OS-specific TFMs are also version-specific. If you don't specify the version, the .NET SDK picks one for you. For example, in all .NET SDKs published to date since 5.0 (the latest being 9.0.304 at the time of writing this), `net6.0-windows` is equivalent to `net6.0-windows7`.
+All OS-specific TFMs are also version-specific. If you don't specify the version, the .NET SDK picks one for you. For example, in all .NET SDKs published to date since 5.0 (the latest being 9.0.306 at the time of writing this), `net6.0-windows` is equivalent to `net6.0-windows7`.
 
 Although the OS version part of a TFM does not imply a minimum requirement, the .NET version number does. `net472` components can't run on .NET Framework 4.6. `net6.0` components can't run on `net5.0`.
 
@@ -151,7 +151,7 @@ There were several different versions of .NET around at this time besides the .N
 * The scheduler support was specialized to work as well as possible on each distinct target
 * Each platform had a different UI framework (or frameworks) available, so Rx's UI framework integration was different for each target
 
-Some of the differences in the first category were implementation details behind an API common to all versions, but there were some public API differences too. (You can still see an echo of this in Rx 6.0. The `ThreadPoolScheduler` class is available on all platforms, but on UWP, which is effectively the successor to the old Windows 8 API, this class has two extra properties, `Priority` and `Options`, for controlling UWP-specific thread pool behaviour.) The second category necessarily involves differences in the public API, although at this point in Rx's history, all of its UI-framework-specific code was in separate assemblies, so those differences were isolated. There was a common core to Rx's public API that was the same across all platforms.
+Some of the differences in the first category were implementation details behind an API common to all versions, but there were some public API differences too. (You can still see an echo of this in Rx 6.0. The `ThreadPoolScheduler` class is available on all platforms, but on UWP, which is effectively the successor to the old Windows 8 API, this class has two extra properties, `Priority` and `Options`, for controlling WinRT-specific thread pool behaviour.) The second category necessarily involves differences in the public API, although at this point in Rx's history, all of its UI-framework-specific code was in separate assemblies, so those differences were isolated. There was a common core to Rx's public API that was the same across all platforms.
 
 This meant that it would be possible, in principle, to write a library that depended on Rx, and which could be used on all the same platforms that Rx supported. However, it wasn't entirely straightforward to do this back in 2011.
 
@@ -265,7 +265,7 @@ This simplification was ingenious, and it worked brilliantly. Until it didn't. B
 
 Although it now targeted just one version of .NET Framework, `System.Reactive` was still a multi-target NuGet package. If you download the v4.0 package and unzip it (`.nupkg` files are just ZIP files) you will find the `lib` folder contains subfolders for 5 different TFMs:
 
-* `net46` (.NET Framework 4.0)
+* `net46` (.NET Framework 4.6)
 * `netstandard2.0`
 * `uap10` (UWP)
 * `uap10.0.18362` (UWP)
@@ -348,7 +348,7 @@ Console.WriteLine($"Touch {touchCapabilities.TouchPresent}");
 
 This uses [WinRT-based APIs to discover whether certain forms of input are available on the machine](https://learn.microsoft.com/en-us/windows/apps/design/input/identify-input-devices). These APIs are available if I use a suitable Windows-specific TFM. They're only in Windows 10 or later, so I need to use a versioned Windows-specific TFM such as `net8.0-windows10.0.18362.0`. (The APIs I'm using are actually available starting with version 10.0.10240.0, but I've chosen version 10.0.18362 because that's the oldest Windows build number that the current .NET tooling supports.) If I had specified a TFM of just `net8.0`, that code would fail to compile because these are Windows-only APIs.
 
-This illustrates the very specific meaning of OS-specific TFMs: they determine what the OS-specific API surface area your code can attempt to use. Here are some things that OS-specific TFMs **don't** mean:
+This illustrates the very specific meaning of OS-specific TFMs: they determine what OS-specific API surface area your code can attempt to use. Here are some things that OS-specific TFMs **don't** mean:
 
 * a minimum supported OS version (because code might use a new API when it runs on the latest OS version but be capable of handling its unavailability gracefully)
 * an intention to use WPF or Windows Forms (e.g., this particular program is a console application)
@@ -376,7 +376,7 @@ In the framework-dependent row it makes only a small difference (because the cop
 
 The self-contained deployment is the worst. It has roughly doubled in size—it is 90MB larger! And for absolutely no change in behaviour. I compiled exactly the same code for the last two columns, it's just that in the 18362 column I chose a target runtime that would prevent Rx from trying to offer the Windows Forms and WPF support that I'm not using.
 
-What's happened here is that because Rx has insisted on providing its Windows Forms and WPF support, the .NET SDK has had to include all of the .NET runtime library components that constitute Windows Forms and WPF, and those are large! That's where that extra 90MB comes from: a complete copy of TWO user interface frameworks, and my application isn't using either of them!
+What's happened here is that because Rx has insisted on providing its Windows Forms and WPF support, the .NET SDK has had to include all of the .NET runtime library components that constitute Windows Forms and WPF, and those are large. That's where that extra 90MB comes from: a complete copy of TWO user interface frameworks, and my application isn't using either of them!
 
 The self-contained trimmed version did a little better. It was able to work out that there was a whole load of code I wasn't using. But there's a limit to its abilities. The trimmer is apparently not able to work out that I wasn't using Windows Forms or WPF at all, so the deployment is still over 47MB larger. Or to put it another way, comparing it with the other two columns in that row we can see that the deployment is about 3.5x the size that it needs to be!
 
@@ -453,7 +453,7 @@ Why not just set [`UseWPF`](https://learn.microsoft.com/en-us/dotnet/core/projec
 
 #### The problems with the workaround
 
-Unfortunately, the workaround doesn't always work. It is usually OK for applications that don't use Rx directly, and which only depend on `System.Reactive` as a transitive reference through some other component. But if the application itself uses Rx, then it can encounter problems with this workaround. For example, if your application ever calls the `ObserveOn` extension method for `IObservable<T>`, you will get baffling compiler errors. Take this simple example, compiled against Rx 6.0.1:
+Unfortunately, this workaround doesn't always work. It is usually OK for applications that don't use Rx directly, and which only depend on `System.Reactive` as a transitive reference through some other component. But if the application itself uses Rx, then it can encounter problems with this workaround. For example, if your application ever calls the `ObserveOn` extension method for `IObservable<T>`, you will get baffling compiler errors. Take this simple example, compiled against Rx 6.0.1:
 
 ```cs
 using System.Reactive.Linq;
@@ -490,126 +490,6 @@ The WPF ones are a bit more weird. These two overloads refer to types defined in
 We are unaware of any good way around this. The only available workaround is to invoke the extension methods directly with static method syntax. (That avoids the problem because the problematic overloads of this extension method are defined in separate classes from the one that app was intending to use.) This is a very unsatisfactory solution.
 
 So although the workaround described above will work for some applications, it's not a good general solution.
-
-#### Enhanced workaround
-
-If you're prepared to delve deeper into modifying the build system's behaviour, adding something like this to your `csproj` can work:
-
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <SelfContained>true</SelfContained>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <!--
-    Using this purely because it has us a transitive reference to System.Reactive 6.0.1,
-    which is the scenario we want to test here.
-    -->
-    <PackageReference Include="DynamicData" Version="9.4.1" PrivateAssets="All" />
-
-    <!--
-    1: To be able to avoid the unwanted transitive framework reference to the Desktop framework,
-        we must use Rx 7.0 or later. Normally we'd use System.Reactive.Net, but since DynamicData
-        uses System.Reactive 6.0.1, we need to upgrade the reference to the legacy verison of that
-        component in Rx 7.0. (If we just used System.Reactive.Net, we would end up with two copies of
-        Rx, which would produce compiler errors.)
-       This gives us a transitive reference to System.Reactive.Net, which we want, and also to the
-       integration packages:
-          System.Reactive.For.WindowsForms
-          System.Reactive.For.WindowsRuntime
-          System.Reactive.For.Wpf
-       We don't want the WPF or Windows Forms ones because the whole point here is to avoid the
-       .NET Desktop framework reference, so we'll be removing those later.
-    -->
-    <PackageReference Include="System.Reactive" Version="7.0.0-preview.17.g58342773bd" />
-  </ItemGroup>
-
-  <PropertyGroup>
-    <!--
-    2: This stops us picking up a Desktop framework reference as a result of the transitive reference to System.Reactive.
-    -->
-    <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
-  </PropertyGroup>
-  
-  <Target Name="_HideLegacyRxFromCompiler" AfterTargets="ResolvePackageAssets">
-    <!--
-    3: Having prevented the transitive reference to the Desktop framework, we now need to prevent
-        the compiler from being able to see the legacy Rx packages. If the compiler is able to see
-        them, it will cause problems when using certain extension methods, such as the ObserveOn
-        extension for IObservable<T>. The main System.Reactive.Net package defines just two such
-        extension methods: one for SynchronizationContext and one for IScheduler. However, in Rx 6,
-        the net6.0-windows10.0.19041 target in System.Reactive defined 10 overloads: in addition
-        to the two mentioned above, it also defined overloads for WPF's Dispatcher and DispatcherObject,
-        (2 for each: with and without a DispatcherPriority parameter), one taking the DispatcherScheduler
-        (the specialized scheduler for WPF's Dispatcher), one for the Windows Forms' Control and and
-        two for the Windows Runtime CoreDispatcher (again, one with and one without a CoreDispatcherPriority).
-        Since System.Reactive is backwards compatible, it makes all these overloads available, which it
-        does using type forwarding to the various System.Reactive.For.* packages.
-
-       However, this creates a problem for a project like this that uses DisableTransitiveFrameworkReferences
-        to prevent the transitive reference to the Desktop framework, because the compiler can still
-        see those extension methods, but it is now unable to understand them because it can't locate the
-        WPF and Windows Forms types that they refer to. This causes compilation errors when we try to
-        use ObserveOn. Even in cases where the ObserveOn overload we want is not a UI-framework-specific
-        one, and is therefore available, compilation fails because the compiler can't determine whether
-        the other available overloads might have been applicable.
-        
-       To avoid this, we need to prevent the compiler from being able to see the legacy System.Reactive,
-         and also prevent it from seeing the WPF and Windows Forms integration packages. There isn't an
-         officially supported way to do this. (PrivateAssets doesn't help here because it still allows
-         the compiler to see the packages, it just prevents them from becoming transitive dependencies
-         for other projects that reference this one. And ExcludeAssets doesn't help because that prevents
-         the DLLs from being copied to the output folder, which is a problem because DynamicData needs
-         System.Reactive.dll to be present.) So we have to employ a workaround that removes these
-         assemblies from the list the SDK passes to the compiler.
-         
-       Note that this doesn't stop our application from using Rx, because the PackageReference to System.Reactive
-         gives us a transitive reference to System.Reactive.Net.
-    -->
-    <ItemGroup>
-      <ResolvedCompileFileDefinitions Remove="@(ResolvedCompileFileDefinitions)" Condition="%(NuGetPackageId) == 'System.Reactive'" />
-      <ResolvedCompileFileDefinitions Remove="@(ResolvedCompileFileDefinitions)" Condition="%(NuGetPackageId) == 'System.Reactive.For.WindowsForms'" />
-      <ResolvedCompileFileDefinitions Remove="@(ResolvedCompileFileDefinitions)" Condition="%(NuGetPackageId) == 'System.Reactive.For.WindowsRuntime'" />
-      <ResolvedCompileFileDefinitions Remove="@(ResolvedCompileFileDefinitions)" Condition="%(NuGetPackageId) == 'System.Reactive.For.Wpf'" />
-    </ItemGroup>
-    
-    <!--
-    4: Although the step above prevents the compiler from seeing the legacy Rx packages, it doesn't
-        prevent the SDK from trying to copy them to the output folder. And for System.Reactive, that's
-        good because we need it to be present in the output folder so that DynamicData can use it.
-        However, since we've set DisableTransitiveFrameworkReferences, we'd better hope that nothing
-        is trying to use and WPF or Windows Forms functionality. If it does it will fail at runtime.
-        So we don't want to include the WPF and Windows Forms integration packages in the output folder,
-        so we can remove those from the list of files to be copied to the output folder.
-        
-      We could also remove the Windows Runtime integration package, but that's not critical because it depends
-        only on the Windows  Runtime, which is built into Windows. It's OK to use that even if we've set
-        DisableTransitiveFrameworkReferences. However, if we know that we're not using it we could also exclude
-        it from the list of files to be copied to the output folder.
-    -->
-    <ItemGroup>
-      <RuntimeCopyLocalItems Remove="@(RuntimeCopyLocalItems)" Condition="%(NuGetPackageId) == 'System.Reactive.For.WindowsForms'" />
-      <RuntimeCopyLocalItems Remove="@(RuntimeCopyLocalItems)" Condition="%(NuGetPackageId) == 'System.Reactive.For.Wpf'" />
-    </ItemGroup>
-  </Target>
-
-</Project>
-```
-
-However, the idea that this should be something people would do as part of normal use of Rx seems like madness. Moreover, this bakes in assumptions about exactly how the builds system achieves certain ends, which means this might just stop working with future versions of the .NET SDK.
-
-So the workaround continues not to look like a viable solution.
-
 
 ### Community input
 
@@ -673,7 +553,7 @@ It's also worth pointing out that not all breaking changes are created equal. He
 
 1. Recent versions of .NET have optimized the performance of `FileStream`
 2. CLR serialization is most of the way through a very long process of deprecation
-3. We could (hypothetically) remove the UI-specific features from `System.Reactive` in v7
+3. We could (hypothetically) completely remove the UI-specific features from `System.Reactive` in v7
 
 These are all, technically, binary breaking changes, but they are very different from one another.
 
@@ -689,7 +569,7 @@ I should clarify that we're not totally opposed to breaking changes, we just wan
 * they aren't worse than necessary
 * people have sufficient notice to be able to deal with the change
 
-It's worth noting that if we choose to keep `System.Reactive` as the main Rx package, a source-level breaking change is, in the long run unavoidable. (Binary-level breaking changes can be avoided though.) We can only solve the problem this ADR addresses by getting to a state where there is no UI-framework-specific code in `System.Reactive` that is visible to the compiler. One way is to deprecate `System.Reactive`, and introduce a new main Rx package. We with to avoid this, but it's important to be aware that the cost of keeping `System.Reactive` as the main Rx package is to remove code from its public API. So this can never be as gentle a breaking change as 1) above: we are intending to remove something from the API. (The `ref\` vs `lib\` trick enables us to phase this by removing it from the public API without fully removing it. This will fully retain binary compatibility, but there will still be a very sudden source-level breaking change for anyone who was using the UI-framework-specific functionality when upgrading to a new version of Rx. It can easily be resolved by adding one or more additional NuGet packages, but it is still disruptive.)
+It's worth noting that if we choose to keep `System.Reactive` as the main Rx package, a source-level breaking change is, in the long run unavoidable. (Binary-level breaking changes can be avoided though.) We can only solve the problem this ADR addresses by getting to a state where there is no UI-framework-specific code in `System.Reactive` that is visible to the compiler. One way is to deprecate `System.Reactive`, and introduce a new main Rx package. We wish to avoid this, but it's important to be aware that the cost of keeping `System.Reactive` as the main Rx package is to remove code from its public API. So this can never be as gentle a breaking change as 1) above: we are intending to remove something from the API. (The `ref\` vs `lib\` trick enables us to phase this by removing it from the public API without fully removing it. This will fully retain binary compatibility, but there will still be a very sudden source-level breaking change for anyone who was using the UI-framework-specific functionality when upgrading to a new version of Rx. It can easily be resolved by adding one or more additional NuGet packages, but it is still disruptive.)
 
 It won't be quite as gentle as 2) either. The thing about CLR serialization is that anyone using it in .NET Core knew its days were numbered from the start. But in Rx we're talking about a change that had not been envisaged back in 2018 when the Rx API adopted its current form. People currently using Rx.NET's WPF and Windows Forms features don't know that change is coming.
 
@@ -766,7 +646,7 @@ https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7604157
 
 The reason we hadn't originally proposed this is that we thought we needed to take action quickly to resolve the problem. `[Obsolete]` is really only suitable when you form a multi-year plan to remove an API, and people were having real problems right now.
 
-If the [workaround](#the-workaround) had not proven to be flawed, using `[Obsolete]` would have been the best option. But we are now back to thinking that we need to make WPF and Windows Forms types vanish from the main public-facing compile-time API as early as possible.
+If the [workaround](#the-workaround) had not proven to be flawed, using `[Obsolete]` would have been the best option if the end state was removing all existing UI-framework-specific API features and replacing them with completely different types in new packages. But we are now back to thinking that we need to make WPF and Windows Forms types vanish from the main public-facing compile-time API as early as possible.
 
 
 ### Constraints
@@ -869,18 +749,18 @@ And whatever people's expectations are, the fact that Rx.NET is widely used mean
 
 ##### ...except for UWP
 
-We are considering making an exception to the constraint just discussed for UWP. The presence of UWP code causes considerable headaches because UWP is not a properly supported target. The modern .NET SDK build system doesn't fully recognize it, and we end up using the [`MSBuild.Sdk.Extras`](https://github.com/novotnyllc/MSBuildSdkExtras) package to work around this. That repository hasn't had an update since 2021, and it was originally written in the hope of being a stopgap while Microsoft got proper UWP support in place.
+We are considering making an exception to the constraint just discussed for UWP (and more specifically, the form of UWP code that uses `uap` TFMs). The presence of the `uap10.0.18362` TFM causes considerable headaches because it is not a properly supported target. The modern .NET SDK build system doesn't fully recognize it, and back when endjin took over maintenance of Rx.NET, it was using the [`MSBuild.Sdk.Extras`](https://github.com/novotnyllc/MSBuildSdkExtras) package to work around this. That repository hasn't had an update since 2021, and it was originally written in the hope of being a stopgap while Microsoft got proper UWP support in place.
 
-Microsoft has now provided a modern way to use UWP, but it entails abandoning the old `uap` runtime and using `net9.0` instead. This is undoubtedly an improvement for application developers, but the question remains: what should Rx do for applications still using `uap10.x`? Proper `uap` support never arrived, originally because UWP is a technology Microsoft has long been telling people not to use, and now because Microsoft is telling people that if they must use it, .NET 9.0+ is now the way to do that. But if we just remove the `uap` TFM, that will be a binary breaking change.
+Microsoft has now provided a modern way to use UWP, but it entails abandoning the old `uap` runtime and using `net9.0` or later instead. This is undoubtedly an improvement for application developers, but the question remains: what should Rx do for applications still using `uap10.x`? Proper `uap` support never arrived, originally because UWP is a technology Microsoft has long been telling people not to use, and now because Microsoft is telling people that if they must use it, .NET 9.0+ is now the way to do that. But if we just remove the `uap` TFM, that will be a binary breaking change.
 
-We don't want to drop `uap` support completely, but we are prepared to contemplate removing the UAP-specific target (`uap10.0.16299`) much earlier than any of the other targets. UWP has long supported .NET Standard 2.0, so Rx.NET would still be available if we did this. The only changes would be that the UWP-specific types would no longer be in `System.Reactive` (we would move them into a separate NuGet package) and also the the very small number of UWP-specific members of `ThreadPoolScheduler` would vanish.
+We don't want to drop `uap` support completely, but we are prepared to contemplate removing the UAP-specific target (`uap10.0.18362`) much earlier than any of the other targets. UWP has long supported .NET Standard 2.0, so Rx.NET would still be available if we did this. The relevant functionality would continue to be available in `System.Reactive.WindowsRuntime`, but this would be a binary breaking change for code that can't be rebuilt to use that.
 
 This is problematic for all of the reasons just discussed in the preceding section. However, UWP never really became hugely popular, and the fact that Microsoft never added proper support for `uap` to the .NET SDK sets a precedent that makes us comfortable with dropping it relatively abruptly. Existing Rx.NET users using UWP will have three choices: 1) upgrade their apps to use the new .NET support for UAP instead of the `uap` runtime, 2) remain on Rx 6.0, or 3) rebuild code that was using UWP-specific types in `System.Reactive` to use the new UWP-specific package we would be adding.
 
 There are a couple of options here:
 
 * Remove UWP support in Rx v7
-* Obsolete UWP support in Rx v7, then remove it in v8
+* Obsolete UWP support in Rx v7, then remove it in v8 or later
 
 As much as I want to be shot of UWP as soon as possible, I think the second option is probably the better one.
 
@@ -914,7 +794,7 @@ Let's start by picking some upper and lower bounds as a starting point. These ar
 * If a project upgrades from Rx.NET 1.0 to 7.0, it is probably reasonable for some things to break
 * Components with a dependency on Rx 5.0 or 6.0 running in an application that upgrades that to Rx 7.0 must not be broken by this upgrade
 
-That's a very incomplete picture, but it establishes that the acceptable position lies somewhere between those two extremes. (That said, some people seem to be [positively enthusiastic about breaking changes](#the-peculiar-faith-in-the-power-of-breaking-changes), and would actually disgree with the lower bound I've put here. But our view is that Rx 5.0 was still the very latest version as recently as 18th May 2023. A little over two years have passed, which seems like not nearly enough time to be completely removing API features that even in the current version are not marked as obsolete. So although we recognize that there are some people who think it would be OK to break things more quickly than the lower bound stated above suggests, we aren't going to do that, meaning that this is a lower bound in practice.)
+That's a very incomplete picture, but it establishes that the acceptable position lies somewhere between those two extremes. (That said, some people seem to be [positively enthusiastic about breaking changes](#the-peculiar-faith-in-the-power-of-breaking-changes), and would actually disgree with the lower bound I've put here. But our view is that Rx 5.0 was still the very latest version as recently as 18th May 2023. About two and a half years have passed, which seems like not nearly enough time to be completely removing API features that even in the current version are not marked as obsolete. So although we recognize that there are some people who think it would be OK to break things more quickly than the lower bound stated above suggests, we aren't going to do that, meaning that this is a lower bound in practice.)
 
 There's another dimension we need to take into account:
 
@@ -1046,6 +926,8 @@ Types available only in specific targets:
 * `net6.0-windows` and `net472`
   * `DispatcherScheduler`
   * `DispatcherObservable`
+  * `ControlScheduler`
+  * `ControlObservable`
 * `net6.0-windows*` and UWP
   * `CoreDispatcherScheduler`
   * `CoreDispatcherObservable`
@@ -1078,13 +960,13 @@ The following sections describe the design choices that have been considered to 
 
 #### Option 1: change nothing
 
-The status quo is always an option. It's the default, but it can also be a deliberate choice. The availability of a [workaround](#the-workaround) makes this a more attractive option than it had seemed when we first started looking at this problem.
+The status quo is always an option. It's the default, but it can also be a deliberate choice. The availability of a [workaround](#the-workaround) makes this a more attractive option than it had seemed when we first started looking at this problem (but the fact that the workaround is limited makes it less so).
 
 Rx 5.0 and 6.0 have both shipped, and a lot of people use them, so one option is just to continue doing things in the same way. This is not a good solution. Back when Rx 5.0 was the current version, some people seemed to think that the changes we adopted in Rx 6.0 would be sufficient to solve the problems described in this document. We did not think that they would, and it is now clear that they don't.
 
-Changing nothing meets many of the [constraints](#constraints). Specifically, it meets all those are all concerned with not making things worse than they already are. This _is_ where we already are, so it can't possibly be any worse than where we are. But the big problem is the one stated at the start of this ADR: the fact that self-contained deployments are vastly bloated by unwanted dependencies on Windows Forms and WPF.
+Changing nothing meets many of the [constraints](#constraints). Specifically, it meets all those that are concerned with not making things worse than they already are. This _is_ where we already are, so it can't possibly be any worse than where we are. But the big problem is the one stated at the start of this ADR: the fact that self-contained deployments are vastly bloated by unwanted dependencies on Windows Forms and WPF.
 
-We believe this is a fundamental problem with anything that continues to have a unified structure: if `System.Reactive` inevitably gives you WPF and Windows Forms support whenever you target a `netX.0-windowX`-like framework, you're going to have this problem. There has to be some way to indicate whether or not you want that. The [workaround](#the-workaround) provides a way to undo this problem, but workarounds usually have their own problems, and we don't want people to have to discover and then apply a fix just to be able to use Rx.NET. I think separating out these parts is the only way to achieve this.
+We believe this is a fundamental problem with anything that continues to have a unified structure: if `System.Reactive` inevitably gives you WPF and Windows Forms support whenever you target a `netX.0-windowX`-like framework, you're going to have this problem. There has to be some way to indicate whether or not you want that. The [workaround](#the-workaround) provides a way to undo this problem, but workarounds usually have their own problems, and we don't want people to have to discover and then apply a fix just to be able to use Rx.NET. I think separating out these parts is the only way to achieve this. In any case, we know there are situations in which the workaround can't be used.
 
 This design option also doesn't have a good answer for how we provide UI-framework-specific support for other frameworks. (E.g., how would we offer a `DispatcherScheduler` for MAUI's `IScheduler`?)
 
@@ -1170,9 +1052,9 @@ This uses the Rx v6 implementation of `Observable.Range`, but the two places whe
 
 So it's possible to make it work, but we consider this to be confusing and painful. You should only really need to use the `extern alias` mechanism if something somewhere has gone horribly wrong. We don't want to make it the norm in Rx usage. Admittedly, it wouldn't be needed for simple applications that use Rx directly. But it would become necessary any time you have indirect references to versions of Rx from both sides of this alleged 'clean break'.
 
-The only way to avoid this would be to change not just the NuGet package names but also all the namespaces. (Even this still has the potential to cause confusion if any file ends up needing to use namespaces from both worlds.) That somewhat resembles what the Azure SDK team did a few years back: they introduced a new set of libraries under a completely different set of namespaces. There was no attempt at or pretence of continuity. New NuGet packages were released, and the old ones they replaced have gradually been deprecated.
+The only way to avoid this would be to change not just the NuGet package names but also all the namespaces. (Even this still has the potential to cause confusion if any file ends up needing to use namespaces from both worlds.) That somewhat resembles what the Azure SDK team did a few years back: they introduced a new set of libraries under a completely different set of namespaces. There was no attempt at or pretence of continuity. New NuGet packages were released, and the old ones they replaced have gradually been deprecated. Having worked on a couple of projects where we had to perform this particular migration, I can say that 'clean break' does not seem like a fitting description.
 
-You could argue that we've already done this. There's a whole new version of Rx at https://github.com/reaqtive/reaqtor that implements functionality not available in `System.Reactive`. (Most notably the ability to persist a subscription. In this, the ['reaqtive' implementation of Rx](https://reaqtive.net), operators that accumulate state over time, such as [`Aggregate`](https://introtorx.com/chapters/aggregation#aggregate), can migrate across machines, and be checkpointed, enabling reliable, persistent Rx subscriptions to run over the long term, potentially even for years.) The NuGet package names and the namespaces are completely different. There's no attempt to create any continuity here.
+You could argue that we've already done exactly this proposed clean break. There's a whole new version of Rx at https://github.com/reaqtive/reaqtor that implements functionality not available in `System.Reactive`. (Most notably the ability to persist a subscription. In this, the ['reaqtive' implementation of Rx](https://reaqtive.net), operators that accumulate state over time, such as [`Aggregate`](https://introtorx.com/chapters/aggregation#aggregate), can migrate across machines, and be checkpointed, enabling reliable, persistent Rx subscriptions to run over the long term, potentially even for years.) The NuGet package names and the namespaces are completely different. There's no attempt to create any continuity here.
 
 An upshot of this is that there is no straightforward way to migrate from `System.Reactive` to the [reaqtive Rx](https://reaqtive.net). (The Azure SDK revamp has the same characteristic. You can't just change your NuGet package references: you need to change your code to use the newer libraries, because lots of things are just different.)
 
@@ -1192,6 +1074,8 @@ When we thought a workaround existed for dealing with the current problem, this 
 
 This was discussed at https://github.com/dotnet/reactive/discussions/2038#discussioncomment-7557014 and we built  a prototype on https://github.com/dotnet/reactive/pull/2034 (back before we knew about the workaround).
 
+There's a subtle problem with this approach: since `System.Reactive` continues to provide the full legacy API, it necessarily entails dependencies on WPF and Windows Forms. This means that if your application doesn't use Rx directly, but does use some component that uses Rx 6, you've got no way to fix the bloat problem.
+
 
 #### Option 4: `System.Reactive` remains the primary package and becomes a facade
 
@@ -1203,7 +1087,9 @@ This might also have been able to provide a quick fix just like option 3, becaus
 
 One unresolved issue with this option (and which is not unique to this option) is how to deal with the fact that Rx v6 provides UWP-specific thread pool handling by defining extra methods on `ThreadPoolScheduler`. What should the UWP version `System.Reactive` forward the `ThreadPoolScheduler` to? If we eventually want to reach a state where `System.Reactive` has no UI-framework-specific surface area, what do we do with `ThreadPoolScheduler`? We can't just obsolete it and remove it, because the core non-UI-specific Rx.NET flavours also have a `ThreadPoolScheduler` and we don't want to remove it.
 
-This could provide a way to expand the number of scenarios in which it's possible to extricate yourself from the Rx-WPF/Window Forms bloat problems. But it is not a complete solution, and is likely to increase confusion.
+This also shares the problem option 3 has in which if your application has an indirect dependency on Rx 6, there's no way to fix the bloat problem. To avoid bloat, you'd need all the libraries you depend on that use Rx to do so through the `System.Reactive.Common` library, and if we're position `System.Reactive` as the main way to use Rx, most libraries will probably do so, instead of using `System.Reactive.Common`.
+
+This option could provide a way to expand the number of scenarios in which it's possible to extricate yourself from the Rx-WPF/Window Forms bloat problems. But it is not a complete solution, and is likely to increase confusion.
 
 
 #### Option 5: gut the UI-specific types so they are hollowed out shells
@@ -1230,11 +1116,11 @@ The way in which we would hide the UI-framework-specific types is that the NuGet
 
 New projects using Rx 7 or later would see Rx as a component with no UI-framework-specific types, because the build system will give the compiler assemblies in the package's `ref` folder in preference to those in the `lib` folder. But binary compatibility is retained because the types are present in the `lib` folder.
 
-We had hoped that the runtime assemblies in `lib` might be able to have type forwarders pointing to the new homes for the UI-specific types, the various `System.Reactive.For.*`. Unfortunately that doesn't work in this case because those packages need references to the main Rx assembly (to get the definition of `IScheduler` at a minimum, and as it happens they use the `LocalScheduler` base type). If `System.Reactive` remains as the main Rx component then it's not possible for it to refer to the UI-framework-specific components because that creates a circular reference.
+We had hoped that the runtime assemblies in `lib` might be able to have type forwarders pointing to the new homes for the UI-specific types (`System.Reactive.Wpf` etc.). Unfortunately that doesn't work in this case because those packages need references to the main Rx assembly (to get the definition of `IScheduler` at a minimum, and as it happens they use the `LocalScheduler` base type). If `System.Reactive` remains as the main Rx component then it's not possible for it to refer to the UI-framework-specific components because that creates a circular reference.
 
 ```mermaid
 graph TD
-  wpf["System.Reactive.For.Wpf
+  wpf["System.Reactive.Wpf
   (also contains DispatcherScheduler)"] -->|IScheduler type reference| rx
   rx["System.Reactive"] -->|TypeForwarder to DispatcherScheduler| wpf
 ```
@@ -1245,13 +1131,13 @@ So if we go with this design option, we would require
 
 ```mermaid
 graph TD
-  wpf["System.Reactive.For.Wpf
+  wpf["System.Reactive.Wpf
   (home of publicly-visible DispatcherScheduler)"] -->|IScheduler type reference| rx
   rx["System.Reactive
   (lib folder defines additional DispatcherScheduler etc. for binary compatibility)"]
 ```
 
-So we'd have _two_ definitions of each of the UI-framework-specific types that exist in `System.Reactive` v6. The only publicly visible ones would be in the new `System.Reactive.For.*` components, but to ensure binary compatibility `System.Reactive` would need to include duplicate definitions of these in the `lib\net472\System.Reactive.dll`, `lib\net8.0-windows10.0.19041\System.Reactive.dll`, and `lib\uap10.0.18362\System.Reactive.dll` assemblies.
+So we'd have _two_ definitions of each of the UI-framework-specific types that exist in `System.Reactive` v6. The only publicly visible ones would be in the new `System.Reactive.Wpf` etc. components, but to ensure binary compatibility `System.Reactive` would need to include duplicate definitions of these in the `lib\net472\System.Reactive.dll`, `lib\net8.0-windows10.0.19041\System.Reactive.dll`, and `lib\uap10.0.18362\System.Reactive.dll` assemblies.
 
 (This highlights another significant downside of this approach: `System.Reactive` continues to have to supply a `uap10.0.18362` target. That will be true for any solution, but for designs where `System.Reactive` remains the primary assembly, it is irritating because legacy UWP targets cause problems.)
 
@@ -1264,7 +1150,7 @@ title: Only possible with certain other design options
 graph TD
   rxf["System.Reactive
   (legacy facade)"] --> |TypeFowarder to DispatcherScheduler| wpf
-  wpf["System.Reactive.For.Wpf
+  wpf["System.Reactive.Wpf
   (sole definition of DispatcherScheduler)"] -->|IScheduler type reference| rxn
 
   rxn["System.Reactive.Net"]
@@ -1283,7 +1169,7 @@ As discussed in https://github.com/dotnet/reactive/discussions/2038#discussionco
 
 >It would be technically possible for us to build a NuGet package for `System.Reactive` which contains a `net8.0` target and which did NOT contain a `net8.0-windows...` target, but where the DLL in the `net8.0` folder contained a DLL that did in fact have references to WPF and Windows Forms assemblies. And if you do this, then as long as you never attempt to use any of the WPF/WinForms features, you'd never know those references are there. The attraction of this is that if you do happen to be running in an application that has specified, say, `<UseWPF>true</UseWPF>`, then you will be able to use the WPF-specific features in this `System.Reactive`.
 
-While this might work, employing hacks that deliberately subvert the way the build system works are exactly the sort of thing that causes trouble a few years down the line. So we don't want to go down that path.
+While this might work, employing hacks that deliberately subvert the way the build system works are exactly the sort of thing that causes trouble a few years down the line. So we don't want to go down that path. And I suspect it wouldn't work: I think this would run into the same problem as the [workaround](#the-workaround). (The presence of extension method overloads that refer to WPF and Windows Forms types would cause compiler errors in applications that don't reference those frameworks.)
 
 Even the use of reference assemblies with a smaller API surface area than the runtime assemblies (part of the proposed plan) worries us a bit because it feels a bit odd. But that at least relies only on supported mechanisms.
 
@@ -1326,16 +1212,13 @@ The main relevant consequences are:
 * New assemblies, one for each UI framework we support (Windows Forms, WPF, and UWP) and one for the non-framework-specific Windows Runtime support will be added containing replacements for the relevant types in `System.Reactive`
 * The types in these new packages have the same names and namespaces as the existing ones, so developers using them should need only to add the necessary package reference(s), and no other changes should be required
 * We won't be able to add type forwarders from the old types in `System.Reactive` to their replacements because you can't deprecate a type forwarder
-* We hope be able to take `uap` out of the majority of the source tree in 2-3 years
+* We hope be able to take `uap` out of the majority of the source tree in 3-4 years
 * All UI-frameworks-specific support will be on an equal footing, enabling MAUI, Blazor, and Avalonia to be supported in exactly the same way as Windows Forms and WPF (i.e., through separate NuGet packages)
 
-Although there are some existing old packages that used to contain some UI-framework-specific types, they are now backwards-compatibility facades. However, these don't separate out all the frameworks completely: Windows Forms has its own one, `System.Reactive.Windows.Forms`, but the WPF support lives in a more confusingly named `System.Reactive.Windows.Threading`, and that same component also defines the UWP integration. The WPF support is available only in the `net472` build, and the UWP support is only in the `uap10.0.18362` build, so this one package contains completely different types in its two target frameworks! And just to confuse matters, there's also a `System.Reactive.WindowsRuntime` package that targets only `uap10.0.18362`, and which contains some different UWP types.
+There are some existing old packages that originally contained some UI-framework-specific types, and which became backwards-compatibility facades in the _great unification_. However, these don't separate out all the frameworks completely: Windows Forms has its own one, `System.Reactive.Windows.Forms`, but the WPF support lives in a more confusingly named `System.Reactive.Windows.Threading`, and that same component also defines the UWP integration. The WPF support is available only in the `net472` build, and the UWP support is only in the `uap10.0.18362` build, so this one package contains completely different types in its two target frameworks! And just to confuse matters, there's also a `System.Reactive.WindowsRuntime` package that targets only `uap10.0.18362`, and which contains some different UWP types.
 
-Our current plan is to leave these facade components untouched, since the split of types is a bit confusing, the naming is a bit inconsistent, and their purpose for years has been to provide backwards compatibility for Rx v3 era apps. We will introduce new components each with a clear purpose:
+Our plan is to reinstate these facade components in cases where the name makes sense, and to introduce new components where the existing naming is confusing. So the UI-framework-specific features would live in:
 
-* `System.Reactive.For.WindowsForms`
-* `System.Reactive.For.Wpf`
-* `System.Reactive.For.Uwp`
-* `System.Reactive.For.WindowsRuntime`
-
-We expect people to hate these names on first acquaintance. (Our initial proposal was to have `Integration` instead of `For`, and people definitely hated that. Anais Betts suggested this `For` name instead. We liked it more, as did most other people, but all options are at least slightly controversial.) All other suggestions to date have either had problems (e.g. there are already packages with the suggested names) or aren't noticeably better.
+* `System.Reactive.WindowsForms` (former facade reinstated as real library)
+* `System.Reactive.Wpf` (new library)
+* `System.Reactive.WindowsRuntime`  (former facade reinstated as real library)
