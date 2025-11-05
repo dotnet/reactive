@@ -293,17 +293,13 @@ namespace System.Reactive.Concurrency
 
             // Some schedulers fail to handle periods of less than 1 ms, in which case we
             // need to use a workaround.
-            // Note that we used to apply this to all WINDOWS targets. Now that we've removed
-            // the uap10.0.xxxx target, this approach no longer works, because the netstandard2.0
-            // target may need to apply this workaround for legacy UWP apps.
-            // This actually introduces a slight change in behavior. Previously, we applied this
-            // workaround for all WINDOWS targets, which was broader than necessary:
-            // it applied to non-UWP Windows targets, which don't strictly need the workaround.
-            // Now we only apply it to schedulers that say they need it.
-            // In theory this is more efficient, because we no longer apply an unnecessary workaround.
-            // However, if it turns out that some applications were relying on the different
-            // performance characteristics of the workaround, we can always reintroduce it.
-            // We'd need to add a WINDOWS-only block that always sets periodic to null (which
+            // Note that we used to apply this to all WINDOWS targets, which was broader than
+            // necessary: it applied to non-UWP Windows targets, which don't strictly need the
+            // workaround. Now we only apply it to schedulers that say they need it.
+            // In theory this is more efficient, because we no longer apply an unnecessary
+            // workaround. However, if it turns out that some applications were relying on the
+            // different performance characteristics of the workaround, we can always reintroduce
+            // it. We'd need to add a WINDOWS-only block that always sets periodic to null (which
             // is what we used to have).
             if (periodic is ISchedulerPeriodNoSubMs)
             {
