@@ -49,7 +49,7 @@
     <!--
     Note: although this will bring in the Microsoft.WindowsDesktop.App framework, this no
     longer forces this framework dependency on users of this package. That's because we control
-    the nuspec file directl, and do not include that framework dependency.
+    the nuspec file directly, and do not include that framework dependency.
     We need it here to be able to build the UI-framework-specific legacy API features that need
     to be available at runtime for binary compatibility with Rx 6.0.1, but which we have removed
     from the ref assemblies so that they are not visible in the public API for Rx 7.0.0 and later. 

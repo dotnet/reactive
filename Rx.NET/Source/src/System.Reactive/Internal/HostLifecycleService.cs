@@ -140,7 +140,7 @@ namespace System.Reactive.PlatformServices
                 {
                     lock (_lock)
                     {
-                        Debug.Assert(_suspending is not null, "HostLifecycleService removed handler mutiple times");
+                        Debug.Assert(_suspending is not null, "HostLifecycleService removed handler multiple times");
                         if (_source is not null)
                         {
                             _source.Suspending -= value;
@@ -167,7 +167,7 @@ namespace System.Reactive.PlatformServices
                 {
                     lock (_lock)
                     {
-                        Debug.Assert(_resuming is not null, "HostLifecycleService removed handler mutiple times");
+                        Debug.Assert(_resuming is not null, "HostLifecycleService removed handler multiple times");
                         if (_source is not null)
                         {
                             _source.Resuming -= value;
