@@ -1208,6 +1208,7 @@ The main relevant consequences are:
 
 * This minimizes disruption: `System.Reactive` continues to be the main way to use Rx.NET; applications with non-Windows-specific TFMs should be entirely unaffected
 * Applications encountering the problem described in this ADR should be able to upgrade to the latest version of Rx to avoid the problem (and should not require any other changes; there are no binary breaking changes, and the only source-level breaking changes are for code that is actually using the UI-framework-specific functionality, and if you're doing that, then you do actually need the `Microsoft.Desktop.App` framework)
+* By retaining hidden copies of the UI-framework-specific code in `System.Reactive` in addition to the new visible types in the UI-framework-specific package, we do slightly increase the size of build outputs in `windows` targets; size-sensitive applications will typically use trimming, which will address this
 * One day, we update `System.Reactive` to be entirely free from UI-framework-specific types (although we can push that out more or less indefinitely)
 * New assemblies, one for each UI framework we support (Windows Forms, WPF, and UWP) and one for the non-framework-specific Windows Runtime support will be added containing replacements for the relevant types in `System.Reactive`
 * The types in these new packages have the same names and namespaces as the existing ones, so developers using them should need only to add the necessary package reference(s), and no other changes should be required
