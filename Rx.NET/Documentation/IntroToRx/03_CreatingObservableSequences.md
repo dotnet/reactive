@@ -1072,7 +1072,7 @@ As you can see the `ISubject` interfaces don't define any members of their own. 
 
 But what is this for? You can think of `IObserver<T>` and the `IObservable<T>` as the 'consumer' and 'publisher' interfaces respectively. A subject, then is both a consumer and a publisher. Data flows both into and out of a subject.
 
-Rx offers a few subject implementations that can occasionally be useful in code that wants to make an `IObservable<T>` available. Although `Observable.Create` is usually the preferred way to do this, there's one important case where a subject might make more sense: if you have some code that discovers events of interest (e.g., by using the client API for some messaging technology) and wants to make them available through an `IObservable<T>`, subjects can sometimes provide a more convenient way to to this than with `Observable.Create` or a custom implementation.
+Rx offers a few subject implementations that can occasionally be useful in code that wants to make an `IObservable<T>` available. Although `Observable.Create` is usually the preferred way to do this, there's one important case where a subject might make more sense: if you have some code that discovers events of interest (e.g., by using the client API for some messaging technology) and wants to make them available through an `IObservable<T>`, subjects can sometimes provide a more convenient way to do this than with `Observable.Create` or a custom implementation.
 
 Rx offers a few subject types. We'll start with the most straightforward one to understand.
 

@@ -14,7 +14,7 @@ using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-#if HAS_DISPATCHER
+#if HAS_WPF
 using System.Windows.Threading;
 #endif
 
@@ -27,7 +27,6 @@ using Assert = Xunit.Assert;
 namespace ReactiveTests.Tests
 {
     [TestClass]
-    [DoNotParallelize] // We've observed hangs since enabling concurrent test execution.
     public class ObserveOnTest : TestBase
     {
         #region + TestBase +
@@ -47,7 +46,7 @@ namespace ReactiveTests.Tests
 #pragma warning restore IDE0034
 #endif
 
-#if HAS_DISPATCHER
+#if HAS_WPF
 #pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overloads being tested.
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(default(IObservable<int>), new DispatcherScheduler(Dispatcher.CurrentDispatcher)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(someObservable, default(DispatcherScheduler)));
@@ -104,7 +103,7 @@ namespace ReactiveTests.Tests
             Assert.True(okay);
         }
 #endif
-#if HAS_DISPATCHER
+#if HAS_WPF
         [TestMethod]
         [Asynchronous]
         public void ObserveOn_Dispatcher()
@@ -209,6 +208,7 @@ namespace ReactiveTests.Tests
     }
 
     [TestClass]
+    [DoNotParallelize] // We've observed hangs since enabling concurrent test execution.
     public class ObserveOnReactiveTest : ReactiveTest
     {
         private static readonly TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
@@ -663,8 +663,8 @@ namespace ReactiveTests.Tests
             Observable.Range(1, N)
                 .ObserveOn(scheduler)
                 .Subscribe(
-                    v => threads.Add(Environment.CurrentManagedThreadId), 
-                    e => cde.Signal(), 
+                    v => threads.Add(Environment.CurrentManagedThreadId),
+                    e => cde.Signal(),
                     () => cde.Signal()
                 );
 

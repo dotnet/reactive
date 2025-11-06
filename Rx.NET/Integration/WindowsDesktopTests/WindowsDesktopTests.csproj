@@ -27,8 +27,13 @@
     <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
     <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
     <PackageReference Include="xunit.assert" Version="2.4.2" />
-    <PackageReference Include="System.Reactive" Version="6.1.0-preview*" />
-    <PackageReference Include="Microsoft.Reactive.Testing" Version="6.1.0-preview*" />
-    <PackageReference Include="System.Reactive.Observable.Aliases" Version="6.1.0-preview*" />
+    <PackageReference Include="System.Reactive" Version="7.0.0-preview*" />
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="7.0.0-preview*" />
+    <PackageReference Include="System.Reactive.Observable.Aliases" Version="7.0.0-preview*" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <PackageReference Include="System.Reactive.Windows.Forms" Version="7.0.0-preview*" />
+    <PackageReference Include="System.Reactive.Wpf" Version="7.0.0-preview*" />
   </ItemGroup>
 </Project>

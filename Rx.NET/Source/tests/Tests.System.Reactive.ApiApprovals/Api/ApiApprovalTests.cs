@@ -4,8 +4,11 @@
 
 using PublicApiGenerator;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using VerifyTests;
 using VerifyXunit;
@@ -25,12 +28,14 @@ namespace ReactiveTests.Tests.Api
         {
         }
 
-        [Fact]
-        public Task Core()
-        {
-            var publicApi = GeneratePublicApi(typeof(System.Reactive.Unit).Assembly);
-            return Verify(publicApi, "cs");
-        }
+        // Note:
+        //  System.Reactive uses the .NET SDK's built in package validation, specifically the
+        //      PackageValidationBaselineVersion feature to ensure backwards compatibility
+        //  System.Reactive is using Microsoft.CodeAnalysis.PublicApiAnalyzers to ensure stability of
+        //      its public API.
+        // TODO:
+        //  Move Aliases and Testing packages over to one of the mechanisms above
+        //  Add similar API checking to the new FrameworkIntegrations packages
 
         [Fact]
         public Task Aliases()
@@ -48,11 +53,16 @@ namespace ReactiveTests.Tests.Api
 
         private string GeneratePublicApi(Assembly assembly)
         {
-            ApiGeneratorOptions options = new()
+            var options = MakeGeneratorOptions();
+            return Filter(ApiGenerator.GeneratePublicApi(assembly, options));
+        }
+
+        private static ApiGeneratorOptions MakeGeneratorOptions()
+        {
+            return new()
             {
                 AllowNamespacePrefixes = ["System", "Microsoft"]
             };
-            return Filter(ApiGenerator.GeneratePublicApi(assembly, options));
         }
 
         private static string Filter(string text)

@@ -337,6 +337,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        [DoNotParallelize] // We've observed hangs since enabling concurrent test execution.
         public void AppendPrepend_SchedulerLongRunning()
         {
             var scheduler = NewThreadScheduler.Default;

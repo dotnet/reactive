@@ -36,4 +36,11 @@
     <PackageReference Include="PublicApiGenerator" Version="11.4.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>

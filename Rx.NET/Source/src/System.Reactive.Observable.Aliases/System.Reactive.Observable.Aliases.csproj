@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Title>Reactive Extensions - Aliases</Title>    
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>    
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>

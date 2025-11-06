@@ -67,13 +67,15 @@ stages:
       inputs:
         command: build
         projects: Rx.NET/Source/System.Reactive.sln
-        arguments: -c $(BuildConfiguration) -p:CreatePackage=true -p:NoPackageAnalysis=true -p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
+        arguments: -c $(BuildConfiguration) -p:CreatePackage=true -p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
 
-    - task: NuGetCommand@2
-      displayName: Pack compatibility package
-      inputs:
-        command: custom
-        arguments: pack Rx.NET/Source/facades/System.Reactive.Compatibility.nuspec -Version $(NBGV_NuGetPackageVersion) -MinClientVersion 2.12 -NoPackageAnalysis -outputdirectory $(Build.ArtifactStagingDirectory)\artifacts
+    # The System.Reactive.MakeRefAssemblies project just builds the reference assemblies that go into
+    # the System.Reactive package's ref folder, so we don't want a NuGet package for System.Reactive.MakeRefAssemblies
+    # itself. However, for some reason setting IsPackable to false causes build failures, so instead, we just let the
+    # build create a nupkg and snupkg for that project, and then delete them here.
+    - pwsh: |
+        rm $(Build.ArtifactStagingDirectory)\artifacts\System.Reactive.MakeRefAssemblies.*
+      displayName: Remove MakeRefAssemblies artifacts
 
     - task: DotNetCoreCLI@2
       inputs:

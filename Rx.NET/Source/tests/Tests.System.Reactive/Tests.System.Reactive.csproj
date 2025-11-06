@@ -25,10 +25,10 @@
     We need to be on a sufficiently recent version of the test framework, because we need this fix:
       https://github.com/microsoft/testfx/pull/1071
     Without this, the test runner fails to process Windows-version-specific TFMs for .NET 6.0.
-    Since the various libraries that require net6.0-windows all specify a minimum version (10.0.19041
+    Since the various libraries that require net8.0-windows all specify a minimum version (10.0.19041
     for reasons not currently clear to me; idg10) this test project needs to specify at least as new
-    a version. If we write just net6.0-windows, that turns out to imply Windows 7.0, so it is not
-    considered compatible with a net6.0-windows10.0.19041 library.
+    a version. If we write just net8.0-windows, that turns out to imply Windows 7.0, so it is not
+    considered compatible with a net8.0-windows10.0.19041 library.
     Before that PR was merged, the test runner wouldn't work if the host specified a TFM with a
     specific Windows version.
 -->
@@ -41,7 +41,9 @@
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="('$(TargetFramework)' == 'net472') or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <ProjectReference Include="..\..\src\System.Reactive.Windows.Forms\System.Reactive.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\src\System.Reactive.Wpf\System.Reactive.Wpf.csproj" />
     <PackageReference Update="coverlet.collector" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

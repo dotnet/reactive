@@ -1,26 +1,71 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net6.0;net6.0-windows10.0.19041</TargetFrameworks>
+    <!--
+    Rx 7.0 moved all UI-framework-specific code into separate packages. This would have reduced
+    the number of distinct TFMs required to just netstandard2.0;net8.0;net8.0-windows10.0.19041.
+    However, because we maintain binary compatibility with Rx 6.1.0, the runtime libraries
+    need to continue to offer the UI-framework-specific code. It's just that we've removed that
+    from the ref assemblies so that it _looks_ like those APIs are no longer in this package.
+    (This is necessary for it to be possible for apps that targets Windows-specific TFMs to
+    use this package without a reference to the Microsoft.WindowsDesktop.App framework.)
+    Consequently, we must continue to provide net472 and uap10.0.18362 targets.
+    -->
+    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net8.0;net8.0-windows10.0.19041</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-  </PropertyGroup>
 
-  <PropertyGroup>
+    <RootNamespace>System.Reactive</RootNamespace>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <!--
+  API compatibility validation.
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0')) or $(TargetFramework.StartsWith('net7.0'))">
+  See ADR 0007-api-compatibility-verification.md for more information about this configuration.
+  -->
+
+  <PropertyGroup>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <PackageValidationBaselineVersion>6.1.0</PackageValidationBaselineVersion>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <ApiCompatSuppressionFile Include="ApiCompatSuppressions.xml" />
+  </ItemGroup>
+
+  <Target Name="_SetUwpTfmForPackageValidation" BeforeTargets="RunPackageValidation">
+    <!-- See ADR 0003-uap-targets.md for an explanation of this. (In short, the package validation tooling doesn't understand UWP.) -->
+    <ItemGroup>
+      <PackageValidationReferencePath Condition="%(PackageValidationReferencePath.TargetFrameworkMoniker) == '.NETCore,Version=v5.0'" TargetFrameworkMoniker="UAP,Version=10.0.18362.0" TargetPlatformMoniker="Windows,Version=10.0.18362.0" />
+    </ItemGroup>
+  </Target>
+
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0')) or $(TargetFramework.StartsWith('net9.0'))">
     <IsTrimmable>true</IsTrimmable>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <!--
+    Note: although this will bring in the Microsoft.WindowsDesktop.App framework, this no
+    longer forces this framework dependency on users of this package. That's because we control
+    the nuspec file directly, and do not include that framework dependency.
+    We need it here to be able to build the UI-framework-specific legacy API features that need
+    to be available at runtime for binary compatibility with Rx 6.0.1, but which we have removed
+    from the ref assemblies so that they are not visible in the public API for Rx 7.0.0 and later. 
+    -->
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
+    <!-- TODO:
+    Should we be using
+    <CsWinRTWindowsMetadata>10.0.19041.0</CsWinRTWindowsMetadata>
+    See
+    https://learn.microsoft.com/en-us/windows/apps/develop/platform/csharp-winrt/#common-errors-and-troubleshooting
+    Or https://github.com/microsoft/CsWinRT ?
+    -->
     <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.26100.0\Windows.winmd" />
 
   </ItemGroup>
@@ -35,20 +80,42 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>QbservableEx.NAry.cs</LastGenOutput>
     </None>
-    <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />
-    <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />
+    <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx">
+      <DependentUpon>Platforms\Windows\Strings_WindowsThreading.resx</DependentUpon>
+    </None>
+    <None Update="Platforms\Windows\Strings_PlatformServices.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
+    <None Update="Platforms\WinRT\Strings_PlatformServices.Designer.cs" DesignTime="True" AutoGen="True">
+      <DependentUpon>Strings_PlatformServices.resx</DependentUpon>
+    </None>
+    <None Update="Platforms\WinRT\Strings_PlatformServices.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
   </ItemGroup>
 
 
+  <!--
+  UI-framework-specific code for binary compatibility with Rx 6.0.1.
+
+  Note that the reference assemblies built by System.Reactive.MakeRefAssemblies do not include these files,
+  so these are not visible in the public API for Rx 7.0.0 and later, but they
+  remain in the runtime assemblies for backwards compatibility.
+  -->
+
   <!-- UWP -->
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
-    <Compile Include="Platforms\UWP\**\*.cs" />
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <Compile Include="Platforms\WinRT\**\*.cs" />
+
+    <Compile Update="Platforms\WinRT\Strings_PlatformServices.Designer.cs" DesignTime="True" AutoGen="True">
+      <DependentUpon>Strings_PlatformServices.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Platforms\WinRT\Strings_PlatformServices.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
   </ItemGroup>
 
   <!-- Windows includes for Desktop and UWP -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
     <Compile Include="Platforms\Windows\**\*.cs" />
-    <EmbeddedResource Include="Platforms\Windows\**\*.resx" />
+    <Compile Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx">
+      <DependentUpon>Platforms\Windows\Strings_WindowsThreading.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
   </ItemGroup>
 
   <!-- Desktop -->
@@ -58,7 +125,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net7.0-windows'))">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
     <Compile Include="Platforms\Desktop\**\*.cs" />
   </ItemGroup>
 
@@ -167,5 +234,53 @@
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
+
+  <!--
+  Put the reference assemblies built by System.Reactive.MakeRefAssemblies into the 'ref' folder of our
+  NuGet package.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.MakeRefAssemblies\System.Reactive.MakeRefAssemblies.csproj" PrivateAssets="all">
+      <!--
+      If we don't set an alias here, all the types exposed by the reference assembly become available in the global namespace,
+      which causes compiler errors when the UAP target tries to build a specialized ThreadPoolScheduler.
+      -->
+      <Aliases>SystemReactiveRefAssembly</Aliases>
+    </ProjectReference>
+  </ItemGroup>
+
+  <Target Name="DiscoverFilteredTypesReferenceAssemblyPath" BeforeTargets="GetTargetPathWithTargetPlatformMoniker">
+    <ItemGroup>
+      <_MatchingRefPath Include="@(ReferencePath)" Condition=" '%(ReferencePath.ProjectReferenceOriginalItemSpec)' == '..\System.Reactive.MakeRefAssemblies\System.Reactive.MakeRefAssemblies.csproj' " />
+    </ItemGroup>
+    <PropertyGroup>
+      <_RefAssemblyWithFilteredTypes>@(_MatchingRefPath->'%(Identity)')</_RefAssemblyWithFilteredTypes>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="_SetPathOnOutput" AfterTargets="GetTargetPathWithTargetPlatformMoniker">
+    <ItemGroup>
+      <TargetPathWithTargetPlatformMoniker Include="$(TargetPath)">
+        <ReferenceAssembly>$(_RefAssemblyWithFilteredTypes)</ReferenceAssembly>
+      </TargetPathWithTargetPlatformMoniker>
+    </ItemGroup>
+  </Target>
+
+  <!--
+  We need to supply our own nuspec file, because the SDK doesn't appear to be able to populate the <references> section,
+  and without that we get NU5131 warnings. (I think this is only strictly necessary for package.config scenarios, but
+  Rx has a lot of users, so we'll probably break someone if we don't get this right.)
+  We use tokenization so that we can pass package metadata (which include the version number). But it turns out that
+  the various NuGet package metadata build properties we want to pass in don't get defined until quite late in the build,
+  so we need to set <NuspecProperties> in a custom target that runs just before the GenerateNuspec target.
+  -->
+  <PropertyGroup>
+    <NuspecFile>System.Reactive.nuspec</NuspecFile>
+  </PropertyGroup>
+  <Target Name="_SetNuspecProperties" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);licenseExpression=$(PackageLicenseExpression);icon=$(PackageIcon);projectUrl=$(PackageProjectUrl);description=$(PackageDescription);copyright=$(Copyright);tags=$(PackageTags.Split('%20'));repository=$(RepositoryUrl);commit=$(RepositoryCommit);outputpath=$(OutputPath);refassemblypath=..\System.Reactive.MakeRefAssemblies\bin\$(Configuration)\;analyzerassemblypath=..\System.Reactive.Analyzers\bin\$(Configuration)\</NuspecProperties>
+    </PropertyGroup>
+  </Target>
 
 </Project>

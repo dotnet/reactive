@@ -6,20 +6,45 @@
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <RxHasWpf>false</RxHasWpf>
+    <RxHasWindowsForms>false</RxHasWindowsForms>
+    <RxIsUap>false</RxIsUap>
+    <RxHasWinRT>false</RxHasWinRT>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
-    <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_WPF;HAS_WINRT;HAS_DISPATCHER;HAS_REMOTING;DESKTOPCLR;NO_NULLABLE_ATTRIBUTES</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_WPF;HAS_REMOTING;DESKTOPCLR;NO_NULLABLE_ATTRIBUTES</DefineConstants>
+    <RxHasWpf>true</RxHasWpf>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.18362'">
-    <DefineConstants>$(DefineConstants);HAS_WINRT;WINDOWS;HAS_OS_XAML;LEGACY_WINRT;NO_NULLABLE_ATTRIBUTES</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_WINRT;WINDOWS;IS_UAP;LEGACY_WINRT;NO_NULLABLE_ATTRIBUTES</DefineConstants>
+    <RxIsUap>true</RxIsUap>
+    <RxHasWinRT>true</RxHasWinRT>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <DefineConstants>$(DefineConstants);HAS_WINRT;NO_NULLABLE_ATTRIBUTES</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_NULLABLE_ATTRIBUTES</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0')) or $(TargetFramework.StartsWith('net7.0')) or $(TargetFramework.StartsWith('net8.0'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0')) or $(TargetFramework.StartsWith('net9.0'))">
     <DefineConstants>$(DefineConstants);HAS_TRIMMABILITY_ATTRIBUTES</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
-    <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_WPF;HAS_DISPATCHER;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <!--
+    Although Rx 7 removes WPF and Windows Forms support from the public API of System.Reactive, for now, we continue to
+    set HAS_WPF, RxHasWpf, HAS_WINDOWS and RxHasWindowsForms here. System.Reactive builds the runtime assembly, which still contains
+    the code for these frameworks, so; we've only removed that code from the public-facing ref assemblies. And the other
+    projects that need to make conditional compilation decisions based on whether WPF is available all include WPF in their
+    -windows targets. So these are the correct settings for compilation of projects that use them, even though System.Reactive itself
+    does not publicly expose any WPF- or Windows Forms-related types or members.
+    -->
+    <DefineConstants>$(DefineConstants);HAS_WINFORMS;HAS_WPF;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
+    <RxHasWpf>true</RxHasWpf>
+    <RxHasWindowsForms>true</RxHasWindowsForms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows10')) or $(TargetFramework.StartsWith('net9.0-windows10'))">
+    <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_WPF;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
+    <RxHasWinRT>true</RxHasWinRT>
   </PropertyGroup>
 
   <ItemGroup Condition="('$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'uap10.0.18362' or '$(TargetFramework)' == 'netstandard2.0') and $(IsPackable)">
@@ -31,8 +56,25 @@
                     Version="6.2.14" />
   </ItemGroup>
 
+  <!-- Ensure correct resx file handling -->
+  <ItemGroup>
+    <!-- Runs code generator to produce strongly-typed resx wrapper type. -->
+    <EmbeddedResource Update="**\*.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>System.Reactive</CustomToolNamespace>
+      <LastGenOutput>$([System.IO.Path]::GetFileNameWithoutExtension('%(Filename)')).Designer.cs</LastGenOutput>
+    </EmbeddedResource>
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+    <!-- Gets the correct grouping in VS -->
+    <Compile Update="@(EmbeddedResource -> '%(LastGenOutput)')">
+      <DependentUpon>$([System.IO.Path]::GetFileNameWithoutExtension('$([System.IO.Path]::GetFileNameWithoutExtension('%(Identity)'))')).resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
     <!--
     In the 9.0.100-rc.2.24474.11 SDK, the build tools attempt to perform code generation for a whole load of our types to support WinRT interop.
     It's looking like it does this for any public type that implements IDisposable!
