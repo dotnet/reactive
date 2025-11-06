@@ -21,7 +21,7 @@
     the net8.0-windows10.0.19041 version registers for app lifecycle events. We don't want to
     encourage people to use Windows Runtime features from this library with the non-Windows-Runtime-aware
     target of System.Reactive, so we match the Windows version in the TFM.
-    For UWP we need a newer version because Visual Studio 2022 supports nothing older than 18362.
+    For UWP we need a newer version because Visual Studio 2026 supports nothing older than 18362.
     -->
     <TargetFrameworks>net8.0-windows10.0.19041.0;uap10.0.18362</TargetFrameworks>
 
