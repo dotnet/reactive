@@ -25,7 +25,7 @@ So we have two slightly different levels of compatibility:
 
 ### Problems with the existing API Compatibility Tests
 
-Rx.NET has for years executed tests intended to verify that the public API does not change by accident. These test have used `[PublicApiGenerator`](https://github.com/PublicApiGenerator/PublicApiGenerator) to generate a C# source file that contains the public-facing API of an assembly. For example, here's a fragment of the output it generates:
+Rx.NET has for years executed tests intended to verify that the public API does not change by accident. These tests have used `[PublicApiGenerator`](https://github.com/PublicApiGenerator/PublicApiGenerator) to generate a C# source file that contains the public-facing API of an assembly. For example, here's a fragment of the output it generates:
 
 ```cs
 namespace System.Reactive

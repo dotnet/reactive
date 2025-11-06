@@ -15,7 +15,7 @@ New features:
   * `System.Reactive.Windows.Forms` for Windows Forms
   * `System.Reactive.Wpf` for WPF
   * `System.Reactive.WindowsRuntime` for WinRT (e.g., `CoreDispatcher`) support
-* If an application with a Windows-specific had been relying on `System.Reactive` to acquire the `Microsoft.Desktop.App` framework dependency, it will need to add `<UseWPF>true</UseWPF>` or `<UseWindowsForms>true</UseWindowsForms>`
+* If an application with a Windows-specific TFM had been relying on `System.Reactive` to acquire the `Microsoft.Desktop.App` framework dependency, it will need to add `<UseWPF>true</UseWPF>` or `<UseWindowsForms>true</UseWindowsForms>`
 * Out-of-support target frameworks (.NET 6.0, .NET 7.0) no longer supported
 
 Note that the packaging changes for UI-specific functionality constitute a source-level breaking change, but not a binary-level breaking change. Although the UI-framework-specific types have been removed from the public API of `System.Reactive`, they remain present at runtime. (The NuGet package has both `ref` and `lib` folders. The .NET build tools use the `ref` folder at compile time, and these types have been removed only from the `ref` assemblies. At runtime the `lib` folder is used, and the full API of `System.Reactive` v6 remains available in the assemblies in `lib`. Thus existing binaries built against Rx 6.0 that find themselves using Rx 7.0 at runtime will continue to work.)
@@ -41,7 +41,7 @@ So we no longer produce new versions of these packages.
 * `System.Reactive.Runtime.Remoting`
 * `System.Reactive.Windows.Threading`
 
-Note that these package were for many years facades:
+Note that these packages were for many years facades:
 
 * `System.Reactive.Windows.Forms`
 * `System.Reactive.WindowsRuntime`

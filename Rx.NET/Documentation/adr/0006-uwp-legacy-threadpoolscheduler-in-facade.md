@@ -22,7 +22,7 @@ If a developer wants to use UI-framework-specific code, the project will need a 
 
 There's one wrinkle in this: UWP's specialized `ThreadPoolScheduler`.
 
-`ThreadPoolScheduler` should be a UI-framework-independent type. It is available in all Rx.NET targets, including `netstandard2.0` and the no-UI-framework-available `netX.0` targets. (E.g., the `net6.0` target in Rx 6.0.) So it belongs in publicly visible API, i.e. it needs to be present in the `System.Reactive` package's `ref` assemblies. The problem is that the `System.Reactive` UWP target (the `uap10.0.18362` TFM) contains a slightly different version of this type than all the other targets. It has:
+`ThreadPoolScheduler` should be a UI-framework-independent type. It is available in all Rx.NET targets, including `netstandard2.0` and the no-UI-framework-available `netX.0` targets. (E.g., the `net6.0` target in Rx 6.0.) So it belongs in the publicly visible API, i.e. it needs to be present in the `System.Reactive` package's `ref` assemblies. The problem is that the `System.Reactive` UWP target (the `uap10.0.18362` TFM) contains a slightly different version of this type than all the other targets. It has:
 
 * Three public constructors
   * a default constructor
@@ -30,7 +30,7 @@ There's one wrinkle in this: UWP's specialized `ThreadPoolScheduler`.
   * a constructor accepting `WorkItemPriority` and `WorkItemOptions` arguments
 * Read-only `Priority` and `Options` properties that report the `WorkItemPriority` and `WorkItemOptions` supplied at construction
 
-It makes these available because it is implemented on top of the Windows Runtime [`Windows.System.Threading.ThreadPool`](https://learn.microsoft.com/en-us/uwp/api/windows.system.threading.threadpool?view=winrt-18362). All the other target use the .NET runtime library's [`System.Threading.ThreadPool`](https://learn.microsoft.com/en-us/dotnet/api/system.threading.threadpool). This was unavailable in early versions of UWP, necessitating a different implementation of `ThreadPoolScheduler` on that platform. UWP has supported `netstandard2.0` since Windows 10.0.16299 (aka 1709, aka the 'Windows 10 Fall Creators Update'), released in 2017, so there's no longer an absolute requirement for a UWP-specific `ThreadPoolScheduler`: the `netstandard2.0` Rx.NET implementation now works just fine.
+It makes these available because it is implemented on top of the Windows Runtime [`Windows.System.Threading.ThreadPool`](https://learn.microsoft.com/en-us/uwp/api/windows.system.threading.threadpool?view=winrt-18362). All the other targets use the .NET runtime library's [`System.Threading.ThreadPool`](https://learn.microsoft.com/en-us/dotnet/api/system.threading.threadpool). This was unavailable in early versions of UWP, necessitating a different implementation of `ThreadPoolScheduler` on that platform. UWP has supported `netstandard2.0` since Windows 10.0.16299 (aka 1709, aka the 'Windows 10 Fall Creators Update'), released in 2017, so there's no longer an absolute requirement for a UWP-specific `ThreadPoolScheduler`: the `netstandard2.0` Rx.NET implementation now works just fine.
 
 However, by the time UWP did get support for .NET `ThreadPool`, it was not possible to modify the UWP implementation to use it. This is because those additional public members described above can only be offered when using the `Windows.System.Threading.ThreadPool`: the `WorkItemPriority` and `WorkItemOptions` and types are specific to that particular thread pool.
 
