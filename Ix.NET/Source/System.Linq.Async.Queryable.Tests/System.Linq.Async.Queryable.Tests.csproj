@@ -22,7 +22,7 @@
   So although we get this references transitively (or automatically on .NET 10.0+) we need to put them explicitly here to set aliases.
   -->
   <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
-    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107" Aliases="SystemLinqAsyncEnumerable" />
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0" Aliases="SystemLinqAsyncEnumerable" />
   </ItemGroup>
 
   <Target Name="_SetAliasOnBuiltInSystemLinqAsyncEnumerable" BeforeTargets="ResolveAssemblyReferences">

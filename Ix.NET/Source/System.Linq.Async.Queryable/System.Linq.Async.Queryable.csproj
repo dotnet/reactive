@@ -21,8 +21,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
     <!-- Although we get this transitively from System.Linq.Async, we need the alias to ensure we compile against the legacy System.Linq.Async -->
-    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107"
-                      Aliases="SystemLinqAsyncEnumerable" />
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0" Aliases="SystemLinqAsyncEnumerable" />
   </ItemGroup>
   <Target Name="_SetAliasOnBuiltInSystemLinqAsyncEnumerable" BeforeTargets="ResolveAssemblyReferences">
 
