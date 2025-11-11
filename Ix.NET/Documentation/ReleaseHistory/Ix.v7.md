@@ -3,7 +3,7 @@
 
 ## v7.0.0
 
-Ix.NET's `System.Linq.Async` is being deprecated. Instead, you should use the .NET runtime's `System.Linq.AsyncEnumerable` library (new in .NET 10.0, but available for use on older runtimes). If you are using functionality in `System.Linq.Async` that has not been included in .NET's `System.Linq.AsyncEnumerable`, you can add a reference to `System.Interactive.Async`, which is the new home of this functionality.
+Ix.NET's `System.Linq.Async` is being deprecated. Instead, you should use the .NET runtime's [`System.Linq.AsyncEnumerable`](https://learn.microsoft.com/en-us/dotnet/core/compatibility/core-libraries/10.0/asyncenumerable) library (new in .NET 10.0, but available for use on older runtimes). If you are using functionality in `System.Linq.Async` that has not been included in .NET's `System.Linq.AsyncEnumerable`, you can add a reference to `System.Interactive.Async`, which is the new home of this functionality.
 
 Note that `System.Linq.Async` will continue to work. The LINQ implementation has been removed from `System.Linq.Async`'s public-facing API, so when a project upgrades to v7, any code that was previously using the `System.Linq.Async` implementation of LINQ for `IAsyncEnumerable<T>` will now use the `System.Linq.AsyncEnumerable` supplied by .NET 10. (This works even if your project targets older versions of .NET because the new `System.Linq.AsyncEnumerable` library supports these down-level targets, and `System.Linq.Async` supplies a transient reference to it for older targets.)
 
