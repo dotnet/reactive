@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Interactive Extensions Providers Library used to build query providers and express queries over enumerable sequences.</Description>
     <AssemblyTitle>Interactive Extensions - Providers Library</AssemblyTitle>
-    <TargetFrameworks>net48;netstandard2.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net48;netstandard2.0;net6.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
   </PropertyGroup>
 

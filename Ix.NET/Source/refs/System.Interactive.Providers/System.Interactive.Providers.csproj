@@ -11,7 +11,7 @@
   
     See ../../Documentation/adr/0001-Ix-Ref-Assembly-Mismatches.md
     -->
-    <TargetFrameworks>net48;netstandard2.1;net8.0</TargetFrameworks>
+    <TargetFrameworks>net48;netstandard2.1;net6.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
   </PropertyGroup>
 
