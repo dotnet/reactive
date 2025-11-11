@@ -229,7 +229,7 @@ else
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
-        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
+        [Obsolete("Use AverageAsync in System.Interactive.Async. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. This functionality has moved to System.Interactive.Async, but the methods that take ValueTask-returning selectors are now overloads of AverageAsync, because this AverageAwaitAsync method did not conform to current .NET naming guidelines.")]
         private static ValueTask<<#=o.res#>> AverageAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -306,7 +306,7 @@ else
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use Select then AverageAsync. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. So you should use Select to perform the projection and then use AverageAsync on the resulting sequence.")]
+        [Obsolete("Use AverageAsync in System.Interactive.Async. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its AverageAsync method does not include the overloads that take a selector. This functionality has moved to System.Interactive.Async, but the methods that take cancellable ValueTask-returning selectors are now overloads of AverageAsync, because this AverageAwaitWithCancellationAsyncCore method did not conform to current .NET naming guidelines.")]
         private static ValueTask<<#=o.res#>> AverageAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)

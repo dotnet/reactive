@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     // NB: Large portions of the implementation are based on https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/OrderedEnumerable.cs.
 
     internal abstract class OrderedAsyncEnumerable<TElement> : AsyncIterator<TElement>, IOrderedAsyncEnumerable<TElement>, IAsyncPartition<TElement>
@@ -1217,5 +1216,4 @@ namespace System.Linq
         }
     }
 #endif
-#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }
