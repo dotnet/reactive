@@ -13,7 +13,12 @@
     <Title>System.Linq.Async</Title>    
     <PackageTags>LINQ;async;streams;query</PackageTags>
     <Description>Provides support for Language-Integrated Query (LINQ) over IAsyncEnumerable&lt;T&gt; sequences.</Description>  
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
+  </ItemGroup>
 
   <ItemGroup>
     <!--
