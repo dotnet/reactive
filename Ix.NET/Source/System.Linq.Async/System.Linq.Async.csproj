@@ -24,9 +24,7 @@
     <!--
     Incorporate the reference assemblies.
     -->
-    <None Include="../refs/System.Linq.Async/bin/$(Configuration)/$(TargetFramework)/**"
-          PackagePath="ref/$(TargetFramework)"
-          Pack="true" />
+    <None Include="../refs/System.Linq.Async/bin/$(Configuration)/$(TargetFramework)/**" PackagePath="ref/$(TargetFramework)" Pack="true" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -96,7 +94,7 @@
 
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
-    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-rc.1.25451.107" Aliases="SystemLinqAsyncEnumerable" />
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0" Aliases="SystemLinqAsyncEnumerable" />
   </ItemGroup>
 
   <Target Name="_SetAliasOnBuiltInSystemLinqAsyncEnumerable" BeforeTargets="ResolveAssemblyReferences">
