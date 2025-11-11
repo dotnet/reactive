@@ -9,10 +9,14 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     // NB: Large portions of the implementation are based on https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/OrderedEnumerable.cs.
 
-    internal abstract class OrderedAsyncEnumerable<TElement> : AsyncIterator<TElement>, IOrderedAsyncEnumerable<TElement>, IAsyncPartition<TElement>
+    internal abstract class OrderedAsyncEnumerable<TElement> :
+    AsyncIterator<TElement>,
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+    IOrderedAsyncEnumerable<TElement>,
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+    IAsyncPartition<TElement>
     {
         protected readonly IAsyncEnumerable<TElement> _source;
 
@@ -25,6 +29,7 @@ namespace System.Linq
             _source = source ?? throw Error.ArgumentNull(nameof(source));
         }
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, TKey> keySelector, IComparer<TKey>? comparer, bool descending)
         {
             return new OrderedAsyncEnumerable<TElement, TKey>(_source, keySelector, comparer, descending, this);
@@ -39,6 +44,7 @@ namespace System.Linq
         {
             return new OrderedAsyncEnumerableWithTaskAndCancellation<TElement, TKey>(_source, keySelector, comparer, descending, this);
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         protected override async ValueTask<bool> MoveNextCore()
         {
@@ -1217,5 +1223,4 @@ namespace System.Linq
         }
     }
 #endif
-#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

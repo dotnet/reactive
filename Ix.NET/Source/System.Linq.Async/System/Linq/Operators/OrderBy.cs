@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     public static partial class AsyncEnumerable
     {
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
@@ -379,5 +378,4 @@ namespace System.Linq
         }
 #endif
     }
-#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }
