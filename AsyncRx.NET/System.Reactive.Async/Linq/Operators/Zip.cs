@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Threading;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             var queues = new Queue<TSource>[count];
             var isDone = new bool[count];
