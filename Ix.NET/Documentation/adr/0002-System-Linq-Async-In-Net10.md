@@ -32,12 +32,15 @@ There are also a couple of cases where functionality simply has not been reprodu
 
 `System.Linq.Async` also defined some interfaces that are not replicated in `System.Linq.AsyncEnumerable`. `System.Linq.Async` defined `IAsyncGrouping` to act as the return type for `GroupBy`. `System.Linq.AsyncEnumerable` just uses `IAsyncEnumerable<IGrouping<TKey, TElement>>`, which is not quite the same: this enables asynchronous iteration of the sequence of groups, but each invidual group's contents are not asynchronously enumerable. `IAsyncGrouping` enabled asynchronous enumeration of both. In practice, `System.Linq.Async` did not exploit this: it fully enumerated the whole source list to split items into groups before returning the first group, so although it compelled you to enumerate at both levels (e.g., with nested `await foreach` loops), in reality only the outer level was asynchronous in practice. So this interface added complication without real benefits. There is also `IAsyncIListProvider<T>`, an interface that arguably should not have been public in the first place, serving only to enable some internal optimizations. (Apparently it was public in `System.Linq.Async` because it is also used in other parts of Ix.NET.) 
 
+A further complication is that some methods in `System.Interactive.Async` clash with methods in `System.Linq.AsyncEnumerable`. For example, `MaxByAsync` and `MinByAsync`. Originally `MinBy` and `MaxBy` were unique to Rx.NET and Ix.NET. But .NET 6.0 added operators with these names to LINQ to Objects. Confusingly, they were slightly different: the Rx.NET and Ix.NET versions recognize that there might not be a single minimum or maximum value, and thus provide a collection of all the entries that are at the maximum value, but the .NET runtime class library versions just pick one arbitrary winner. So at this point, `System.Interactive` renamed its versions to `MinByWithTies` and `MaxByWithTies`. Unfortunately that same change wasn't made in `System.Interactive.Async`, so we now have the same situation with `System.Linq.AsyncEnumerable`: the .NET runtime class libraries now define `MinByAsync` and `MaxByAsync` extension methods for `IAsyncEnumerable<T>`, and these take the same arguments as the ones in `System.Interactive.Async`, but have a different return type, and have different behaviour!
+
+
 ## Decision
 
-The next `System.Linq.Async` release will:
+The next Ix.NET release will:
 
-1. add a reference to `System.Linq.AsyncEnumerable` and `System.Interactive.Async`
-2. remove from publicly visible API (ref assemblies) all `IAsyncEnumerable<T>` extension methods for which direct replacements exist
+1. add a reference to `System.Linq.AsyncEnumerable` and `System.Interactive.Async` in `System.Linq.Async`
+2. remove from `System.Linq.Async`'s and `System.Interactive.Async`'s publicly visible API (ref assemblies) all `IAsyncEnumerable<T>` extension methods for which direct replacements exist (adding `MinByWithTiesAsync` and `MaxByWithTiesAsync` for the case where the new .NET runtime library methods actually have slightly different functionality)
 3. add [Obsolete] attribute for members of `AsyncEnumerable` for which `System.Linq.AsyncEnumerable` offers replacements that require code changes to use (e.g., `WhereAwait`, which is replaced by an overload of `Where`)
 4. `AsyncEnumerable` methods that are a bad idea and that should probably have never existing (the ones that do sync over async, e.g. `ToEnumerable`) are marked as `Obsolete` and will not be replaced; note that although `ToObservable` has issues that meant the .NET team decided not to replicate it, the main issue is that it embeds opinions, and not that there's anything fundamentally broken about it, so we do not include `ToObservable` in this category
 5. remaining methods of `AsyncEnumerable` (where `System.Linq.AsyncEnumerable` offers no equivalent) are removed from the publicly visible API of `System.Linq.Async`, with identical replacements being defined by `AsyncEnumerableEx` in `System.Interactive
@@ -59,6 +62,14 @@ In summary, each of the features previously provided by `System.Linq.Async` will
 * Method hidden in `ref` assembly, available in `System.Linq.AsyncEnumerable`
 * Method hidden in `ref` assembly, available in `System.Interactive.Async`
 * Method visible but marked as `Obsolete`, with new but slightly different equivalent available in `System.Linq.AsyncEnumerable`
+
+### TFMs
+
+We want to keep the TFMs for all Ix.NET packages exactly the same in this version, because the only reason for Ix.NET v7 to exist is to deal with the new existence of `System.Linq.AsyncEnumerable`.
+
+There is one issue with this. If a project has a `net6.0` target and tries to use `System.Linq.AsyncEnumerable`, it produces a build warning, saying that it's not supported on that runtime. Although we don't like having this build warning, we are currently intending not to do anything about it, because we believe that messing with the TFMs is likely to have unintended consequences.
+
+If it turns out that this does cause problems, we'll revisit this and do a new release.
 
 ## Consequences
 
