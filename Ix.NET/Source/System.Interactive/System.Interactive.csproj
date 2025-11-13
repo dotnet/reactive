@@ -18,7 +18,7 @@
   See ../../Documentation/adr/0001-Ix-Ref-Assembly-Mismatches.md
   -->
   <ItemGroup>
-    <None Include="../refs/System.Interactive/bin/$(Configuration)/$(TargetFramework)/System.Interactive.*" PackagePath="ref/$(TargetFramework)" Pack="true" />
+    <None Include="../refs/System.Interactive/bin/$(Configuration)/**/System.Interactive.*" PackagePath="ref/" Pack="true" />
   </ItemGroup>
 
   <!--
