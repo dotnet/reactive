@@ -36,7 +36,7 @@ namespace System.Linq.Async.SourceGenerator
             var attributeSymbol = GetAsyncOverloadAttributeSymbol(context);
             var methodsBySyntaxTree = GetMethodsGroupedBySyntaxTree(context, syntaxReceiver);
 
-            foreach (var grouping in methodsBySyntaxTree)
+            foreach (var grouping in methodsBySyntaxTree.Where(g => g.Methods.Any()))
                 context.AddSource(
                     $"{Path.GetFileNameWithoutExtension(grouping.SyntaxTree.FilePath)}.AsyncOverloads",
                     GenerateOverloads(grouping, options, context, attributeSymbol));

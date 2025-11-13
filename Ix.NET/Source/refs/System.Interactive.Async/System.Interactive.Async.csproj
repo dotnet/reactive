@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ProduceOnlyReferenceAssembly>true</ProduceOnlyReferenceAssembly>
+    
+    <Description>Interactive Extensions Async Library used to express queries over asynchronous enumerable sequences.</Description>
+    <AssemblyTitle>Interactive Extensions - Async Library</AssemblyTitle>
+    <Authors>Microsoft</Authors>
+
+    <!--
+    This TFM list does not match the main project. That is deliberate.
+  
+    See ../../Documentation/adr/0001-Ix-Ref-Assembly-Mismatches.md
+
+    .NET 10.0 gets its own target because that doesn't need a transitive reference
+    to System.Linq.AsyncEnumerable - it's built in from .NET 10.0 and later -
+    but all other targets do need that reference.
+    Even though we support back to .NET 8.0 for v7, we don't build targets for
+    any versions older than net10.0 because net8.0 and net9.0 are both covered
+    by the netstandard2.0 target.
+    -->
+    <TargetFrameworks>net48;netstandard2.1;net6.0;net10.0</TargetFrameworks>
+    <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\System.Interactive.Async\**\*.cs" Exclude="..\..\System.Interactive.Async\obj\**" />
+
+    <Compile Include="..\..\System.Linq.Async\System\Error.cs" Link="System\Error.cs" />
+    <Compile Include="..\..\System.Linq.Async\System\Linq\AsyncIterator.cs" Link="System\Linq\AsyncIterator.cs" />
+    <Compile Include="..\..\System.Linq.Async\System\Linq\Set.cs" Link="System\Linq\Set.cs" />
+    <Compile Include="..\..\System.Linq.Async\System\Strings.cs" Link="System\Strings.cs" />
+    <Compile Include="..\..\System.Linq.Async\System\Threading\Tasks\AsyncEnumerableExt.cs" Link="System\Threading\Tasks\AsyncEnumerableExt.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Linq.Async.SourceGenerator\System.Linq.Async.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Private="false" />
+  </ItemGroup>
+
+</Project>

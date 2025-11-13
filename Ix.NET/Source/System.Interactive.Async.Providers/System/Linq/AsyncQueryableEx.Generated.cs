@@ -30,6 +30,500 @@ namespace System.Linq
             return first.Provider.CreateQuery<TSource>(Expression.Call(Amb__TSource__2__0(typeof(TSource)), first.Expression, GetSourceExpression(second)));
         }
 
+        private static MethodInfo? s_AsAsyncEnumerable__TSource__1__0;
+        
+        private static MethodInfo AsAsyncEnumerable__TSource__1__0(Type TSource) =>
+            (s_AsAsyncEnumerable__TSource__1__0 ??
+            (s_AsAsyncEnumerable__TSource__1__0 = new Func<IAsyncQueryable<object>, IAsyncQueryable<object>>(AsAsyncEnumerable<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static IAsyncQueryable<TSource> AsAsyncEnumerable<TSource>(this IAsyncQueryable<TSource> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return source.Provider.CreateQuery<TSource>(Expression.Call(AsAsyncEnumerable__TSource__1__0(typeof(TSource)), source.Expression));
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__0;
+        
+        private static MethodInfo AverageAsync__TSource__3__0(Type TSource) =>
+            (s_AverageAsync__TSource__3__0 ??
+            (s_AverageAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<decimal?>>>, CancellationToken, ValueTask<decimal?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<decimal?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<decimal?>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<decimal?>(Expression.Call(AverageAsync__TSource__3__0(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__1;
+        
+        private static MethodInfo AverageAsync__TSource__3__1(Type TSource) =>
+            (s_AverageAsync__TSource__3__1 ??
+            (s_AverageAsync__TSource__3__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<decimal>>>, CancellationToken, ValueTask<decimal>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<decimal> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<decimal>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<decimal>(Expression.Call(AverageAsync__TSource__3__1(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__2;
+        
+        private static MethodInfo AverageAsync__TSource__3__2(Type TSource) =>
+            (s_AverageAsync__TSource__3__2 ??
+            (s_AverageAsync__TSource__3__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<double?>>>, CancellationToken, ValueTask<double?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<double?>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double?>(Expression.Call(AverageAsync__TSource__3__2(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__3;
+        
+        private static MethodInfo AverageAsync__TSource__3__3(Type TSource) =>
+            (s_AverageAsync__TSource__3__3 ??
+            (s_AverageAsync__TSource__3__3 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<double>>>, CancellationToken, ValueTask<double>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<double>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double>(Expression.Call(AverageAsync__TSource__3__3(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__4;
+        
+        private static MethodInfo AverageAsync__TSource__3__4(Type TSource) =>
+            (s_AverageAsync__TSource__3__4 ??
+            (s_AverageAsync__TSource__3__4 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<float?>>>, CancellationToken, ValueTask<float?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<float?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<float?>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<float?>(Expression.Call(AverageAsync__TSource__3__4(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__5;
+        
+        private static MethodInfo AverageAsync__TSource__3__5(Type TSource) =>
+            (s_AverageAsync__TSource__3__5 ??
+            (s_AverageAsync__TSource__3__5 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<float>>>, CancellationToken, ValueTask<float>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<float> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<float>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<float>(Expression.Call(AverageAsync__TSource__3__5(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__6;
+        
+        private static MethodInfo AverageAsync__TSource__3__6(Type TSource) =>
+            (s_AverageAsync__TSource__3__6 ??
+            (s_AverageAsync__TSource__3__6 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<int?>>>, CancellationToken, ValueTask<double?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<int?>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double?>(Expression.Call(AverageAsync__TSource__3__6(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__7;
+        
+        private static MethodInfo AverageAsync__TSource__3__7(Type TSource) =>
+            (s_AverageAsync__TSource__3__7 ??
+            (s_AverageAsync__TSource__3__7 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<int>>>, CancellationToken, ValueTask<double>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<int>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double>(Expression.Call(AverageAsync__TSource__3__7(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__8;
+        
+        private static MethodInfo AverageAsync__TSource__3__8(Type TSource) =>
+            (s_AverageAsync__TSource__3__8 ??
+            (s_AverageAsync__TSource__3__8 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<long?>>>, CancellationToken, ValueTask<double?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<long?>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double?>(Expression.Call(AverageAsync__TSource__3__8(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__9;
+        
+        private static MethodInfo AverageAsync__TSource__3__9(Type TSource) =>
+            (s_AverageAsync__TSource__3__9 ??
+            (s_AverageAsync__TSource__3__9 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<long>>>, CancellationToken, ValueTask<double>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<long>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double>(Expression.Call(AverageAsync__TSource__3__9(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__10;
+        
+        private static MethodInfo AverageAsync__TSource__3__10(Type TSource) =>
+            (s_AverageAsync__TSource__3__10 ??
+            (s_AverageAsync__TSource__3__10 = new Func<IAsyncQueryable<object>, Expression<Func<object, decimal?>>, CancellationToken, ValueTask<decimal?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<decimal?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, decimal?>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<decimal?>(Expression.Call(AverageAsync__TSource__3__10(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__11;
+        
+        private static MethodInfo AverageAsync__TSource__3__11(Type TSource) =>
+            (s_AverageAsync__TSource__3__11 ??
+            (s_AverageAsync__TSource__3__11 = new Func<IAsyncQueryable<object>, Expression<Func<object, decimal>>, CancellationToken, ValueTask<decimal>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<decimal> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, decimal>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<decimal>(Expression.Call(AverageAsync__TSource__3__11(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__12;
+        
+        private static MethodInfo AverageAsync__TSource__3__12(Type TSource) =>
+            (s_AverageAsync__TSource__3__12 ??
+            (s_AverageAsync__TSource__3__12 = new Func<IAsyncQueryable<object>, Expression<Func<object, double?>>, CancellationToken, ValueTask<double?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, double?>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double?>(Expression.Call(AverageAsync__TSource__3__12(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__13;
+        
+        private static MethodInfo AverageAsync__TSource__3__13(Type TSource) =>
+            (s_AverageAsync__TSource__3__13 ??
+            (s_AverageAsync__TSource__3__13 = new Func<IAsyncQueryable<object>, Expression<Func<object, double>>, CancellationToken, ValueTask<double>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, double>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double>(Expression.Call(AverageAsync__TSource__3__13(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__14;
+        
+        private static MethodInfo AverageAsync__TSource__3__14(Type TSource) =>
+            (s_AverageAsync__TSource__3__14 ??
+            (s_AverageAsync__TSource__3__14 = new Func<IAsyncQueryable<object>, Expression<Func<object, float?>>, CancellationToken, ValueTask<float?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<float?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, float?>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<float?>(Expression.Call(AverageAsync__TSource__3__14(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__15;
+        
+        private static MethodInfo AverageAsync__TSource__3__15(Type TSource) =>
+            (s_AverageAsync__TSource__3__15 ??
+            (s_AverageAsync__TSource__3__15 = new Func<IAsyncQueryable<object>, Expression<Func<object, float>>, CancellationToken, ValueTask<float>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<float> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, float>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<float>(Expression.Call(AverageAsync__TSource__3__15(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__16;
+        
+        private static MethodInfo AverageAsync__TSource__3__16(Type TSource) =>
+            (s_AverageAsync__TSource__3__16 ??
+            (s_AverageAsync__TSource__3__16 = new Func<IAsyncQueryable<object>, Expression<Func<object, int?>>, CancellationToken, ValueTask<double?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, int?>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double?>(Expression.Call(AverageAsync__TSource__3__16(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__17;
+        
+        private static MethodInfo AverageAsync__TSource__3__17(Type TSource) =>
+            (s_AverageAsync__TSource__3__17 ??
+            (s_AverageAsync__TSource__3__17 = new Func<IAsyncQueryable<object>, Expression<Func<object, int>>, CancellationToken, ValueTask<double>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, int>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double>(Expression.Call(AverageAsync__TSource__3__17(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__18;
+        
+        private static MethodInfo AverageAsync__TSource__3__18(Type TSource) =>
+            (s_AverageAsync__TSource__3__18 ??
+            (s_AverageAsync__TSource__3__18 = new Func<IAsyncQueryable<object>, Expression<Func<object, long?>>, CancellationToken, ValueTask<double?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, long?>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double?>(Expression.Call(AverageAsync__TSource__3__18(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__19;
+        
+        private static MethodInfo AverageAsync__TSource__3__19(Type TSource) =>
+            (s_AverageAsync__TSource__3__19 ??
+            (s_AverageAsync__TSource__3__19 = new Func<IAsyncQueryable<object>, Expression<Func<object, long>>, CancellationToken, ValueTask<double>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, long>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double>(Expression.Call(AverageAsync__TSource__3__19(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__20;
+        
+        private static MethodInfo AverageAsync__TSource__3__20(Type TSource) =>
+            (s_AverageAsync__TSource__3__20 ??
+            (s_AverageAsync__TSource__3__20 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<decimal?>>>, CancellationToken, ValueTask<decimal?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<decimal?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<decimal?>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<decimal?>(Expression.Call(AverageAsync__TSource__3__20(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__21;
+        
+        private static MethodInfo AverageAsync__TSource__3__21(Type TSource) =>
+            (s_AverageAsync__TSource__3__21 ??
+            (s_AverageAsync__TSource__3__21 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<decimal>>>, CancellationToken, ValueTask<decimal>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<decimal> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<decimal>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<decimal>(Expression.Call(AverageAsync__TSource__3__21(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__22;
+        
+        private static MethodInfo AverageAsync__TSource__3__22(Type TSource) =>
+            (s_AverageAsync__TSource__3__22 ??
+            (s_AverageAsync__TSource__3__22 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<double?>>>, CancellationToken, ValueTask<double?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<double?>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double?>(Expression.Call(AverageAsync__TSource__3__22(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__23;
+        
+        private static MethodInfo AverageAsync__TSource__3__23(Type TSource) =>
+            (s_AverageAsync__TSource__3__23 ??
+            (s_AverageAsync__TSource__3__23 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<double>>>, CancellationToken, ValueTask<double>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<double>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double>(Expression.Call(AverageAsync__TSource__3__23(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__24;
+        
+        private static MethodInfo AverageAsync__TSource__3__24(Type TSource) =>
+            (s_AverageAsync__TSource__3__24 ??
+            (s_AverageAsync__TSource__3__24 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<float?>>>, CancellationToken, ValueTask<float?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<float?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<float?>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<float?>(Expression.Call(AverageAsync__TSource__3__24(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__25;
+        
+        private static MethodInfo AverageAsync__TSource__3__25(Type TSource) =>
+            (s_AverageAsync__TSource__3__25 ??
+            (s_AverageAsync__TSource__3__25 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<float>>>, CancellationToken, ValueTask<float>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<float> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<float>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<float>(Expression.Call(AverageAsync__TSource__3__25(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__26;
+        
+        private static MethodInfo AverageAsync__TSource__3__26(Type TSource) =>
+            (s_AverageAsync__TSource__3__26 ??
+            (s_AverageAsync__TSource__3__26 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<int?>>>, CancellationToken, ValueTask<double?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<int?>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double?>(Expression.Call(AverageAsync__TSource__3__26(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__27;
+        
+        private static MethodInfo AverageAsync__TSource__3__27(Type TSource) =>
+            (s_AverageAsync__TSource__3__27 ??
+            (s_AverageAsync__TSource__3__27 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<int>>>, CancellationToken, ValueTask<double>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<int>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double>(Expression.Call(AverageAsync__TSource__3__27(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__28;
+        
+        private static MethodInfo AverageAsync__TSource__3__28(Type TSource) =>
+            (s_AverageAsync__TSource__3__28 ??
+            (s_AverageAsync__TSource__3__28 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<long?>>>, CancellationToken, ValueTask<double?>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double?> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<long?>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double?>(Expression.Call(AverageAsync__TSource__3__28(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_AverageAsync__TSource__3__29;
+        
+        private static MethodInfo AverageAsync__TSource__3__29(Type TSource) =>
+            (s_AverageAsync__TSource__3__29 ??
+            (s_AverageAsync__TSource__3__29 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<long>>>, CancellationToken, ValueTask<double>>(AverageAsync<object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource);
+
+        public static ValueTask<double> AverageAsync<TSource>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<long>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Provider.ExecuteAsync<double>(Expression.Call(AverageAsync__TSource__3__29(typeof(TSource)), source.Expression, selector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
         private static MethodInfo? s_Buffer__TSource__2__0;
         
         private static MethodInfo Buffer__TSource__2__0(Type TSource) =>
@@ -806,6 +1300,102 @@ namespace System.Linq
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MaxByAsync__TSource_TKey__4__2(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
         }
 
+        private static MethodInfo? s_MaxByWithTiesAsync__TSource_TKey__3__0;
+        
+        private static MethodInfo MaxByWithTiesAsync__TSource_TKey__3__0(Type TSource, Type TKey) =>
+            (s_MaxByWithTiesAsync__TSource_TKey__3__0 ??
+            (s_MaxByWithTiesAsync__TSource_TKey__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, CancellationToken, ValueTask<IList<object>>>(MaxByWithTiesAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
+
+        public static ValueTask<IList<TSource>> MaxByWithTiesAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MaxByWithTiesAsync__TSource_TKey__3__0(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_MaxByWithTiesAsync__TSource_TKey__3__1;
+        
+        private static MethodInfo MaxByWithTiesAsync__TSource_TKey__3__1(Type TSource, Type TKey) =>
+            (s_MaxByWithTiesAsync__TSource_TKey__3__1 ??
+            (s_MaxByWithTiesAsync__TSource_TKey__3__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, CancellationToken, ValueTask<IList<object>>>(MaxByWithTiesAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
+
+        public static ValueTask<IList<TSource>> MaxByWithTiesAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MaxByWithTiesAsync__TSource_TKey__3__1(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_MaxByWithTiesAsync__TSource_TKey__3__2;
+        
+        private static MethodInfo MaxByWithTiesAsync__TSource_TKey__3__2(Type TSource, Type TKey) =>
+            (s_MaxByWithTiesAsync__TSource_TKey__3__2 ??
+            (s_MaxByWithTiesAsync__TSource_TKey__3__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, CancellationToken, ValueTask<IList<object>>>(MaxByWithTiesAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
+
+        public static ValueTask<IList<TSource>> MaxByWithTiesAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MaxByWithTiesAsync__TSource_TKey__3__2(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_MaxByWithTiesAsync__TSource_TKey__4__0;
+        
+        private static MethodInfo MaxByWithTiesAsync__TSource_TKey__4__0(Type TSource, Type TKey) =>
+            (s_MaxByWithTiesAsync__TSource_TKey__4__0 ??
+            (s_MaxByWithTiesAsync__TSource_TKey__4__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MaxByWithTiesAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
+
+        public static ValueTask<IList<TSource>> MaxByWithTiesAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IComparer<TKey>? comparer, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MaxByWithTiesAsync__TSource_TKey__4__0(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_MaxByWithTiesAsync__TSource_TKey__4__1;
+        
+        private static MethodInfo MaxByWithTiesAsync__TSource_TKey__4__1(Type TSource, Type TKey) =>
+            (s_MaxByWithTiesAsync__TSource_TKey__4__1 ??
+            (s_MaxByWithTiesAsync__TSource_TKey__4__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MaxByWithTiesAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
+
+        public static ValueTask<IList<TSource>> MaxByWithTiesAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey>? comparer, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MaxByWithTiesAsync__TSource_TKey__4__1(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_MaxByWithTiesAsync__TSource_TKey__4__2;
+        
+        private static MethodInfo MaxByWithTiesAsync__TSource_TKey__4__2(Type TSource, Type TKey) =>
+            (s_MaxByWithTiesAsync__TSource_TKey__4__2 ??
+            (s_MaxByWithTiesAsync__TSource_TKey__4__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MaxByWithTiesAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
+
+        public static ValueTask<IList<TSource>> MaxByWithTiesAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey>? comparer, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MaxByWithTiesAsync__TSource_TKey__4__2(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
         private static MethodInfo? s_Merge__TSource__1__0;
         
         private static MethodInfo Merge__TSource__1__0(Type TSource) =>
@@ -928,6 +1518,102 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(keySelector));
 
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MinByAsync__TSource_TKey__4__2(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_MinByWithTiesAsync__TSource_TKey__3__0;
+        
+        private static MethodInfo MinByWithTiesAsync__TSource_TKey__3__0(Type TSource, Type TKey) =>
+            (s_MinByWithTiesAsync__TSource_TKey__3__0 ??
+            (s_MinByWithTiesAsync__TSource_TKey__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, CancellationToken, ValueTask<IList<object>>>(MinByWithTiesAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
+
+        public static ValueTask<IList<TSource>> MinByWithTiesAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MinByWithTiesAsync__TSource_TKey__3__0(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_MinByWithTiesAsync__TSource_TKey__3__1;
+        
+        private static MethodInfo MinByWithTiesAsync__TSource_TKey__3__1(Type TSource, Type TKey) =>
+            (s_MinByWithTiesAsync__TSource_TKey__3__1 ??
+            (s_MinByWithTiesAsync__TSource_TKey__3__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, CancellationToken, ValueTask<IList<object>>>(MinByWithTiesAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
+
+        public static ValueTask<IList<TSource>> MinByWithTiesAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MinByWithTiesAsync__TSource_TKey__3__1(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_MinByWithTiesAsync__TSource_TKey__3__2;
+        
+        private static MethodInfo MinByWithTiesAsync__TSource_TKey__3__2(Type TSource, Type TKey) =>
+            (s_MinByWithTiesAsync__TSource_TKey__3__2 ??
+            (s_MinByWithTiesAsync__TSource_TKey__3__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, CancellationToken, ValueTask<IList<object>>>(MinByWithTiesAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
+
+        public static ValueTask<IList<TSource>> MinByWithTiesAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MinByWithTiesAsync__TSource_TKey__3__2(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_MinByWithTiesAsync__TSource_TKey__4__0;
+        
+        private static MethodInfo MinByWithTiesAsync__TSource_TKey__4__0(Type TSource, Type TKey) =>
+            (s_MinByWithTiesAsync__TSource_TKey__4__0 ??
+            (s_MinByWithTiesAsync__TSource_TKey__4__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MinByWithTiesAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
+
+        public static ValueTask<IList<TSource>> MinByWithTiesAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IComparer<TKey>? comparer, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MinByWithTiesAsync__TSource_TKey__4__0(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_MinByWithTiesAsync__TSource_TKey__4__1;
+        
+        private static MethodInfo MinByWithTiesAsync__TSource_TKey__4__1(Type TSource, Type TKey) =>
+            (s_MinByWithTiesAsync__TSource_TKey__4__1 ??
+            (s_MinByWithTiesAsync__TSource_TKey__4__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MinByWithTiesAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
+
+        public static ValueTask<IList<TSource>> MinByWithTiesAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey>? comparer, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MinByWithTiesAsync__TSource_TKey__4__1(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+        }
+
+        private static MethodInfo? s_MinByWithTiesAsync__TSource_TKey__4__2;
+        
+        private static MethodInfo MinByWithTiesAsync__TSource_TKey__4__2(Type TSource, Type TKey) =>
+            (s_MinByWithTiesAsync__TSource_TKey__4__2 ??
+            (s_MinByWithTiesAsync__TSource_TKey__4__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MinByWithTiesAsync<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
+
+        public static ValueTask<IList<TSource>> MinByWithTiesAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey>? comparer, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(MinByWithTiesAsync__TSource_TKey__4__2(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
         }
 
         private static MethodInfo? s_OnErrorResumeNext__TSource__2__0;

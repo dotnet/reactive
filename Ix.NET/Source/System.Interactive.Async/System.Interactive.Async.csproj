@@ -33,6 +33,30 @@
     <EmbeddedResource Include="Properties\System.Interactive.Async.rd.xml" />
   </ItemGroup>
 
+  <!--
+  Incorporate the reference assemblies. Note that these have a different set of TFMs from the proper assemblies.
+  
+  See ../../Documentation/adr/0001-Ix-Ref-Assembly-Mismatches.md
+  -->
+  <ItemGroup>
+    <None Include="../refs/System.Interactive.Async/bin/$(Configuration)/**/System.Interactive.Async.*" PackagePath="ref/" Pack="true" />
+  </ItemGroup>
+  
+  <!--
+  These warnings occur because we are deliberately creating a lib/ref mismatch. There doesn't seem to be
+  an official way to do that, so we have to suppress the warnings.
+  
+  See ../../Documentation/adr/0001-Ix-Ref-Assembly-Mismatches.md for an explanation of this bizarreness.
+  -->
+
+  <PropertyGroup>
+    <!--
+    NU5128: lib/ref mismatch. This is deliberate, as explained in the ADR.
+    NU5131: spurious missing file errors. It appears that the build is confused by what we're doing.
+    -->
+    <NoWarn>$(NoWarn);NU5128;NU5131</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
     <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0" />
   </ItemGroup>
