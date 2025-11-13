@@ -10,6 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
+#if !REFERENCE_ASSEMBLY
         /// <summary>
         /// Returns the elements in an async-enumerable sequence with the maximum key value.
         /// </summary>
@@ -164,6 +165,8 @@ namespace System.Linq
 
             return ExtremaBy(source, keySelector, (key, minValue) => comparer.Compare(key, minValue), cancellationToken);
         }
+#endif
+
 #endif
     }
 }
