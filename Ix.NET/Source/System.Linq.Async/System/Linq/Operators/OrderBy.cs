@@ -37,13 +37,13 @@ namespace System.Linq
         /// <returns>An ordered async-enumerable sequence whose elements are sorted according to a key.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use OrderBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByAwait functionality now exists as overloads of OrderBy.")]
+        [Obsolete("Use OrderBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByAwait functionality now exists as an overload of OrderBy. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IOrderedAsyncEnumerable<TSource> OrderByAwaitCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) =>
             new OrderedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer: null, descending: false, parent: null);
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use OrderBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByAwaitWithCancellation functionality now exists as overloads of OrderBy.")]
+        [Obsolete("Use OrderBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByAwaitWithCancellation functionality now exists as an overload of OrderBy. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IOrderedAsyncEnumerable<TSource> OrderByAwaitWithCancellationCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) =>
             new OrderedAsyncEnumerableWithTaskAndCancellation<TSource, TKey>(source, keySelector, comparer: null, descending: false, parent: null);
 #endif
@@ -76,13 +76,13 @@ namespace System.Linq
         /// <returns>An ordered async-enumerable sequence whose elements are sorted according to a key.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use OrderBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByAwait functionality now exists as overloads of OrderBy.")]
+        [Obsolete("Use OrderBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByAwait functionality now exists as an overload of OrderBy. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IOrderedAsyncEnumerable<TSource> OrderByAwaitCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) =>
             new OrderedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer, descending: false, parent: null);
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use OrderBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByAwaitWithCancellation functionality now exists as overloads of OrderBy.")]
+        [Obsolete("Use OrderBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByAwaitWithCancellation functionality now exists as an overload of OrderBy. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IOrderedAsyncEnumerable<TSource> OrderByAwaitWithCancellationCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) =>
             new OrderedAsyncEnumerableWithTaskAndCancellation<TSource, TKey>(source, keySelector, comparer, descending: false, parent: null);
 #endif
@@ -114,13 +114,13 @@ namespace System.Linq
         /// <returns>An ordered async-enumerable sequence whose elements are sorted in descending order according to a key.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use OrderByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByDescendingAwait functionality now exists as overloads of OrderByDescending.")]
+        [Obsolete("Use OrderByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByDescendingAwait functionality now exists as an overload of OrderByDescending. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IOrderedAsyncEnumerable<TSource> OrderByDescendingAwaitCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector) =>
             new OrderedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer: null, descending: true, parent: null);
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use OrderByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByDescendingAwaitWithCancellation functionality now exists as overloads of OrderByDescending.")]
+        [Obsolete("Use OrderByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByDescendingAwaitWithCancellation functionality now exists as an overload of OrderByDescending.")]
         private static IOrderedAsyncEnumerable<TSource> OrderByDescendingAwaitWithCancellationCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector) =>
             new OrderedAsyncEnumerableWithTaskAndCancellation<TSource, TKey>(source, keySelector, comparer: null, descending: true, parent: null);
 #endif
@@ -153,13 +153,13 @@ namespace System.Linq
         /// <returns>An ordered async-enumerable sequence whose elements are sorted in descending order according to a key.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use OrderByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByDescendingAwait functionality now exists as overloads of OrderByDescending.")]
+        [Obsolete("Use OrderByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByDescendingAwait functionality now exists as an overload of OrderByDescending. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IOrderedAsyncEnumerable<TSource> OrderByDescendingAwaitCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) =>
             new OrderedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer, descending: true, parent: null);
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use OrderByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByDescendingAwaitWithCancellation functionality now exists as overloads of OrderByDescending.")]
+        [Obsolete("Use OrderByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the OrderByDescendingAwaitWithCancellation functionality now exists as an overload of OrderByDescending.")]
         private static IOrderedAsyncEnumerable<TSource> OrderByDescendingAwaitWithCancellationCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer) =>
             new OrderedAsyncEnumerableWithTaskAndCancellation<TSource, TKey>(source, keySelector, comparer, descending: true, parent: null);
 #endif
@@ -196,7 +196,7 @@ namespace System.Linq
         /// <returns>An ordered async-enumerable whose elements are sorted according to a key.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use ThenBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByAwait functionality now exists as overloads of ThenBy.")]
+        [Obsolete("Use ThenBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByAwait functionality now exists as an overload of ThenBy. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IOrderedAsyncEnumerable<TSource> ThenByAwaitCore<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (source == null)
@@ -207,7 +207,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use ThenBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByAwaitWithCancellation functionality now exists as overloads of ThenBy.")]
+        [Obsolete("Use ThenBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByAwaitWithCancellation functionality now exists as an overload of ThenBy.")]
         private static IOrderedAsyncEnumerable<TSource> ThenByAwaitWithCancellationCore<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector)
         {
             if (source == null)
@@ -250,7 +250,7 @@ namespace System.Linq
         /// <returns>An ordered async-enumerable whose elements are sorted according to a key.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use ThenBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByAwait functionality now exists as overloads of ThenBy.")]
+        [Obsolete("Use ThenBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByAwait functionality now exists as an overload of ThenBy. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IOrderedAsyncEnumerable<TSource> ThenByAwaitCore<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
@@ -261,7 +261,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use ThenBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByAwaitWithCancellation functionality now exists as overloads of ThenBy.")]
+        [Obsolete("Use ThenBy. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByAwaitWithCancellation functionality now exists as an overload of ThenBy.")]
         private static IOrderedAsyncEnumerable<TSource> ThenByAwaitWithCancellationCore<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
@@ -303,7 +303,7 @@ namespace System.Linq
         /// <returns>An ordered async-enumerable sequence whose elements are sorted in descending order according to a key.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use ThenByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByDescendingAwait functionality now exists as overloads of ThenByDescending.")]
+        [Obsolete("Use ThenByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByDescendingAwait functionality now exists as an overload of ThenByDescending. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IOrderedAsyncEnumerable<TSource> ThenByDescendingAwaitCore<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (source == null)
@@ -314,7 +314,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use ThenByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByDescendingAwaitWithCancellation functionality now exists as overloads of ThenByDescending.")]
+        [Obsolete("Use ThenByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByDescendingAwaitWithCancellation functionality now exists as an overload of ThenByDescending.")]
         private static IOrderedAsyncEnumerable<TSource> ThenByDescendingAwaitWithCancellationCore<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector)
         {
             if (source == null)
@@ -357,7 +357,7 @@ namespace System.Linq
         /// <returns>An ordered async-enumerable sequence whose elements are sorted in descending order according to a key.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use ThenByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByDescendingAwait functionality now exists as overloads of ThenByDescending.")]
+        [Obsolete("Use ThenByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByDescendingAwait functionality now exists as an overload of ThenByDescending. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IOrderedAsyncEnumerable<TSource> ThenByDescendingAwaitCore<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
@@ -368,7 +368,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use ThenByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByDescendingAwaitWithCancellation functionality now exists as overloads of ThenByDescending.")]
+        [Obsolete("Use ThenByDescending. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ThenByDescendingAwaitWithCancellation functionality now exists as an overload of ThenByDescending.")]
         private static IOrderedAsyncEnumerable<TSource> ThenByDescendingAwaitWithCancellationCore<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)

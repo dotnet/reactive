@@ -84,7 +84,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence whose elements are the result of invoking the transform function on each element of the source sequence and awaiting the result.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use Select. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectAwait functionality now exists as overloads of Select.")]
+        [Obsolete("Use Select. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectAwait functionality now exists as overloads of Select. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TResult> SelectAwaitCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
         {
             if (source == null)
@@ -129,7 +129,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence whose elements are the result of invoking the transform function on each element and its index of the source sequence and awaiting the result.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use Select. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectAwait functionality now exists as overloads of Select.")]
+        [Obsolete("Use Select. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SelectAwait functionality now exists as overloads of Select. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TResult> SelectAwaitCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector)
         {
             if (source == null)
