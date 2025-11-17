@@ -112,7 +112,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing the elements in the source sequence starting at the first element that does not pass the test specified by the predicate.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use SkipWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SkipWhileAwait functionality now exists as overloads of SkipWhile.")]
+        [Obsolete("Use SkipWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SkipWhileAwait functionality now exists as overloads of SkipWhile. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TSource> SkipWhileAwaitCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
@@ -191,7 +191,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing the elements in the source sequence starting at the first element that does not pass the test specified by the predicate.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use SkipWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SkipWhileAwait functionality now exists as overloads of SkipWhile.")]
+        [Obsolete("Use SkipWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SkipWhileAwait functionality now exists as overloads of SkipWhile. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TSource> SkipWhileAwaitCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
         {
             if (source == null)

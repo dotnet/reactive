@@ -93,7 +93,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing the result of pairwise combining the elements of the first and second source using the specified result selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> or <paramref name="selector"/> is null.</exception>
         [GenerateAsyncOverload]
-        [Obsolete("Use Zip. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ZipAwait functionality now exists as overloads of Zip.")]
+        [Obsolete("Use Zip. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ZipAwait functionality now exists as an overload of Zip. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TResult> ZipAwaitCore<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector)
         {
             if (first == null)
@@ -119,7 +119,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use Zip. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ZipAwaitWithCancellation functionality now exists as overloads of Zip.")]
+        [Obsolete("Use Zip. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ZipAwaitWithCancellation functionality now exists as an overload of Zip.")]
         private static IAsyncEnumerable<TResult> ZipAwaitWithCancellationCore<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, CancellationToken, ValueTask<TResult>> selector)
         {
             if (first == null)

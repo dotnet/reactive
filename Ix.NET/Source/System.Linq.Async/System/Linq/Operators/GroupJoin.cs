@@ -82,12 +82,12 @@ namespace System.Linq
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupJoinAwait functionality now exists as overloads of GroupJoin.")]
+        [Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupJoinAwait functionality now exists as an overload of GroupJoin. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TResult> GroupJoinAwaitCore<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector) =>
             GroupJoinAwaitCore<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer: null);
 
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupJoinAwait functionality now exists as overloads of GroupJoin.")]
+        [Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupJoinAwait functionality now exists as an overload of GroupJoin. You will need to modify your callback to take an additional CancellationToken argument. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TResult> GroupJoinAwaitCore<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer)
         {
             if (outer == null)
@@ -124,12 +124,12 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupJoinAwaitWithCancellation functionality now exists as overloads of GroupJoin.")]
+        [Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupJoinAwaitWithCancellation functionality now exists as an overload of GroupJoin.")]
         private static IAsyncEnumerable<TResult> GroupJoinAwaitWithCancellationCore<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector, Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, CancellationToken, ValueTask<TResult>> resultSelector) =>
             GroupJoinAwaitWithCancellationCore<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer: null);
 
         [GenerateAsyncOverload]
-        [Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupJoinAwaitWithCancellation functionality now exists as overloads of GroupJoin.")]
+        [Obsolete("Use GroupJoin. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the GroupJoinAwaitWithCancellation functionality now exists as an overload of GroupJoin.")]
         private static IAsyncEnumerable<TResult> GroupJoinAwaitWithCancellationCore<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector, Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, CancellationToken, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer)
         {
             if (outer == null)
