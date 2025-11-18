@@ -50,7 +50,9 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -222,7 +224,9 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -394,7 +398,9 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -566,7 +572,9 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -738,7 +746,9 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -918,7 +928,9 @@ namespace System.Linq
                 return null;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Int}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -1122,7 +1134,9 @@ namespace System.Linq
                 return null;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Long}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -1326,7 +1340,9 @@ namespace System.Linq
                 return null;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Float}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -1530,7 +1546,9 @@ namespace System.Linq
                 return null;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Double}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -1734,7 +1752,9 @@ namespace System.Linq
                 return null;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="Nullable{Decimal}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>

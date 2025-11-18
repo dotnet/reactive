@@ -43,6 +43,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the sum of a sequence of <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -80,6 +81,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 
         [Obsolete("Use SumAsync in System.Interactive.Async. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. This functionality has moved to System.Interactive.Async, but the methods that take ValueTask-returning selectors are now overloads of SumAsync, because this SumAwaitAsync method did not conform to current .NET naming guidelines.")]
         [GenerateAsyncOverload]
@@ -174,6 +176,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the sum of a sequence of <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -211,6 +214,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 
         [Obsolete("Use SumAsync in System.Interactive.Async. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. This functionality has moved to System.Interactive.Async, but the methods that take ValueTask-returning selectors are now overloads of SumAsync, because this SumAwaitAsync method did not conform to current .NET naming guidelines.")]
         [GenerateAsyncOverload]
@@ -302,6 +306,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the sum of a sequence of <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -336,6 +341,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 
         [Obsolete("Use SumAsync in System.Interactive.Async. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. This functionality has moved to System.Interactive.Async, but the methods that take ValueTask-returning selectors are now overloads of SumAsync, because this SumAwaitAsync method did not conform to current .NET naming guidelines.")]
         [GenerateAsyncOverload]
@@ -421,6 +427,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the sum of a sequence of <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -455,6 +462,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 
         [Obsolete("Use SumAsync in System.Interactive.Async. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. This functionality has moved to System.Interactive.Async, but the methods that take ValueTask-returning selectors are now overloads of SumAsync, because this SumAwaitAsync method did not conform to current .NET naming guidelines.")]
         [GenerateAsyncOverload]
@@ -540,6 +548,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the sum of a sequence of <see cref="decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -574,6 +583,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 
         [Obsolete("Use SumAsync in System.Interactive.Async. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. This functionality has moved to System.Interactive.Async, but the methods that take ValueTask-returning selectors are now overloads of SumAsync, because this SumAwaitAsync method did not conform to current .NET naming guidelines.")]
         [GenerateAsyncOverload]
@@ -662,6 +672,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Int}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -699,6 +710,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 
         [Obsolete("Use SumAsync in System.Interactive.Async. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. This functionality has moved to System.Interactive.Async, but the methods that take ValueTask-returning selectors are now overloads of SumAsync, because this SumAwaitAsync method did not conform to current .NET naming guidelines.")]
         [GenerateAsyncOverload]
@@ -793,6 +805,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Long}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -830,6 +843,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 
         [Obsolete("Use SumAsync in System.Interactive.Async. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. This functionality has moved to System.Interactive.Async, but the methods that take ValueTask-returning selectors are now overloads of SumAsync, because this SumAwaitAsync method did not conform to current .NET naming guidelines.")]
         [GenerateAsyncOverload]
@@ -921,6 +935,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Float}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -955,6 +970,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 
         [Obsolete("Use SumAsync in System.Interactive.Async. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. This functionality has moved to System.Interactive.Async, but the methods that take ValueTask-returning selectors are now overloads of SumAsync, because this SumAwaitAsync method did not conform to current .NET naming guidelines.")]
         [GenerateAsyncOverload]
@@ -1040,6 +1056,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Double}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -1074,6 +1091,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 
         [Obsolete("Use SumAsync in System.Interactive.Async. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. This functionality has moved to System.Interactive.Async, but the methods that take ValueTask-returning selectors are now overloads of SumAsync, because this SumAwaitAsync method did not conform to current .NET naming guidelines.")]
         [GenerateAsyncOverload]
@@ -1159,6 +1177,7 @@ namespace System.Linq
         }
 #endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the sum of a sequence of <see cref="Nullable{Decimal}" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
@@ -1193,6 +1212,7 @@ namespace System.Linq
                 return sum;
             }
         }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 
         [Obsolete("Use SumAsync in System.Interactive.Async. System.Linq.Async (a community-supported library) has been replaced by the (Microsoft supported) IAsyncEnumerable LINQ in System.Linq.AsyncEnumerable, and its SumAsync method does not include the overloads that take a selector. This functionality has moved to System.Interactive.Async, but the methods that take ValueTask-returning selectors are now overloads of SumAsync, because this SumAwaitAsync method did not conform to current .NET naming guidelines.")]
         [GenerateAsyncOverload]
