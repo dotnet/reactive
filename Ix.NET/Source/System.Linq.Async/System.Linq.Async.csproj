@@ -31,11 +31,12 @@
     <!--
     The ref assembly defines the public API visible at compile time, so it should not include any methods for which
     System.Linq.AsyncEnumerable defines source-compatible replacements, because their continued availability would
-    cause compile-time ambiguity.
+    cause compile-time ambiguity. Similarly, methods we have relocated to System.Interactive.Async need to be
+    hidden here.
     We retain the code because we continue to make these methods available in the runtime assembly (in the lib folder)
     to provide binary compatibility. This project builds the runtime assembly, so we need to include these methods.
     -->
-    <DefineConstants>$(DefineConstants);INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES</DefineConstants>
+    <DefineConstants>$(DefineConstants);INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES;INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC</DefineConstants>
   </PropertyGroup>
 
   <!--

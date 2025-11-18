@@ -130,7 +130,9 @@ else
 #>
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         /// <summary>
         /// Computes the average of an async-enumerable sequence of <see cref="<#=typeStr#>" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>

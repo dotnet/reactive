@@ -71,11 +71,20 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="System\Linq\Operators\Sum.Generated.cs">
+      <DependentUpon>Sum.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <None Update="System\Linq\Operators\Average.Generated.tt">
       <LastGenOutput>Average.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Linq\Operators\Sum.Generated.tt">
+      <LastGenOutput>Sum.Generated.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
   </ItemGroup>

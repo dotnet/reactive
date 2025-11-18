@@ -11,7 +11,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 
         // Moved to AsyncEnumerableEx in System.Interactive.Async.
         // System.Linq.AsyncEnumerable has chosen not to implement this. We continue to implement this because
@@ -225,6 +225,6 @@ namespace System.Linq
                 }
             }
         }
-#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
     }
 }
