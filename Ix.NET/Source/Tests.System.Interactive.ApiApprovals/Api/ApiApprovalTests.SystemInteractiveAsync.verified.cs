@@ -54,6 +54,7 @@ namespace System.Linq
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Concat<TSource>(this System.Collections.Generic.IAsyncEnumerable<System.Collections.Generic.IAsyncEnumerable<TSource>> sources) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Concat<TSource>(params System.Collections.Generic.IAsyncEnumerable<TSource>[] sources) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Concat<TSource>(this System.Collections.Generic.IEnumerable<System.Collections.Generic.IAsyncEnumerable<TSource>> sources) { }
+        public static System.Collections.Generic.IAsyncEnumerable<T> Create<T>(System.Func<System.Threading.CancellationToken, System.Collections.Generic.IAsyncEnumerator<T>> getAsyncEnumerator) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Defer<TSource>(System.Func<System.Collections.Generic.IAsyncEnumerable<TSource>> factory) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Defer<TSource>(System.Func<System.Threading.Tasks.Task<System.Collections.Generic.IAsyncEnumerable<TSource>>> factory) { }
         public static System.Collections.Generic.IAsyncEnumerable<TSource> Defer<TSource>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<System.Collections.Generic.IAsyncEnumerable<TSource>>> factory) { }

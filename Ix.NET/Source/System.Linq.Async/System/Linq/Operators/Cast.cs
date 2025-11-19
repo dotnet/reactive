@@ -8,7 +8,11 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
         // NB: This is a non-standard LINQ operator, because we don't have a non-generic IAsyncEnumerable.
         //     We're keeping it to enable `from T x in xs` binding in C#.

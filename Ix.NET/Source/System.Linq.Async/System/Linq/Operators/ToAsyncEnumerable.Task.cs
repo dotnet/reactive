@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
     public static partial class AsyncEnumerable
     {
-#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         // Moved to AsyncEnumerableEx in System.Interactive.Async.
         // System.Linq.AsyncEnumerable has chosen not to implement this. We continue to implement this because
         // we believe it is a useful feature, but since it's now in the category of LINQ-adjacent functionality
@@ -50,6 +50,6 @@ namespace System.Linq
                 return false;
             }
         }
-#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
     }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 }

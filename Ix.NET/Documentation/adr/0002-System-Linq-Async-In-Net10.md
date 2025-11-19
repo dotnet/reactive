@@ -4,7 +4,7 @@
 
 ## Status
 
-Proposed.
+Accepted.
 
 ## Authors
 
@@ -15,7 +15,7 @@ Proposed.
 
 As an accident of history, the Rx.NET repository ended up being the de facto implementation of LINQ for `IAsyncEnumerable<T>` from 2019 when .NET Core 3 shipped up until late 2025 when .NET 10 shipped.
 
-This happened because Rx.NET had effectively been the incubator in which `IAsyncEnumerable<T>` was originally developed. Back before .NET Core 3.0, there was no such interface built into .NET, but Rx _did_ define this interface as part of its 'interactive extensions for .NET' feature. It also implemented common LINQ operators for that interface.
+This happened because Rx.NET had effectively been the incubator in which `IAsyncEnumerable<T>` was originally developed. Back before .NET Core 3.0, there was no such interface built into .NET, but Rx _did_ define this interface as part of its 'interactive extensions for .NET' feature. (It did this as early as 2010.) It also implemented common LINQ operators for that interface.
 
 .NET Core 3.0 defined its own version of this `IAsyncEnumerable<T>`, but the .NET team did not implement LINQ for it at that time. Since the Rx.NET repository already had a fairly complete implementation of LINQ for its original version of `IAsyncEnumerable<T>`, it was fairly easy to adapt this to the new version of `IAsyncEnumerable<T>` built into .NET. Thus `System.Linq.Async` was born.
 
@@ -34,6 +34,8 @@ There are also a couple of cases where functionality simply has not been reprodu
 
 A further complication is that some methods in `System.Interactive.Async` clash with methods in `System.Linq.AsyncEnumerable`. For example, `MaxByAsync` and `MinByAsync`. Originally `MinBy` and `MaxBy` were unique to Rx.NET and Ix.NET. But .NET 6.0 added operators with these names to LINQ to Objects. Confusingly, they were slightly different: the Rx.NET and Ix.NET versions recognize that there might not be a single minimum or maximum value, and thus provide a collection of all the entries that are at the maximum value, but the .NET runtime class library versions just pick one arbitrary winner. So at this point, `System.Interactive` renamed its versions to `MinByWithTies` and `MaxByWithTies`. Unfortunately that same change wasn't made in `System.Interactive.Async`, so we now have the same situation with `System.Linq.AsyncEnumerable`: the .NET runtime class libraries now define `MinByAsync` and `MaxByAsync` extension methods for `IAsyncEnumerable<T>`, and these take the same arguments as the ones in `System.Interactive.Async`, but have a different return type, and have different behaviour!
 
+One more important point to consider is that although LINQ to `IAsyncEnumerable<T>` _mostly_ consists of extension methods, there are a few static methods. (E.g., `AsyncEnumerable.Range`, which the .NET library implements, and `AsyncEnumerable.Create`, which is does not.) With extension methods, the compiler does not have a problem with multiple identically-named types in different assemblies all defining extension methods as long as the individual methods do not conflict. However, non-extension methods are a problem. If `System.Linq.Async` were to continue to define a public `AsyncEnumerable` type, then calls to `AsyncEnumerable.Range` would fail to compile: even though there would only be a single `Range` method (supplied by the new `System.Linq.AsyncEnumerable`) this would fail to compile because `AsyncEnumerable` itself is an ambiguous class name. So it will be necessary for the public API of `System.Linq.Async` v7 not to define an `AsyncEnumerable` type. This places some limits on how far we can go with source-level compatibility. (Binary compatibility is not a problem because the runtime assemblies can continue to define this type.)
+
 
 ## Decision
 
@@ -41,13 +43,14 @@ The next Ix.NET release will:
 
 1. add a reference to `System.Linq.AsyncEnumerable` and `System.Interactive.Async` in `System.Linq.Async`
 2. remove from `System.Linq.Async`'s and `System.Interactive.Async`'s publicly visible API (ref assemblies) all `IAsyncEnumerable<T>` extension methods for which direct replacements exist (adding `MinByWithTiesAsync` and `MaxByWithTiesAsync` for the case where the new .NET runtime library methods actually have slightly different functionality)
-3. add [Obsolete] attribute for members of `AsyncEnumerable` for which `System.Linq.AsyncEnumerable` offers replacements that require code changes to use (e.g., `WhereAwait`, which is replaced by an overload of `Where`)
-4. `AsyncEnumerable` methods that are a bad idea and that should probably have never existing (the ones that do sync over async, e.g. `ToEnumerable`) are marked as `Obsolete` and will not be replaced; note that although `ToObservable` has issues that meant the .NET team decided not to replicate it, the main issue is that it embeds opinions, and not that there's anything fundamentally broken about it, so we do not include `ToObservable` in this category
-5. remaining methods of `AsyncEnumerable` (where `System.Linq.AsyncEnumerable` offers no equivalent) are removed from the publicly visible API of `System.Linq.Async`, with identical replacements being defined by `AsyncEnumerableEx` in `System.Interactive
-6. mark `IAsyncGrouping` as obsolete
-7. mark the public `IAsyncIListProvider` as obsolete, and define a non-public version for continued internal use in `System.Interactive.Linq`
-8. continue to provide the full `System.Linq.Async` API in the `lib` assemblies to provide binary compatibility
-9. mark the `System.Linq.Async` NuGet package as obsolete, and recommend the use of `System.Linq.AsyncEnumerable` and/or `System.Interactive.Async` instead
+4. Rename `AsyncEnumerable` to `AsyncEnumerableDeprecated` in the public API (reference assemblies; the old name will be retained in runtime assemblies for binary compatibility) to avoid errors arising from there being two definitions of `AsyncEnumerable` in the same namespace
+5. add [Obsolete] attribute for members of `AsyncEnumerableDeprecated` for which `System.Linq.AsyncEnumerable` offers replacements that require code changes to use (e.g., `WhereAwait`, which is replaced by an overload of `Where`)
+6. the `AsyncEnumerable.ToEnumerable` method that was a bad idea and that should probably have never existing has been marked as `Obsolete` and will not be replaced; note that although `ToObservable` has issues that meant the .NET team decided not to replicate it, the main issue is that it embeds opinions, and not that there's anything fundamentally broken about it, so we do not include `ToObservable` in this category
+7. remaining methods of `AsyncEnumerable` (where `System.Linq.AsyncEnumerable` offers no equivalent) are removed from the publicly visible API of `System.Linq.Async`, with identical replacements being defined by `AsyncEnumerableEx` in `System.Interactive
+8. mark `IAsyncGrouping` as obsolete
+9. mark the public `IAsyncIListProvider` as obsolete, and define a non-public version for continued internal use in `System.Interactive.Linq`
+10. continue to provide the full `System.Linq.Async` API in the `lib` assemblies to provide binary compatibility
+11. mark the `System.Linq.Async` NuGet package as obsolete, and recommend the use of `System.Linq.AsyncEnumerable` and/or `System.Interactive.Async` instead
 
 The main effect of this is that code that had been using the `System.Linq.Async` implementation of LINQ for `IAsyncEnumerable<T>` will, in most cases, now be using the .NET runtime library implementation if it is rebuilt against this new version of `System.Linq.Async`.
 
@@ -79,4 +82,4 @@ Code that had been written to use `System.Linq.Async` v6 that upgrades to .NET 1
 
 The situation is very similar for code written to use `System.Linq.Async` v6 that does _not_ upgrade to .NET 10 (e.g. either it stays on .NET 8 or 9, or it targets .NET Framework or .NET Standard) but which newly acquires a dependency on `System.Linq.AsyncEnumerable` either because the developer adds it, or because they update to a new version of some component which adds it as a new transitive dependency.
 
-Code written to use `System.Linq.Async` v6 that changes nothing at all but, which is rebuilt after `System.Linq.Async` v7 is released, will see a warning that the package is now deprecated. They can fix this warning by removing the package and adding a reference to `System.Linq.AsyncEnumerable` or `System.Interactive.Async` or both as required.
+Code written to use `System.Linq.Async` v6 that changes nothing at all but, which is rebuilt after `System.Linq.Async` v7 is released, will see a warning that the package is now deprecated. Developers can fix this warning by removing the package and adding a reference to `System.Linq.AsyncEnumerable` or `System.Interactive.Async` or both as required.

@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
         private static Func<TSource, bool> CombinePredicates<TSource>(Func<TSource, bool> predicate1, Func<TSource, bool> predicate2)
         {

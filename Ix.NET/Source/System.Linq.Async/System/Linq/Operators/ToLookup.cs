@@ -8,7 +8,11 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.tolookupasync?view=net-9.0-pp#system-linq-asyncenumerable-tolookupasync-2(system-collections-generic-iasyncenumerable((-0))-system-func((-0-1))-system-collections-generic-iequalitycomparer((-1))-system-threading-cancellationtoken)

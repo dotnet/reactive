@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     public static partial class AsyncEnumerable
     {
-#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.tohashsetasync?view=net-9.0-pp
         // That one overload covers the next two methods, because it supplieds a default comparer.
 
@@ -55,6 +55,6 @@ namespace System.Linq
                 return set;
             }
         }
-#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

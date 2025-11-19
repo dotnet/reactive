@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     public static partial class AsyncEnumerable
     {
-#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.sequenceequalasync?view=net-9.0-pp
         // The method above covers the next two overloads because it supplies a default null value for comparer.
 
@@ -88,6 +88,6 @@ namespace System.Linq
                 return !await e2.MoveNextAsync();
             }
         }
-#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

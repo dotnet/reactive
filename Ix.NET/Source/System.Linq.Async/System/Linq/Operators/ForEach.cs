@@ -10,7 +10,11 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
         // REVIEW: Once we have C# 8.0 language support, we may want to do away with these methods. An open question is how to
         //         provide support for cancellation, which could be offered through WithCancellation on the source. If we still
