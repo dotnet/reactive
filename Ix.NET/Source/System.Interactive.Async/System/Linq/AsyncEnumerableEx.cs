@@ -20,7 +20,7 @@ namespace System.Linq
         //         who was using it can still have it. Unfortunately there's no way to do that
         //         without introducing a source-level breaking change: we've had to move it out
         //         of AsyncEnumerable because we can't have System.Linq.Async's public API defining
-        //         a class of that name. (It causes amibuigous type errors if you try to invoke
+        //         a class of that name. (It causes ambiguous type errors if you try to invoke
         //         a static method such as AsyncEnumerable.Range: even if System.Linq.Async doesn't
         //         define Range on its AsyncEnumerable, the compiler chokes on the fact that there
         //         are two AsyncEnumerable types.)
