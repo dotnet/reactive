@@ -7,10 +7,16 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
-        // REVIEW: This type of blocking is an anti-pattern. We may want to move it to System.Interactive.Async
-        //         and remove it from System.Linq.Async API surface.
+        // NOTE: This type of blocking is an anti-pattern. We should never have offered it.
+        //       It is being left here for binary compatibility for those who were using it,
+        //       and the publicly visible version is marked as Obsolete so we can explain
+        //       why it should not be used.
 
         /// <summary>
         /// Converts an async-enumerable sequence to an enumerable sequence.

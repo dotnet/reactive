@@ -6,8 +6,12 @@ using System.Collections.Generic;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
-        // NB: Synchronous LINQ to Objects doesn't hide the implementation of the source either.
+#endif
+    // NB: Synchronous LINQ to Objects doesn't hide the implementation of the source either.
     {
 #if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
         // Note: this one isn't actually in the System.Linq.AsyncEnumerable package, so we've moved it

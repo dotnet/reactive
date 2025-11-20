@@ -8,11 +8,15 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
 #if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.todictionaryasync?view=net-9.0-pp#system-linq-asyncenumerable-todictionaryasync-2(system-collections-generic-iasyncenumerable((-0))-system-func((-0-1))-system-collections-generic-iequalitycomparer((-1))-system-threading-cancellationtoken)
-        // That one overload covers the next two methods, because it supplieds a default comparer.
+        // That one overload covers the next two methods, because it supplies a default comparer.
 
         /// <summary>
         /// Creates a dictionary from an async-enumerable sequence according to a specified key selector function.

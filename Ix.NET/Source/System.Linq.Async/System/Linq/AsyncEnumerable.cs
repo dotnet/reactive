@@ -7,14 +7,19 @@ using System.Threading;
 
 namespace System.Linq
 {
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
     /// <summary>
     /// Provides a set of extension methods for <see cref="IAsyncEnumerable{T}"/>.
     /// </summary>
     public static partial class AsyncEnumerable
     {
         //
-        // REVIEW: Create methods may not belong in System.Linq.Async. Async iterators can be
-        //         used to implement these interfaces. Move to System.Interactive.Async?
+        // NOTE:    This has been replaced in v7 by a method of the same name on
+        //          System.Interactive.Async's AsyncEnumerableEx class. This is a breaking
+        //          change but it's necessary because we can't allow System.Linq.Async's
+        //          ref assembly to define a public AsyncEnumerable type. If we do that,
+        //          it will conflict with System.Linq.AsyncEnumerable, preventing direct
+        //          invocation of static methods. (E.g., AsyncEnumerable.Range.)
         //
 
         /// <summary>
@@ -45,4 +50,5 @@ namespace System.Linq
             }
         }
     }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 }

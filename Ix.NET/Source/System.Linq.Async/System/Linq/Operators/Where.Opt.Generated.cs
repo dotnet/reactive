@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
         private sealed class CombinedPredicates2<TSource> : ICombinedPredicates<TSource>
         {
