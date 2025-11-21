@@ -1,11 +1,12 @@
 {
-  "version": "7.0.0-preview.{height}",
+  "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/main/src/NerdBank.GitVersioning/version.schema.json",
+  "version": "7.0.0",
+  "nuGetPackageVersion": {
+    "semVer": 2.0
+  },
   "publicReleaseRefSpec": [
-    "^refs/heads/main$", // we release out of main
-    "^refs/heads/rel/v\\d+\\.\\d+", // we also release branches starting with vN.N
-    "^refs/heads/rel/ix-v\\d+\\.\\d+" // we also release branches starting with vN.N
-  ],
-  "nugetPackageVersion":{
-    "semVer": 2
-  }
+    "^refs/heads/main$",
+    "^refs/heads/rel/v\\d+\\.\\d+",
+    "^refs/heads/rel/ix-v\\d+\\.\\d+"
+  ]
 }
