@@ -169,6 +169,8 @@ namespace System.Linq.Async.SourceGenerator
                         {
                             var originalMethodSymbol = sm.GetDeclaredSymbol(method)!;
                             methodName = AsyncOverloadsGenerator.GetMethodNameForGeneratedAsyncMethod(originalMethodSymbol, _options);
+
+                            facadeMethod = facadeMethod.WithIdentifier(SyntaxFactory.Identifier(methodName));
                         }
                     }
 
