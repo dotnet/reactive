@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT License.
+// See the LICENSE file in the project root for more information. 
+
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -12,7 +16,7 @@ namespace System.Linq.Async.SourceGenerator
     [Generator]
     public sealed class AsyncOverloadsGenerator : ISourceGenerator
     {
-        private const string AttributeSource =
+        private const string GenerateAsyncOverloadAttributeSource =
             "using System;\n" +
             "using System.Diagnostics;\n" +
             "namespace System.Linq\n" +
@@ -21,11 +25,24 @@ namespace System.Linq.Async.SourceGenerator
             "    [Conditional(\"COMPILE_TIME_ONLY\")]\n" +
             "    internal sealed class GenerateAsyncOverloadAttribute : Attribute { }\n" +
             "}\n";
+        private const string DuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttributeSource =
+            "using System;\n" +
+            "using System.Diagnostics;\n" +
+            "namespace System.Linq\n" +
+            "{\n" +
+            "    [AttributeUsage(AttributeTargets.Assembly)]\n" +
+            "    [Conditional(\"COMPILE_TIME_ONLY\")]\n" +
+            "    internal sealed class DuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttribute : Attribute { }\n" +
+            "}\n";
 
         public void Initialize(GeneratorInitializationContext context)
         {
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
-            context.RegisterForPostInitialization(c => c.AddSource("GenerateAsyncOverloadAttribute", AttributeSource));
+            context.RegisterForPostInitialization(c =>
+            {
+                c.AddSource("GenerateAsyncOverloadAttribute", GenerateAsyncOverloadAttributeSource);
+                c.AddSource("DuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttribute", DuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttributeSource);
+            });
         }
 
         public void Execute(GeneratorExecutionContext context)
@@ -33,13 +50,22 @@ namespace System.Linq.Async.SourceGenerator
             if (context.SyntaxReceiver is not SyntaxReceiver syntaxReceiver) return;
 
             var options = GetGenerationOptions(context);
-            var attributeSymbol = GetAsyncOverloadAttributeSymbol(context);
+            var asyncOverloadAttributeSymbol = GetAsyncOverloadAttributeSymbol(context);
             var methodsBySyntaxTree = GetMethodsGroupedBySyntaxTree(context, syntaxReceiver);
 
             foreach (var grouping in methodsBySyntaxTree.Where(g => g.Methods.Any()))
                 context.AddSource(
                     $"{Path.GetFileNameWithoutExtension(grouping.SyntaxTree.FilePath)}.AsyncOverloads",
-                    GenerateOverloads(grouping, options, context, attributeSymbol));
+                    GenerateOverloads(grouping, options, context, asyncOverloadAttributeSymbol));
+
+            var duplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttributeSymbol = GetDuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttributeSymbol(context);
+            var dupBuilder = new DeprecatedDuplicateBuilder(
+                context,
+                options,
+                asyncOverloadAttributeSymbol,
+                duplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttributeSymbol,
+                syntaxReceiver);
+            dupBuilder.BuildDuplicatesIfRequired();
         }
 
         private static GenerationOptions GetGenerationOptions(GeneratorExecutionContext context)
@@ -95,7 +121,7 @@ namespace System.Linq.Async.SourceGenerator
                          select a))))
                 .Where(list => list.Attributes.Count > 0));
 
-            return MethodDeclaration(method.Syntax.ReturnType, GetMethodName(method.Symbol, options))
+            return MethodDeclaration(method.Syntax.ReturnType, GetMethodNameForGeneratedAsyncMethod(method.Symbol, options))
                 .WithAttributeLists(attributeListsWithGenerateAsyncOverloadRemoved)
                 .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
                 .WithTypeParameterList(method.Syntax.TypeParameterList)
@@ -117,8 +143,11 @@ namespace System.Linq.Async.SourceGenerator
         private static INamedTypeSymbol GetAsyncOverloadAttributeSymbol(GeneratorExecutionContext context)
             => context.Compilation.GetTypeByMetadataName("System.Linq.GenerateAsyncOverloadAttribute") ?? throw new InvalidOperationException();
 
+        private static INamedTypeSymbol GetDuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttributeSymbol(GeneratorExecutionContext context)
+            => context.Compilation.GetTypeByMetadataName("System.Linq.DuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttribute") ?? throw new InvalidOperationException();
+
         private static IEnumerable<AsyncMethodGrouping> GetMethodsGroupedBySyntaxTree(GeneratorExecutionContext context, SyntaxReceiver syntaxReceiver, INamedTypeSymbol attributeSymbol)
-            => from candidate in syntaxReceiver.Candidates
+            => from candidate in syntaxReceiver.CandidateMethods
                group candidate by candidate.SyntaxTree into grouping
                let model = context.Compilation.GetSemanticModel(grouping.Key)
                select new AsyncMethodGrouping(
@@ -128,7 +157,7 @@ namespace System.Linq.Async.SourceGenerator
                   where methodSymbol.GetAttributes().Any(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass!, attributeSymbol))
                   select new AsyncMethod(methodSymbol, methodSyntax));
 
-        private static string GetMethodName(IMethodSymbol methodSymbol, GenerationOptions options)
+        internal static string GetMethodNameForGeneratedAsyncMethod(IMethodSymbol methodSymbol, GenerationOptions options)
         {
             var methodName = methodSymbol.Name.Replace("Core", "");
             return options.SupportFlatAsyncApi

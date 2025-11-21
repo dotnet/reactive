@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 #pragma warning disable IDE0051 // Remove unused private members - all used via reflection
+#pragma warning disable CS0618 // Type or member is obsolete - this has not been updated since the deprecation of System.Linq.Async due to .NET 10's System.Linq.AsyncEnumerable
 
 using System;
 using System.Collections.Generic;
