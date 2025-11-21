@@ -150,8 +150,8 @@ namespace System.Linq.Async.SourceGenerator
                         if (!facadeMethod.AttributeLists.SelectMany(a => a.Attributes)
                             .Any(a =>
                             {
-                                var asym = sm.GetSymbolInfo(a.Name);
-                                return asym.Symbol?.Name == "ObsoleteAttribute" && asym.Symbol.ContainingNamespace?.Name == "System.Runtime.InteropServices";
+                                var asym = sm.GetSymbolInfo(a);
+                                return asym.Symbol?.ContainingType.Name == "ObsoleteAttribute" && asym.Symbol.ContainingNamespace?.Name == "System";
                             }))
                         {
                             continue;
