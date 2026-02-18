@@ -2,6 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#if HAS_WPF
+extern alias SystemReactiveWpf;
+#endif
+
+#if HAS_WINFORMS
+extern alias SystemReactiveWindowsForms;
+#endif
+
 using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -15,10 +23,15 @@ using System.Windows.Threading;
 using System.Reactive;
 using System.Reactive.Subjects;
 
+using DispatcherScheduler = SystemReactiveWpf::System.Reactive.Concurrency.DispatcherScheduler;
+using DispatcherObservable = SystemReactiveWpf::System.Reactive.Linq.DispatcherObservable;
 #endif
 
 #if HAS_WINFORMS
 using System.Windows.Forms;
+
+using ControlScheduler = SystemReactiveWindowsForms::System.Reactive.Concurrency.ControlScheduler;
+using ControlObservable = SystemReactiveWindowsForms::System.Reactive.Linq.ControlObservable;
 #endif
 
 using Assert = Xunit.Assert;
@@ -69,7 +82,7 @@ namespace ReactiveTests.Tests
             {
                 var evt2 = new ManualResetEvent(false);
                 var evt = new ManualResetEvent(false);
-                var d = Observable.Create<int>(obs =>
+                var d = ControlObservable.SubscribeOn(Observable.Create<int>(obs =>
                 {
                     lbl.Text = "Subscribe";
                     okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
@@ -81,8 +94,7 @@ namespace ReactiveTests.Tests
                         okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
                         evt.Set();
                     };
-                })
-                .SubscribeOn(lbl)
+                }), lbl)
                 .Subscribe(_ => { });
 
                 evt2.WaitOne();
@@ -141,7 +153,7 @@ namespace ReactiveTests.Tests
                 {
                     var s = new AsyncSubject<Unit>();
                     var okay = true;
-                    var d = Observable.Create<int>(obs =>
+                    var d = DispatcherObservable.SubscribeOn(Observable.Create<int>(obs =>
                     {
                         okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
                         s.OnNext(Unit.Default);
@@ -153,8 +165,7 @@ namespace ReactiveTests.Tests
                             Assert.True(okay);
                             evt.Set();
                         };
-                    })
-                    .SubscribeOn(dispatcher)
+                    }), dispatcher)
                     .Subscribe(_ => { });
 
                     s.Subscribe(_ => d.Dispose());
@@ -206,7 +217,7 @@ namespace ReactiveTests.Tests
 
                     dispatcher.BeginInvoke(new Action(() =>
                     {
-                        var d = Observable.Create<int>(obs =>
+                        var d = DispatcherObservable.SubscribeOnDispatcher(Observable.Create<int>(obs =>
                         {
                             okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
                             s.OnNext(Unit.Default);
@@ -218,8 +229,7 @@ namespace ReactiveTests.Tests
                                 Assert.True(okay);
                                 evt.Set();
                             };
-                        })
-                        .SubscribeOnDispatcher()
+                        }))
                         .Subscribe(_ => { });
 
                         s.Subscribe(_ => d.Dispose());

@@ -38,9 +38,9 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.15.4" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.11.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.11.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
     <PackageReference Include="WindowsBase" Version="4.6.1055" />
   </ItemGroup>
 

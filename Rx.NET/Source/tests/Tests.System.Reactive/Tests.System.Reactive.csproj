@@ -32,19 +32,23 @@
     Before that PR was merged, the test runner wouldn't work if the host specified a TFM with a
     specific Windows version.
 -->
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.11.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.11.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
     <PackageReference Include="xunit.assert" Version="2.9.3" />
     <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
     <ProjectReference Include="..\..\src\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="('$(TargetFramework)' == 'net472') or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
-    <ProjectReference Include="..\..\src\System.Reactive.Windows.Forms\System.Reactive.Windows.Forms.csproj" />
-    <ProjectReference Include="..\..\src\System.Reactive.Wpf\System.Reactive.Wpf.csproj" />
-    <PackageReference Update="coverlet.collector" Version="6.0.2">
+  <ItemGroup Condition="('$(TargetFramework)' == 'net472') or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows')) or $(TargetFramework.StartsWith('net10.0-windows'))">
+    <ProjectReference Include="..\..\src\System.Reactive.Windows.Forms\System.Reactive.Windows.Forms.csproj">
+      <Aliases>SystemReactiveWindowsForms</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\System.Reactive.Wpf\System.Reactive.Wpf.csproj">
+      <Aliases>SystemReactiveWpf</Aliases>
+    </ProjectReference>
+    <PackageReference Update="coverlet.collector" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
