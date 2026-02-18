@@ -25,11 +25,6 @@ namespace System.Reactive.Uwp
     {
         private static readonly Lazy<WindowsRuntimeThreadPoolScheduler> LazyDefault = new(static () => new WindowsRuntimeThreadPoolScheduler());
 
-        static WindowsRuntimeThreadPoolScheduler()
-        {
-            SystemReactive::System.Reactive.PlatformServices.HostLifecycleService.TrySetHostLifecycleNotifications(new SystemReactive::System.Reactive.PlatformServices.HostLifecycleNotifications());
-        }
-
         /// <summary>
         /// Constructs a ThreadPoolScheduler that schedules units of work on the Windows ThreadPool.
         /// </summary>
