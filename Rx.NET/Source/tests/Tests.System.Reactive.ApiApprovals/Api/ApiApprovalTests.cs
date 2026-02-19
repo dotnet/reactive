@@ -2,20 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using PublicApiGenerator;
+
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
+
+using VerifyMSTest;
+
 using VerifyTests;
-using VerifyXunit;
-using Xunit;
 
 namespace ReactiveTests.Tests.Api
 {
+    [TestClass]
     public class ApiApprovalTests : VerifyBase
     {
         static ApiApprovalTests()
@@ -37,14 +39,14 @@ namespace ReactiveTests.Tests.Api
         //  Move Aliases and Testing packages over to one of the mechanisms above
         //  Add similar API checking to the new FrameworkIntegrations packages
 
-        [Fact]
+        [TestMethod]
         public Task Aliases()
         {
             var publicApi = GeneratePublicApi(typeof(System.Reactive.Observable.Aliases.QueryLanguage).Assembly);
             return Verify(publicApi, "cs");
         }
 
-        [Fact]
+        [TestMethod]
         public Task Testing()
         {
             var publicApi = GeneratePublicApi(typeof(Microsoft.Reactive.Testing.TestScheduler).Assembly);

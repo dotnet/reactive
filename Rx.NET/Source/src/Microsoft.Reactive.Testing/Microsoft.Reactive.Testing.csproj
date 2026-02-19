@@ -17,12 +17,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Properties\*.xml" />
-    <PackageReference Include="xunit.assert.source" Version="2.9.3" PrivateAssets="All" /> 
+    <EmbeddedResource Include="Properties\*.xml" /> 
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Collections.Immutable" Version="10.0.3" />
+    <PackageReference Include="xunit.v3.assert.source" Version="3.2.2" />
   </ItemGroup>
 </Project>

@@ -132,6 +132,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
+        [DoNotParallelize] // TODO: work out why this fails when we allow parallel execution
         [TestMethod]
         public void TaskPool_Periodic()
         {

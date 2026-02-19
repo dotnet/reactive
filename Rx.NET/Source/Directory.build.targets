@@ -25,10 +25,10 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <DefineConstants>$(DefineConstants);NO_NULLABLE_ATTRIBUTES</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0')) or $(TargetFramework.StartsWith('net9.0'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0')) or $(TargetFramework.StartsWith('net9.0')) or $(TargetFramework.StartsWith('net10.0'))">
     <DefineConstants>$(DefineConstants);HAS_TRIMMABILITY_ATTRIBUTES</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows')) or $(TargetFramework.StartsWith('net10.0-windows'))">
     <!--
     Although Rx 7 removes WPF and Windows Forms support from the public API of System.Reactive, for now, we continue to
     set HAS_WPF, RxHasWpf, HAS_WINDOWS and RxHasWindowsForms here. System.Reactive builds the runtime assembly, which still contains
@@ -42,13 +42,13 @@
     <RxHasWindowsForms>true</RxHasWindowsForms>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows10')) or $(TargetFramework.StartsWith('net9.0-windows10'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows10')) or $(TargetFramework.StartsWith('net9.0-windows10')) or $(TargetFramework.StartsWith('net10.0-windows10'))">
     <DefineConstants>$(DefineConstants);HAS_WINRT;HAS_WINFORMS;HAS_WPF;DESKTOPCLR;WINDOWS;CSWINRT</DefineConstants>
     <RxHasWinRT>true</RxHasWinRT>
   </PropertyGroup>
 
   <ItemGroup Condition="('$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'uap10.0.18362' or '$(TargetFramework)' == 'netstandard2.0') and $(IsPackable)">
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='uap10.0.18362'">
@@ -74,7 +74,7 @@
   </ItemGroup>
 
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows')) or $(TargetFramework.StartsWith('net10.0-windows'))">
     <!--
     In the 9.0.100-rc.2.24474.11 SDK, the build tools attempt to perform code generation for a whole load of our types to support WinRT interop.
     It's looking like it does this for any public type that implements IDisposable!

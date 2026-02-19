@@ -2,6 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#if HAS_WPF
+extern alias SystemReactiveWpf;
+#endif
+
+#if HAS_WINFORMS
+extern alias SystemReactiveWindowsForms;
+#endif
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +24,15 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #if HAS_WPF
 using System.Windows.Threading;
+using DispatcherScheduler = SystemReactiveWpf::System.Reactive.Concurrency.DispatcherScheduler;
+using DispatcherObservable = SystemReactiveWpf::System.Reactive.Linq.DispatcherObservable;
 #endif
 
 #if HAS_WINFORMS
 using System.Windows.Forms;
+
+using ControlScheduler = SystemReactiveWindowsForms::System.Reactive.Concurrency.ControlScheduler;
+using ControlObservable = SystemReactiveWindowsForms::System.Reactive.Linq.ControlObservable;
 #endif
 
 using Assert = Xunit.Assert;
@@ -70,7 +83,7 @@ namespace ReactiveTests.Tests
             {
                 var evt = new ManualResetEvent(false);
 
-                Observable.Range(0, 10, NewThreadScheduler.Default).ObserveOn(lbl).Subscribe(x =>
+                ControlObservable.ObserveOn(Observable.Range(0, 10, NewThreadScheduler.Default), lbl).Subscribe(x =>
                 {
                     lbl.Text = x.ToString();
                     okay &= (SynchronizationContext.Current is System.Windows.Forms.WindowsFormsSynchronizationContext);
@@ -113,7 +126,7 @@ namespace ReactiveTests.Tests
                 RunAsync(evt =>
                 {
                     var okay = true;
-                    Observable.Range(0, 10, NewThreadScheduler.Default).ObserveOn(dispatcher).Subscribe(x =>
+                    DispatcherObservable.ObserveOn(Observable.Range(0, 10, NewThreadScheduler.Default), dispatcher).Subscribe(x =>
                     {
                         okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
                     }, () =>
@@ -157,7 +170,7 @@ namespace ReactiveTests.Tests
                     var okay = true;
                     dispatcher.BeginInvoke(new Action(() =>
                     {
-                        Observable.Range(0, 10, NewThreadScheduler.Default).ObserveOnDispatcher().Subscribe(x =>
+                        DispatcherObservable.ObserveOnDispatcher(Observable.Range(0, 10, NewThreadScheduler.Default)).Subscribe(x =>
                         {
                             okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
                         },  () =>
@@ -183,7 +196,7 @@ namespace ReactiveTests.Tests
 
                     dispatcher.BeginInvoke(new Action(() =>
                     {
-                        Observable.Throw<int>(ex).ObserveOnDispatcher().Subscribe(x =>
+                        DispatcherObservable.ObserveOnDispatcher(Observable.Throw<int>(ex)).Subscribe(x =>
                         {
                             okay &= (SynchronizationContext.Current is System.Windows.Threading.DispatcherSynchronizationContext);
                         },
@@ -203,7 +216,7 @@ namespace ReactiveTests.Tests
             }
         }
 #endif
-        #endregion + TestBase +
+#endregion + TestBase +
 
     }
 

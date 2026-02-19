@@ -3,6 +3,14 @@
 // See the LICENSE file in the project root for more information. 
 #define DEBUG // so that the Debug.WriteLines aren't compiled out
 
+#if HAS_WPF
+extern alias SystemReactiveWpf;
+#endif
+
+#if HAS_WINFORMS
+extern alias SystemReactiveWindowsForms;
+#endif
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,6 +29,14 @@ using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Assert = Xunit.Assert;
+
+#if HAS_WPF
+using DispatcherScheduler = SystemReactiveWpf::System.Reactive.Concurrency.DispatcherScheduler;
+#endif
+
+#if HAS_WINFORMS
+using ControlScheduler = SystemReactiveWindowsForms::System.Reactive.Concurrency.ControlScheduler;
+#endif
 
 namespace ReactiveTests.Tests
 {
