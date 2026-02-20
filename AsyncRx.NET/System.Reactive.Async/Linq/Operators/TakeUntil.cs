@@ -4,7 +4,7 @@
 
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Threading;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
@@ -87,7 +87,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
                 (
@@ -150,7 +150,7 @@ namespace System.Reactive.Linq
                 // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want TakeUntil on the observer?
                 // DESIGN: It seems that if an observer would be an IAsyncDisposable, this could get a bit easier ("inject" the inner disposable).
 
-                var gate = new AsyncGate();
+                var gate = AsyncGate.Create();
 
                 return
                     (

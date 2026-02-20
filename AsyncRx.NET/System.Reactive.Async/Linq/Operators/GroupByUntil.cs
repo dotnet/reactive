@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
-using System.Threading;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
@@ -609,7 +609,7 @@ namespace System.Reactive.Linq
                     groups = new ConcurrentDictionary<TKey, IAsyncSubject<TElement>>(Environment.ProcessorCount * 4, capacity, comparer);
                 }
 
-                var gate = new AsyncGate();
+                var gate = AsyncGate.Create();
 
                 var nullGate = new object();
                 var nullGroup = default(IAsyncSubject<TElement>);

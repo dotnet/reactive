@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+using System.Reactive.Threading;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -44,7 +45,7 @@ namespace System.Reactive.Linq
 
             var semaphore = new SemaphoreSlim(0);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             var queue = new Queue<TSource>();
             var error = default(Exception);

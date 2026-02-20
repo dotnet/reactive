@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Linq;
-using System.Threading;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Subjects
@@ -12,7 +12,7 @@ namespace System.Reactive.Subjects
     {
         private readonly IAsyncSubject<TSource, TResult> _subject;
         private readonly IAsyncObservable<TSource> _source;
-        private readonly AsyncGate _gate = new();
+        private readonly IAsyncGate _gate = AsyncGate.Create();
 
         private Connection _connection;
 
