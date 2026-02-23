@@ -5,6 +5,9 @@
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+#if NET8_0_OR_GREATER
+using System.Runtime.InteropServices;
+#endif
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -517,6 +520,122 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run();
 
+#if NET8_0_OR_GREATER
+            internal sealed class _ : Sink<TSource, IList<TSource>>
+            {
+                private readonly Ferry _parent;
+                private readonly int _count;
+                private readonly object _gate = new();
+                private List<TSource> _s;
+
+                public _(Ferry parent, IObserver<IList<TSource>> observer)
+                    : base(observer)
+                {
+                    _parent = parent;
+                    _count = _parent._count;
+                    _s = new List<TSource>(_count);
+                }
+
+                private SerialDisposableValue _timerSerial;
+                private int _n;
+                private int _windowId;
+
+                public void Run()
+                {
+                    _n = 0;
+                    _windowId = 0;
+
+                    CreateTimer(0);
+
+                    SetUpstream(_parent._source.SubscribeSafe(this));
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        _timerSerial.Dispose();
+                    }
+
+                    base.Dispose(disposing);
+                }
+
+                private void CreateTimer(int id)
+                {
+                    var m = new SingleAssignmentDisposable();
+                    _timerSerial.Disposable = m;
+
+                    m.Disposable = _parent._scheduler.ScheduleAction((@this: this, id), _parent._timeSpan, static tuple => tuple.@this.Tick(tuple.id));
+                }
+
+                private void Tick(int id)
+                {
+                    lock (_gate)
+                    {
+                        if (id != _windowId)
+                        {
+                            return;
+                        }
+
+                        var res = _s;
+                        CollectionsMarshal.SetCount(res, _n);
+                        _n = 0;
+                        var newId = ++_windowId;
+
+                        _s = new List<TSource>(_count);
+                        ForwardOnNext(res);
+
+                        CreateTimer(newId);
+                    }
+                }
+
+                public override void OnNext(TSource value)
+                {
+                    var newWindow = false;
+                    var newId = 0;
+
+                    lock (_gate)
+                    {
+                        _s.Add(value);
+
+                        _n++;
+                        if (_n == _parent._count)
+                        {
+                            newWindow = true;
+                            _n = 0;
+                            newId = ++_windowId;
+
+                            var res = _s;
+                            _s = new List<TSource>(_count);
+                            ForwardOnNext(res);
+                        }
+
+                        if (newWindow)
+                        {
+                            CreateTimer(newId);
+                        }
+                    }
+                }
+
+                public override void OnError(Exception error)
+                {
+                    lock (_gate)
+                    {
+                        _s.Clear();
+                        ForwardOnError(error);
+                    }
+                }
+
+                public override void OnCompleted()
+                {
+                    lock (_gate)
+                    {
+                        ForwardOnNext(_s);
+                        ForwardOnCompleted();
+                    }
+                }
+            }
+#else
             internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly Ferry _parent;
@@ -627,6 +746,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
             }
+#endif
         }
     }
 
