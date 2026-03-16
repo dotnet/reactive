@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -18,9 +17,9 @@ namespace HomoIconize
             Console.WriteLine("------------------------------------");
             Console.WriteLine();
 
-            var uri = new Uri(Assembly.GetEntryAssembly().CodeBase);
+            var uri = new Uri(Assembly.GetEntryAssembly().Location);
 
-            var root = Path.Combine(Path.GetDirectoryName(uri.LocalPath), @"..\..\..\..\Source\src");
+            var root = Path.Combine(Path.GetDirectoryName(uri.LocalPath), @"..\..\..\..\..\Source\src");
             if (!Directory.Exists(root))
             {
                 Console.WriteLine("Error:  Could not find directory \"" + root + "\"");
@@ -29,29 +28,31 @@ namespace HomoIconize
 
             Process(root,
                 "System.Reactive", 
-                @"System.Reactive\Linq\Qbservable.Generated.cs", 
+                @"System.Reactive\Linq\Qbservable.Homoicon.cs", 
                 "System.Reactive.Linq.Observable", "Qbservable",
                 includeAsync: true, exludeFromCodeCoverage:true);
             Console.WriteLine();
 
             Process(root, 
-                "System.Reactive", 
-                @"System.Reactive\Linq\QbservableEx.Generated.cs", 
+                "System.Reactive",
+                @"System.Reactive\Linq\QbservableEx.Homoicon.cs", 
                 "System.Reactive.Linq.ObservableEx", "QbservableEx");            
             Console.WriteLine();
 
             Process(root, 
                 "System.Reactive.Observable.Aliases",
-                @"System.Reactive.Observable.Aliases\Qbservable.Aliases.Generated.cs",
+                @"System.Reactive.Observable.Aliases\Qbservable.Aliases.Homoicon.cs",
                 "System.Reactive.Observable.Aliases.QueryLanguage", "QbservableAliases",
-                includeAsync: false, createAliases: true, exludeFromCodeCoverage: true);
+                includeAsync: false, createAliases: true, exludeFromCodeCoverage: true,
+                tfm: "netstandard2.0",
+                includeNullability: false);
             Console.WriteLine();
 
             Console.WriteLine("Processing complete, press enter to continue.");
             Console.ReadLine();
         }
 
-        static void Process(string root, string sourceAssembly, string targetFile, string sourceTypeName, string targetTypeName, bool includeAsync = false, bool createAliases = false, bool exludeFromCodeCoverage = false)
+        static void Process(string root, string sourceAssembly, string targetFile, string sourceTypeName, string targetTypeName, bool includeAsync = false, bool createAliases = false, bool exludeFromCodeCoverage = false, string tfm = "net8.0", bool includeNullability = true)
         {
             var rxRoot = Path.Combine(root, sourceAssembly);
             if (!Directory.Exists(rxRoot))
@@ -60,14 +61,14 @@ namespace HomoIconize
                 return;
             }
 
-            var dll = Path.Combine(rxRoot, @"bin\debug\netstandard2.0\" + sourceAssembly + ".dll");
+            var dll = Path.Combine(rxRoot, @$"bin\debug\{tfm}\" + sourceAssembly + ".dll");
             if (!File.Exists(dll))
             {
                 Console.WriteLine("Error:  Could not find file \"" + dll + "\"");
                 return;
             }
 
-            var xml = Path.Combine(rxRoot, @"bin\debug\netstandard2.0\" + sourceAssembly + ".xml");
+            var xml = Path.Combine(rxRoot, @$"bin\debug\{tfm}\" + sourceAssembly + ".xml");
             if (!File.Exists(xml))
             {
                 Console.WriteLine("Error:  Could not find file \"" + xml + "\"");
@@ -81,7 +82,7 @@ namespace HomoIconize
                 return;
             }
 
-            Generate(dll, xml, qbsgen, sourceTypeName, targetTypeName, includeAsync, createAliases, exludeFromCodeCoverage);
+            Generate(dll, xml, qbsgen, sourceTypeName, targetTypeName, includeAsync, createAliases, exludeFromCodeCoverage, includeNullability);
         }
 
         // Prototype interface to break dependencies. Only used for ToString2 ultimately.
@@ -89,7 +90,7 @@ namespace HomoIconize
         {
         }
 
-        static void Generate(string input, string xml, string output, string sourceTypeName, string targetTypeName, bool includeAsync, bool createAliases, bool exludeFromCodeCoverage)
+        static void Generate(string input, string xml, string output, string sourceTypeName, string targetTypeName, bool includeAsync, bool createAliases, bool exludeFromCodeCoverage, bool includeNullability)
         {
             var docs = XDocument.Load(xml).Root.Element("members").Elements("member").ToDictionary(m => m.Attribute("name").Value, m => m);
 
@@ -137,18 +138,18 @@ namespace HomoIconize
             {
                 using (Out = new StreamWriter(fs))
                 {
-                    Generate(t, docs, targetTypeName, includeAsync, createAliases, exludeFromCodeCoverage);
+                    Generate(t, docs, targetTypeName, includeAsync, createAliases, exludeFromCodeCoverage, includeNullability);
                 }
             }
         }
 
         static Type _qbs;
 
-        static void Generate(Type t, IDictionary<string, XElement> docs, string typeName, bool includeAsync, bool createAliases, bool exludeFromCodeCoverage)
+        static void Generate(Type t, IDictionary<string, XElement> docs, string typeName, bool includeAsync, bool createAliases, bool exludeFromCodeCoverage, bool includeNullability)
         {
             WriteLine(
 @"/*
- * WARNING: Auto-generated file (" + DateTime.Now.ToString(CultureInfo.InvariantCulture) + @")
+ * WARNING: Auto-generated file (" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + @")
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 ");
@@ -189,6 +190,7 @@ using System.Threading.Tasks;
 
             var except = new[] { "ToAsync", "FromAsyncPattern", "And", "Then", "GetEnumerator", "get_Provider", "Wait", "ForEach", "ForEachAsync", "GetAwaiter", "RunAsync", "First", "FirstOrDefault", "Last", "LastOrDefault", "Single", "SingleOrDefault", "Subscribe", "AsQbservable", "AsObservable", "ToEvent", "ToEventPattern" };
 
+            var items = t.GetMethods(BindingFlags.Public | BindingFlags.Static).OrderBy(m => m.Name).ThenBy(m => !m.IsGenericMethod ? "" : string.Join(",", m.GetGenericArguments().Select(p => p.Name))).ThenBy(m => string.Join(",", m.GetParameters().Select(p => p.Name + ":" + p.ParameterType.FullName))).Where(m => !except.Contains(m.Name)).ToList();
             foreach (var m in t.GetMethods(BindingFlags.Public | BindingFlags.Static).OrderBy(m => m.Name).ThenBy(m => !m.IsGenericMethod ? "" : string.Join(",", m.GetGenericArguments().Select(p => p.Name))).ThenBy(m => string.Join(",", m.GetParameters().Select(p => p.Name + ":" + p.ParameterType.FullName))).Where(m => !except.Contains(m.Name)))
             {
                 var docName = ToDocName(m);
@@ -256,16 +258,11 @@ using System.Threading.Tasks;
                 parNames.Add(firstName);
 
                 var rem = hasProvider ? p : p.Skip(1);
-                var isCreateAsync = false;
                 foreach (var q in rem)
                 {
                     var pt = q.ParameterType;
                     if (pt.Name.StartsWith("Func") || pt.Name.StartsWith("Action"))
                     {
-                        if (pt.Name.StartsWith("Func") && pt.GetGenericArguments().Last().Name.StartsWith("Task"))
-                        {
-                            isCreateAsync = true;
-                        }
                         pt = typeof(Expression<>).MakeGenericType(pt);
                         args.Add(q.Name);
                     }
@@ -329,7 +326,7 @@ using System.Threading.Tasks;
                 }
 
                 {
-                    var retStr = ret.ToString2();
+                    var retStr = ret.ToString2(m.ReturnParameter.GetCustomAttributesData());
 
                     if (xmlDoc != null)
                     {
@@ -366,13 +363,42 @@ using System.Threading.Tasks;
                                    select new { a, c })
                                   .ToList();
 
+                    HashSet<string> alreadyEmittedTypeConstraintFor = [];
                     if (genCons.Count > 0)
                     {
                         Indent();
                         foreach (var gc in genCons)
+                        {
                             WriteLine("where " + gc.a.Name + " : " + gc.c.Name);
+                            alreadyEmittedTypeConstraintFor.Add(gc.a.Name);
+                        }
                         Outdent();
                     }
+
+                    foreach (var a in m.GetGenericArguments())
+                    {
+                        if (alreadyEmittedTypeConstraintFor.Contains(a.Name))
+                        {
+                            continue;
+                        }
+
+                        bool isNotNull = true;
+                        if (a.GetCustomAttributesData().SingleOrDefault((CustomAttributeData a) => a.AttributeType.FullName == "System.Runtime.CompilerServices.NullableAttribute")
+                            is CustomAttributeData gana)
+                        {
+                            switch (gana.ConstructorArguments.Single().Value)
+                            {
+                                case (byte)2:
+                                    isNotNull = false;
+                                    break;
+                            }
+                        }
+                        if (isNotNull && includeNullability)
+                        {
+                            WriteLine($"where {a.Name} : notnull");
+                        }
+                    }
+
 
                     if (createAliases)
                     {
@@ -812,34 +838,48 @@ using System.Threading.Tasks;
             return type;
         }
 
-        static string ToString2(this Type type)
+        static string ToString2(this Type type, IEnumerable<CustomAttributeData> customAttributeData = null)
         {
+            CustomAttributeData methodNullableAttribute = customAttributeData
+                ?.SingleOrDefault((CustomAttributeData a) => a.AttributeType.FullName == "System.Runtime.CompilerServices.NullableAttribute");
+
+            bool returnTypeIsNullable = false;
+            if (methodNullableAttribute is not null)
+            {
+                if (methodNullableAttribute.ConstructorArguments.Single().Value is (byte)2)
+                {
+                    returnTypeIsNullable = true;
+                }
+            }
+
+            string returnTypeSuffix = returnTypeIsNullable ? "?" : "";
+
             if (type == typeof(int))
-                return "int";
+                return "int" + returnTypeSuffix;
             else if (type == typeof(uint))
-                return "uint";
+                return "uint" + returnTypeSuffix;
             else if (type == typeof(long))
-                return "long";
+                return "long" + returnTypeSuffix;
             else if (type == typeof(ulong))
-                return "ulong";
+                return "ulong" + returnTypeSuffix;
             else if (type == typeof(float))
-                return "float";
+                return "float" + returnTypeSuffix;
             else if (type == typeof(double))
-                return "double";
+                return "double" + returnTypeSuffix;
             else if (type == typeof(byte))
-                return "byte";
+                return "byte" + returnTypeSuffix;
             else if (type == typeof(sbyte))
-                return "sbyte";
+                return "sbyte" + returnTypeSuffix;
             else if (type == typeof(bool))
-                return "bool";
+                return "bool" + returnTypeSuffix;
             else if (type == typeof(short))
-                return "short";
+                return "short" + returnTypeSuffix;
             else if (type == typeof(ushort))
-                return "ushort";
+                return "ushort" + returnTypeSuffix;
             else if (type == typeof(string))
-                return "string";
+                return "string" + returnTypeSuffix;
             else if (type == typeof(object))
-                return "object";
+                return "object" + returnTypeSuffix;
             else if (type == typeof(void))
                 return "void";
             else if (type == typeof(decimal))
@@ -852,11 +892,38 @@ using System.Threading.Tasks;
             {
                 if (!type.IsGenericTypeDefinition)
                 {
-                    var g = type.GetGenericTypeDefinition();
+                    var genericArgs = type.GetGenericArguments();
+
+                    bool[] genericArgIsNullable = null;
+                    if (methodNullableAttribute is not null)
+                    {
+                        if (methodNullableAttribute.ConstructorArguments.Single().Value is IList<CustomAttributeTypedArgument> data)
+                        {
+                            genericArgIsNullable = new bool[genericArgs.Length];
+                            for (int i = 0; i < genericArgs.Length; i++)
+                            {
+                                if (i < data.Count)
+                                {
+                                    genericArgIsNullable[i] = data[i + 1].Value is (byte)2;
+                                }
+                            }
+                        }
+                    }
+                    string GetGenericTypeArgNullabilitySuffix(int index)
+                    {
+                        if (genericArgIsNullable != null && index < genericArgIsNullable.Length && genericArgIsNullable[index])
+                        {
+                            return "?";
+                        }
+                        return "";
+                    }
+
+
+                        var g = type.GetGenericTypeDefinition();
                     if (g == typeof(Nullable<>))
                         return type.GetGenericArguments()[0].ToString2() + "?";
                     else
-                        return g.ToString2() + "<" + string.Join(", ", type.GetGenericArguments().Select(t => t.ToString2()).ToArray()) + ">";
+                        return g.ToString2() + "<" + string.Join(", ", genericArgs.Select((t, i) => t.ToString2() + GetGenericTypeArgNullabilitySuffix(i)).ToArray()) + ">";
                 }
                 else
                 {
