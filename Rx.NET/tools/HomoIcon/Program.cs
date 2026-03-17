@@ -445,10 +445,7 @@ using System.Threading.Tasks;
                     Indent();
                     WriteLine("null,");
                     var cma = args.Count > 0 ? "," : "";
-                    if (!m.IsGenericMethod)
-                        WriteLine("(MethodInfo)MethodInfo.GetCurrentMethod()!" + cma);
-                    else
-                        WriteLine("((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(" + string.Join(", ", m.GetGenericArguments().Select(ga => "typeof(" + ga.Name + ")").ToArray()) + ")" + cma);
+                    WriteLine($"new Func<{string.Join(", ", ptps)}, {retStr}>({name}{g}).Method,");
                     for (int j = 0; j < args.Count; j++)
                         WriteLine(args[j] + (j < args.Count - 1 ? "," : ""));
                     Outdent();
@@ -507,11 +504,11 @@ using System.Threading.Tasks;
             switch (v)
             {
                 case "Double": return "double";
-                // case "Decimal": return "decimal";
+                case "Decimal": return "decimal";
                 case "Int32": return "int";
                 case "Inte16": return "short";
                 case "Int64": return "long";
-                // case "Single": return "float";
+                case "Single": return "float";
                 case "IObservable`1": return "IObservable{T}";
             }
 
@@ -627,10 +624,7 @@ using System.Threading.Tasks;
                         }
 
                         WriteLine("");
-                        if (genArgs.Length == 0)
-                            WriteLine("var m = (MethodInfo)MethodInfo.GetCurrentMethod()!;");
-                        else
-                            WriteLine("var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(" + string.Join(", ", genArgs.Select(a => "typeof(" + a + ")").ToArray()) + ");");
+                        WriteLine($"var m = new Func<IQbservableProvider, {actType}, {retType}>(ToAsync).Method;");
 
                         WriteLine("return (" + string.Join(", ", lamPars) + ") => provider.CreateQuery<" + ret + ">(");
                         Indent();
@@ -758,11 +752,7 @@ using System.Threading.Tasks;
                     Outdent();
 
                     WriteLine("");
-
-                    if (genArgs.Length == 0)
-                        WriteLine("var m = (MethodInfo)MethodInfo.GetCurrentMethod()!;");
-                    else
-                        WriteLine("var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(" + string.Join(", ", genArgs.Select(a => "typeof(" + a + ")").ToArray()) + ");");
+                    WriteLine($"var m = new Func<IQbservableProvider, {begType}, {endType}, {retType}>(FromAsyncPattern).Method;");
 
                     WriteLine("return (" + string.Join(", ", lamPars) + ") => provider.CreateQuery<" + ret + ">(");
                     Indent();

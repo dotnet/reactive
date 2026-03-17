@@ -4,7 +4,6 @@
 
 #if HAS_REMOTING
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Runtime.Remoting.Lifetime;
 
 namespace System.Reactive.Linq
@@ -71,7 +70,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(Remotable).Method,
                     source.Expression
                 )
             );
@@ -96,8 +95,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#pragma warning restore IL2060
+                    new Func<IQbservable<TSource>, ILease, IQbservable<TSource>>(Remotable).Method,
                     source.Expression,
                     Expression.Constant(lease, typeof(ILease))
                 )

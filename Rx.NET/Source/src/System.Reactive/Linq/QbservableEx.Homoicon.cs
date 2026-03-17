@@ -1,5 +1,5 @@
 /*
- * WARNING: Auto-generated file (2026/03/16 11:20:01)
+ * WARNING: Auto-generated file (2026/03/17 10:43:31)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IQbservable<ValueTuple<TFirst, TSecond>>>(CombineLatest<TFirst, TSecond>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -70,7 +70,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IQbservable<ValueTuple<TFirst, TSecond, TThird>>>(CombineLatest<TFirst, TSecond, TThird>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third)
@@ -106,7 +106,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth>>>(CombineLatest<TFirst, TSecond, TThird, TFourth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -147,7 +147,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -193,7 +193,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -244,7 +244,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -300,7 +300,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, ValueTuple<TEighth>>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, ValueTuple<TEighth>>>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -333,7 +333,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<IEnumerable<IObservable<object>>>>, IQbservable<Unit>>(Create).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     iteratorMethod
                 )
@@ -362,7 +362,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<IObserver<TResult>, IEnumerable<IObservable<object>>>>, IQbservable<TResult>>(Create<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     iteratorMethod
                 )
@@ -391,7 +391,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, IObservable<TSource>>>, IQbservable<TSource>>(Expand<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -423,7 +423,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, IObservable<TSource>>>, IScheduler, IQbservable<TSource>>(Expand<TSource>).Method,
                     source.Expression,
                     selector,
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -453,7 +453,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource[]>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IObservable<TSource>[], IQbservable<TSource[]>>(ForkJoin<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -482,7 +482,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource[]>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, IQbservable<TSource[]>>(ForkJoin<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -516,7 +516,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, Expression<Func<TSource1, TSource2, TResult>>, IQbservable<TResult>>(ForkJoin<TSource1, TSource2, TResult>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     resultSelector
@@ -548,7 +548,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, IObservable<TResult>>>, IQbservable<TResult>>(Let<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -571,7 +571,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, TResult>>, IQbservable<TResult>>(ManySelect<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -596,7 +596,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, TResult>>, IScheduler, IQbservable<TResult>>(ManySelect<TSource, TResult>).Method,
                     source.Expression,
                     selector,
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -625,7 +625,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IQbservable<ValueTuple<TFirst, TSecond>>>(WithLatestFrom<TFirst, TSecond>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -652,7 +652,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond)),
+                    new Func<IQbservable<TFirst>, IEnumerable<TSecond>, IQbservable<ValueTuple<TFirst, TSecond>>>(Zip<TFirst, TSecond>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -679,7 +679,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IQbservable<ValueTuple<TFirst, TSecond>>>(Zip<TFirst, TSecond>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -710,7 +710,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IQbservable<ValueTuple<TFirst, TSecond, TThird>>>(Zip<TFirst, TSecond, TThird>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third)
@@ -746,7 +746,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth>>>(Zip<TFirst, TSecond, TThird, TFourth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -787,7 +787,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -833,7 +833,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -884,7 +884,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -940,7 +940,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, ValueTuple<TEighth>>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TThird), typeof(TFourth), typeof(TFifth), typeof(TSixth), typeof(TSeventh), typeof(TEighth)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, ValueTuple<TEighth>>>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
