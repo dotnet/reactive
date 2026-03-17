@@ -1,6 +1,6 @@
 # Trimming Warnings and `IQbservable<T>`
 
-This ADR describes the approach Rx.NET takes to handling the problems that `IQbservable<T>` creates when using trimming. `IQbservable<T>` relies on .NET expression trees, which are a reflection-heavy mechanism. Furthermore, subscribing to a
+This ADR describes the approach Rx.NET takes to handling the problems that `IQbservable<T>` creates when using trimming. `IQbservable<T>` relies on .NET expression trees, which are a reflection-heavy mechanism, which can create challenges when using trimming.
 
 ## Status
 
@@ -24,7 +24,7 @@ using System.Reactive.Linq;
 IQbservable<int> qis = Qbservable.Provider.Range(1, 10);
 ```
 
-Factory-like operators (i.e. ones that create a sequence out of nothing) such as `Range` are implemented as extension methods for `IQbservableProvider`. Combinator-like operators (i.e. ones that take one or more other sequences as input) such as `Where` are implemented as extension methods for `IQbservable<T>`, meaning that if we've already got an `IQbservable<T>`, we can just invoke operators directly on that just like we can with a normal `IObservable<T>` (or like `IEnumerable<T>` for that matter), e.g.:
+Factory-like operators (i.e. ones that create a sequence out of nothing) such as `Range` are implemented as extension methods for `IQbservableProvider`. Combinator-like operators (i.e. ones that take one or more other sequences as input) such as `Where` are implemented as extension methods for `IQbservable<T>`, meaning that if we've already got an `IQbservable<T>`, we can invoke operators directly on that just like we can with a normal `IObservable<T>` (or like `IEnumerable<T>` for that matter), e.g.:
 
 ```cs
 qis = qis.Where(i => i % 2 == 0);
@@ -46,7 +46,7 @@ value(System.Reactive.ObservableQueryProvider).Range(1, 10).Where(i => ((i % 2) 
 
 This states that the query that `qis` currently refers to begins with a specific provider instance of type `System.Reactive.ObservableQueryProvider`. (That is an internal type; it happens to be the type returned by `Qbservable.Provider`.) From there, we invoked the `Range` operator passing the arguments `1` and `10`, and then on the resulting `IQbservable<int>` we invoked the `Where` operator passing the lambda expression shown. (The extra parentheses appear because the code that turns the expression tree representation of a lamdba back into text adds parentheses even in cases where they are not strictly required to avoid ambiguity.)
 
-In theory we could have started from some other implementation of `IQbservableProvider`. (E.g., we could write out own.) But the `Expression` should still come out the same, because all providers are required to make their `Expression` available, and the contents of that expression are actually determined not by the provider itself but by the code in these operator methods. E.g., the `Range` operator looks like this:
+In theory we could have started from some other implementation of `IQbservableProvider`. (E.g., we could write our own.) But the `Expression` should still come out the same, because all providers are required to make their `Expression` available, and the contents of that expression are actually determined not by the provider itself but by the code in these operator methods. E.g., the `Range` operator looks like this:
 
 ```cs
 public static IQbservable<int> Range(this IQbservableProvider provider, int start, int count)
@@ -95,14 +95,14 @@ This is analogous to the `IQueryable<T>` implementation you get if you start to 
 
 With that in mind, let's now look at some of the problems that exist in Rx 6.
 
-### Issue: IL2060 and IL2026
+### Issue: IL2060 and IL2026 diagnostics
 
-The .NET 10 SDK produces compiler diagnostics relating to trimming. In fact, this happened with earlier SDKs, and we already had pragmas in there to suppress IL2060 already. This happened because prior to Rx 7, we were using `MethodInfo.GetCurrentMethod` to get the `MethodInfo` argument for the `Expression.Call` method in code such as that shown above. So instead of the code you can see in earlier examples that constructs a `Func`, we were using something like this:
+The .NET 10 SDK produces compiler diagnostics relating to trimming. In fact, this happened with earlier SDKs, and we already had pragmas in there to suppress IL2060. This happened because prior to Rx 7, we were using a different way to get the `MethodInfo` argument for the `Expression.Call` method than the code shown above uses. Instead of constructing a `Func`, we were using something like this:
 
 ```cs
 ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond)),
 ```
-Even with older .NET SDKs, this produced an IL2060 diagnostic. That was due to `MakeGenericMethod`: the analyzer reports that it's "not possible to guarantee the availability of requirements of the generic method". Now, this code will also produce an IL2026 diagnostic due to `GetCurrentMethod`, which is now marked with `RequiresUnreferencedCodeAttribute`. Apparently that came in with .NET 7.0 to address https://github.com/dotnet/runtime/issues/53242 and it seems a little OTT to me: the issue says this can "allow reflecting on basically everything in the program." It's not clear to me how asking for the `MethodInfo` only for the method executing right means "everything in the program". Sure you can walk out from this `MethodInfo` to other things, but that's true for more or less any reflection type.
+Even with older .NET SDKs, this produced an IL2060 diagnostic. That was due to `MakeGenericMethod`: the analyzer reports that it's "not possible to guarantee the availability of requirements of the generic method". The newer SDKs, this code will also produce an IL2026 diagnostic due to `GetCurrentMethod`, which is now marked with `RequiresUnreferencedCodeAttribute`. Apparently that came in with .NET 7.0 to address https://github.com/dotnet/runtime/issues/53242 and it seems a little OTT to me: the issue says this can "allow reflecting on basically everything in the program." It's not clear to me how asking for the `MethodInfo` only for the calling method means "everything in the program". Sure, you can walk out from this `MethodInfo` to other things, but that's true for more or less any reflection type.
 
 The .NET runtime's own `Queryable` class also needs to retrieve metadata for the current method, and it avoids this problem with a delegate:
 
@@ -110,7 +110,7 @@ The .NET runtime's own `Queryable` class also needs to retrieve metadata for the
 new Func<IQbservable<TFirst>, IObservable<TSecond>, IQbservable<(TFirst First, TSecond Second)>>(SomeMethod).Method
 ```
 
-This constructs a delegate and uses it purely to be able to retrieve its `MethodInfo`. Since this retrieves the exact same metadata as `MethodInfo.GetCurrentMethod` it's not at all clear why this delegate-based approach is considered to be OK when we're getting the very same `MethodInfo`. The description in that issue implies that when you retrieve this with `GetCurrentMethod` the tools discard more of the metadata (e.g. parameter names) then they would when you obtain the same `MethodInfo` through other means.
+This constructs a delegate and uses it purely to be able to retrieve its `MethodInfo`. Since this retrieves the exact same metadata as `MethodInfo.GetCurrentMethod` it's not at all clear why this delegate-based approach is considered to be OK when we're getting the very same `MethodInfo` either way. The description in that issue implies that when you retrieve this with `GetCurrentMethod` the tools discard more of the metadata (e.g. parameter names) than they would when you obtain the same `MethodInfo` through other means.
 
 ### Issue: Qbservable methods imply dependency on Observable methods
 
@@ -132,20 +132,20 @@ This is a hint to the IL trimmer that any program that uses the `IQueryable<T>` 
 
 ### Issue: the generated query-space files were exempt from compiler diagnostics
 
-It appears that simply having the text `.Generated.` in a filename suppresses some compiler diagnostics. We don't actually want that for the generated query-space code, because we do actually want to know if there are problems. We control the code generation. (It is done by the HomoIcon tool in this repository.) So we can and should fix any issues rather than suppressing them.
+It appears that simply having the text `.Generated.` in a filename suppresses some compiler diagnostics. We don't want that for the generated query-space code, because we do actually want to know if there are problems. Typically the reason you need to suppress diagnostics in generated code is that there's no way to fix them. But in our case, we control the code generation. (It is done by the HomoIcon tool in this repository.) So we can and should fix any issues rather than suppressing them.
 
 
 ## Decisions
 
 ### Replace `GetCurrentMethod`
 
-Since the IL trimming tooling doesn't seem to fully support `GetCurrentMethod`, we have replaced all of the code that used that with code that creates a delegate and returns its `Method` instead. This is the approach used by the .NET Runtime Librarys in `IQueryable<T>` operators, so it seems safest for us to do the same.
+Since the IL trimming tooling doesn't seem to fully support `GetCurrentMethod`, we have replaced all of the code that used that with code that creates a delegate and returns its `Method` instead. This is the approach used by the .NET Runtime Libraries in `IQueryable<T>` operators, so it seems safest for us to do the same.
 
 ### Implied Dynamic Dependency
 
 For the time being we will not be adding `DynamicDependency` attributes because this implies a level of support for dynamic code generation that is not backed up by our tests. We do not want to mislead developers into thinking that this is a fully supported scenario.
 
-If we get requests for better support for scenarios that would be helped by `DynamicDependency`, we will revisit this, but right now, we suspect nobody using `IQbservable<T>` is attempting to do so in conjunction with trimming.
+If we get requests for better support for scenarios that would be helped by `DynamicDependency`, we will revisit this. (We will most likely also need to add `RequiresDynamicCode` in some places.) Right now, we suspect nobody using `IQbservable<T>` is attempting to do so in conjunction with trimming.
 
 ### Change generated filenames for Q-space operators
 
