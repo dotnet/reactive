@@ -82,7 +82,7 @@ for (int j = 0; j < i; j++)
 #pragma warning restore CA1711
     {
 <#
-for (int i = 2; i <= 8; i++)
+for (int i = 2; i <= 16; i++)
 {
     var parameters = string.Join(", ", Enumerable.Range(1, i).Select(j => "IObservable<T" + toUpper(ordinals[j - 1]) + "> " + ordinals[j - 1]));
     var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + toUpper(ordinals[j - 1])));

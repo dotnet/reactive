@@ -437,7 +437,7 @@ using System.Threading.Tasks;
                     }
                     WriteLine("");
 
-                    var gArg = ret.GetGenericArguments().Single().ToString2();
+                    var gArg = ret.GetGenericArguments().Single().ToString2(m.ReturnParameter.GetCustomAttributesData());
 
                     WriteLine("return " + factory + ".CreateQuery<" + gArg + ">(");
                     Indent();
@@ -842,6 +842,9 @@ using System.Threading.Tasks;
                 }
             }
 
+            CustomAttributeData tupleElementNamesAttribute = customAttributeData
+                ?.SingleOrDefault((CustomAttributeData a) => a.AttributeType.FullName == "System.Runtime.CompilerServices.TupleElementNamesAttribute");
+
             string returnTypeSuffix = returnTypeIsNullable ? "?" : "";
 
             if (type == typeof(int))
@@ -884,6 +887,27 @@ using System.Threading.Tasks;
                 {
                     var genericArgs = type.GetGenericArguments();
 
+                    if (type.Name.StartsWith("ValueTuple") && tupleElementNamesAttribute is not null)
+                    {
+                        static IEnumerable<Type> FlattenValueTupleTypeArguments(Type[] vt)
+                        {
+                            if (vt[^1].Name.StartsWith("ValueTuple"))
+                            {
+                                var nested = vt[^1].GetGenericArguments();
+                                return vt.Take(vt.Length - 1).Concat(FlattenValueTupleTypeArguments(nested));
+
+                            }
+                            return vt;
+                        }
+
+                        if (tupleElementNamesAttribute.ConstructorArguments.Single().Value is IList<CustomAttributeTypedArgument> data)
+                        {
+                            var names = data.Select(a => a.Value as string).ToArray();
+                            var valueTupleTypes = FlattenValueTupleTypeArguments(genericArgs);
+                            return "(" + string.Join(", ", valueTupleTypes.Select((t, i) => t.ToString2() + " " + names[i]).ToArray()) + ")";
+                        }
+                    }
+
                     bool[] genericArgIsNullable = null;
                     if (methodNullableAttribute is not null)
                     {
@@ -913,7 +937,7 @@ using System.Threading.Tasks;
                     if (g == typeof(Nullable<>))
                         return type.GetGenericArguments()[0].ToString2() + "?";
                     else
-                        return g.ToString2() + "<" + string.Join(", ", genericArgs.Select((t, i) => t.ToString2() + GetGenericTypeArgNullabilitySuffix(i)).ToArray()) + ">";
+                        return g.ToString2() + "<" + string.Join(", ", genericArgs.Select((t, i) => t.ToString2(customAttributeData) + GetGenericTypeArgNullabilitySuffix(i)).ToArray()) + ">";
                 }
                 else
                 {

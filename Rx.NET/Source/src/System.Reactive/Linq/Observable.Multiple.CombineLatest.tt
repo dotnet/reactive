@@ -78,10 +78,12 @@ for (int j = 0; j < i; j++)
 #>
     }
 
+#pragma warning disable CA1711 // Identifiers should not have incorrect suffix. It has always been called this, so we can't change it now.
     public static partial class ObservableEx
+#pragma warning restore CA1711 // Identifiers should not have incorrect suffix
     {
 <#
-for (int i = 2; i <= 8; i++)
+for (int i = 2; i <= 16; i++)
 {
     var parameters = string.Join(", ", Enumerable.Range(1, i).Select(j => "IObservable<T" + toUpper(ordinals[j - 1]) + "> " + ordinals[j - 1]));
     var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + toUpper(ordinals[j - 1])));

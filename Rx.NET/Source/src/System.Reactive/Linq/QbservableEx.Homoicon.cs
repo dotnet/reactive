@@ -1,5 +1,5 @@
 /*
- * WARNING: Auto-generated file (2026/03/17 10:43:31)
+ * WARNING: Auto-generated file (2026/03/18 13:52:29)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 
@@ -29,17 +29,17 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond>> CombineLatest<TFirst, TSecond>(this IQbservable<TFirst> first, IObservable<TSecond> second)
+        public static IQbservable<(TFirst First, TSecond Second)> CombineLatest<TFirst, TSecond>(this IQbservable<TFirst> first, IObservable<TSecond> second)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IQbservable<ValueTuple<TFirst, TSecond>>>(CombineLatest<TFirst, TSecond>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IQbservable<(TFirst First, TSecond Second)>>(CombineLatest<TFirst, TSecond>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -58,7 +58,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond, TThird>> CombineLatest<TFirst, TSecond, TThird>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third)
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third)> CombineLatest<TFirst, TSecond, TThird>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -67,10 +67,10 @@ namespace System.Reactive.Linq
             if (third == null)
                 throw new ArgumentNullException(nameof(third));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IQbservable<ValueTuple<TFirst, TSecond, TThird>>>(CombineLatest<TFirst, TSecond, TThird>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IQbservable<(TFirst First, TSecond Second, TThird Third)>>(CombineLatest<TFirst, TSecond, TThird>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third)
@@ -92,7 +92,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth>> CombineLatest<TFirst, TSecond, TThird, TFourth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth)
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth)> CombineLatest<TFirst, TSecond, TThird, TFourth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -103,10 +103,10 @@ namespace System.Reactive.Linq
             if (fourth == null)
                 throw new ArgumentNullException(nameof(fourth));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth>>>(CombineLatest<TFirst, TSecond, TThird, TFourth>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth)>>(CombineLatest<TFirst, TSecond, TThird, TFourth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -131,7 +131,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth)
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth)> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -144,10 +144,10 @@ namespace System.Reactive.Linq
             if (fifth == null)
                 throw new ArgumentNullException(nameof(fifth));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth)>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -175,7 +175,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth)
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth)> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -190,10 +190,10 @@ namespace System.Reactive.Linq
             if (sixth == null)
                 throw new ArgumentNullException(nameof(sixth));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth)>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -224,7 +224,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh)
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh)> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -241,10 +241,10 @@ namespace System.Reactive.Linq
             if (seventh == null)
                 throw new ArgumentNullException(nameof(seventh));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh)>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -278,7 +278,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, ValueTuple<TEighth>>> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth)
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth)> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -297,10 +297,10 @@ namespace System.Reactive.Linq
             if (eighth == null)
                 throw new ArgumentNullException(nameof(eighth));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, ValueTuple<TEighth>>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, ValueTuple<TEighth>>>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth)>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -309,6 +309,642 @@ namespace System.Reactive.Linq
                     GetSourceExpression(sixth),
                     GetSourceExpression(seventh),
                     GetSourceExpression(eighth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever any of the observable sequences produces an element.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth)> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth)>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever any of the observable sequences produces an element.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth)> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth)>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever any of the observable sequences produces an element.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <typeparam name="TEleventh">The type of the elements in the eleventh source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <param name="eleventh">Eleventh observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> or <paramref name="eleventh" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh)> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth, IObservable<TEleventh> eleventh)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+            if (eleventh == null)
+                throw new ArgumentNullException(nameof(eleventh));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IObservable<TEleventh>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh)>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth),
+                    GetSourceExpression(eleventh)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever any of the observable sequences produces an element.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <typeparam name="TEleventh">The type of the elements in the eleventh source sequence.</typeparam>
+        /// <typeparam name="TTwelfth">The type of the elements in the twelfth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <param name="eleventh">Eleventh observable source.</param>
+        /// <param name="twelfth">Twelfth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> or <paramref name="eleventh" /> or <paramref name="twelfth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth)> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth, IObservable<TEleventh> eleventh, IObservable<TTwelfth> twelfth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+            if (eleventh == null)
+                throw new ArgumentNullException(nameof(eleventh));
+            if (twelfth == null)
+                throw new ArgumentNullException(nameof(twelfth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IObservable<TEleventh>, IObservable<TTwelfth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth)>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth),
+                    GetSourceExpression(eleventh),
+                    GetSourceExpression(twelfth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever any of the observable sequences produces an element.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <typeparam name="TEleventh">The type of the elements in the eleventh source sequence.</typeparam>
+        /// <typeparam name="TTwelfth">The type of the elements in the twelfth source sequence.</typeparam>
+        /// <typeparam name="TThirteenth">The type of the elements in the thirteenth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <param name="eleventh">Eleventh observable source.</param>
+        /// <param name="twelfth">Twelfth observable source.</param>
+        /// <param name="thirteenth">Thirteenth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> or <paramref name="eleventh" /> or <paramref name="twelfth" /> or <paramref name="thirteenth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth)> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth, IObservable<TEleventh> eleventh, IObservable<TTwelfth> twelfth, IObservable<TThirteenth> thirteenth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+            if (eleventh == null)
+                throw new ArgumentNullException(nameof(eleventh));
+            if (twelfth == null)
+                throw new ArgumentNullException(nameof(twelfth));
+            if (thirteenth == null)
+                throw new ArgumentNullException(nameof(thirteenth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IObservable<TEleventh>, IObservable<TTwelfth>, IObservable<TThirteenth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth)>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth),
+                    GetSourceExpression(eleventh),
+                    GetSourceExpression(twelfth),
+                    GetSourceExpression(thirteenth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever any of the observable sequences produces an element.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <typeparam name="TEleventh">The type of the elements in the eleventh source sequence.</typeparam>
+        /// <typeparam name="TTwelfth">The type of the elements in the twelfth source sequence.</typeparam>
+        /// <typeparam name="TThirteenth">The type of the elements in the thirteenth source sequence.</typeparam>
+        /// <typeparam name="TFourteenth">The type of the elements in the fourteenth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <param name="eleventh">Eleventh observable source.</param>
+        /// <param name="twelfth">Twelfth observable source.</param>
+        /// <param name="thirteenth">Thirteenth observable source.</param>
+        /// <param name="fourteenth">Fourteenth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> or <paramref name="eleventh" /> or <paramref name="twelfth" /> or <paramref name="thirteenth" /> or <paramref name="fourteenth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth)> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth, IObservable<TEleventh> eleventh, IObservable<TTwelfth> twelfth, IObservable<TThirteenth> thirteenth, IObservable<TFourteenth> fourteenth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+            if (eleventh == null)
+                throw new ArgumentNullException(nameof(eleventh));
+            if (twelfth == null)
+                throw new ArgumentNullException(nameof(twelfth));
+            if (thirteenth == null)
+                throw new ArgumentNullException(nameof(thirteenth));
+            if (fourteenth == null)
+                throw new ArgumentNullException(nameof(fourteenth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IObservable<TEleventh>, IObservable<TTwelfth>, IObservable<TThirteenth>, IObservable<TFourteenth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth)>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth),
+                    GetSourceExpression(eleventh),
+                    GetSourceExpression(twelfth),
+                    GetSourceExpression(thirteenth),
+                    GetSourceExpression(fourteenth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever any of the observable sequences produces an element.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <typeparam name="TEleventh">The type of the elements in the eleventh source sequence.</typeparam>
+        /// <typeparam name="TTwelfth">The type of the elements in the twelfth source sequence.</typeparam>
+        /// <typeparam name="TThirteenth">The type of the elements in the thirteenth source sequence.</typeparam>
+        /// <typeparam name="TFourteenth">The type of the elements in the fourteenth source sequence.</typeparam>
+        /// <typeparam name="TFifteenth">The type of the elements in the fifteenth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <param name="eleventh">Eleventh observable source.</param>
+        /// <param name="twelfth">Twelfth observable source.</param>
+        /// <param name="thirteenth">Thirteenth observable source.</param>
+        /// <param name="fourteenth">Fourteenth observable source.</param>
+        /// <param name="fifteenth">Fifteenth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> or <paramref name="eleventh" /> or <paramref name="twelfth" /> or <paramref name="thirteenth" /> or <paramref name="fourteenth" /> or <paramref name="fifteenth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth, TFifteenth Fifteenth)> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth, IObservable<TEleventh> eleventh, IObservable<TTwelfth> twelfth, IObservable<TThirteenth> thirteenth, IObservable<TFourteenth> fourteenth, IObservable<TFifteenth> fifteenth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+            if (eleventh == null)
+                throw new ArgumentNullException(nameof(eleventh));
+            if (twelfth == null)
+                throw new ArgumentNullException(nameof(twelfth));
+            if (thirteenth == null)
+                throw new ArgumentNullException(nameof(thirteenth));
+            if (fourteenth == null)
+                throw new ArgumentNullException(nameof(fourteenth));
+            if (fifteenth == null)
+                throw new ArgumentNullException(nameof(fifteenth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth, TFifteenth Fifteenth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IObservable<TEleventh>, IObservable<TTwelfth>, IObservable<TThirteenth>, IObservable<TFourteenth>, IObservable<TFifteenth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth, TFifteenth Fifteenth)>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth),
+                    GetSourceExpression(eleventh),
+                    GetSourceExpression(twelfth),
+                    GetSourceExpression(thirteenth),
+                    GetSourceExpression(fourteenth),
+                    GetSourceExpression(fifteenth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever any of the observable sequences produces an element.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <typeparam name="TEleventh">The type of the elements in the eleventh source sequence.</typeparam>
+        /// <typeparam name="TTwelfth">The type of the elements in the twelfth source sequence.</typeparam>
+        /// <typeparam name="TThirteenth">The type of the elements in the thirteenth source sequence.</typeparam>
+        /// <typeparam name="TFourteenth">The type of the elements in the fourteenth source sequence.</typeparam>
+        /// <typeparam name="TFifteenth">The type of the elements in the fifteenth source sequence.</typeparam>
+        /// <typeparam name="TSixteenth">The type of the elements in the sixteenth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <param name="eleventh">Eleventh observable source.</param>
+        /// <param name="twelfth">Twelfth observable source.</param>
+        /// <param name="thirteenth">Thirteenth observable source.</param>
+        /// <param name="fourteenth">Fourteenth observable source.</param>
+        /// <param name="fifteenth">Fifteenth observable source.</param>
+        /// <param name="sixteenth">Sixteenth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> or <paramref name="eleventh" /> or <paramref name="twelfth" /> or <paramref name="thirteenth" /> or <paramref name="fourteenth" /> or <paramref name="fifteenth" /> or <paramref name="sixteenth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth, TFifteenth Fifteenth, TSixteenth Sixteenth)> CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth, TSixteenth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth, IObservable<TEleventh> eleventh, IObservable<TTwelfth> twelfth, IObservable<TThirteenth> thirteenth, IObservable<TFourteenth> fourteenth, IObservable<TFifteenth> fifteenth, IObservable<TSixteenth> sixteenth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+            if (eleventh == null)
+                throw new ArgumentNullException(nameof(eleventh));
+            if (twelfth == null)
+                throw new ArgumentNullException(nameof(twelfth));
+            if (thirteenth == null)
+                throw new ArgumentNullException(nameof(thirteenth));
+            if (fourteenth == null)
+                throw new ArgumentNullException(nameof(fourteenth));
+            if (fifteenth == null)
+                throw new ArgumentNullException(nameof(fifteenth));
+            if (sixteenth == null)
+                throw new ArgumentNullException(nameof(sixteenth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth, TFifteenth Fifteenth, TSixteenth Sixteenth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IObservable<TEleventh>, IObservable<TTwelfth>, IObservable<TThirteenth>, IObservable<TFourteenth>, IObservable<TFifteenth>, IObservable<TSixteenth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth, TFifteenth Fifteenth, TSixteenth Sixteenth)>>(CombineLatest<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth, TSixteenth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth),
+                    GetSourceExpression(eleventh),
+                    GetSourceExpression(twelfth),
+                    GetSourceExpression(thirteenth),
+                    GetSourceExpression(fourteenth),
+                    GetSourceExpression(fifteenth),
+                    GetSourceExpression(sixteenth)
                 )
             );
         }
@@ -615,17 +1251,17 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining each element of the first source with the latest element from the second source, if any, as a tuple value.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond>> WithLatestFrom<TFirst, TSecond>(this IQbservable<TFirst> first, IObservable<TSecond> second)
+        public static IQbservable<(TFirst First, TSecond Second)> WithLatestFrom<TFirst, TSecond>(this IQbservable<TFirst> first, IObservable<TSecond> second)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IQbservable<ValueTuple<TFirst, TSecond>>>(WithLatestFrom<TFirst, TSecond>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IQbservable<(TFirst First, TSecond Second)>>(WithLatestFrom<TFirst, TSecond>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -642,17 +1278,17 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of pairwise combining the elements of the first and second source as a tuple value.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond>> Zip<TFirst, TSecond>(this IQbservable<TFirst> first, IEnumerable<TSecond> second)
+        public static IQbservable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IQbservable<TFirst> first, IEnumerable<TSecond> second)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IEnumerable<TSecond>, IQbservable<ValueTuple<TFirst, TSecond>>>(Zip<TFirst, TSecond>).Method,
+                    new Func<IQbservable<TFirst>, IEnumerable<TSecond>, IQbservable<(TFirst First, TSecond Second)>>(Zip<TFirst, TSecond>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -669,17 +1305,17 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond>> Zip<TFirst, TSecond>(this IQbservable<TFirst> first, IObservable<TSecond> second)
+        public static IQbservable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IQbservable<TFirst> first, IObservable<TSecond> second)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IQbservable<ValueTuple<TFirst, TSecond>>>(Zip<TFirst, TSecond>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IQbservable<(TFirst First, TSecond Second)>>(Zip<TFirst, TSecond>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -698,7 +1334,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond, TThird>> Zip<TFirst, TSecond, TThird>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third)
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third)> Zip<TFirst, TSecond, TThird>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -707,10 +1343,10 @@ namespace System.Reactive.Linq
             if (third == null)
                 throw new ArgumentNullException(nameof(third));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IQbservable<ValueTuple<TFirst, TSecond, TThird>>>(Zip<TFirst, TSecond, TThird>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IQbservable<(TFirst First, TSecond Second, TThird Third)>>(Zip<TFirst, TSecond, TThird>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third)
@@ -732,7 +1368,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth>> Zip<TFirst, TSecond, TThird, TFourth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth)
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth)> Zip<TFirst, TSecond, TThird, TFourth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -743,10 +1379,10 @@ namespace System.Reactive.Linq
             if (fourth == null)
                 throw new ArgumentNullException(nameof(fourth));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth>>>(Zip<TFirst, TSecond, TThird, TFourth>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth)>>(Zip<TFirst, TSecond, TThird, TFourth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -771,7 +1407,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>> Zip<TFirst, TSecond, TThird, TFourth, TFifth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth)
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth)> Zip<TFirst, TSecond, TThird, TFourth, TFifth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -784,10 +1420,10 @@ namespace System.Reactive.Linq
             if (fifth == null)
                 throw new ArgumentNullException(nameof(fifth));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth>>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth)>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -815,7 +1451,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth)
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth)> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -830,10 +1466,10 @@ namespace System.Reactive.Linq
             if (sixth == null)
                 throw new ArgumentNullException(nameof(sixth));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth)>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -864,7 +1500,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh)
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh)> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -881,10 +1517,10 @@ namespace System.Reactive.Linq
             if (seventh == null)
                 throw new ArgumentNullException(nameof(seventh));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh)>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -918,7 +1554,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> is null.</exception>
-        public static IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, ValueTuple<TEighth>>> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth)
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth)> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth)
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
@@ -937,10 +1573,10 @@ namespace System.Reactive.Linq
             if (eighth == null)
                 throw new ArgumentNullException(nameof(eighth));
 
-            return first.Provider.CreateQuery<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, ValueTuple<TEighth>>>(
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth)>(
                 Expression.Call(
                     null,
-                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IQbservable<ValueTuple<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, ValueTuple<TEighth>>>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>).Method,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth)>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     GetSourceExpression(third),
@@ -949,6 +1585,642 @@ namespace System.Reactive.Linq
                     GetSourceExpression(sixth),
                     GetSourceExpression(seventh),
                     GetSourceExpression(eighth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever all of the observable sequences have produced an element at a corresponding index.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth)> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth)>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever all of the observable sequences have produced an element at a corresponding index.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth)> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth)>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever all of the observable sequences have produced an element at a corresponding index.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <typeparam name="TEleventh">The type of the elements in the eleventh source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <param name="eleventh">Eleventh observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> or <paramref name="eleventh" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh)> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth, IObservable<TEleventh> eleventh)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+            if (eleventh == null)
+                throw new ArgumentNullException(nameof(eleventh));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IObservable<TEleventh>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh)>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth),
+                    GetSourceExpression(eleventh)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever all of the observable sequences have produced an element at a corresponding index.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <typeparam name="TEleventh">The type of the elements in the eleventh source sequence.</typeparam>
+        /// <typeparam name="TTwelfth">The type of the elements in the twelfth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <param name="eleventh">Eleventh observable source.</param>
+        /// <param name="twelfth">Twelfth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> or <paramref name="eleventh" /> or <paramref name="twelfth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth)> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth, IObservable<TEleventh> eleventh, IObservable<TTwelfth> twelfth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+            if (eleventh == null)
+                throw new ArgumentNullException(nameof(eleventh));
+            if (twelfth == null)
+                throw new ArgumentNullException(nameof(twelfth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IObservable<TEleventh>, IObservable<TTwelfth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth)>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth),
+                    GetSourceExpression(eleventh),
+                    GetSourceExpression(twelfth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever all of the observable sequences have produced an element at a corresponding index.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <typeparam name="TEleventh">The type of the elements in the eleventh source sequence.</typeparam>
+        /// <typeparam name="TTwelfth">The type of the elements in the twelfth source sequence.</typeparam>
+        /// <typeparam name="TThirteenth">The type of the elements in the thirteenth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <param name="eleventh">Eleventh observable source.</param>
+        /// <param name="twelfth">Twelfth observable source.</param>
+        /// <param name="thirteenth">Thirteenth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> or <paramref name="eleventh" /> or <paramref name="twelfth" /> or <paramref name="thirteenth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth)> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth, IObservable<TEleventh> eleventh, IObservable<TTwelfth> twelfth, IObservable<TThirteenth> thirteenth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+            if (eleventh == null)
+                throw new ArgumentNullException(nameof(eleventh));
+            if (twelfth == null)
+                throw new ArgumentNullException(nameof(twelfth));
+            if (thirteenth == null)
+                throw new ArgumentNullException(nameof(thirteenth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IObservable<TEleventh>, IObservable<TTwelfth>, IObservable<TThirteenth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth)>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth),
+                    GetSourceExpression(eleventh),
+                    GetSourceExpression(twelfth),
+                    GetSourceExpression(thirteenth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever all of the observable sequences have produced an element at a corresponding index.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <typeparam name="TEleventh">The type of the elements in the eleventh source sequence.</typeparam>
+        /// <typeparam name="TTwelfth">The type of the elements in the twelfth source sequence.</typeparam>
+        /// <typeparam name="TThirteenth">The type of the elements in the thirteenth source sequence.</typeparam>
+        /// <typeparam name="TFourteenth">The type of the elements in the fourteenth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <param name="eleventh">Eleventh observable source.</param>
+        /// <param name="twelfth">Twelfth observable source.</param>
+        /// <param name="thirteenth">Thirteenth observable source.</param>
+        /// <param name="fourteenth">Fourteenth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> or <paramref name="eleventh" /> or <paramref name="twelfth" /> or <paramref name="thirteenth" /> or <paramref name="fourteenth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth)> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth, IObservable<TEleventh> eleventh, IObservable<TTwelfth> twelfth, IObservable<TThirteenth> thirteenth, IObservable<TFourteenth> fourteenth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+            if (eleventh == null)
+                throw new ArgumentNullException(nameof(eleventh));
+            if (twelfth == null)
+                throw new ArgumentNullException(nameof(twelfth));
+            if (thirteenth == null)
+                throw new ArgumentNullException(nameof(thirteenth));
+            if (fourteenth == null)
+                throw new ArgumentNullException(nameof(fourteenth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IObservable<TEleventh>, IObservable<TTwelfth>, IObservable<TThirteenth>, IObservable<TFourteenth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth)>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth),
+                    GetSourceExpression(eleventh),
+                    GetSourceExpression(twelfth),
+                    GetSourceExpression(thirteenth),
+                    GetSourceExpression(fourteenth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever all of the observable sequences have produced an element at a corresponding index.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <typeparam name="TEleventh">The type of the elements in the eleventh source sequence.</typeparam>
+        /// <typeparam name="TTwelfth">The type of the elements in the twelfth source sequence.</typeparam>
+        /// <typeparam name="TThirteenth">The type of the elements in the thirteenth source sequence.</typeparam>
+        /// <typeparam name="TFourteenth">The type of the elements in the fourteenth source sequence.</typeparam>
+        /// <typeparam name="TFifteenth">The type of the elements in the fifteenth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <param name="eleventh">Eleventh observable source.</param>
+        /// <param name="twelfth">Twelfth observable source.</param>
+        /// <param name="thirteenth">Thirteenth observable source.</param>
+        /// <param name="fourteenth">Fourteenth observable source.</param>
+        /// <param name="fifteenth">Fifteenth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> or <paramref name="eleventh" /> or <paramref name="twelfth" /> or <paramref name="thirteenth" /> or <paramref name="fourteenth" /> or <paramref name="fifteenth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth, TFifteenth Fifteenth)> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth, IObservable<TEleventh> eleventh, IObservable<TTwelfth> twelfth, IObservable<TThirteenth> thirteenth, IObservable<TFourteenth> fourteenth, IObservable<TFifteenth> fifteenth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+            if (eleventh == null)
+                throw new ArgumentNullException(nameof(eleventh));
+            if (twelfth == null)
+                throw new ArgumentNullException(nameof(twelfth));
+            if (thirteenth == null)
+                throw new ArgumentNullException(nameof(thirteenth));
+            if (fourteenth == null)
+                throw new ArgumentNullException(nameof(fourteenth));
+            if (fifteenth == null)
+                throw new ArgumentNullException(nameof(fifteenth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth, TFifteenth Fifteenth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IObservable<TEleventh>, IObservable<TTwelfth>, IObservable<TThirteenth>, IObservable<TFourteenth>, IObservable<TFifteenth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth, TFifteenth Fifteenth)>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth),
+                    GetSourceExpression(eleventh),
+                    GetSourceExpression(twelfth),
+                    GetSourceExpression(thirteenth),
+                    GetSourceExpression(fourteenth),
+                    GetSourceExpression(fifteenth)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Merges the specified observable sequences into one observable sequence of tuple values whenever all of the observable sequences have produced an element at a corresponding index.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TThird">The type of the elements in the third source sequence.</typeparam>
+        /// <typeparam name="TFourth">The type of the elements in the fourth source sequence.</typeparam>
+        /// <typeparam name="TFifth">The type of the elements in the fifth source sequence.</typeparam>
+        /// <typeparam name="TSixth">The type of the elements in the sixth source sequence.</typeparam>
+        /// <typeparam name="TSeventh">The type of the elements in the seventh source sequence.</typeparam>
+        /// <typeparam name="TEighth">The type of the elements in the eighth source sequence.</typeparam>
+        /// <typeparam name="TNinth">The type of the elements in the ninth source sequence.</typeparam>
+        /// <typeparam name="TTenth">The type of the elements in the tenth source sequence.</typeparam>
+        /// <typeparam name="TEleventh">The type of the elements in the eleventh source sequence.</typeparam>
+        /// <typeparam name="TTwelfth">The type of the elements in the twelfth source sequence.</typeparam>
+        /// <typeparam name="TThirteenth">The type of the elements in the thirteenth source sequence.</typeparam>
+        /// <typeparam name="TFourteenth">The type of the elements in the fourteenth source sequence.</typeparam>
+        /// <typeparam name="TFifteenth">The type of the elements in the fifteenth source sequence.</typeparam>
+        /// <typeparam name="TSixteenth">The type of the elements in the sixteenth source sequence.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="third">Third observable source.</param>
+        /// <param name="fourth">Fourth observable source.</param>
+        /// <param name="fifth">Fifth observable source.</param>
+        /// <param name="sixth">Sixth observable source.</param>
+        /// <param name="seventh">Seventh observable source.</param>
+        /// <param name="eighth">Eighth observable source.</param>
+        /// <param name="ninth">Ninth observable source.</param>
+        /// <param name="tenth">Tenth observable source.</param>
+        /// <param name="eleventh">Eleventh observable source.</param>
+        /// <param name="twelfth">Twelfth observable source.</param>
+        /// <param name="thirteenth">Thirteenth observable source.</param>
+        /// <param name="fourteenth">Fourteenth observable source.</param>
+        /// <param name="fifteenth">Fifteenth observable source.</param>
+        /// <param name="sixteenth">Sixteenth observable source.</param>
+        /// <returns>An observable sequence containing the result of combining elements of the sources using tuple values.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="third" /> or <paramref name="fourth" /> or <paramref name="fifth" /> or <paramref name="sixth" /> or <paramref name="seventh" /> or <paramref name="eighth" /> or <paramref name="ninth" /> or <paramref name="tenth" /> or <paramref name="eleventh" /> or <paramref name="twelfth" /> or <paramref name="thirteenth" /> or <paramref name="fourteenth" /> or <paramref name="fifteenth" /> or <paramref name="sixteenth" /> is null.</exception>
+        public static IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth, TFifteenth Fifteenth, TSixteenth Sixteenth)> Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth, TSixteenth>(this IQbservable<TFirst> first, IObservable<TSecond> second, IObservable<TThird> third, IObservable<TFourth> fourth, IObservable<TFifth> fifth, IObservable<TSixth> sixth, IObservable<TSeventh> seventh, IObservable<TEighth> eighth, IObservable<TNinth> ninth, IObservable<TTenth> tenth, IObservable<TEleventh> eleventh, IObservable<TTwelfth> twelfth, IObservable<TThirteenth> thirteenth, IObservable<TFourteenth> fourteenth, IObservable<TFifteenth> fifteenth, IObservable<TSixteenth> sixteenth)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (third == null)
+                throw new ArgumentNullException(nameof(third));
+            if (fourth == null)
+                throw new ArgumentNullException(nameof(fourth));
+            if (fifth == null)
+                throw new ArgumentNullException(nameof(fifth));
+            if (sixth == null)
+                throw new ArgumentNullException(nameof(sixth));
+            if (seventh == null)
+                throw new ArgumentNullException(nameof(seventh));
+            if (eighth == null)
+                throw new ArgumentNullException(nameof(eighth));
+            if (ninth == null)
+                throw new ArgumentNullException(nameof(ninth));
+            if (tenth == null)
+                throw new ArgumentNullException(nameof(tenth));
+            if (eleventh == null)
+                throw new ArgumentNullException(nameof(eleventh));
+            if (twelfth == null)
+                throw new ArgumentNullException(nameof(twelfth));
+            if (thirteenth == null)
+                throw new ArgumentNullException(nameof(thirteenth));
+            if (fourteenth == null)
+                throw new ArgumentNullException(nameof(fourteenth));
+            if (fifteenth == null)
+                throw new ArgumentNullException(nameof(fifteenth));
+            if (sixteenth == null)
+                throw new ArgumentNullException(nameof(sixteenth));
+
+            return first.Provider.CreateQuery<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth, TFifteenth Fifteenth, TSixteenth Sixteenth)>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, IObservable<TThird>, IObservable<TFourth>, IObservable<TFifth>, IObservable<TSixth>, IObservable<TSeventh>, IObservable<TEighth>, IObservable<TNinth>, IObservable<TTenth>, IObservable<TEleventh>, IObservable<TTwelfth>, IObservable<TThirteenth>, IObservable<TFourteenth>, IObservable<TFifteenth>, IObservable<TSixteenth>, IQbservable<(TFirst First, TSecond Second, TThird Third, TFourth Fourth, TFifth Fifth, TSixth Sixth, TSeventh Seventh, TEighth Eighth, TNinth Ninth, TTenth Tenth, TEleventh Eleventh, TTwelfth Twelfth, TThirteenth Thirteenth, TFourteenth Fourteenth, TFifteenth Fifteenth, TSixteenth Sixteenth)>>(Zip<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TEighth, TNinth, TTenth, TEleventh, TTwelfth, TThirteenth, TFourteenth, TFifteenth, TSixteenth>).Method,
+                    first.Expression,
+                    GetSourceExpression(second),
+                    GetSourceExpression(third),
+                    GetSourceExpression(fourth),
+                    GetSourceExpression(fifth),
+                    GetSourceExpression(sixth),
+                    GetSourceExpression(seventh),
+                    GetSourceExpression(eighth),
+                    GetSourceExpression(ninth),
+                    GetSourceExpression(tenth),
+                    GetSourceExpression(eleventh),
+                    GetSourceExpression(twelfth),
+                    GetSourceExpression(thirteenth),
+                    GetSourceExpression(fourteenth),
+                    GetSourceExpression(fifteenth),
+                    GetSourceExpression(sixteenth)
                 )
             );
         }
