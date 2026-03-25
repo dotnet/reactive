@@ -1,5 +1,5 @@
-﻿/*
- * WARNING: Auto-generated file (merged on 04/19/2023)
+/*
+ * WARNING: Auto-generated file (2026/03/18 13:52:29)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 
@@ -43,7 +43,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TSource, TSource>>, IQbservable<TSource>>(Aggregate<TSource>).Method,
                     source.Expression,
                     accumulator
                 )
@@ -73,7 +73,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TAccumulate>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TAccumulate)),
+                    new Func<IQbservable<TSource>, TAccumulate, Expression<Func<TAccumulate, TSource, TAccumulate>>, IQbservable<TAccumulate>>(Aggregate<TSource, TAccumulate>).Method,
                     source.Expression,
                     Expression.Constant(seed, typeof(TAccumulate)),
                     accumulator
@@ -108,7 +108,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TAccumulate), typeof(TResult)),
+                    new Func<IQbservable<TSource>, TAccumulate, Expression<Func<TAccumulate, TSource, TAccumulate>>, Expression<Func<TAccumulate, TResult>>, IQbservable<TResult>>(Aggregate<TSource, TAccumulate, TResult>).Method,
                     source.Expression,
                     Expression.Constant(seed, typeof(TAccumulate)),
                     accumulator,
@@ -137,7 +137,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<bool>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<bool>>(All<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -163,7 +163,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IObservable<TSource>, IQbservable<TSource>>(Amb<TSource>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -189,7 +189,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IObservable<TSource>[], IQbservable<TSource>>(Amb<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -215,7 +215,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, IQbservable<TSource>>(Amb<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -239,7 +239,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<bool>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<bool>>(Any<TSource>).Method,
                     source.Expression
                 )
             );
@@ -265,7 +265,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<bool>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<bool>>(Any<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -289,7 +289,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TSource, IQbservable<TSource>>(Append<TSource>).Method,
                     source.Expression,
                     Expression.Constant(value, typeof(TSource))
                 )
@@ -316,7 +316,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TSource, IScheduler, IQbservable<TSource>>(Append<TSource>).Method,
                     source.Expression,
                     Expression.Constant(value, typeof(TSource)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -348,7 +348,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IConnectableObservable<TSource>, int, Expression<Action<IDisposable>>, IQbservable<TSource>>(AutoConnect<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
                     Expression.Constant(minObservers, typeof(int)),
@@ -358,9 +358,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Decimal" /> values.
+        /// Computes the average of an observable sequence of <see cref="decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Decimal" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="decimal" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -375,7 +375,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<decimal>, IQbservable<decimal>>(Average).Method,
                     source.Expression
                 )
             );
@@ -398,7 +398,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<double>, IQbservable<double>>(Average).Method,
                     source.Expression
                 )
             );
@@ -422,7 +422,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<int>, IQbservable<double>>(Average).Method,
                     source.Expression
                 )
             );
@@ -446,16 +446,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<long>, IQbservable<double>>(Average).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Decimal" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Decimal" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="decimal" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -470,7 +470,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<decimal?>, IQbservable<decimal?>>(Average).Method,
                     source.Expression
                 )
             );
@@ -493,7 +493,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<double?>, IQbservable<double?>>(Average).Method,
                     source.Expression
                 )
             );
@@ -517,7 +517,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<int?>, IQbservable<double?>>(Average).Method,
                     source.Expression
                 )
             );
@@ -541,16 +541,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<long?>, IQbservable<double?>>(Average).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Single" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Single" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="float" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -564,16 +564,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<float?>, IQbservable<float?>>(Average).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Single" /> values.
+        /// Computes the average of an observable sequence of <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Single" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="float" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -587,14 +587,14 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<float>, IQbservable<float>>(Average).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -615,7 +615,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, decimal>>, IQbservable<decimal>>(Average<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -643,7 +643,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, double>>, IQbservable<double>>(Average<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -651,7 +651,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -671,7 +671,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, float>>, IQbservable<float>>(Average<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -700,7 +700,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int>>, IQbservable<double>>(Average<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -729,7 +729,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, long>>, IQbservable<double>>(Average<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -737,7 +737,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -758,7 +758,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, decimal?>>, IQbservable<decimal?>>(Average<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -786,7 +786,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, double?>>, IQbservable<double?>>(Average<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -794,7 +794,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -814,7 +814,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, float?>>, IQbservable<float?>>(Average<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -843,7 +843,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int?>>, IQbservable<double?>>(Average<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -872,7 +872,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, long?>>, IQbservable<double?>>(Average<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -898,7 +898,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IQbservable<IList<TSource>>>(Buffer<TSource>).Method,
                     source.Expression,
                     Expression.Constant(count, typeof(int))
                 )
@@ -925,7 +925,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, int, IQbservable<IList<TSource>>>(Buffer<TSource>).Method,
                     source.Expression,
                     Expression.Constant(count, typeof(int)),
                     Expression.Constant(skip, typeof(int))
@@ -957,7 +957,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IQbservable<IList<TSource>>>(Buffer<TSource>).Method,
                     source.Expression,
                     Expression.Constant(timeSpan, typeof(TimeSpan))
                 )
@@ -990,7 +990,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, int, IQbservable<IList<TSource>>>(Buffer<TSource>).Method,
                     source.Expression,
                     Expression.Constant(timeSpan, typeof(TimeSpan)),
                     Expression.Constant(count, typeof(int))
@@ -1027,7 +1027,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, int, IScheduler, IQbservable<IList<TSource>>>(Buffer<TSource>).Method,
                     source.Expression,
                     Expression.Constant(timeSpan, typeof(TimeSpan)),
                     Expression.Constant(count, typeof(int)),
@@ -1063,7 +1063,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IQbservable<IList<TSource>>>(Buffer<TSource>).Method,
                     source.Expression,
                     Expression.Constant(timeSpan, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -1103,7 +1103,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, TimeSpan, IQbservable<IList<TSource>>>(Buffer<TSource>).Method,
                     source.Expression,
                     Expression.Constant(timeSpan, typeof(TimeSpan)),
                     Expression.Constant(timeShift, typeof(TimeSpan))
@@ -1146,7 +1146,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, TimeSpan, IScheduler, IQbservable<IList<TSource>>>(Buffer<TSource>).Method,
                     source.Expression,
                     Expression.Constant(timeSpan, typeof(TimeSpan)),
                     Expression.Constant(timeShift, typeof(TimeSpan)),
@@ -1175,7 +1175,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TBufferBoundary)),
+                    new Func<IQbservable<TSource>, IObservable<TBufferBoundary>, IQbservable<IList<TSource>>>(Buffer<TSource, TBufferBoundary>).Method,
                     source.Expression,
                     GetSourceExpression(bufferBoundaries)
                 )
@@ -1202,7 +1202,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TBufferClosing)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TBufferClosing>>>, IQbservable<IList<TSource>>>(Buffer<TSource, TBufferClosing>).Method,
                     source.Expression,
                     bufferClosingSelector
                 )
@@ -1233,34 +1233,10 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TBufferOpening), typeof(TBufferClosing)),
+                    new Func<IQbservable<TSource>, IObservable<TBufferOpening>, Expression<Func<TBufferOpening, IObservable<TBufferClosing>>>, IQbservable<IList<TSource>>>(Buffer<TSource, TBufferOpening, TBufferClosing>).Method,
                     source.Expression,
                     GetSourceExpression(bufferOpenings),
                     bufferClosingSelector
-                )
-            );
-        }
-
-        /// <summary>
-        /// Propagates all messages, but if <paramref name="source" /> produces an error, this updates the dispatch state
-        /// of the <see cref="Exception" /> to reflect the current execution context (by executing a
-        /// <see langword="throw" /> or equivalent operation) before passing the notification on.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">Source sequence.</param>
-        /// <returns>The source sequence with the exception dispatch state modifying behavior applied.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="source" /> is null.</exception>
-        public static IQbservable<TSource> ResetExceptionDispatchState<TSource>(this IQbservable<TSource> source)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return source.Provider.CreateQuery<TSource>(
-                Expression.Call(
-                    null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
-                    source.Expression
                 )
             );
         }
@@ -1277,7 +1253,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException">
         /// <paramref name="selector" /> or <paramref name="sources" /> is null.</exception>
         public static IQbservable<TResult> Case<TValue, TResult>(this IQbservableProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IObservable<TResult>> sources)
-            where TValue : notnull
+        where TValue : notnull
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -1289,7 +1265,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TValue), typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<TValue>>, IDictionary<TValue, IObservable<TResult>>, IQbservable<TResult>>(Case<TValue, TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     selector,
                     Expression.Constant(sources, typeof(IDictionary<TValue, IObservable<TResult>>))
@@ -1310,7 +1286,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException">
         /// <paramref name="selector" /> or <paramref name="sources" /> or <paramref name="defaultSource" /> is null.</exception>
         public static IQbservable<TResult> Case<TValue, TResult>(this IQbservableProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IObservable<TResult>> sources, IObservable<TResult> defaultSource)
-            where TValue : notnull
+        where TValue : notnull
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -1324,7 +1300,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TValue), typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<TValue>>, IDictionary<TValue, IObservable<TResult>>, IObservable<TResult>, IQbservable<TResult>>(Case<TValue, TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     selector,
                     Expression.Constant(sources, typeof(IDictionary<TValue, IObservable<TResult>>)),
@@ -1346,7 +1322,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException">
         /// <paramref name="selector" /> or <paramref name="sources" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> Case<TValue, TResult>(this IQbservableProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IObservable<TResult>> sources, IScheduler scheduler)
-            where TValue : notnull
+        where TValue : notnull
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -1360,7 +1336,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TValue), typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<TValue>>, IDictionary<TValue, IObservable<TResult>>, IScheduler, IQbservable<TResult>>(Case<TValue, TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     selector,
                     Expression.Constant(sources, typeof(IDictionary<TValue, IObservable<TResult>>)),
@@ -1385,7 +1361,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservable<object>, IQbservable<TResult>>(Cast<TResult>).Method,
                     source.Expression
                 )
             );
@@ -1410,7 +1386,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IObservable<TSource>, IQbservable<TSource>>(Catch<TSource>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -1436,7 +1412,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IObservable<TSource>[], IQbservable<TSource>>(Catch<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -1462,7 +1438,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, IQbservable<TSource>>(Catch<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -1490,7 +1466,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TException)),
+                    new Func<IQbservable<TSource>, Expression<Func<TException, IObservable<TSource>>>, IQbservable<TSource>>(Catch<TSource, TException>).Method,
                     source.Expression,
                     handler
                 )
@@ -1514,7 +1490,7 @@ namespace System.Reactive.Linq
             return ((IQueryProvider)source.Provider).CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQueryable<IList<TSource>>>(Chunkify<TSource>).Method,
                     source.Expression
                 )
             );
@@ -1547,7 +1523,7 @@ namespace System.Reactive.Linq
             return ((IQueryProvider)source.Provider).CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TResult>>, Expression<Func<TResult, TSource, TResult>>, Expression<Func<TResult, TResult>>, IQueryable<TResult>>(Collect<TSource, TResult>).Method,
                     source.Expression,
                     getInitialCollector,
                     merge,
@@ -1580,7 +1556,7 @@ namespace System.Reactive.Linq
             return ((IQueryProvider)source.Provider).CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TResult>>, Expression<Func<TResult, TSource, TResult>>, IQueryable<TResult>>(Collect<TSource, TResult>).Method,
                     source.Expression,
                     newCollector,
                     merge
@@ -1608,7 +1584,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, IQbservable<IList<TSource>>>(CombineLatest<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -1635,7 +1611,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IObservable<TSource>[], IQbservable<IList<TSource>>>(CombineLatest<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -1666,7 +1642,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, Expression<Func<IList<TSource>, TResult>>, IQbservable<TResult>>(CombineLatest<TSource, TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources),
                     resultSelector
@@ -1699,7 +1675,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, Expression<Func<TSource1, TSource2, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TResult>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     resultSelector
@@ -1736,7 +1712,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, Expression<Func<TSource1, TSource2, TSource3, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -1778,7 +1754,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -1825,7 +1801,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -1877,7 +1853,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -1934,7 +1910,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -1996,7 +1972,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -2063,7 +2039,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -2135,7 +2111,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -2212,7 +2188,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TSource11), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, IObservable<TSource11>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -2294,7 +2270,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TSource11), typeof(TSource12), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, IObservable<TSource11>, IObservable<TSource12>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -2381,7 +2357,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TSource11), typeof(TSource12), typeof(TSource13), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, IObservable<TSource11>, IObservable<TSource12>, IObservable<TSource13>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -2473,7 +2449,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TSource11), typeof(TSource12), typeof(TSource13), typeof(TSource14), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, IObservable<TSource11>, IObservable<TSource12>, IObservable<TSource13>, IObservable<TSource14>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -2570,7 +2546,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TSource11), typeof(TSource12), typeof(TSource13), typeof(TSource14), typeof(TSource15), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, IObservable<TSource11>, IObservable<TSource12>, IObservable<TSource13>, IObservable<TSource14>, IObservable<TSource15>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -2672,7 +2648,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TSource11), typeof(TSource12), typeof(TSource13), typeof(TSource14), typeof(TSource15), typeof(TSource16), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, IObservable<TSource11>, IObservable<TSource12>, IObservable<TSource13>, IObservable<TSource14>, IObservable<TSource15>, IObservable<TSource16>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>>, IQbservable<TResult>>(CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -2713,7 +2689,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IObservable<TSource>, IQbservable<TSource>>(Concat<TSource>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -2739,7 +2715,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IObservable<TSource>[], IQbservable<TSource>>(Concat<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -2765,7 +2741,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, IQbservable<TSource>>(Concat<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -2788,7 +2764,7 @@ namespace System.Reactive.Linq
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<IObservable<TSource>>, IQbservable<TSource>>(Concat<TSource>).Method,
                     sources.Expression
                 )
             );
@@ -2811,7 +2787,7 @@ namespace System.Reactive.Linq
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<Task<TSource>>, IQbservable<TSource>>(Concat<TSource>).Method,
                     sources.Expression
                 )
             );
@@ -2835,7 +2811,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<bool>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TSource, IQbservable<bool>>(Contains<TSource>).Method,
                     source.Expression,
                     Expression.Constant(value, typeof(TSource))
                 )
@@ -2863,7 +2839,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<bool>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TSource, IEqualityComparer<TSource>, IQbservable<bool>>(Contains<TSource>).Method,
                     source.Expression,
                     Expression.Constant(value, typeof(TSource)),
                     Expression.Constant(comparer, typeof(IEqualityComparer<TSource>))
@@ -2889,7 +2865,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<int>>(Count<TSource>).Method,
                     source.Expression
                 )
             );
@@ -2915,7 +2891,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<int>>(Count<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -2946,7 +2922,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<IObserver<TResult>, IDisposable>>, IQbservable<TResult>>(Create<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     subscribe
                 )
@@ -2977,7 +2953,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<IObserver<TResult>, Action>>, IQbservable<TResult>>(Create<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     subscribe
                 )
@@ -3006,7 +2982,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<IObserver<TResult>, CancellationToken, Task>>, IQbservable<TResult>>(Create<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     subscribeAsync
                 )
@@ -3033,7 +3009,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<IObserver<TResult>, Task>>, IQbservable<TResult>>(Create<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     subscribeAsync
                 )
@@ -3062,7 +3038,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<IObserver<TResult>, CancellationToken, Task<IDisposable>>>, IQbservable<TResult>>(Create<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     subscribeAsync
                 )
@@ -3089,7 +3065,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<IObserver<TResult>, Task<IDisposable>>>, IQbservable<TResult>>(Create<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     subscribeAsync
                 )
@@ -3118,7 +3094,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<IObserver<TResult>, CancellationToken, Task<Action>>>, IQbservable<TResult>>(Create<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     subscribeAsync
                 )
@@ -3145,7 +3121,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<IObserver<TResult>, Task<Action>>>, IQbservable<TResult>>(Create<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     subscribeAsync
                 )
@@ -3168,7 +3144,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource?>>(DefaultIfEmpty<TSource>).Method,
                     source.Expression
                 )
             );
@@ -3191,7 +3167,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TSource, IQbservable<TSource>>(DefaultIfEmpty<TSource>).Method,
                     source.Expression,
                     Expression.Constant(defaultValue, typeof(TSource))
                 )
@@ -3217,7 +3193,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<IObservable<TResult>>>, IQbservable<TResult>>(Defer<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     observableFactory
                 )
@@ -3244,7 +3220,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<Task<IObservable<TResult>>>>, IQbservable<TResult>>(Defer<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     observableFactoryAsync
                 )
@@ -3276,7 +3252,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<Task<IObservable<TResult>>>>, bool, IQbservable<TResult>>(Defer<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     observableFactoryAsync,
                     Expression.Constant(ignoreExceptionsAfterUnsubscribe, typeof(bool))
@@ -3306,7 +3282,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task<IObservable<TResult>>>>, IQbservable<TResult>>(DeferAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     observableFactoryAsync
                 )
@@ -3340,7 +3316,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task<IObservable<TResult>>>>, bool, IQbservable<TResult>>(DeferAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     observableFactoryAsync,
                     Expression.Constant(ignoreExceptionsAfterUnsubscribe, typeof(bool))
@@ -3378,7 +3354,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, DateTimeOffset, IQbservable<TSource>>(Delay<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(DateTimeOffset))
                 )
@@ -3418,7 +3394,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, DateTimeOffset, IScheduler, IQbservable<TSource>>(Delay<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(DateTimeOffset)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -3458,7 +3434,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IQbservable<TSource>>(Delay<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(TimeSpan))
                 )
@@ -3503,7 +3479,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IQbservable<TSource>>(Delay<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -3531,7 +3507,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TDelay)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, IObservable<TDelay>>>, IQbservable<TSource>>(Delay<TSource, TDelay>).Method,
                     source.Expression,
                     delayDurationSelector
                 )
@@ -3561,7 +3537,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TDelay)),
+                    new Func<IQbservable<TSource>, IObservable<TDelay>, Expression<Func<TSource, IObservable<TDelay>>>, IQbservable<TSource>>(Delay<TSource, TDelay>).Method,
                     source.Expression,
                     GetSourceExpression(subscriptionDelay),
                     delayDurationSelector
@@ -3594,7 +3570,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, DateTimeOffset, IQbservable<TSource>>(DelaySubscription<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(DateTimeOffset))
                 )
@@ -3629,7 +3605,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, DateTimeOffset, IScheduler, IQbservable<TSource>>(DelaySubscription<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(DateTimeOffset)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -3664,7 +3640,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IQbservable<TSource>>(DelaySubscription<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(TimeSpan))
                 )
@@ -3701,7 +3677,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IQbservable<TSource>>(DelaySubscription<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -3725,7 +3701,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<Notification<TSource>>, IQbservable<TSource>>(Dematerialize<TSource>).Method,
                     source.Expression
                 )
             );
@@ -3748,7 +3724,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(Distinct<TSource>).Method,
                     source.Expression
                 )
             );
@@ -3774,7 +3750,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IEqualityComparer<TSource>, IQbservable<TSource>>(Distinct<TSource>).Method,
                     source.Expression,
                     Expression.Constant(comparer, typeof(IEqualityComparer<TSource>))
                 )
@@ -3802,7 +3778,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IQbservable<TSource>>(Distinct<TSource, TKey>).Method,
                     source.Expression,
                     keySelector
                 )
@@ -3833,7 +3809,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IEqualityComparer<TKey>, IQbservable<TSource>>(Distinct<TSource, TKey>).Method,
                     source.Expression,
                     keySelector,
                     Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))
@@ -3857,7 +3833,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(DistinctUntilChanged<TSource>).Method,
                     source.Expression
                 )
             );
@@ -3882,7 +3858,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IEqualityComparer<TSource>, IQbservable<TSource>>(DistinctUntilChanged<TSource>).Method,
                     source.Expression,
                     Expression.Constant(comparer, typeof(IEqualityComparer<TSource>))
                 )
@@ -3909,7 +3885,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IQbservable<TSource>>(DistinctUntilChanged<TSource, TKey>).Method,
                     source.Expression,
                     keySelector
                 )
@@ -3939,7 +3915,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IEqualityComparer<TKey>, IQbservable<TSource>>(DistinctUntilChanged<TSource, TKey>).Method,
                     source.Expression,
                     keySelector,
                     Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))
@@ -3967,7 +3943,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IObserver<TSource>, IQbservable<TSource>>(Do<TSource>).Method,
                     source.Expression,
                     Expression.Constant(observer, typeof(IObserver<TSource>))
                 )
@@ -3994,7 +3970,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Action<TSource>>, IQbservable<TSource>>(Do<TSource>).Method,
                     source.Expression,
                     onNext
                 )
@@ -4024,7 +4000,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Action<TSource>>, Expression<Action>, IQbservable<TSource>>(Do<TSource>).Method,
                     source.Expression,
                     onNext,
                     onCompleted
@@ -4055,7 +4031,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Action<TSource>>, Expression<Action<Exception>>, IQbservable<TSource>>(Do<TSource>).Method,
                     source.Expression,
                     onNext,
                     onError
@@ -4089,7 +4065,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Action<TSource>>, Expression<Action<Exception>>, Expression<Action>, IQbservable<TSource>>(Do<TSource>).Method,
                     source.Expression,
                     onNext,
                     onError,
@@ -4117,7 +4093,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<bool>>, IQbservable<TSource>>(DoWhile<TSource>).Method,
                     source.Expression,
                     condition
                 )
@@ -4144,7 +4120,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IQbservable<TSource>>(ElementAt<TSource>).Method,
                     source.Expression,
                     Expression.Constant(index, typeof(int))
                 )
@@ -4170,7 +4146,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IQbservable<TSource?>>(ElementAtOrDefault<TSource>).Method,
                     source.Expression,
                     Expression.Constant(index, typeof(int))
                 )
@@ -4191,7 +4167,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, IQbservable<TResult>>(Empty<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider))
                 )
             );
@@ -4216,7 +4192,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, IScheduler, IQbservable<TResult>>(Empty<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(scheduler, typeof(IScheduler))
                 )
@@ -4243,7 +4219,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, IScheduler, TResult, IQbservable<TResult>>(Empty<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(scheduler, typeof(IScheduler)),
                     Expression.Constant(witness, typeof(TResult))
@@ -4266,7 +4242,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, TResult, IQbservable<TResult>>(Empty<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(witness, typeof(TResult))
                 )
@@ -4292,7 +4268,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Action>, IQbservable<TSource>>(Finally<TSource>).Method,
                     source.Expression,
                     finallyAction
                 )
@@ -4316,7 +4292,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(FirstAsync<TSource>).Method,
                     source.Expression
                 )
             );
@@ -4342,7 +4318,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<TSource>>(FirstAsync<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -4365,7 +4341,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource?>>(FirstOrDefaultAsync<TSource>).Method,
                     source.Expression
                 )
             );
@@ -4390,7 +4366,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<TSource?>>(FirstOrDefaultAsync<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -4420,7 +4396,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservableProvider, IEnumerable<TSource>, Expression<Func<TSource, IObservable<TResult>>>, IQbservable<TResult>>(For<TSource, TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(source),
                     resultSelector
@@ -4446,7 +4422,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<Task>>, IQbservable<Unit>>(FromAsync).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync
                 )
@@ -4474,7 +4450,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<Task>>, TaskObservationOptions, IQbservable<Unit>>(FromAsync).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync,
                     Expression.Constant(options, typeof(TaskObservationOptions))
@@ -4503,7 +4479,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<Task>>, IScheduler, IQbservable<Unit>>(FromAsync).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync,
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -4531,7 +4507,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task>>, IQbservable<Unit>>(FromAsync).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync
                 )
@@ -4561,7 +4537,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task>>, TaskObservationOptions, IQbservable<Unit>>(FromAsync).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync,
                     Expression.Constant(options, typeof(TaskObservationOptions))
@@ -4592,7 +4568,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task>>, IScheduler, IQbservable<Unit>>(FromAsync).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync,
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -4619,7 +4595,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<Task<TResult>>>, IQbservable<TResult>>(FromAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync
                 )
@@ -4647,7 +4623,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task<TResult>>>, IQbservable<TResult>>(FromAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync
                 )
@@ -4676,7 +4652,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<Task<TResult>>>, TaskObservationOptions, IQbservable<TResult>>(FromAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync,
                     Expression.Constant(options, typeof(TaskObservationOptions))
@@ -4708,7 +4684,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task<TResult>>>, TaskObservationOptions, IQbservable<TResult>>(FromAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync,
                     Expression.Constant(options, typeof(TaskObservationOptions))
@@ -4738,7 +4714,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<Task<TResult>>>, IScheduler, IQbservable<TResult>>(FromAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync,
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -4770,7 +4746,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task<TResult>>>, IScheduler, IQbservable<TResult>>(FromAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync,
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -4820,7 +4796,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Action<Action>>, Expression<Action<Action>>, IQbservable<Unit>>(FromEvent).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler
@@ -4869,7 +4845,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Action<Action>>, Expression<Action<Action>>, IScheduler, IQbservable<Unit>>(FromEvent).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler,
@@ -4922,7 +4898,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TEventArgs>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TDelegate), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Action<TDelegate>>, Expression<Action<TDelegate>>, IQbservable<TEventArgs>>(FromEvent<TDelegate, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler
@@ -4973,7 +4949,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TEventArgs>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TDelegate), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Action<TDelegate>>, Expression<Action<TDelegate>>, IScheduler, IQbservable<TEventArgs>>(FromEvent<TDelegate, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler,
@@ -5029,7 +5005,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TEventArgs>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TDelegate), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Func<Action<TEventArgs>, TDelegate>>, Expression<Action<TDelegate>>, Expression<Action<TDelegate>>, IQbservable<TEventArgs>>(FromEvent<TDelegate, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     conversion,
                     addHandler,
@@ -5084,7 +5060,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TEventArgs>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TDelegate), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Func<Action<TEventArgs>, TDelegate>>, Expression<Action<TDelegate>>, Expression<Action<TDelegate>>, IScheduler, IQbservable<TEventArgs>>(FromEvent<TDelegate, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     conversion,
                     addHandler,
@@ -5137,7 +5113,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TEventArgs>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Action<Action<TEventArgs>>>, Expression<Action<Action<TEventArgs>>>, IQbservable<TEventArgs>>(FromEvent<TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler
@@ -5187,7 +5163,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TEventArgs>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Action<Action<TEventArgs>>>, Expression<Action<Action<TEventArgs>>>, IScheduler, IQbservable<TEventArgs>>(FromEvent<TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler,
@@ -5239,7 +5215,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<object>>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Action<EventHandler>>, Expression<Action<EventHandler>>, IQbservable<EventPattern<object>>>(FromEventPattern).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler
@@ -5289,7 +5265,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<object>>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Action<EventHandler>>, Expression<Action<EventHandler>>, IScheduler, IQbservable<EventPattern<object>>>(FromEventPattern).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler,
@@ -5343,7 +5319,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<object>>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, object, string, IQbservable<EventPattern<object>>>(FromEventPattern).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(target, typeof(object)),
                     Expression.Constant(eventName, typeof(string))
@@ -5395,7 +5371,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<object>>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, object, string, IScheduler, IQbservable<EventPattern<object>>>(FromEventPattern).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(target, typeof(object)),
                     Expression.Constant(eventName, typeof(string)),
@@ -5449,7 +5425,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<object>>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Type, string, IQbservable<EventPattern<object>>>(FromEventPattern).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(type, typeof(Type)),
                     Expression.Constant(eventName, typeof(string))
@@ -5501,7 +5477,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<object>>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Type, string, IScheduler, IQbservable<EventPattern<object>>>(FromEventPattern).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(type, typeof(Type)),
                     Expression.Constant(eventName, typeof(string)),
@@ -5555,7 +5531,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TDelegate), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Action<TDelegate>>, Expression<Action<TDelegate>>, IQbservable<EventPattern<TEventArgs>>>(FromEventPattern<TDelegate, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler
@@ -5607,7 +5583,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TDelegate), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Action<TDelegate>>, Expression<Action<TDelegate>>, IScheduler, IQbservable<EventPattern<TEventArgs>>>(FromEventPattern<TDelegate, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler,
@@ -5664,7 +5640,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TDelegate), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Func<EventHandler<TEventArgs>, TDelegate>>, Expression<Action<TDelegate>>, Expression<Action<TDelegate>>, IQbservable<EventPattern<TEventArgs>>>(FromEventPattern<TDelegate, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     conversion,
                     addHandler,
@@ -5720,7 +5696,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TDelegate), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Func<EventHandler<TEventArgs>, TDelegate>>, Expression<Action<TDelegate>>, Expression<Action<TDelegate>>, IScheduler, IQbservable<EventPattern<TEventArgs>>>(FromEventPattern<TDelegate, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     conversion,
                     addHandler,
@@ -5776,7 +5752,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TSender, TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TDelegate), typeof(TSender), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Action<TDelegate>>, Expression<Action<TDelegate>>, IQbservable<EventPattern<TSender, TEventArgs>>>(FromEventPattern<TDelegate, TSender, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler
@@ -5829,7 +5805,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TSender, TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TDelegate), typeof(TSender), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Action<TDelegate>>, Expression<Action<TDelegate>>, IScheduler, IQbservable<EventPattern<TSender, TEventArgs>>>(FromEventPattern<TDelegate, TSender, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler,
@@ -5880,7 +5856,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Action<EventHandler<TEventArgs>>>, Expression<Action<EventHandler<TEventArgs>>>, IQbservable<EventPattern<TEventArgs>>>(FromEventPattern<TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler
@@ -5929,7 +5905,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Expression<Action<EventHandler<TEventArgs>>>, Expression<Action<EventHandler<TEventArgs>>>, IScheduler, IQbservable<EventPattern<TEventArgs>>>(FromEventPattern<TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     addHandler,
                     removeHandler,
@@ -5984,7 +5960,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TEventArgs)),
+                    new Func<IQbservableProvider, object, string, IQbservable<EventPattern<TEventArgs>>>(FromEventPattern<TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(target, typeof(object)),
                     Expression.Constant(eventName, typeof(string))
@@ -6037,7 +6013,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TEventArgs)),
+                    new Func<IQbservableProvider, object, string, IScheduler, IQbservable<EventPattern<TEventArgs>>>(FromEventPattern<TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(target, typeof(object)),
                     Expression.Constant(eventName, typeof(string)),
@@ -6092,7 +6068,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Type, string, IQbservable<EventPattern<TEventArgs>>>(FromEventPattern<TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(type, typeof(Type)),
                     Expression.Constant(eventName, typeof(string))
@@ -6145,7 +6121,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Type, string, IScheduler, IQbservable<EventPattern<TEventArgs>>>(FromEventPattern<TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(type, typeof(Type)),
                     Expression.Constant(eventName, typeof(string)),
@@ -6201,7 +6177,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TSender, TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSender), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, object, string, IQbservable<EventPattern<TSender, TEventArgs>>>(FromEventPattern<TSender, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(target, typeof(object)),
                     Expression.Constant(eventName, typeof(string))
@@ -6255,7 +6231,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TSender, TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSender), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, object, string, IScheduler, IQbservable<EventPattern<TSender, TEventArgs>>>(FromEventPattern<TSender, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(target, typeof(object)),
                     Expression.Constant(eventName, typeof(string)),
@@ -6311,7 +6287,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TSender, TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSender), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Type, string, IQbservable<EventPattern<TSender, TEventArgs>>>(FromEventPattern<TSender, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(type, typeof(Type)),
                     Expression.Constant(eventName, typeof(string))
@@ -6365,7 +6341,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<EventPattern<TSender, TEventArgs>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSender), typeof(TEventArgs)),
+                    new Func<IQbservableProvider, Type, string, IScheduler, IQbservable<EventPattern<TSender, TEventArgs>>>(FromEventPattern<TSender, TEventArgs>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(type, typeof(Type)),
                     Expression.Constant(eventName, typeof(string)),
@@ -6401,7 +6377,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TState), typeof(TResult)),
+                    new Func<IQbservableProvider, TState, Expression<Func<TState, bool>>, Expression<Func<TState, TState>>, Expression<Func<TState, TResult>>, IQbservable<TResult>>(Generate<TState, TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(initialState, typeof(TState)),
                     condition,
@@ -6441,7 +6417,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TState), typeof(TResult)),
+                    new Func<IQbservableProvider, TState, Expression<Func<TState, bool>>, Expression<Func<TState, TState>>, Expression<Func<TState, TResult>>, IScheduler, IQbservable<TResult>>(Generate<TState, TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(initialState, typeof(TState)),
                     condition,
@@ -6482,7 +6458,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TState), typeof(TResult)),
+                    new Func<IQbservableProvider, TState, Expression<Func<TState, bool>>, Expression<Func<TState, TState>>, Expression<Func<TState, TResult>>, Expression<Func<TState, TimeSpan>>, IQbservable<TResult>>(Generate<TState, TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(initialState, typeof(TState)),
                     condition,
@@ -6523,7 +6499,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TState), typeof(TResult)),
+                    new Func<IQbservableProvider, TState, Expression<Func<TState, bool>>, Expression<Func<TState, TState>>, Expression<Func<TState, TResult>>, Expression<Func<TState, DateTimeOffset>>, IQbservable<TResult>>(Generate<TState, TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(initialState, typeof(TState)),
                     condition,
@@ -6567,7 +6543,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TState), typeof(TResult)),
+                    new Func<IQbservableProvider, TState, Expression<Func<TState, bool>>, Expression<Func<TState, TState>>, Expression<Func<TState, TResult>>, Expression<Func<TState, TimeSpan>>, IScheduler, IQbservable<TResult>>(Generate<TState, TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(initialState, typeof(TState)),
                     condition,
@@ -6612,7 +6588,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TState), typeof(TResult)),
+                    new Func<IQbservableProvider, TState, Expression<Func<TState, bool>>, Expression<Func<TState, TState>>, Expression<Func<TState, TResult>>, Expression<Func<TState, DateTimeOffset>>, IScheduler, IQbservable<TResult>>(Generate<TState, TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(initialState, typeof(TState)),
                     condition,
@@ -6644,7 +6620,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IQbservable<IGroupedObservable<TKey, TSource>>>(GroupBy<TSource, TKey>).Method,
                     source.Expression,
                     keySelector
                 )
@@ -6674,7 +6650,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, int, IQbservable<IGroupedObservable<TKey, TSource>>>(GroupBy<TSource, TKey>).Method,
                     source.Expression,
                     keySelector,
                     Expression.Constant(capacity, typeof(int))
@@ -6708,7 +6684,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, int, IEqualityComparer<TKey>, IQbservable<IGroupedObservable<TKey, TSource>>>(GroupBy<TSource, TKey>).Method,
                     source.Expression,
                     keySelector,
                     Expression.Constant(capacity, typeof(int)),
@@ -6740,7 +6716,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IEqualityComparer<TKey>, IQbservable<IGroupedObservable<TKey, TSource>>>(GroupBy<TSource, TKey>).Method,
                     source.Expression,
                     keySelector,
                     Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))
@@ -6772,7 +6748,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TElement)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<TSource, TElement>>, IQbservable<IGroupedObservable<TKey, TElement>>>(GroupBy<TSource, TKey, TElement>).Method,
                     source.Expression,
                     keySelector,
                     elementSelector
@@ -6807,7 +6783,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TElement)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<TSource, TElement>>, int, IQbservable<IGroupedObservable<TKey, TElement>>>(GroupBy<TSource, TKey, TElement>).Method,
                     source.Expression,
                     keySelector,
                     elementSelector,
@@ -6846,7 +6822,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TElement)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<TSource, TElement>>, int, IEqualityComparer<TKey>, IQbservable<IGroupedObservable<TKey, TElement>>>(GroupBy<TSource, TKey, TElement>).Method,
                     source.Expression,
                     keySelector,
                     elementSelector,
@@ -6883,7 +6859,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TElement)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<TSource, TElement>>, IEqualityComparer<TKey>, IQbservable<IGroupedObservable<TKey, TElement>>>(GroupBy<TSource, TKey, TElement>).Method,
                     source.Expression,
                     keySelector,
                     elementSelector,
@@ -6921,7 +6897,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TDuration)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>>>, IQbservable<IGroupedObservable<TKey, TSource>>>(GroupByUntil<TSource, TKey, TDuration>).Method,
                     source.Expression,
                     keySelector,
                     durationSelector
@@ -6961,7 +6937,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TDuration)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>>>, int, IQbservable<IGroupedObservable<TKey, TSource>>>(GroupByUntil<TSource, TKey, TDuration>).Method,
                     source.Expression,
                     keySelector,
                     durationSelector,
@@ -7005,7 +6981,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TDuration)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>>>, int, IEqualityComparer<TKey>, IQbservable<IGroupedObservable<TKey, TSource>>>(GroupByUntil<TSource, TKey, TDuration>).Method,
                     source.Expression,
                     keySelector,
                     durationSelector,
@@ -7047,7 +7023,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TDuration)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>>>, IEqualityComparer<TKey>, IQbservable<IGroupedObservable<TKey, TSource>>>(GroupByUntil<TSource, TKey, TDuration>).Method,
                     source.Expression,
                     keySelector,
                     durationSelector,
@@ -7089,7 +7065,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TElement), typeof(TDuration)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<TSource, TElement>>, Expression<Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>>>, IQbservable<IGroupedObservable<TKey, TElement>>>(GroupByUntil<TSource, TKey, TElement, TDuration>).Method,
                     source.Expression,
                     keySelector,
                     elementSelector,
@@ -7134,7 +7110,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TElement), typeof(TDuration)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<TSource, TElement>>, Expression<Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>>>, int, IQbservable<IGroupedObservable<TKey, TElement>>>(GroupByUntil<TSource, TKey, TElement, TDuration>).Method,
                     source.Expression,
                     keySelector,
                     elementSelector,
@@ -7183,7 +7159,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TElement), typeof(TDuration)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<TSource, TElement>>, Expression<Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>>>, int, IEqualityComparer<TKey>, IQbservable<IGroupedObservable<TKey, TElement>>>(GroupByUntil<TSource, TKey, TElement, TDuration>).Method,
                     source.Expression,
                     keySelector,
                     elementSelector,
@@ -7230,7 +7206,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TElement), typeof(TDuration)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<TSource, TElement>>, Expression<Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>>>, IEqualityComparer<TKey>, IQbservable<IGroupedObservable<TKey, TElement>>>(GroupByUntil<TSource, TKey, TElement, TDuration>).Method,
                     source.Expression,
                     keySelector,
                     elementSelector,
@@ -7272,7 +7248,7 @@ namespace System.Reactive.Linq
             return left.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TLeft), typeof(TRight), typeof(TLeftDuration), typeof(TRightDuration), typeof(TResult)),
+                    new Func<IQbservable<TLeft>, IObservable<TRight>, Expression<Func<TLeft, IObservable<TLeftDuration>>>, Expression<Func<TRight, IObservable<TRightDuration>>>, Expression<Func<TLeft, IObservable<TRight>, TResult>>, IQbservable<TResult>>(GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>).Method,
                     left.Expression,
                     GetSourceExpression(right),
                     leftDurationSelector,
@@ -7305,7 +7281,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<bool>>, IObservable<TResult>, IQbservable<TResult>>(If<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     condition,
                     GetSourceExpression(thenSource)
@@ -7339,7 +7315,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<bool>>, IObservable<TResult>, IObservable<TResult>, IQbservable<TResult>>(If<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     condition,
                     GetSourceExpression(thenSource),
@@ -7374,7 +7350,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<bool>>, IObservable<TResult>, IScheduler, IQbservable<TResult>>(If<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     condition,
                     GetSourceExpression(thenSource),
@@ -7399,7 +7375,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(IgnoreElements<TSource>).Method,
                     source.Expression
                 )
             );
@@ -7428,7 +7404,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, TimeSpan, IQbservable<long>>(Interval).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(period, typeof(TimeSpan))
                 )
@@ -7463,7 +7439,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, TimeSpan, IScheduler, IQbservable<long>>(Interval).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(period, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -7487,7 +7463,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<bool>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<bool>>(IsEmpty<TSource>).Method,
                     source.Expression
                 )
             );
@@ -7525,7 +7501,7 @@ namespace System.Reactive.Linq
             return left.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TLeft), typeof(TRight), typeof(TLeftDuration), typeof(TRightDuration), typeof(TResult)),
+                    new Func<IQbservable<TLeft>, IObservable<TRight>, Expression<Func<TLeft, IObservable<TLeftDuration>>>, Expression<Func<TRight, IObservable<TRightDuration>>>, Expression<Func<TLeft, TRight, TResult>>, IQbservable<TResult>>(Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult>).Method,
                     left.Expression,
                     GetSourceExpression(right),
                     leftDurationSelector,
@@ -7552,7 +7528,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(LastAsync<TSource>).Method,
                     source.Expression
                 )
             );
@@ -7578,7 +7554,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<TSource>>(LastAsync<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -7601,7 +7577,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource?>>(LastOrDefaultAsync<TSource>).Method,
                     source.Expression
                 )
             );
@@ -7626,7 +7602,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<TSource?>>(LastOrDefaultAsync<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -7649,7 +7625,7 @@ namespace System.Reactive.Linq
             return ((IQueryProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQueryable<TSource>>(Latest<TSource>).Method,
                     source.Expression
                 )
             );
@@ -7673,7 +7649,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<long>>(LongCount<TSource>).Method,
                     source.Expression
                 )
             );
@@ -7699,7 +7675,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<long>>(LongCount<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -7722,16 +7698,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<Notification<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<Notification<TSource>>>(Materialize<TSource>).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="Decimal" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Decimal" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="decimal" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -7744,7 +7720,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<decimal>, IQbservable<decimal>>(Max).Method,
                     source.Expression
                 )
             );
@@ -7766,7 +7742,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<double>, IQbservable<double>>(Max).Method,
                     source.Expression
                 )
             );
@@ -7788,7 +7764,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<int>, IQbservable<int>>(Max).Method,
                     source.Expression
                 )
             );
@@ -7810,16 +7786,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<long>, IQbservable<long>>(Max).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="Decimal" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Decimal" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="decimal" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -7832,7 +7808,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<decimal?>, IQbservable<decimal?>>(Max).Method,
                     source.Expression
                 )
             );
@@ -7854,7 +7830,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<double?>, IQbservable<double?>>(Max).Method,
                     source.Expression
                 )
             );
@@ -7876,7 +7852,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<int?>, IQbservable<int?>>(Max).Method,
                     source.Expression
                 )
             );
@@ -7898,16 +7874,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<long?>, IQbservable<long?>>(Max).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="Single" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Single" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="float" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -7920,16 +7896,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<float?>, IQbservable<float?>>(Max).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="Single" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Single" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="float" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -7942,7 +7918,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<float>, IQbservable<float>>(Max).Method,
                     source.Expression
                 )
             );
@@ -7965,7 +7941,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(Max<TSource>).Method,
                     source.Expression
                 )
             );
@@ -7991,7 +7967,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IComparer<TSource>, IQbservable<TSource>>(Max<TSource>).Method,
                     source.Expression,
                     Expression.Constant(comparer, typeof(IComparer<TSource>))
                 )
@@ -8018,7 +7994,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, double>>, IQbservable<double>>(Max<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -8026,12 +8002,12 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Single" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="float" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Single" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="float" /> that corresponds to the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -8045,7 +8021,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, float>>, IQbservable<float>>(Max<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -8053,12 +8029,12 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Decimal" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="decimal" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Decimal" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="decimal" /> that corresponds to the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -8072,7 +8048,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, decimal>>, IQbservable<decimal>>(Max<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -8099,7 +8075,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int>>, IQbservable<int>>(Max<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -8126,7 +8102,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, long>>, IQbservable<long>>(Max<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -8153,7 +8129,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, double?>>, IQbservable<double?>>(Max<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -8161,7 +8137,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Single" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="float" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
@@ -8180,7 +8156,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, float?>>, IQbservable<float?>>(Max<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -8188,7 +8164,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Decimal" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="decimal" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
@@ -8207,7 +8183,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, decimal?>>, IQbservable<decimal?>>(Max<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -8234,7 +8210,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int?>>, IQbservable<int?>>(Max<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -8261,7 +8237,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, long?>>, IQbservable<long?>>(Max<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -8289,7 +8265,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TResult>>, IQbservable<TResult>>(Max<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -8320,7 +8296,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TResult>>, IComparer<TResult>, IQbservable<TResult>>(Max<TSource, TResult>).Method,
                     source.Expression,
                     selector,
                     Expression.Constant(comparer, typeof(IComparer<TResult>))
@@ -8349,7 +8325,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IQbservable<IList<TSource>>>(MaxBy<TSource, TKey>).Method,
                     source.Expression,
                     keySelector
                 )
@@ -8380,7 +8356,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IComparer<TKey>, IQbservable<IList<TSource>>>(MaxBy<TSource, TKey>).Method,
                     source.Expression,
                     keySelector,
                     Expression.Constant(comparer, typeof(IComparer<TKey>))
@@ -8407,7 +8383,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IObservable<TSource>, IQbservable<TSource>>(Merge<TSource>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -8436,7 +8412,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IObservable<TSource>, IScheduler, IQbservable<TSource>>(Merge<TSource>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -8466,7 +8442,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IScheduler, IObservable<TSource>[], IQbservable<TSource>>(Merge<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(scheduler, typeof(IScheduler)),
                     GetSourceExpression(sources)
@@ -8490,7 +8466,7 @@ namespace System.Reactive.Linq
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<IObservable<TSource>>, IQbservable<TSource>>(Merge<TSource>).Method,
                     sources.Expression
                 )
             );
@@ -8513,7 +8489,7 @@ namespace System.Reactive.Linq
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<Task<TSource>>, IQbservable<TSource>>(Merge<TSource>).Method,
                     sources.Expression
                 )
             );
@@ -8538,7 +8514,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IObservable<TSource>[], IQbservable<TSource>>(Merge<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -8564,7 +8540,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, IQbservable<TSource>>(Merge<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -8590,7 +8566,7 @@ namespace System.Reactive.Linq
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<IObservable<TSource>>, int, IQbservable<TSource>>(Merge<TSource>).Method,
                     sources.Expression,
                     Expression.Constant(maxConcurrent, typeof(int))
                 )
@@ -8619,7 +8595,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, int, IQbservable<TSource>>(Merge<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources),
                     Expression.Constant(maxConcurrent, typeof(int))
@@ -8652,7 +8628,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, int, IScheduler, IQbservable<TSource>>(Merge<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources),
                     Expression.Constant(maxConcurrent, typeof(int)),
@@ -8683,7 +8659,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, IScheduler, IQbservable<TSource>>(Merge<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -8692,9 +8668,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="Decimal" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Decimal" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="decimal" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -8707,7 +8683,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<decimal>, IQbservable<decimal>>(Min).Method,
                     source.Expression
                 )
             );
@@ -8729,7 +8705,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<double>, IQbservable<double>>(Min).Method,
                     source.Expression
                 )
             );
@@ -8751,7 +8727,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<int>, IQbservable<int>>(Min).Method,
                     source.Expression
                 )
             );
@@ -8773,16 +8749,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<long>, IQbservable<long>>(Min).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="Decimal" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Decimal" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="decimal" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -8795,7 +8771,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<decimal?>, IQbservable<decimal?>>(Min).Method,
                     source.Expression
                 )
             );
@@ -8817,7 +8793,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<double?>, IQbservable<double?>>(Min).Method,
                     source.Expression
                 )
             );
@@ -8839,7 +8815,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<int?>, IQbservable<int?>>(Min).Method,
                     source.Expression
                 )
             );
@@ -8861,16 +8837,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<long?>, IQbservable<long?>>(Min).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="Single" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Single" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="float" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -8883,16 +8859,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<float?>, IQbservable<float?>>(Min).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="Single" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Single" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="float" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -8905,7 +8881,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<float>, IQbservable<float>>(Min).Method,
                     source.Expression
                 )
             );
@@ -8928,7 +8904,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(Min<TSource>).Method,
                     source.Expression
                 )
             );
@@ -8954,7 +8930,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IComparer<TSource>, IQbservable<TSource>>(Min<TSource>).Method,
                     source.Expression,
                     Expression.Constant(comparer, typeof(IComparer<TSource>))
                 )
@@ -8981,7 +8957,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, double>>, IQbservable<double>>(Min<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -8989,12 +8965,12 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Single" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="float" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Single" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="float" /> that corresponds to the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -9008,7 +8984,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, float>>, IQbservable<float>>(Min<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -9016,12 +8992,12 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Decimal" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="decimal" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Decimal" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="decimal" /> that corresponds to the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -9035,7 +9011,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, decimal>>, IQbservable<decimal>>(Min<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -9062,7 +9038,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int>>, IQbservable<int>>(Min<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -9089,7 +9065,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, long>>, IQbservable<long>>(Min<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -9116,7 +9092,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, double?>>, IQbservable<double?>>(Min<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -9124,7 +9100,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Single" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="float" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
@@ -9143,7 +9119,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, float?>>, IQbservable<float?>>(Min<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -9151,7 +9127,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Decimal" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="decimal" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
@@ -9170,7 +9146,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, decimal?>>, IQbservable<decimal?>>(Min<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -9197,7 +9173,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int?>>, IQbservable<int?>>(Min<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -9224,7 +9200,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, long?>>, IQbservable<long?>>(Min<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -9252,7 +9228,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TResult>>, IQbservable<TResult>>(Min<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -9283,7 +9259,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TResult>>, IComparer<TResult>, IQbservable<TResult>>(Min<TSource, TResult>).Method,
                     source.Expression,
                     selector,
                     Expression.Constant(comparer, typeof(IComparer<TResult>))
@@ -9312,7 +9288,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IQbservable<IList<TSource>>>(MinBy<TSource, TKey>).Method,
                     source.Expression,
                     keySelector
                 )
@@ -9343,7 +9319,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IComparer<TKey>, IQbservable<IList<TSource>>>(MinBy<TSource, TKey>).Method,
                     source.Expression,
                     keySelector,
                     Expression.Constant(comparer, typeof(IComparer<TKey>))
@@ -9370,7 +9346,7 @@ namespace System.Reactive.Linq
             return ((IQueryProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TSource, IQueryable<TSource>>(MostRecent<TSource>).Method,
                     source.Expression,
                     Expression.Constant(initialValue, typeof(TSource))
                 )
@@ -9403,7 +9379,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TIntermediate), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<ISubject<TSource, TIntermediate>>>, Expression<Func<IObservable<TIntermediate>, IObservable<TResult>>>, IQbservable<TResult>>(Multicast<TSource, TIntermediate, TResult>).Method,
                     source.Expression,
                     subjectSelector,
                     selector
@@ -9425,7 +9401,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, IQbservable<TResult>>(Never<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider))
                 )
             );
@@ -9446,7 +9422,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, TResult, IQbservable<TResult>>(Never<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(witness, typeof(TResult))
                 )
@@ -9471,7 +9447,7 @@ namespace System.Reactive.Linq
             return ((IQueryProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQueryable<TSource>>(Next<TSource>).Method,
                     source.Expression
                 )
             );
@@ -9500,7 +9476,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, SynchronizationContext, IQbservable<TSource>>(ObserveOn<TSource>).Method,
                     source.Expression,
                     Expression.Constant(context, typeof(SynchronizationContext))
                 )
@@ -9530,7 +9506,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IScheduler, IQbservable<TSource>>(ObserveOn<TSource>).Method,
                     source.Expression,
                     Expression.Constant(scheduler, typeof(IScheduler))
                 )
@@ -9553,7 +9529,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservable<object>, IQbservable<TResult>>(OfType<TResult>).Method,
                     source.Expression
                 )
             );
@@ -9578,7 +9554,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IObservable<TSource>, IQbservable<TSource>>(OnErrorResumeNext<TSource>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -9604,7 +9580,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IObservable<TSource>[], IQbservable<TSource>>(OnErrorResumeNext<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -9630,7 +9606,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, IQbservable<TSource>>(OnErrorResumeNext<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -9654,7 +9630,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TSource, IQbservable<TSource>>(Prepend<TSource>).Method,
                     source.Expression,
                     Expression.Constant(value, typeof(TSource))
                 )
@@ -9681,7 +9657,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TSource, IScheduler, IQbservable<TSource>>(Prepend<TSource>).Method,
                     source.Expression,
                     Expression.Constant(value, typeof(TSource)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -9711,7 +9687,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, IObservable<TResult>>>, IQbservable<TResult>>(Publish<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -9741,7 +9717,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, IObservable<TResult>>>, TSource, IQbservable<TResult>>(Publish<TSource, TResult>).Method,
                     source.Expression,
                     selector,
                     Expression.Constant(initialValue, typeof(TSource))
@@ -9771,7 +9747,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, IObservable<TResult>>>, IQbservable<TResult>>(PublishLast<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -9795,7 +9771,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<int>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, int, int, IQbservable<int>>(Range).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(start, typeof(int)),
                     Expression.Constant(count, typeof(int))
@@ -9825,7 +9801,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<int>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, int, int, IScheduler, IQbservable<int>>(Range).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(start, typeof(int)),
                     Expression.Constant(count, typeof(int)),
@@ -9853,7 +9829,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IConnectableObservable<TSource>, IQbservable<TSource>>(RefCount<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(source, typeof(IConnectableObservable<TSource>))
                 )
@@ -9880,7 +9856,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IConnectableObservable<TSource>, TimeSpan, IQbservable<TSource>>(RefCount<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
                     Expression.Constant(disconnectDelay, typeof(TimeSpan))
@@ -9911,7 +9887,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IConnectableObservable<TSource>, TimeSpan, IScheduler, IQbservable<TSource>>(RefCount<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
                     Expression.Constant(disconnectDelay, typeof(TimeSpan)),
@@ -9930,7 +9906,8 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minObservers"/> is non-positive.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="minObservers" /> is non-positive.</exception>
         public static IQbservable<TSource> RefCount<TSource>(this IQbservableProvider provider, IConnectableObservable<TSource> source, int minObservers)
         {
             if (provider == null)
@@ -9941,7 +9918,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IConnectableObservable<TSource>, int, IQbservable<TSource>>(RefCount<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
                     Expression.Constant(minObservers, typeof(int))
@@ -9960,7 +9937,8 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minObservers"/> is non-positive.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="minObservers" /> is non-positive.</exception>
         public static IQbservable<TSource> RefCount<TSource>(this IQbservableProvider provider, IConnectableObservable<TSource> source, int minObservers, TimeSpan disconnectDelay)
         {
             if (provider == null)
@@ -9971,7 +9949,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IConnectableObservable<TSource>, int, TimeSpan, IQbservable<TSource>>(RefCount<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
                     Expression.Constant(minObservers, typeof(int)),
@@ -9992,7 +9970,8 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minObservers"/> is non-positive.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="minObservers" /> is non-positive.</exception>
         public static IQbservable<TSource> RefCount<TSource>(this IQbservableProvider provider, IConnectableObservable<TSource> source, int minObservers, TimeSpan disconnectDelay, IScheduler scheduler)
         {
             if (provider == null)
@@ -10005,7 +9984,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IConnectableObservable<TSource>, int, TimeSpan, IScheduler, IQbservable<TSource>>(RefCount<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
                     Expression.Constant(minObservers, typeof(int)),
@@ -10030,7 +10009,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, TResult, IQbservable<TResult>>(Repeat<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(value, typeof(TResult))
                 )
@@ -10055,7 +10034,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, TResult, int, IQbservable<TResult>>(Repeat<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(value, typeof(TResult)),
                     Expression.Constant(repeatCount, typeof(int))
@@ -10086,7 +10065,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, TResult, int, IScheduler, IQbservable<TResult>>(Repeat<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(value, typeof(TResult)),
                     Expression.Constant(repeatCount, typeof(int)),
@@ -10115,7 +10094,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, TResult, IScheduler, IQbservable<TResult>>(Repeat<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(value, typeof(TResult)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -10139,7 +10118,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(Repeat<TSource>).Method,
                     source.Expression
                 )
             );
@@ -10164,7 +10143,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IQbservable<TSource>>(Repeat<TSource>).Method,
                     source.Expression,
                     Expression.Constant(repeatCount, typeof(int))
                 )
@@ -10183,8 +10162,10 @@ namespace System.Reactive.Linq
         /// response to receiving the completion signal from the source observable. If this observable signals
         /// a terminal event, the sequence is terminated with that signal instead.</param>
         /// <returns>An observable sequence producing the elements of the given sequence repeatedly while each repetition terminates successfully.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="handler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="handler" /> is null.</exception>
         public static IQbservable<TSource> RepeatWhen<TSource, TSignal>(this IQbservable<TSource> source, Expression<Func<IObservable<object>, IObservable<TSignal>>> handler)
         {
             if (source == null)
@@ -10195,7 +10176,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TSignal)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<object>, IObservable<TSignal>>>, IQbservable<TSource>>(RepeatWhen<TSource, TSignal>).Method,
                     source.Expression,
                     handler
                 )
@@ -10224,7 +10205,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, IObservable<TResult>>>, IQbservable<TResult>>(Replay<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -10256,7 +10237,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, IObservable<TResult>>>, int, IQbservable<TResult>>(Replay<TSource, TResult>).Method,
                     source.Expression,
                     selector,
                     Expression.Constant(bufferSize, typeof(int))
@@ -10292,7 +10273,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, IObservable<TResult>>>, int, IScheduler, IQbservable<TResult>>(Replay<TSource, TResult>).Method,
                     source.Expression,
                     selector,
                     Expression.Constant(bufferSize, typeof(int)),
@@ -10329,7 +10310,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, IObservable<TResult>>>, int, TimeSpan, IQbservable<TResult>>(Replay<TSource, TResult>).Method,
                     source.Expression,
                     selector,
                     Expression.Constant(bufferSize, typeof(int)),
@@ -10369,7 +10350,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, IObservable<TResult>>>, int, TimeSpan, IScheduler, IQbservable<TResult>>(Replay<TSource, TResult>).Method,
                     source.Expression,
                     selector,
                     Expression.Constant(bufferSize, typeof(int)),
@@ -10404,7 +10385,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, IObservable<TResult>>>, IScheduler, IQbservable<TResult>>(Replay<TSource, TResult>).Method,
                     source.Expression,
                     selector,
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -10437,7 +10418,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, IObservable<TResult>>>, TimeSpan, IQbservable<TResult>>(Replay<TSource, TResult>).Method,
                     source.Expression,
                     selector,
                     Expression.Constant(window, typeof(TimeSpan))
@@ -10473,11 +10454,35 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TSource>, IObservable<TResult>>>, TimeSpan, IScheduler, IQbservable<TResult>>(Replay<TSource, TResult>).Method,
                     source.Expression,
                     selector,
                     Expression.Constant(window, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Propagates all messages, but if <paramref name="source" /> produces an error, this updates the dispatch state
+        /// of the <see cref="Exception" /> to reflect the current execution context (by executing a
+        /// <see langword="throw" /> or equivalent operation) before passing the notification on.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <returns>The source sequence with the exception dispatch state modifying behavior applied.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is null.</exception>
+        public static IQbservable<TSource> ResetExceptionDispatchState<TSource>(this IQbservable<TSource> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(ResetExceptionDispatchState<TSource>).Method,
+                    source.Expression
                 )
             );
         }
@@ -10498,7 +10503,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(Retry<TSource>).Method,
                     source.Expression
                 )
             );
@@ -10523,7 +10528,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IQbservable<TSource>>(Retry<TSource>).Method,
                     source.Expression,
                     Expression.Constant(retryCount, typeof(int))
                 )
@@ -10556,7 +10561,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TSignal)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<Exception>, IObservable<TSignal>>>, IQbservable<TSource>>(RetryWhen<TSource, TSignal>).Method,
                     source.Expression,
                     handler
                 )
@@ -10578,7 +10583,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, TResult, IQbservable<TResult>>(Return<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(value, typeof(TResult))
                 )
@@ -10605,7 +10610,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, TResult, IScheduler, IQbservable<TResult>>(Return<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(value, typeof(TResult)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -10637,7 +10642,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IQbservable<TSource>>(Sample<TSource>).Method,
                     source.Expression,
                     Expression.Constant(interval, typeof(TimeSpan))
                 )
@@ -10671,7 +10676,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IQbservable<TSource>>(Sample<TSource>).Method,
                     source.Expression,
                     Expression.Constant(interval, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -10700,7 +10705,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TSample)),
+                    new Func<IQbservable<TSource>, IObservable<TSample>, IQbservable<TSource>>(Sample<TSource, TSample>).Method,
                     source.Expression,
                     GetSourceExpression(sampler)
                 )
@@ -10727,7 +10732,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TSource, TSource>>, IQbservable<TSource>>(Scan<TSource>).Method,
                     source.Expression,
                     accumulator
                 )
@@ -10756,7 +10761,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TAccumulate>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TAccumulate)),
+                    new Func<IQbservable<TSource>, TAccumulate, Expression<Func<TAccumulate, TSource, TAccumulate>>, IQbservable<TAccumulate>>(Scan<TSource, TAccumulate>).Method,
                     source.Expression,
                     Expression.Constant(seed, typeof(TAccumulate)),
                     accumulator
@@ -10784,7 +10789,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TResult>>, IQbservable<TResult>>(Select<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -10811,7 +10816,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, TResult>>, IQbservable<TResult>>(Select<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -10819,10 +10824,10 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Projects each element of an observable sequence to an enumerable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
+        /// Projects each element of an observable sequence to an observable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <typeparam name="TCollection">The type of the elements in the projected intermediate enumerable sequences.</typeparam>
+        /// <typeparam name="TCollection">The type of the elements in the projected intermediate sequences.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate sequence elements.</typeparam>
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="collectionSelector">A transform function to apply to each element.</param>
@@ -10842,7 +10847,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, IObservable<TCollection>>>, Expression<Func<TSource, TCollection, TResult>>, IQbservable<TResult>>(SelectMany<TSource, TCollection, TResult>).Method,
                     source.Expression,
                     collectionSelector,
                     resultSelector
@@ -10851,10 +10856,10 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Projects each element of an observable sequence to an enumerable sequence by incorporating the element's index, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
+        /// Projects each element of an observable sequence to an observable sequence by incorporating the element's index, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <typeparam name="TCollection">The type of the elements in the projected intermediate enumerable sequences.</typeparam>
+        /// <typeparam name="TCollection">The type of the elements in the projected intermediate sequences.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate sequence elements.</typeparam>
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="collectionSelector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
@@ -10874,7 +10879,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, IObservable<TCollection>>>, Expression<Func<TSource, int, TCollection, int, TResult>>, IQbservable<TResult>>(SelectMany<TSource, TCollection, TResult>).Method,
                     source.Expression,
                     collectionSelector,
                     resultSelector
@@ -10883,10 +10888,10 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Projects each element of an observable sequence to an observable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
+        /// Projects each element of an observable sequence to an enumerable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <typeparam name="TCollection">The type of the elements in the projected intermediate sequences.</typeparam>
+        /// <typeparam name="TCollection">The type of the elements in the projected intermediate enumerable sequences.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate sequence elements.</typeparam>
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="collectionSelector">A transform function to apply to each element.</param>
@@ -10907,7 +10912,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, IEnumerable<TCollection>>>, Expression<Func<TSource, TCollection, TResult>>, IQbservable<TResult>>(SelectMany<TSource, TCollection, TResult>).Method,
                     source.Expression,
                     collectionSelector,
                     resultSelector
@@ -10940,7 +10945,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, IEnumerable<TCollection>>>, Expression<Func<TSource, int, TCollection, int, TResult>>, IQbservable<TResult>>(SelectMany<TSource, TCollection, TResult>).Method,
                     source.Expression,
                     collectionSelector,
                     resultSelector
@@ -10968,7 +10973,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TOther>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TOther)),
+                    new Func<IQbservable<TSource>, IObservable<TOther>, IQbservable<TOther>>(SelectMany<TSource, TOther>).Method,
                     source.Expression,
                     GetSourceExpression(other)
                 )
@@ -11001,7 +11006,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, IObservable<TResult>>>, Expression<Func<Exception, IObservable<TResult>>>, Expression<Func<IObservable<TResult>>>, IQbservable<TResult>>(SelectMany<TSource, TResult>).Method,
                     source.Expression,
                     onNext,
                     onError,
@@ -11036,7 +11041,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, IObservable<TResult>>>, Expression<Func<Exception, IObservable<TResult>>>, Expression<Func<IObservable<TResult>>>, IQbservable<TResult>>(SelectMany<TSource, TResult>).Method,
                     source.Expression,
                     onNext,
                     onError,
@@ -11065,7 +11070,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, IObservable<TResult>>>, IQbservable<TResult>>(SelectMany<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -11092,7 +11097,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, IObservable<TResult>>>, IQbservable<TResult>>(SelectMany<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -11120,7 +11125,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, Task<TResult>>>, IQbservable<TResult>>(SelectMany<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -11148,7 +11153,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, Task<TResult>>>, IQbservable<TResult>>(SelectMany<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -11176,7 +11181,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, CancellationToken, Task<TResult>>>, IQbservable<TResult>>(SelectMany<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -11204,7 +11209,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, CancellationToken, Task<TResult>>>, IQbservable<TResult>>(SelectMany<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -11232,7 +11237,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, IEnumerable<TResult>>>, IQbservable<TResult>>(SelectMany<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -11260,7 +11265,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, IEnumerable<TResult>>>, IQbservable<TResult>>(SelectMany<TSource, TResult>).Method,
                     source.Expression,
                     selector
                 )
@@ -11292,7 +11297,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TTaskResult), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, Task<TTaskResult>>>, Expression<Func<TSource, TTaskResult, TResult>>, IQbservable<TResult>>(SelectMany<TSource, TTaskResult, TResult>).Method,
                     source.Expression,
                     taskSelector,
                     resultSelector
@@ -11325,7 +11330,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TTaskResult), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, Task<TTaskResult>>>, Expression<Func<TSource, int, TTaskResult, TResult>>, IQbservable<TResult>>(SelectMany<TSource, TTaskResult, TResult>).Method,
                     source.Expression,
                     taskSelector,
                     resultSelector
@@ -11358,7 +11363,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TTaskResult), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, CancellationToken, Task<TTaskResult>>>, Expression<Func<TSource, TTaskResult, TResult>>, IQbservable<TResult>>(SelectMany<TSource, TTaskResult, TResult>).Method,
                     source.Expression,
                     taskSelector,
                     resultSelector
@@ -11391,7 +11396,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TTaskResult), typeof(TResult)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, CancellationToken, Task<TTaskResult>>>, Expression<Func<TSource, int, TTaskResult, TResult>>, IQbservable<TResult>>(SelectMany<TSource, TTaskResult, TResult>).Method,
                     source.Expression,
                     taskSelector,
                     resultSelector
@@ -11419,7 +11424,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<bool>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IObservable<TSource>, IQbservable<bool>>(SequenceEqual<TSource>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -11446,7 +11451,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<bool>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IEnumerable<TSource>, IQbservable<bool>>(SequenceEqual<TSource>).Method,
                     first.Expression,
                     GetSourceExpression(second)
                 )
@@ -11476,7 +11481,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<bool>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IObservable<TSource>, IEqualityComparer<TSource>, IQbservable<bool>>(SequenceEqual<TSource>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     Expression.Constant(comparer, typeof(IEqualityComparer<TSource>))
@@ -11507,7 +11512,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<bool>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IEnumerable<TSource>, IEqualityComparer<TSource>, IQbservable<bool>>(SequenceEqual<TSource>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     Expression.Constant(comparer, typeof(IEqualityComparer<TSource>))
@@ -11532,7 +11537,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(SingleAsync<TSource>).Method,
                     source.Expression
                 )
             );
@@ -11558,7 +11563,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<TSource>>(SingleAsync<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -11582,7 +11587,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource?>>(SingleOrDefaultAsync<TSource>).Method,
                     source.Expression
                 )
             );
@@ -11598,7 +11603,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The sequence contains more than one element that satisfies the condition in the predicate.</exception>
-        public static IQbservable<TSource> SingleOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
+        public static IQbservable<TSource?> SingleOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -11608,7 +11613,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<TSource?>>(SingleOrDefaultAsync<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -11634,7 +11639,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IQbservable<TSource>>(Skip<TSource>).Method,
                     source.Expression,
                     Expression.Constant(count, typeof(int))
                 )
@@ -11670,7 +11675,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IQbservable<TSource>>(Skip<TSource>).Method,
                     source.Expression,
                     Expression.Constant(duration, typeof(TimeSpan))
                 )
@@ -11709,7 +11714,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IQbservable<TSource>>(Skip<TSource>).Method,
                     source.Expression,
                     Expression.Constant(duration, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -11740,7 +11745,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IQbservable<TSource>>(SkipLast<TSource>).Method,
                     source.Expression,
                     Expression.Constant(count, typeof(int))
                 )
@@ -11771,7 +11776,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IQbservable<TSource>>(SkipLast<TSource>).Method,
                     source.Expression,
                     Expression.Constant(duration, typeof(TimeSpan))
                 )
@@ -11805,7 +11810,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IQbservable<TSource>>(SkipLast<TSource>).Method,
                     source.Expression,
                     Expression.Constant(duration, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -11833,7 +11838,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, DateTimeOffset, IQbservable<TSource>>(SkipUntil<TSource>).Method,
                     source.Expression,
                     Expression.Constant(startTime, typeof(DateTimeOffset))
                 )
@@ -11863,7 +11868,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, DateTimeOffset, IScheduler, IQbservable<TSource>>(SkipUntil<TSource>).Method,
                     source.Expression,
                     Expression.Constant(startTime, typeof(DateTimeOffset)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -11893,7 +11898,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TOther)),
+                    new Func<IQbservable<TSource>, IObservable<TOther>, IQbservable<TSource>>(SkipUntil<TSource, TOther>).Method,
                     source.Expression,
                     GetSourceExpression(other)
                 )
@@ -11919,7 +11924,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<TSource>>(SkipWhile<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -11946,7 +11951,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, bool>>, IQbservable<TSource>>(SkipWhile<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -11981,7 +11986,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Action>, IQbservable<Unit>>(Start).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     action
                 )
@@ -12019,7 +12024,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Action>, IScheduler, IQbservable<Unit>>(Start).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     action,
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -12056,7 +12061,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<TResult>>, IQbservable<TResult>>(Start<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     function
                 )
@@ -12095,7 +12100,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<TResult>>, IScheduler, IQbservable<TResult>>(Start<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     function,
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -12131,7 +12136,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<Task>>, IQbservable<Unit>>(StartAsync).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync
                 )
@@ -12169,7 +12174,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<Task>>, TaskObservationOptions, IQbservable<Unit>>(StartAsync).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync,
                     Expression.Constant(options, typeof(TaskObservationOptions))
@@ -12208,7 +12213,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<Task>>, IScheduler, IQbservable<Unit>>(StartAsync).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync,
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -12254,7 +12259,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task>>, IQbservable<Unit>>(StartAsync).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync
                 )
@@ -12302,7 +12307,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task>>, TaskObservationOptions, IQbservable<Unit>>(StartAsync).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync,
                     Expression.Constant(options, typeof(TaskObservationOptions))
@@ -12351,7 +12356,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task>>, IScheduler, IQbservable<Unit>>(StartAsync).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync,
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -12388,7 +12393,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<Task<TResult>>>, IQbservable<TResult>>(StartAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync
                 )
@@ -12434,9 +12439,49 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task<TResult>>>, IQbservable<TResult>>(StartAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync
+                )
+            );
+        }
+
+        /// <summary>
+        /// Invokes the asynchronous function, surfacing the result through an observable sequence.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to run.</param>
+        /// <param name="options">Controls how the tasks's progress is observed.</param>
+        /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="functionAsync" /> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>The function is started immediately, not during the subscription of the resulting sequence.</description>
+        /// </item>
+        /// <item>
+        /// <description>Multiple subscriptions to the resulting sequence can observe the function's result.</description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, TaskObservationOptions options)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (functionAsync == null)
+                throw new ArgumentNullException(nameof(functionAsync));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservableProvider, Expression<Func<Task<TResult>>>, TaskObservationOptions, IQbservable<TResult>>(StartAsync<TResult>).Method,
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    functionAsync,
+                    Expression.Constant(options, typeof(TaskObservationOptions))
                 )
             );
         }
@@ -12483,7 +12528,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task<TResult>>>, TaskObservationOptions, IQbservable<TResult>>(StartAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync,
                     Expression.Constant(options, typeof(TaskObservationOptions))
@@ -12497,10 +12542,10 @@ namespace System.Reactive.Linq
         /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
         /// <param name="functionAsync">Asynchronous function to run.</param>
-        /// <param name="options">Controls how the tasks's progress is observed.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
         /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="functionAsync" /> is null.</exception>
+        /// <paramref name="functionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
         /// <item>
@@ -12511,22 +12556,22 @@ namespace System.Reactive.Linq
         /// </item>
         /// </list>
         /// </remarks>
-        public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, TaskObservationOptions options)
+        public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, IScheduler scheduler)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
-            if (options == null)
-                throw new ArgumentNullException(nameof(options));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<Task<TResult>>>, IScheduler, IQbservable<TResult>>(StartAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync,
-                    Expression.Constant(options, typeof(TaskObservationOptions))
+                    Expression.Constant(scheduler, typeof(IScheduler))
                 )
             );
         }
@@ -12573,47 +12618,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
-                    Expression.Constant(provider, typeof(IQbservableProvider)),
-                    functionAsync,
-                    Expression.Constant(scheduler, typeof(IScheduler))
-                )
-            );
-        }
-
-        /// <summary>
-        /// Invokes the asynchronous function, surfacing the result through an observable sequence.
-        /// </summary>
-        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
-        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
-        /// <param name="functionAsync">Asynchronous function to run.</param>
-        /// <param name="scheduler">Scheduler on which to notify observers.</param>
-        /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="functionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
-        /// <remarks>
-        /// <list type="bullet">
-        /// <item>
-        /// <description>The function is started immediately, not during the subscription of the resulting sequence.</description>
-        /// </item>
-        /// <item>
-        /// <description>Multiple subscriptions to the resulting sequence can observe the function's result.</description>
-        /// </item>
-        /// </list>
-        /// </remarks>
-        public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, IScheduler scheduler)
-        {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-            if (functionAsync == null)
-                throw new ArgumentNullException(nameof(functionAsync));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-
-            return provider.CreateQuery<TResult>(
-                Expression.Call(
-                    null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task<TResult>>>, IScheduler, IQbservable<TResult>>(StartAsync<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync,
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -12643,7 +12648,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IScheduler, TSource[], IQbservable<TSource>>(StartWith<TSource>).Method,
                     source.Expression,
                     Expression.Constant(scheduler, typeof(IScheduler)),
                     Expression.Constant(values, typeof(TSource[]))
@@ -12673,7 +12678,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IScheduler, IEnumerable<TSource>, IQbservable<TSource>>(StartWith<TSource>).Method,
                     source.Expression,
                     Expression.Constant(scheduler, typeof(IScheduler)),
                     GetSourceExpression(values)
@@ -12700,7 +12705,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TSource[], IQbservable<TSource>>(StartWith<TSource>).Method,
                     source.Expression,
                     Expression.Constant(values, typeof(TSource[]))
                 )
@@ -12726,7 +12731,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IEnumerable<TSource>, IQbservable<TSource>>(StartWith<TSource>).Method,
                     source.Expression,
                     GetSourceExpression(values)
                 )
@@ -12757,7 +12762,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, SynchronizationContext, IQbservable<TSource>>(SubscribeOn<TSource>).Method,
                     source.Expression,
                     Expression.Constant(context, typeof(SynchronizationContext))
                 )
@@ -12788,7 +12793,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IScheduler, IQbservable<TSource>>(SubscribeOn<TSource>).Method,
                     source.Expression,
                     Expression.Constant(scheduler, typeof(IScheduler))
                 )
@@ -12796,9 +12801,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Decimal" /> values.
+        /// Computes the sum of a sequence of <see cref="decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Decimal" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="decimal" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -12812,7 +12817,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<decimal>, IQbservable<decimal>>(Sum).Method,
                     source.Expression
                 )
             );
@@ -12834,7 +12839,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<double>, IQbservable<double>>(Sum).Method,
                     source.Expression
                 )
             );
@@ -12857,7 +12862,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<int>, IQbservable<int>>(Sum).Method,
                     source.Expression
                 )
             );
@@ -12880,16 +12885,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<long>, IQbservable<long>>(Sum).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Decimal" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Decimal" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="decimal" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -12903,7 +12908,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<decimal?>, IQbservable<decimal?>>(Sum).Method,
                     source.Expression
                 )
             );
@@ -12925,7 +12930,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<double?>, IQbservable<double?>>(Sum).Method,
                     source.Expression
                 )
             );
@@ -12948,7 +12953,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<int?>, IQbservable<int?>>(Sum).Method,
                     source.Expression
                 )
             );
@@ -12971,16 +12976,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<long?>, IQbservable<long?>>(Sum).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Single" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Single" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="float" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -12993,16 +12998,16 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<float?>, IQbservable<float?>>(Sum).Method,
                     source.Expression
                 )
             );
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Single" /> values.
+        /// Computes the sum of a sequence of <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Single" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="float" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -13015,7 +13020,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservable<float>, IQbservable<float>>(Sum).Method,
                     source.Expression
                 )
             );
@@ -13041,7 +13046,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, double>>, IQbservable<double>>(Sum<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -13049,7 +13054,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -13068,7 +13073,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, float>>, IQbservable<float>>(Sum<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -13076,7 +13081,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -13096,7 +13101,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, decimal>>, IQbservable<decimal>>(Sum<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -13124,7 +13129,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int>>, IQbservable<int>>(Sum<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -13152,7 +13157,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, long>>, IQbservable<long>>(Sum<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -13179,7 +13184,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, double?>>, IQbservable<double?>>(Sum<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -13187,7 +13192,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -13206,7 +13211,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, float?>>, IQbservable<float?>>(Sum<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -13214,7 +13219,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -13234,7 +13239,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, decimal?>>, IQbservable<decimal?>>(Sum<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -13262,7 +13267,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<int?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int?>>, IQbservable<int?>>(Sum<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -13290,7 +13295,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<long?>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, long?>>, IQbservable<long?>>(Sum<TSource>).Method,
                     source.Expression,
                     selector
                 )
@@ -13316,7 +13321,7 @@ namespace System.Reactive.Linq
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<IObservable<TSource>>, IQbservable<TSource>>(Switch<TSource>).Method,
                     sources.Expression
                 )
             );
@@ -13341,7 +13346,7 @@ namespace System.Reactive.Linq
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<Task<TSource>>, IQbservable<TSource>>(Switch<TSource>).Method,
                     sources.Expression
                 )
             );
@@ -13368,7 +13373,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource>>(Synchronize<TSource>).Method,
                     source.Expression
                 )
             );
@@ -13394,7 +13399,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, object, IQbservable<TSource>>(Synchronize<TSource>).Method,
                     source.Expression,
                     Expression.Constant(gate, typeof(object))
                 )
@@ -13420,7 +13425,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IQbservable<TSource>>(Take<TSource>).Method,
                     source.Expression,
                     Expression.Constant(count, typeof(int))
                 )
@@ -13449,7 +13454,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IScheduler, IQbservable<TSource>>(Take<TSource>).Method,
                     source.Expression,
                     Expression.Constant(count, typeof(int)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -13481,7 +13486,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IQbservable<TSource>>(Take<TSource>).Method,
                     source.Expression,
                     Expression.Constant(duration, typeof(TimeSpan))
                 )
@@ -13515,7 +13520,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IQbservable<TSource>>(Take<TSource>).Method,
                     source.Expression,
                     Expression.Constant(duration, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -13546,7 +13551,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IQbservable<TSource>>(TakeLast<TSource>).Method,
                     source.Expression,
                     Expression.Constant(count, typeof(int))
                 )
@@ -13579,7 +13584,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IScheduler, IQbservable<TSource>>(TakeLast<TSource>).Method,
                     source.Expression,
                     Expression.Constant(count, typeof(int)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -13611,7 +13616,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IQbservable<TSource>>(TakeLast<TSource>).Method,
                     source.Expression,
                     Expression.Constant(duration, typeof(TimeSpan))
                 )
@@ -13645,7 +13650,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IQbservable<TSource>>(TakeLast<TSource>).Method,
                     source.Expression,
                     Expression.Constant(duration, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -13683,7 +13688,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IScheduler, IQbservable<TSource>>(TakeLast<TSource>).Method,
                     source.Expression,
                     Expression.Constant(duration, typeof(TimeSpan)),
                     Expression.Constant(timerScheduler, typeof(IScheduler)),
@@ -13715,7 +13720,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IQbservable<IList<TSource>>>(TakeLastBuffer<TSource>).Method,
                     source.Expression,
                     Expression.Constant(count, typeof(int))
                 )
@@ -13745,7 +13750,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IQbservable<IList<TSource>>>(TakeLastBuffer<TSource>).Method,
                     source.Expression,
                     Expression.Constant(duration, typeof(TimeSpan))
                 )
@@ -13778,7 +13783,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IQbservable<IList<TSource>>>(TakeLastBuffer<TSource>).Method,
                     source.Expression,
                     Expression.Constant(duration, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -13794,7 +13799,8 @@ namespace System.Reactive.Linq
         /// <param name="source">The source sequence to relay elements of.</param>
         /// <param name="cancellationToken">The cancellation token to complete the target observable sequence on.</param>
         /// <returns>The observable sequence with the source elements until the provided <paramref name="cancellationToken" /> is cancelled.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> is <code>null</code>.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is <code>null</code>.</exception>
         public static IQbservable<TSource> TakeUntil<TSource>(this IQbservable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
@@ -13803,13 +13809,12 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, CancellationToken, IQbservable<TSource>>(TakeUntil<TSource>).Method,
                     source.Expression,
                     Expression.Constant(cancellationToken, typeof(CancellationToken))
                 )
             );
         }
-
 
         /// <summary>
         /// Takes elements for the specified duration until the specified end time.
@@ -13828,7 +13833,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, DateTimeOffset, IQbservable<TSource>>(TakeUntil<TSource>).Method,
                     source.Expression,
                     Expression.Constant(endTime, typeof(DateTimeOffset))
                 )
@@ -13855,10 +13860,46 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, DateTimeOffset, IScheduler, IQbservable<TSource>>(TakeUntil<TSource>).Method,
                     source.Expression,
                     Expression.Constant(endTime, typeof(DateTimeOffset)),
                     Expression.Constant(scheduler, typeof(IScheduler))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Relays elements from the source observable sequence and calls the predicate after an
+        /// emission to check if the sequence should stop after that specific item.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source and result sequences.</typeparam>
+        /// <param name="source">The source sequence to relay elements of.</param>
+        /// <param name="stopPredicate">Called after each upstream item has been emitted with
+        /// that upstream item and should return <code>true</code> to indicate the sequence should
+        /// complete.</param>
+        /// <returns>The observable sequence with the source elements until the stop predicate returns true.</returns>
+        /// <example>
+        /// The following sequence will stop after the value 5 has been encountered:
+        /// <code>
+        /// Observable.Range(1, 10)
+        /// .TakeUntil(item =&gt; item == 5)
+        /// .Subscribe(Console.WriteLine);
+        /// </code></example>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="stopPredicate" /> is <code>null</code>.</exception>
+        public static IQbservable<TSource> TakeUntil<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> stopPredicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (stopPredicate == null)
+                throw new ArgumentNullException(nameof(stopPredicate));
+
+            return source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<TSource>>(TakeUntil<TSource>).Method,
+                    source.Expression,
+                    stopPredicate
                 )
             );
         }
@@ -13883,45 +13924,9 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TOther)),
+                    new Func<IQbservable<TSource>, IObservable<TOther>, IQbservable<TSource>>(TakeUntil<TSource, TOther>).Method,
                     source.Expression,
                     GetSourceExpression(other)
-                )
-            );
-        }
-
-        /// <summary>
-        /// Relays elements from the source observable sequence and calls the predicate after an
-        /// emission to check if the sequence should stop after that specific item.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source and result sequences.</typeparam>
-        /// <param name="source">The source sequence to relay elements of.</param>
-        /// <param name="stopPredicate">Called after each upstream item has been emitted with
-        /// that upstream item and should return <code>true</code> to indicate the sequence should
-        /// complete.</param>
-        /// <returns>The observable sequence with the source elements until the stop predicate returns true.</returns>
-        /// <example>
-        /// The following sequence will stop after the value 5 has been encountered:
-        /// <code>
-        /// Observable.Range(1, 10)
-        ///     .TakeUntil(item =&gt; item == 5)
-        ///     .Subscribe(Console.WriteLine);
-        /// </code>
-        /// </example>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="stopPredicate"/> is <code>null</code>.</exception>
-        public static IQbservable<TSource> TakeUntil<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> stopPredicate)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (stopPredicate == null)
-                throw new ArgumentNullException(nameof(stopPredicate));
-
-            return source.Provider.CreateQuery<TSource>(
-                Expression.Call(
-                    null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
-                    source.Expression,
-                    stopPredicate
                 )
             );
         }
@@ -13945,7 +13950,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<TSource>>(TakeWhile<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -13972,7 +13977,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, bool>>, IQbservable<TSource>>(TakeWhile<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -14013,7 +14018,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IQbservable<TSource>>(Throttle<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(TimeSpan))
                 )
@@ -14057,7 +14062,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IQbservable<TSource>>(Throttle<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -14092,7 +14097,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TThrottle)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, IObservable<TThrottle>>>, IQbservable<TSource>>(Throttle<TSource, TThrottle>).Method,
                     source.Expression,
                     throttleDurationSelector
                 )
@@ -14118,7 +14123,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Exception, IQbservable<TResult>>(Throw<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(exception, typeof(Exception))
                 )
@@ -14147,7 +14152,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Exception, IScheduler, IQbservable<TResult>>(Throw<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(exception, typeof(Exception)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -14178,7 +14183,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Exception, IScheduler, TResult, IQbservable<TResult>>(Throw<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(exception, typeof(Exception)),
                     Expression.Constant(scheduler, typeof(IScheduler)),
@@ -14207,7 +14212,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
+                    new Func<IQbservableProvider, Exception, TResult, IQbservable<TResult>>(Throw<TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(exception, typeof(Exception)),
                     Expression.Constant(witness, typeof(TResult))
@@ -14231,7 +14236,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TimeInterval<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TimeInterval<TSource>>>(TimeInterval<TSource>).Method,
                     source.Expression
                 )
             );
@@ -14256,7 +14261,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TimeInterval<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IScheduler, IQbservable<TimeInterval<TSource>>>(TimeInterval<TSource>).Method,
                     source.Expression,
                     Expression.Constant(scheduler, typeof(IScheduler))
                 )
@@ -14287,7 +14292,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, DateTimeOffset, IQbservable<TSource>>(Timeout<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(DateTimeOffset))
                 )
@@ -14320,7 +14325,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, DateTimeOffset, IObservable<TSource>, IQbservable<TSource>>(Timeout<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(DateTimeOffset)),
                     GetSourceExpression(other)
@@ -14357,7 +14362,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, DateTimeOffset, IObservable<TSource>, IScheduler, IQbservable<TSource>>(Timeout<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(DateTimeOffset)),
                     GetSourceExpression(other),
@@ -14393,7 +14398,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, DateTimeOffset, IScheduler, IQbservable<TSource>>(Timeout<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(DateTimeOffset)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -14435,7 +14440,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IQbservable<TSource>>(Timeout<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(TimeSpan))
                 )
@@ -14478,7 +14483,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IObservable<TSource>, IQbservable<TSource>>(Timeout<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(TimeSpan)),
                     GetSourceExpression(other)
@@ -14525,7 +14530,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IObservable<TSource>, IScheduler, IQbservable<TSource>>(Timeout<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(TimeSpan)),
                     GetSourceExpression(other),
@@ -14571,7 +14576,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IQbservable<TSource>>(Timeout<TSource>).Method,
                     source.Expression,
                     Expression.Constant(dueTime, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -14603,7 +14608,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TTimeout)),
+                    new Func<IQbservable<TSource>, IObservable<TTimeout>, Expression<Func<TSource, IObservable<TTimeout>>>, IQbservable<TSource>>(Timeout<TSource, TTimeout>).Method,
                     source.Expression,
                     GetSourceExpression(firstTimeout),
                     timeoutDurationSelector
@@ -14638,7 +14643,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TTimeout)),
+                    new Func<IQbservable<TSource>, IObservable<TTimeout>, Expression<Func<TSource, IObservable<TTimeout>>>, IObservable<TSource>, IQbservable<TSource>>(Timeout<TSource, TTimeout>).Method,
                     source.Expression,
                     GetSourceExpression(firstTimeout),
                     timeoutDurationSelector,
@@ -14668,7 +14673,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TTimeout)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, IObservable<TTimeout>>>, IQbservable<TSource>>(Timeout<TSource, TTimeout>).Method,
                     source.Expression,
                     timeoutDurationSelector
                 )
@@ -14699,7 +14704,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TTimeout)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, IObservable<TTimeout>>>, IObservable<TSource>, IQbservable<TSource>>(Timeout<TSource, TTimeout>).Method,
                     source.Expression,
                     timeoutDurationSelector,
                     GetSourceExpression(other)
@@ -14721,7 +14726,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, DateTimeOffset, IQbservable<long>>(Timer).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(dueTime, typeof(DateTimeOffset))
                 )
@@ -14745,7 +14750,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, DateTimeOffset, TimeSpan, IQbservable<long>>(Timer).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(dueTime, typeof(DateTimeOffset)),
                     Expression.Constant(period, typeof(TimeSpan))
@@ -14775,7 +14780,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, DateTimeOffset, TimeSpan, IScheduler, IQbservable<long>>(Timer).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(dueTime, typeof(DateTimeOffset)),
                     Expression.Constant(period, typeof(TimeSpan)),
@@ -14803,7 +14808,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, DateTimeOffset, IScheduler, IQbservable<long>>(Timer).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(dueTime, typeof(DateTimeOffset)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -14825,7 +14830,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, TimeSpan, IQbservable<long>>(Timer).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(dueTime, typeof(TimeSpan))
                 )
@@ -14849,7 +14854,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, TimeSpan, TimeSpan, IQbservable<long>>(Timer).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(dueTime, typeof(TimeSpan)),
                     Expression.Constant(period, typeof(TimeSpan))
@@ -14879,7 +14884,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, TimeSpan, TimeSpan, IScheduler, IQbservable<long>>(Timer).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(dueTime, typeof(TimeSpan)),
                     Expression.Constant(period, typeof(TimeSpan)),
@@ -14907,7 +14912,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<long>(
                 Expression.Call(
                     null,
-                    (MethodInfo)MethodInfo.GetCurrentMethod()!,
+                    new Func<IQbservableProvider, TimeSpan, IScheduler, IQbservable<long>>(Timer).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(dueTime, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -14931,7 +14936,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<Timestamped<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<Timestamped<TSource>>>(Timestamp<TSource>).Method,
                     source.Expression
                 )
             );
@@ -14956,7 +14961,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<Timestamped<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IScheduler, IQbservable<Timestamped<TSource>>>(Timestamp<TSource>).Method,
                     source.Expression,
                     Expression.Constant(scheduler, typeof(IScheduler))
                 )
@@ -14980,7 +14985,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource[]>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<TSource[]>>(ToArray<TSource>).Method,
                     source.Expression
                 )
             );
@@ -14998,7 +15003,7 @@ namespace System.Reactive.Linq
         /// <paramref name="source" /> or <paramref name="keySelector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IDictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
-            where TKey : notnull
+        where TKey : notnull
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -15008,7 +15013,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IDictionary<TKey, TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IQbservable<IDictionary<TKey, TSource>>>(ToDictionary<TSource, TKey>).Method,
                     source.Expression,
                     keySelector
                 )
@@ -15028,7 +15033,7 @@ namespace System.Reactive.Linq
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IDictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
-            where TKey : notnull
+        where TKey : notnull
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -15040,7 +15045,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IDictionary<TKey, TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IEqualityComparer<TKey>, IQbservable<IDictionary<TKey, TSource>>>(ToDictionary<TSource, TKey>).Method,
                     source.Expression,
                     keySelector,
                     Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))
@@ -15062,7 +15067,7 @@ namespace System.Reactive.Linq
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IDictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector)
-            where TKey : notnull
+        where TKey : notnull
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -15074,7 +15079,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IDictionary<TKey, TElement>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TElement)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<TSource, TElement>>, IQbservable<IDictionary<TKey, TElement>>>(ToDictionary<TSource, TKey, TElement>).Method,
                     source.Expression,
                     keySelector,
                     elementSelector
@@ -15097,7 +15102,7 @@ namespace System.Reactive.Linq
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IDictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, IEqualityComparer<TKey> comparer)
-            where TKey : notnull
+        where TKey : notnull
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -15111,7 +15116,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IDictionary<TKey, TElement>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TElement)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<TSource, TElement>>, IEqualityComparer<TKey>, IQbservable<IDictionary<TKey, TElement>>>(ToDictionary<TSource, TKey, TElement>).Method,
                     source.Expression,
                     keySelector,
                     elementSelector,
@@ -15137,7 +15142,7 @@ namespace System.Reactive.Linq
             return ((IQueryProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQueryable<TSource>>(ToQueryable<TSource>).Method,
                     source.Expression
                 )
             );
@@ -15160,7 +15165,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, IQbservable<IList<TSource>>>(ToList<TSource>).Method,
                     source.Expression
                 )
             );
@@ -15187,7 +15192,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<ILookup<TKey, TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IQbservable<ILookup<TKey, TSource>>>(ToLookup<TSource, TKey>).Method,
                     source.Expression,
                     keySelector
                 )
@@ -15218,7 +15223,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<ILookup<TKey, TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, IEqualityComparer<TKey>, IQbservable<ILookup<TKey, TSource>>>(ToLookup<TSource, TKey>).Method,
                     source.Expression,
                     keySelector,
                     Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))
@@ -15251,7 +15256,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<ILookup<TKey, TElement>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TElement)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<TSource, TElement>>, IQbservable<ILookup<TKey, TElement>>>(ToLookup<TSource, TKey, TElement>).Method,
                     source.Expression,
                     keySelector,
                     elementSelector
@@ -15287,7 +15292,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<ILookup<TKey, TElement>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TKey), typeof(TElement)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TKey>>, Expression<Func<TSource, TElement>>, IEqualityComparer<TKey>, IQbservable<ILookup<TKey, TElement>>>(ToLookup<TSource, TKey, TElement>).Method,
                     source.Expression,
                     keySelector,
                     elementSelector,
@@ -15315,7 +15320,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<TSource>, IQbservable<TSource>>(ToObservable<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(source)
                 )
@@ -15344,7 +15349,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<TSource>, IScheduler, IQbservable<TSource>>(ToObservable<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(source),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -15376,7 +15381,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult), typeof(TResource)),
+                    new Func<IQbservableProvider, Expression<Func<TResource>>, Expression<Func<TResource, IObservable<TResult>>>, IQbservable<TResult>>(Using<TResult, TResource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     resourceFactory,
                     observableFactory
@@ -15411,7 +15416,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult), typeof(TResource)),
+                    new Func<IQbservableProvider, Expression<Func<CancellationToken, Task<TResource>>>, Expression<Func<TResource, CancellationToken, Task<IObservable<TResult>>>>, IQbservable<TResult>>(Using<TResult, TResource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     resourceFactoryAsync,
                     observableFactoryAsync
@@ -15438,7 +15443,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, bool>>, IQbservable<TSource>>(Where<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -15464,7 +15469,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, int, bool>>, IQbservable<TSource>>(Where<TSource>).Method,
                     source.Expression,
                     predicate
                 )
@@ -15493,7 +15498,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, Expression<Func<bool>>, IObservable<TSource>, IQbservable<TSource>>(While<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     condition,
                     GetSourceExpression(source)
@@ -15520,7 +15525,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, IQbservable<IObservable<TSource>>>(Window<TSource>).Method,
                     source.Expression,
                     Expression.Constant(count, typeof(int))
                 )
@@ -15547,7 +15552,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, int, int, IQbservable<IObservable<TSource>>>(Window<TSource>).Method,
                     source.Expression,
                     Expression.Constant(count, typeof(int)),
                     Expression.Constant(skip, typeof(int))
@@ -15579,7 +15584,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IQbservable<IObservable<TSource>>>(Window<TSource>).Method,
                     source.Expression,
                     Expression.Constant(timeSpan, typeof(TimeSpan))
                 )
@@ -15612,7 +15617,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, int, IQbservable<IObservable<TSource>>>(Window<TSource>).Method,
                     source.Expression,
                     Expression.Constant(timeSpan, typeof(TimeSpan)),
                     Expression.Constant(count, typeof(int))
@@ -15649,7 +15654,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, int, IScheduler, IQbservable<IObservable<TSource>>>(Window<TSource>).Method,
                     source.Expression,
                     Expression.Constant(timeSpan, typeof(TimeSpan)),
                     Expression.Constant(count, typeof(int)),
@@ -15685,7 +15690,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, IScheduler, IQbservable<IObservable<TSource>>>(Window<TSource>).Method,
                     source.Expression,
                     Expression.Constant(timeSpan, typeof(TimeSpan)),
                     Expression.Constant(scheduler, typeof(IScheduler))
@@ -15725,7 +15730,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, TimeSpan, IQbservable<IObservable<TSource>>>(Window<TSource>).Method,
                     source.Expression,
                     Expression.Constant(timeSpan, typeof(TimeSpan)),
                     Expression.Constant(timeShift, typeof(TimeSpan))
@@ -15768,7 +15773,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservable<TSource>, TimeSpan, TimeSpan, IScheduler, IQbservable<IObservable<TSource>>>(Window<TSource>).Method,
                     source.Expression,
                     Expression.Constant(timeSpan, typeof(TimeSpan)),
                     Expression.Constant(timeShift, typeof(TimeSpan)),
@@ -15797,7 +15802,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TWindowBoundary)),
+                    new Func<IQbservable<TSource>, IObservable<TWindowBoundary>, IQbservable<IObservable<TSource>>>(Window<TSource, TWindowBoundary>).Method,
                     source.Expression,
                     GetSourceExpression(windowBoundaries)
                 )
@@ -15824,7 +15829,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TWindowClosing)),
+                    new Func<IQbservable<TSource>, Expression<Func<IObservable<TWindowClosing>>>, IQbservable<IObservable<TSource>>>(Window<TSource, TWindowClosing>).Method,
                     source.Expression,
                     windowClosingSelector
                 )
@@ -15855,7 +15860,7 @@ namespace System.Reactive.Linq
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TWindowOpening), typeof(TWindowClosing)),
+                    new Func<IQbservable<TSource>, IObservable<TWindowOpening>, Expression<Func<TWindowOpening, IObservable<TWindowClosing>>>, IQbservable<IObservable<TSource>>>(Window<TSource, TWindowOpening, TWindowClosing>).Method,
                     source.Expression,
                     GetSourceExpression(windowOpenings),
                     windowClosingSelector
@@ -15889,7 +15894,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TResult)),
+                    new Func<IQbservable<TFirst>, IObservable<TSecond>, Expression<Func<TFirst, TSecond, TResult>>, IQbservable<TResult>>(WithLatestFrom<TFirst, TSecond, TResult>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     resultSelector
@@ -15916,7 +15921,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, IQbservable<IList<TSource>>>(Zip<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -15942,7 +15947,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
+                    new Func<IQbservableProvider, IObservable<TSource>[], IQbservable<IList<TSource>>>(Zip<TSource>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
                 )
@@ -15972,7 +15977,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    new Func<IQbservableProvider, IEnumerable<IObservable<TSource>>, Expression<Func<IList<TSource>, TResult>>, IQbservable<TResult>>(Zip<TSource, TResult>).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources),
                     resultSelector
@@ -16004,7 +16009,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, Expression<Func<TSource1, TSource2, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TResult>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     resultSelector
@@ -16036,7 +16041,7 @@ namespace System.Reactive.Linq
             return first.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IEnumerable<TSource2>, Expression<Func<TSource1, TSource2, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TResult>).Method,
                     first.Expression,
                     GetSourceExpression(second),
                     resultSelector
@@ -16072,7 +16077,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, Expression<Func<TSource1, TSource2, TSource3, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16113,7 +16118,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16159,7 +16164,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16210,7 +16215,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16266,7 +16271,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16327,7 +16332,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16393,7 +16398,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16464,7 +16469,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16540,7 +16545,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TSource11), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, IObservable<TSource11>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16621,7 +16626,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TSource11), typeof(TSource12), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, IObservable<TSource11>, IObservable<TSource12>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16707,7 +16712,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TSource11), typeof(TSource12), typeof(TSource13), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, IObservable<TSource11>, IObservable<TSource12>, IObservable<TSource13>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16798,7 +16803,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TSource11), typeof(TSource12), typeof(TSource13), typeof(TSource14), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, IObservable<TSource11>, IObservable<TSource12>, IObservable<TSource13>, IObservable<TSource14>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16894,7 +16899,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TSource11), typeof(TSource12), typeof(TSource13), typeof(TSource14), typeof(TSource15), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, IObservable<TSource11>, IObservable<TSource12>, IObservable<TSource13>, IObservable<TSource14>, IObservable<TSource15>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -16995,7 +17000,7 @@ namespace System.Reactive.Linq
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TSource3), typeof(TSource4), typeof(TSource5), typeof(TSource6), typeof(TSource7), typeof(TSource8), typeof(TSource9), typeof(TSource10), typeof(TSource11), typeof(TSource12), typeof(TSource13), typeof(TSource14), typeof(TSource15), typeof(TSource16), typeof(TResult)),
+                    new Func<IQbservable<TSource1>, IObservable<TSource2>, IObservable<TSource3>, IObservable<TSource4>, IObservable<TSource5>, IObservable<TSource6>, IObservable<TSource7>, IObservable<TSource8>, IObservable<TSource9>, IObservable<TSource10>, IObservable<TSource11>, IObservable<TSource12>, IObservable<TSource13>, IObservable<TSource14>, IObservable<TSource15>, IObservable<TSource16>, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>>, IQbservable<TResult>>(Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>).Method,
                     source1.Expression,
                     GetSourceExpression(source2),
                     GetSourceExpression(source3),
@@ -17032,7 +17037,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = (MethodInfo)MethodInfo.GetCurrentMethod()!;
+            var m = new Func<IQbservableProvider, Expression<Action>, Func<IQbservable<Unit>>>(ToAsync).Method;
             return () => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17063,7 +17068,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = (MethodInfo)MethodInfo.GetCurrentMethod()!;
+            var m = new Func<IQbservableProvider, Expression<Action>, Func<IQbservable<Unit>>>(ToAsync).Method;
             return () => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17093,7 +17098,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1>>, Func<TArg1, IQbservable<Unit>>>(ToAsync).Method;
             return (t1) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17126,7 +17131,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1>>, Func<TArg1, IQbservable<Unit>>>(ToAsync).Method;
             return (t1) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17158,7 +17163,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2>>, Func<TArg1, TArg2, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17193,7 +17198,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2>>, Func<TArg1, TArg2, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17227,7 +17232,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3>>, Func<TArg1, TArg2, TArg3, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17264,7 +17269,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3>>, Func<TArg1, TArg2, TArg3, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17300,7 +17305,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4>>, Func<TArg1, TArg2, TArg3, TArg4, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17339,7 +17344,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4>>, Func<TArg1, TArg2, TArg3, TArg4, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17377,7 +17382,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17418,7 +17423,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17458,7 +17463,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17501,7 +17506,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17543,7 +17548,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17588,7 +17593,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17632,7 +17637,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17679,7 +17684,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17725,7 +17730,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17774,7 +17779,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17822,7 +17827,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17873,7 +17878,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17923,7 +17928,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -17976,7 +17981,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18028,7 +18033,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18083,7 +18088,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18137,7 +18142,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18194,7 +18199,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18250,7 +18255,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18309,7 +18314,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18367,7 +18372,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14), typeof(TArg15));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18428,7 +18433,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14), typeof(TArg15));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18488,7 +18493,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14), typeof(TArg15), typeof(TArg16));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18551,7 +18556,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14), typeof(TArg15), typeof(TArg16));
+            var m = new Func<IQbservableProvider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, IQbservable<Unit>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18597,7 +18602,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TResult>>, Func<IQbservable<TResult>>>(ToAsync).Method;
             return () => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18629,7 +18634,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TResult>>, Func<IQbservable<TResult>>>(ToAsync).Method;
             return () => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18660,7 +18665,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TResult>>, Func<TArg1, IQbservable<TResult>>>(ToAsync).Method;
             return (t1) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18694,7 +18699,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TResult>>, Func<TArg1, IQbservable<TResult>>>(ToAsync).Method;
             return (t1) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18727,7 +18732,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TResult>>, Func<TArg1, TArg2, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18763,7 +18768,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TResult>>, Func<TArg1, TArg2, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18798,7 +18803,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TResult>>, Func<TArg1, TArg2, TArg3, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18836,7 +18841,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TResult>>, Func<TArg1, TArg2, TArg3, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18873,7 +18878,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18913,7 +18918,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18952,7 +18957,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -18994,7 +18999,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19035,7 +19040,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19079,7 +19084,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19122,7 +19127,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19168,7 +19173,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19213,7 +19218,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19261,7 +19266,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19308,7 +19313,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19358,7 +19363,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19407,7 +19412,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19459,7 +19464,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19510,7 +19515,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19564,7 +19569,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19617,7 +19622,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19673,7 +19678,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19728,7 +19733,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19786,7 +19791,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19843,7 +19848,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19903,7 +19908,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -19962,7 +19967,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14), typeof(TArg15), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20024,7 +20029,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14), typeof(TArg15), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20085,7 +20090,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14), typeof(TArg15), typeof(TArg16), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20149,7 +20154,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14), typeof(TArg15), typeof(TArg16), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, IQbservable<TResult>>>(ToAsync).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20202,7 +20207,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = (MethodInfo)MethodInfo.GetCurrentMethod()!;
+            var m = new Func<IQbservableProvider, Expression<Func<AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<IQbservable<Unit>>>(FromAsyncPattern).Method;
             return () => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20239,7 +20244,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20278,7 +20283,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20319,7 +20324,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, TArg3, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2, t3) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20362,7 +20367,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, TArg3, TArg4, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20407,7 +20412,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20454,7 +20459,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20503,7 +20508,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20554,7 +20559,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20607,7 +20612,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20662,7 +20667,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20719,7 +20724,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20778,7 +20783,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20839,7 +20844,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20902,7 +20907,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, AsyncCallback, object, IAsyncResult>>, Expression<Action<IAsyncResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<Unit>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14) => provider.CreateQuery<Unit>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20953,7 +20958,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<IQbservable<TResult>>>(FromAsyncPattern).Method;
             return () => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -20991,7 +20996,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21031,7 +21036,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21073,7 +21078,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, TArg3, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2, t3) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21117,7 +21122,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21163,7 +21168,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21211,7 +21216,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21261,7 +21266,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21313,7 +21318,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21367,7 +21372,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21423,7 +21428,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21481,7 +21486,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21541,7 +21546,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21603,7 +21608,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(
@@ -21667,7 +21672,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            var m = ((MethodInfo)MethodInfo.GetCurrentMethod()!).MakeGenericMethod(typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4), typeof(TArg5), typeof(TArg6), typeof(TArg7), typeof(TArg8), typeof(TArg9), typeof(TArg10), typeof(TArg11), typeof(TArg12), typeof(TArg13), typeof(TArg14), typeof(TResult));
+            var m = new Func<IQbservableProvider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, AsyncCallback, object, IAsyncResult>>, Expression<Func<IAsyncResult, TResult>>, Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<TResult>>>(FromAsyncPattern).Method;
             return (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14) => provider.CreateQuery<TResult>(
                 Expression.Invoke(
                     Expression.Call(

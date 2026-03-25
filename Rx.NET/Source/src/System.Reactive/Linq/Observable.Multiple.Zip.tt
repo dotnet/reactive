@@ -77,10 +77,12 @@ for (int j = 0; j < i; j++)
 #>
     }
 
+#pragma warning disable CA1711 // (Don't use Ex suffix.) This has been a public type for many years, so we can't rename it now.
     public static partial class ObservableEx
+#pragma warning restore CA1711
     {
 <#
-for (int i = 2; i <= 8; i++)
+for (int i = 2; i <= 16; i++)
 {
     var parameters = string.Join(", ", Enumerable.Range(1, i).Select(j => "IObservable<T" + toUpper(ordinals[j - 1]) + "> " + ordinals[j - 1]));
     var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + toUpper(ordinals[j - 1])));

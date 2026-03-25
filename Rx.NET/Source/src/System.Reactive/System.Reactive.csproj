@@ -76,10 +76,6 @@
     <!-- Workaround so the files appear in VS -->
     <None Include="Platforms\**\*.*" />
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
-    <None Update="Linq\QbservableEx.NAry.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>QbservableEx.NAry.cs</LastGenOutput>
-    </None>
     <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx">
       <DependentUpon>Platforms\Windows\Strings_WindowsThreading.resx</DependentUpon>
     </None>
@@ -166,11 +162,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Observable.Multiple.Zip.tt</DependentUpon>
     </Compile>
-    <Compile Update="Linq\QbservableEx.NAry.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>QbservableEx.NAry.tt</DependentUpon>
-    </Compile>
     <Compile Update="Linq\QueryLanguage.Multiple.CombineLatest.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -224,11 +215,6 @@
     <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
     <None Include="build\_._" PackagePath="build\net6.0;build\net6.0-windows10.0.19041" Pack="true" />
     <None Include="build\_._" PackagePath="buildTransitive\net6.0;buildTransitive\net6.0-windows10.0.19041" Pack="true" />
-    <None Include="Linq\QbservableEx.NAry.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>QbservableEx.NAry.tt</DependentUpon>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
