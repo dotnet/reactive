@@ -30,7 +30,7 @@ namespace HomoIconize
                 "System.Reactive", 
                 @"System.Reactive\Linq\Qbservable.Homoicon.cs", 
                 "System.Reactive.Linq.Observable", "Qbservable",
-                includeAsync: true, exludeFromCodeCoverage:true);
+                includeAsync: true, excludeFromCodeCoverage:true);
             Console.WriteLine();
 
             Process(root, 
@@ -43,7 +43,7 @@ namespace HomoIconize
                 "System.Reactive.Observable.Aliases",
                 @"System.Reactive.Observable.Aliases\Qbservable.Aliases.Homoicon.cs",
                 "System.Reactive.Observable.Aliases.QueryLanguage", "QbservableAliases",
-                includeAsync: false, createAliases: true, exludeFromCodeCoverage: true,
+                includeAsync: false, createAliases: true, excludeFromCodeCoverage: true,
                 tfm: "netstandard2.0",
                 includeNullability: false);
             Console.WriteLine();
@@ -52,7 +52,7 @@ namespace HomoIconize
             Console.ReadLine();
         }
 
-        static void Process(string root, string sourceAssembly, string targetFile, string sourceTypeName, string targetTypeName, bool includeAsync = false, bool createAliases = false, bool exludeFromCodeCoverage = false, string tfm = "net8.0", bool includeNullability = true)
+        static void Process(string root, string sourceAssembly, string targetFile, string sourceTypeName, string targetTypeName, bool includeAsync = false, bool createAliases = false, bool excludeFromCodeCoverage = false, string tfm = "net8.0", bool includeNullability = true)
         {
             var rxRoot = Path.Combine(root, sourceAssembly);
             if (!Directory.Exists(rxRoot))
@@ -82,7 +82,7 @@ namespace HomoIconize
                 return;
             }
 
-            Generate(dll, xml, qbsgen, sourceTypeName, targetTypeName, includeAsync, createAliases, exludeFromCodeCoverage, includeNullability);
+            Generate(dll, xml, qbsgen, sourceTypeName, targetTypeName, includeAsync, createAliases, excludeFromCodeCoverage, includeNullability);
         }
 
         // Prototype interface to break dependencies. Only used for ToString2 ultimately.
@@ -916,7 +916,7 @@ using System.Threading.Tasks;
                             genericArgIsNullable = new bool[genericArgs.Length];
                             for (int i = 0; i < genericArgs.Length; i++)
                             {
-                                if (i < data.Count)
+                                if ((i + 1) < data.Count)
                                 {
                                     genericArgIsNullable[i] = data[i + 1].Value is (byte)2;
                                 }

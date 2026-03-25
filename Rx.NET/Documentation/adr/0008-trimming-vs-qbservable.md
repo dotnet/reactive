@@ -32,7 +32,7 @@ qis = qis.Where(i => i % 2 == 0);
 
 Whether an operator creates a brand new source from scratch (as in `Range`) or bolts onto an existing sequence (as in `Where`), these `IQbservable<T>` operators are all implemented in much the same way: they call the `IQbservableProvider.CreateQuery<int>` method passing  an `Expression` describing the query. (In the case of combinators like `Where`, they obtain the `IQbservableProvider` from the `Provider` property of the incoming source).
 
-This expression is available as part of `IQbservable<T>` (or more precisely, its base type, `IQbservable`), so we can inspect the expression for an `IQbserable<T>`:
+This expression is available as part of `IQbservable<T>` (or more precisely, its base type, `IQbservable`), so we can inspect the expression for an `IQbservable<T>`:
 
 ```cs
 Console.WriteLine(qis.Expression);
@@ -44,7 +44,7 @@ That produces this output:
 value(System.Reactive.ObservableQueryProvider).Range(1, 10).Where(i => ((i % 2) == 0))
 ```
 
-This states that the query that `qis` currently refers to begins with a specific provider instance of type `System.Reactive.ObservableQueryProvider`. (That is an internal type; it happens to be the type returned by `Qbservable.Provider`.) From there, we invoked the `Range` operator passing the arguments `1` and `10`, and then on the resulting `IQbservable<int>` we invoked the `Where` operator passing the lambda expression shown. (The extra parentheses appear because the code that turns the expression tree representation of a lamdba back into text adds parentheses even in cases where they are not strictly required to avoid ambiguity.)
+This states that the query that `qis` currently refers to begins with a specific provider instance of type `System.Reactive.ObservableQueryProvider`. (That is an internal type; it happens to be the type returned by `Qbservable.Provider`.) From there, we invoked the `Range` operator passing the arguments `1` and `10`, and then on the resulting `IQbservable<int>` we invoked the `Where` operator passing the lambda expression shown. (The extra parentheses appear because the code that turns the expression tree representation of a lambda back into text adds parentheses even in cases where they are not strictly required to avoid ambiguity.)
 
 In theory we could have started from some other implementation of `IQbservableProvider`. (E.g., we could write our own.) But the `Expression` should still come out the same, because all providers are required to make their `Expression` available, and the contents of that expression are actually determined not by the provider itself but by the code in these operator methods. E.g., the `Range` operator looks like this:
 
@@ -89,7 +89,7 @@ public static IQbservable<TSource> Where<TSource>(this IQbservable<TSource> sour
 
 What distinguishes one provider from another is what happens when you actually ask for the items the query describes. (This is also true for `IQueryable<T>`: when you use a provider such as EF Core, it will also build up expressions in exactly the same way, and it's only when you actually try to evaluate the query that anything interesting happens.) And we do that by calling `Subscribe`, just like we would with any `IObservable<T>`. (`IQbservable<T>` inherits from `IObservable<T>`.)
 
-The one and only provider that `System.Reactive` supplies (the one we get from `Qbservable.Provider`) does this when you call its `Subscribe` method: it generates code at runtime that executes exactly the same code you would have got if you had started with `Observable` instead of `Qbservable.Provide`. Thus the starting point of the expression and the following factory method (the part of the expression represented as `value(System.Reactive.ObservableQueryProvider).Range(1, 10)`) gets turned into code that invokes `Observable.Range(1, 10)`, and then the call to the `Qbservable.Where` extension method (represented by the `.Where(i => ((i % 2) == 0))` text above) gets turned into a call to `Observable.Where`. It will compile that lambda expression, because `Observable.Where` requires `Func<T, bool>`, and not the `Expression<Func<T, bool>>` that will be present in the `IQbservable.Expression`.
+The one and only provider that `System.Reactive` supplies (the one we get from `Qbservable.Provider`) does this when you call its `Subscribe` method: it generates code at runtime that executes exactly the same code you would have got if you had started with `Observable` instead of `Qbservable.Provider`. Thus the starting point of the expression and the following factory method (the part of the expression represented as `value(System.Reactive.ObservableQueryProvider).Range(1, 10)`) gets turned into code that invokes `Observable.Range(1, 10)`, and then the call to the `Qbservable.Where` extension method (represented by the `.Where(i => ((i % 2) == 0))` text above) gets turned into a call to `Observable.Where`. It will compile that lambda expression, because `Observable.Where` requires `Func<T, bool>`, and not the `Expression<Func<T, bool>>` that will be present in the `IQbservable.Expression`.
 
 This is analogous to the `IQueryable<T>` implementation you get if you start to enumerate one of those. (Just as `IQbservable<T>` inherits from `IObservable<T>`, so `IQueryable<T>` inherits from `IEnumerable<T>`, so any of the means of getting the elements out of an `IEnumerable<T>` also work for an `IQueryable<T>`. For example, you can write a `foreach` loop.)
 
@@ -118,7 +118,7 @@ If you use an `IQbservable<T>` operator, it is likely that this will cause a run
 
 For example, suppose you used the `Where` operator. The `IQbservable<T>` implementation of that is provided as the `Qbservable.Where` extension method, and the compiler will be able to see that you used this, and will therefore know not to trim it. However, when you call `Subscribe`, the expression tree rewriter will convert that into a call to `Observable.Where`, as part of an `Expression<Func<IObservable<T>>>`. It then calls `Compile` on this.
 
-The upshot is that using `Qbservable.Where` may imply that you are also use `Observable.Where`, but indirectly in a way that the IL trimmer might not be able to see directly.
+The upshot is that using `Qbservable.Where` may imply that you are also using `Observable.Where`, but indirectly in a way that the IL trimmer might not be able to see directly.
 
 The exact same issue exists with `IQueryable<T>` and LINQ to Objects: you can convert a `IQueryable<T>` into an `IEnumerable<T>`, and this causes runtime code generation that uses the `Enumerable` equivalent of each `Queryable` operator used. The .NET Runtime Libraries source code tells the trimming tooling by adding `DynamicDependency` attributes, e.g.:
 
@@ -156,6 +156,6 @@ Since the presence of ".Generated." in a filename seems to stop the trim warning
 
 By removing `GetCurrentMethod`, we no longer get the IL2026 warnings, and we've also been able to remove the `#pragma` lines that had been suppressing the IL2060 warnings. Furthermore, since we're now using an approach that appears to be better understood by the trimming tools, it is possible that this will improve the effectiveness of its static analysis around these methods.
 
-Since we are not adding `DynamicDependency` attributes at this time, we continue not to support the use of runtime code generation from `IQueryable<T>` in scenarios where trimming is in use.
+Since we are not adding `DynamicDependency` attributes at this time, we continue not to support the use of runtime code generation from `IQbservable<T>` in scenarios where trimming is in use.
 
-By changing the naming convention for files generated by the HomoIcon tool, we will now discover sooner when the code it generates has problems that can be detected by analyzers build into the .NET SDK.
+By changing the naming convention for files generated by the HomoIcon tool, we will now discover sooner when the code it generates has problems that can be detected by analyzers built into the .NET SDK.
