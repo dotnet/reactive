@@ -1,5 +1,8 @@
 # Ix Release History v7.0
 
+## v7.0.1
+
+Since `System.Memory` v10.0.0 has a known vulnerability, and since some Ix.NET components indirectly depend on this through the `System.Linq.AsyncEnumerable` package, it was necessary to release an update to Ix.NET that uses `System.Linq.AsyncEnumerable` v10.0.6 to avoid a situation in which taking a dependency on `System.Linq.Async` causes a dependency on this vulnerable version of `System.Memory`.
 
 ## v7.0.0
 
