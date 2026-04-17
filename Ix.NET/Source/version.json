@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/main/src/NerdBank.GitVersioning/version.schema.json",
-  "version": "7.0.1",
+  "version": "7.0",
   "nuGetPackageVersion": {
     "semVer": 2.0
   },
@@ -8,6 +8,5 @@
     "^refs/heads/main$",
     "^refs/heads/rel/v\\d+\\.\\d+",
     "^refs/heads/rel/ix-v\\d+\\.\\d+"
-  ],
-  "versionHeightOffset": -1 // For reasons I continue not to understand, without this nbgv makes the first version 7.0.1 instead of 7.0.0
+  ]
 }
