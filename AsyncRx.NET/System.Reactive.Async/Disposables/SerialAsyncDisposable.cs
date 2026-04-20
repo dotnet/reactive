@@ -2,14 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Threading;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Disposables
 {
     public sealed class SerialAsyncDisposable : IAsyncDisposable
     {
-        private readonly AsyncGate _gate = new();
+        private readonly IAsyncGate _gate = AsyncGate.Create();
 
         private IAsyncDisposable _disposable;
         private bool _disposed;
