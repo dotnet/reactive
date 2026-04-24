@@ -2,10 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive.Analyzers.Test.Verifiers;
-
-using Microsoft.CodeAnalysis.Testing;
-
 namespace System.Reactive.Analyzers.Test
 {
     /// <summary>
@@ -14,7 +10,7 @@ namespace System.Reactive.Analyzers.Test
     /// System.Reactive.Wpf because of an upgrade to Rx 7.
     /// </summary>
     [TestClass]
-    public sealed class WindowsFormsSchedulerNewPackageAnalyzerTests
+    public sealed class WindowsFormsSchedulerNewPackageAnalyzerTests : AnalyzerTestNetFxBase
     {
         [TestMethod]
         public async Task ExplicitNewControlSchedulerFullyQualified()
@@ -227,21 +223,7 @@ namespace System.Reactive.Analyzers.Test
                 """,
                 "CS0246");
         }
-
-        private static async Task TestAsync(
-            string code,
-            string expectedInitialError)
-        {
-            var normalError = new DiagnosticResult(expectedInitialError, Microsoft.CodeAnalysis.DiagnosticSeverity.Error)
-                    .WithLocation(0);
-            var customDiagnostic = AddUiFrameworkPackageAnalyzerVerifier.Diagnostic("RXNET0001")
-                .WithLocation(0)
-                .WithArguments("ControlScheduler", "type");
-            await AddUiFrameworkPackageAnalyzerVerifier.VerifyAnalyzerAsync(
-                code,
-                normalError,
-                customDiagnostic);
-
-        }
+        private static Task TestAsync(string code, string expectedInitialError) =>
+            TestCodeAsync(code, expectedInitialError, "RXNET0001", "ControlScheduler", "type");
     }
-}
+}   

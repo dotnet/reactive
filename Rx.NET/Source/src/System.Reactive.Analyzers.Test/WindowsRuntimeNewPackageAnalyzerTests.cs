@@ -5,8 +5,21 @@
 namespace System.Reactive.Analyzers.Test
 {
     [TestClass]
-    public sealed class WindowsRuntimeNewPackageAnalyzerTests : TestExtensionMethodAnalyzerBase
+    public sealed class WindowsRuntimeNewPackageAnalyzerTests : AnalyzerTestNetFxBase
     {
+        [TestMethod]
+        public async Task DetectIObservableSubscribeOnImplicitDispatcherWithPriority()
+        {
+            await TestExtensionMethodOnIObservable(
+                targetType: null,
+                "SubscribeOnDispatcher",
+                "RXNET0003",
+                "SubscribeOnDispatcher(CoreDispatcherPriority)",
+                "Windows.UI.Core.CoreDispatcherPriority.Normal",
+                expectedOriginalError: "CS1061",
+                diagnosticTarget: DiagnosticTarget.MethodName);
+        }
+
         [TestMethod]
         public async Task DetectIObservableSubscribeOnImplicitCoreDispatcher()
         {

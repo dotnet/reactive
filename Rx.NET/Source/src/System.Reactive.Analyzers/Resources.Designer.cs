@@ -79,11 +79,11 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;{0}(Control)&apos; extension method has moved. Add a reference to the System.Reactive.WindowsForms NuGet package..
+        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} method has moved. Add a reference to the System.Reactive.WindowsForms NuGet package..
         /// </summary>
-        internal static string ReferenceToRxWindowsFormsRequiredAnalyzerExtensionMethodMessageFormat {
+        internal static string ReferenceToRxWindowsFormsRequiredAnalyzerMessageFormat {
             get {
-                return ResourceManager.GetString("ReferenceToRxWindowsFormsRequiredAnalyzerExtensionMethodMessageFormat", resourceCulture);
+                return ResourceManager.GetString("ReferenceToRxWindowsFormsRequiredAnalyzerMessageFormat", resourceCulture);
             }
         }
         
@@ -106,7 +106,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} extension method has moved. Add a reference to the System.Reactive.WindowsRuntime NuGet package..
+        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} has moved. Add a reference to the System.Reactive.WindowsRuntime NuGet package..
         /// </summary>
         internal static string ReferenceToRxWindowsRuntimeRequiredAnalyzerMessageFormat {
             get {

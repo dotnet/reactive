@@ -4,18 +4,45 @@
 
 using System.Reactive.Analyzers.Test.Verifiers;
 
+using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 
 namespace System.Reactive.Analyzers.Test
 {
 #pragma warning disable CA1052 // Static holder types should be Static or NotInheritable - we do in fact derive from this,
-    public class TestExtensionMethodAnalyzerBase
+    public class AnalyzerTestBase<TVerifier, TTest, TVerifierDispatcher>
+        where TVerifier : CSharpAnalyzerVerifier<AddUiFrameworkPackageAnalyzer, TTest, DefaultVerifier>
+        where TTest : CSharpAnalyzerTest<AddUiFrameworkPackageAnalyzer, DefaultVerifier>, new()
+        where TVerifierDispatcher : IVerifierDispatcher, new()
 #pragma warning restore CA1052
     {
+        // We would use static abstract methods, but since we need to run in .NET FX (to simulate
+        // how the compiler runs), we have to use this hack where we instantiate an instance of
+        // a class so we can use normal interface dispatch instead.
+        private static readonly TVerifierDispatcher s_verifierDispatcher = new();
+
         protected enum DiagnosticTarget
         {
             Argument,
             MethodName
+        }
+
+        protected static async Task TestCodeAsync(
+            string code,
+            string expectedInitialError,
+            string diagnosticId,
+            string diagnosticArgumentName,
+            string diagnosticArgumentKind)
+        {
+            var normalError = new DiagnosticResult(expectedInitialError, Microsoft.CodeAnalysis.DiagnosticSeverity.Error)
+                    .WithLocation(0);
+            var customDiagnostic = s_verifierDispatcher.Diagnostic(diagnosticId)
+                .WithLocation(0)
+                .WithArguments(diagnosticArgumentName, diagnosticArgumentKind);
+            await s_verifierDispatcher.VerifyAnalyzerAsync(
+                code,
+                normalError,
+                customDiagnostic);
         }
 
         protected static async Task TestExtensionMethod(
@@ -29,12 +56,12 @@ namespace System.Reactive.Analyzers.Test
             string? expectedOriginalError = null)
         {
             // targetType is null when invoking a method that does not take a target argument.
-            string target = targetType is null
+            var target = targetType is null
                 ? ""
                 : "target";
 
             // Some diagnostics apply to the argument, and some to the method name.
-            string invocation = diagnosticTarget switch
+            var invocation = diagnosticTarget switch
             {
                 DiagnosticTarget.Argument => $$""".{{extensionMethodName}}({|#0:{{target}}|}{{additionalArguments}})""",
                 DiagnosticTarget.MethodName => $$""".{|#0:{{extensionMethodName}}|}({{target}}{{additionalArguments}})""",
@@ -42,7 +69,7 @@ namespace System.Reactive.Analyzers.Test
             };
 
 
-            string? targetDeclaration = targetType is null
+            var targetDeclaration = targetType is null
                 ? null
                 : $"{targetType} target = default!;";
 
@@ -60,15 +87,12 @@ namespace System.Reactive.Analyzers.Test
             expectedOriginalError ??= additionalArguments is null
                 ? "CS1503" // single-argument overloads
                 : "CS1501"; // multi-argument overloads
-            var normalError = new DiagnosticResult(expectedOriginalError, Microsoft.CodeAnalysis.DiagnosticSeverity.Error)
-                    .WithLocation(0);
-            var customDiagnostic = AddUiFrameworkPackageAnalyzerVerifier.Diagnostic(diagnosticId)
-                .WithLocation(0)
-                .WithArguments(diagnosticArgument, "extension method");
-            await AddUiFrameworkPackageAnalyzerVerifier.VerifyAnalyzerAsync(
+            await TestCodeAsync(
                 test,
-                normalError,
-                customDiagnostic);
+                expectedOriginalError,
+                diagnosticId,
+                diagnosticArgument,
+                "extension method");
         }
 
         protected static Task TestExtensionMethodOnIObservable(
@@ -81,7 +105,7 @@ namespace System.Reactive.Analyzers.Test
                 targetDeclaration,
                 extensionMethodName,
                 diagnosticId,
-                extensionMethodName,
+                $"{extensionMethodName}()",
                 additionalArguments: null,
                 diagnosticTarget: DiagnosticTarget.Argument);
          }

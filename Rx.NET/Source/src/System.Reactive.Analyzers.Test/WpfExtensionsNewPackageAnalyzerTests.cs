@@ -63,7 +63,7 @@ namespace System.Reactive.Analyzers.Test
     /// </para>
     /// </remarks>
     [TestClass]
-    public sealed class WpfExtensionsNewPackageAnalyzerTests : TestExtensionMethodAnalyzerBase
+    public sealed class WpfExtensionsNewPackageAnalyzerTests : AnalyzerTestNetFxBase
     {
         [TestMethod]
         public async Task DetectIObservableSubscribeOnImplicitDispatcher()

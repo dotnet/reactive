@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Diagnostics;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -75,7 +74,7 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                     if (ti.Type is null || ti.Type.TypeKind == TypeKind.Error)
                     {
                         var importScopes = context.SemanticModel.GetImportScopes(diag.Location.SourceSpan.Start);
-                        bool namespaceInScope = importScopes.SelectMany(s => s.Imports).Any(i => i.NamespaceOrType.ToDisplayString() == "System.Reactive.Concurrency");
+                        var namespaceInScope = importScopes.SelectMany(s => s.Imports).Any(i => i.NamespaceOrType.ToDisplayString() == "System.Reactive.Concurrency");
                         if (namespaceInScope)
                         {
                             context.ReportDiagnostic(Diagnostic.Create(
