@@ -914,6 +914,16 @@ We don't currently have a coherent plan for how we will address this. Currently 
 
 However, we need to bear it in mind with the packaging plan, because it is precisely the sort of issue that led to some of the early packaging design and resulting confusion in Rx.NET. We need to have some idea of how we are going to deal with this before setting packaging plans in stone.
 
+#### Long term goal of simplifying `System.Reactive` TFMs
+
+We would like `System.Reactive` to support just the following TFMs: `netstandard2.0;net8.0;net8.0-windows10.0.19041`. This is the minimum possible set because:
+
+ * `netstandard2.0` is how we want to support .NET FX and UAP
+ * `net8.0` is required to be able to support more modern features
+ * proper handling of timers in the face of suspend/resume on Windows requires a distinct `net8.0-windows10.0.19041` target even if the public API surface area is identical to the `net8.0` target
+
+For now, binary compatibility requires us also to target `net472` and `uap10.0.18362`. But we're looking ahead to a point where we would be ready to drop binary compatibility (several years hence). We need to avoid retaining API features in `System.Reactive` that would make this step impossible.
+
 
 ### Types in `System.Reactive` that are partially or completely UI-framework-specific
 
@@ -1187,7 +1197,7 @@ We will go with [option 7](#option-7-ui-framework-specific-packages-hiding-the-s
 
 * `System.Reactive` will remain as the main package for using Rx.NET
 * we will add a new NuGet packages for each UI framework, and put UI-framework-specific support in these (and from the developer's perspective, the existing types will have 'moved' into these new libraries, but as described below, that's not quite true, for binary compatability reasons)
-* functionality specific to Windows Runtime that is not UI-framework-specific (e.g. `IAsyncOperation<T>` support) will remain available in `System.Reactive`
+* functionality specific to Windows Runtime that is not UI-framework-specific (e.g. `IAsyncOperation<T>` support) moves into `System.Reactive.WindowsRuntime`
 * the UI-frameworks-specific types in `System.Reactive` will continue to be available in the runtime libraries (`lib` folder), ensuring binary compatibility
 * those same UI-frameworks-specific and Windows-Runtime-specific types in `System.Reactive` will be hidden from the public API by putting reference assemblies in the `ref` folder that omit these types (but types with exactly the same names and APIs are available in the new packages, so developers just need to add suitable new package references)
 * we have the [very long-term](#minimum-acceptable-path-for-breaking-changes) aspiration of removing these types entirely, likely not before 2030
@@ -1201,6 +1211,10 @@ The benefit of hindsight makes the wisdom of this evident. There were some good 
 
 So it is time to de-unify the UI-framework-specific parts.
 
+One non-obvious aspect of this is why the non-UI-framework-specific Windows Runtime features move into `System.Reactive.WindowsRuntime`. In a Windows-specific target (e.g., `net8.0-windows10.0.19041`) the relevant types (`CoreDispatcher`, `IAsyncInfo`, etc.) are all available as part of the Windows API surface area, without needing any additional package or framework references. So why not just leave the support for this in `System.Reactive` where it is today?
+
+The reason not to do this is that it would perpetuate the need for `System.Reactive` to include a `uap` TFM. That is necessary for now to maintain binary compatibility, but given our long term goal of eventually simplifying the TFM list once enough time has passed to drop binary compatibility (and especially given that we are open to doing that sooner for UAP than for anything else) we don't want to accidentally make it impossible to take that step. A classic UAP application can't consume a `net8.0-windows10.0.19041` TFM. So in our preferred end state where `System.Reactive` has `netstandard2.0`, some .NET TFM (e.g. `net16.0`) and some Windows-specific .NET TFM (E.g. `net16.0-windows10.0.19041`) a UAP app is going to end up using the `netstandard2.0` TFM, which can't include any Windows Runtime functionality. So we need to encourage UAP developers who upgrade to Rx 7.0 to get their Windows Runtime functionality from a more specialized package. That's why we're reinstating the `System.Reactive.WindowsRuntime` package—for years it has been a legacy facade, but in this design option, it would once again be the canonical package for getting access to Windows Runtime Rx features. But it would not contain any UI-framework-specific features. (Note that the Windows Runtime `CoreDispatcher` is not UI-framework-specific. There are now actually a few different UI frameworks that use it.) Support for the Xaml `DependencyObject` (currently provided as extension methods on the `CoreDispatcherObservable` class in `System.Reactive`) would be reimplemented in a new `System.Reactive.Uwp` package. The extension methods would be source-compatible with the old ones, but would actually be defined on a completely different type. We would also add support for equivalent `DependencyObject` extension methods for modern UWP apps that use .NET; today, these don't actually have access to the `ObserveOn` and `SubscribeOn` extension methods for `DependencyObject` that classic UAP apps get to use.
+
 
 ## Consequences
 
@@ -1209,6 +1223,7 @@ The main relevant consequences are:
 * This minimizes disruption: `System.Reactive` continues to be the main way to use Rx.NET; applications with non-Windows-specific TFMs should be entirely unaffected
 * Applications encountering the problem described in this ADR should be able to upgrade to the latest version of Rx to avoid the problem (and should not require any other changes; there are no binary breaking changes, and the only source-level breaking changes are for code that is actually using the UI-framework-specific functionality, and if you're doing that, then you do actually need the `Microsoft.Desktop.App` framework)
 * By retaining hidden copies of the UI-framework-specific code in `System.Reactive` in addition to the new visible types in the UI-framework-specific package, we do slightly increase the size of build outputs in `windows` targets; size-sensitive applications will typically use trimming, which will address this
+* .NET Framework Projects still using the old `packages.config` system don't use the `ref` assemblies: they build from the `lib` folder, so for these projects, the WPF and Windows Forms types will still appear to be present in `System.Reactive`, so they might be able to carry on as if nothing has changed, but there will be a conflict it these projects also end up with a reference to `System.Reactive.Wpf` or `System.Reactive.Windows.Forms`; our official position is that if you want to use UI-framework-specific types in Rx.NET 7+, we do not support the use of `packages.config` (you might be able to work around the issue with `extern alias`, but nobody should still be using `packages.config`)
 * One day, we update `System.Reactive` to be entirely free from UI-framework-specific types (although we can push that out more or less indefinitely)
 * New assemblies, one for each UI framework we support (Windows Forms, WPF, and UWP) and one for the non-framework-specific Windows Runtime support will be added containing replacements for the relevant types in `System.Reactive`
 * The types in these new packages have the same names and namespaces as the existing ones, so developers using them should need only to add the necessary package reference(s), and no other changes should be required
@@ -1216,10 +1231,11 @@ The main relevant consequences are:
 * We hope be able to take `uap` out of the majority of the source tree in 3-4 years
 * All UI-frameworks-specific support will be on an equal footing, enabling MAUI, Blazor, and Avalonia to be supported in exactly the same way as Windows Forms and WPF (i.e., through separate NuGet packages)
 
-There are some existing old packages that originally contained some UI-framework-specific types, and which became backwards-compatibility facades in the _great unification_. However, these don't separate out all the frameworks completely: Windows Forms has its own one, `System.Reactive.Windows.Forms`, but the WPF support lives in a more confusingly named `System.Reactive.Windows.Threading`, and that same component also defines the UWP integration. The WPF support is available only in the `net472` build, and the UWP support is only in the `uap10.0.18362` build, so this one package contains completely different types in its two target frameworks! And just to confuse matters, there's also a `System.Reactive.WindowsRuntime` package that targets only `uap10.0.18362`, and which contains some different UWP types.
+There are some existing old packages that originally contained some UI-framework-specific types, and which became backwards-compatibility facades in the _great unification_. However, these don't separate out all the frameworks completely: Windows Forms has its own one, `System.Reactive.Windows.Forms`, but the WPF support lives in a more confusingly named `System.Reactive.Windows.Threading`, and that same component also defines the UWP integration. The WPF support is available only in the `net472` build, and the UWP support is only in the `uap10.0.18362` build, so this one package contains completely different types in its two target frameworks! And just to confuse matters, there's also a `System.Reactive.WindowsRuntime` package that targets only `uap10.0.18362`, but which happens to contain types that are applicable to any Windows Runtime app, not just a UAP app.
 
 Our plan is to reinstate these facade components in cases where the name makes sense, and to introduce new components where the existing naming is confusing. So the UI-framework-specific features would live in:
 
 * `System.Reactive.WindowsForms` (former facade reinstated as real library)
 * `System.Reactive.Wpf` (new library)
 * `System.Reactive.WindowsRuntime`  (former facade reinstated as real library)
+* `System.Reactive.Uap` (new library)
