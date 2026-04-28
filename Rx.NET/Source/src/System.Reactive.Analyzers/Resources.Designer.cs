@@ -70,6 +70,33 @@ namespace System.Reactive {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a reference to the System.Reactive.Uwp NuGet Package to continue using Rx.NET UWP support..
+        /// </summary>
+        internal static string ReferenceToRxUwpRequiredAnalyzerDescription {
+            get {
+                return ResourceManager.GetString("ReferenceToRxUwpRequiredAnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} method has moved. Add a reference to the System.Reactive.Uwp NuGet package..
+        /// </summary>
+        internal static string ReferenceToRxUwpRequiredAnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("ReferenceToRxUwpRequiredAnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rx.NET UWP support is now in System.Reactive.Uwp.
+        /// </summary>
+        internal static string ReferenceToRxUwpRequiredAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ReferenceToRxUwpRequiredAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a reference to the System.Reactive.WindowsForms NuGet Package to continue using Rx.NET Windows Forms support..
         /// </summary>
         internal static string ReferenceToRxWindowsFormsRequiredAnalyzerDescription {

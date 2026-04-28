@@ -53,6 +53,7 @@ namespace System.Reactive.Analyzers
         public const string ReferenceToRxWindowsFormsRequiredDiagnosticId = "RXNET0001";
         public const string ReferenceToRxWpfRequiredDiagnosticId = "RXNET0002";
         public const string ReferenceToRxWindowsRuntimeRequiredDiagnosticId = "RXNET0003";
+        public const string ReferenceToRxUwpRequiredDiagnosticId = "RXNET0004";
 
         private const string PackagingCategory = "NuGet";
 
@@ -104,12 +105,29 @@ namespace System.Reactive.Analyzers
             description: ReferenceToRxWindowsRuntimeRequiredDescription,
             helpLinkUri: "https://github.com/dotnet/reactive");
 
+        private static readonly LocalizableString ReferenceToRxUwpRequiredTitle = new LocalizableResourceString(
+            nameof(Resources.ReferenceToRxUwpRequiredAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
+        private static readonly LocalizableString ReferenceToRxUwpRequiredAnalyzerMessageFormat = new LocalizableResourceString(
+            nameof(Resources.ReferenceToRxUwpRequiredAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
+        private static readonly LocalizableString ReferenceToRxUwpRequiredDescription = new LocalizableResourceString(
+            nameof(Resources.ReferenceToRxUwpRequiredAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
+        internal static readonly DiagnosticDescriptor ReferenceToRxUwpRequiredRule = new(
+            ReferenceToRxUwpRequiredDiagnosticId,
+            ReferenceToRxUwpRequiredTitle,
+            ReferenceToRxUwpRequiredAnalyzerMessageFormat,
+            PackagingCategory,
+            DiagnosticSeverity.Warning,
+            isEnabledByDefault: true,
+            description: ReferenceToRxUwpRequiredDescription,
+            helpLinkUri: "https://github.com/dotnet/reactive");
+
         /// <inheritdoc/>
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(
         [
             ReferenceToRxWindowsFormsRequiredRule,
             ReferenceToRxWpfRequiredRule,
-            ReferenceToRxWindowsRuntimeRequiredRule
+            ReferenceToRxWindowsRuntimeRequiredRule,
+            ReferenceToRxUwpRequiredRule
         ]);
 
         /// <inheritdoc/>

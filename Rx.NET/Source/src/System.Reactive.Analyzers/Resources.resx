@@ -150,4 +150,13 @@
   <data name="ReferenceToRxWindowsRuntimeRequiredAnalyzerTitle" xml:space="preserve">
     <value>Rx.NET Windows Runtime support is now in System.Reactive.WindowsRuntime</value>
   </data>
+  <data name="ReferenceToRxUwpRequiredAnalyzerDescription" xml:space="preserve">
+    <value>Add a reference to the System.Reactive.Uwp NuGet Package to continue using Rx.NET UWP support.</value>
+  </data>
+  <data name="ReferenceToRxUwpRequiredAnalyzerMessageFormat" xml:space="preserve">
+    <value>The '{0}' {1} method has moved. Add a reference to the System.Reactive.Uwp NuGet package.</value>
+  </data>
+  <data name="ReferenceToRxUwpRequiredAnalyzerTitle" xml:space="preserve">
+    <value>Rx.NET UWP support is now in System.Reactive.Uwp</value>
+  </data>
 </root>

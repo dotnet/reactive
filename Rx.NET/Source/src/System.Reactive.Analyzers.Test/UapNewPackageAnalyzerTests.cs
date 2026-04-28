@@ -4,11 +4,12 @@
 
 namespace System.Reactive.Analyzers.Test
 {
-    // Most of the methods moving out of System.Reactive that are available for UAP are also
-    // available to any WinRT app, so the WindowsRuntime tests handle them. However, there
-    // are a handful of UAP-only methods.
+    /// <summary>
+    /// Test <c>System.Reactive.Uwp</c> and <c>System.Reactive.WindowsRuntime</c> package reference
+    /// diagnostics for a UAP project.
+    /// </summary>
     [TestClass]
-    public sealed class UwpNewPackageAnalyzerTests : AnalyzerTestUapBase
+    public sealed class UapNewPackageAnalyzerTests : AnalyzerTestUapBase
     {
         [TestMethod]
         public async Task DetectIObservableSubscribeOnDependencyObject()
@@ -16,7 +17,7 @@ namespace System.Reactive.Analyzers.Test
             await TestExtensionMethodOnIObservable(
                 targetType: "Windows.UI.Xaml.DependencyObject",
                 "SubscribeOn",
-                "RXNET0003",
+                "RXNET0004",
                 "SubscribeOn(DependencyObject)",
                 expectedOriginalError: "CS1503");
         }
@@ -27,7 +28,7 @@ namespace System.Reactive.Analyzers.Test
             await TestExtensionMethodOnIObservable(
                 "Windows.UI.Xaml.DependencyObject",
                 "SubscribeOn",
-                "RXNET0003",
+                "RXNET0004",
                 "SubscribeOn(DependencyObject,CoreDispatcherPriority)",
                 ", Windows.UI.Core.CoreDispatcherPriority.Normal");
         }
@@ -38,8 +39,19 @@ namespace System.Reactive.Analyzers.Test
             await TestExtensionMethodOnIObservable(
                 "Windows.UI.Xaml.DependencyObject",
                 "ObserveOn",
-                "RXNET0003",
+                "RXNET0004",
                 "ObserveOn(DependencyObject)");
+        }
+
+        [TestMethod]
+        public async Task DetectIObservableObserveOnDependencyObjectWithPriority()
+        {
+            await TestExtensionMethodOnIObservable(
+                "Windows.UI.Xaml.DependencyObject",
+                "ObserveOn",
+                "RXNET0004",
+                "ObserveOn(DependencyObject,CoreDispatcherPriority)",
+                ", Windows.UI.Core.CoreDispatcherPriority.Normal");
         }
 
         // The following tests are also in WindowsRuntimeNewPackageAnalyzerTests,

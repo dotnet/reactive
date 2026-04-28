@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net9.0-windows10.0.26100.0;uap10.0.18362</TargetFrameworks>
+    <!--<TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>-->
+    <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
+
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net'))">
+    <UseUwp>true</UseUwp>
+    <IsAotCompatible>true</IsAotCompatible>
+    <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.18362'">
+    <!-- 26100 not 18362 because the Azure DevOps hosted build agents don't offer 18362, and there appears
+         not to be any official supported way to get it on there.
+         We end up with a reference to Windows 255.255.255.255 in any case, so as far as I can tell, this
+         produces results indistinguishable from what we would get with 18362. The only issue here is that
+         in theory it makes it possible for the code to refer to an API that is not available on 18362. In
+         practice, we're not doing that, and we don't expect to change this code much in the future, so it
+         shouldn't happen.
+    -->
+    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.26100.0\Windows.winmd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.WindowsRuntime\System.Reactive.WindowsRuntime.csproj" />
+
+    <!--
+    The use of Aliases here prevents the copies of the Windows Runtime types that are built into System.Reactive's
+    runtime assemblies for binary compatibility interfering with the types we use from System.Reactive.WindowsRuntime.
+    -->
+    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj">
+      <Aliases>SystemReactive</Aliases>
+    </ProjectReference>
+
+  </ItemGroup>
+
+</Project>

@@ -71,7 +71,7 @@ namespace System.Reactive.Linq
             return Synchronization.ObserveOn(source, new CoreDispatcherScheduler(dispatcher, priority));
         }
 
-#if IS_UAP
+#if IS_UAP && !BUILDING_REFERENCE_ASSEMBLY // These are replaced by System.Reactive.Uwp, so we only want these in the runtime UAP assembly.
         /// <summary>
         /// Wraps the source sequence in order to run its observer callbacks on the dispatcher associated with the specified object.
         /// </summary>

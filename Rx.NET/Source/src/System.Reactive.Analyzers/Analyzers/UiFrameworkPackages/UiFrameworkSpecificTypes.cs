@@ -14,8 +14,8 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
     internal static class UiFrameworkSpecificTypes
     {
         /// <summary>
-        /// Check whether a diagnostic looks likely to have been caused by a call to obs.ObserveOn(control),
-        /// or similar calls to UI-framework-specific extension methods.
+        /// Check whether a diagnostic looks likely to have been caused by use of a
+        /// UI-framework-specific type.
         /// </summary>
         /// <param name="context">
         /// Analyzer context from which the diagnostic was reported.
@@ -32,6 +32,18 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
         public static bool Check(
             SemanticModelAnalysisContext context, SyntaxNode? node, Diagnostic diag)
         {
+            // TODO: go through all of the UI framework libraries to make sure we've got
+            // every type covered.
+            // System.Reactive.Concurrency.ControlScheduler
+            // System.Reactive.Concurrency.DispatcherScheduler
+            // Don't need ControlObservable or DispatcherObservable because they contain only extension methods, so the other analyzer gets that
+            // System.Reactive.Concurrency.CoreDispatcherScheduler
+
+            // TODO: do we need to do anything around ThreadPoolScheduler?
+            // Where did we land with AsyncInfoObservableExtensions add AsyncInfoObservable - are they in the main Rx library? IEventPatternSource<TSender, TEventArgs>?
+            // Likewise WindowsObservable (FromEventPattern and ToEventPattern but also SelectMany - do these need to go into the extension methods bit?)
+
+
             if (node?.Parent is QualifiedNameSyntax qualifiedName)
             {
                 (DiagnosticDescriptor diagnostic, string type)? info = qualifiedName.ToFullString().Trim() switch
