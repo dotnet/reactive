@@ -5,7 +5,7 @@
 namespace System.Reactive.Analyzers.Test
 {
     [TestClass]
-    public sealed class WindowsRuntimeNewPackageAnalyzerTests : AnalyzerTestNetFxBase
+    public sealed class WindowsRuntimeExtensionsNewPackageAnalyzerTests : AnalyzerTestNetFxBase
     {
         [TestMethod]
         public async Task DetectIObservableSubscribeOnImplicitDispatcherWithPriority()

@@ -32,108 +32,83 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
         public static bool Check(
             SemanticModelAnalysisContext context, SyntaxNode? node, Diagnostic diag)
         {
-            // TODO: go through all of the UI framework libraries to make sure we've got
-            // every type covered.
-            // System.Reactive.Concurrency.ControlScheduler
-            // System.Reactive.Concurrency.DispatcherScheduler
-            // Don't need ControlObservable or DispatcherObservable because they contain only extension methods, so the other analyzer gets that
-            // System.Reactive.Concurrency.CoreDispatcherScheduler
-
             // TODO: do we need to do anything around ThreadPoolScheduler?
             // Where did we land with AsyncInfoObservableExtensions add AsyncInfoObservable - are they in the main Rx library? IEventPatternSource<TSender, TEventArgs>?
             // Likewise WindowsObservable (FromEventPattern and ToEventPattern but also SelectMany - do these need to go into the extension methods bit?)
 
-
-            if (node?.Parent is QualifiedNameSyntax qualifiedName)
-            {
-                (DiagnosticDescriptor diagnostic, string type)? info = qualifiedName.ToFullString().Trim() switch
+            static (DiagnosticDescriptor diagnostic, string type)? MatchNamespaceQualifiedType(string fullTypeName) =>
+                fullTypeName switch
                 {
                     "System.Reactive.Concurrency.DispatcherScheduler" =>
                         (AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule, "DispatcherScheduler"),
                     "System.Reactive.Concurrency.ControlScheduler" =>
                         (AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsFormsRequiredRule, "ControlScheduler"),
+                    "System.Reactive.Concurrency.CoreDispatcherScheduler" =>
+                        (AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule, "CoreDispatcherScheduler"),
                     _ => null
                 };
 
-                if (info is (DiagnosticDescriptor diagnostic, string type))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(
-                        diagnostic,
-                        diag.Location,
-                        type,
-                        "type"));
+            static (DiagnosticDescriptor diagnostic, string type)? MatchType(string typeName) =>
+                MatchNamespaceQualifiedType($"System.Reactive.Concurrency.{typeName}");
 
-                    return true;
+            (DiagnosticDescriptor diagnostic, string type)? report = null;
+
+            if (node?.Parent is QualifiedNameSyntax qualifiedName)
+            {
+                if (MatchNamespaceQualifiedType(qualifiedName.ToFullString().Trim()) is (DiagnosticDescriptor diagnostic, string type))
+                {
+                    report = (diagnostic, type);
                 }
             }
 
-            if (node is IdentifierNameSyntax identifierName)
+            if (report is null)
             {
-                (DiagnosticDescriptor diagnostic, string type)? info = identifierName.Identifier.ValueText switch
+                if (node is IdentifierNameSyntax identifierName)
                 {
-                    "DispatcherScheduler" =>
-                        (AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule, "DispatcherScheduler"),
-                    "ControlScheduler" =>
-                        (AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsFormsRequiredRule, "ControlScheduler"),
-                    _ => null
-                };
-                if (info is (DiagnosticDescriptor diagnostic, string type))
-                {
-                    // If the compiler has already determined what type this name represents, then the
-                    // problem can't be that the Rx DispatcherScheduler type is unavailable, so we only
-                    // proceed if the semantic model doesn't understand this identifier name's type.
-                    var ti = context.SemanticModel.GetTypeInfo(identifierName);
-                    if (ti.Type is null || ti.Type.TypeKind == TypeKind.Error)
+                    if (MatchType(identifierName.Identifier.ValueText) is (DiagnosticDescriptor diagnostic, string type))
                     {
-                        var importScopes = context.SemanticModel.GetImportScopes(diag.Location.SourceSpan.Start);
-                        var namespaceInScope = importScopes.SelectMany(s => s.Imports).Any(i => i.NamespaceOrType.ToDisplayString() == "System.Reactive.Concurrency");
-                        if (namespaceInScope)
+                        // If the compiler has already determined what type this name represents, then the
+                        // problem can't be that the Rx DispatcherScheduler type is unavailable, so we only
+                        // proceed if the semantic model doesn't understand this identifier name's type.
+                        var ti = context.SemanticModel.GetTypeInfo(identifierName);
+                        if (ti.Type is null || ti.Type.TypeKind == TypeKind.Error)
                         {
-                            context.ReportDiagnostic(Diagnostic.Create(
-                                diagnostic,
-                                diag.Location,
-                                type,
-                                "type"));
-
-                            return true;
+                            var importScopes = context.SemanticModel.GetImportScopes(diag.Location.SourceSpan.Start);
+                            var namespaceInScope = importScopes.SelectMany(s => s.Imports).Any(i => i.NamespaceOrType.ToDisplayString() == "System.Reactive.Concurrency");
+                            if (namespaceInScope)
+                            {
+                                report = (diagnostic, type);
+                            }
+                        }
+                    }
+                }
+                else if (node is MemberAccessExpressionSyntax memberAccess)
+                {
+                    if (MatchType(memberAccess.Name.Identifier.ValueText) is (DiagnosticDescriptor diagnostic, string type))
+                    {
+                        // If the compiler has already determined what type this name represents, then the
+                        // problem can't be that the Rx DispatcherScheduler type is unavailable, so we only
+                        // proceed if the semantic model doesn't understand this identifier name's type.
+                        var ti = context.SemanticModel.GetTypeInfo(memberAccess.Name);
+                        if (ti.Type is null || ti.Type.TypeKind == TypeKind.Error)
+                        {
+                            if (memberAccess.Expression.ToFullString() == "System.Reactive.Concurrency")
+                            {
+                                report = (diagnostic, type);
+                            }
                         }
                     }
                 }
             }
 
-            if (node is MemberAccessExpressionSyntax memberAccess)
+            if (report is (DiagnosticDescriptor d, string t))
             {
-                (DiagnosticDescriptor diagnostic, string type)? info = memberAccess.Name.Identifier.ValueText switch
-                {
-                    "DispatcherScheduler" =>
-                        (AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule, "DispatcherScheduler"),
-                    "ControlScheduler" =>
-                        (AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsFormsRequiredRule, "ControlScheduler"),
-                    _ => null
-                };
-                if (info is (DiagnosticDescriptor diagnostic, string type))
-                {
-                    // If the compiler has already determined what type this name represents, then the
-                    // problem can't be that the Rx DispatcherScheduler type is unavailable, so we only
-                    // proceed if the semantic model doesn't understand this identifier name's type.
-                    var ti = context.SemanticModel.GetTypeInfo(memberAccess.Name);
-                    if (ti.Type is null || ti.Type.TypeKind == TypeKind.Error)
-                    {
-                        ////var importScopes = context.SemanticModel.GetImportScopes(diag.Location.SourceSpan.Start);
-                        ////bool namespaceInScope = importScopes.SelectMany(s => s.Imports).Any(i => i.NamespaceOrType.ToDisplayString() == "System.Reactive.Concurrency");
-                        ////if (namespaceInScope)
-                        if (memberAccess.Expression.ToFullString() == "System.Reactive.Concurrency")
-                        {
-                            context.ReportDiagnostic(Diagnostic.Create(
-                                diagnostic,
-                                diag.Location,
-                                type,
-                                "type"));
-
-                            return true;
-                        }
-                    }
-                }
+                context.ReportDiagnostic(Diagnostic.Create(
+                    d,
+                    diag.Location,
+                    t,
+                    "type"));
+                return true;
             }
 
             return false;
