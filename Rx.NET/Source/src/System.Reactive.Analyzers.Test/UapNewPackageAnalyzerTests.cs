@@ -106,7 +106,6 @@ namespace System.Reactive.Analyzers.Test
         [TestMethod]
         public async Task DetectIObservableSubscribeOnCoreDispatcherArgument()
         {
-            // TODO: how do we ensure we've got a suitably recent windows version in the TFM?
             await TestExtensionMethodOnIObservable(
                 "Windows.UI.Core.CoreDispatcher",
                 "SubscribeOn",
@@ -150,7 +149,6 @@ namespace System.Reactive.Analyzers.Test
         [TestMethod]
         public async Task DetectIObservableObserveOnCoreDispatcher()
         {
-            // TODO: how do we ensure we've got a suitably recent windows version in the TFM?
             await TestExtensionMethodOnIObservable(
                 "Windows.UI.Core.CoreDispatcher",
                 "ObserveOn",

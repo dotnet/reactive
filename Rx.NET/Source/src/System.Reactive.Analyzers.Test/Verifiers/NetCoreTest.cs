@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
@@ -7,6 +7,10 @@ using Microsoft.CodeAnalysis.Testing;
 
 namespace System.Reactive.Analyzers.Test.Verifiers
 {
+    /// <summary>
+    /// Analyzer test base that sets up the compilation to resemble a modern .NET build with
+    /// WinRT types available.
+    /// </summary>
     public sealed class NetCoreTest : TestBase
     {
         public NetCoreTest()
@@ -16,14 +20,14 @@ namespace System.Reactive.Analyzers.Test.Verifiers
 
         protected override string GetRxDllPath()
         {
-            // TODO: but this next bit isn't actually right! We set up the ReferenceAssemblies to be
-            // net8.0-windows. (Should we actually be running a set of tests against .NET FX too?)
-
-            // The test assembly is built against .NET Framework 4.8, so when testing how the
-            // analyzer works with .NET FX projects, we can just use the copy of System.Reactive.dll
-            // that's in the test project's output directory.
+            // Locate the Windows-specific .NET build of the component.
+            var testProjectOutputDirectory = Path.GetDirectoryName(typeof(AddUiFrameworkPackageAnalyzerVerifier<>).Assembly.Location);
+            var configuration = Path.GetFileName(Path.GetDirectoryName(testProjectOutputDirectory));
+            var rxRefUapFolder = Path.GetFullPath(Path.Combine(
+                testProjectOutputDirectory,
+                $"../../../../System.Reactive.MakeRefAssemblies/bin/{configuration}/net8.0-windows10.0.19041"));
             return Path.Combine(
-                Path.GetDirectoryName(typeof(AddUiFrameworkPackageAnalyzerVerifier<>).Assembly.Location),
+                rxRefUapFolder,
                 "System.Reactive.dll");
         }
 
@@ -74,16 +78,17 @@ namespace System.Reactive.Analyzers.Test.Verifiers
             // TODO: why didn't this work?
             // return ReferenceAssemblies.Net.Net80Windows;
 
-            // Somehow we need to add the winrt refs too.
             var net80win = new ReferenceAssemblies(
                     "net8.0-windows10.0.19041",
                     new PackageIdentity(
                         "Microsoft.NETCore.App.Ref",
                         "8.0.0"),
                     Path.Combine("ref", "net8.0"));
+
+            // Make the winrt refs available.
             return net80win.AddPackages([
                 new PackageIdentity("Microsoft.WindowsDesktop.App.Ref", "8.0.0"),
-                    new PackageIdentity("Microsoft.Windows.SDK.NET.Ref", "10.0.19041.57")]);
+                new PackageIdentity("Microsoft.Windows.SDK.NET.Ref", "10.0.19041.57")]);
         }
     }
 }

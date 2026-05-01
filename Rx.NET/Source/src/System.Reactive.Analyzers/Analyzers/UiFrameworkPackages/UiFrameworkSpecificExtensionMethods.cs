@@ -14,6 +14,7 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
     internal static class UiFrameworkSpecificExtensionMethods
     {
         private sealed record ExtensionMethodDetails(
+            Func<ITypeSymbol, bool> TargetMatcher,
             string Name,
             string[] ArgumentTypes,
             DiagnosticDescriptor DiagnosticDescriptor);
@@ -22,33 +23,45 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
         // See comments in ReportDiagnosticIfAppropriate for why this is not a dictionary.
         private static readonly ExtensionMethodDetails[] Methods =
         [
-            new("ObserveOn", ["System.Windows.Forms.Control"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsFormsRequiredRule),
-            new("ObserveOn", ["System.Windows.Threading.Dispatcher"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
-            new("ObserveOn", ["System.Windows.Threading.Dispatcher", "System.Windows.Threading.DispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
-            new("ObserveOn", ["System.Windows.Threading.DispatcherObject"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
-            new("ObserveOn", ["System.Windows.Threading.DispatcherObject", "System.Windows.Threading.DispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
-            new("ObserveOn", ["Windows.UI.Core.CoreDispatcher"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
-            new("ObserveOn", ["Windows.UI.Core.CoreDispatcher", "Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
-            new("ObserveOn", ["Windows.UI.Xaml.DependencyObject"], AddUiFrameworkPackageAnalyzer.ReferenceToRxUwpRequiredRule),
-            new("ObserveOn", ["Windows.UI.Xaml.DependencyObject", "Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxUwpRequiredRule),
-            new("ObserveOnDispatcher", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
-            new("ObserveOnDispatcher", ["System.Windows.Threading.DispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
-            new("ObserveOnCoreDispatcher", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
-            new("ObserveOnCoreDispatcher", ["Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
-            new("SubscribeOn", ["System.Windows.Forms.Control"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsFormsRequiredRule),
-            new("SubscribeOn", ["System.Windows.Threading.Dispatcher"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
-            new("SubscribeOn", ["System.Windows.Threading.Dispatcher", "System.Windows.Threading.DispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
-            new("SubscribeOn", ["System.Windows.Threading.DispatcherObject"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
-            new("SubscribeOn", ["System.Windows.Threading.DispatcherObject", "System.Windows.Threading.DispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
-            new("SubscribeOn", ["Windows.UI.Core.CoreDispatcher"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
-            new("SubscribeOn", ["Windows.UI.Core.CoreDispatcher", "Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
-            new("SubscribeOn", ["Windows.UI.Xaml.DependencyObject"], AddUiFrameworkPackageAnalyzer.ReferenceToRxUwpRequiredRule),
-            new("SubscribeOn", ["Windows.UI.Xaml.DependencyObject", "Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxUwpRequiredRule),
-            new("SubscribeOnDispatcher", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
-            new("SubscribeOnDispatcher", ["System.Windows.Threading.DispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
-            new("SubscribeOnDispatcher", ["Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
-            new("SubscribeOnCoreDispatcher", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
-            new("SubscribeOnCoreDispatcher", ["Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOn", ["System.Windows.Forms.Control"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsFormsRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOn", ["System.Windows.Threading.Dispatcher"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOn", ["System.Windows.Threading.Dispatcher", "System.Windows.Threading.DispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOn", ["System.Windows.Threading.DispatcherObject"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOn", ["System.Windows.Threading.DispatcherObject", "System.Windows.Threading.DispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOn", ["Windows.UI.Core.CoreDispatcher"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOn", ["Windows.UI.Core.CoreDispatcher", "Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOn", ["Windows.UI.Xaml.DependencyObject"], AddUiFrameworkPackageAnalyzer.ReferenceToRxUwpRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOn", ["Windows.UI.Xaml.DependencyObject", "Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxUwpRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOnDispatcher", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOnDispatcher", ["System.Windows.Threading.DispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOnCoreDispatcher", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "ObserveOnCoreDispatcher", ["Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOn", ["System.Windows.Forms.Control"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsFormsRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOn", ["System.Windows.Threading.Dispatcher"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOn", ["System.Windows.Threading.Dispatcher", "System.Windows.Threading.DispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOn", ["System.Windows.Threading.DispatcherObject"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOn", ["System.Windows.Threading.DispatcherObject", "System.Windows.Threading.DispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOn", ["Windows.UI.Core.CoreDispatcher"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOn", ["Windows.UI.Core.CoreDispatcher", "Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOn", ["Windows.UI.Xaml.DependencyObject"], AddUiFrameworkPackageAnalyzer.ReferenceToRxUwpRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOn", ["Windows.UI.Xaml.DependencyObject", "Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxUwpRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOnDispatcher", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOnDispatcher", ["System.Windows.Threading.DispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWpfRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOnDispatcher", ["Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOnCoreDispatcher", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIObservable, "SubscribeOnCoreDispatcher", ["Windows.UI.Core.CoreDispatcherPriority"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+
+            new(CodeAnalysisExtensions.IsIAsyncAction, "ToObservable", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIAsyncActionWithProgress, "ToObservable", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIAsyncActionWithProgress, "ToObservable", ["System.IProgress`1"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIAsyncActionWithProgress, "ToObservableProgress", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+
+            new(CodeAnalysisExtensions.IsIAsyncOperation, "ToObservable", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIAsyncOperationWithProgress, "ToObservable", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIAsyncOperationWithProgress, "ToObservable", ["System.IProgress`1"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIAsyncOperationWithProgress, "ToObservableProgress", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIAsyncOperationWithProgress, "ToObservableMultiple", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            new(CodeAnalysisExtensions.IsIAsyncOperationWithProgress, "ToObservableMultiple", ["System.IProgress`1"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
         ];
 
         /// <summary>
@@ -120,7 +133,7 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
             IReadOnlyList<ArgumentSyntax> arguments)
         {
             var mn = ma.Name.ToString();
-            var checkedTargetTypeIsObservable = false;
+            ITypeSymbol? targetType = null;
             ITypeSymbol[]? argumentTypeSymbols = null;
 
             // Although we have enough method entries to exceed the threshold where a dictionary
@@ -161,19 +174,14 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                     // We defer asking for type information for the target until we recognize a
                     // method name that we care about. This avoids performing type information
                     // lookups in cases that can't possibly be this analyzer's business.
-                    if (!checkedTargetTypeIsObservable)
+                    targetType ??= context.SemanticModel.GetTypeInfo(ma.Expression).Type;
+                    if (targetType is null)
                     {
-                        var targetType = context.SemanticModel.GetTypeInfo(ma.Expression).Type;
-                        if (targetType is null)
-                        {
-                            return false;
-                        }
-                        if (!targetType.IsIObservable())
-                        {
-                            return false;
-                        }
-
-                        checkedTargetTypeIsObservable = true;
+                        continue;
+                    }
+                    if (!detail.TargetMatcher(targetType))
+                    {
+                        continue;
                     }
 
                     if (argumentTypeSymbols is null)
@@ -186,7 +194,7 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                             {
                                 // This analyzer can only produce diagnostics when the types of
                                 // all arguments are known.
-                                return false;
+                                continue;
                             }
                             argumentTypeSymbols[i] = argumentType;
                         }
@@ -197,8 +205,25 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                         .All(pair =>
                         {
                             var expectedType = context.SemanticModel.Compilation.GetTypeByMetadataName(pair.expected);
-                            return expectedType is not null &&
-                                pair.actual.InheritsFromOrEquals(expectedType, false);
+                            if (expectedType is null)
+                            {
+                                return false;
+                            }
+
+                            if (expectedType.Arity != 0)
+                            {
+                                if (pair.actual is INamedTypeSymbol actual && actual.Arity == expectedType.Arity)
+                                {
+                                    // Handle generic types with matching arity
+                                    var actualGenericDefinition = actual.ConstructedFrom;
+                                    return actualGenericDefinition.InheritsFromOrEquals(expectedType, false);
+                                }
+                                else
+                                {
+                                    return false;
+                                }
+                            }
+                            return pair.actual.InheritsFromOrEquals(expectedType, false);
                         });
 
                     if (argumentTypesMatch)
