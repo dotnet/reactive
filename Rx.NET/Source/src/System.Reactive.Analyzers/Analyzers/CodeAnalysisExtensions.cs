@@ -44,6 +44,13 @@ namespace System.Reactive.Analyzers
                 || typeSymbol.AllInterfaces.Any(IsIObservable);
         }
 
+        public static bool IsIObservableOfEventPattern(this ITypeSymbol typeSymbol)
+        {
+            return (typeSymbol is INamedTypeSymbol { Name: "IObservable", Arity: 1, ContainingNamespace.MetadataName: "System" } nts &&
+                nts.TypeArguments.Length == 1 && nts.TypeArguments[0] is INamedTypeSymbol { Name: "EventPattern", Arity: 2, ContainingNamespace: { MetadataName: "Reactive", ContainingNamespace.MetadataName: "System" } })
+                || typeSymbol.AllInterfaces.Any(IsIObservableOfEventPattern);
+        }
+
         public static bool IsIAsyncAction(this ITypeSymbol typeSymbol)
         {
             return typeSymbol is INamedTypeSymbol { Name: "IAsyncAction", Arity: 0, ContainingNamespace: { MetadataName: "Foundation", ContainingNamespace.MetadataName: "Windows" } }

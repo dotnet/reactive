@@ -211,14 +211,29 @@ namespace System.Reactive.Analyzers.Test
                 "default(System.IProgress<int>)");
         }
 
+        [TestMethod]
+        public async Task DetectIObservableToEventPattern()
+        {
+            await TestExtensionMethod(
+                "(default(IObservable<System.Reactive.EventPattern<object, EventArgs>>))",
+                targetType: null,
+                "ToEventPattern",
+                "RXNET0003",
+                "ToEventPattern()",
+                additionalArguments: null,
+                diagnosticTarget: DiagnosticTarget.MethodName,
+                expectedOriginalError: "CS1061");
+
+        }
+
         private static Task TestExtensionMethodOnIAsyncAction(
-                    string? targetType,
-                    string extensionMethodName,
-                    string diagnosticId,
-                    string diagnosticArgument,
-                    string? additionalArguments = null,
-                    string? expectedOriginalError = null,
-                    DiagnosticTarget? diagnosticTarget = null)
+            string? targetType,
+            string extensionMethodName,
+            string diagnosticId,
+            string diagnosticArgument,
+            string? additionalArguments = null,
+            string? expectedOriginalError = null,
+            DiagnosticTarget? diagnosticTarget = null)
         {
             return TestExtensionMethod(
                 "default(global::Windows.Foundation.IAsyncAction)",

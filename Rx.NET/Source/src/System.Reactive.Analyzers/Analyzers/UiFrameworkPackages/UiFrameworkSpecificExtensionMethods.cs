@@ -62,6 +62,28 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
             new(CodeAnalysisExtensions.IsIAsyncOperationWithProgress, "ToObservableProgress", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
             new(CodeAnalysisExtensions.IsIAsyncOperationWithProgress, "ToObservableMultiple", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
             new(CodeAnalysisExtensions.IsIAsyncOperationWithProgress, "ToObservableMultiple", ["System.IProgress`1"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+
+            new(CodeAnalysisExtensions.IsIObservableOfEventPattern, "ToEventPattern", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+
+            // Note: there are four methods we're choosing not to detect: the four IAsyncOp-flavoured
+            // overloads of SelectMany in WindowsObservable.StandardSequenceOperators.
+            // Although this would detect them:
+            //  new(CodeAnalysisExtensions.IsIObservable, "SelectMany", ["System.Func`2"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
+            // it could also trigger for unrelated errors. We would need to check not just that the
+            // argument is of type Func<TArg, TResult>, but also that the TResult is an
+            // IAsyncOperation<T> or IAsyncOperationWithProgress<T>. We're using this table-driven
+            // approach so that the same detection logic can be shared across all the extension
+            // methods we detect, and right now, this scheme has no place to put the extra logic
+            // that would be required to be sufficiently selective in detecting these particular
+            // SelectMany overloads.
+            // It would be possible to extend it of course, but it seems very unlikely that any
+            // project using these particular extensions was not also using other Windows Runtime
+            // Rx functionality, in which case those other uses will also produce diagnostics
+            // indicating that they need to add a package reference. They only need to do that
+            // once, so it's not really necessary to raise these diagnostics in every single place.
+            // So for that reason we are not currently detecting these four SelectMany overloads.
+            // If this turns out to be wrong, and there are projects that use these SelectMany
+            // overloads but not any other Windows Runtime Rx functionality, we can revisit this.
         ];
 
         /// <summary>

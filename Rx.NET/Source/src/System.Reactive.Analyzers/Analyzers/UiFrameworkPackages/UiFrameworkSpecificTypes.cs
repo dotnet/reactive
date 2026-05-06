@@ -33,7 +33,7 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
             SemanticModelAnalysisContext context, SyntaxNode? node, Diagnostic diag)
         {
             // TODO: do we need to do anything around ThreadPoolScheduler?
-            // Where did we land with AsyncInfoObservableExtensions add AsyncInfoObservable - are they in the main Rx library? IEventPatternSource<TSender, TEventArgs>?
+            // TODO: FromEventPattern, ToEventPattern
             // Likewise WindowsObservable (FromEventPattern and ToEventPattern but also SelectMany - do these need to go into the extension methods bit?)
 
             static (DiagnosticDescriptor diagnostic, string type)? MatchNamespaceQualifiedType(string fullTypeName) =>
