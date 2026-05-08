@@ -242,7 +242,7 @@ namespace System.Reactive.Analyzers.Test
                 diagnosticId,
                 diagnosticArgument,
                 additionalArguments,
-                diagnosticTarget: DiagnosticTarget.MethodName,
+                diagnosticTarget: diagnosticTarget ?? DiagnosticTarget.MethodName,
                 expectedOriginalError: expectedOriginalError ?? "CS1061");
         }
 
@@ -262,7 +262,7 @@ namespace System.Reactive.Analyzers.Test
                 diagnosticId,
                 diagnosticArgument,
                 additionalArguments,
-                diagnosticTarget: DiagnosticTarget.MethodName,
+                diagnosticTarget: diagnosticTarget ?? DiagnosticTarget.MethodName,
                 expectedOriginalError: expectedOriginalError ?? "CS1061");
         }
 
@@ -283,7 +283,7 @@ namespace System.Reactive.Analyzers.Test
                 diagnosticId,
                 diagnosticArgument,
                 additionalArguments,
-                diagnosticTarget: DiagnosticTarget.MethodName,
+                diagnosticTarget: diagnosticTarget ?? DiagnosticTarget.MethodName,
                 expectedOriginalError: expectedOriginalError ?? "CS1061");
         }
 
@@ -303,7 +303,7 @@ namespace System.Reactive.Analyzers.Test
                 diagnosticId,
                 diagnosticArgument,
                 additionalArguments,
-                diagnosticTarget: DiagnosticTarget.MethodName,
+                diagnosticTarget: diagnosticTarget ?? DiagnosticTarget.MethodName,
                 expectedOriginalError: expectedOriginalError ?? "CS1061");
         }
     }

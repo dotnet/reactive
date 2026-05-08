@@ -11,6 +11,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace System.Reactive.Analyzers.UiFrameworkPackages
 {
+    /// <summary>
+    /// Detect the use of UI-framework-specific Rx.NET extension methods.
+    /// </summary>
     internal static class UiFrameworkSpecificExtensionMethods
     {
         private sealed record ExtensionMethodDetails(
@@ -65,8 +68,8 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
 
             new(CodeAnalysisExtensions.IsIObservableOfEventPattern, "ToEventPattern", [], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
 
-            // Note: there are four methods we're choosing not to detect: the four IAsyncOp-flavoured
-            // overloads of SelectMany in WindowsObservable.StandardSequenceOperators.
+            // Note: we're choosing not to detect the four IAsyncOp-flavoured overloads of
+            // SelectMany in WindowsObservable.StandardSequenceOperators.
             // Although this would detect them:
             //  new(CodeAnalysisExtensions.IsIObservable, "SelectMany", ["System.Func`2"], AddUiFrameworkPackageAnalyzer.ReferenceToRxWindowsRuntimeRequiredRule),
             // it could also trigger for unrelated errors. We would need to check not just that the
@@ -110,10 +113,10 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
             SemanticModelAnalysisContext context, SyntaxNode? node, Diagnostic diag)
         {
             // Note: we don't inspect the incoming diagnostic type to see if it's one we expect to
-            // arise when there's a missing package reference. Since we only raise a diagnostic
-            // when we've determined that the code looks like it's trying to call one of the
-            // extension methods that we know has moved, there shouldn't be any risk of raising a
-            // diagnostic inappropriately, and depending on a particular error might make the
+            // arise when there's a missing package reference. We only raise a diagnostic when
+            // we've determined that the code looks like it's trying to call one of the extension
+            // methods that we know has moved, so there shouldn't be any risk of raising a
+            // diagnostic inappropriately. Depending on a particular error might make this
             // analyzer more brittle.
 
             // Some UI-framework-specific methods are overloads of methods available in the main
@@ -160,15 +163,12 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
 
             // Although we have enough method entries to exceed the threshold where a dictionary
             // lookup is typically faster than a linear search, it is complicated by the fact that
-            // there are multiple entries with the same method name, so this loop will often match
-            // and consider more than one entry. Also, this is an analyzer, so it may run on .NET FX,
-            // where the threshold for dictionary vs linear search can be around 25 items, which
-            // is how many we have, so this is exactly the kind of code where trying to be 'clever'
-            // might actually perform worse in practice. We would need to do some careful
-            // benchmarking to determine whether any proposed more complex approach actually helps
-            // in practice.
+            // there are multiple entries with the same method name, so this loop will often
+            // consider more than one entry. We would need to do some careful benchmarking to
+            // determine whether any proposed more complex approach actually helps in practice.
+            //
             // If we are going to get clever, we would need to consider the following:
-            //  1. does retrieving the method name as a string cause an avoidable allocation?
+            //  1. does retrieving the method name from Roslyn as a string cause an avoidable allocation?
             //  2. is it worth trying to defer to creation of the arrays of ExtensionMethodDetails
             //      (e.g. should we use Lazy<T> or something similar to avoid creating these
             //      in static initialization?)
@@ -195,7 +195,9 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                 {
                     // We defer asking for type information for the target until we recognize a
                     // method name that we care about. This avoids performing type information
-                    // lookups in cases that can't possibly be this analyzer's business.
+                    // lookups in cases that can't possibly be this analyzer's business. But we've
+                    // now found a match, so if we haven't yet fetched the semantic model, the
+                    // time has come.
                     targetType ??= context.SemanticModel.GetTypeInfo(ma.Expression).Type;
                     if (targetType is null)
                     {
@@ -209,7 +211,7 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                     if (argumentTypeSymbols is null)
                     {
                         argumentTypeSymbols = new ITypeSymbol[arguments.Count];
-                        for (int i = 0; i < arguments.Count; i++)
+                        for (var i = 0; i < arguments.Count; i++)
                         {
                             var argumentType = context.SemanticModel.GetTypeInfo(arguments[i].Expression).Type;
                             if (argumentType is null)

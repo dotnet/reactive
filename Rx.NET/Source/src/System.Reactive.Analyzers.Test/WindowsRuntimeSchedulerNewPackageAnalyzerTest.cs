@@ -7,7 +7,7 @@ namespace System.Reactive.Analyzers.Test
     /// <summary>
     /// Verify that the analyzer correctly reports when a problem is caused by code that was
     /// relying on the <c>CoreDispatcherScheduler</c> extension methods supplyed by System.Reactive now needing a reference to
-    /// System.Reactive.Wpf because of an upgrade to Rx 7.
+    /// System.Reactive.WindowsRuntime because of an upgrade to Rx 7.
     /// </summary>
     [TestClass]
     public sealed class WindowsRuntimeSchedulerNewPackageAnalyzerTest : AnalyzerTestNetFxBase
