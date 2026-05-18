@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
@@ -33,7 +33,7 @@ namespace System.Reactive.Analyzers.Test.Verifiers
                 var project = solution.GetProject(projectId);
                 var compilationOptions = project.CompilationOptions;
                 compilationOptions = compilationOptions
-                    .WithOutputKind(Microsoft.CodeAnalysis.OutputKind.ConsoleApplication);
+                    .WithOutputKind(OutputKind.ConsoleApplication);
                 solution = solution
                     .WithProjectCompilationOptions(projectId, compilationOptions)
                     .AddMetadataReference(projectId, rxMetadataRef);
@@ -45,7 +45,6 @@ namespace System.Reactive.Analyzers.Test.Verifiers
             });
 
             ReferenceAssemblies = referenceAssemblies;
-            //ReferenceAssemblies = ReferenceAssemblies.Net.Net80Windows;
 
             // Adding a NuGet reference to Rx would more directly represent real developer
             // scenarios, but we don't build new packages in day to day dev in the IDE, so this

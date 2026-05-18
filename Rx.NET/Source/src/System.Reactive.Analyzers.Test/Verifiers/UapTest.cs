@@ -41,15 +41,8 @@ namespace System.Reactive.Analyzers.Test.Verifiers
                         "6.2.14"),
                     "ref\\uap10.0.15138");
 
-            // We're not finding the Windows.UI.Xaml namespace (which is where DependencyObject is defined).
-            // In an actual UAP project this appears to be here:
-            // C:\Program Files (x86)\Windows Kits\10\References\10.0.26100.0\Windows.Foundation.UniversalApiContract\19.0.0.0\Windows.Foundation.UniversalApiContract.winmd
-            //
             // Microsoft.Windows.SDK.NET.Ref defines the bits of the WinRT API that are available
-            // to all .NET apps. This excludes Xaml types, so this alone does not make the
-            // Windows.UI.Xaml namespace (which is where DependencyObject is defined) available.
-            // There is no NuGet package defining those types for UAP apps, so we need to deal
-            // with that by adding a direct reference in AdjustSolutionIfRequired.
+            // to all .NET apps.
             return uap10.AddPackages(
                 [
                     new PackageIdentity("Microsoft.Windows.SDK.NET.Ref", "10.0.26100.84")
@@ -58,9 +51,9 @@ namespace System.Reactive.Analyzers.Test.Verifiers
 
         protected override Solution AdjustSolutionIfRequired(Solution solution, Project project)
         {
-            // A classic UAP app gets its WinRT API from the locally-installed SDK. To simulate
-            // that, we need to locate the locally-installed SDK and add a reference to
-            // Windows.winmd.
+            // The UAP-specific parts of the WinRT API are not available in any NuGet package.
+            // The only supported way to reference these APIs is to use the locally-installed
+            // Windows platform SDK, which includes a Windows.winmd file.
             var platformSdkLocation = Microsoft.Build.Utilities.ToolLocationHelper
                 .GetPlatformSDKLocation("Windows", "10.0");
             var uapMdPath = Path.Combine(platformSdkLocation, "UnionMetadata\\10.0.26100.0\\Windows.winmd");
