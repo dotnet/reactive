@@ -1238,4 +1238,4 @@ Our plan is to reinstate these facade components in cases where the name makes s
 * `System.Reactive.WindowsForms` (former facade reinstated as real library)
 * `System.Reactive.Wpf` (new library)
 * `System.Reactive.WindowsRuntime`  (former facade reinstated as real library)
-* `System.Reactive.Uap` (new library)
+* `System.Reactive.Uwp` (new library)
