@@ -18,6 +18,10 @@
     <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net'))">
     <UseUwp>true</UseUwp>
     <IsAotCompatible>true</IsAotCompatible>

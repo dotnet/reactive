@@ -16,6 +16,7 @@ namespace System.Reactive.Linq
     /// <summary>
     /// Rx extension methods for UWP's (Windows.UI.Xaml) <see cref="DependencyObject"/>.
     /// </summary>
+    [CLSCompliant(false)]
     public static class DependencyObjectObservable
     {
         /// <summary>
