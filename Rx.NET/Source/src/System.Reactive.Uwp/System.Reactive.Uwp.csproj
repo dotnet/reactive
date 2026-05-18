@@ -8,6 +8,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events;UWP;UAP</PackageTags>
+    <Description>WPF support for Reactive Extensions (Rx) for .NET</Description>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
+  </ItemGroup>
+
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net'))">
     <UseUwp>true</UseUwp>
     <IsAotCompatible>true</IsAotCompatible>
