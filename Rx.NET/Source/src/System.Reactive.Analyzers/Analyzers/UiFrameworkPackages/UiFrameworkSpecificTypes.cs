@@ -132,8 +132,8 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                         // problem can't be that the Rx DispatcherScheduler type is unavailable, so we only
                         // proceed if the semantic model doesn't understand this identifier name's type.
                         // Except, there's a special case: when the code wants to use
-                        // IEventSource<TSender, TEventArgs>, the semantic model incorrectly thinks that
-                        // it has identified the type - it thinks it is IEventSource<TEventArgs> and that
+                        // IEventPatternSource<TSender, TEventArgs>, the semantic model incorrectly thinks that
+                        // it has identified the type - it thinks it is IEventPatternSource<TEventArgs> and that
                         // the code simply has the wrong number of type arguments.
                         var ti = context.SemanticModel.GetTypeInfo(identifierName);
                         if (ti.Type is null || ti.Type.TypeKind == TypeKind.Error ||
@@ -155,7 +155,7 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                         // If the compiler has already determined what type this name represents, then the
                         // problem can't be that the Rx DispatcherScheduler type is unavailable, so we only
                         // proceed if the semantic model doesn't understand this identifier name's type.
-                        // (Unlike earlier, we don't worry about the IEventSource<TSender, TEventArgs>
+                        // (Unlike earlier, we don't worry about the IEventPatternSource<TSender, TEventArgs>
                         // case here, because that type is very unlikely to appear in a member access expression.)
                         var ti = context.SemanticModel.GetTypeInfo(memberAccess.Name);
                         if (ti.Type is null || ti.Type.TypeKind == TypeKind.Error)
