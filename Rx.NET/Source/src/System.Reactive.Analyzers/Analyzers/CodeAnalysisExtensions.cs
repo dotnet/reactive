@@ -59,21 +59,21 @@ namespace System.Reactive.Analyzers
 
         public static bool IsIAsyncActionWithProgress(this ITypeSymbol typeSymbol)
         {
-            // Note: we are deliberately ignore what the actual type parameters are, because we want to match on IAsyncActionWithProgress<TProgress> for any TProgress.
+            // Note: we are deliberately ignoring what the actual type parameters are, because we want to match on IAsyncActionWithProgress<TProgress> for any TProgress.
             return typeSymbol is INamedTypeSymbol { Name: "IAsyncActionWithProgress", Arity: 1, ContainingNamespace: { MetadataName: "Foundation", ContainingNamespace.MetadataName: "Windows" } }
                 || typeSymbol.AllInterfaces.Any(IsIAsyncActionWithProgress);
         }
 
         public static bool IsIAsyncOperation(this ITypeSymbol typeSymbol)
         {
-            // Note: we are deliberately ignore what the actual type parameters are, because we want to match on IAsyncOperation<TProgress> for any TProgress.
+            // Note: we are deliberately ignoring what the actual type parameters are, because we want to match on IAsyncOperation<TProgress> for any TProgress.
             return typeSymbol is INamedTypeSymbol { Name: "IAsyncOperation", Arity: 1, ContainingNamespace: { MetadataName: "Foundation", ContainingNamespace.MetadataName: "Windows" } }
                 || typeSymbol.AllInterfaces.Any(IsIAsyncOperation);
         }
 
         public static bool IsIAsyncOperationWithProgress(this ITypeSymbol typeSymbol)
         {
-            // Note: we are deliberately ignore what the actual type parameters are, because we want to match on IAsyncOperationWithProgress<TProgress> for any TProgress.
+            // Note: we are deliberately ignoring what the actual type parameters are, because we want to match on IAsyncOperationWithProgress<TProgress> for any TProgress.
             return typeSymbol is INamedTypeSymbol { Name: "IAsyncOperationWithProgress", Arity: 2, ContainingNamespace: { MetadataName: "Foundation", ContainingNamespace.MetadataName: "Windows" } }
                 || typeSymbol.AllInterfaces.Any(IsIAsyncOperationWithProgress);
         }
