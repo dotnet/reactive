@@ -79,7 +79,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} method has moved. Add a reference to the System.Reactive.Uwp NuGet package..
+        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} has moved. Add a reference to the System.Reactive.Uwp NuGet package..
         /// </summary>
         internal static string ReferenceToRxUwpRequiredAnalyzerMessageFormat {
             get {
@@ -106,7 +106,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} method has moved. Add a reference to the System.Reactive.WindowsForms NuGet package..
+        ///   Looks up a localized string similar to The &apos;{0}&apos; {1} has moved. Add a reference to the System.Reactive.WindowsForms NuGet package..
         /// </summary>
         internal static string ReferenceToRxWindowsFormsRequiredAnalyzerMessageFormat {
             get {

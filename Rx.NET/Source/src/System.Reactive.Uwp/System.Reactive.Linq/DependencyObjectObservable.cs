@@ -11,7 +11,7 @@ using Windows.UI.Xaml;
 
 using Synchronization = SystemReactive::System.Reactive.Concurrency.Synchronization;
 
-namespace System.Reactive.Uwp.System.Reactive.Linq
+namespace System.Reactive.Linq
 {
     /// <summary>
     /// Rx extension methods for UWP's (Windows.UI.Xaml) <see cref="DependencyObject"/>.

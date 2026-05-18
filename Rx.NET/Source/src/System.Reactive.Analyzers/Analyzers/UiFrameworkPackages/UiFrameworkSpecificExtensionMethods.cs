@@ -211,6 +211,7 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                     if (argumentTypeSymbols is null)
                     {
                         argumentTypeSymbols = new ITypeSymbol[arguments.Count];
+                        var anyArgumentTypeUnknown = false;
                         for (var i = 0; i < arguments.Count; i++)
                         {
                             var argumentType = context.SemanticModel.GetTypeInfo(arguments[i].Expression).Type;
@@ -218,9 +219,15 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
                             {
                                 // This analyzer can only produce diagnostics when the types of
                                 // all arguments are known.
-                                continue;
+                                anyArgumentTypeUnknown = true;
+                                break;
                             }
                             argumentTypeSymbols[i] = argumentType;
+                        }
+
+                        if (anyArgumentTypeUnknown)
+                        {
+                            continue;
                         }
                     }
 
