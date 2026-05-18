@@ -121,7 +121,7 @@ namespace System.Reactive.Analyzers.Test
                         void Conversion(object o, Windows.UI.Xaml.RoutedEventArgs e) => th((Windows.UI.Xaml.Controls.Button)o, e);
                         return Conversion;
                     },
-                    h => p.Loaded += h, p => w.Loaded -= h);
+                    h => p.Loaded += h, h => p.Loaded -= h);
                 """,
                 "WindowsObservable",
                 "CS0234");
