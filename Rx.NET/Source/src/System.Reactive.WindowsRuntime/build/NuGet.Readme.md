@@ -4,20 +4,8 @@ This library provides Windows Runtime support for the Reactive Extensions for .N
 
 See the main Rx.NET package at https://www.nuget.org/packages/System.Reactive for more information about Rx.NET.
 
-## Rx.NET and UI Frameworks
+If you had been using the Windows Runtime support in earlier versions of Rx (pre v7), you'll know that it used to live in the main `System.Reactive` package, along with all UI-framework-specific functionality. See [ADR 0005 (Moving UI framework support out of `System.Reactive`)](https://github.com/dotnet/reactive/blob/main/Rx.NET/Documentation/adr/0005-package-split.md) for an in depth explanation of the reason for moving these features out into separate packages.
 
-Up as far as Rx.NET v6.0, UI framework support has been built directly into the main `System.Reactive` package.
-Unfortunately, this has caused problems since support for WPF and Windows Forms was added in .NET Core 3.1.
-Because .NET Core 3.1, and all subsequent versions of .NET have supported cross-platform use, WPF and Windows
-Forms are not universally available. Rx.NET used to make WPF and Windows Forms support if you targetted a
-sufficiently recent version of Windows in your application TFM. But this turns out to cause problems in
-some deployment models, adding as much as 90MB to the deployable size of an application.
+## Feedback
 
-Consequently, starting in Rx.NET v7.0 we are moving all UI-framework-specific types, and also platform-specific
-types out into separate packages.
-
-Although WPF's support for UWP did not have similar problems, for consistency we have moved _all_ UI framework
-support out into separate libraries. Moreover, the goal is to have the public-facing API for `System.Reactive`
-be as consistent as possible across all targets, so Windows-Runtime-specific Rx APIs that aren't strictly
-UI-related (such as support for `IAsyncInfo`) are also now in this package and not the main one.
-
+You can create issues at the https://github.com/dotnet/reactive repository

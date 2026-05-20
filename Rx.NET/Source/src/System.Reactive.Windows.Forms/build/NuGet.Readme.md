@@ -2,7 +2,7 @@
 
 This is part of the Reactive Extensions for .NET (Rx). Rx enables event-driven programming with a composable, declarative model. The main Rx package is `System.Reactive`, which provides the core types and operators. This package, `System.Reactive.Windows.Forms`, provides additional support for using Rx with Windows Forms applications.
 
-
+If you had been using the Windows Forms support in earlier versions of Rx (pre v7), you'll know that all UI-framework-specific functionality used to live in the main `System.Reactive` package. See [ADR 0005 (Moving UI framework support out of `System.Reactive`)](https://github.com/dotnet/reactive/blob/main/Rx.NET/Documentation/adr/0005-package-split.md) for an in depth explanation of the reason for moving these features out into separate packages.
 
 ## Feedback
 
