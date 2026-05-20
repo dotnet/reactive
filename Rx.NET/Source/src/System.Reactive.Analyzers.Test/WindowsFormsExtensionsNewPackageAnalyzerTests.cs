@@ -5,7 +5,7 @@
 namespace System.Reactive.Analyzers.Test
 {
     [TestClass]
-    public sealed class WindowsFormsExtensionsNewPackageAnalyzerTests : TestExtensionMethodAnalyzerBase
+    public sealed class WindowsFormsExtensionsNewPackageAnalyzerTests : AnalyzerTestNetFxBase
     {
         [TestMethod]
         public async Task DetectIObservableSubscribeOnControl()
@@ -13,7 +13,8 @@ namespace System.Reactive.Analyzers.Test
             await TestExtensionMethodOnIObservable(
                 "System.Windows.Forms.Control",
                 "SubscribeOn",
-                "RXNET0001");
+                "RXNET0001",
+                "SubscribeOn(Control)");
         }
 
         /// <summary>
@@ -26,7 +27,8 @@ namespace System.Reactive.Analyzers.Test
             await TestExtensionMethodOnIObservable(
                 "System.Windows.Forms.Button",
                 "SubscribeOn",
-                "RXNET0001");
+                "RXNET0001",
+                "SubscribeOn(Control)");
         }
 
         [TestMethod]
@@ -35,7 +37,8 @@ namespace System.Reactive.Analyzers.Test
             await TestExtensionMethodOnIObservable(
                 "System.Windows.Forms.Control",
                 "ObserveOn",
-                "RXNET0001");
+                "RXNET0001",
+                "ObserveOn(Control)");
         }
 
         /// <summary>
@@ -48,7 +51,8 @@ namespace System.Reactive.Analyzers.Test
             await TestExtensionMethodOnIObservable(
                 "System.Windows.Forms.Button",
                 "ObserveOn",
-                "RXNET0001");
+                "RXNET0001",
+                "ObserveOn(Control)");
         }
 
         [TestMethod]
@@ -57,7 +61,8 @@ namespace System.Reactive.Analyzers.Test
             await TestExtensionMethodOnSubject(
                 "System.Windows.Forms.Control",
                 "SubscribeOn",
-                "RXNET0001");
+                "RXNET0001",
+                "SubscribeOn(Control)");
         }
 
         [TestMethod]
@@ -66,7 +71,8 @@ namespace System.Reactive.Analyzers.Test
             await TestExtensionMethodOnSubject(
                 "System.Windows.Forms.Control",
                 "ObserveOn",
-                "RXNET0001");
+                "RXNET0001",
+                "ObserveOn(Control)");
         }
 
         [TestMethod]
@@ -75,7 +81,8 @@ namespace System.Reactive.Analyzers.Test
             await TestExtensionMethodOnSubject(
                 "System.Windows.Forms.Button",
                 "ObserveOn",
-                "RXNET0001");
+                "RXNET0001",
+                "ObserveOn(Control)");
         }
     }
 }

@@ -2,14 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Reactive.Analyzers.Test
+namespace System.Runtime.CompilerServices
 {
-    [TestClass]
-    public sealed class UwpNewPackageAnalyzerTests
+    [AttributeUsage(AttributeTargets.Property)]
+    internal sealed class IsExternalInit : Attribute
     {
-        [TestMethod]
-        public void ToDo()
-        {
-        }
     }
 }

@@ -2,15 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Reactive.Analyzers.UiFrameworkPackages;
-using System.Text;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace System.Reactive.Analyzers
@@ -58,19 +53,20 @@ namespace System.Reactive.Analyzers
         public const string ReferenceToRxWindowsFormsRequiredDiagnosticId = "RXNET0001";
         public const string ReferenceToRxWpfRequiredDiagnosticId = "RXNET0002";
         public const string ReferenceToRxWindowsRuntimeRequiredDiagnosticId = "RXNET0003";
+        public const string ReferenceToRxUwpRequiredDiagnosticId = "RXNET0004";
 
         private const string PackagingCategory = "NuGet";
 
         private static readonly LocalizableString ReferenceToRxWindowsFormsRequiredTitle = new LocalizableResourceString(
             nameof(Resources.ReferenceToRxWindowsFormsRequiredAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
-        private static readonly LocalizableString ReferenceToRxWindowsFormsRequiredExtensionMethodMessageFormat = new LocalizableResourceString(
-            nameof(Resources.ReferenceToRxWindowsFormsRequiredAnalyzerExtensionMethodMessageFormat), Resources.ResourceManager, typeof(Resources));
+        private static readonly LocalizableString ReferenceToRxWindowsFormsRequiredAnalyzerMessageFormat = new LocalizableResourceString(
+            nameof(Resources.ReferenceToRxWindowsFormsRequiredAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString ReferenceToRxWindowsFormsRequiredDescription = new LocalizableResourceString(
             nameof(Resources.ReferenceToRxWindowsFormsRequiredAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         internal static readonly DiagnosticDescriptor ReferenceToRxWindowsFormsRequiredRule = new(
             ReferenceToRxWindowsFormsRequiredDiagnosticId,
             ReferenceToRxWindowsFormsRequiredTitle,
-            ReferenceToRxWindowsFormsRequiredExtensionMethodMessageFormat,
+            ReferenceToRxWindowsFormsRequiredAnalyzerMessageFormat,
             PackagingCategory,
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
@@ -79,14 +75,14 @@ namespace System.Reactive.Analyzers
 
         private static readonly LocalizableString ReferenceToRxWpfRequiredTitle = new LocalizableResourceString(
             nameof(Resources.ReferenceToRxWpfRequiredAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
-        private static readonly LocalizableString ReferenceToRxWpfRequiredExtensionMethodMessageFormat = new LocalizableResourceString(
+        private static readonly LocalizableString ReferenceToRxWpfRequiredAnalyzerMessageFormat = new LocalizableResourceString(
             nameof(Resources.ReferenceToRxWpfRequiredAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString ReferenceToRxWpfRequiredDescription = new LocalizableResourceString(
             nameof(Resources.ReferenceToRxWpfRequiredAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         internal static readonly DiagnosticDescriptor ReferenceToRxWpfRequiredRule = new(
             ReferenceToRxWpfRequiredDiagnosticId,
             ReferenceToRxWpfRequiredTitle,
-            ReferenceToRxWpfRequiredExtensionMethodMessageFormat,
+            ReferenceToRxWpfRequiredAnalyzerMessageFormat,
             PackagingCategory,
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
@@ -95,18 +91,34 @@ namespace System.Reactive.Analyzers
 
         private static readonly LocalizableString ReferenceToRxWindowsRuntimeRequiredTitle = new LocalizableResourceString(
             nameof(Resources.ReferenceToRxWindowsRuntimeRequiredAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
-        private static readonly LocalizableString ReferenceToRxWindowsRuntimeRequiredExtensionMethodMessageFormat = new LocalizableResourceString(
+        private static readonly LocalizableString ReferenceToRxWindowsRuntimeRequiredAnalyzerMessageFormat = new LocalizableResourceString(
             nameof(Resources.ReferenceToRxWindowsRuntimeRequiredAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString ReferenceToRxWindowsRuntimeRequiredDescription = new LocalizableResourceString(
             nameof(Resources.ReferenceToRxWindowsRuntimeRequiredAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         internal static readonly DiagnosticDescriptor ReferenceToRxWindowsRuntimeRequiredRule = new(
             ReferenceToRxWindowsRuntimeRequiredDiagnosticId,
             ReferenceToRxWindowsRuntimeRequiredTitle,
-            ReferenceToRxWindowsRuntimeRequiredExtensionMethodMessageFormat,
+            ReferenceToRxWindowsRuntimeRequiredAnalyzerMessageFormat,
             PackagingCategory,
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
             description: ReferenceToRxWindowsRuntimeRequiredDescription,
+            helpLinkUri: "https://github.com/dotnet/reactive");
+
+        private static readonly LocalizableString ReferenceToRxUwpRequiredTitle = new LocalizableResourceString(
+            nameof(Resources.ReferenceToRxUwpRequiredAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
+        private static readonly LocalizableString ReferenceToRxUwpRequiredAnalyzerMessageFormat = new LocalizableResourceString(
+            nameof(Resources.ReferenceToRxUwpRequiredAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
+        private static readonly LocalizableString ReferenceToRxUwpRequiredDescription = new LocalizableResourceString(
+            nameof(Resources.ReferenceToRxUwpRequiredAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
+        internal static readonly DiagnosticDescriptor ReferenceToRxUwpRequiredRule = new(
+            ReferenceToRxUwpRequiredDiagnosticId,
+            ReferenceToRxUwpRequiredTitle,
+            ReferenceToRxUwpRequiredAnalyzerMessageFormat,
+            PackagingCategory,
+            DiagnosticSeverity.Warning,
+            isEnabledByDefault: true,
+            description: ReferenceToRxUwpRequiredDescription,
             helpLinkUri: "https://github.com/dotnet/reactive");
 
         /// <inheritdoc/>
@@ -114,7 +126,8 @@ namespace System.Reactive.Analyzers
         [
             ReferenceToRxWindowsFormsRequiredRule,
             ReferenceToRxWpfRequiredRule,
-            ReferenceToRxWindowsRuntimeRequiredRule
+            ReferenceToRxWindowsRuntimeRequiredRule,
+            ReferenceToRxUwpRequiredRule
         ]);
 
         /// <inheritdoc/>

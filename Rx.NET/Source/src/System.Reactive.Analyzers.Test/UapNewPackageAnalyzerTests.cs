@@ -4,9 +4,74 @@
 
 namespace System.Reactive.Analyzers.Test
 {
+    /// <summary>
+    /// Test <c>System.Reactive.Uwp</c> and <c>System.Reactive.WindowsRuntime</c> package reference
+    /// diagnostics for a UAP project.
+    /// </summary>
     [TestClass]
-    public sealed class WindowsRuntimeNewPackageAnalyzerTests : TestExtensionMethodAnalyzerBase
+    public sealed class UapNewPackageAnalyzerTests : AnalyzerTestUapBase
     {
+        [TestMethod]
+        public async Task DetectIObservableSubscribeOnDependencyObject()
+        {
+            await TestExtensionMethodOnIObservable(
+                targetType: "Windows.UI.Xaml.DependencyObject",
+                "SubscribeOn",
+                "RXNET0004",
+                "SubscribeOn(DependencyObject)",
+                expectedOriginalError: "CS1503");
+        }
+
+        [TestMethod]
+        public async Task DetectIObservableSubscribeOnDependencyObjectWithPriority()
+        {
+            await TestExtensionMethodOnIObservable(
+                "Windows.UI.Xaml.DependencyObject",
+                "SubscribeOn",
+                "RXNET0004",
+                "SubscribeOn(DependencyObject,CoreDispatcherPriority)",
+                ", Windows.UI.Core.CoreDispatcherPriority.Normal");
+        }
+
+        [TestMethod]
+        public async Task DetectIObservableObserveOnDependencyObject()
+        {
+            await TestExtensionMethodOnIObservable(
+                "Windows.UI.Xaml.DependencyObject",
+                "ObserveOn",
+                "RXNET0004",
+                "ObserveOn(DependencyObject)");
+        }
+
+        [TestMethod]
+        public async Task DetectIObservableObserveOnDependencyObjectWithPriority()
+        {
+            await TestExtensionMethodOnIObservable(
+                "Windows.UI.Xaml.DependencyObject",
+                "ObserveOn",
+                "RXNET0004",
+                "ObserveOn(DependencyObject,CoreDispatcherPriority)",
+                ", Windows.UI.Core.CoreDispatcherPriority.Normal");
+        }
+
+        // The following tests are also in WindowsRuntimeNewPackageAnalyzerTests,
+        // but we need to test against both UAP and modern .NET WinRT. Since this
+        // test class derives from AnalyzerTestUapBase, the compilation will be
+        // set up with the UAP reference assemblies.
+
+        [TestMethod]
+        public async Task DetectIObservableSubscribeOnImplicitDispatcherWithPriority()
+        {
+            await TestExtensionMethodOnIObservable(
+                targetType: null,
+                "SubscribeOnDispatcher",
+                "RXNET0003",
+                "SubscribeOnDispatcher(CoreDispatcherPriority)",
+                "Windows.UI.Core.CoreDispatcherPriority.Normal",
+                expectedOriginalError: "CS1061",
+                diagnosticTarget: DiagnosticTarget.MethodName);
+        }
+
         [TestMethod]
         public async Task DetectIObservableSubscribeOnImplicitCoreDispatcher()
         {
@@ -30,9 +95,17 @@ namespace System.Reactive.Analyzers.Test
         }
 
         [TestMethod]
-        public async Task DetectIObservableSubscribeOnCoreDispatcher()
+        public async Task DetectIObservableSubscribeOnCoreDispatcherImplicit()
         {
-            // TODO: how do we ensure we've got a suitably recent windows version in the TFM?
+            await TestExtensionMethodOnIObservableNoArguments(
+                targetType: null,
+                "SubscribeOnCoreDispatcher",
+                "RXNET0003");
+        }
+
+        [TestMethod]
+        public async Task DetectIObservableSubscribeOnCoreDispatcherArgument()
+        {
             await TestExtensionMethodOnIObservable(
                 "Windows.UI.Core.CoreDispatcher",
                 "SubscribeOn",
@@ -76,7 +149,6 @@ namespace System.Reactive.Analyzers.Test
         [TestMethod]
         public async Task DetectIObservableObserveOnCoreDispatcher()
         {
-            // TODO: how do we ensure we've got a suitably recent windows version in the TFM?
             await TestExtensionMethodOnIObservable(
                 "Windows.UI.Core.CoreDispatcher",
                 "ObserveOn",
@@ -94,15 +166,5 @@ namespace System.Reactive.Analyzers.Test
                 "ObserveOn(CoreDispatcher,CoreDispatcherPriority)",
                 ", Windows.UI.Core.CoreDispatcherPriority.Normal");
         }
-        // This may need to look a bit different from the WPF and Windows Forms tests, because
-        // this covers more types.
-        // Then again, in the ADR, I recently made a change to say that actually the non-UI-framework-specific
-        // Windows Runtime functionality should actually remain in System.Reactive.
-        // There is an argumnet that anything that is inherently available as a result of having a Windows-specific TFM
-        // could remain in System.Reactive. (These _don't_ bring in a whole extra framework dependency, so we don't have
-        // the same absolute need to get rid of these as we do with WPF/Windows Forms,.) On the other hand, it would feel
-        // odd for the WPF Dispatcher support to live in in the WPF component while the CoreDispatcher is in the main
-        // System.Reactive.
-        // The IEventPattern and IAsyncInfo bits are arguably an interesting special case.
     }
 }

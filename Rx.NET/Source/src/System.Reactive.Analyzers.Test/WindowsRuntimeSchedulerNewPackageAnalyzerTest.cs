@@ -6,34 +6,34 @@ namespace System.Reactive.Analyzers.Test
 {
     /// <summary>
     /// Verify that the analyzer correctly reports when a problem is caused by code that was
-    /// relying on the <c>DispatcherScheduler</c> extension methods supplied by System.Reactive now needing a reference to
-    /// System.Reactive.Wpf because of an upgrade to Rx 7.
+    /// relying on the <c>CoreDispatcherScheduler</c> extension methods supplied by System.Reactive now needing a reference to
+    /// System.Reactive.WindowsRuntime because of an upgrade to Rx 7.
     /// </summary>
     [TestClass]
-    public sealed class WpfSchedulerNewPackageAnalyzerTests : AnalyzerTestNetFxBase
+    public sealed class WindowsRuntimeSchedulerNewPackageAnalyzerTest : AnalyzerTestNetFxBase
     {
         [TestMethod]
-        public async Task ExplicitNewDispatcherSchedulerFullyQualified()
+        public async Task ExplicitNewCoreDispatcherSchedulerFullyQualified()
         {
             await TestAsync($$"""
-                var scheduler = new System.Reactive.Concurrency.{|#0:DispatcherScheduler|}(System.Windows.Threading.Dispatcher.CurrentDispatcher);
+                var scheduler = new System.Reactive.Concurrency.{|#0:CoreDispatcherScheduler|}(default(Windows.UI.Core.CoreDispatcher));
                 """,
                 "CS0234");
         }
 
         [TestMethod]
-        public async Task ExplicitNewDispatcherSchedulerWithUsing()
+        public async Task ExplicitNewCoreDispatcherSchedulerWithUsing()
         {
             await TestAsync($$"""
                 using System.Reactive.Concurrency;
 
-                var scheduler = new {|#0:DispatcherScheduler|}(System.Windows.Threading.Dispatcher.CurrentDispatcher);
+                var scheduler = new {|#0:CoreDispatcherScheduler|}(default(Windows.UI.Core.CoreDispatcher));
                 """,
                 "CS0246");
         }
 
         [TestMethod]
-        public async Task ExplicitNewDispatcherSchedulerWithPartialUsingInNestedNamespace()
+        public async Task ExplicitNewCoreDispatcherSchedulerWithPartialUsingInNestedNamespace()
         {
             await TestAsync($$"""
                 namespace System.Reactive
@@ -44,7 +44,7 @@ namespace System.Reactive.Analyzers.Test
                     {
                         public static void Main()
                         {
-                            var scheduler = new {|#0:DispatcherScheduler|}(System.Windows.Threading.Dispatcher.CurrentDispatcher);
+                            var scheduler = new {|#0:CoreDispatcherScheduler|}(default(global::Windows.UI.Core.CoreDispatcher));
                         }
                     }
                 }
@@ -53,27 +53,27 @@ namespace System.Reactive.Analyzers.Test
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerCurrentFullyQualified()
+        public async Task CoreDispatcherSchedulerCurrentFullyQualified()
         {
             await TestAsync($$"""
-                var scheduler = {|#0:System.Reactive.Concurrency.DispatcherScheduler|}.Current;
+                var scheduler = {|#0:System.Reactive.Concurrency.CoreDispatcherScheduler|}.Current;
                 """,
                 "CS0234");
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerCurrentSchedulerWithUsing()
+        public async Task CoreDispatcherSchedulerCurrentSchedulerWithUsing()
         {
             await TestAsync($$"""
                 using System.Reactive.Concurrency;
 
-                var scheduler = {|#0:DispatcherScheduler|}.Current;
+                var scheduler = {|#0:CoreDispatcherScheduler|}.Current;
                 """,
                 "CS0103");
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerCurrentSchedulerWithPartialUsingInNestedNamespace()
+        public async Task CoreDispatcherSchedulerCurrentSchedulerWithPartialUsingInNestedNamespace()
         {
             await TestAsync($$"""
                 namespace System.Reactive
@@ -84,7 +84,7 @@ namespace System.Reactive.Analyzers.Test
                     {
                         public static void Main()
                         {
-                            var scheduler = {|#0:DispatcherScheduler|}.Current;
+                            var scheduler = {|#0:CoreDispatcherScheduler|}.Current;
                         }
                     }
                 }
@@ -93,76 +93,76 @@ namespace System.Reactive.Analyzers.Test
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerVariableFullyQualified()
+        public async Task CoreDispatcherSchedulerVariableFullyQualified()
         {
             await TestAsync($$"""
-                System.Reactive.Concurrency.{|#0:DispatcherScheduler|} scheduler = null;
+                System.Reactive.Concurrency.{|#0:CoreDispatcherScheduler|} scheduler = null;
                 """,
                 "CS0234");
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerVariableWithUsing()
+        public async Task CoreDispatcherSchedulerVariableWithUsing()
         {
             await TestAsync($$"""
                 using System.Reactive.Concurrency;
 
-                {|#0:DispatcherScheduler|}? scheduler = null;
+                {|#0:CoreDispatcherScheduler|}? scheduler = null;
                 """,
                 "CS0246");
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerArgumentFullyQualified()
+        public async Task CoreDispatcherSchedulerArgumentFullyQualified()
         {
             await TestAsync($$"""
-                void Use(System.Reactive.Concurrency.{|#0:DispatcherScheduler|}? s) => s?.Schedule(() => { });
+                void Use(System.Reactive.Concurrency.{|#0:CoreDispatcherScheduler|}? s) => s?.Schedule(() => { });
                 Use(default);
                 """,
                 "CS0234");
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerArgumentWithUsing()
+        public async Task CoreDispatcherSchedulerArgumentWithUsing()
         {
             await TestAsync($$"""
                 using System.Reactive.Concurrency;
 
-                void Use({|#0:DispatcherScheduler|}? s) => s?.Schedule(() => { });
+                void Use({|#0:CoreDispatcherScheduler|}? s) => s?.Schedule(() => { });
                 Use(default);
                 """,
                 "CS0246");
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerReturnTypeFullyQualified()
+        public async Task CoreDispatcherSchedulerReturnTypeFullyQualified()
         {
             await TestAsync($$"""
-                System.Reactive.Concurrency.{|#0:DispatcherScheduler|}? Get() => default;
+                System.Reactive.Concurrency.{|#0:CoreDispatcherScheduler|}? Get() => default;
                 _ = Get();
                 """,
                 "CS0234");
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerReturnTypeWithUsing()
+        public async Task CoreDispatcherSchedulerReturnTypeWithUsing()
         {
             await TestAsync($$"""
                 using System.Reactive.Concurrency;
 
-                {|#0:DispatcherScheduler|}? Get() => default;
+                {|#0:CoreDispatcherScheduler|}? Get() => default;
                 _ = Get();
                 """,
                 "CS0246");
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerPropertyTypeFullyQualified()
+        public async Task CoreDispatcherSchedulerPropertyTypeFullyQualified()
         {
             await TestAsync($$"""
                 public static class Program
                 {
-                    public static System.Reactive.Concurrency.{|#0:DispatcherScheduler|}? Scheduler { get; } = default;
+                    public static System.Reactive.Concurrency.{|#0:CoreDispatcherScheduler|}? Scheduler { get; } = default;
                     public static void Main()
                     {
                         _ = Scheduler;
@@ -173,14 +173,14 @@ namespace System.Reactive.Analyzers.Test
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerPropertyTypeWithUsing()
+        public async Task CoreDispatcherSchedulerPropertyTypeWithUsing()
         {
             await TestAsync($$"""
                 using System.Reactive.Concurrency;
 
                 public static class Program
                 {
-                    public static {|#0:DispatcherScheduler|}? Scheduler { get; } = default;
+                    public static {|#0:CoreDispatcherScheduler|}? Scheduler { get; } = default;
                     public static void Main()
                     {
                         _ = Scheduler;
@@ -191,12 +191,12 @@ namespace System.Reactive.Analyzers.Test
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerFieldTypeFullyQualified()
+        public async Task CoreDispatcherSchedulerFieldTypeFullyQualified()
         {
             await TestAsync($$"""
                 public static class Program
                 {
-                    public static System.Reactive.Concurrency.{|#0:DispatcherScheduler|}? Scheduler = default;
+                    public static System.Reactive.Concurrency.{|#0:CoreDispatcherScheduler|}? Scheduler = default;
                     public static void Main()
                     {
                         _ = Scheduler;
@@ -207,14 +207,14 @@ namespace System.Reactive.Analyzers.Test
         }
 
         [TestMethod]
-        public async Task DispatcherSchedulerFieldTypeWithUsing()
+        public async Task CoreDispatcherSchedulerFieldTypeWithUsing()
         {
             await TestAsync($$"""
                 using System.Reactive.Concurrency;
 
                 public static class Program
                 {
-                    public static {|#0:DispatcherScheduler|}? Scheduler = default;
+                    public static {|#0:CoreDispatcherScheduler|}? Scheduler = default;
                     public static void Main()
                     {
                         _ = Scheduler;
@@ -225,6 +225,6 @@ namespace System.Reactive.Analyzers.Test
         }
 
         private static Task TestAsync(string code, string expectedInitialError) =>
-            TestCodeAsync(code, expectedInitialError, "RXNET0002", "DispatcherScheduler", "type");
+            TestCodeAsync(code, expectedInitialError, "RXNET0003", "CoreDispatcherScheduler", "type");
     }
 }

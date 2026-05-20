@@ -12,11 +12,14 @@ New features:
 ### Breaking changes
 
 * UI-framework-specific functionality now requires referencing the relevant platform-specific package:
+  * `System.Reactive.Uwp` for UWP
   * `System.Reactive.Windows.Forms` for Windows Forms
   * `System.Reactive.Wpf` for WPF
   * `System.Reactive.WindowsRuntime` for WinRT (e.g., `CoreDispatcher`) support
 * If an application with a Windows-specific TFM had been relying on `System.Reactive` to acquire the `Microsoft.Desktop.App` framework dependency, it will need to add `<UseWPF>true</UseWPF>` or `<UseWindowsForms>true</UseWindowsForms>`
 * Out-of-support target frameworks (.NET 6.0, .NET 7.0) no longer supported
+
+See [ADR 0005 (Moving UI framework support out of `System.Reactive`)](../adr/0005-package-split.md) for an in depth explanation of the reason for these changes.
 
 Note that the packaging changes for UI-specific functionality constitute a source-level breaking change, but not a binary-level breaking change. Although the UI-framework-specific types have been removed from the public API of `System.Reactive`, they remain present at runtime. (The NuGet package has both `ref` and `lib` folders. The .NET build tools use the `ref` folder at compile time, and these types have been removed only from the `ref` assemblies. At runtime the `lib` folder is used, and the full API of `System.Reactive` v6 remains available in the assemblies in `lib`. Thus existing binaries built against Rx 6.0 that find themselves using Rx 7.0 at runtime will continue to work.)
 
@@ -46,4 +49,4 @@ Note that these packages were for many years facades:
 * `System.Reactive.Windows.Forms`
 * `System.Reactive.WindowsRuntime`
 
-With Rx 7, these have returned to their original roles: they are now the home of Windows Forms and WinRT support in Rx. (We have not resurrected the `System.Reactive.Windows.Threading` package, because its name is a somewhat unhelpful accident of history. WPF functionality now lives in the new `System.Reactive.Wpf` component.)
+With Rx 7, these have returned to their original roles: they are now the home of Windows Forms and WinRT support in Rx. (We have not resurrected the `System.Reactive.Windows.Threading` package, because its name is a somewhat unhelpful accident of history. WPF functionality now lives in the new `System.Reactive.Wpf` component, and similarly UWP functionality is in the new `System.Reactive.Uwp` package.)

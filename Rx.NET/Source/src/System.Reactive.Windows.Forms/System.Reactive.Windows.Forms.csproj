@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <!--
-    The use of Aliases here prevents the copies of the Windows Forms types that are build into System.Reactive's
+    The use of Aliases here prevents the copies of the Windows Forms types that are built into System.Reactive's
     runtime assemblies for binary compatibility interfering with the types in this assembly.
     -->
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj">
