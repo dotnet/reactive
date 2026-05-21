@@ -46,12 +46,7 @@ namespace System.Reactive.WindowsRuntime
             switch (status)
             {
                 case AsyncStatus.Error:
-                    error = info.ErrorCode;
-                    if (error == null)
-                    {
-                        throw new InvalidOperationException("The asynchronous operation failed with a null error code.");
-                    }
-
+                    error = info.ErrorCode ?? throw new InvalidOperationException("The asynchronous operation failed with a null error code.");
                     break;
                 case AsyncStatus.Canceled:
                     error = new OperationCanceledException();
