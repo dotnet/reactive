@@ -63,10 +63,10 @@ stages:
       displayName: Set Version
 
     - task: DotNetCoreCLI@2
-      displayName: Build System.Reactive.sln
+      displayName: Build System.Reactive.slnx
       inputs:
         command: build
-        projects: Rx.NET/Source/System.Reactive.sln
+        projects: Rx.NET/Source/System.Reactive.slnx
         arguments: -c $(BuildConfiguration) -p:CreatePackage=true -p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
 
     # The System.Reactive.MakeRefAssemblies project just builds the reference assemblies that go into
