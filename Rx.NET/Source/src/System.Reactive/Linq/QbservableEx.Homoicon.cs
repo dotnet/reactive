@@ -1,10 +1,10 @@
 /*
- * WARNING: Auto-generated file (2026/03/18 13:52:29)
+ * WARNING: Auto-generated file (2026/05/21 07:28:20)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 
 #nullable enable
-#pragma warning disable 1591
+#pragma warning disable CS1591, CA1711
 
 using System.Collections.Generic;
 using System.Linq;
