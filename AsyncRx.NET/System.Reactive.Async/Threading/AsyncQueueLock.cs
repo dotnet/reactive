@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Threading
@@ -10,7 +11,7 @@ namespace System.Threading
     public sealed class AsyncQueueLock : IAsyncDisposable
     {
         private readonly Queue<Func<ValueTask>> _queue = new();
-        private readonly AsyncGate _gate = new();
+        private readonly IAsyncGate _gate = AsyncGate.Create();
 
         private bool _isAcquired;
         private bool _hasFaulted;

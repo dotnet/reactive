@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+using System.Reactive.Threading;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -306,7 +307,7 @@ namespace System.Reactive.Linq
 
             async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
             {
-                var gate = new AsyncGate();
+                var gate = AsyncGate.Create();
 
                 var buffer = new List<TSource>();
 
@@ -378,7 +379,7 @@ namespace System.Reactive.Linq
 
             async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
             {
-                var gate = new AsyncGate();
+                var gate = AsyncGate.Create();
 
                 var queue = new Queue<List<TSource>>();
 
@@ -509,7 +510,7 @@ namespace System.Reactive.Linq
 
             async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
             {
-                var gate = new AsyncGate();
+                var gate = AsyncGate.Create();
 
                 var timer = new SerialAsyncDisposable();
 
@@ -586,7 +587,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             var buffer = new List<TSource>();
 
@@ -660,7 +661,7 @@ namespace System.Reactive.Linq
             {
                 var closeSubscription = new SerialAsyncDisposable();
 
-                var gate = new AsyncGate();
+                var gate = AsyncGate.Create();
                 var queueLock = new AsyncQueueLock();
 
                 var buffer = new List<TSource>();

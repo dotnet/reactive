@@ -4,14 +4,14 @@
 
 using System.Collections.Generic;
 using System.Reactive.Disposables;
-using System.Threading;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Subjects
 {
     public abstract class BehaviorAsyncSubject<T> : IAsyncSubject<T>
     {
-        private readonly AsyncGate _gate = new();
+        private readonly IAsyncGate _gate = AsyncGate.Create();
         private readonly List<IAsyncObserver<T>> _observers = new();
         private T _value;
         private bool _done;

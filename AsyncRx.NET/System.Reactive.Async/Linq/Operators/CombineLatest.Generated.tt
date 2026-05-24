@@ -9,6 +9,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 using System.Reactive.Disposables;
+using System.Reactive.Threading;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -161,7 +162,7 @@ for (var j = 1; j <= i; j++)
 }
 #>
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -248,7 +249,7 @@ for (var j = 1; j <= i; j++)
 }
 #>
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
