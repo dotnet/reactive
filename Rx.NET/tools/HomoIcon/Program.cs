@@ -155,7 +155,7 @@ namespace HomoIconize
 ");
             WriteLine(
 @"#nullable enable
-#pragma warning disable 1591
+#pragma warning disable CS1591, CA1711
 ");
 
             WriteLine(

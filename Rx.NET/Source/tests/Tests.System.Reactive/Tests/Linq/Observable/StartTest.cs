@@ -82,20 +82,20 @@ namespace ReactiveTests.Tests
                 () =>
                 {
                     // 1: action running
-                    gate.SignalAndWait();
+                    gate.SignalAndWait(TestContext.CancellationToken);
                     // 2: unsubscribe Dispose returned
-                    gate.SignalAndWait();
+                    gate.SignalAndWait(TestContext.CancellationToken);
                     throw ex;
                 })
                 .Subscribe();
 
             // 1: action running
-            gate.SignalAndWait();
+            gate.SignalAndWait(TestContext.CancellationToken);
 
             sub.Dispose();
 
             // 2: unsubscribe Dispose returned
-            gate.SignalAndWait();
+            gate.SignalAndWait(TestContext.CancellationToken);
         }
 
         [TestMethod]
@@ -135,5 +135,6 @@ namespace ReactiveTests.Tests
             ]));
         }
 
+        public TestContext TestContext { get; set; }
     }
 }

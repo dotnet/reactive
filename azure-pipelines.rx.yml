@@ -63,10 +63,10 @@ stages:
       displayName: Set Version
 
     - task: DotNetCoreCLI@2
-      displayName: Build System.Reactive.sln
+      displayName: Build System.Reactive.slnx
       inputs:
         command: build
-        projects: Rx.NET/Source/System.Reactive.sln
+        projects: Rx.NET/Source/System.Reactive.slnx
         arguments: -c $(BuildConfiguration) -p:CreatePackage=true -p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
 
     # The System.Reactive.MakeRefAssemblies project just builds the reference assemblies that go into
@@ -101,7 +101,7 @@ stages:
     - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Rx.NET/Source/coverlet/reports -reporttypes:"Cobertura"
       displayName: Create reports
 
-    - task: PublishCodeCoverageResults@1
+    - task: PublishCodeCoverageResults@2
       displayName: 'Publish code coverage'
       inputs:
         codeCoverageTool: Cobertura

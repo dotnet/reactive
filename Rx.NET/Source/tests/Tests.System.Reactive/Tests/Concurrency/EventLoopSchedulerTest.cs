@@ -322,7 +322,7 @@ namespace ReactiveTests.Tests
                         d.Add(e.Schedule(() => cd.Signal()));
                     }
 
-                    if (!cd.Wait(10000))
+                    if (!cd.Wait(10000, TestContext.CancellationToken))
                     {
                         Assert.True(false, "j = " + j);
                     }
@@ -349,7 +349,7 @@ namespace ReactiveTests.Tests
                         d.Add(e.Schedule(TimeSpan.FromMilliseconds(100), () => cd.Signal()));
                     }
 
-                    if (!cd.Wait(10000))
+                    if (!cd.Wait(10000, TestContext.CancellationToken))
                     {
                         Assert.True(false, "j = " + j);
                     }
@@ -376,7 +376,7 @@ namespace ReactiveTests.Tests
                         d.Add(e.Schedule(TimeSpan.FromMilliseconds(k), () => cd.Signal()));
                     }
 
-                    if (!cd.Wait(10000))
+                    if (!cd.Wait(10000, TestContext.CancellationToken))
                     {
                         Assert.True(false, "j = " + j);
                     }
@@ -407,6 +407,8 @@ namespace ReactiveTests.Tests
 
             d.Dispose();
         }
+
+        public TestContext TestContext { get; set; }
 
 #if STRESS
         [TestMethod]

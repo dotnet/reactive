@@ -1,0 +1,86 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Debug (with UWP)" />
+    <BuildType Name="Release" />
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Analyzers/">
+    <Project Path="src/System.Reactive.Analyzers.Test/System.Reactive.Analyzers.Test.csproj">
+      <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+    </Project>
+    <Project Path="src/System.Reactive.Analyzers/System.Reactive.Analyzers.csproj">
+      <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/Benchmarks/">
+    <Project Path="benchmarks/Benchmarks.System.Reactive/Benchmarks.System.Reactive.csproj">
+      <BuildType Project="Current Sources" />
+    </Project>
+  </Folder>
+  <Folder Name="/FrameworkIntegrations/">
+    <Project Path="src/System.Reactive.MakeRefAssemblies/System.Reactive.MakeRefAssemblies.csproj">
+      <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+    </Project>
+    <Project Path="src/System.Reactive.Uwp/System.Reactive.Uwp.csproj">
+      <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+    </Project>
+    <Project Path="src/System.Reactive.Windows.Forms/System.Reactive.Windows.Forms.csproj">
+      <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+    </Project>
+    <Project Path="src/System.Reactive.WindowsRuntime/System.Reactive.WindowsRuntime.csproj">
+      <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+    </Project>
+    <Project Path="src/System.Reactive.Wpf/System.Reactive.Wpf.csproj">
+      <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="../../.editorconfig" />
+    <File Path="../../azure-pipelines.rx.yml" />
+    <File Path=".editorconfig" />
+    <File Path="analyzers.globalconfig" />
+    <File Path="Directory.build.props" />
+    <File Path="Directory.build.targets" />
+    <File Path="global.json" />
+    <File Path="Rx.ruleset" />
+    <File Path="Test.ruleset" />
+    <File Path="version.json" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <File Path="tests/.editorconfig" />
+    <File Path="tests/Directory.build.props" />
+    <File Path="tests/Directory.build.targets" />
+    <Project Path="tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj">
+      <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+    </Project>
+    <Project Path="tests/Tests.System.Reactive.Uwp.DeviceRunner/Tests.System.Reactive.Uwp.DeviceRunner.csproj" Id="10cc7191-d936-46ca-ba87-0646733571ea">
+      <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+      <Platform Solution="*|Any CPU" Project="x86" />
+      <Platform Solution="*|ARM" Project="ARM" />
+      <Platform Solution="*|x64" Project="x64" />
+      <Platform Solution="*|x86" Project="x86" />
+      <Build Solution="Debug|Any CPU" Project="false" />
+      <Build Solution="Release|Any CPU" Project="false" />
+      <Deploy Solution="*|ARM" />
+      <Deploy Solution="*|x64" />
+      <Deploy Solution="*|x86" />
+      <Deploy Solution="Debug (with UWP)|Any CPU" />
+    </Project>
+    <Project Path="tests/Tests.System.Reactive/Tests.System.Reactive.csproj">
+      <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Project Path="src/Microsoft.Reactive.Testing/Microsoft.Reactive.Testing.csproj">
+    <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+  </Project>
+  <Project Path="src/System.Reactive.Observable.Aliases/System.Reactive.Observable.Aliases.csproj">
+    <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+  </Project>
+  <Project Path="src/System.Reactive/System.Reactive.csproj">
+    <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
+  </Project>
+</Solution>

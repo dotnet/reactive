@@ -1390,11 +1390,11 @@ namespace ReactiveTests.Tests
 
                 o.OnNext(43);
 
-                await scheduler.Sleep(TimeSpan.FromTicks(10));
+                await scheduler.Sleep(TimeSpan.FromTicks(10), TestContext.CancellationToken);
 
                 o.OnNext(44);
 
-                await scheduler.Sleep(new DateTimeOffset(250, TimeSpan.Zero));
+                await scheduler.Sleep(new DateTimeOffset(250, TimeSpan.Zero), TestContext.CancellationToken);
 #pragma warning restore CA2016
 
                 o.OnNext(45);
@@ -1580,5 +1580,7 @@ namespace ReactiveTests.Tests
                 d(state);
             }
         }
+
+        public TestContext TestContext { get; set; }
     }
 }
