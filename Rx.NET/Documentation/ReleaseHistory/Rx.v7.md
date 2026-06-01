@@ -34,15 +34,15 @@ These packages existed to enable code built against older versions of Rx.NET to 
 
 So we no longer produce new versions of these packages.
 
-* `System.Reactive.Compatibility`
-* `System.Reactive.Core`
-* `System.Reactive.Experimental`
-* `System.Reactive.Interfaces`
-* `System.Reactive.Linq`
-* `System.Reactive.PlatformServices`
-* `System.Reactive.Providers`
-* `System.Reactive.Runtime.Remoting`
-* `System.Reactive.Windows.Threading`
+* [`System.Reactive.Compatibility`](https://www.nuget.org/packages/System.Reactive.Compatibility) was a metapackage intended to support migration from Rx 3 to Rx 4, both of which have long been out of support
+* [`System.Reactive.Core`](https://www.nuget.org/packages/System.Reactive.Core) was once home to various Rx.NET types that are now core features, and will never move out of `System.Reactive`: anonymous observers and observables, base observers and observables, reified notifications, `Unit`, common schedulers, common disposables, platform abstractions
+* [`System.Reactive.Experimental`](https://www.nuget.org/packages/System.Reactive.Experimental) defines the `ExperimentalAttribute`, and a handful of types, all of which have lived in `System.Reactive` for a long time
+* [`System.Reactive.Interfaces`](https://www.nuget.org/packages/System.Reactive.Interfaces): was originally conceived as a stable package defining core interfaces (e.g. `IScheduler`, `IQbservable`) that would change very rarely if at all, and would therefore not need new versions with each release of Rx.NET. However, this was forgotten at some point, and this got version updates along with all other Rx.NET packages, thus defeating the entire point of the package. All the interfaces have lived in `System.Reactive` for many years.
+* [`System.Reactive.Linq`](https://www.nuget.org/packages/System.Reactive.Linq) was once home to various Rx.NET types that are now core features, and will never move out of `System.Reactive`: LINQ operators, subjects, join patterns, event patterns, `Task` integration, timestamping, virtual schedulers
+* [`System.Reactive.PlatformServices`](https://www.nuget.org/packages/System.Reactive.PlatformServices): was home to the 'platform enlightenment' features that date back to the old PCL (Portable Class Library) system that was [deprecated in 2021](https://github.com/dotnet/modernize-dotnet/issues/437), and also used to define schedulers that depended on multithreading support that was not available across all .NET runtime types back then; these moved into `System.Reactive` a long time ago
+* [`System.Reactive.Providers`](https://www.nuget.org/packages/System.Reactive.Providers) was once the home of Rx.NET's `IQueryable` support, but this has been built into `System.Reactive` for a long time
+* [`System.Reactive.Runtime.Remoting`](https://www.nuget.org/packages/System.Reactive.Runtime.Remoting) defined the `RemotingObservable`. .NET Remoting is no longer supported by Microsoft; we retain this in the .NET Framework target of `System.Reactive`, but use of remoting is now strongly discouraged.
+* [`System.Reactive.Windows.Threading`](https://www.nuget.org/packages/System.Reactive.Windows.Threading) used to try to make it possible to write one codebase that supported multiple different UI frameworks, back around the time when WPF, Silverlight, Windows 8 ('Metro') and Windows Phone were all available at the same time, and all had quite similar, but slightly different ideas of 'dispatcher'. The packaging concept behind this particular package was confusing even when it served a purpose, and is now a relic of history; developers should now pick the appropriate UI integration package for whichever UI framework they are targeting
 
 Note that these packages were for many years facades:
 
