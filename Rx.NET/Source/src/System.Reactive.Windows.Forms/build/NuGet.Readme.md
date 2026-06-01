@@ -16,7 +16,7 @@ dotnet new winforms
 dotnet add package System.Reactive.Windows.Forms
 ```
 
-Alternatively, if you have Visual Studio installed, create a new .NET WPF project, and then use the NuGet package manager to add a reference to `System.Reactive.Wpf`.
+Alternatively, if you have Visual Studio installed, create a new .NET Windows Forms project, and then use the NuGet package manager to add a reference to `System.Reactive.Windows.Forms`.
 
 You can then add the following code to your `Form1.cs`. First, add this `using` directive at the top of the file:
 
