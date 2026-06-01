@@ -1,0 +1,35 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="_RxCheckPackagesConfig" BeforeTargets="Build">
+  <!--
+  Projects that use System.Reactive v7.0 via the old packages.config mechanism are likely to encounter problems.
+  It is highly recommended that they use PackageReference instead of packages.config.
+
+  If for some reason your project must use packages.config, you can set the RxUseUnsupportedPackagesConfig property
+  to true to bypass this check. However, this can cause problems because the old package.config mechanism does
+  know what reference assemblies are. As of Rx 7.0, the System.Reactive package defines reference assemblies
+  that have a smaller API surface area than the runtime assemblies. (This was necessary to be able to move
+  UI-framework-specific types out of System.Reactive without breaking binary compatiblity. See
+    https://github.com/dotnet/reactive/blob/main/Rx.NET/Documentation/adr/0005-package-split.md
+  for a (very) detailed explanation of the motivation behind this change.)
+
+  The main problem that can occur if you use System.Reactive in a packages.config-based projects is that if
+  you also end up with references to any of the new UI-frameworks-specific packages (e.g. System.Reactive.Wpf)
+  then the compiler will see two lots of the relevant types. It is possible to work around this through the
+  use of reference aliases and C#'s extern keyword, but PackageReference is so much better than packages.config
+  that you are almost certainly better off migrating to PackageReference instead of trying to work around the
+  problems with packages.config.
+
+    NuGetProjectStyle=PackageReference
+  -->
+    <PropertyGroup>
+      <_RxIsPackagesConfig Condition="'$(RestoreProjectStyle)' == 'PackageReference'">false</_RxIsPackagesConfig>
+      <!-- When old-style (non-Sdk) projects use PackageReference they seem to set NuGetProjectStyle, and not RestoreProjectStyle -->
+      <_RxIsPackagesConfig Condition="'$(NuGetProjectStyle)' == 'PackageReference'">false</_RxIsPackagesConfig>
+      <_RxIsPackagesConfig Condition="'$(_RxIsPackagesConfig)' != 'false'">true</_RxIsPackagesConfig>
+    </PropertyGroup>
+
+    <Warning
+      Condition="($(_RxIsPackagesConfig) == 'true') and ($(RxUseUnsupportedPackagesConfig) != 'true')"
+      Text="The project contains a packages.config file, which is not supported by System.Reactive v7.0 or later. Please migrate to PackageReference. (You can suppress this message by setting the RxUseUnsupportedPackagesConfig property to true, but be aware this is an unsupported scenario.)"/>
+  </Target>
+</Project>

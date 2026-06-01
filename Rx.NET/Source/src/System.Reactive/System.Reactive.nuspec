@@ -31,15 +31,15 @@
     </references>
     <dependencies>
       <group targetFramework=".NETFramework4.7.2">
-        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
+        <dependency id="System.Threading.Tasks.Extensions" version="4.6.3" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net8.0" />
       <group targetFramework="net8.0-windows10.0.19041" />
       <group targetFramework=".NETStandard2.0">
-        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
+        <dependency id="System.Threading.Tasks.Extensions" version="4.6.3" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="UAP10.0.18362">
-        <dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers" />
+        <dependency id="System.Threading.Tasks.Extensions" version="4.6.3" exclude="Build,Analyzers" />
       </group>
     </dependencies>
     <frameworkReferences>
@@ -69,6 +69,8 @@
     <file src="$analyzerassemblypath$netstandard2.0\System.Reactive.Analyzers.dll" target="analyzers\dotnet\System.Reactive.Analyzers.dll" />
     <file src="..\..\..\Resources\Artwork\Logo.png" target="icon.png" />
     <file src="build\NuGet.Readme.md" target="readme.md" />
+    <file src="build\System.Reactive.targets" target="build\System.Reactive.targets" />
+    <file src="build\System.Reactive.PackagesConfigCheck.targets" target="build\System.Reactive.PackagesConfigCheck.targets" />
     <file src="$outputpath$net472\System.Reactive.pdb" target="lib\net472\System.Reactive.pdb" />
     <file src="$outputpath$net8.0\System.Reactive.pdb" target="lib\net8.0\System.Reactive.pdb" />
     <file src="$outputpath$net8.0-windows10.0.19041\System.Reactive.pdb" target="lib\net8.0-windows10.0.19041\System.Reactive.pdb" />
