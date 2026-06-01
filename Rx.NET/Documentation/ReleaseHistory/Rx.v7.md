@@ -17,6 +17,7 @@ New features:
   * `System.Reactive.Wpf` for WPF
   * `System.Reactive.WindowsRuntime` for WinRT (e.g., `CoreDispatcher`) support
 * If an application with a Windows-specific TFM had been relying on `System.Reactive` to acquire the `Microsoft.Desktop.App` framework dependency, it will need to add `<UseWPF>true</UseWPF>` or `<UseWindowsForms>true</UseWindowsForms>`
+* `OfType` nullability fixed (see [#2247](https://github.com/dotnet/reactive/issues/2247)) - this is an API change, so although this fixes a flaw, it is technically a breaking change
 * Out-of-support target frameworks (.NET 6.0, .NET 7.0) no longer supported
 
 See [ADR 0005 (Moving UI framework support out of `System.Reactive`)](../adr/0005-package-split.md) for an in depth explanation of the reason for these changes.
