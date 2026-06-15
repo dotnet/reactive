@@ -5,7 +5,11 @@
     "^refs/heads/rel/v\\d+\\.\\d+", // we also release branches starting with rel/vN.N
     "^refs/heads/rel/rx-v\\d+\\.\\d+" // we also release branches starting with rel/vN.N
   ],
-  "nugetPackageVersion":{
+  "nugetPackageVersion": {
     "semVer": 2
+  },
+  "release": {
+    "branchName": "rel/rx-v{version}",
+    "firstUnstableTag": "preview"
   }
 }
