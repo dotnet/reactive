@@ -1,13 +1,14 @@
 {
-  "version": "7.0.0-preview.{height}",
-  "publicReleaseRefSpec": [
-    "^refs/heads/main$", // we release out of main
-    "^refs/heads/rel/v\\d+\\.\\d+", // we also release branches starting with rel/vN.N
-    "^refs/heads/rel/rx-v\\d+\\.\\d+" // we also release branches starting with rel/vN.N
-  ],
-  "nugetPackageVersion": {
-    "semVer": 2
+  "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/main/src/NerdBank.GitVersioning/version.schema.json",
+  "version": "7.0.0-beta.{height}",
+  "nuGetPackageVersion": {
+    "semVer": 2.0
   },
+  "publicReleaseRefSpec": [
+    "^refs/heads/main$",
+    "^refs/heads/rel/v\\d+\\.\\d+",
+    "^refs/heads/rel/rx-v\\d+\\.\\d+"
+  ],
   "release": {
     "branchName": "rel/rx-v{version}",
     "firstUnstableTag": "preview"
