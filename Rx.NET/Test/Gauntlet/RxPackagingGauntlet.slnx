@@ -1,0 +1,42 @@
+<Solution>
+  <Folder Name="/Checks/" />
+  <Folder Name="/Checks/Bloat/">
+    <File Path="Checks/Bloat/Readme.md" />
+    <Project Path="Checks/Bloat/Bloat.ConsoleWinRtTemplate/Bloat.ConsoleWinRtTemplate.csproj" />
+    <Project Path="Checks/Bloat/CheckIssue1745/CheckIssue1745.csproj" />
+  </Folder>
+  <Folder Name="/Checks/ExtensionMethods/">
+    <File Path="Checks/ExtensionMethods/Readme.md" />
+    <Project Path="Checks/ExtensionMethods/CheckDisableTransitiveFailingExtensionMethod/CheckDisableTransitiveFailingExtensionMethod.csproj" />
+    <Project Path="Checks/ExtensionMethods/ExtensionMethods.DisableTransitiveWorkaroundFail/ExtensionMethods.DisableTransitiveWorkaroundFail.csproj" />
+  </Folder>
+  <Folder Name="/Checks/PlugIns/">
+    <File Path="Checks/PlugIns/Readme.md" />
+    <Project Path="Checks/PlugIns/CheckIssue97/CheckIssue97.csproj" />
+    <Project Path="Checks/PlugIns/PlugIn.Api/PlugIn.Api.csproj" />
+    <Project Path="Checks/PlugIns/PlugIn.HostDotnet/PlugIn.HostDotnet.csproj" />
+    <Project Path="Checks/PlugIns/PlugIn.HostDriver/PlugIn.HostDriver.csproj" />
+    <Project Path="Checks/PlugIns/PlugIn.HostNetFx/PlugIn.HostNetFx.csproj" />
+    <Project Path="Checks/PlugIns/PlugIn.HostSerialization/PlugIn.HostSerialization.csproj" />
+    <Project Path="Checks/PlugIns/PlugIn/PlugIn.csproj" />
+  </Folder>
+  <Folder Name="/Checks/TransitiveReferences/">
+    <File Path="Checks/TransitiveReferences/Readme.md" />
+    <Project Path="Checks/TransitiveReferences/CheckTransitiveFrameworkReference/CheckTransitiveFrameworkReference.csproj" />
+    <Project Path="Checks/TransitiveReferences/Transitive.App/Transitive.App.csproj" />
+    <Project Path="Checks/TransitiveReferences/Transitive.Lib.UsesRx/Transitive.Lib.UsesRx.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Check.Specs/Check.Specs.csproj" />
+  </Folder>
+  <Project Path="RxGauntlet.Common/RxGauntlet.Common.csproj" />
+  <Project Path="RxGauntlet/RxGauntlet.csproj">
+    <BuildDependency Project="Checks/Bloat/CheckIssue1745/CheckIssue1745.csproj" />
+    <BuildDependency Project="Checks/ExtensionMethods/CheckDisableTransitiveFailingExtensionMethod/CheckDisableTransitiveFailingExtensionMethod.csproj" />
+    <BuildDependency Project="Checks/PlugIns/CheckIssue97/CheckIssue97.csproj" />
+    <BuildDependency Project="Checks/TransitiveReferences/CheckTransitiveFrameworkReference/CheckTransitiveFrameworkReference.csproj" />
+  </Project>
+</Solution>
