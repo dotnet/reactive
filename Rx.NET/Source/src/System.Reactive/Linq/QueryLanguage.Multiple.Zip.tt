@@ -38,7 +38,7 @@ for (int i = 3; i <= 16; i++)
     internal partial class QueryLanguageEx
     {
 <#
-for (int i = 2; i <= 8; i++)
+for (int i = 2; i <= 16; i++)
 {
     var parameters = string.Join(", ", Enumerable.Range(1, i).Select(j => "IObservable<TSource" + j + "> source" + j));
     var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "TSource" + j));

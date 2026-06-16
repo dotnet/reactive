@@ -36,6 +36,7 @@ namespace Tests
         public async Task Range_Simple_IAsyncPartition()
         {
             var xs = AsyncEnumerable.Range(2, 5);
+            int[] expected = [2, 3, 4, 5, 6];
 
             Assert.Equal(5, await xs.CountAsync());
 
@@ -63,8 +64,8 @@ namespace Tests
             Assert.Equal(2, await xs.Take(1024).FirstAsync());
             Assert.Equal(6, await xs.Take(1024).LastAsync());
 
-            Assert.Equal([2, 3, 4, 5, 6], await xs.ToArrayAsync());
-            Assert.Equal(new[] { 2, 3, 4, 5, 6 }, await xs.ToListAsync());
+            Assert.Equal(expected, await xs.ToArrayAsync());
+            Assert.Equal(expected, await xs.ToListAsync());
         }
 
         [Fact]

@@ -8,8 +8,15 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.skipwhile?view=net-9.0-pp#system-linq-asyncenumerable-skipwhile-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean)))
+
         /// <summary>
         /// Bypasses elements in an async-enumerable sequence as long as a specified condition is true and then returns the remaining elements.
         /// </summary>
@@ -49,6 +56,8 @@ namespace System.Linq
                 }
             }
         }
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.skipwhile?view=net-9.0-pp#system-linq-asyncenumerable-skipwhile-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-int32-system-boolean)))
 
         /// <summary>
         /// Bypasses elements in an async-enumerable sequence as long as a specified condition is true and then returns the remaining elements.
@@ -96,6 +105,7 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Bypasses elements in an async-enumerable sequence as long as a condition is true, and then returns the remaining elements.
@@ -106,6 +116,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing the elements in the source sequence starting at the first element that does not pass the test specified by the predicate.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use SkipWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SkipWhileAwait functionality now exists as overloads of SkipWhile. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TSource> SkipWhileAwaitCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
@@ -140,6 +151,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use SkipWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SkipWhileAwaitWithCancellation functionality now exists as overloads of SkipWhile.")]
         private static IAsyncEnumerable<TSource> SkipWhileAwaitWithCancellationCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
         {
             if (source == null)
@@ -183,6 +195,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence containing the elements in the source sequence starting at the first element that does not pass the test specified by the predicate.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use SkipWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SkipWhileAwait functionality now exists as overloads of SkipWhile. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TSource> SkipWhileAwaitCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
         {
             if (source == null)
@@ -223,6 +236,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use SkipWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SkipWhileAwaitWithCancellation functionality now exists as overloads of SkipWhile.")]
         private static IAsyncEnumerable<TSource> SkipWhileAwaitWithCancellationCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate)
         {
             if (source == null)

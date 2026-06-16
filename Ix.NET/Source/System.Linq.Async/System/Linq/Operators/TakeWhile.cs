@@ -8,8 +8,15 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.takewhile?view=net-9.0-pp#system-linq-asyncenumerable-takewhile-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean)))
+
         /// <summary>
         /// Returns elements from an async-enumerable sequence as long as a specified condition is true.
         /// </summary>
@@ -40,6 +47,8 @@ namespace System.Linq
                 }
             }
         }
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.takewhile?view=net-9.0-pp#system-linq-asyncenumerable-takewhile-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-int32-system-boolean)))
 
         /// <summary>
         /// Returns elements from an async-enumerable sequence as long as a specified condition is true.
@@ -79,6 +88,7 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Returns elements from an async-enumerable sequence as long as a specified condition is true.
@@ -89,6 +99,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence that contains the elements from the input sequence that occur before the element at which the test no longer passes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use TakeWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the TakeWhileAwait functionality now exists as overloads of TakeWhile. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TSource> TakeWhileAwaitCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
@@ -114,6 +125,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use TakeWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the TakeWhileAwaitWithCancellation functionality now exists as overloads of TakeWhile.")]
         private static IAsyncEnumerable<TSource> TakeWhileAwaitWithCancellationCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
         {
             if (source == null)
@@ -148,6 +160,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence that contains the elements from the input sequence that occur before the element at which the test no longer passes.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use TakeWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the TakeWhileAwait functionality now exists as overloads of TakeWhile. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TSource> TakeWhileAwaitCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
         {
             if (source == null)
@@ -180,6 +193,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use TakeWhile. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the TakeWhileAwaitWithCancellation functionality now exists as overloads of TakeWhile.")]
         private static IAsyncEnumerable<TSource> TakeWhileAwaitWithCancellationCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate)
         {
             if (source == null)

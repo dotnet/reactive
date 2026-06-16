@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="int" /> values.
         /// </summary>
@@ -50,7 +55,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<int> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -87,16 +94,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
-        /// Returns the maximum <see cref="int"/> value in an async-enumerable sequence.
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="int"/> value.
         /// </summary>
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<int> MaxAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -135,6 +145,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitWithCancellationAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<int> MaxAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -172,6 +183,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Int}" /> values.
         /// </summary>
@@ -251,7 +264,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<int?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -327,16 +342,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
-        /// Returns the maximum <see cref="Nullable{Int}"/> value in an async-enumerable sequence.
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Int}"/> value.
         /// </summary>
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<int?> MaxAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -414,6 +432,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitWithCancellationAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<int?> MaxAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -490,6 +509,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="long" /> values.
         /// </summary>
@@ -530,7 +551,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<long> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -567,16 +590,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="long"/> value.
         /// </summary>
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<long> MaxAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -615,6 +641,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitWithCancellationAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<long> MaxAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -652,6 +679,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Long}" /> values.
         /// </summary>
@@ -731,7 +760,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<long?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -807,16 +838,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Long}"/> value.
         /// </summary>
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<long?> MaxAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -894,6 +928,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitWithCancellationAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<long?> MaxAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -970,6 +1005,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="float" /> values.
         /// </summary>
@@ -1025,7 +1062,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<float> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1077,16 +1116,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="float"/> value.
         /// </summary>
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<float> MaxAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1140,6 +1182,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitWithCancellationAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<float> MaxAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1192,6 +1235,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Float}" /> values.
         /// </summary>
@@ -1267,7 +1312,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<float?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1339,16 +1386,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Float}"/> value.
         /// </summary>
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<float?> MaxAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1422,6 +1472,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitWithCancellationAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<float?> MaxAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1494,6 +1545,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="double" /> values.
         /// </summary>
@@ -1549,7 +1602,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<double> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1601,16 +1656,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="double"/> value.
         /// </summary>
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<double> MaxAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1664,6 +1722,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitWithCancellationAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<double> MaxAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1716,6 +1775,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Double}" /> values.
         /// </summary>
@@ -1791,7 +1852,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<double?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1863,16 +1926,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Double}"/> value.
         /// </summary>
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<double?> MaxAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -1946,6 +2012,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitWithCancellationAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<double?> MaxAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2018,6 +2085,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="decimal" /> values.
         /// </summary>
@@ -2058,7 +2127,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<decimal> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2095,16 +2166,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="decimal"/> value.
         /// </summary>
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<decimal> MaxAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2143,6 +2217,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitWithCancellationAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<decimal> MaxAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2180,6 +2255,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the maximum value in an async-enumerable sequence of <see cref="Nullable{Decimal}" /> values.
         /// </summary>
@@ -2233,7 +2310,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<decimal?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2283,16 +2362,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
         /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Decimal}"/> value.
         /// </summary>
         /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
         /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
-        /// <param name="cancellationToken">The optional cancellation token to be usef for cancelling the sequence at any time.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<decimal?> MaxAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2344,6 +2426,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MaxByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MaxAwaitWithCancellationAsync now exists as an overload of MaxByAsync.")]
         private static ValueTask<decimal?> MaxAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2394,6 +2477,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="int" /> values.
         /// </summary>
@@ -2434,7 +2519,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<int> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2471,17 +2558,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="int"/> value.
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="int"/> value.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<int> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2520,6 +2609,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitWithCancellationAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<int> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2557,6 +2647,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Int}" /> values.
         /// </summary>
@@ -2612,7 +2704,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<int?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2664,17 +2758,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Int}"/> value.
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Int}"/> value.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<int?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2728,6 +2824,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitWithCancellationAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<int?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2780,6 +2877,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="long" /> values.
         /// </summary>
@@ -2820,7 +2919,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<long> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2857,17 +2958,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="long"/> value.
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="long"/> value.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<long> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2906,6 +3009,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitWithCancellationAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<long> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -2943,6 +3047,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Long}" /> values.
         /// </summary>
@@ -2998,7 +3104,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<long?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3050,17 +3158,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Long}"/> value.
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Long}"/> value.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<long?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3114,6 +3224,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitWithCancellationAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<long?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3166,6 +3277,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="float" /> values.
         /// </summary>
@@ -3222,7 +3335,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<float> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3275,17 +3390,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="float"/> value.
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="float"/> value.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<float> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3340,6 +3457,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitWithCancellationAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<float> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3393,6 +3511,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Float}" /> values.
         /// </summary>
@@ -3464,7 +3584,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<float?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3532,17 +3654,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Float}"/> value.
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Float}"/> value.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<float?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3612,6 +3736,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitWithCancellationAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<float?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3680,6 +3805,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="double" /> values.
         /// </summary>
@@ -3736,7 +3863,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<double> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3789,17 +3918,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="double"/> value.
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="double"/> value.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<double> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3854,6 +3985,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitWithCancellationAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<double> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -3907,6 +4039,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Double}" /> values.
         /// </summary>
@@ -3978,7 +4112,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<double?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4046,17 +4182,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Double}"/> value.
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Double}"/> value.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<double?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4126,6 +4264,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitWithCancellationAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<double?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4194,6 +4333,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="decimal" /> values.
         /// </summary>
@@ -4234,7 +4375,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<decimal> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4271,17 +4414,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="decimal"/> value.
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="decimal"/> value.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<decimal> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4319,7 +4464,8 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-[GenerateAsyncOverload]
+        [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitWithCancellationAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<decimal> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4357,6 +4503,8 @@ namespace System.Linq
         }
 
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the minimum value in an async-enumerable sequence of <see cref="Nullable{Decimal}" /> values.
         /// </summary>
@@ -4410,7 +4558,9 @@ namespace System.Linq
                 return value;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         public static ValueTask<decimal?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4460,17 +4610,19 @@ namespace System.Linq
             }
         }
 
+#endif
+
         /// <summary>
-        /// Invokes and awaits a transform function on each element of a sequence and returns the minimum <see cref="Nullable{Decimal}"/> value.
+        /// Invokes and awaits a transform function on each element of a sequence and returns the maximum <see cref="Nullable{Decimal}"/> value.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
-        /// <param name="selector">An asynchronous transform function to invoke and await on each element.</param>
+        /// <typeparam name="TSource">Type of elements in the source sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="selector">An asynchronous transform function to invoke and await on each element of the source.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>A ValueTask sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        /// <returns>A ValueTask containing the maximum value in the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<decimal?> MinAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4522,6 +4674,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use MinByAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality previously provided by MinAwaitWithCancellationAsync now exists as an overload of MinByAsync.")]
         private static ValueTask<decimal?> MinAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -4572,5 +4725,6 @@ namespace System.Linq
         }
 
 #endif
+
     }
 }

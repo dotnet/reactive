@@ -11,6 +11,7 @@ using ReactiveTests.Dummies;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Assert = Xunit.Assert;
+using System.Threading.Tasks;
 
 namespace ReactiveTests.Tests
 {
@@ -114,6 +115,5 @@ namespace ReactiveTests.Tests
 
             Assert.Same(ex, res);
         }
-
     }
 }

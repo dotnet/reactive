@@ -317,6 +317,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        [DoNotParallelize] // This test seems to be especially subject to running too slowly when run in parallel with others.
         public void AppendPrepend_SchedulerRecursive()
         {
             using var scheduler = new EventLoopScheduler();
@@ -337,6 +338,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        [DoNotParallelize] // We've observed hangs since enabling concurrent test execution.
         public void AppendPrepend_SchedulerLongRunning()
         {
             var scheduler = NewThreadScheduler.Default;

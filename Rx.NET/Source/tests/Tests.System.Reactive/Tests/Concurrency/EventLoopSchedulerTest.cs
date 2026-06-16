@@ -20,6 +20,7 @@ using Assert = Xunit.Assert;
 namespace ReactiveTests.Tests
 {
     [TestClass]
+    [DoNotParallelize] // We've observed hangs since enabling concurrent test execution.
     public class EventLoopSchedulerTest
     {
         private static readonly TimeSpan MaxWaitTime = TimeSpan.FromSeconds(10);
@@ -321,7 +322,7 @@ namespace ReactiveTests.Tests
                         d.Add(e.Schedule(() => cd.Signal()));
                     }
 
-                    if (!cd.Wait(10000))
+                    if (!cd.Wait(10000, TestContext.CancellationToken))
                     {
                         Assert.True(false, "j = " + j);
                     }
@@ -348,7 +349,7 @@ namespace ReactiveTests.Tests
                         d.Add(e.Schedule(TimeSpan.FromMilliseconds(100), () => cd.Signal()));
                     }
 
-                    if (!cd.Wait(10000))
+                    if (!cd.Wait(10000, TestContext.CancellationToken))
                     {
                         Assert.True(false, "j = " + j);
                     }
@@ -375,7 +376,7 @@ namespace ReactiveTests.Tests
                         d.Add(e.Schedule(TimeSpan.FromMilliseconds(k), () => cd.Signal()));
                     }
 
-                    if (!cd.Wait(10000))
+                    if (!cd.Wait(10000, TestContext.CancellationToken))
                     {
                         Assert.True(false, "j = " + j);
                     }
@@ -406,6 +407,8 @@ namespace ReactiveTests.Tests
 
             d.Dispose();
         }
+
+        public TestContext TestContext { get; set; }
 
 #if STRESS
         [TestMethod]

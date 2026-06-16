@@ -383,6 +383,8 @@ We don't have to use a time, `TakeUntil` offers an overload that accept a second
 
 **Note**: these overloads require the second observable to produce a value in order to trigger the start or end. If that second observable completes without producing a single notification, then it has no effect—`TakeUntil` will continue to take items indefinitely; `SkipUntil` will never produce anything. In other words, these operators would treat `Observable.Empty<T>()` as being effectively equivalent to `Observable.Never<T>()`.
 
+There is also an overload of `TakeUntil` that accepts a `CancellationToken`. This forwards notifications from the source until either the source itself completes, or the token signals cancellation, at which point `TakeUntil` will complete.
+
 ### Distinct and DistinctUntilChanged
 
 `Distinct` is yet another standard LINQ operator. It removes duplicates from a sequence. To do this, it needs to remember all the values that its source has ever produced, so that it can filter out any items that it has seen before. Rx includes an implementation of `Distinct`, and this example uses it to display the unique identifier of vessels generating AIS messages, but ensuring that we only display each such identifier the first time we see it:

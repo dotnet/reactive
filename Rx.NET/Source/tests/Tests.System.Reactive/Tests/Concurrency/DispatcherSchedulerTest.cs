@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 #if HAS_WPF
+extern alias SystemReactiveWpf;
 
 #pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overload being tested.
 
@@ -16,6 +17,7 @@ using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Assert = Xunit.Assert;
+using DispatcherScheduler = SystemReactiveWpf::System.Reactive.Concurrency.DispatcherScheduler;
 
 namespace ReactiveTests.Tests
 {

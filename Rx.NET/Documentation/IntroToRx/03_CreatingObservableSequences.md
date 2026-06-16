@@ -381,6 +381,9 @@ As an example of where you might want to use `Never` for timing purposes, suppos
 IObservable<string> throws = Observable.Throw<string>(new Exception()); 
 ```
 
+Be aware that this if you use this operator in conjunction with any of the mechanisms described in the [Leaving Rx's World](13_LeavingIObservable.md) chapter, you might fall foul of the rules described in [Exception state](13_LeavingIObservable.md#exception-state). If you need to use `await` (or similar mechanisms that will turn a call to `OnError` into a rethrow) you may need to use the [`ResetExceptionDispatchState`](13_LeavingIObservable.md#resetexceptiondispatchstate) operator to ensure that each rethrowing of the exception gets suitably reset exception state. (This problem only arises if you cause the same exception to be rethrown multiple times.)
+
+
 ### Observable.Create
 
 The `Create` factory method is more powerful than the other creation methods because it can be used to create any kind of sequence. You could implement any of the preceding four methods with `Observable.Create`.
@@ -458,7 +461,7 @@ IObservable<string> ReadFileLines(string path) =>
     {
         using (StreamReader reader = File.OpenText(path))
         {
-            while (cancellationToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 string? line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false);
                 if (line is null)
@@ -516,7 +519,7 @@ public static IObservable<T> Never<T>()
     });
 }
 
-public static IObservable<T> Throws<T>(Exception exception)
+public static IObservable<T> Throw<T>(Exception exception)
 {
     return Observable.Create<T>(o =>
     {
@@ -1001,7 +1004,7 @@ public static IObservable<T> ToObservableOversimplified<T>(this IEnumerable<T> s
             o.OnNext(item);
         }
 
-        o.OnComplete();
+        o.OnCompleted();
 
         // Incorrectly ignoring unsubscription.
         return Disposable.Empty;
@@ -1069,7 +1072,7 @@ As you can see the `ISubject` interfaces don't define any members of their own. 
 
 But what is this for? You can think of `IObserver<T>` and the `IObservable<T>` as the 'consumer' and 'publisher' interfaces respectively. A subject, then is both a consumer and a publisher. Data flows both into and out of a subject.
 
-Rx offers a few subject implementations that can occasionally be useful in code that wants to make an `IObservable<T>` available. Although `Observable.Create` is usually the preferred way to do this, there's one important case where a subject might make more sense: if you have some code that discovers events of interest (e.g., by using the client API for some messaging technology) and wants to make them available through an `IObservable<T>`, subjects can sometimes provide a more convenient way to to this than with `Observable.Create` or a custom implementation.
+Rx offers a few subject implementations that can occasionally be useful in code that wants to make an `IObservable<T>` available. Although `Observable.Create` is usually the preferred way to do this, there's one important case where a subject might make more sense: if you have some code that discovers events of interest (e.g., by using the client API for some messaging technology) and wants to make them available through an `IObservable<T>`, subjects can sometimes provide a more convenient way to do this than with `Observable.Create` or a custom implementation.
 
 Rx offers a few subject types. We'll start with the most straightforward one to understand.
 
@@ -1200,6 +1203,9 @@ Sub2: 4
 ```
 
 Alternatively, you can specify a time-based limit by passing a `TimeSpan` to the `ReplaySubject<T>` constructor.
+
+Note that if the source reports an error (by calling `OnError`), `ReplaySubject<T>` will retain the `Exception`, and provide it to all current subscribers, and also any subsequent subscribers. This should not be a surprise—this subject's job is to replay what the source did—but be aware that this can cause a problem if you use any of the mechanisms described in the [Leaving Rx's World](13_LeavingIObservable.md) chapter. For example if you `await` an observable that uses a `ReplaySubject<T>` and if the underlying source reported an error, you will no longer be conforming to the rules described in [Exception state](13_LeavingIObservable.md#exception-state). If you need to use `await` (or similar mechanisms that will turn a call to `OnError` into a rethrow) you may need to use the [`ResetExceptionDispatchState`](13_LeavingIObservable.md#resetexceptiondispatchstate) operator to ensure that each rethrowing of the exception gets suitably reset exception state.
+
 
 ## `BehaviorSubject<T>`
 

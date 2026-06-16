@@ -34,10 +34,11 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 7.0.x SDK
+      displayName: Use .NET 9.0.x SDK
       inputs:
-        version: 7.0.x
+        version: 9.0.x
         performMultiLevelLookup: true
+        includePreviewVersions: true
 
     - task: DotNetCoreCLI@2
       inputs:

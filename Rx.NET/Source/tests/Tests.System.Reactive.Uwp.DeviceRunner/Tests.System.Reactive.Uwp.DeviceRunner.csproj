@@ -11,7 +11,7 @@
     <AssemblyName>Tests.System.Reactive.Uwp.DeviceRunner</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
+    <TargetPlatformVersion>10.0.26100.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>17</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -90,7 +90,7 @@
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <PropertyGroup>
-    <NoWarn>$(NoWarn);IDE0003;IDE0016;IDE0017;IDE0018;IDE0019;IDE0020;IDE0031;IDE0032;IDE0034;IDE0037;IDE0038;IDE0039;IDE0040;IDE0044;IDE0051;IDE0052;IDE0056;IDE0057;IDE0059;IDE0060;IDE0062;IDE0063;IDE0071;IDE0074;IDE0075;IDE0076;IDE0077;IDE0079;IDE0083;IDE0090;IDE0180;IDE1006;IDE1056</NoWarn>
+    <NoWarn>$(NoWarn);IDE0003;IDE0016;IDE0017;IDE0018;IDE0019;IDE0020;IDE0031;IDE0032;IDE0034;IDE0037;IDE0038;IDE0039;IDE0040;IDE0044;IDE0051;IDE0052;IDE0056;IDE0057;IDE0059;IDE0060;IDE0062;IDE0063;IDE0071;IDE0074;IDE0075;IDE0076;IDE0077;IDE0079;IDE0083;IDE0090;IDE0180;IDE1006;IDE1056;MSTEST0049</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
@@ -140,12 +140,22 @@
     Windows API version they select, and I don't want to upgrade those to a newer version.)
     -->
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.14" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.6.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.6.1" />
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="xunit.assert" Version="2.8.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="xunit.v3.assert" Version="3.2.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <!--
+    Nerdbank.GitVersioning 3.6.128 injects a reference to a .proj file that doesn't work inside the
+    UWP test runner project. We don't ship that as a NuGet package, so it doesn't matter what its
+    version number is.
+    However, this doesn't seem to work. And excluding this project in the Directory.Build.props file
+    where we add this reference in the first place also doesn't work. I think this is coming in
+    transitively. So we need to work out exactly how .nuget\packages\nerdbank.gitversioning\3.6.143\build\PrivateP2PCaching.proj
+    is getting included, and work out how to stop that.
+    -->
+    <PackageReference Remove="Nerdbank.GitVersioning" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

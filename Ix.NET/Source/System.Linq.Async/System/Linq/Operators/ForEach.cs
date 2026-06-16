@@ -10,7 +10,11 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
         // REVIEW: Once we have C# 8.0 language support, we may want to do away with these methods. An open question is how to
         //         provide support for cancellation, which could be offered through WithCancellation on the source. If we still
@@ -27,6 +31,7 @@ namespace System.Linq
         /// <returns>Task that signals the termination of the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
+        [Obsolete("Use the language support for async foreach instead.")]
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> action, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -55,6 +60,7 @@ namespace System.Linq
         /// <returns>Task that signals the termination of the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
+        [Obsolete("Use the language support for async foreach instead.")]
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -85,6 +91,7 @@ namespace System.Linq
         /// <returns>Task that signals the termination of the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use the language support for async foreach instead.")]
         private static Task ForEachAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> action, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -105,6 +112,7 @@ namespace System.Linq
 
         #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use the language support for async foreach instead.")]
         internal static Task ForEachAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> action, CancellationToken cancellationToken)
         {
             if (source == null)
@@ -134,6 +142,7 @@ namespace System.Linq
         /// <returns>Task that signals the termination of the sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use the language support for async foreach instead.")]
         private static Task ForEachAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task> action, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -156,6 +165,7 @@ namespace System.Linq
 
         #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use the language support for async foreach instead.")]
         internal static Task ForEachAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, Task> action, CancellationToken cancellationToken)
         {
             if (source == null)

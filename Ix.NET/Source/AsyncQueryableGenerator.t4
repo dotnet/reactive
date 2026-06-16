@@ -283,6 +283,10 @@ foreach (var m in asyncEnumerableType.GetMethods()
                 cast = "(" + toQuoted(m.ReturnType, null, 0) + ")";
             }
         }
+        else
+        {
+            continue; // this skips ToObservable, which we can't represent in a query
+        }
     }
 
     var n = 0;

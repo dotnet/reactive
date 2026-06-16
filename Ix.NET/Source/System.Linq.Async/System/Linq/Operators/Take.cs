@@ -6,8 +6,12 @@ using System.Collections.Generic;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     public static partial class AsyncEnumerable
     {
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.take?view=net-9.0-pp#system-linq-asyncenumerable-take-1(system-collections-generic-iasyncenumerable((-0))-system-int32)
+
         /// <summary>
         /// Returns a specified number of contiguous elements from the start of an async-enumerable sequence.
         /// </summary>
@@ -38,4 +42,5 @@ namespace System.Linq
             return new AsyncEnumerablePartition<TSource>(source, 0, count - 1);
         }
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

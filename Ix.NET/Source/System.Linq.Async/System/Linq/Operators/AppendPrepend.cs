@@ -10,8 +10,15 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.append?view=net-9.0-pp
+
         /// <summary>
         /// Append a value to an async-enumerable sequence.
         /// </summary>
@@ -33,6 +40,8 @@ namespace System.Linq
             return new AppendPrepend1AsyncIterator<TSource>(source, element, appending: true);
         }
 
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.prepend?view=net-9.0-pp
+
         /// <summary>
         /// Prepend a value to an async-enumerable sequence.
         /// </summary>
@@ -53,6 +62,7 @@ namespace System.Linq
 
             return new AppendPrepend1AsyncIterator<TSource>(source, element, appending: false);
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         private abstract class AppendPrependAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {

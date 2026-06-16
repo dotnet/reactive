@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
@@ -223,6 +223,27 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Never2Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Never3()
         {
             var scheduler = new TestScheduler();
@@ -233,6 +254,28 @@ namespace ReactiveTests.Tests
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, (_0, _1, _2) => 42)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Never3Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2)
             );
 
             res.Messages.AssertEqual(
@@ -256,6 +299,29 @@ namespace ReactiveTests.Tests
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, (_0, _1, _2, _3) => 42)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Never4Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3)
             );
 
             res.Messages.AssertEqual(
@@ -292,6 +358,30 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Never5Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Never6()
         {
             var scheduler = new TestScheduler();
@@ -305,6 +395,31 @@ namespace ReactiveTests.Tests
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => 42)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Never6Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5)
             );
 
             res.Messages.AssertEqual(
@@ -343,6 +458,32 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Never7Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Never8()
         {
             var scheduler = new TestScheduler();
@@ -358,6 +499,33 @@ namespace ReactiveTests.Tests
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => 42)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Never8Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7)
             );
 
             res.Messages.AssertEqual(
@@ -398,6 +566,34 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Never9Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Never10()
         {
             var scheduler = new TestScheduler();
@@ -415,6 +611,35 @@ namespace ReactiveTests.Tests
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => 42)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Never10Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)
             );
 
             res.Messages.AssertEqual(
@@ -457,6 +682,36 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Never11Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Never12()
         {
             var scheduler = new TestScheduler();
@@ -476,6 +731,37 @@ namespace ReactiveTests.Tests
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => 42)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Never12Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11)
             );
 
             res.Messages.AssertEqual(
@@ -520,6 +806,38 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Never13Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Never14()
         {
             var scheduler = new TestScheduler();
@@ -541,6 +859,39 @@ namespace ReactiveTests.Tests
 
             var res = scheduler.Start(
                 () => Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => 42)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Never14Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13)
             );
 
             res.Messages.AssertEqual(
@@ -587,6 +938,40 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Never15Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Never16()
         {
             var scheduler = new TestScheduler();
@@ -610,6 +995,41 @@ namespace ReactiveTests.Tests
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => 42)
+            );
+
+            res.Messages.AssertEqual(
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Never16Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+            var e15 = scheduler.CreateHotObservable([OnNext(150, 1)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15)
             );
 
             res.Messages.AssertEqual(
@@ -745,6 +1165,29 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Empty2Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int)>(220)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Empty3()
         {
             var scheduler = new TestScheduler();
@@ -759,6 +1202,30 @@ namespace ReactiveTests.Tests
 
             res.Messages.AssertEqual(
                 OnCompleted<int>(230)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Empty3Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int)>(230)
             );
 
             var i = 0;
@@ -784,6 +1251,31 @@ namespace ReactiveTests.Tests
 
             res.Messages.AssertEqual(
                 OnCompleted<int>(240)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Empty4Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int)>(240)
             );
 
             var i = 0;
@@ -820,6 +1312,32 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Empty5Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int, int)>(250)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3, e4 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Empty6()
         {
             var scheduler = new TestScheduler();
@@ -837,6 +1355,33 @@ namespace ReactiveTests.Tests
 
             res.Messages.AssertEqual(
                 OnCompleted<int>(260)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Empty6Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int, int, int)>(260)
             );
 
             var i = 0;
@@ -875,6 +1420,34 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Empty7Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int, int, int, int)>(270)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Empty8()
         {
             var scheduler = new TestScheduler();
@@ -894,6 +1467,35 @@ namespace ReactiveTests.Tests
 
             res.Messages.AssertEqual(
                 OnCompleted<int>(280)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Empty8Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int, int, int, int, int)>(280)
             );
 
             var i = 0;
@@ -934,6 +1536,36 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Empty9Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int, int, int, int, int, int)>(290)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Empty10()
         {
             var scheduler = new TestScheduler();
@@ -955,6 +1587,37 @@ namespace ReactiveTests.Tests
 
             res.Messages.AssertEqual(
                 OnCompleted<int>(300)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Empty10Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int, int, int, int, int, int, int)>(300)
             );
 
             var i = 0;
@@ -997,6 +1660,38 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Empty11Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(310)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int, int, int, int, int, int, int, int)>(310)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Empty12()
         {
             var scheduler = new TestScheduler();
@@ -1020,6 +1715,39 @@ namespace ReactiveTests.Tests
 
             res.Messages.AssertEqual(
                 OnCompleted<int>(320)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Empty12Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(310)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(320)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int, int, int, int, int, int, int, int, int)>(320)
             );
 
             var i = 0;
@@ -1064,6 +1792,40 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Empty13Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(310)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(320)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(330)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int, int, int, int, int, int, int, int, int, int)>(330)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Empty14()
         {
             var scheduler = new TestScheduler();
@@ -1089,6 +1851,41 @@ namespace ReactiveTests.Tests
 
             res.Messages.AssertEqual(
                 OnCompleted<int>(340)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Empty14Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(310)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(320)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(330)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(340)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int, int, int, int, int, int, int, int, int, int, int)>(340)
             );
 
             var i = 0;
@@ -1135,6 +1932,42 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_Empty15Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(310)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(320)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(330)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(340)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(350)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int, int, int, int, int, int, int, int, int, int, int, int)>(350)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
         public void Zip_Empty16()
         {
             var scheduler = new TestScheduler();
@@ -1162,6 +1995,43 @@ namespace ReactiveTests.Tests
 
             res.Messages.AssertEqual(
                 OnCompleted<int>(360)
+            );
+
+            var i = 0;
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_Empty16Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(210)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(220)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(230)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(240)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(250)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(260)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(270)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(280)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(290)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(300)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(310)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(320)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(330)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(340)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(350)]);
+            var e15 = scheduler.CreateHotObservable([OnNext(150, 1), OnCompleted<int>(360)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<(int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int)>(360)
             );
 
             var i = 0;
@@ -1771,6 +2641,29 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_SymmetricReturn2Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, (1, 2)),
+                OnCompleted<(int First, int Second)>(400)
+            );
+
+            foreach (var e in new[] { e0, e1 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
         public void Zip_SymmetricReturn3()
         {
             var scheduler = new TestScheduler();
@@ -1786,6 +2679,30 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(230, 6),
                 OnCompleted<int>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_SymmetricReturn3Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(230, (1, 2, 3)),
+                OnCompleted<(int First, int Second, int Third)>(400)
             );
 
             foreach (var e in new[] { e0, e1, e2 })
@@ -1811,6 +2728,31 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(240, 10),
                 OnCompleted<int>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_SymmetricReturn4Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(240, (1, 2, 3, 4)),
+                OnCompleted<(int First, int Second, int Third, int Fourth)>(400)
             );
 
             foreach (var e in new[] { e0, e1, e2, e3 })
@@ -1846,6 +2788,32 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_SymmetricReturn5Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(250, (1, 2, 3, 4, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth)>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
         public void Zip_SymmetricReturn6()
         {
             var scheduler = new TestScheduler();
@@ -1864,6 +2832,33 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(260, 21),
                 OnCompleted<int>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_SymmetricReturn6Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(260, (1, 2, 3, 4, 5, 6)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth)>(400)
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5 })
@@ -1901,6 +2896,34 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_SymmetricReturn7Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(270, (1, 2, 3, 4, 5, 6, 7)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh)>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
         public void Zip_SymmetricReturn8()
         {
             var scheduler = new TestScheduler();
@@ -1921,6 +2944,35 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(280, 36),
                 OnCompleted<int>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_SymmetricReturn8Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(280, (1, 2, 3, 4, 5, 6, 7, 8)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth)>(400)
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7 })
@@ -1960,6 +3012,36 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_SymmetricReturn9Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(290, (1, 2, 3, 4, 5, 6, 7, 8, 9)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth)>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
         public void Zip_SymmetricReturn10()
         {
             var scheduler = new TestScheduler();
@@ -1982,6 +3064,37 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(300, 55),
                 OnCompleted<int>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_SymmetricReturn10Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(300, (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth)>(400)
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9 })
@@ -2023,6 +3136,38 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_SymmetricReturn11Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(310, (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth, int Eleventh)>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
         public void Zip_SymmetricReturn12()
         {
             var scheduler = new TestScheduler();
@@ -2047,6 +3192,39 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(320, 78),
                 OnCompleted<int>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_SymmetricReturn12Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(320, (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth, int Eleventh, int Twelfth)>(400)
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11 })
@@ -2090,6 +3268,40 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_SymmetricReturn13Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(330, (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth, int Eleventh, int Twelfth, int Thirteenth)>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
         public void Zip_SymmetricReturn14()
         {
             var scheduler = new TestScheduler();
@@ -2116,6 +3328,41 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(340, 105),
                 OnCompleted<int>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_SymmetricReturn14Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(340, (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth, int Eleventh, int Twelfth, int Thirteenth, int Fourteenth)>(400)
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13 })
@@ -2161,6 +3408,42 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_SymmetricReturn15Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(350, (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth, int Eleventh, int Twelfth, int Thirteenth, int Fourteenth, int Fifteenth)>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
         public void Zip_SymmetricReturn16()
         {
             var scheduler = new TestScheduler();
@@ -2189,6 +3472,43 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(360, 136),
                 OnCompleted<int>(400)
+            );
+
+            foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
+        }
+
+        [TestMethod]
+        public void Zip_SymmetricReturn16Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400)]);
+            var e15 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(360, 16), OnCompleted<int>(400)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(360, (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth, int Eleventh, int Twelfth, int Thirteenth, int Fourteenth, int Fifteenth, int Sixteenth)>(400)
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
@@ -2892,6 +4212,36 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_AllCompleted2Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5)),
+                OnCompleted<(int First, int Second)>(220)
+            );
+
+            var es = new[] { e0, e1 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
         public void Zip_AllCompleted3()
         {
             var scheduler = new TestScheduler();
@@ -2907,6 +4257,37 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(210, 15),
                 OnCompleted<int>(230)
+            );
+
+            var es = new[] { e0, e1, e2 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
+        public void Zip_AllCompleted3Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third)>(230)
             );
 
             var es = new[] { e0, e1, e2 };
@@ -2939,6 +4320,38 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(210, 20),
                 OnCompleted<int>(240)
+            );
+
+            var es = new[] { e0, e1, e2, e3 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
+        public void Zip_AllCompleted4Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth)>(240)
             );
 
             var es = new[] { e0, e1, e2, e3 };
@@ -2988,6 +4401,39 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_AllCompleted5Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth)>(250)
+            );
+
+            var es = new[] { e0, e1, e2, e3, e4 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
         public void Zip_AllCompleted6()
         {
             var scheduler = new TestScheduler();
@@ -3006,6 +4452,40 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(210, 30),
                 OnCompleted<int>(260)
+            );
+
+            var es = new[] { e0, e1, e2, e3, e4, e5 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
+        public void Zip_AllCompleted6Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth)>(260)
             );
 
             var es = new[] { e0, e1, e2, e3, e4, e5 };
@@ -3057,6 +4537,41 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_AllCompleted7Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh)>(270)
+            );
+
+            var es = new[] { e0, e1, e2, e3, e4, e5, e6 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
         public void Zip_AllCompleted8()
         {
             var scheduler = new TestScheduler();
@@ -3077,6 +4592,42 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(210, 40),
                 OnCompleted<int>(280)
+            );
+
+            var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
+        public void Zip_AllCompleted8Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5, 5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth)>(280)
             );
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7 };
@@ -3130,6 +4681,43 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_AllCompleted9Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5, 5, 5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth)>(290)
+            );
+
+            var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
         public void Zip_AllCompleted10()
         {
             var scheduler = new TestScheduler();
@@ -3152,6 +4740,44 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(210, 50),
                 OnCompleted<int>(300)
+            );
+
+            var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
+        public void Zip_AllCompleted10Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5, 5, 5, 5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth)>(300)
             );
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9 };
@@ -3207,6 +4833,45 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_AllCompleted11Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth, int Eleventh)>(310)
+            );
+
+            var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
         public void Zip_AllCompleted12()
         {
             var scheduler = new TestScheduler();
@@ -3231,6 +4896,46 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(210, 60),
                 OnCompleted<int>(320)
+            );
+
+            var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
+        public void Zip_AllCompleted12Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth, int Eleventh, int Twelfth)>(320)
             );
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11 };
@@ -3288,6 +4993,47 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_AllCompleted13Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnCompleted<int>(340)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth, int Eleventh, int Twelfth, int Thirteenth)>(330)
+            );
+
+            var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
         public void Zip_AllCompleted14()
         {
             var scheduler = new TestScheduler();
@@ -3314,6 +5060,48 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(210, 70),
                 OnCompleted<int>(340)
+            );
+
+            var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
+        public void Zip_AllCompleted14Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnCompleted<int>(340)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnCompleted<int>(350)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth, int Eleventh, int Twelfth, int Thirteenth, int Fourteenth)>(340)
             );
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13 };
@@ -3373,6 +5161,49 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void Zip_AllCompleted15Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnCompleted<int>(340)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnCompleted<int>(350)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnNext(350, 19), OnCompleted<int>(360)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth, int Eleventh, int Twelfth, int Thirteenth, int Fourteenth, int Fifteenth)>(350)
+            );
+
+            var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
         public void Zip_AllCompleted16()
         {
             var scheduler = new TestScheduler();
@@ -3401,6 +5232,50 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(210, 80),
                 OnCompleted<int>(360)
+            );
+
+            var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 };
+
+            var i = 0;
+            foreach (var e in es.Take(es.Length - 1))
+            {
+                e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
+
+            es.Last().Subscriptions.AssertEqual(
+                Subscribe(200, 220 + (i - 1) * 10)
+            );
+        }
+
+        [TestMethod]
+        public void Zip_AllCompleted16Tuple()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220)]);
+            var e1 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230)]);
+            var e2 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240)]);
+            var e3 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnCompleted<int>(250)]);
+            var e4 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnCompleted<int>(260)]);
+            var e5 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnCompleted<int>(270)]);
+            var e6 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnCompleted<int>(280)]);
+            var e7 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnCompleted<int>(290)]);
+            var e8 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnCompleted<int>(300)]);
+            var e9 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnCompleted<int>(310)]);
+            var e10 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnCompleted<int>(320)]);
+            var e11 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnCompleted<int>(330)]);
+            var e12 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnCompleted<int>(340)]);
+            var e13 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnCompleted<int>(350)]);
+            var e14 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnNext(350, 19), OnCompleted<int>(360)]);
+            var e15 = scheduler.CreateHotObservable([OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnNext(240, 8), OnNext(250, 9), OnNext(260, 10), OnNext(270, 11), OnNext(280, 12), OnNext(290, 13), OnNext(300, 14), OnNext(310, 15), OnNext(320, 16), OnNext(330, 17), OnNext(340, 18), OnNext(350, 19), OnNext(360, 20), OnCompleted<int>(370)]);
+
+            var res = scheduler.Start(() =>
+                ObservableEx.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(210, (5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5)),
+                OnCompleted<(int First, int Second, int Third, int Fourth, int Fifth, int Sixth, int Seventh, int Eighth, int Ninth, int Tenth, int Eleventh, int Twelfth, int Thirteenth, int Fourteenth, int Fifteenth, int Sixteenth)>(360)
             );
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 };

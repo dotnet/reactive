@@ -67,8 +67,9 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.Reverse();
+            int[] expected = [3, 2, 1];
 
-            Assert.Equal([3, 2, 1], await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToArrayAsync());
         }
 
         [Fact]
@@ -103,8 +104,9 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.Reverse().Prepend(4); // to trigger onlyIfCheap
+            int[] expected = [4, 3, 2, 1];
 
-            Assert.Equal([4, 3, 2, 1], await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToArrayAsync());
         }
     }
 }

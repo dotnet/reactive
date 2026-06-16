@@ -37,7 +37,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 if (_conversion == null)
                 {
                     Action<object, TEventArgs> h = (sender, eventArgs) => onNext(new EventPattern<TEventArgs>(sender, eventArgs));
-                    handler = ReflectionUtils.CreateDelegate<TDelegate>(h, typeof(Action<object, TEventArgs>).GetMethod(nameof(Action<object, TEventArgs>.Invoke))!);
+                    handler = ReflectionUtils.CreateDelegate<TDelegate>(h, typeof(Action<object, TEventArgs>).GetMethod(nameof(Action<,>.Invoke))!);
                 }
                 else
                 {
@@ -58,7 +58,7 @@ namespace System.Reactive.Linq.ObservableImpl
             protected override TDelegate GetHandler(Action<EventPattern<TSender, TEventArgs>> onNext)
             {
                 Action<TSender, TEventArgs> h = (sender, eventArgs) => onNext(new EventPattern<TSender, TEventArgs>(sender, eventArgs));
-                return ReflectionUtils.CreateDelegate<TDelegate>(h, typeof(Action<TSender, TEventArgs>).GetMethod(nameof(Action<TSender, TEventArgs>.Invoke))!);
+                return ReflectionUtils.CreateDelegate<TDelegate>(h, typeof(Action<TSender, TEventArgs>).GetMethod(nameof(Action<,>.Invoke))!);
             }
         }
 
@@ -85,7 +85,7 @@ namespace System.Reactive.Linq.ObservableImpl
             protected override Delegate GetHandler(Action<TResult> onNext)
             {
                 Action<TSender, TEventArgs> h = (sender, eventArgs) => onNext(_getResult(sender, eventArgs));
-                return ReflectionUtils.CreateDelegate(_delegateType, h, typeof(Action<TSender, TEventArgs>).GetMethod(nameof(Action<TSender, TEventArgs>.Invoke))!);
+                return ReflectionUtils.CreateDelegate(_delegateType, h, typeof(Action<TSender, TEventArgs>).GetMethod(nameof(Action<,>.Invoke))!);
             }
 
             protected override IDisposable AddHandler(Delegate handler)

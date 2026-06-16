@@ -50,7 +50,7 @@ namespace ReactiveTests.Tests
 
             Task.Run(async () =>
             {
-                await Task.Delay(250);
+                await Task.Delay(250, TestContext.CancellationToken);
                 evt.Set();
             });
 
@@ -165,7 +165,7 @@ namespace ReactiveTests.Tests
 
             Task.Run(async () =>
             {
-                await Task.Delay(250);
+                await Task.Delay(250, TestContext.CancellationToken);
                 evt.Set();
             });
 
@@ -177,5 +177,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => res.MoveNext());
         }
 
+        public TestContext TestContext { get; set; }
     }
 }

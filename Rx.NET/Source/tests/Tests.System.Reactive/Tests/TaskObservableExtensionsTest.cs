@@ -1173,9 +1173,9 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public async Task ToTask_Scheduler_Dispose_Can_Propagate()
         {
-            static async Task asyncMethod()
+            async Task asyncMethod()
             {
-                await Task.Delay(500);
+                await Task.Delay(500, TestContext.CancellationToken);
                 Console.WriteLine("Done");
             }
 
@@ -1199,6 +1199,8 @@ namespace ReactiveTests.Tests
 
             Assert.Equal(1, Volatile.Read(ref count));
         }
+
+        public TestContext TestContext { get; set; }
 
         #endregion
     }

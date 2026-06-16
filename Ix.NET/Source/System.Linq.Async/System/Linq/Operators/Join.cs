@@ -8,8 +8,16 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.join?view=net-9.0-pp#system-linq-asyncenumerable-join-4(system-collections-generic-iasyncenumerable((-0))-system-collections-generic-iasyncenumerable((-1))-system-func((-0-2))-system-func((-1-2))-system-func((-0-1-3))-system-collections-generic-iequalitycomparer((-2)))
+        // The method above covers the next two overloads because it supplies a default null value for comparer.
+
         /// <summary>
         /// Correlates the elements of two sequences based on matching keys. The default equality comparer is used to compare keys.
         /// </summary>
@@ -91,12 +99,17 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.join?view=net-9.0-pp#system-linq-asyncenumerable-join-4(system-collections-generic-iasyncenumerable((-0))-system-collections-generic-iasyncenumerable((-1))-system-func((-0-system-threading-cancellationtoken-system-threading-tasks-valuetask((-2))))-system-func((-1-system-threading-cancellationtoken-system-threading-tasks-valuetask((-2))))-system-func((-0-1-system-threading-cancellationtoken-system-threading-tasks-valuetask((-3))))-system-collections-generic-iequalitycomparer((-2)))
 
         [GenerateAsyncOverload]
+        [Obsolete("Use Join. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the JoinAwait functionality now exists as an overload of Join. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TResult> JoinAwaitCore<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, ValueTask<TResult>> resultSelector) =>
             JoinAwaitCore<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer: null);
 
         [GenerateAsyncOverload]
+        [Obsolete("Use Join. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the JoinAwait functionality now exists as an overload of Join. You will need to modify your callback to take an additional CancellationToken argument.")]
         private static IAsyncEnumerable<TResult> JoinAwaitCore<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer)
         {
             if (outer == null)
@@ -149,10 +162,12 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use Join. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the JoinAwaitWithCancellation functionality now exists as an overload of Join.")]
         private static IAsyncEnumerable<TResult> JoinAwaitWithCancellationCore<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector, Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, CancellationToken, ValueTask<TResult>> resultSelector) =>
             JoinAwaitWithCancellationCore<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer: null);
 
         [GenerateAsyncOverload]
+        [Obsolete("Use Join. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the JoinAwaitWithCancellation functionality now exists as an overload of Join.")]
         private static IAsyncEnumerable<TResult> JoinAwaitWithCancellationCore<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector, Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, CancellationToken, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer)
         {
             if (outer == null)

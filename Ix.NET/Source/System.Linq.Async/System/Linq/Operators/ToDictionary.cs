@@ -8,8 +8,16 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.todictionaryasync?view=net-9.0-pp#system-linq-asyncenumerable-todictionaryasync-2(system-collections-generic-iasyncenumerable((-0))-system-func((-0-1))-system-collections-generic-iequalitycomparer((-1))-system-threading-cancellationtoken)
+        // That one overload covers the next two methods, because it supplies a default comparer.
+
         /// <summary>
         /// Creates a dictionary from an async-enumerable sequence according to a specified key selector function.
         /// </summary>
@@ -59,6 +67,7 @@ namespace System.Linq
                 return d;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Creates a dictionary from an async-enumerable sequence by invoking a key-selector function on each element and awaiting the result.
@@ -72,6 +81,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToDictionaryAwaitAsync functionality now exists as overloads of ToDictionaryAsync.")]
         private static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) where TKey : notnull =>
             ToDictionaryAwaitAsyncCore<TSource, TKey>(source, keySelector, comparer: null, cancellationToken);
 
@@ -88,6 +98,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToDictionaryAwaitAsync functionality now exists as overloads of ToDictionaryAsync.")]
         private static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default) where TKey : notnull
         {
             if (source == null)
@@ -114,10 +125,12 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToDictionaryAwaitWithCancellationAsync functionality now exists as overloads of ToDictionaryAsync.")]
         private static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) where TKey : notnull =>
             ToDictionaryAwaitWithCancellationAsyncCore(source, keySelector, comparer: null, cancellationToken);
 
         [GenerateAsyncOverload]
+        [Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToDictionaryAwaitWithCancellationAsync functionality now exists as overloads of ToDictionaryAsync.")]
         private static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default) where TKey : notnull
         {
             if (source == null)
@@ -142,6 +155,12 @@ namespace System.Linq
             }
         }
 #endif
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.todictionaryasync?view=net-9.0-pp#system-linq-asyncenumerable-todictionaryasync-2(system-collections-generic-iasyncenumerable((-0))-system-func((-0-1))-system-collections-generic-iequalitycomparer((-1))-system-threading-cancellationtoken)
+        // The method above provides the functionality for each of the next two methods, although because it does so with a
+        // single method that provides a default null value for the comparer, it it's not a strict source-compatible
+        // replacement. But there's not much we can do about that.
 
         /// <summary>
         /// Creates a dictionary from an async-enumerable sequence according to a specified key selector function, and an element selector function.
@@ -199,6 +218,7 @@ namespace System.Linq
                 return d;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Creates a dictionary from an async-enumerable sequence using the specified asynchronous key and element selector functions.
@@ -214,6 +234,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToDictionaryAwaitAsync functionality now exists as overloads of ToDictionaryAsync.")]
         private static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) where TKey : notnull =>
             ToDictionaryAwaitAsyncCore<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null, cancellationToken);
 
@@ -232,6 +253,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> or <paramref name="comparer"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         [GenerateAsyncOverload]
+        [Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToDictionaryAwaitAsync functionality now exists as overloads of ToDictionaryAsync.")]
         private static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default) where TKey : notnull
         {
             if (source == null)
@@ -261,10 +283,12 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToDictionaryAwaitWithCancellationAsync functionality now exists as overloads of ToDictionaryAsync.")]
         private static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) where TKey : notnull =>
             ToDictionaryAwaitWithCancellationAsyncCore(source, keySelector, elementSelector, comparer: null, cancellationToken);
 
         [GenerateAsyncOverload]
+        [Obsolete("Use ToDictionaryAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the ToDictionaryAwaitWithCancellationAsync functionality now exists as overloads of ToDictionaryAsync.")]
         private static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default) where TKey : notnull
         {
             if (source == null)

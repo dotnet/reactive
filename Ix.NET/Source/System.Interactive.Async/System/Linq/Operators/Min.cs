@@ -10,6 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
+#if !REFERENCE_ASSEMBLY
         /// <summary>
         /// Returns the minimum element in an async-enumerable sequence according to the specified comparer.
         /// </summary>
@@ -51,5 +52,6 @@ namespace System.Linq
                 return min;
             }
         }
+#endif
     }
 }

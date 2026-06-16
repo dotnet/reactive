@@ -6,8 +6,14 @@ using System.Collections.Generic;
 
 namespace System.Linq
 {
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
     public static partial class AsyncEnumerable
     {
+        // Moved to AsyncEnumerableEx in System.Interactive.Async.
+        // System.Linq.AsyncEnumerable has chosen not to implement this. We continue to implement this because
+        // we believe it is a useful feature, but since it's now in the category of LINQ-adjacent functionality
+        // not built into the .NET runtime libraries, it now lives in System.Interactive.Async.
+
         /// <summary>
         /// Converts an async-enumerable sequence to an observable sequence.
         /// </summary>
@@ -80,4 +86,5 @@ namespace System.Linq
             }
         }
     }
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
 }

@@ -51,9 +51,7 @@ namespace System.Reactive.Linq
             return ((IQbservableProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
-                    ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
-#pragma warning restore IL2060
+                    new Func<IQueryable<TSource>, IQbservable<TSource>>(ToQbservable).Method,
                     source.Expression
                 )
             );
@@ -83,9 +81,7 @@ namespace System.Reactive.Linq
             return ((IQbservableProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
                     null,
-#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
-                    ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource)),
-#pragma warning restore IL2060
+                    new Func<IQueryable<TSource>, IScheduler, IQbservable <TSource>>(ToQbservable).Method,
                     source.Expression,
                     Expression.Constant(scheduler)
                 )

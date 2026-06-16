@@ -8,8 +8,16 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.intersect?view=net-9.0-pp
+        // The method above covers the next two overloads because it supplies a default null value for comparer.
+
         /// <summary>
         /// Produces the set intersection of two async-enumerable sequences by using the default equality comparer to compare values.
         /// </summary>
@@ -57,5 +65,6 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

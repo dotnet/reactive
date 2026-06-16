@@ -11,6 +11,13 @@ namespace System.Threading.Tasks
     internal static class TaskExt
     {
         public static readonly Task<bool> Never = new TaskCompletionSource<bool>().Task;
+        public static readonly TaskCompletionSource<bool> True;
+
+        static TaskExt()
+        {
+            True = new TaskCompletionSource<bool>();
+            True.SetResult(true);
+        }
 
 #if USE_FAIR_AND_CHEAPER_MERGE
         public static WhenAnyValueTask<T> WhenAny<T>(ValueTask<T>[] tasks)

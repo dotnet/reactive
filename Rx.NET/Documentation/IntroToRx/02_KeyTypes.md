@@ -87,7 +87,7 @@ And some examples of some sources that might make good cold observables:
 * events generated based on an algorithm, such as [`Observable.Generate`](03_CreatingObservableSequences.md#observablegenerate) produces
 * a factory for an asynchronous operation, such as [`FromAsync`](03_CreatingObservableSequences.md#from-task) returns
 * events produced by running conventional code such as a loop; you can create such sources with [`Observable.Create`](03_CreatingObservableSequences.md#observablecreate)
-* a streaming event provides such as Azure Event Hub or Kafka (or any other streaming-style source which holds onto events from the past to be able to deliver events from a particular moment in the stream; so _not_ an event source in the Azure Event Grid style)
+* a streaming event provider such as Azure Event Hub or Kafka (or any other streaming-style source which holds onto events from the past to be able to deliver events from a particular moment in the stream; so _not_ an event source in the Azure Event Grid style)
 
 Not all sources are strictly completely _hot_ or _cold_.  For example, you could imagine a slight variation on a live `IObservable<Trade>` where the source always reports the most recent trade to new subscribers. Subscribers can count on immediately receiving something, and will then be kept up to date as new information arrives. The fact that new subscribers will always receive (potentially quite old) information is a _cold_-like characteristic, but it's only that first event that is _cold_. It's still likely that a brand new subscriber will have missed lots of information that would have been available to earlier subscribers, making this source more _hot_ than _cold_.
 

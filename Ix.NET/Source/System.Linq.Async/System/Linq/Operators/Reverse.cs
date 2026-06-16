@@ -9,8 +9,11 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     public static partial class AsyncEnumerable
     {
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.reverse?view=net-9.0-pp
+
         /// <summary>
         /// Inverts the order of the elements in a sequence.
         /// </summary>
@@ -116,4 +119,5 @@ namespace System.Linq
             }
         }
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     public static partial class AsyncEnumerable
     {
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.tohashsetasync?view=net-9.0-pp
+        // That one overload covers the next two methods, because it supplies a default comparer.
+
         /// <summary>
         /// Creates a hash set from an async-enumerable sequence.
         /// </summary>
@@ -52,4 +56,5 @@ namespace System.Linq
             }
         }
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

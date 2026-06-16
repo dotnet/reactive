@@ -114,6 +114,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Where(x => true);
             var ys = xs.Skip(2);
+            int[] expected = [3, 4];
 
             Assert.Equal(2, await ys.CountAsync());
 
@@ -123,8 +124,8 @@ namespace Tests
             Assert.Equal(3, await ys.ElementAtAsync(0));
             Assert.Equal(4, await ys.ElementAtAsync(1));
 
-            Assert.Equal([3, 4], await ys.ToArrayAsync());
-            Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
+            Assert.Equal(expected, await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToListAsync());
         }
 
         [Fact]
@@ -132,6 +133,7 @@ namespace Tests
         {
             var xs = new[] { -2, -1, 0, 1, 2, 3, 4 }.ToAsyncEnumerable().Where(x => true);
             var ys = xs.Skip(2).Skip(3);
+            int[] expected = [3, 4];
 
             Assert.Equal(2, await ys.CountAsync());
 
@@ -141,8 +143,8 @@ namespace Tests
             Assert.Equal(3, await ys.ElementAtAsync(0));
             Assert.Equal(4, await ys.ElementAtAsync(1));
 
-            Assert.Equal([3, 4], await ys.ToArrayAsync());
-            Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
+            Assert.Equal(expected, await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToListAsync());
         }
 
         [Fact]
@@ -150,6 +152,7 @@ namespace Tests
         {
             var xs = new[] { 2, 3, 4, 5 }.ToAsyncEnumerable().Where(x => true);
             var ys = xs.Skip(1).Take(2);
+            int[] expected = [3, 4];
 
             Assert.Equal(2, await ys.CountAsync());
 
@@ -159,8 +162,8 @@ namespace Tests
             Assert.Equal(3, await ys.ElementAtAsync(0));
             Assert.Equal(4, await ys.ElementAtAsync(1));
 
-            Assert.Equal([3, 4], await ys.ToArrayAsync());
-            Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
+            Assert.Equal(expected, await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToListAsync());
         }
 
         [Fact]
@@ -204,6 +207,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Skip(2);
+            int[] expected = [3, 4];
 
             Assert.Equal(2, await ys.CountAsync());
 
@@ -213,8 +217,8 @@ namespace Tests
             Assert.Equal(3, await ys.ElementAtAsync(0));
             Assert.Equal(4, await ys.ElementAtAsync(1));
 
-            Assert.Equal([3, 4], await ys.ToArrayAsync());
-            Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
+            Assert.Equal(expected, await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToListAsync());
         }
 
         [Fact]
@@ -222,6 +226,7 @@ namespace Tests
         {
             var xs = new[] { -2, -1, 0, 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Skip(2).Skip(3);
+            int[] expected = [3, 4];
 
             Assert.Equal(2, await ys.CountAsync());
 
@@ -231,8 +236,8 @@ namespace Tests
             Assert.Equal(3, await ys.ElementAtAsync(0));
             Assert.Equal(4, await ys.ElementAtAsync(1));
 
-            Assert.Equal([3, 4], await ys.ToArrayAsync());
-            Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
+            Assert.Equal(expected, await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToListAsync());
         }
 
         [Fact]
@@ -240,6 +245,7 @@ namespace Tests
         {
             var xs = new[] { 2, 3, 4, 5 }.ToAsyncEnumerable();
             var ys = xs.Skip(1).Take(2);
+            int[] expected = [3, 4];
 
             Assert.Equal(2, await ys.CountAsync());
 
@@ -249,8 +255,8 @@ namespace Tests
             Assert.Equal(3, await ys.ElementAtAsync(0));
             Assert.Equal(4, await ys.ElementAtAsync(1));
 
-            Assert.Equal([3, 4], await ys.ToArrayAsync());
-            Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
+            Assert.Equal(expected, await ys.ToArrayAsync());
+            Assert.Equal(expected, await ys.ToListAsync());
         }
 
         [Fact]

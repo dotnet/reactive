@@ -2,6 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#if HAS_WINFORMS
+extern alias SystemReactiveWindowsForms;
+#endif
+
+#if HAS_WPF
+extern alias SystemReactiveWpf;
+#endif
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +24,13 @@ using Microsoft.Reactive.Testing;
 
 #if HAS_WINFORMS
 using System.Windows.Forms;
+
+using ControlScheduler = SystemReactiveWindowsForms::System.Reactive.Concurrency.ControlScheduler;
+using ControlObservable = SystemReactiveWindowsForms::System.Reactive.Linq.ControlObservable;
+#endif
+
+#if HAS_WPF
+using DispatcherScheduler = SystemReactiveWpf::System.Reactive.Concurrency.DispatcherScheduler;
 #endif
 
 using System.Threading.Tasks;
@@ -58,7 +73,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.ScheduleAction(new object(), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(DateTimeOffset.MaxValue, default(Action)));
-#if DESKTOPCLR
+#if HAS_WPF
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.Schedule(default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.ScheduleAction(new object(), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.Schedule(TimeSpan.Zero, default(Action)));
@@ -374,7 +389,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#if DESKTOPCLR && NET472
+#if NET472
         [TestMethod]
         public void Scheduler_Periodic_HostLifecycleManagement()
         {
@@ -1375,11 +1390,11 @@ namespace ReactiveTests.Tests
 
                 o.OnNext(43);
 
-                await scheduler.Sleep(TimeSpan.FromTicks(10));
+                await scheduler.Sleep(TimeSpan.FromTicks(10), TestContext.CancellationToken);
 
                 o.OnNext(44);
 
-                await scheduler.Sleep(new DateTimeOffset(250, TimeSpan.Zero));
+                await scheduler.Sleep(new DateTimeOffset(250, TimeSpan.Zero), TestContext.CancellationToken);
 #pragma warning restore CA2016
 
                 o.OnNext(45);
@@ -1565,5 +1580,7 @@ namespace ReactiveTests.Tests
                 d(state);
             }
         }
+
+        public TestContext TestContext { get; set; }
     }
 }

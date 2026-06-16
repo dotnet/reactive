@@ -9,8 +9,12 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     public static partial class AsyncEnumerable
     {
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.takelast?view=net-9.0-pp
+
         /// <summary>
         /// Returns a specified number of contiguous elements from the end of an async-enumerable sequence.
         /// </summary>
@@ -78,4 +82,5 @@ namespace System.Linq
             }
         }
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

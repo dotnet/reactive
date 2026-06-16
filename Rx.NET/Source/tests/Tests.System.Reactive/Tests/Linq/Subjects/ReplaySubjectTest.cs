@@ -1979,7 +1979,7 @@ namespace ReactiveTests.Tests
                 });
             }
 
-            Task.WaitAll(ts);
+            Task.WaitAll(ts, TestContext.CancellationToken);
 
             Assert.True(xs.Count == ts.Length * N);
         }
@@ -2041,6 +2041,8 @@ namespace ReactiveTests.Tests
 
             return ns;
         }
+
+        public TestContext TestContext { get; set; }
 #endif
     }
 }

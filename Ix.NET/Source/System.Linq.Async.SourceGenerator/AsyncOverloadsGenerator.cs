@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT License.
+// See the LICENSE file in the project root for more information. 
+
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -12,7 +16,7 @@ namespace System.Linq.Async.SourceGenerator
     [Generator]
     public sealed class AsyncOverloadsGenerator : ISourceGenerator
     {
-        private const string AttributeSource =
+        private const string GenerateAsyncOverloadAttributeSource =
             "using System;\n" +
             "using System.Diagnostics;\n" +
             "namespace System.Linq\n" +
@@ -21,11 +25,24 @@ namespace System.Linq.Async.SourceGenerator
             "    [Conditional(\"COMPILE_TIME_ONLY\")]\n" +
             "    internal sealed class GenerateAsyncOverloadAttribute : Attribute { }\n" +
             "}\n";
+        private const string DuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttributeSource =
+            "using System;\n" +
+            "using System.Diagnostics;\n" +
+            "namespace System.Linq\n" +
+            "{\n" +
+            "    [AttributeUsage(AttributeTargets.Assembly)]\n" +
+            "    [Conditional(\"COMPILE_TIME_ONLY\")]\n" +
+            "    internal sealed class DuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttribute : Attribute { }\n" +
+            "}\n";
 
         public void Initialize(GeneratorInitializationContext context)
         {
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
-            context.RegisterForPostInitialization(c => c.AddSource("GenerateAsyncOverloadAttribute", AttributeSource));
+            context.RegisterForPostInitialization(c =>
+            {
+                c.AddSource("GenerateAsyncOverloadAttribute", GenerateAsyncOverloadAttributeSource);
+                c.AddSource("DuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttribute", DuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttributeSource);
+            });
         }
 
         public void Execute(GeneratorExecutionContext context)
@@ -33,12 +50,22 @@ namespace System.Linq.Async.SourceGenerator
             if (context.SyntaxReceiver is not SyntaxReceiver syntaxReceiver) return;
 
             var options = GetGenerationOptions(context);
+            var asyncOverloadAttributeSymbol = GetAsyncOverloadAttributeSymbol(context);
             var methodsBySyntaxTree = GetMethodsGroupedBySyntaxTree(context, syntaxReceiver);
 
-            foreach (var grouping in methodsBySyntaxTree)
+            foreach (var grouping in methodsBySyntaxTree.Where(g => g.Methods.Any()))
                 context.AddSource(
                     $"{Path.GetFileNameWithoutExtension(grouping.SyntaxTree.FilePath)}.AsyncOverloads",
-                    GenerateOverloads(grouping, options));
+                    GenerateOverloads(grouping, options, context, asyncOverloadAttributeSymbol));
+
+            var duplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttributeSymbol = GetDuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttributeSymbol(context);
+            var dupBuilder = new DeprecatedDuplicateBuilder(
+                context,
+                options,
+                asyncOverloadAttributeSymbol,
+                duplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttributeSymbol,
+                syntaxReceiver);
+            dupBuilder.BuildDuplicatesIfRequired();
         }
 
         private static GenerationOptions GetGenerationOptions(GeneratorExecutionContext context)
@@ -50,22 +77,33 @@ namespace System.Linq.Async.SourceGenerator
                 syntaxReceiver,
                 GetAsyncOverloadAttributeSymbol(context));
 
-        private static string GenerateOverloads(AsyncMethodGrouping grouping, GenerationOptions options)
+        private static string GenerateOverloads(AsyncMethodGrouping grouping, GenerationOptions options, GeneratorExecutionContext context, INamedTypeSymbol attributeSymbol)
         {
             var usings = grouping.SyntaxTree.GetRoot() is CompilationUnitSyntax compilationUnit
                 ? compilationUnit.Usings.ToString()
                 : string.Empty;
+
+            // This source generator gets used not just in System.Linq.Async, but also for code that has migrated from
+            // System.Linq.Async to System.Interactive.Async. (E.g., we define overloads of AverageAsync that accept
+            // selector callbacks. The .NET runtime library implementation offers no equivalents. We want to continue
+            // to offer these even though we're decprecating System.Linq.Async, so they migrate into
+            // System.Interactive.Async.) In those cases, the containing type is typically AsyncEnumerableEx,
+            // but in System.Linq.Async it is AsyncEnumerable. So we need to discover the containing type name.
+            var containingTypeName = grouping.Methods.FirstOrDefault()?.Symbol.ContainingType.Name ?? "AsyncEnumerable";
 
             var overloads = new StringBuilder();
             overloads.AppendLine("#nullable enable");
             overloads.AppendLine(usings);
             overloads.AppendLine("namespace System.Linq");
             overloads.AppendLine("{");
-            overloads.AppendLine("    partial class AsyncEnumerable");
+            overloads.AppendLine($"    partial class {containingTypeName}");
             overloads.AppendLine("    {");
 
             foreach (var method in grouping.Methods)
-                overloads.AppendLine(GenerateOverload(method, options));
+            {
+                var model = context.Compilation.GetSemanticModel(method.Syntax.SyntaxTree);
+                overloads.AppendLine(GenerateOverload(method, options, model, attributeSymbol));
+            }
 
             overloads.AppendLine("    }");
             overloads.AppendLine("}");
@@ -73,8 +111,18 @@ namespace System.Linq.Async.SourceGenerator
             return overloads.ToString();
         }
 
-        private static string GenerateOverload(AsyncMethod method, GenerationOptions options)
-            => MethodDeclaration(method.Syntax.ReturnType, GetMethodName(method.Symbol, options))
+        private static string GenerateOverload(AsyncMethod method, GenerationOptions options, SemanticModel model, INamedTypeSymbol attributeSymbol)
+        {
+            var attributeListsWithGenerateAsyncOverloadRemoved = SyntaxFactory.List(method.Syntax.AttributeLists
+                .Select(list => AttributeList(SeparatedList(
+                        (from a in list.Attributes
+                         let am = model.GetSymbolInfo(a.Name).Symbol?.ContainingType
+                         where !SymbolEqualityComparer.Default.Equals(am, attributeSymbol)
+                         select a))))
+                .Where(list => list.Attributes.Count > 0));
+
+            return MethodDeclaration(method.Syntax.ReturnType, GetMethodNameForGeneratedAsyncMethod(method.Symbol, options))
+                .WithAttributeLists(attributeListsWithGenerateAsyncOverloadRemoved)
                 .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword)))
                 .WithTypeParameterList(method.Syntax.TypeParameterList)
                 .WithParameterList(method.Syntax.ParameterList)
@@ -87,15 +135,19 @@ namespace System.Linq.Async.SourceGenerator
                                 method.Syntax.ParameterList.Parameters
                                     .Select(p => Argument(IdentifierName(p.Identifier))))))))
                 .WithSemicolonToken(Token(SyntaxKind.SemicolonToken))
-                .WithLeadingTrivia(method.Syntax.GetLeadingTrivia().Where(t => t.GetStructure() is not DirectiveTriviaSyntax))
+                .WithLeadingTrivia(method.Syntax.GetLeadingTrivia().Where(t => !t.IsKind(SyntaxKind.DisabledTextTrivia) && t.GetStructure() is not DirectiveTriviaSyntax))
                 .NormalizeWhitespace()
                 .ToFullString();
+        }
 
         private static INamedTypeSymbol GetAsyncOverloadAttributeSymbol(GeneratorExecutionContext context)
             => context.Compilation.GetTypeByMetadataName("System.Linq.GenerateAsyncOverloadAttribute") ?? throw new InvalidOperationException();
 
+        private static INamedTypeSymbol GetDuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttributeSymbol(GeneratorExecutionContext context)
+            => context.Compilation.GetTypeByMetadataName("System.Linq.DuplicateAsyncEnumerableAsAsyncEnumerableDeprecatedAttribute") ?? throw new InvalidOperationException();
+
         private static IEnumerable<AsyncMethodGrouping> GetMethodsGroupedBySyntaxTree(GeneratorExecutionContext context, SyntaxReceiver syntaxReceiver, INamedTypeSymbol attributeSymbol)
-            => from candidate in syntaxReceiver.Candidates
+            => from candidate in syntaxReceiver.CandidateMethods
                group candidate by candidate.SyntaxTree into grouping
                let model = context.Compilation.GetSemanticModel(grouping.Key)
                select new AsyncMethodGrouping(
@@ -105,7 +157,7 @@ namespace System.Linq.Async.SourceGenerator
                   where methodSymbol.GetAttributes().Any(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass!, attributeSymbol))
                   select new AsyncMethod(methodSymbol, methodSyntax));
 
-        private static string GetMethodName(IMethodSymbol methodSymbol, GenerationOptions options)
+        internal static string GetMethodNameForGeneratedAsyncMethod(IMethodSymbol methodSymbol, GenerationOptions options)
         {
             var methodName = methodSymbol.Name.Replace("Core", "");
             return options.SupportFlatAsyncApi

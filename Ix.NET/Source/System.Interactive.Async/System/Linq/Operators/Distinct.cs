@@ -20,6 +20,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
+        [Obsolete("Use DistinctBy.  IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality of selector-based overloads of Distinct now exists as DistinctBy.")]
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
@@ -41,6 +42,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is null.</exception>
         /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
+        [Obsolete("Use DistinctBy.  IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality of selector-based overloads of Distinct now exists as DistinctBy.")]
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
@@ -61,6 +63,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
+        [Obsolete("Use DistinctBy.  IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality of selector-based overloads of Distinct now exists as DistinctBy.")]
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (source == null)
@@ -82,6 +85,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is null.</exception>
         /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
+        [Obsolete("Use DistinctBy.  IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality of selector-based overloads of Distinct now exists as DistinctBy.")]
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector)
         {
             if (source == null)
@@ -104,6 +108,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is null.</exception>
         /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
+        [Obsolete("Use DistinctBy.  IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality of selector-based overloads of Distinct now exists as DistinctBy.")]
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
@@ -126,6 +131,7 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="comparer"/> is null.</exception>
         /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
+        [Obsolete("Use DistinctBy.  IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the functionality of selector-based overloads of Distinct now exists as DistinctBy.")]
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Joins;
-using System.Reflection;
 
 namespace System.Reactive.Linq
 {
@@ -38,9 +37,7 @@ namespace System.Reactive.Linq
             return new QueryablePattern<TLeft, TRight>(
                 Expression.Call(
                     null,
-#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
-                    ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TLeft), typeof(TRight)),
-#pragma warning restore IL2060
+                    new Func<IQbservable<TLeft>, IObservable<TRight>, QueryablePattern<TLeft, TRight>>(And).Method,
                     left.Expression,
                     GetSourceExpression(right)
                 )
@@ -71,9 +68,7 @@ namespace System.Reactive.Linq
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     null,
-#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
-                    ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TSource), typeof(TResult)),
-#pragma warning restore IL2060
+                    new Func<IQbservable<TSource>, Expression<Func<TSource, TResult>>, QueryablePlan<TResult>>(Then).Method,
                     source.Expression,
                     selector
                 )
@@ -103,9 +98,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
-                    ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
-#pragma warning restore IL2060
+                    new Func<IQbservableProvider, QueryablePlan<TResult>[], IQbservable<TResult>>(When).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.NewArrayInit(
                         typeof(QueryablePlan<TResult>),
@@ -138,9 +131,7 @@ namespace System.Reactive.Linq
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
-#pragma warning disable IL2060 // ('System.Reflection.MethodInfo.MakeGenericMethod' can not be statically analyzed.) This gets the MethodInfo for the method running right now, so it can't have been trimmed
-                    ((MethodInfo)MethodBase.GetCurrentMethod()!).MakeGenericMethod(typeof(TResult)),
-#pragma warning restore IL2060
+                    new Func<IQbservableProvider, IEnumerable<QueryablePlan<TResult>>, IQbservable<TResult>>(When).Method,
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(plans, typeof(IEnumerable<QueryablePlan<TResult>>))
                 )

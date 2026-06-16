@@ -134,6 +134,29 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + ResetExceptionDispatchState +
+
+        /// <summary>
+        /// Propagates all messages, but if <paramref name="source"/> produces an error, this updates the dispatch state
+        /// of the <see cref="Exception"/> to reflect the current execution context (by executing a
+        /// <see langword="throw" /> or equivalent operation) before passing the notification on.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <returns>The source sequence with the exception dispatch state modifying behavior applied.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static IObservable<TSource> ResetExceptionDispatchState<TSource>(this IObservable<TSource> source)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            return s_impl.ResetExceptionDispatchState(source);
+        }
+
+        #endregion
+
         #region + Dematerialize +
 
         /// <summary>

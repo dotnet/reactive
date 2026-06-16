@@ -2,17 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using PublicApiGenerator;
+
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+
+using VerifyMSTest;
+
 using VerifyTests;
-using VerifyXunit;
-using Xunit;
 
 namespace ReactiveTests.Tests.Api
 {
+    [TestClass]
     public class ApiApprovalTests : VerifyBase
     {
         static ApiApprovalTests()
@@ -25,21 +30,23 @@ namespace ReactiveTests.Tests.Api
         {
         }
 
-        [Fact]
-        public Task Core()
-        {
-            var publicApi = GeneratePublicApi(typeof(System.Reactive.Unit).Assembly);
-            return Verify(publicApi, "cs");
-        }
+        // Note:
+        //  System.Reactive uses the .NET SDK's built in package validation, specifically the
+        //      PackageValidationBaselineVersion feature to ensure backwards compatibility
+        //  System.Reactive is using Microsoft.CodeAnalysis.PublicApiAnalyzers to ensure stability of
+        //      its public API.
+        // TODO:
+        //  Move Aliases and Testing packages over to one of the mechanisms above
+        //  Add similar API checking to the new FrameworkIntegrations packages
 
-        [Fact]
+        [TestMethod]
         public Task Aliases()
         {
             var publicApi = GeneratePublicApi(typeof(System.Reactive.Observable.Aliases.QueryLanguage).Assembly);
             return Verify(publicApi, "cs");
         }
 
-        [Fact]
+        [TestMethod]
         public Task Testing()
         {
             var publicApi = GeneratePublicApi(typeof(Microsoft.Reactive.Testing.TestScheduler).Assembly);
@@ -48,11 +55,16 @@ namespace ReactiveTests.Tests.Api
 
         private string GeneratePublicApi(Assembly assembly)
         {
-            ApiGeneratorOptions options = new()
+            var options = MakeGeneratorOptions();
+            return Filter(ApiGenerator.GeneratePublicApi(assembly, options));
+        }
+
+        private static ApiGeneratorOptions MakeGeneratorOptions()
+        {
+            return new()
             {
                 AllowNamespacePrefixes = ["System", "Microsoft"]
             };
-            return Filter(ApiGenerator.GeneratePublicApi(assembly, options));
         }
 
         private static string Filter(string text)

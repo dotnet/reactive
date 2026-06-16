@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "System.Linq.Async": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\System.Linq.Async\\System.Linq.Async.csproj"
+    },
+    "System.Interactive.Async": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\System.Interactive.Async\\System.Interactive.Async.csproj"
+    }
+  }
+}

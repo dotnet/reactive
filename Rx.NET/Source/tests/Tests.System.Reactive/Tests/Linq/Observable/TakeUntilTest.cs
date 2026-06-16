@@ -860,5 +860,64 @@ namespace ReactiveTests.Tests
 
         #endregion
 
+        #region + CancellationToken +
+
+        [TestMethod]
+        public void TakeUntil_CancellationToken_BasicCancelation()
+        {
+            var scheduler = new TestScheduler();
+            var tokenSource = new CancellationTokenSource();
+
+            var source = scheduler.CreateColdObservable(
+                OnNext(10, 1),
+                OnNext(20, 2),
+                OnNext(30, 3),
+                OnNext(40, 4),
+                OnNext(50, 5),
+                OnCompleted<int>(260)
+                );
+
+            scheduler.ScheduleAbsolute(235, () => tokenSource.Cancel());
+
+            var result = scheduler.Start(() => source.TakeUntil(tokenSource.Token));
+
+            result.Messages.AssertEqual(
+                OnNext(210, 1),
+                OnNext(220, 2),
+                OnNext(230, 3),
+                OnCompleted<int>(235)
+            );
+
+            source.Subscriptions.AssertEqual(
+                Subscribe(200, 235)
+            );
+        }
+
+        [TestMethod]
+        public void TakeUntil_CancellationToken_AlreadyCanceled()
+        {
+            var scheduler = new TestScheduler();
+            var tokenSource = new CancellationTokenSource();
+            tokenSource.Cancel();
+
+            var source = scheduler.CreateColdObservable(
+                OnNext(10, 1),
+                OnNext(20, 2),
+                OnNext(30, 3),
+                OnNext(40, 4),
+                OnNext(50, 5),
+                OnCompleted<int>(260)
+                );
+
+            var result = scheduler.Start(() => source.TakeUntil(tokenSource.Token));
+
+            result.Messages.AssertEqual(
+                OnCompleted<int>(200)
+            );
+
+            Assert.Empty(source.Subscriptions);
+        }
+
+        #endregion
     }
 }

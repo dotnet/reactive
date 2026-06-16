@@ -6,9 +6,19 @@ using System.Collections.Generic;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
+    // NB: Synchronous LINQ to Objects doesn't hide the implementation of the source either.
     {
-        // NB: Synchronous LINQ to Objects doesn't hide the implementation of the source either.
+#if INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
+        // Note: this one isn't actually in the System.Linq.AsyncEnumerable package, so we've moved it
+        // to System.Interactive.Async because that's the home for LINQ-like implementations for
+        // IAsyncEnumerable<T> that aren't in the runtime libraries.
+        // It therefore remains available only for runtime binary compatibility, and is no longer
+        // visible in System.Linq.Async at compile time.
 
         /// <summary>
         /// Hides the identity of an async-enumerable sequence.
@@ -18,5 +28,6 @@ namespace System.Linq
         /// <returns>An async-enumerable sequence that hides the identity of the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IAsyncEnumerable<TSource> AsAsyncEnumerable<TSource>(this IAsyncEnumerable<TSource> source) => source;
+#endif // INCLUDE_RELOCATED_TO_INTERACTIVE_ASYNC
     }
 }

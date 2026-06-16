@@ -77,7 +77,7 @@ The following versions are of interest. The comments about the status of the lat
 * `10.0.19045`: Windows 10 22H2, the last ever version of Windows 10 (support ends October 2025)
 * `10.0.22621`: the oldest Windows 11 version (22H2) still in GA support (enterprise only; support ends October 2025)
 * `10.0.22631`: the oldest Windows 11 version (23H2) with GA support for Home, Pro and Education (non-enterprise servicing ends November 2025; enterprise servicing ends November 2026)
-* `10.0.26100`: the latest version of Windows (24H2)
+* `10.0.26100`: the latest version of Windows (24H2), also the version installed on the `windows-2025` Azure DevOps hosted build images
 
 So as it happens, we don't technically need anything newer than 10.0.17763. So we could specify that as the minimum platform version. However, there's no compelling reason to do this, and since 10.0.18362 is as far back as the current tooling fully understands, and is the version Rx 6.0 has always targetted, it makes sense to continue with that.
 
@@ -127,6 +127,18 @@ Without these explicit settings, those first two values would have become `UAP,V
 
 However, only _some_ properties should use the old name. We need to set _all_ of these properties, because otherwise, other parts of the build system get confused (e.g., NuGet handling). So we need the ".NETCore" name in some places, and the "UAP" name in others.
 
+Also note that the package validation tooling (which we use to ensure that `System.Reactive` continues to present the same API as it always did) turns out not to understand the `.NETCore,Version=v5.0` TFM. So for that to work, we need to put the TFM back how it was later in the build process, which is why we have this target:
+
+```xml
+<Target Name="_SetUwpTfmForPackageValidation" BeforeTargets="RunPackageValidation">
+<ItemGroup>
+    <PackageValidationReferencePath Condition="%(PackageValidationReferencePath.TargetFrameworkMoniker) == '.NETCore,Version=v5.0'" TargetFrameworkMoniker="UAP,Version=10.0.18362.0" TargetPlatformMoniker="Windows,Version=10.0.18362.0" />
+</ItemGroup>
+</Target>
+```
+
+This also sets the target platform moniker to indicate that this is a Windows-specific TFM, something that the package validation tooling doesn't seem to understand otherwise. (But we do need the target platform identifier to be `UAP` earlier on in the build for various other things to work, which is why we only switch this just before package validation runs.)
+
 
 #### Compiler Constants
 
@@ -161,12 +173,12 @@ The provides references to the .NET runtime library components. (So this provide
 So this enables normal .NET code to compile. However, Rx.NET also includes code that uses some UWP-specific APIs. (After all, a large part of the issue we're dealing with here exists because of features like schedulers that support UWP dispatchers.) And for that to work, the compiler needs access to `.winmd` files with the metadata for these APIs. So we have this:
 
 ```xml
-<ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.19041.0\Windows.winmd" />
+<ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.26100.0\Windows.winmd" />
 ```
 
 This relies on the `TargetPlatformSdkPath` build variable being set. When building locally (either in Visual Studio, or with `dotnet build` from the command line) this variable is set correctly, but for some reason it doesn't seem to be set on the build agents. So we set this as an environment variable in the `azure-pipelines.rx.yml` build pipeline definition.
 
-You might be wondering about that 19041 in there. Why is that not 18362, consistent with the TFM? This is because, as mentioned earlier, Azure DevOps Windows build agents have only certain Windows SDK versions installed. They don't have 18362. but they do have the 19041 version, and we can use that to target `10.0.18362`.
+You might be wondering about that 26100 in there. Why is that not 18362, consistent with the TFM? This is because, as mentioned earlier, Azure DevOps Windows build agents have only certain Windows SDK versions installed. They don't have 18362. but the `windows-2025` image does have the 26100 version, and we can use that to target `10.0.18362`.
 
 
 #### Prevent Over-Zealous WinRT Interop Code Generation

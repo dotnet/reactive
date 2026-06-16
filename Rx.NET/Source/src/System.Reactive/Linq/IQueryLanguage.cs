@@ -558,6 +558,7 @@ namespace System.Reactive.Linq
         IObservable<TSource> Switch<TSource>(IObservable<IObservable<TSource>> sources);
         IObservable<TSource> TakeUntil<TSource, TOther>(IObservable<TSource> source, IObservable<TOther> other);
         IObservable<TSource> TakeUntil<TSource>(IObservable<TSource> source, Func<TSource, bool> stopPredicate);
+        IObservable<TSource> TakeUntil<TSource>(IObservable<TSource> source, CancellationToken cancellationToken);
         IObservable<IObservable<TSource>> Window<TSource, TWindowClosing>(IObservable<TSource> source, Func<IObservable<TWindowClosing>> windowClosingSelector);
         IObservable<IObservable<TSource>> Window<TSource, TWindowOpening, TWindowClosing>(IObservable<TSource> source, IObservable<TWindowOpening> windowOpenings, Func<TWindowOpening, IObservable<TWindowClosing>> windowClosingSelector);
         IObservable<IObservable<TSource>> Window<TSource, TWindowBoundary>(IObservable<TSource> source, IObservable<TWindowBoundary> windowBoundaries);
@@ -581,6 +582,7 @@ namespace System.Reactive.Linq
         IObservable<TSource> AsObservable<TSource>(IObservable<TSource> source);
         IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, int count);
         IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, int count, int skip);
+        IObservable<TSource> ResetExceptionDispatchState<TSource>(IObservable<TSource> source);
         IObservable<TSource> Dematerialize<TSource>(IObservable<Notification<TSource>> source);
         IObservable<TSource> DistinctUntilChanged<TSource>(IObservable<TSource> source);
         IObservable<TSource> DistinctUntilChanged<TSource>(IObservable<TSource> source, IEqualityComparer<TSource> comparer);
@@ -644,7 +646,7 @@ namespace System.Reactive.Linq
         IObservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>> durationSelector, int capacity);
         IObservable<TResult> GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(IObservable<TLeft> left, IObservable<TRight> right, Func<TLeft, IObservable<TLeftDuration>> leftDurationSelector, Func<TRight, IObservable<TRightDuration>> rightDurationSelector, Func<TLeft, IObservable<TRight>, TResult> resultSelector);
         IObservable<TResult> Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(IObservable<TLeft> left, IObservable<TRight> right, Func<TLeft, IObservable<TLeftDuration>> leftDurationSelector, Func<TRight, IObservable<TRightDuration>> rightDurationSelector, Func<TLeft, TRight, TResult> resultSelector);
-        IObservable<TResult> OfType<TResult>(IObservable<object> source);
+        IObservable<TResult> OfType<TResult>(IObservable<object?> source);
         IObservable<TResult> Select<TSource, TResult>(IObservable<TSource> source, Func<TSource, TResult> selector);
         IObservable<TResult> Select<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, TResult> selector);
         IObservable<TOther> SelectMany<TSource, TOther>(IObservable<TSource> source, IObservable<TOther> other);

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <Description>Reactive Extensions Testing Library containing interfaces and classes providing functionality to test applications and libraries built using Reactive Extensions.</Description>    
     <AssemblyTitle>Microsoft.Reactive.Testing - Testing Helper Library</AssemblyTitle>    
@@ -17,12 +17,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Properties\*.xml" />
-    <PackageReference Include="xunit.assert.source" Version="2.9.3" PrivateAssets="All" /> 
+    <EmbeddedResource Include="Properties\*.xml" /> 
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Collections.Immutable" Version="10.0.3" />
+    <PackageReference Include="xunit.v3.assert.source" Version="3.2.2" />
   </ItemGroup>
 </Project>

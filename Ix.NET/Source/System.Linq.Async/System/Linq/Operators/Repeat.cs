@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     public static partial class AsyncEnumerable
     {
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.repeat?view=net-9.0-pp
+
         /// <summary>
         /// Generates an async-enumerable sequence that repeats the given element the specified number of times.
         /// </summary>
@@ -100,4 +103,5 @@ namespace System.Linq
             }
         }
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

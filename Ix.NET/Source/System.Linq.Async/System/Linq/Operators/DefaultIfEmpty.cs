@@ -9,8 +9,13 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
         /// <summary>
         /// Returns the elements of the specified sequence or the type parameter's default value in a singleton sequence if the sequence is empty.
         /// </summary>
@@ -136,5 +141,6 @@ namespace System.Linq
                 return count == 0 ? 1 : count;
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

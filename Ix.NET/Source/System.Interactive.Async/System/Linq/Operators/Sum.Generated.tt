@@ -1,0 +1,193 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT License.
+// See the LICENSE file in the project root for more information. 
+
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace System.Linq
+{
+    public static partial class AsyncEnumerableEx
+    {
+<#
+var os = new[]
+{
+    new { type = "int", zero = "0", @checked = true },
+    new { type = "long", zero = "0L", @checked = true },
+    new { type = "float", zero = "0.0f", @checked = false },
+    new { type = "double", zero = "0.0", @checked = false },
+    new { type = "decimal", zero = "0m", @checked = false },
+    new { type = "int?", zero = "0", @checked = true },
+    new { type = "long?", zero = "0L", @checked = true },
+    new { type = "float?", zero = "0.0f", @checked = false },
+    new { type = "double?", zero = "0.0", @checked = false },
+    new { type = "decimal?", zero = "0m", @checked = false },
+};
+
+foreach (var o in os)
+{
+    var n = o.type.EndsWith("?") ? ".GetValueOrDefault()" : "";
+
+    var typeStr = o.type;
+    if (o.type.EndsWith("?")) {
+        typeStr = "Nullable{" + o.type.Substring(0, 1).ToUpper() + o.type.Substring(1, o.type.Length - 2) + "}";
+    }
+#>
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="<#=typeStr#>" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">A transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        public static ValueTask<<#=o.type#>> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=o.type#>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return Core(source, selector, cancellationToken);
+
+            static async ValueTask<<#=o.type#>> Core(IAsyncEnumerable<TSource> source, Func<TSource, <#=o.type#>> selector, CancellationToken cancellationToken)
+            {
+                var sum = <#=o.zero#>;
+
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    var value = selector(item);
+
+<#
+if (o.@checked)
+{
+#>
+                    checked
+                    {
+                        sum += value<#=n#>;
+                    }
+<#
+}
+else
+{
+#>
+                    sum += value<#=n#>;
+<#
+}
+#>
+                }
+
+                return sum;
+            }
+        }
+
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="<#=typeStr#>" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">An asynchronous transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        public static ValueTask<<#=o.type#>> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return Core(source, selector, cancellationToken);
+
+            static async ValueTask<<#=o.type#>> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken)
+            {
+                var sum = <#=o.zero#>;
+
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await selector(item).ConfigureAwait(false);
+
+<#
+if (o.@checked)
+{
+#>
+                    checked
+                    {
+                        sum += value<#=n#>;
+                    }
+<#
+}
+else
+{
+#>
+                    sum += value<#=n#>;
+<#
+}
+#>
+                }
+
+                return sum;
+            }
+        }
+
+        /// <summary>
+        /// Computes the sum of a sequence of <see cref="<#=typeStr#>" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">An asynchronous, cancellable transform function to apply to each element.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>An async-enumerable sequence containing a single element with the sum of the values in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        public static ValueTask<<#=o.type#>> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return Core(source, selector, cancellationToken);
+
+            static async ValueTask<<#=o.type#>> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken)
+            {
+                var sum = <#=o.zero#>;
+
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await selector(item, cancellationToken).ConfigureAwait(false);
+
+<#
+if (o.@checked)
+{
+#>
+                    checked
+                    {
+                        sum += value<#=n#>;
+                    }
+<#
+}
+else
+{
+#>
+                    sum += value<#=n#>;
+<#
+}
+#>
+                }
+
+                return sum;
+            }
+        }
+<#
+}
+#>
+    }
+}

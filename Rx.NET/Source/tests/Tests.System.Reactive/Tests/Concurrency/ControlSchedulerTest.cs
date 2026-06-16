@@ -4,6 +4,8 @@
 
 #if HAS_WINFORMS
 
+extern alias SystemReactiveWindowsForms;
+
 #pragma warning disable IDE0034 // (Simplify 'default'.) Want to be explicit about overload being tested.
 
 using System;
@@ -16,6 +18,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Reactive.Testing;
 
 using Assert = Xunit.Assert;
+
+using ControlScheduler = SystemReactiveWindowsForms::System.Reactive.Concurrency.ControlScheduler;
 
 namespace ReactiveTests.Tests
 {
@@ -63,7 +67,7 @@ namespace ReactiveTests.Tests
                 var id = Environment.CurrentManagedThreadId;
 
                 var sch = new ControlScheduler(lbl);
-                
+
                 sch.Schedule(() => { lbl.Text = "Okay"; Assert.NotEqual(id, Environment.CurrentManagedThreadId); });
                 sch.Schedule(() => { Assert.Equal("Okay", lbl.Text); Assert.NotEqual(id, Environment.CurrentManagedThreadId); evt.Set(); });
 
@@ -115,14 +119,14 @@ namespace ReactiveTests.Tests
                 var evt = new ManualResetEvent(false);
 
                 var id = Environment.CurrentManagedThreadId;
-                
+
                 var sch = new ControlScheduler(lbl);
 
                 sch.Schedule(delay, () =>
                 {
                     lbl.Text = "Okay";
                     Assert.NotEqual(id, Environment.CurrentManagedThreadId);
-                    
+
                     sch.Schedule(() =>
                     {
                         Assert.Equal("Okay", lbl.Text);

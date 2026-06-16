@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     /// <summary>
     /// An iterator that yields the items of part of an <see cref="IList{TSource}"/>.
     /// </summary>
@@ -182,4 +183,5 @@ namespace System.Linq
             return new ValueTask<int>(Count);
         }
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

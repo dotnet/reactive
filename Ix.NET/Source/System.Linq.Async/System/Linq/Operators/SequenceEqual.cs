@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     public static partial class AsyncEnumerable
     {
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.sequenceequalasync?view=net-9.0-pp
+        // The method above covers the next two overloads because it supplies a default null value for comparer.
+
         /// <summary>
         /// Determines whether two sequences are equal by comparing the elements pairwise.
         /// </summary>
@@ -85,4 +89,5 @@ namespace System.Linq
             }
         }
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

@@ -42,7 +42,7 @@ for (int i = 2; i <= 16; i++)
     internal partial interface IQueryLanguageEx
     {
 <#
-for (int i = 2; i <= 8; i++)
+for (int i = 2; i <= 16; i++)
 {
     var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j));
     var parameters = string.Join(", ", Enumerable.Range(1, i).Select(j => "IObservable<T" + j + "> source" + j));
@@ -55,7 +55,7 @@ for (int i = 2; i <= 8; i++)
 #>
 
 <#
-for (int i = 2; i <= 8; i++)
+for (int i = 2; i <= 16; i++)
 {
     var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j));
     var parameters = string.Join(", ", Enumerable.Range(1, i).Select(j => "IObservable<T" + j + "> source" + j));

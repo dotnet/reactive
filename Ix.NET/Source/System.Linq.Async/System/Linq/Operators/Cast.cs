@@ -8,10 +8,17 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
         // NB: This is a non-standard LINQ operator, because we don't have a non-generic IAsyncEnumerable.
         //     We're keeping it to enable `from T x in xs` binding in C#.
+
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.cast?view=net-9.0-pp
 
         /// <summary>
         /// Converts the elements of an async-enumerable sequence to the specified type.
@@ -40,5 +47,6 @@ namespace System.Linq
                 }
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     }
 }

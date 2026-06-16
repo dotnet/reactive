@@ -3,6 +3,14 @@
 // See the LICENSE file in the project root for more information. 
 #define DEBUG // so that the Debug.WriteLines aren't compiled out
 
+#if HAS_WPF
+extern alias SystemReactiveWpf;
+#endif
+
+#if HAS_WINFORMS
+extern alias SystemReactiveWindowsForms;
+#endif
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,10 +24,19 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
+
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Assert = Xunit.Assert;
+
+#if HAS_WPF
+using DispatcherScheduler = SystemReactiveWpf::System.Reactive.Concurrency.DispatcherScheduler;
+#endif
+
+#if HAS_WINFORMS
+using ControlScheduler = SystemReactiveWindowsForms::System.Reactive.Concurrency.ControlScheduler;
+#endif
 
 namespace ReactiveTests.Tests
 {
@@ -865,7 +882,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ObserveOn(_qbMy, default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ObserveOn(_qbMy, default(SynchronizationContext)));
-#if HAS_DISPATCHER
+#if HAS_WPF
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ObserveOn(_qbMy, default(DispatcherScheduler)));
 #endif
 #if HAS_WINFORMS
@@ -874,12 +891,12 @@ namespace ReactiveTests.Tests
 #endif
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ObserveOn(_qbNull, Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ObserveOn(_qbNull, new SynchronizationContext()));
-#if HAS_DISPATCHER
+#if HAS_WPF
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ObserveOn(_qbNull, DispatcherScheduler.Instance));
 #endif
         }
 
-#if HAS_DISPATCHER
+#if HAS_WPF
         [TestMethod]
         public void ObserveOn()
         {
@@ -1152,12 +1169,12 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.SubscribeOn(_qbMy, default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.SubscribeOn(_qbMy, default(SynchronizationContext)));
-#if HAS_DISPATCHER
+#if HAS_WPF
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.SubscribeOn(_qbMy, default(DispatcherScheduler)));
 #endif
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.SubscribeOn(_qbNull, Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.SubscribeOn(_qbNull, new SynchronizationContext()));
-#if HAS_DISPATCHER
+#if HAS_WPF
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.SubscribeOn(_qbNull, DispatcherScheduler.Instance));
 #endif
 #if HAS_WINFORMS
@@ -1171,7 +1188,7 @@ namespace ReactiveTests.Tests
         {
             _qbMy.SubscribeOn(Scheduler.Immediate);
             _qbMy.SubscribeOn(new SynchronizationContext());
-#if HAS_DISPATCHER
+#if HAS_WPF
             Qbservable.SubscribeOn(_qbMy, DispatcherScheduler.Instance);
 #endif
 #if HAS_WINFORMS

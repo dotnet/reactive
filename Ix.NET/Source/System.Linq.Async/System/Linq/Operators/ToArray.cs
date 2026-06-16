@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     public static partial class AsyncEnumerable
     {
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.toarrayasync?view=net-9.0-pp
+
         /// <summary>
         /// Creates an array from an async-enumerable sequence.
         /// </summary>
@@ -30,4 +33,5 @@ namespace System.Linq
             return AsyncEnumerableHelpers.ToArray(source, cancellationToken);
         }
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

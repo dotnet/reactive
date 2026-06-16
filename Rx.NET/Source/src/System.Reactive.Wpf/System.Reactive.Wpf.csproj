@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+    WPF is available on net8.0-windows, and although this is technically shorthand for Windows 7, that's not
+    widely understood. People often leave out the version number because they think it means no particular version.
+    We don't want to force people to use a more complex TFM. Also, although Windows 7 is long out of support, there
+    is one technical reason not to specify a later version: you end up deploying a quite large .winmd file if you
+    specify one of the later versions, and if you're not actually using any WinRT APIs, this is just wasted space.
+
+    Historically, Rx has required you to use at least windows10.0.19041 to get WPF support, but that was a side effect
+    of the great unification making WPF inextricable from the target framework. Now that we have separated out the WPF
+    we can make it work for simpler TFMs, because nothing actually requires us to use any WinRT APIs.
+    -->
+
+    <TargetFrameworks>net472;net8.0-windows</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <Description>WPF support for Reactive Extensions (Rx) for .NET</Description>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj">
+      <Aliases>SystemReactive</Aliases>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,79 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+    For .NET 6.0 and later, we need to specify the Windows 10 target framework because Windows
+    Runtime APIs are not available on older platforms. We use:
+    CoreDispatcher          10.0.10240
+    CoreDispatcherPriority  10.0.10240
+    CoreWindow              10.0.10240
+    DispatcherQueue         10.0.16299
+    DispatcherQueueTimer    10.0.16299
+
+    So in theory, 10.0.16299.0 meets our needs. However, the .NET SDK doesn't recognize that.
+    The oldest version it supports in a TFM is 10.0.17763.0, corresponding to Windows 1809.
+    Although that went out of mainstream support in 2021, it's still in extended support until 2029
+    for enterprises paying for long term support. It is also a common choice for the oldest version
+    supported by tooling (e.g., the .NET SDK), which would make it a reasonable choice here.
+    However, the minimum version of System.Reactive that supports Windows Runtime requires a TFM
+    specifying Windows 10.0.19041 or later, and although the System.Reactive API surface area is
+    essentially the same on net8.0 and net8.0-windows10.0.19041, there is a difference in behaviour:
+    the net8.0-windows10.0.19041 version registers for app lifecycle events. We don't want to
+    encourage people to use Windows Runtime features from this library with the non-Windows-Runtime-aware
+    target of System.Reactive, so we match the Windows version in the TFM.
+    For UWP we need a newer version because Visual Studio 2026 supports nothing older than 18362.
+    -->
+    <TargetFrameworks>net8.0-windows10.0.19041.0;uap10.0.18362</TargetFrameworks>
+
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.18362'">
+    <!-- 26100 not 18362 because the Azure DevOps hosted build agents don't offer 18362, and there appears
+         not to be any official supported way to get it on there.
+         We end up with a reference to Windows 255.255.255.255 in any case, so as far as I can tell, this
+         produces results indistinguishable from what we would get with 18362. The only issue here is that
+         in theory it makes it possible for the code to refer to an API that is not available on 18362. In
+         practice, we're not doing that, and we don't expect to change this code much in the future, so it
+         shouldn't happen.
+    -->
+    <ReferencePath Include="$(TargetPlatformSdkPath)UnionMetadata\10.0.26100.0\Windows.winmd" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events;WinRT;Windows Runtime</PackageTags>
+    <Description>Window Runtime (WinRT) Support for Reactive Extensions (Rx) for .NET</Description>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
+    <None Include="AsyncInfoExtensions.cs" />
+    <!--<EmbeddedResource Include="Features\WinRT\Strings_WindowsThreading.resx" />
+    <Compile Update="Features\WinRT\Strings_WindowsThreading.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings_WindowsThreading.resx</DependentUpon>
+    </Compile>-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\System.Reactive\Platforms\WinRT\Strings_PlatformServices.Designer.cs" Link="Strings_PlatformServices.Designer.cs">
+      <DependentUpon>Strings_PlatformServices.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\System.Reactive\Platforms\WinRT\Strings_PlatformServices.resx" Link="Strings_PlatformServices.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj">
+      <Aliases>SystemReactive</Aliases>
+    </ProjectReference>
+  </ItemGroup>
+  
+</Project>

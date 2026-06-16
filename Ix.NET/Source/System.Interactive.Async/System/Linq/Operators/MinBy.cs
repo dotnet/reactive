@@ -10,6 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
+#if !REFERENCE_ASSEMBLY
         /// <summary>
         /// Returns the elements in an async-enumerable sequence with the minimum key value.
         /// </summary>
@@ -166,111 +167,6 @@ namespace System.Linq
         }
 #endif
 
-        private static async ValueTask<IList<TSource>> ExtremaBy<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, TKey, int> compare, CancellationToken cancellationToken)
-        {
-            var result = new List<TSource>();
-
-            await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
-            {
-                if (!await e.MoveNextAsync())
-                    throw Error.NoElements();
-
-                var current = e.Current;
-                var resKey = keySelector(current);
-                result.Add(current);
-
-                while (await e.MoveNextAsync())
-                {
-                    var cur = e.Current;
-                    var key = keySelector(cur);
-
-                    var cmp = compare(key, resKey);
-
-                    if (cmp == 0)
-                    {
-                        result.Add(cur);
-                    }
-                    else if (cmp > 0)
-                    {
-                        result = [cur];
-                        resKey = key;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        private static async ValueTask<IList<TSource>> ExtremaBy<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TKey, TKey, int> compare, CancellationToken cancellationToken)
-        {
-            var result = new List<TSource>();
-
-            await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
-            {
-                if (!await e.MoveNextAsync())
-                    throw Error.NoElements();
-
-                var current = e.Current;
-                var resKey = await keySelector(current).ConfigureAwait(false);
-                result.Add(current);
-
-                while (await e.MoveNextAsync())
-                {
-                    var cur = e.Current;
-                    var key = await keySelector(cur).ConfigureAwait(false);
-
-                    var cmp = compare(key, resKey);
-
-                    if (cmp == 0)
-                    {
-                        result.Add(cur);
-                    }
-                    else if (cmp > 0)
-                    {
-                        result = [cur];
-                        resKey = key;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-#if !NO_DEEP_CANCELLATION
-        private static async ValueTask<IList<TSource>> ExtremaBy<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TKey, TKey, int> compare, CancellationToken cancellationToken)
-        {
-            var result = new List<TSource>();
-
-            await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
-            {
-                if (!await e.MoveNextAsync())
-                    throw Error.NoElements();
-
-                var current = e.Current;
-                var resKey = await keySelector(current, cancellationToken).ConfigureAwait(false);
-                result.Add(current);
-
-                while (await e.MoveNextAsync())
-                {
-                    var cur = e.Current;
-                    var key = await keySelector(cur, cancellationToken).ConfigureAwait(false);
-
-                    var cmp = compare(key, resKey);
-
-                    if (cmp == 0)
-                    {
-                        result.Add(cur);
-                    }
-                    else if (cmp > 0)
-                    {
-                        result = [cur];
-                        resKey = key;
-                    }
-                }
-            }
-
-            return result;
-        }
 #endif
     }
 }

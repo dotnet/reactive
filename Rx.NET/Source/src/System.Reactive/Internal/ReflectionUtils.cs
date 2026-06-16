@@ -29,19 +29,13 @@ namespace System.Reactive
 
             if (target == null)
             {
-                e = targetType.GetEvent(eventName, BindingFlags.Public | BindingFlags.Static);
-                if (e == null)
-                {
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.COULD_NOT_FIND_STATIC_EVENT, eventName, targetType.FullName));
-                }
+                e = targetType.GetEvent(eventName, BindingFlags.Public | BindingFlags.Static)
+                    ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.COULD_NOT_FIND_STATIC_EVENT, eventName, targetType.FullName));
             }
             else
             {
-                e = targetType.GetEvent(eventName, BindingFlags.Public | BindingFlags.Instance);
-                if (e == null)
-                {
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.COULD_NOT_FIND_INSTANCE_EVENT, eventName, targetType.FullName));
-                }
+                e = targetType.GetEvent(eventName, BindingFlags.Public | BindingFlags.Instance)
+                    ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.COULD_NOT_FIND_INSTANCE_EVENT, eventName, targetType.FullName));
             }
 
             addMethod = e.GetAddMethod() ?? throw new InvalidOperationException(Strings_Linq.EVENT_MISSING_ADD_METHOD);

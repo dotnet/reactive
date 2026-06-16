@@ -2,19 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#if HAS_WPF
 using System.Reactive.Disposables;
 
-#if NET472 || CSWINRT
 using System.Threading;
-#endif
-#if HAS_DISPATCHER
 using System;
 using System.Windows.Threading;
-#endif
 
 namespace ReactiveTests
 {
-#if HAS_DISPATCHER
     internal static class DispatcherHelpers
     {
         private static readonly Semaphore s_oneDispatcher = new(1, 1);
@@ -23,7 +19,6 @@ namespace ReactiveTests
         {
             s_oneDispatcher.WaitOne();
 
-#if DESKTOPCLR
             var dispatcher = new Thread(Dispatcher.Run);
             dispatcher.IsBackground = true;
             dispatcher.Start();
@@ -38,14 +33,8 @@ namespace ReactiveTests
             wrapper = new DispatcherWrapper(d);
 
             return new DispatcherTest(dispatcher);
-#else
-            wrapper = new DispatcherWrapper(Dispatcher.CurrentDispatcher);
-
-            return Disposable.Empty; // REVIEW: Anything to shut down?
-#endif
         }
 
-#if DESKTOPCLR
         private sealed class DispatcherTest : IDisposable
         {
             private readonly Thread _t;
@@ -66,7 +55,6 @@ namespace ReactiveTests
                 s_oneDispatcher.Release();
             }
         }
-#endif
     }
 
     internal class DispatcherWrapper
@@ -96,5 +84,5 @@ namespace ReactiveTests
             _dispatcher.BeginInvoke(action);
         }
     }
-#endif
 }
+#endif

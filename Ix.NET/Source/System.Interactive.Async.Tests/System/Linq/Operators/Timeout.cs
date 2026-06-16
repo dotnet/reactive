@@ -23,7 +23,7 @@ namespace Tests
             {
                 await en.MoveNextAsync();
 
-                Assert.False(true, "MoveNextAsync should have thrown");
+                Assert.Fail("MoveNextAsync should have thrown");
             }
             catch (TimeoutException)
             {
@@ -48,7 +48,7 @@ namespace Tests
             {
                 await en.MoveNextAsync();
 
-                Assert.False(true, "MoveNextAsync should have thrown");
+                Assert.Fail("MoveNextAsync should have thrown");
             }
             catch (TimeoutException)
             {
@@ -77,7 +77,7 @@ namespace Tests
             {
                 await en.MoveNextAsync();
 
-                Assert.False(true, "MoveNextAsync should have thrown");
+                Assert.Fail("MoveNextAsync should have thrown");
             }
             catch (TimeoutException)
             {
@@ -115,7 +115,7 @@ namespace Tests
             {
                 await en.MoveNextAsync();
 
-                Assert.False(true, "MoveNextAsync should have thrown");
+                Assert.Fail("MoveNextAsync should have thrown");
             }
             catch (TimeoutException)
             {

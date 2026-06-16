@@ -6,6 +6,10 @@ using System;
 using System.Reactive.Linq;
 using BenchmarkDotNet.Running;
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+[assembly:DoNotParallelize] // Not really a test project, but the build tools think we are, and complain if we don't state our parallelization policy.
+
 namespace Benchmarks.System.Reactive
 {
     internal class Program

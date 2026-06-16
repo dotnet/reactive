@@ -9,8 +9,12 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
     public static partial class AsyncEnumerable
     {
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.union?view=net-9.0-pp
+        // That one overload covers the next two methods, because it supplies a default comparer.
+
         /// <summary>
         /// Produces the set union of two sequences by using the default equality comparer.
         /// </summary>
@@ -291,4 +295,5 @@ namespace System.Linq
             }
         }
     }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 }

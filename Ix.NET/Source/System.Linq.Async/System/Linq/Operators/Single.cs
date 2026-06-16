@@ -8,8 +8,15 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+#if REFERENCE_ASSEMBLY
+    public static partial class AsyncEnumerableDeprecated
+#else
     public static partial class AsyncEnumerable
+#endif
     {
+#if INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.singleasync?view=net-9.0-pp#system-linq-asyncenumerable-singleasync-1(system-collections-generic-iasyncenumerable((-0))-system-threading-cancellationtoken)
+
         /// <summary>
         /// Returns the only element of an async-enumerable sequence, and reports an exception if there is not exactly one element in the async-enumerable sequence.
         /// </summary>
@@ -56,6 +63,8 @@ namespace System.Linq
             }
         }
 
+        // https://learn.microsoft.com/en-us/dotnet/api/system.linq.asyncenumerable.singleasync?view=net-9.0-pp#system-linq-asyncenumerable-singleasync-1(system-collections-generic-iasyncenumerable((-0))-system-func((-0-system-boolean))-system-threading-cancellationtoken)
+
         /// <summary>
         /// Returns the only element of an async-enumerable sequence that satisfies the condition in the predicate, and reports an exception if there is not exactly one element in the async-enumerable sequence.
         /// </summary>
@@ -101,6 +110,7 @@ namespace System.Linq
                 throw Error.NoElements();
             }
         }
+#endif // INCLUDE_SYSTEM_LINQ_ASYNCENUMERABLE_DUPLICATES
 
         /// <summary>
         /// Returns the only element of an async-enumerable sequence that satisfies the condition in the asynchronous predicate, and reports an exception if there is not exactly one element in the async-enumerable sequence that matches the predicate.
@@ -113,6 +123,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) No element satisfies the condition in the predicate. -or- More than one element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
         [GenerateAsyncOverload]
+        [Obsolete("Use SingleAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SingleAwaitAsync functionality now exists as overloads of SingleAsync.")]
         private static ValueTask<TSource> SingleAwaitAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -151,6 +162,7 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         [GenerateAsyncOverload]
+        [Obsolete("Use SingleAsync. IAsyncEnumerable LINQ is now in System.Linq.AsyncEnumerable, and the SingleAwaitWithCancellationAsync functionality now exists as overloads of SingleAsync.")]
         private static ValueTask<TSource> SingleAwaitWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
