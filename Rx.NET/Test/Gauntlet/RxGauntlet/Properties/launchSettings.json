@@ -4,6 +4,10 @@
       "commandName": "Project",
       "commandLineArgs": "test-all-published-rx"
     },
+    "System.Reactive 7.0.0-beta.1": {
+      "commandName": "Project",
+      "commandLineArgs": "test-candidate\r\n--package-source https://pkgs.dev.azure.com/dotnet/Rx.NET/_packaging/RxNet/nuget/v3/index.json\r\n--rx-main-package System.Reactive,7.0.0-beta.1 --rx-ui-package System.Reactive.Wpf,7.0.0-beta.1 --rx-ui-package System.Reactive.WindowsForms,7.0.0-beta.1 --rx-ui-package System.Reactive.WindowsRuntime,7.0.0-beta.1"
+    },
     "System.Reactive.Net preview.17": {
       "commandName": "Project",
       "commandLineArgs": "test-candidate\r\n--package-source https://pkgs.dev.azure.com/dotnet/Rx.NET/_packaging/RxNet/nuget/v3/index.json\r\n--rx-main-package System.Reactive.Net,7.0.0-preview.17.g58342773bd --rx-legacy-package System.Reactive,7.0.0-preview.17.g58342773bd --rx-ui-package System.Reactive.For.Wpf,7.0.0-preview.17.g58342773bd --rx-ui-package System.Reactive.For.WindowsForms,7.0.0-preview.17.g58342773bd"
