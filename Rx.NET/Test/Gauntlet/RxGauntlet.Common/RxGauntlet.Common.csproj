@@ -13,12 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Json.ExtendedTypes" Version="4.3.10" />
-    <PackageReference Include="Corvus.Json.SourceGenerator" Version="4.3.10">
+    <PackageReference Include="Corvus.Json.ExtendedTypes" Version="5.1.16" />
+    <PackageReference Include="Corvus.Json.SourceGenerator" Version="5.1.16">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Spectre.Console.Cli" Version="0.50.0" />
+    <PackageReference Include="Spectre.Console.Cli" Version="0.55.0" />
   </ItemGroup>
 
 </Project>

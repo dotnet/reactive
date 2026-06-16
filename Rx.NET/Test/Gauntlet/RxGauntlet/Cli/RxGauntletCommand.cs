@@ -36,7 +36,7 @@ internal abstract class RxGauntletCommandBase<TSettings> : AsyncCommand<TSetting
 
     protected abstract TestRunPackageSelection[] GetPackageSelection(TSettings settings);
 
-    public override async Task<int> ExecuteAsync(CommandContext context, TSettings settings)
+    protected override async Task<int> ExecuteAsync(CommandContext context, TSettings settings, CancellationToken cancellationToken)
     {
         var packageSelections = GetPackageSelection(settings);
 

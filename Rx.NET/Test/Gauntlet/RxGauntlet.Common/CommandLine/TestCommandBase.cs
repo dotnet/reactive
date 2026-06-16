@@ -16,7 +16,7 @@ public abstract class TestCommandBase<TSettings> : AsyncCommand<TSettings>
 {
     protected abstract string DefaultOutputFilename { get; }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, TSettings settings)
+    protected override async Task<int> ExecuteAsync(CommandContext context, TSettings settings, CancellationToken cancellationToken)
     {
         var testTimestampText = settings.TestTimestamp ?? DateTimeOffset.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss");
         var testRunId = settings.TestRunId ?? $"{testTimestampText}-{System.Security.Cryptography.RandomNumberGenerator.GetHexString(8)}";
