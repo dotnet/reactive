@@ -13,5 +13,6 @@
     "branchName": "rel/rx-v{version}",
     "firstUnstableTag": "preview"
   },
+
   "versionHeightOffset": -1
 }
