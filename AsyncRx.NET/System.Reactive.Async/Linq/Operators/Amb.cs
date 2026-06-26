@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Threading;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
@@ -83,7 +83,7 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             var state = AmbState.None;
 
@@ -199,7 +199,7 @@ namespace System.Reactive.Linq
             if (subscriptions == null)
                 throw new ArgumentNullException(nameof(subscriptions));
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             var winner = default(int?);
 

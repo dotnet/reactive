@@ -10,6 +10,7 @@
 <#@ output extension=".cs" #>
 using System.Collections.Generic;
 using System.Reactive.Disposables;
+using System.Reactive.Threading;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -152,7 +153,7 @@ for (var i = 2; i <= 15; i++)
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
 <#
 for (var j = 1; j <= i; j++)
@@ -258,7 +259,7 @@ for (var j = 1; j <= i; j++)
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
 <#
 for (var j = 1; j <= i; j++)

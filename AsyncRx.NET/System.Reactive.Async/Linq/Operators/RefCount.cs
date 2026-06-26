@@ -4,7 +4,7 @@
 
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
-using System.Threading;
+using System.Reactive.Threading;
 
 namespace System.Reactive.Linq
 {
@@ -15,7 +15,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
             var count = 0;
             var connectable = default(IAsyncDisposable);
 

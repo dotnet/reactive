@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Joins
@@ -18,7 +18,7 @@ namespace System.Reactive.Joins
         private readonly List<ActiveAsyncPlan> _activePlans = new();
         private readonly SingleAssignmentAsyncDisposable _subscription = new();
 
-        private AsyncGate _gate;
+        private IAsyncGate _gate;
         private bool _isDisposed;
 
         public AsyncJoinObserver(IAsyncObservable<T> source, Func<Exception, ValueTask> onError)
@@ -56,7 +56,7 @@ namespace System.Reactive.Joins
             }
         }
 
-        public async Task SubscribeAsync(AsyncGate gate)
+        public async Task SubscribeAsync(IAsyncGate gate)
         {
             _gate = gate;
 

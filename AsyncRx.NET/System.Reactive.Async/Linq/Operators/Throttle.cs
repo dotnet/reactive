@@ -4,7 +4,7 @@
 
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Threading;
+using System.Reactive.Threading;
 
 namespace System.Reactive.Linq
 {
@@ -104,7 +104,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             var timer = new SerialAsyncDisposable();
 
@@ -187,7 +187,7 @@ namespace System.Reactive.Linq
             if (throttleSelector == null)
                 throw new ArgumentNullException(nameof(throttleSelector));
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             var throttler = new SerialAsyncDisposable();
 

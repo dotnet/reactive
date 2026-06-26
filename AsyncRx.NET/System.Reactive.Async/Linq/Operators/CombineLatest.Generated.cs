@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Disposables;
+using System.Reactive.Threading;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -1827,7 +1828,7 @@ namespace System.Reactive.Linq
             bool isDone2 = false;
             T2 latestValue2 = default(T2);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -1946,7 +1947,7 @@ namespace System.Reactive.Linq
             bool isDone2 = false;
             T2 latestValue2 = default(T2);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -2078,7 +2079,7 @@ namespace System.Reactive.Linq
             bool isDone3 = false;
             T3 latestValue3 = default(T3);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -2243,7 +2244,7 @@ namespace System.Reactive.Linq
             bool isDone3 = false;
             T3 latestValue3 = default(T3);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -2432,7 +2433,7 @@ namespace System.Reactive.Linq
             bool isDone4 = false;
             T4 latestValue4 = default(T4);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -2643,7 +2644,7 @@ namespace System.Reactive.Linq
             bool isDone4 = false;
             T4 latestValue4 = default(T4);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -2889,7 +2890,7 @@ namespace System.Reactive.Linq
             bool isDone5 = false;
             T5 latestValue5 = default(T5);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -3146,7 +3147,7 @@ namespace System.Reactive.Linq
             bool isDone5 = false;
             T5 latestValue5 = default(T5);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -3449,7 +3450,7 @@ namespace System.Reactive.Linq
             bool isDone6 = false;
             T6 latestValue6 = default(T6);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -3752,7 +3753,7 @@ namespace System.Reactive.Linq
             bool isDone6 = false;
             T6 latestValue6 = default(T6);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -4112,7 +4113,7 @@ namespace System.Reactive.Linq
             bool isDone7 = false;
             T7 latestValue7 = default(T7);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -4461,7 +4462,7 @@ namespace System.Reactive.Linq
             bool isDone7 = false;
             T7 latestValue7 = default(T7);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -4878,7 +4879,7 @@ namespace System.Reactive.Linq
             bool isDone8 = false;
             T8 latestValue8 = default(T8);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -5273,7 +5274,7 @@ namespace System.Reactive.Linq
             bool isDone8 = false;
             T8 latestValue8 = default(T8);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -5747,7 +5748,7 @@ namespace System.Reactive.Linq
             bool isDone9 = false;
             T9 latestValue9 = default(T9);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -6188,7 +6189,7 @@ namespace System.Reactive.Linq
             bool isDone9 = false;
             T9 latestValue9 = default(T9);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -6719,7 +6720,7 @@ namespace System.Reactive.Linq
             bool isDone10 = false;
             T10 latestValue10 = default(T10);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -7206,7 +7207,7 @@ namespace System.Reactive.Linq
             bool isDone10 = false;
             T10 latestValue10 = default(T10);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -7794,7 +7795,7 @@ namespace System.Reactive.Linq
             bool isDone11 = false;
             T11 latestValue11 = default(T11);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -8327,7 +8328,7 @@ namespace System.Reactive.Linq
             bool isDone11 = false;
             T11 latestValue11 = default(T11);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -8972,7 +8973,7 @@ namespace System.Reactive.Linq
             bool isDone12 = false;
             T12 latestValue12 = default(T12);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -9551,7 +9552,7 @@ namespace System.Reactive.Linq
             bool isDone12 = false;
             T12 latestValue12 = default(T12);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -10253,7 +10254,7 @@ namespace System.Reactive.Linq
             bool isDone13 = false;
             T13 latestValue13 = default(T13);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -10878,7 +10879,7 @@ namespace System.Reactive.Linq
             bool isDone13 = false;
             T13 latestValue13 = default(T13);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -11637,7 +11638,7 @@ namespace System.Reactive.Linq
             bool isDone14 = false;
             T14 latestValue14 = default(T14);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -12308,7 +12309,7 @@ namespace System.Reactive.Linq
             bool isDone14 = false;
             T14 latestValue14 = default(T14);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -13124,7 +13125,7 @@ namespace System.Reactive.Linq
             bool isDone15 = false;
             T15 latestValue15 = default(T15);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
@@ -13841,7 +13842,7 @@ namespace System.Reactive.Linq
             bool isDone15 = false;
             T15 latestValue15 = default(T15);
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             return
             (
