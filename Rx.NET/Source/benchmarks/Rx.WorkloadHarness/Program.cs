@@ -27,8 +27,20 @@ namespace Rx.WorkloadHarness
                 ? args[0].ToLowerInvariant()
                 : "buffer";
             var rateMs = GetIntOption(args, "--rate-ms", 1);
-            var period = TimeSpan.FromMilliseconds(rateMs);
             var seconds = GetIntOption(args, "--seconds", 0); // 0 = run until Ctrl+C; > 0 = auto-stop (handy for CI/smoke runs)
+            if (rateMs < 1)
+            {
+                Console.Error.WriteLine("--rate-ms must be >= 1.");
+                Environment.Exit(1);
+            }
+
+            if (seconds < 0)
+            {
+                Console.Error.WriteLine("--seconds must be >= 0 (0 = run until Ctrl+C).");
+                Environment.Exit(1);
+            }
+
+            var period = TimeSpan.FromMilliseconds(rateMs);
 
             var pid = Environment.ProcessId;
             Console.WriteLine($"Rx.WorkloadHarness  PID={pid}  workload='{workload}'  rate={rateMs}ms");

@@ -45,7 +45,12 @@ $branch = (git -C $benchmarksRoot rev-parse --abbrev-ref HEAD).Trim()
 $date = Get-Date -Format 'yyyy-MM-dd'
 
 $folderName = "$date-$sha"
-if ($Label) { $folderName += "-$Label" }
+if ($Label) {
+    # Sanitize to a safe filename segment so the label cannot contain path separators or '..'.
+    $safeLabel = ($Label -replace '[^A-Za-z0-9_.-]', '-').Trim('.')
+    if (-not $safeLabel) { throw "Label '$Label' contains no usable filename characters." }
+    $folderName += "-$safeLabel"
+}
 $dest = Join-Path (Join-Path $benchmarksRoot 'baselines') $folderName
 
 if (Test-Path (Join-Path $dest 'results')) {
