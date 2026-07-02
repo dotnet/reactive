@@ -1,18 +1,22 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472;net8.0;net9.0;net10.0</TargetFrameworks>
     <Optimize>true</Optimize>
     <IsPackable>false</IsPackable>
-    <Configurations>Current Sources;Rx.net 3.1.1;Rx.net 4.0</Configurations>
+
+    <!--
+      The benchmark suite always measures the current in-repo sources. The old per-config
+      cross-version comparison (Rx 3.1.1 / 4.0) has been dropped; before/after comparisons are
+      cross-run instead — see tools/capture-baseline.ps1 and tools/compare-results.ps1.
+    -->
   </PropertyGroup>
 
   <!--
-    Test projects are not designed for public consumption so the analysis rules mostly produce
+    Benchmarks are not designed for public consumption, so the analysis rules mostly produce
     false positives.
     -->
-
   <PropertyGroup>
     <AnalysisLevelNaming>7.0-none</AnalysisLevelNaming>
     <AnalysisLevelPerformance>7.0-none</AnalysisLevelPerformance>
@@ -23,41 +27,30 @@
     <GlobalAnalyzerConfigFiles Remove="$(MSBuildThisFileDirectory)..\..\analyzers.globalconfig" />
   </ItemGroup>
 
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rx.net 3.1.1|AnyCPU'">
-    <DefineConstants>$(DefineConstants);RX3_1_1</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rx.net 4.0|AnyCPU'">
-    <DefineConstants>$(DefineConstants);RX4_0</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Current Sources|AnyCPU'">
-    <DefineConstants>$(DefineConstants);CURRENT</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-    <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
-    <PackageReference Include="WindowsBase" Version="4.6.1055" />
+    <!--
+      EtwProfiler + hardware counters (Windows). The EventPipe / Disassembly / Threading diagnosers
+      ship in the core BenchmarkDotNet package. Together they enable the opt-in profiler and disasm
+      CLI switches used by the profiling / telemetry feedback loop.
+    -->
+    <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.15.8" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Rx.net 3.1.1|AnyCPU'">
-    <PackageReference Include="System.Reactive" Version="3.1.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Rx.net 4.0|AnyCPU'">
-    <PackageReference Include="System.Reactive" Version="4.0.0" />
-  </ItemGroup>
-
+  <!--
+    Reference the product projects directly (not via the test project), so the benchmark graph no
+    longer drags in MSTest / xUnit / the whole test assembly. System.Reactive (max net8.0) resolves
+    to its net472 output for the net472 TFM and its net8.0 output for net8/net9/net10.
+  -->
   <ItemGroup>
-    <ProjectReference Include="..\..\tests\Tests.System.Reactive\Tests.System.Reactive.csproj" />
+    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
+    <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!-- .NET Framework-only UI assemblies, retained for the legacy net472 benchmarks; the new suite avoids UI-thread schedulers. -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="System.Windows.Forms" />
+    <PackageReference Include="WindowsBase" Version="4.6.1055" />
   </ItemGroup>
 
 </Project>
