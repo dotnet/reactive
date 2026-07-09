@@ -12,7 +12,7 @@ var bigTrades =
 
 Most .NET developers will be familiar with [LINQ](https://learn.microsoft.com/en-us/dotnet/csharp/linq/) in at least one of its many popular forms such as [LINQ to Objects](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/linq-to-objects), or [Entity Framework Core queries](https://learn.microsoft.com/en-us/ef/core/querying/). Most LINQ implementations allow you to query _data at rest_. LINQ to Objects works on arrays or other collections, and LINQ queries in Entity Framework Core run against data in a database, but Rx is different: it offers the ability to define queries over live event streams—what you might call _data in motion_.
 
-If you don't like the query expression syntax, you can write exactly equivalent code by invoking LINQ operators directly:
+If you don't like the query expression syntax, you can write exactly equivalent code by using method syntax with a lambda expression directly:
 
 ```csharp
 var bigTrades = trades.Where(trade => trade.Volume > 1_000_000);
