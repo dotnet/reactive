@@ -29,6 +29,28 @@ namespace System.Reactive.Linq
                 static (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Take(observer, count)));
         }
 
+        public static IAsyncObservable<TSource> Take<TSource>(this IAsyncObservable<TSource> source, int count, IAsyncScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            // As in Rx.NET, the scheduler only matters for the degenerate count of zero, where
+            // the completion is scheduled rather than delivered immediately.
+            if (count == 0)
+            {
+                return Empty<TSource>(scheduler);
+            }
+
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                count,
+                static (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Take(observer, count)));
+        }
+
         public static IAsyncObservable<TSource> Take<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration)
         {
             if (source == null)

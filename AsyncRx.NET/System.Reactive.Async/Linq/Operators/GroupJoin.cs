@@ -27,15 +27,15 @@ namespace System.Reactive.Linq
 
             return Create<TResult>(async observer =>
             {
-                var subscriptions = new CompositeAsyncDisposable();
+                // Each side owns its own subscription so that it can be released as soon as that
+                // side completes (Rx.NET v2+ behaviour), independently of the join as a whole.
+                var leftSubscription = new SingleAssignmentAsyncDisposable();
+                var rightSubscription = new SingleAssignmentAsyncDisposable();
 
-                var (leftObserver, rightObserver, disposable) = AsyncObserver.GroupJoin(observer, subscriptions, leftDurationSelector, rightDurationSelector, resultSelector);
+                var (leftObserver, rightObserver, disposable) = AsyncObserver.GroupJoin(observer, leftSubscription, rightSubscription, leftDurationSelector, rightDurationSelector, resultSelector);
 
-                var leftSubscription = await left.SubscribeSafeAsync(leftObserver).ConfigureAwait(false);
-                await subscriptions.AddAsync(leftSubscription).ConfigureAwait(false);
-
-                var rightSubscription = await right.SubscribeSafeAsync(rightObserver).ConfigureAwait(false);
-                await subscriptions.AddAsync(rightSubscription).ConfigureAwait(false);
+                await leftSubscription.AssignAsync(await left.SubscribeSafeAsync(leftObserver).ConfigureAwait(false)).ConfigureAwait(false);
+                await rightSubscription.AssignAsync(await right.SubscribeSafeAsync(rightObserver).ConfigureAwait(false)).ConfigureAwait(false);
 
                 return disposable;
             });
@@ -44,12 +44,16 @@ namespace System.Reactive.Linq
 
     public partial class AsyncObserver
     {
-        public static (IAsyncObserver<TLeft>, IAsyncObserver<TRight>, IAsyncDisposable) GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(IAsyncObserver<TResult> observer, IAsyncDisposable subscriptions, Func<TLeft, IAsyncObservable<TLeftDuration>> leftDurationSelector, Func<TRight, IAsyncObservable<TRightDuration>> rightDurationSelector, Func<TLeft, IAsyncObservable<TRight>, TResult> resultSelector)
+        /// <param name="leftSubscription">The subscription to the left source (typically assigned after subscribing). Disposed when the left source completes, and with the join as a whole.</param>
+        /// <param name="rightSubscription">The subscription to the right source (typically assigned after subscribing). Disposed when the right source completes, and with the join as a whole.</param>
+        public static (IAsyncObserver<TLeft>, IAsyncObserver<TRight>, IAsyncDisposable) GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(IAsyncObserver<TResult> observer, IAsyncDisposable leftSubscription, IAsyncDisposable rightSubscription, Func<TLeft, IAsyncObservable<TLeftDuration>> leftDurationSelector, Func<TRight, IAsyncObservable<TRightDuration>> rightDurationSelector, Func<TLeft, IAsyncObservable<TRight>, TResult> resultSelector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
-            if (subscriptions == null)
-                throw new ArgumentNullException(nameof(subscriptions));
+            if (leftSubscription == null)
+                throw new ArgumentNullException(nameof(leftSubscription));
+            if (rightSubscription == null)
+                throw new ArgumentNullException(nameof(rightSubscription));
             if (leftDurationSelector == null)
                 throw new ArgumentNullException(nameof(leftDurationSelector));
             if (rightDurationSelector == null)
@@ -59,7 +63,7 @@ namespace System.Reactive.Linq
 
             var gate = new AsyncGate();
 
-            var group = new CompositeAsyncDisposable(subscriptions);
+            var group = new CompositeAsyncDisposable(leftSubscription, rightSubscription);
             var refCount = new RefCountAsyncDisposable(group);
 
             var leftMap = new SortedDictionary<int, IAsyncObserver<TRight>>();
@@ -167,6 +171,8 @@ namespace System.Reactive.Linq
                         {
                             await observer.OnCompletedAsync().ConfigureAwait(false);
                         }
+
+                        await leftSubscription.DisposeAsync().ConfigureAwait(false);
                     }
                 );
 
@@ -230,7 +236,7 @@ namespace System.Reactive.Linq
                         }
                     },
                     OnErrorAsync,
-                    () => default
+                    () => rightSubscription.DisposeAsync()
                 );
 
             return (leftObserver, rightObserver, refCount);

@@ -159,6 +159,20 @@ namespace System.Reactive.Linq
                 });
         }
 
+        public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource, TWindowOpening, TWindowClosing>(this IAsyncObservable<TSource> source, IAsyncObservable<TWindowOpening> windowOpenings, Func<TWindowOpening, IAsyncObservable<TWindowClosing>> windowClosingSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (windowOpenings == null)
+                throw new ArgumentNullException(nameof(windowOpenings));
+            if (windowClosingSelector == null)
+                throw new ArgumentNullException(nameof(windowClosingSelector));
+
+            // Defined exactly as in Rx.NET: each opening starts a group whose lifetime is the
+            // closing sequence selected for it, and the source's elements join with zero duration.
+            return windowOpenings.GroupJoin(source, windowClosingSelector, static _ => Empty<Unit>(), static (_, window) => window);
+        }
+
         // REVIEW: This overload is inherited from Rx but arguably a bit esoteric as it doesn't provide context to the closing selector.
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource, TWindowClosing>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TWindowClosing>> windowClosingSelector)
