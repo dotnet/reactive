@@ -32,10 +32,19 @@ namespace System.Threading
 
             if (shouldAcquire)
             {
-                return new ValueTask<Releaser>(_semaphore.WaitAsync().ContinueWith(_ => new Releaser(this)));
+                return AcquireAsync();
             }
 
             return new ValueTask<Releaser>(new Releaser(this));
+        }
+
+        // This acquires the semaphore, and if it is uncontended, this will complete synchronously.
+        // This avoids unnecessary thread switches when there is no contention, and also makes it
+        // possible for tests to run deterministically.
+        private async ValueTask<Releaser> AcquireAsync()
+        {
+            await _semaphore.WaitAsync().ConfigureAwait(false);
+            return new Releaser(this);
         }
 
         private void Release()
