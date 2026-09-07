@@ -44,8 +44,8 @@ namespace System.Reactive.Linq
 
     public partial class AsyncObserver
     {
-        /// <param name="leftSubscription">The subscription to the left source (typically assigned after subscribing). Disposed when the left source completes, and with the join as a whole.</param>
-        /// <param name="rightSubscription">The subscription to the right source (typically assigned after subscribing). Disposed when the right source completes, and with the join as a whole.</param>
+        // leftSubscription/rightSubscription: the subscriptions to the left and right sources (typically
+        // assigned after subscribing). Each is disposed when its side completes, and with the join as a whole.
         public static (IAsyncObserver<TLeft>, IAsyncObserver<TRight>, IAsyncDisposable) GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(IAsyncObserver<TResult> observer, IAsyncDisposable leftSubscription, IAsyncDisposable rightSubscription, Func<TLeft, IAsyncObservable<TLeftDuration>> leftDurationSelector, Func<TRight, IAsyncObservable<TRightDuration>> rightDurationSelector, Func<TLeft, IAsyncObservable<TRight>, TResult> resultSelector)
         {
             if (observer == null)
