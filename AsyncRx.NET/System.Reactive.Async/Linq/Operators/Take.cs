@@ -58,10 +58,8 @@ namespace System.Reactive.Linq
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
 
-            if (duration == TimeSpan.Zero)
-            {
-                return Empty<TSource>();
-            }
+            // No special case for a zero duration: as in Rx.NET, the source is subscribed and the
+            // completion is delivered by the scheduler (observable via the source subscription).
 
             // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want Take on the observer?
 
@@ -84,13 +82,8 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
-            if (scheduler == null)  // REVIEW: scheduler not used.
+            if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
-
-            if (duration == TimeSpan.Zero)
-            {
-                return Empty<TSource>();
-            }
 
             // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want Take on the observer?
 
@@ -99,7 +92,7 @@ namespace System.Reactive.Linq
                 (duration, scheduler),
                 static async (source, state, observer) =>
                 {
-                    var (sourceObserver, timer) = await AsyncObserver.Take(observer, state.duration).ConfigureAwait(false);
+                    var (sourceObserver, timer) = await AsyncObserver.Take(observer, state.duration, state.scheduler).ConfigureAwait(false);
 
                     var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 

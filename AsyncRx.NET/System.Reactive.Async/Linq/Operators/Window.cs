@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
             return CreateAsyncObservable<IAsyncObservable<TSource>>.From(
                 source,
                 count,
-                static (source, count, observer) => WindowCore(source, observer, (o, d) => AsyncObserver.Window(o, d, count)));
+                static (source, count, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, count)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, int count, int skip)
@@ -38,7 +38,7 @@ namespace System.Reactive.Linq
             return CreateAsyncObservable<IAsyncObservable<TSource>>.From(
                 source,
                 (count, skip),
-                static (source, state, observer) => WindowCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.count, state.skip)));
+                static (source, state, observer) => WindowAsyncCore(source, observer, (o, d) => AsyncObserver.Window(o, d, state.count, state.skip)));
         }
 
         public static IAsyncObservable<IAsyncObservable<TSource>> Window<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan)
@@ -227,9 +227,9 @@ namespace System.Reactive.Linq
 
     public partial class AsyncObserver
     {
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, int count) => Window(observer, subscription, count, count);
+        public static ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, int count) => Window(observer, subscription, count, count);
 
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, int count, int skip)
+        public static ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, int count, int skip)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -245,7 +245,25 @@ namespace System.Reactive.Linq
             var queue = new Queue<IAsyncSubject<TSource>>();
             var n = 0;
 
-            return
+            async ValueTask CreateWindowAsync()
+            {
+                var window = new SequentialSimpleAsyncSubject<TSource>();
+                queue.Enqueue(window);
+
+                var wrapper = new WindowAsyncObservable<TSource>(window, refCount);
+
+                await observer.OnNextAsync(wrapper).ConfigureAwait(false);
+            }
+
+            return CoreAsync();
+
+            async ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
+            {
+                // As in Rx.NET, the first window is open (and has been handed to the observer)
+                // before the source is subscribed, so no leading elements are lost.
+                await CreateWindowAsync().ConfigureAwait(false);
+
+                return
                 (
                     Create<TSource>
                     (
@@ -266,12 +284,7 @@ namespace System.Reactive.Linq
 
                             if (n % skip == 0)
                             {
-                                var window = new SequentialSimpleAsyncSubject<TSource>();
-                                queue.Enqueue(window);
-
-                                var wrapper = new WindowAsyncObservable<TSource>(window, refCount);
-
-                                await observer.OnNextAsync(wrapper).ConfigureAwait(false);
+                                await CreateWindowAsync().ConfigureAwait(false);
                             }
                         },
                         async ex =>
@@ -295,6 +308,7 @@ namespace System.Reactive.Linq
                     ),
                     refCount
                 );
+            }
         }
 
         public static ValueTask<(IAsyncObserver<TSource>, IAsyncDisposable)> Window<TSource>(IAsyncObserver<IAsyncObservable<TSource>> observer, IAsyncDisposable subscription, TimeSpan timeSpan) => Window(observer, subscription, timeSpan, TaskPoolAsyncScheduler.Default);
@@ -576,6 +590,12 @@ namespace System.Reactive.Linq
                         {
                             return;
                         }
+
+                        // Close the window whose time is up before opening the next one (as the
+                        // count-triggered path below and Rx.NET's sink do); otherwise the window
+                        // never completes, its consumers never release it, and the subscriptions
+                        // this operator hands out can never be torn down.
+                        await window.OnCompletedAsync().RendezVous(scheduler, ct);
 
                         n = 0;
                         newWindow = await CreateWindowAsync().RendezVous(scheduler, ct);
