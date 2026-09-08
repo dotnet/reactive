@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -9,55 +10,67 @@ namespace System.Threading
 {
     public sealed class AsyncGate
     {
+        // A FIFO async lock whose waiters are handed the lock directly on release, with their
+        // continuations run inline by the releasing thread. This replaced a SemaphoreSlim-based
+        // implementation: SemaphoreSlim completes its waiters with RunContinuationsAsynchronously,
+        // so every contended acquisition hopped to the thread pool — which made contended
+        // operators nondeterministic under a single-threaded virtual-time scheduler and cost a
+        // pool hop per contention in production. (An earlier ContinueWith without
+        // ExecuteSynchronously hopped even when uncontended.)
         private readonly object _gate = new();
-        private readonly SemaphoreSlim _semaphore = new(1, 1);
+        private readonly Queue<TaskCompletionSource<Releaser>> _waiters = new();
         private readonly AsyncLocal<int> _recursionCount = new();
+        private bool _held;
 
         public ValueTask<Releaser> LockAsync()
         {
-            var shouldAcquire = false;
-
             lock (_gate)
             {
-                if (_recursionCount.Value == 0)
+                if (_recursionCount.Value > 0)
                 {
-                    shouldAcquire = true;
-                    _recursionCount.Value = 1;
-                }
-                else
-                {
+                    // Re-entrant acquisition on the same logical flow.
                     _recursionCount.Value++;
+                    return new ValueTask<Releaser>(new Releaser(this));
                 }
+
+                _recursionCount.Value = 1;
+
+                if (!_held)
+                {
+                    _held = true;
+                    return new ValueTask<Releaser>(new Releaser(this));
+                }
+
+                var waiter = new TaskCompletionSource<Releaser>();
+                _waiters.Enqueue(waiter);
+                return new ValueTask<Releaser>(waiter.Task);
             }
-
-            if (shouldAcquire)
-            {
-                return AcquireAsync();
-            }
-
-            return new ValueTask<Releaser>(new Releaser(this));
-        }
-
-        // This acquires the semaphore, and if it is uncontended, this will complete synchronously.
-        // This avoids unnecessary thread switches when there is no contention, and also makes it
-        // possible for tests to run deterministically.
-        private async ValueTask<Releaser> AcquireAsync()
-        {
-            await _semaphore.WaitAsync().ConfigureAwait(false);
-            return new Releaser(this);
         }
 
         private void Release()
         {
+            var next = default(TaskCompletionSource<Releaser>);
+
             lock (_gate)
             {
                 Debug.Assert(_recursionCount.Value > 0);
 
                 if (--_recursionCount.Value == 0)
                 {
-                    _semaphore.Release();
+                    if (_waiters.Count > 0)
+                    {
+                        // Hand the lock straight to the next waiter; it stays held throughout.
+                        next = _waiters.Dequeue();
+                    }
+                    else
+                    {
+                        _held = false;
+                    }
                 }
             }
+
+            // Outside the lock: the waiter's continuation runs inline from here.
+            next?.TrySetResult(new Releaser(this));
         }
 
         public readonly struct Releaser : IDisposable
