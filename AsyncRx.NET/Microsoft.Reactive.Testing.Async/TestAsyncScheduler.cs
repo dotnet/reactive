@@ -31,8 +31,21 @@ namespace Microsoft.Reactive.Testing.Async;
 /// so installing a pump context would punt every ConfigureAwait(false) continuation to the
 /// thread pool. With no context, every awaiter — configured or not — resumes inline. It also
 /// matches production AsyncRx on TaskPoolAsyncScheduler, where operator code runs contextless.
+/// (A non-default <see cref="TaskScheduler"/> would block inlining in exactly the same way, so
+/// that is not an option either.)
+/// </para>
+/// <para>
 /// Code that escapes anyway (Task.Yield, Task.Run, real timers) is detected and reported as
-/// a failure rather than being silently tolerated.
+/// a failure rather than being silently tolerated. Detection cannot rely on inspecting a
+/// work item's task after the fact — an escaped continuation can complete it on a pool thread
+/// before the pump looks, which would make the escape indistinguishable from synchronous
+/// completion. Instead the pump marks every flow it runs with an <see cref="AsyncLocal{T}"/>
+/// that has a change-notification handler. The runtime invokes that handler on whichever
+/// thread restores a captured <see cref="ExecutionContext"/>, before the continuation body
+/// runs; the handler checks it is the pump thread. So the escape is recorded before escaped
+/// code can do anything observable, whether it resumes via Task.Yield, runs inside Task.Run,
+/// or fires from a real timer or a foreign cancellation. Harness entry points check the
+/// current thread as well, as a second line of defence.
 /// </para>
 /// <para>
 /// Continuations that cannot run inline (forced-yield resumptions) are inserted at the front
@@ -63,10 +76,18 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     private readonly object _failureGate = new();
     private readonly List<Exception> _failures = [];
     private readonly List<string> _diagnostics = [];
+    private bool _escapeRecorded;
+
+    // The pump running the current flow. Set inside every dispatched item, so every
+    // continuation captured under the pump carries it in its ExecutionContext, and the runtime
+    // invokes OnAmbientPumpChanged on whichever thread restores that context — before the
+    // continuation body runs. That is what makes escape detection race-free: see the class
+    // remarks and OnAmbientPumpChanged.
+    private static readonly AsyncLocal<TestAsyncScheduler?> s_ambientPump = new(OnAmbientPumpChanged);
 
     private long _nextSequence;
     private Thread? _pumpThread;
-    private bool _pumping;
+    private volatile bool _pumping;
 
     public TestAsyncScheduler()
         : this(ExecutionShape.SynchronousCompletion)
@@ -359,8 +380,10 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
         if (Thread.CurrentThread != _pumpThread)
         {
             // The work item's continuation chain ran (at least partly) off the pump; the
-            // pump's data structures must not be touched from here.
-            RecordFailure(EscapeFailure(work.Describe(), "completed on"));
+            // pump's data structures must not be touched from here. (OnAmbientPumpChanged
+            // will normally have recorded the escape already, as this continuation's context
+            // was restored onto the foreign thread; this is the backstop.)
+            RecordEscape(work.Describe(), "completed on");
             return;
         }
 
@@ -414,18 +437,56 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     {
         if (_pumping && Thread.CurrentThread != _pumpThread)
         {
-            RecordFailure(EscapeFailure(operation, "ran on"));
+            RecordEscape(operation, "ran on");
             return false;
         }
 
         return true;
     }
 
-    private TestAsyncSchedulerException EscapeFailure(string what, string verb) =>
-        new($"Work escaped the virtual-time pump: {what} {verb} thread " +
+    /// <summary>
+    /// Invoked by the runtime whenever <see cref="s_ambientPump"/>'s value changes on a
+    /// thread — including when a captured <see cref="ExecutionContext"/> is restored onto a
+    /// thread, which happens before the continuation (or Task.Run body, timer callback,
+    /// cancellation callback...) that captured it runs. A restore onto anything but the pump
+    /// thread while the pump is running is an escape, and is recorded here before the escaped
+    /// code can execute. Explicit sets (the pump marking a flow it is about to run) are not
+    /// context changes and are ignored.
+    /// </summary>
+    private static void OnAmbientPumpChanged(AsyncLocalValueChangedArgs<TestAsyncScheduler?> args)
+    {
+        if (args.ThreadContextChanged && args.CurrentValue is { } scheduler)
+        {
+            scheduler.VerifyPumpThread("execution");
+        }
+    }
+
+    /// <summary>
+    /// Records an escape from the pump. Only the first escape in a run is a failure: once a
+    /// flow has left the pump thread, everything it does from there (touching the harness,
+    /// completing its work item) is a consequence of that same escape, so subsequent reports
+    /// go to the diagnostic output rather than turning the failure into an aggregate.
+    /// </summary>
+    private void RecordEscape(string what, string verb)
+    {
+        var message = $"Work escaped the virtual-time pump: {what} {verb} thread " +
             $"'{Thread.CurrentThread.Name ?? $"#{Thread.CurrentThread.ManagedThreadId}"}' instead of the pump thread. " +
             "All asynchrony in a canonical-schedule test must originate from harness primitives " +
-            "(no Task.Run, real timers, or thread-pool continuations).");
+            "(no Task.Run, real timers, or thread-pool continuations).";
+
+        lock (_failureGate)
+        {
+            if (_escapeRecorded)
+            {
+                _diagnostics.Add(message);
+            }
+            else
+            {
+                _escapeRecorded = true;
+                _failures.Add(new TestAsyncSchedulerException(message));
+            }
+        }
+    }
 
     internal void RecordFailure(Exception exception)
     {
@@ -489,13 +550,27 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     /// saw the lock as held by its own flow). This keeps "what operator code sees" faithful
     /// to production for ambient state as well as for continuations.
     /// </summary>
-    private static Action Isolate(Action action)
+    /// <remarks>
+    /// Inside the restored context the item is marked as running under this pump (see
+    /// <see cref="s_ambientPump"/>). Doing this here rather than once in <see cref="Start"/>
+    /// matters: an item queued before <c>Start</c> captured a context without the mark, and
+    /// continuations captured inside it would otherwise be unmarked, and their escapes invisible.
+    /// </remarks>
+    private Action Isolate(Action action)
     {
         var context = ExecutionContext.Capture();
 
         return context is null
             ? action
-            : () => ExecutionContext.Run(context, static state => ((Action)state!)(), action);
+            : () => ExecutionContext.Run(
+                context,
+                static state =>
+                {
+                    var (scheduler, action) = ((TestAsyncScheduler, Action))state!;
+                    s_ambientPump.Value = scheduler;
+                    action();
+                },
+                (this, action));
     }
 
     private sealed class TimerItem(Action run)

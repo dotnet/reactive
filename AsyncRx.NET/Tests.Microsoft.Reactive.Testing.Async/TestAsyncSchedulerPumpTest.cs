@@ -161,9 +161,11 @@ public class TestAsyncSchedulerPumpTest
     public void Task_Yield_escapes_to_the_thread_pool_and_fails_informatively()
     {
         // With no SynchronizationContext current, Task.Yield resumes on the thread pool.
-        // That is an escape from the virtual-time pump; the harness reports it (either as an
-        // escaped continuation or as work still incomplete at pump exhaustion, depending on
-        // timing) instead of hanging or producing a corrupt trace.
+        // That is an escape from the virtual-time pump; the harness reports it (as an escape
+        // if the pool thread has resumed the continuation by the time the pump runs out of
+        // work, otherwise as work still incomplete) instead of hanging, producing a corrupt
+        // trace, or — if the pool thread completes the work before the pump looks at it —
+        // passing silently.
         var scheduler = new TestAsyncScheduler();
 
         scheduler.ScheduleAbsolute(100, async _ =>
@@ -330,10 +332,39 @@ public class TestAsyncSchedulerPumpTest
             await Task.Run(() => 42);
         });
 
-        // Depending on timing this surfaces as an escaped continuation or as work that
-        // had not completed when the pump ran out of virtual-time events; both are the
-        // harness's informative failure, never a hang.
+        // Depending on timing this surfaces as an escape or as work that had not completed
+        // when the pump ran out of virtual-time events; both are the harness's informative
+        // failure, never a hang and never a silent pass.
         Assert.ThrowsExactly<TestAsyncSchedulerException>(scheduler.Start);
+    }
+
+    [TestMethod]
+    public void Escaped_code_that_never_touches_the_harness_is_still_reported()
+    {
+        // The escape is detected when the escaped code's ExecutionContext is restored onto
+        // the foreign thread, before it runs — not by inspecting the work item's task
+        // afterwards, which a fast pool thread could already have completed. To prove that,
+        // the escaped code does nothing harness-related, and the pump is made to wait until
+        // it has run, so the only possible outcome is the escape diagnosis (never "work
+        // never completed", and never a silent pass). It also shows the escaped work's own
+        // completion, which follows on the same foreign thread, is folded into that one
+        // failure rather than reported as a second one.
+        var scheduler = new TestAsyncScheduler();
+        using var escapedCodeRan = new ManualResetEventSlim();
+
+        scheduler.ScheduleAbsolute(100, async _ =>
+        {
+            await Task.Run(() => escapedCodeRan.Set());
+        });
+
+        scheduler.ScheduleAbsolute(200, _ =>
+        {
+            escapedCodeRan.Wait();
+            return default;
+        });
+
+        var thrown = Assert.ThrowsExactly<TestAsyncSchedulerException>(scheduler.Start);
+        StringAssert.Contains(thrown.Message, "escaped the virtual-time pump");
     }
 
     [TestMethod]
