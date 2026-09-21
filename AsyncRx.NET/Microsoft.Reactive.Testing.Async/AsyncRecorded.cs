@@ -40,7 +40,7 @@ public readonly struct AsyncRecorded<T> : IEquatable<AsyncRecorded<T>>
     public T Value { get; }
 
     public bool Equals(AsyncRecorded<T> other) =>
-        Time == other.Time && Value!.Equals(other.Value);
+        Time == other.Time && EqualityComparer<T>.Default.Equals(Value, other.Value);
 
     public override bool Equals(object? obj) => obj is AsyncRecorded<T> other && Equals(other);
 
