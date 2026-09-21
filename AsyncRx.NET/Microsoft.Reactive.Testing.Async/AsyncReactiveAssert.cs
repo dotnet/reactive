@@ -7,34 +7,98 @@ using System.Text;
 
 namespace Microsoft.Reactive.Testing.Async;
 
-/// <summary>Thrown when an async trace assertion fails.</summary>
-public class AsyncReactiveAssertException : Exception
-{
-    public AsyncReactiveAssertException(string message)
-        : base(message)
-    {
-    }
-}
-
 /// <summary>
-/// Assertion helpers over recorded async traces, mirroring the sync
-/// <see cref="ReactiveAssert"/> conventions. The compact overloads take the shared (sync)
-/// vocabulary — <see cref="Recorded{T}"/> and <see cref="Subscription"/> — and assert that
-/// each async process's start and completion coincide; failures name exactly which
-/// timestamp mismatched. The extended overloads take the four-timestamp /
-/// two-timestamp async records for tests where the divergence is the point.
+/// Assertion helpers over recorded async traces.
 /// </summary>
+/// <remarks>
+/// <para>
+/// Although this does the same job as <see cref="ReactiveAssert"/>, and has superficially similar
+/// usage, there are some differences driven by the needs of AsyncRx.NET. In particular, whereas
+/// normal method invocation runs entirely within the space of a single tick, this is not
+/// necessarily true for asynchronous methods: these might start at one tick, but then yield,
+/// going on to complete during a later tick.
+/// </para>
+/// <para>
+/// Where Rx.NET's <c>Microsoft.Reactive.Testing</c> library defines <see cref="Recorded{T}"/>,
+/// which wraps a value in a single timestamp, this library defines <see cref="AsyncRecorded{T}"/>,
+/// which wraps a value in a start and end timestamp. Similarly, where <see cref="Subscription"/>
+/// has a pair of timestamps indicating when subscription and disposal occur, this library's'
+/// <see cref="AsyncSubscription"/> has two <em>pairs</em> of timestamps, because both the
+/// subscribe and dispose events might yield, meaning they might start and end on different
+/// timestamps.
+/// </para>
+/// <para>
+/// This class defines assertions as extension methods for collections of type
+/// <see cref="AsyncRecorded{T}"/> and <see cref="AsyncSubscription"/>, but these offer overloads
+/// enabling the expected values to be supplied in either sync or async forms. That means that
+/// tests asserting equivalence with Rx.NET (in scenarios that do not exploit the potential for
+/// async) can specify the expected values using the simple <see cref="Recorded{T}"/> or
+/// <see cref="Subscription"/> types. (We refer to these as 'compact' overloads.) This reduces
+/// verbosity in tests, and can enable sharing of code between tests for Rx.NET and AsyncRx.NET.
+/// </para>
+/// <para>
+/// To enable these mixed assertions, in which actual asynchronous traces are compared with
+/// expected synchronous traces, the overloads offered by this class are more specialized than
+/// those offered by <see cref="ReactiveAssert"/>. <see cref="ReactiveAssert"/> does not
+/// offer any overloads specific to <see cref="Recorded{T}"/> or <see cref="Subscription"/>,
+/// instead offering more general collection comparisons that then rely on those types' support
+/// for equality comparisons. That doesn't work for mixed comparisons: although we could make
+/// <see cref="AsyncRecorded{T}"/> detect when it is being compared with <see cref="Recorded{T}"/>,
+/// we can't do the converse, and so comparison would be asymmetric. Thus, we make these mixed
+/// comparisons work by providing suitable overloads of the assertion methods.
+/// </para>
+/// <para>
+/// The 'compact' overloads that enable a sequence of <see cref="AsyncRecorded{T}"/> events to be
+/// compared with a sequence of <see cref="Recorded{T}"/> events are equivalent to assertions
+/// comparing with a sequence of <see cref="AsyncRecorded{T}"/> events in which each event's
+/// start and end timestamps are the same. So instead of writing something like this:
+/// </para>
+/// <code><![CDATA[
+/// res.Messages.AssertEqual(
+///   OnNext((210, 210), 9),
+///   OnNext((230, 230), 13));
+/// ]]></code>
+/// <para>
+/// we can write just this:
+/// </para>
+/// <code><![CDATA[
+/// res.Messages.AssertEqual(
+///   OnNext(210, 9),
+///   OnNext(230, 13));
+/// ]]></code>
+/// <para>
+/// Similarly, the 'compact' overloads that compare a sequence of <see cref="AsyncSubscription"/>
+/// events with a sequence of <see cref="Subscription"/> events are equivalent to equality
+/// assertions with a sequence of <see cref="AsyncSubscription"/> events in which subscription
+/// starts and ends at the same timestamp, and also where the disposal starts and ends at the same
+/// timestamp. The subscription and disposal timestamps can be different of course, because
+/// <see cref="Subscription"/> can represent that. It's just that both events are required to be
+/// effectively instantaneous in any such test - neither the call to
+/// <see cref="IAsyncObservable{T}.SubscribeAsync(IAsyncObserver{T})"/> nor the eventual call to
+/// <see cref="IAsyncDisposable.DisposeAsync"/> is allowed to yield in tests that use these simpler
+/// overloads.)
+/// </para>
+/// </remarks>
 public static class AsyncReactiveAssert
 {
-    /// <summary>Asserts the observer recorded no notifications.</summary>
-    public static void AssertEqual<T>(this IEnumerable<AsyncRecorded<Notification<T>>> actual) =>
+    /// <summary>
+    /// Asserts that the sequence recorded no notifications.
+    /// </summary>
+    public static void AssertEmpty<T>(this IEnumerable<AsyncRecorded<Notification<T>>> actual) =>
         AssertEqual(actual, Array.Empty<Recorded<Notification<T>>>());
 
     /// <summary>
-    /// Asserts the recorded notifications match the compact expectations: for each, delivery
-    /// started <em>and</em> completed at the expected tick, with the expected value.
+    /// Asserts that the recorded notifications match expectations.
     /// </summary>
-    public static void AssertEqual<T>(this IEnumerable<AsyncRecorded<Notification<T>>> actual, params Recorded<Notification<T>>[] expected)
+    /// <remarks>
+    /// This is the compact form of the assertion, which asserts that each notification's delivery
+    /// started and completed at the same tick. If prolonged completion is intended, use the
+    /// extended (start, end) form:
+    /// <see cref="AssertEqual{T}(IEnumerable{AsyncRecorded{Notification{T}}}, AsyncRecorded{Notification{T}}[])"/>.
+    /// </remarks>
+    public static void AssertEqual<T>(
+        this IEnumerable<AsyncRecorded<Notification<T>>> actual,
+        params Recorded<Notification<T>>[] expected)
     {
         if (actual == null)
         {
@@ -81,10 +145,17 @@ public static class AsyncReactiveAssert
     }
 
     /// <summary>
-    /// Asserts the recorded notifications match extended expectations, comparing delivery
-    /// start and completion times independently.
+    /// Asserts that the recorded notifications match expectations.
     /// </summary>
-    public static void AssertEqual<T>(this IEnumerable<AsyncRecorded<Notification<T>>> actual, params AsyncRecorded<Notification<T>>[] expected)
+    /// <remarks>
+    /// This compares delivery start and completion times independently. For scenarios where the
+    /// operations are expected to complete instantly (in the same tick that they started) you can
+    /// use the compact form:
+    /// <see cref="AssertEqual{T}(IEnumerable{AsyncRecorded{Notification{T}}}, Recorded{Notification{T}}[])"/>.
+    /// </remarks>
+    public static void AssertEqual<T>(
+        this IEnumerable<AsyncRecorded<Notification<T>>> actual,
+        params AsyncRecorded<Notification<T>>[] expected)
     {
         if (actual == null)
         {
@@ -121,15 +192,23 @@ public static class AsyncReactiveAssert
         }
     }
 
-    /// <summary>Asserts no subscriptions were recorded.</summary>
-    public static void AssertEqual(this IEnumerable<AsyncSubscription> actual) =>
+    /// <summary>
+    /// Asserts that the sequence recorded no notifications.
+    /// </summary>
+    public static void AssertEmpty(this IEnumerable<AsyncSubscription> actual) =>
         AssertEqual(actual, Array.Empty<Subscription>());
 
     /// <summary>
-    /// Asserts the recorded subscriptions match the compact expectations:
-    /// <c>Subscribe(200, 590)</c> means subscribe was called <em>and</em> completed at 200,
-    /// and dispose was called <em>and</em> completed at 590.
+    /// Asserts that the recorded subscription timings match expectations.
     /// </summary>
+    /// <remarks>
+    /// This is for scenarios where operations complete instantaneously. (This means that
+    /// the subscription operation completes in the same tick that it started. Likewise,
+    /// it means that the disposal of the subscription completes in the same tick that disposal
+    /// was started). For scenarios where the operations are not instantaneous (they yield, and complete
+    /// asynchronously in a later tick) you can use the full form:
+    /// <see cref="AssertEqual{T}(IEnumerable{AsyncRecorded{Notification{T}}}, AsyncRecorded{Notification{T}}[])"/>.
+    /// </remarks>
     public static void AssertEqual(this IEnumerable<AsyncSubscription> actual, params Subscription[] expected)
     {
         if (actual == null)
@@ -160,8 +239,15 @@ public static class AsyncReactiveAssert
     }
 
     /// <summary>
-    /// Asserts the recorded subscriptions match broken-down four-timestamp expectations.
+    /// Asserts that the recorded subscription timings match expectations.
     /// </summary>
+    /// <remarks>
+    /// This compares delivery start and completion times independently (for both subscription and
+    /// disposal, meaning tests specify 4 timestamps). For scenarios where the operations are
+    /// expected to complete instantly (in the same tick that they started) you can use the compact
+    /// form:
+    /// <see cref="AssertEqual{T}(IEnumerable{AsyncRecorded{Notification{T}}}, Recorded{Notification{T}}[])"/>.
+    /// </remarks>
     public static void AssertEqual(this IEnumerable<AsyncSubscription> actual, params AsyncSubscription[] expected)
     {
         if (actual == null)

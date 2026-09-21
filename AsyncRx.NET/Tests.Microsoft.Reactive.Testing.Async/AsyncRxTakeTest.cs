@@ -157,6 +157,6 @@ public class AsyncRxTakeTest : AsyncReactiveTest
         res.Messages.AssertEqual(
             OnCompleted<int>(200)); // Immediate
 
-        xs.Subscriptions.AssertEqual();
+        xs.Subscriptions.AssertEmpty();
     }
 }

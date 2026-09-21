@@ -98,7 +98,7 @@ public class AsyncReactiveAssertTest : AsyncReactiveTest
     [TestMethod]
     public void Empty_message_assertion_passes_for_no_messages()
     {
-        Array.Empty<AsyncRecorded<Notification<int>>>().AssertEqual();
+        Array.Empty<AsyncRecorded<Notification<int>>>().AssertEmpty();
     }
 
     [TestMethod]

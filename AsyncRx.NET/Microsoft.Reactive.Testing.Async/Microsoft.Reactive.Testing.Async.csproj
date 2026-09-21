@@ -8,6 +8,11 @@
     <Description>Reactive Extensions (AsyncRx) for .NET - Testing Library</Description>
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events;Async</PackageTags>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
+
+    <!--
+    CA1510: Use ArgumentNullException.ThrowIfNull() - not available on netstandard2.0
+    -->
+    <NoWarn>$(NoWarn>;CA1510</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
