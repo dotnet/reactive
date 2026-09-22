@@ -207,7 +207,7 @@ public static class AsyncReactiveAssert
     /// it means that the disposal of the subscription completes in the same tick that disposal
     /// was started). For scenarios where the operations are not instantaneous (they yield, and complete
     /// asynchronously in a later tick) you can use the full form:
-    /// <see cref="AssertEqual{T}(IEnumerable{AsyncRecorded{Notification{T}}}, AsyncRecorded{Notification{T}}[])"/>.
+    /// <see cref="AssertEqual(IEnumerable{AsyncSubscription}, AsyncSubscription[])"/>.
     /// </remarks>
     public static void AssertEqual(this IEnumerable<AsyncSubscription> actual, params Subscription[] expected)
     {
