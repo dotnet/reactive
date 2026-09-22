@@ -135,8 +135,10 @@ namespace System.Reactive.Linq
                 return
                     (
                         Synchronize(observer, gate),
-                        await scheduler.ScheduleAsync(async ct =>
+                        await scheduler.ScheduleAsync((observer, scheduler, gate), duration, static async (state, ct) =>
                         {
+                            var (observer, scheduler, gate) = state;
+
                             if (!ct.IsCancellationRequested)
                             {
                                 using (await gate.LockAsync().RendezVous(scheduler, ct))
@@ -144,7 +146,7 @@ namespace System.Reactive.Linq
                                     await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                                 }
                             }
-                        }, duration).ConfigureAwait(false)
+                        }).ConfigureAwait(false)
                     );
             }
         }

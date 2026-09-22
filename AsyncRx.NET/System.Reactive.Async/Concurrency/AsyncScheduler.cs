@@ -11,6 +11,41 @@ namespace System.Reactive.Concurrency
 {
     public static class AsyncScheduler
     {
+        //
+        // Stateless scheduling overloads. These pass the caller's delegate through as the state of
+        // the underlying IAsyncScheduler call, so they add no allocation of their own.
+        //
+
+        public static ValueTask<IAsyncDisposable> ScheduleAsync(this IAsyncScheduler scheduler, Func<CancellationToken, ValueTask> action)
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            return scheduler.ScheduleAsync(action, static (action, ct) => action(ct));
+        }
+
+        public static ValueTask<IAsyncDisposable> ScheduleAsync(this IAsyncScheduler scheduler, Func<CancellationToken, ValueTask> action, TimeSpan dueTime)
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            return scheduler.ScheduleAsync(action, dueTime, static (action, ct) => action(ct));
+        }
+
+        public static ValueTask<IAsyncDisposable> ScheduleAsync(this IAsyncScheduler scheduler, Func<CancellationToken, ValueTask> action, DateTimeOffset dueTime)
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            return scheduler.ScheduleAsync(action, dueTime, static (action, ct) => action(ct));
+        }
+
         public static RendezVousAwaitable RendezVous(this IAsyncScheduler scheduler, CancellationToken token = default)
         {
             if (scheduler == null)
@@ -64,7 +99,7 @@ namespace System.Reactive.Concurrency
 
             var tcs = new TaskCompletionSource<bool>();
 
-            var task = await scheduler.ScheduleAsync(ct =>
+            var task = await scheduler.ScheduleAsync(tcs, dueTime, static (tcs, ct) =>
             {
                 if (ct.IsCancellationRequested)
                 {
@@ -76,9 +111,9 @@ namespace System.Reactive.Concurrency
                 }
 
                 return default;
-            }, dueTime);
+            });
 
-            using (token.Register(() => task.DisposeAsync()))
+            using (token.Register(static task => { _ = ((IAsyncDisposable)task).DisposeAsync(); }, task))
             {
                 await tcs.Task;
             }
@@ -91,7 +126,7 @@ namespace System.Reactive.Concurrency
 
             var tcs = new TaskCompletionSource<bool>();
 
-            var task = await scheduler.ScheduleAsync(ct =>
+            var task = await scheduler.ScheduleAsync(tcs, dueTime, static (tcs, ct) =>
             {
                 if (ct.IsCancellationRequested)
                 {
@@ -103,42 +138,49 @@ namespace System.Reactive.Concurrency
                 }
 
                 return default;
-            }, dueTime);
+            });
 
-            using (token.Register(() => task.DisposeAsync()))
+            using (token.Register(static task => { _ = ((IAsyncDisposable)task).DisposeAsync(); }, task))
             {
                 await tcs.Task;
             }
         }
 
-        public static async ValueTask ExecuteAsync(this IAsyncScheduler scheduler, Func<CancellationToken, ValueTask> action, CancellationToken token = default)
+        public static ValueTask ExecuteAsync(this IAsyncScheduler scheduler, Func<CancellationToken, ValueTask> action, CancellationToken token = default)
+        {
+            return scheduler.ExecuteAsync(action, static (action, ct) => action(ct), token);
+        }
+
+        public static async ValueTask ExecuteAsync<TState>(this IAsyncScheduler scheduler, TState state, Func<TState, CancellationToken, ValueTask> action, CancellationToken token = default)
         {
             var tcs = new TaskCompletionSource<object>();
 
-            var d = await scheduler.ScheduleAsync(async ct =>
+            var d = await scheduler.ScheduleAsync((scheduler, state, action, tcs), static async (s, ct) =>
             {
                 try
                 {
                     ct.ThrowIfCancellationRequested();
 
-                    await action(ct).RendezVous(scheduler, ct);
+                    await s.action(s.state, ct).RendezVous(s.scheduler, ct);
                 }
                 catch (OperationCanceledException ex) when (ex.CancellationToken == ct)
                 {
-                    tcs.TrySetCanceled(ct);
+                    s.tcs.TrySetCanceled(ct);
                 }
                 catch (Exception ex)
                 {
-                    tcs.TrySetException(ex);
+                    s.tcs.TrySetException(ex);
                 }
                 finally
                 {
-                    tcs.TrySetResult(null);
+                    s.tcs.TrySetResult(null);
                 }
             });
 
-            using (token.Register(() =>
+            using (token.Register(static s =>
             {
+                var (d, tcs, token) = ((IAsyncDisposable, TaskCompletionSource<object>, CancellationToken))s;
+
                 try
                 {
                     d.DisposeAsync();
@@ -147,17 +189,22 @@ namespace System.Reactive.Concurrency
                 {
                     tcs.TrySetCanceled(token);
                 }
-            }))
+            }, (d, tcs, token)))
             {
                 await tcs.Task.ConfigureAwait(false);
             }
         }
 
-        public static async ValueTask<TResult> ExecuteAsync<TResult>(this IAsyncScheduler scheduler, Func<CancellationToken, ValueTask<TResult>> action, CancellationToken token = default)
+        public static ValueTask<TResult> ExecuteAsync<TResult>(this IAsyncScheduler scheduler, Func<CancellationToken, ValueTask<TResult>> action, CancellationToken token = default)
+        {
+            return scheduler.ExecuteAsync(action, static (action, ct) => action(ct), token);
+        }
+
+        public static async ValueTask<TResult> ExecuteAsync<TState, TResult>(this IAsyncScheduler scheduler, TState state, Func<TState, CancellationToken, ValueTask<TResult>> action, CancellationToken token = default)
         {
             var tcs = new TaskCompletionSource<TResult>();
 
-            var d = await scheduler.ScheduleAsync(async ct =>
+            var d = await scheduler.ScheduleAsync((scheduler, state, action, tcs), static async (s, ct) =>
             {
                 var res = default(TResult);
 
@@ -165,24 +212,26 @@ namespace System.Reactive.Concurrency
                 {
                     ct.ThrowIfCancellationRequested();
 
-                    res = await action(ct).RendezVous(scheduler, ct);
+                    res = await s.action(s.state, ct).RendezVous(s.scheduler, ct);
                 }
                 catch (OperationCanceledException ex) when (ex.CancellationToken == ct)
                 {
-                    tcs.TrySetCanceled(ct);
+                    s.tcs.TrySetCanceled(ct);
                 }
                 catch (Exception ex)
                 {
-                    tcs.TrySetException(ex);
+                    s.tcs.TrySetException(ex);
                 }
                 finally
                 {
-                    tcs.TrySetResult(res);
+                    s.tcs.TrySetResult(res);
                 }
             });
 
-            using (token.Register(() =>
+            using (token.Register(static s =>
             {
+                var (d, tcs, token) = ((IAsyncDisposable, TaskCompletionSource<TResult>, CancellationToken))s;
+
                 try
                 {
                     d.DisposeAsync();
@@ -191,7 +240,7 @@ namespace System.Reactive.Concurrency
                 {
                     tcs.TrySetCanceled(token);
                 }
-            }))
+            }, (d, tcs, token)))
             {
                 return await tcs.Task.ConfigureAwait(false);
             }
@@ -236,19 +285,19 @@ namespace System.Reactive.Concurrency
 
                 public void OnCompleted(Action continuation)
                 {
-                    var t = _scheduler.ExecuteAsync(ct =>
+                    var t = _scheduler.ExecuteAsync((awaiter: this, continuation), static (s, ct) =>
                     {
                         try
                         {
-                            continuation();
+                            s.continuation();
                         }
                         catch (Exception ex)
                         {
-                            _error = ExceptionDispatchInfo.Capture(ex);
+                            s.awaiter._error = ExceptionDispatchInfo.Capture(ex);
                         }
                         finally
                         {
-                            IsCompleted = true;
+                            s.awaiter.IsCompleted = true;
                         }
 
                         return default;

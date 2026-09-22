@@ -29,7 +29,7 @@ namespace System.Reactive
 
         protected override async ValueTask ScheduleAsync()
         {
-            var d = await _scheduler.ScheduleAsync(RunAsync).ConfigureAwait(false);
+            var d = await _scheduler.ScheduleAsync(this, static (@this, ct) => @this.RunAsync(ct)).ConfigureAwait(false);
             await _disposable.AssignAsync(d).ConfigureAwait(false);
         }
     }

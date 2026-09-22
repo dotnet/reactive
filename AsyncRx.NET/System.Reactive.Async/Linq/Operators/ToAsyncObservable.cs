@@ -41,13 +41,15 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var subscribeTask = await subscribeScheduler.ScheduleAsync(async ct =>
+                var subscribeTask = await subscribeScheduler.ScheduleAsync((source, observer, d, subscribeScheduler, disposeScheduler), static async (state, ct) =>
                 {
+                    var (source, observer, d, subscribeScheduler, disposeScheduler) = state;
+
                     ct.ThrowIfCancellationRequested();
 
                     var disposable = source.Subscribe(AsyncObserver.ToObserver(observer));
 
-                    var disposeTask = AsyncDisposable.Create(() => disposeScheduler.ExecuteAsync(_ =>
+                    var disposeTask = AsyncDisposable.Create(() => disposeScheduler.ExecuteAsync(disposable, static (disposable, _) =>
                     {
                         disposable.Dispose();
                         return default;

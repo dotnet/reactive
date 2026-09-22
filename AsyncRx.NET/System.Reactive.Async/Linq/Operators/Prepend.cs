@@ -131,8 +131,10 @@ namespace System.Reactive.Linq
             {
                 var subscription = new SingleAssignmentAsyncDisposable();
 
-                var task = await scheduler.ScheduleAsync(async ct =>
+                var task = await scheduler.ScheduleAsync((observer, source, scheduler, value, subscription), static async (state, ct) =>
                 {
+                    var (observer, source, scheduler, value, subscription) = state;
+
                     if (ct.IsCancellationRequested)
                         return;
 
@@ -186,8 +188,10 @@ namespace System.Reactive.Linq
             {
                 var subscription = new SingleAssignmentAsyncDisposable();
 
-                var task = await scheduler.ScheduleAsync(async ct =>
+                var task = await scheduler.ScheduleAsync((observer, source, scheduler, values, subscription), static async (state, ct) =>
                 {
+                    var (observer, source, scheduler, values, subscription) = state;
+
                     if (ct.IsCancellationRequested)
                         return;
 
@@ -244,8 +248,10 @@ namespace System.Reactive.Linq
             {
                 var subscription = new SingleAssignmentAsyncDisposable();
 
-                var task = await scheduler.ScheduleAsync(async ct =>
+                var task = await scheduler.ScheduleAsync((observer, source, scheduler, values, subscription), static async (state, ct) =>
                 {
+                    var (observer, source, scheduler, values, subscription) = state;
+
                     if (ct.IsCancellationRequested)
                         return;
 

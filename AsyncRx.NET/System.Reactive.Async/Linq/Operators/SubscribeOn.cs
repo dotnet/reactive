@@ -38,15 +38,19 @@ namespace System.Reactive.Linq
 
                     await d.AssignAsync(m).ConfigureAwait(false);
 
-                    var scheduled = await state.subscribeScheduler.ScheduleAsync(async ct =>
+                    var scheduled = await state.subscribeScheduler.ScheduleAsync((source, observer, state, d), static async (s, ct) =>
                     {
+                        var (source, observer, state, d) = s;
+
                         var subscription = await source.SubscribeSafeAsync(observer).RendezVous(state.subscribeScheduler, ct);
 
                         var scheduledDispose = AsyncDisposable.Create(async () =>
                         {
-                            await state.disposeScheduler.ScheduleAsync(async _ =>
+                            await state.disposeScheduler.ScheduleAsync((subscription, state.disposeScheduler, ct), static async (s, _) =>
                             {
-                                await subscription.DisposeAsync().RendezVous(state.disposeScheduler, ct);
+                                var (subscription, disposeScheduler, ct) = s;
+
+                                await subscription.DisposeAsync().RendezVous(disposeScheduler, ct);
                             }).ConfigureAwait(false);
                         });
 

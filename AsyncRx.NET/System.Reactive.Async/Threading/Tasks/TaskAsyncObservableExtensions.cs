@@ -62,8 +62,10 @@ namespace System.Threading.Tasks
 
             ValueTask<IAsyncDisposable> CompleteAsync()
             {
-                return scheduler.ScheduleAsync(async ct =>
+                return scheduler.ScheduleAsync((task, observer, scheduler), static async (state, ct) =>
                 {
+                    var (task, observer, scheduler) = state;
+
                     if (ct.IsCancellationRequested)
                     {
                         return;
@@ -124,8 +126,10 @@ namespace System.Threading.Tasks
 
             ValueTask<IAsyncDisposable> CompleteAsync()
             {
-                return scheduler.ScheduleAsync(async ct =>
+                return scheduler.ScheduleAsync((task, observer, scheduler), static async (state, ct) =>
                 {
+                    var (task, observer, scheduler) = state;
+
                     if (ct.IsCancellationRequested)
                     {
                         return;

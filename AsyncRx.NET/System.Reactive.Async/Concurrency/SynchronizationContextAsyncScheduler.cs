@@ -18,15 +18,18 @@ namespace System.Reactive.Concurrency
 
         protected override ValueTask Delay(TimeSpan dueTime, CancellationToken token) => new(Task.Delay(dueTime, token));
 
-        protected override ValueTask ScheduleAsyncCore(Func<CancellationToken, ValueTask> action, CancellationToken token)
+        protected override ValueTask ScheduleAsyncCore<TState>(TState state, Func<TState, CancellationToken, ValueTask> action, CancellationToken token)
         {
-            _context.Post(_ =>
+            // The work item is boxed once as the Post state; a static callback avoids a closure and delegate per call.
+            _context.Post(static s =>
             {
+                var (state, action, token) = ((TState, Func<TState, CancellationToken, ValueTask>, CancellationToken))s;
+
                 if (!token.IsCancellationRequested)
                 {
-                    action(token);
+                    action(state, token);
                 }
-            }, null);
+            }, (state, action, token));
 
             return default;
         }

@@ -82,8 +82,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return scheduler.ScheduleAsync(async ct =>
+            return scheduler.ScheduleAsync((observer, scheduler, value), static async (state, ct) =>
             {
+                var (observer, scheduler, value) = state;
+
                 while (!ct.IsCancellationRequested)
                 {
                     await observer.OnNextAsync(value).RendezVous(scheduler, ct);
@@ -110,8 +112,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return scheduler.ScheduleAsync(async ct =>
+            return scheduler.ScheduleAsync((observer, scheduler, value, repeatCount), static async (state, ct) =>
             {
+                var (observer, scheduler, value, repeatCount) = state;
+
                 var i = 0;
 
                 while (!ct.IsCancellationRequested && i < repeatCount)

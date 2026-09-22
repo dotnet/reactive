@@ -241,8 +241,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return scheduler.ScheduleAsync(async ct =>
+            return scheduler.ScheduleAsync((observer, initialState, condition, iterate, resultSelector, scheduler), static async (args, ct) =>
             {
+                var (observer, initialState, condition, iterate, resultSelector, scheduler) = args;
+
                 var first = true;
                 var state = initialState;
 
@@ -357,8 +359,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return scheduler.ScheduleAsync(async ct =>
+            return scheduler.ScheduleAsync((observer, initialState, condition, iterate, resultSelector, timeSelector, scheduler), static async (args, ct) =>
             {
+                var (observer, initialState, condition, iterate, resultSelector, timeSelector, scheduler) = args;
+
                 var first = true;
                 var state = initialState;
 
@@ -477,8 +481,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return scheduler.ScheduleAsync(async ct =>
+            return scheduler.ScheduleAsync((observer, initialState, condition, iterate, resultSelector, timeSelector, scheduler), static async (args, ct) =>
             {
+                var (observer, initialState, condition, iterate, resultSelector, timeSelector, scheduler) = args;
+
                 var first = true;
                 var state = initialState;
 

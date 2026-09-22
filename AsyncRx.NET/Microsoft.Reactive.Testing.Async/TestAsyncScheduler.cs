@@ -123,7 +123,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
             throw new ArgumentNullException(nameof(action));
         }
 
-        var work = new PendingWork(action, CancellationToken.None, description ?? "work", Math.Max(dueTime, Clock));
+        var work = new PendingWork<Func<CancellationToken, ValueTask>>(action, static (action, ct) => action(ct), CancellationToken.None, description ?? "work", Math.Max(dueTime, Clock));
         var item = new TimerItem(Isolate(() => RunUserWork(work)));
 
         EnqueueTimer(item, work.DueTime);
@@ -228,9 +228,9 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     /// </summary>
     public YieldPointAwaitable YieldPoint() => new(this);
 
-    protected override ValueTask ScheduleAsyncCore(Func<CancellationToken, ValueTask> action, CancellationToken token)
+    protected override ValueTask ScheduleAsyncCore<TState>(TState state, Func<TState, CancellationToken, ValueTask> action, CancellationToken token)
     {
-        var work = new PendingWork(action, token, "immediately scheduled work", Clock);
+        var work = new PendingWork<TState>(state, action, token, "immediately scheduled work", Clock);
 
         if (VerifyPumpThread("IAsyncScheduler.ScheduleAsync"))
         {
@@ -299,7 +299,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
 
         try
         {
-            var task = work.Action(work.Token);
+            var task = work.Invoke();
 
             if (task.IsCompleted)
             {
@@ -579,14 +579,21 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
         public void Run() => run();
     }
 
-    private sealed class PendingWork(Func<CancellationToken, ValueTask> action, CancellationToken token, string description, long dueTime)
+    private abstract class PendingWork(CancellationToken token, string description, long dueTime)
     {
-        public Func<CancellationToken, ValueTask> Action { get; } = action;
         public CancellationToken Token { get; } = token;
         public long DueTime { get; } = dueTime;
         public long StartedAt { get; set; } = -1;
 
+        public abstract ValueTask Invoke();
+
         public string Describe() => $"{description} (scheduled for tick {DueTime}, started at tick {StartedAt})";
+    }
+
+    private sealed class PendingWork<TState>(TState state, Func<TState, CancellationToken, ValueTask> action, CancellationToken token, string description, long dueTime)
+        : PendingWork(token, description, dueTime)
+    {
+        public override ValueTask Invoke() => action(state, Token);
     }
 
     private sealed class AnonymousDisposable(Action dispose) : IDisposable

@@ -31,11 +31,13 @@ namespace System.Reactive.Linq
                 {
                     var d = new CompositeAsyncDisposable();
 
-                    var task = await state.scheduler.ScheduleAsync(async ct =>
+                    var task = await state.scheduler.ScheduleAsync((source, observer, d), state.dueTime, static async (s, ct) =>
                     {
+                        var (source, observer, d) = s;
+
                         var inner = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
                         await d.AddAsync(inner).ConfigureAwait(false);
-                    }, state.dueTime).ConfigureAwait(false);
+                    }).ConfigureAwait(false);
 
                     await d.AddAsync(task).ConfigureAwait(false);
 
@@ -65,11 +67,13 @@ namespace System.Reactive.Linq
                 {
                     var d = new CompositeAsyncDisposable();
 
-                    var task = await state.scheduler.ScheduleAsync(async ct =>
+                    var task = await state.scheduler.ScheduleAsync((source, observer, d), state.dueTime, static async (s, ct) =>
                     {
+                        var (source, observer, d) = s;
+
                         var inner = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
                         await d.AddAsync(inner).ConfigureAwait(false);
-                    }, state.dueTime).ConfigureAwait(false);
+                    }).ConfigureAwait(false);
 
                     await d.AddAsync(task).ConfigureAwait(false);
 

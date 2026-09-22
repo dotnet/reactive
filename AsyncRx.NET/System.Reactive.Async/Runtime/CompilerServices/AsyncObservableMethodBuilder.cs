@@ -183,7 +183,7 @@ namespace System.Runtime.CompilerServices
         /// <param name="exception">The exception to rethrow.</param>
         private static void Rethrow(Exception exception)
         {
-            TaskPoolAsyncScheduler.Default.ScheduleAsync(_ =>
+            TaskPoolAsyncScheduler.Default.ScheduleAsync(exception, static (exception, _) =>
             {
                 ExceptionDispatchInfo.Capture(exception).Throw();
 
