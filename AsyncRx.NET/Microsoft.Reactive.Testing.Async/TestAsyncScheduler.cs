@@ -316,7 +316,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
 
             if (task.IsCompleted)
             {
-                ObserveSynchronousCompletion(task, work);
+                ObserveCompletion(task, work);
             }
             else
             {
@@ -329,9 +329,11 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
                     TaskScheduler.Default);
             }
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (work.Token.IsCancellationRequested)
         {
-            // Cancellation of scheduled work is normal (e.g. a disposed timer), not a failure.
+            // Cancellation through the work's own token (e.g. a disposed timer) is normal, not
+            // a failure. Any other OperationCanceledException is one nothing asked for, so it
+            // is a failure like any other exception (handled below).
         }
         catch (Exception ex)
         {
@@ -339,7 +341,13 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
         }
     }
 
-    private void ObserveSynchronousCompletion(ValueTask task, PendingWork work)
+    /// <summary>
+    /// Observes a completed work item's outcome: nothing for success, nothing for cancellation
+    /// through the work's own token, a recorded failure for anything else — including a
+    /// cancellation that the work's token did not ask for, which would otherwise let
+    /// <see cref="Start"/> return normally from work that never did its job.
+    /// </summary>
+    private void ObserveCompletion(ValueTask task, PendingWork work)
     {
         if (!task.IsCompletedSuccessfully)
         {
@@ -347,7 +355,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
             {
                 task.GetAwaiter().GetResult();
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException) when (work.Token.IsCancellationRequested)
             {
             }
             catch (Exception ex)
@@ -405,6 +413,13 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
         if (task.IsFaulted)
         {
             RecordFailure(WorkFailure(work, task.Exception!.InnerExceptions.Count == 1 ? task.Exception.InnerException! : task.Exception));
+        }
+        else if (task.IsCanceled)
+        {
+            // GetResult rethrows the original OperationCanceledException (with its token), so
+            // the same rule applies as for synchronous completion: only cancellation through
+            // the work's own token is benign.
+            ObserveCompletion(new ValueTask(task), work);
         }
     }
 

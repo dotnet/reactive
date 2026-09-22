@@ -22,7 +22,7 @@ namespace Microsoft.Reactive.Testing.Async;
 /// Where Rx.NET's <c>Microsoft.Reactive.Testing</c> library defines <see cref="Recorded{T}"/>,
 /// which wraps a value in a single timestamp, this library defines <see cref="AsyncRecorded{T}"/>,
 /// which wraps a value in a start and end timestamp. Similarly, where <see cref="Subscription"/>
-/// has a pair of timestamps indicating when subscription and disposal occur, this library's'
+/// has a pair of timestamps indicating when subscription and disposal occur, this library's
 /// <see cref="AsyncSubscription"/> has two <em>pairs</em> of timestamps, because both the
 /// subscribe and dispose events might yield, meaning they might start and end on different
 /// timestamps.

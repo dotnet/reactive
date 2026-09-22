@@ -280,6 +280,87 @@ public class TestAsyncSchedulerPumpTest
     }
 
     [TestMethod]
+    public void Cancellation_through_the_works_own_token_after_a_genuine_suspension_is_not_a_failure()
+    {
+        // The work is suspended when its token is cancelled, so the OperationCanceledException
+        // surfaces from an asynchronously completed work item (the sibling test above covers
+        // the same for the timed overload's own Delay). That is the benign case: nothing asked
+        // for more than what the handle's disposal requested.
+        var scheduler = new TestAsyncScheduler();
+        IAsyncDisposable? handle = null;
+        var cancelledWhenObserved = false;
+
+        scheduler.ScheduleAbsolute(50, async _ =>
+        {
+            handle = await scheduler.ScheduleAsync(async ct =>
+            {
+                var untilCancelled = new TaskCompletionSource();
+                using var registration = ct.Register(() => untilCancelled.TrySetCanceled(ct));
+
+                try
+                {
+                    await untilCancelled.Task;
+                }
+                catch (OperationCanceledException)
+                {
+                    cancelledWhenObserved = ct.IsCancellationRequested;
+                    throw;
+                }
+            });
+        });
+
+        scheduler.ScheduleAbsolute(100, async _ =>
+        {
+            await handle!.DisposeAsync();
+        });
+
+        scheduler.Start();
+
+        Assert.IsTrue(cancelledWhenObserved);
+    }
+
+    [TestMethod]
+    public void OperationCanceledException_thrown_synchronously_without_the_works_token_being_cancelled_fails_Start()
+    {
+        // ScheduleAbsolute work has no cancellation token, so a cancellation exception from it
+        // is not cancellation the harness asked for: it is work that never did its job, and
+        // must fail Start rather than be mistaken for a disposed timer.
+        var scheduler = new TestAsyncScheduler();
+        var error = new OperationCanceledException("not requested by the harness");
+
+        scheduler.ScheduleAbsolute(100, _ => throw error);
+
+        var thrown = Assert.ThrowsExactly<OperationCanceledException>(scheduler.Start);
+        Assert.AreSame(error, thrown);
+    }
+
+    [TestMethod]
+    public void Already_cancelled_ValueTask_returned_without_the_works_token_being_cancelled_fails_Start()
+    {
+        var scheduler = new TestAsyncScheduler();
+
+        scheduler.ScheduleAbsolute(100, _ => new ValueTask(Task.FromCanceled(new CancellationToken(canceled: true))));
+
+        Assert.ThrowsExactly<TaskCanceledException>(scheduler.Start);
+    }
+
+    [TestMethod]
+    public void OperationCanceledException_after_a_genuine_suspension_without_the_works_token_being_cancelled_fails_Start()
+    {
+        var scheduler = new TestAsyncScheduler();
+        var error = new OperationCanceledException("not requested by the harness");
+
+        scheduler.ScheduleAbsolute(100, async _ =>
+        {
+            await scheduler.Delay(TimeSpan.FromTicks(50));
+            throw error;
+        });
+
+        var thrown = Assert.ThrowsExactly<OperationCanceledException>(scheduler.Start);
+        Assert.AreSame(error, thrown);
+    }
+
+    [TestMethod]
     public void Synchronous_exception_from_scheduled_work_fails_Start_with_the_original_exception()
     {
         var scheduler = new TestAsyncScheduler();
