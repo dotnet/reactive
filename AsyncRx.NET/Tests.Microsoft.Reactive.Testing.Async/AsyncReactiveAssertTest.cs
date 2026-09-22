@@ -41,7 +41,7 @@ public class AsyncReactiveAssertTest : AsyncReactiveTest
 
         var thrown = Assert.ThrowsExactly<AsyncReactiveAssertException>(() => actual.AssertEqual(OnNext(210, 2)));
 
-        StringAssert.Contains(thrown.Message, "started at 210 and never completed");
+        Assert.Contains("started at 210 and never completed", thrown.Message);
     }
 
     [TestMethod]
@@ -51,8 +51,8 @@ public class AsyncReactiveAssertTest : AsyncReactiveTest
 
         var thrown = Assert.ThrowsExactly<AsyncReactiveAssertException>(() => actual.AssertEqual(OnNext(210, 2)));
 
-        StringAssert.Contains(thrown.Message, "started at 210 but completed at 250");
-        StringAssert.Contains(thrown.Message, "extended");
+        Assert.Contains("started at 210 but completed at 250", thrown.Message);
+        Assert.Contains("extended", thrown.Message);
     }
 
     [TestMethod]
@@ -62,7 +62,7 @@ public class AsyncReactiveAssertTest : AsyncReactiveTest
 
         var thrown = Assert.ThrowsExactly<AsyncReactiveAssertException>(() => actual.AssertEqual(OnNext(210, 2)));
 
-        StringAssert.Contains(thrown.Message, "started at 215, expected 210");
+        Assert.Contains("started at 215, expected 210", thrown.Message);
     }
 
     [TestMethod]
@@ -80,7 +80,7 @@ public class AsyncReactiveAssertTest : AsyncReactiveTest
 
         var thrown = Assert.ThrowsExactly<AsyncReactiveAssertException>(() => actual.AssertEqual(OnNext((210, 240), 2)));
 
-        StringAssert.Contains(thrown.Message, "completed at 250, expected 240");
+        Assert.Contains("completed at 250, expected 240", thrown.Message);
     }
 
     [TestMethod]
@@ -90,9 +90,9 @@ public class AsyncReactiveAssertTest : AsyncReactiveTest
 
         var thrown = Assert.ThrowsExactly<AsyncReactiveAssertException>(() => actual.AssertEqual(OnNext(210, 2), OnNext(220, 3)));
 
-        StringAssert.Contains(thrown.Message, "Expected 2 notification(s) but got 1");
-        StringAssert.Contains(thrown.Message, "Expected:");
-        StringAssert.Contains(thrown.Message, "Actual..:");
+        Assert.Contains("Expected 2 notification(s) but got 1", thrown.Message);
+        Assert.Contains("Expected:", thrown.Message);
+        Assert.Contains("Actual..:", thrown.Message);
     }
 
     [TestMethod]
@@ -126,8 +126,8 @@ public class AsyncReactiveAssertTest : AsyncReactiveTest
 
         var thrown = Assert.ThrowsExactly<AsyncReactiveAssertException>(() => actual.AssertEqual(Subscribe(200, 590)));
 
-        StringAssert.Contains(thrown.Message, "SubscribeCompleted was 201, expected 200");
-        StringAssert.Contains(thrown.Message, "compact form");
+        Assert.Contains("SubscribeCompleted was 201, expected 200", thrown.Message);
+        Assert.Contains("compact form", thrown.Message);
     }
 
     [TestMethod]
@@ -145,7 +145,7 @@ public class AsyncReactiveAssertTest : AsyncReactiveTest
 
         var thrown = Assert.ThrowsExactly<AsyncReactiveAssertException>(() => actual.AssertEqual(Subscribe(200, 201, 590, 591)));
 
-        StringAssert.Contains(thrown.Message, "DisposeCompleted was 592, expected 591");
+        Assert.Contains("DisposeCompleted was 592, expected 591", thrown.Message);
     }
 
     [TestMethod]
@@ -153,6 +153,6 @@ public class AsyncReactiveAssertTest : AsyncReactiveTest
     {
         Assert.AreEqual("Subscribe(200, 590)", new AsyncSubscription(200, 200, 590, 590).ToString());
         Assert.AreEqual("Subscribe(200)", new AsyncSubscription(200, 200, OperationTime.Infinite, OperationTime.Infinite).ToString());
-        StringAssert.Contains(new AsyncSubscription(200, 201, 590, 590).ToString(), "completed: 201");
+        Assert.Contains("completed: 201", new AsyncSubscription(200, 201, 590, 590).ToString());
     }
 }

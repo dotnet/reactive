@@ -144,7 +144,7 @@ public class TestableAsyncObservableTest : AsyncReactiveTest
             OnNext(300, 3));
 
         var observer = scheduler.CreateObserver<int>(
-            n => n.Value == 1 ? scheduler.Delay(TimeSpan.FromTicks(40)) : default(ValueTask));
+            n => n.Value == 1 ? scheduler.Delay(TimeSpan.FromTicks(40)) : default);
 
         scheduler.ScheduleAbsolute(200, async _ =>
         {
@@ -219,8 +219,8 @@ public class TestableAsyncObservableTest : AsyncReactiveTest
 
         var thrown = Assert.ThrowsExactly<TestAsyncSchedulerException>(() => scheduler.Start<int>(() => new NeverCompletingSubscribe()));
 
-        StringAssert.Contains(thrown.Message, "the subscription is not complete");
-        StringAssert.Contains(thrown.Message, "called at tick 200");
+        Assert.Contains("the subscription is not complete", thrown.Message);
+        Assert.Contains("called at tick 200", thrown.Message);
     }
 
     [TestMethod]

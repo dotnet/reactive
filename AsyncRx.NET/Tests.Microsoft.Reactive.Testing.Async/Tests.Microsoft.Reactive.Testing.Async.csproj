@@ -5,7 +5,22 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
+
+    <!--
+    MSTEST0049: Use CancellationToken - the analyzer has misunderstood most of the tests where this appears.
+      For example, it flags scheduler.Delay(TimeSpan.FromTicks(100)), which is operating in virtual time,
+      and adding in cancellation tokens would actually change what the test is doing. So we have to
+      do without this rule.
+    CA2016: Forward CancellationToken - similar to the preceding misunderstanding.
+    CA1861: Prefer static readonly fields over constants - a performance-orientated suggestion that isn't
+      relevant to test code.
+    -->
+    <NoWarn>$(NoWarn);MSTEST0049;CA2016;CA1861</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="Microsoft.VisualStudio.TestTools.UnitTesting.ParallelizeAttribute"/>
+  </ItemGroup>
 
   <ItemGroup>
     <!-- MSTest, not xunit: Rx.NET continues to support old-style UWP apps, and xunit's

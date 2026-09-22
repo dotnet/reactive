@@ -142,7 +142,7 @@ public class AsyncSchedulerStateTest
 
         scheduler.Start();
 
-        Assert.AreEqual(false, cancelledWhenRun);
+        Assert.IsFalse(cancelledWhenRun, "value of IsCancellationRequested observed when callback ran");
         Assert.IsFalse(disposedWorkRan, "cancelled work must not run");
     }
 

@@ -7,6 +7,10 @@ namespace Microsoft.Reactive.Testing.Async;
 /// <summary>Thrown when an async trace assertion fails.</summary>
 public class AsyncReactiveAssertException : Exception
 {
+    /// <summary>
+    /// Creates an <see cref="AsyncReactiveAssertException"/> with the given message.
+    /// </summary>
+    /// <param name="message">The message describing the error.</param>
     public AsyncReactiveAssertException(string message)
         : base(message)
     {

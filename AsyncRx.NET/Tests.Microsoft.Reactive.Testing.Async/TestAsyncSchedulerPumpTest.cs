@@ -319,7 +319,7 @@ public class TestAsyncSchedulerPumpTest
         });
 
         var thrown = Assert.ThrowsExactly<TestAsyncSchedulerException>(scheduler.Start);
-        StringAssert.Contains(thrown.Message, "never completed");
+        Assert.Contains("never completed", thrown.Message);
     }
 
     [TestMethod]
@@ -364,7 +364,7 @@ public class TestAsyncSchedulerPumpTest
         });
 
         var thrown = Assert.ThrowsExactly<TestAsyncSchedulerException>(scheduler.Start);
-        StringAssert.Contains(thrown.Message, "escaped the virtual-time pump");
+        Assert.Contains("escaped the virtual-time pump", thrown.Message);
     }
 
     [TestMethod]

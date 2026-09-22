@@ -9,9 +9,8 @@ namespace Microsoft.Reactive.Testing.Async;
 public sealed partial class TestAsyncScheduler
 {
     /// <summary>
-    /// Creates a hot async observable playing back the given messages at their absolute
-    /// virtual times, recording four-timestamp subscriptions and serializing deliveries
-    /// (a delivery starts at max(scheduled tick, completion of the previous delivery)).
+    /// Creates an async observable that delivers notifications at their specified absolute
+    /// virtual times, and which records when subscriptions occur.
     /// </summary>
     public ITestableAsyncObservable<T> CreateHotObservable<T>(params Recorded<Notification<T>>[] messages)
     {
@@ -24,8 +23,8 @@ public sealed partial class TestAsyncScheduler
     }
 
     /// <summary>
-    /// Creates a cold async observable playing back the given messages at virtual times
-    /// relative to each subscription, recording four-timestamp subscriptions.
+    /// Creates an async observable that delivers notifications timed relative to each
+    /// subscription's start time, and which records when subscriptions occur.
     /// </summary>
     public ITestableAsyncObservable<T> CreateColdObservable<T>(params Recorded<Notification<T>>[] messages)
     {
@@ -38,18 +37,21 @@ public sealed partial class TestAsyncScheduler
     }
 
     /// <summary>
-    /// Creates an observer that records received notifications with delivery start and
-    /// completion virtual times.
+    /// Creates an observer that records received notifications.
     /// </summary>
+    /// <remarks>
+    /// This handles all notifications instantaneously.
+    /// </remarks>
     public ITestableAsyncObserver<T> CreateObserver<T>() => new MockAsyncObserver<T>(this);
 
     /// <summary>
-    /// Creates a recording observer whose handler participates in delivery completion: each
-    /// delivery is not complete until the handler's returned task is. A handler that awaits
-    /// something logically in the future (e.g. a virtual-time delay) produces prolonged
-    /// completions — records whose completion tick is later than their start tick,
-    /// assertable with the extended expectation forms.
+    /// Creates a recording observer that records received notifications, passing each message
+    /// to a handler.
     /// </summary>
+    /// <remarks>
+    /// If the handler chooses to prolong handling, this will be reflected with different start
+    /// and end times in the <see cref="ITestableAsyncObservable{T}.Messages"/> entries.
+    /// </remarks>
     public ITestableAsyncObserver<T> CreateObserver<T>(Func<Notification<T>, ValueTask> onNotification)
     {
         if (onNotification == null)

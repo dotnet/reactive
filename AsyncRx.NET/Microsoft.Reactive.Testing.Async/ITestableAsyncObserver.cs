@@ -7,11 +7,28 @@ using System.Reactive;
 namespace Microsoft.Reactive.Testing.Async;
 
 /// <summary>
-/// The async counterpart of <see cref="ITestableObserver{T}"/>: records each received
-/// notification with its delivery start and completion virtual times.
+/// Asynchronous observer that records and timestamps received notification messages.
+/// </summary>
+/// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+/// <summary>
+/// <para>
+/// The async counterpart of <see cref="ITestableObserver{T}"/>. In addition to deriving from
+/// <see cref="IAsyncObserver{T}"/> (instead of <see cref="IObserver{T}"/>), this records the
+/// start and end times of each notification delivery, because asynchronous operations don't
+/// necessarily complete at the same virtual time as they start.
+/// </para>
 /// </summary>
 public interface ITestableAsyncObserver<T> : IAsyncObserver<T>
 {
-    /// <summary>Recorded notifications, each with delivery start and completion times.</summary>
-    IReadOnlyList<AsyncRecorded<Notification<T>>> Messages { get; }
+    /// <summary>
+    /// Gets recorded timestamped notification messages received by the observer.
+    /// </summary>
+    /// <remarks>
+    /// In test observers can be set up to invoke a test-supplied handler with the
+    /// <see cref="TestAsyncScheduler.CreateObserver{T}(Func{Notification{T}, ValueTask})"/>
+    /// method. This enables tests to prolong consumption of notifications, which is why this
+    /// property uses <see cref="AsyncRecorded{T}"/>. This enables recording of different start and
+    /// end times.
+    /// </remarks>
+    public IReadOnlyList<AsyncRecorded<Notification<T>>> Messages { get; }
 }

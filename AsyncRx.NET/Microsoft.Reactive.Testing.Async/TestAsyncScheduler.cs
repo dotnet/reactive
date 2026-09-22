@@ -64,7 +64,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
 {
     // Timers ordered by due time, then by insertion sequence. (A SortedDictionary rather than
     // PriorityQueue because the latter is not available on netstandard2.0.)
-    private readonly SortedDictionary<(long DueTime, long Sequence), TimerItem> _timers = new();
+    private readonly SortedDictionary<(long DueTime, long Sequence), TimerItem> _timers = [];
     private readonly LinkedList<Action> _ready = new();
     private LinkedListNode<Action>? _continuationCursor;
 
@@ -83,32 +83,43 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     // invokes OnAmbientPumpChanged on whichever thread restores that context — before the
     // continuation body runs. That is what makes escape detection race-free: see the class
     // remarks and OnAmbientPumpChanged.
-    private static readonly AsyncLocal<TestAsyncScheduler?> s_ambientPump = new(OnAmbientPumpChanged);
+    private static readonly AsyncLocal<TestAsyncScheduler?> AmbientPump = new(OnAmbientPumpChanged);
 
     private long _nextSequence;
     private Thread? _pumpThread;
     private volatile bool _pumping;
 
+    /// <summary>
+    /// Creates a scheduler that runs all await points synchronously.
+    /// </summary>
     public TestAsyncScheduler()
         : this(ExecutionShape.SynchronousCompletion)
     {
     }
 
+    /// <summary>
+    /// Creates a scheduler that runs await points according to the specified <paramref name="executionShape"/>.
+    /// </summary>
+    /// <param name="executionShape">
+    /// Determines whether await points complete synchronously or genuinely suspend, resuming via
+    /// the front of the ready deque.
+    /// </param>
     public TestAsyncScheduler(ExecutionShape executionShape)
     {
         ExecutionShape = executionShape;
     }
 
     /// <summary>
-    /// How harness await points behave; see <see cref="Async.ExecutionShape"/>.
+    /// Gets the policy determining how await points behave.
     /// </summary>
     public ExecutionShape ExecutionShape { get; }
 
     /// <summary>
-    /// The current virtual time, in ticks.
+    /// Gets the current virtual time, in ticks.
     /// </summary>
     public long Clock { get; private set; }
 
+    /// <inheritdoc/>
     public override DateTimeOffset Now => new(Clock, TimeSpan.Zero);
 
     /// <summary>
@@ -123,7 +134,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
             throw new ArgumentNullException(nameof(action));
         }
 
-        var work = new PendingWork<Func<CancellationToken, ValueTask>>(action, static (action, ct) => action(ct), CancellationToken.None, description ?? "work", Math.Max(dueTime, Clock));
+        var work = new PendingWork<Func<CancellationToken, ValueTask>>(action, static (action, ct) => action(ct), description ?? "work", Math.Max(dueTime, Clock), CancellationToken.None);
         var item = new TimerItem(Isolate(() => RunUserWork(work)));
 
         EnqueueTimer(item, work.DueTime);
@@ -228,9 +239,10 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     /// </summary>
     public YieldPointAwaitable YieldPoint() => new(this);
 
+    /// <inheritdoc/>
     protected override ValueTask ScheduleAsyncCore<TState>(TState state, Func<TState, CancellationToken, ValueTask> action, CancellationToken token)
     {
-        var work = new PendingWork<TState>(state, action, token, "immediately scheduled work", Clock);
+        var work = new PendingWork<TState>(state, action, "immediately scheduled work", Clock, token);
 
         if (VerifyPumpThread("IAsyncScheduler.ScheduleAsync"))
         {
@@ -240,6 +252,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
         return default;
     }
 
+    /// <inheritdoc/>
     protected override ValueTask Delay(TimeSpan dueTime, CancellationToken token)
     {
         if (!VerifyPumpThread("Delay") || dueTime <= TimeSpan.Zero)
@@ -445,7 +458,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     }
 
     /// <summary>
-    /// Invoked by the runtime whenever <see cref="s_ambientPump"/>'s value changes on a
+    /// Invoked by the runtime whenever <see cref="AmbientPump"/>'s value changes on a
     /// thread — including when a captured <see cref="ExecutionContext"/> is restored onto a
     /// thread, which happens before the continuation (or Task.Run body, timer callback,
     /// cancellation callback...) that captured it runs. A restore onto anything but the pump
@@ -470,7 +483,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     private void RecordEscape(string what, string verb)
     {
         var message = $"Work escaped the virtual-time pump: {what} {verb} thread " +
-            $"'{Thread.CurrentThread.Name ?? $"#{Thread.CurrentThread.ManagedThreadId}"}' instead of the pump thread. " +
+            $"'{Thread.CurrentThread.Name ?? $"#{Environment.CurrentManagedThreadId}"}' instead of the pump thread. " +
             "All asynchrony in a canonical-schedule test must originate from harness primitives " +
             "(no Task.Run, real timers, or thread-pool continuations).";
 
@@ -552,7 +565,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     /// </summary>
     /// <remarks>
     /// Inside the restored context the item is marked as running under this pump (see
-    /// <see cref="s_ambientPump"/>). Doing this here rather than once in <see cref="Start"/>
+    /// <see cref="AmbientPump"/>). Doing this here rather than once in <see cref="Start"/>
     /// matters: an item queued before <c>Start</c> captured a context without the mark, and
     /// continuations captured inside it would otherwise be unmarked, and their escapes invisible.
     /// </remarks>
@@ -567,7 +580,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
                 static state =>
                 {
                     var (scheduler, action) = ((TestAsyncScheduler, Action))state!;
-                    s_ambientPump.Value = scheduler;
+                    AmbientPump.Value = scheduler;
                     action();
                 },
                 (this, action));
@@ -579,7 +592,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
         public void Run() => run();
     }
 
-    private abstract class PendingWork(CancellationToken token, string description, long dueTime)
+    private abstract class PendingWork(string description, long dueTime, CancellationToken token)
     {
         public CancellationToken Token { get; } = token;
         public long DueTime { get; } = dueTime;
@@ -590,8 +603,8 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
         public string Describe() => $"{description} (scheduled for tick {DueTime}, started at tick {StartedAt})";
     }
 
-    private sealed class PendingWork<TState>(TState state, Func<TState, CancellationToken, ValueTask> action, CancellationToken token, string description, long dueTime)
-        : PendingWork(token, description, dueTime)
+    private sealed class PendingWork<TState>(TState state, Func<TState, CancellationToken, ValueTask> action, string description, long dueTime, CancellationToken token)
+        : PendingWork(description, dueTime, token)
     {
         public override ValueTask Invoke() => action(state, Token);
     }
@@ -604,18 +617,48 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     /// <summary>Awaitable returned by <see cref="YieldPoint"/>.</summary>
     public readonly struct YieldPointAwaitable(TestAsyncScheduler scheduler)
     {
+        /// <summary>
+        /// Gets an awaiter. Typically called by code generated for an <c>await</c> expression.
+        /// </summary>
+        /// <returns></returns>
         public Awaiter GetAwaiter() => new(scheduler);
 
+        /// <summary>
+        /// The awaiter for <see cref="YieldPointAwaitable"/>. Typically used by code generated for
+        /// an <c>await</c> expression.
+        /// </summary>
+        /// <param name="scheduler"></param>
         public readonly struct Awaiter(TestAsyncScheduler scheduler) : ICriticalNotifyCompletion
         {
+            /// <summary>
+            /// Gets a value indicating whether the awaiter has completed. Typically called by code
+            /// generated for an <c>await</c> expression.   
+            /// </summary>
             public bool IsCompleted => scheduler.ExecutionShape == ExecutionShape.SynchronousCompletion;
 
+            /// <summary>
+            /// Called by code generated for an <c>await</c> expression the operation completes.
+            /// </summary>
+            /// <remarks>
+            /// For <c>void</c>-typed awaiters, there is no value to return. This exists only to
+            /// enable exceptions to be thrown, but this awaiter never does that.
+            /// </remarks>
             public void GetResult()
             {
             }
 
+            /// <summary>
+            /// Schedules the continuation action to be invoked when the operation completes.
+            /// Typically called by code generated for an <c>await</c> expression.
+            /// </summary>
+            /// <param name="continuation">The action to invoke when the operation completes.</param>
             public void OnCompleted(Action continuation) => scheduler.PostContinuation(continuation);
 
+            /// <summary>
+            /// Schedules the continuation action to be invoked when the operation completes.
+            /// Typically called by code generated for an <c>await</c> expression.
+            /// </summary>
+            /// <param name="continuation">The action to invoke when the operation completes.</param>
             public void UnsafeOnCompleted(Action continuation) => scheduler.PostContinuation(continuation);
         }
     }
