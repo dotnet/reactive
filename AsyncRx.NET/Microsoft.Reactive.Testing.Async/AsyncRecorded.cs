@@ -65,7 +65,7 @@ public readonly struct AsyncRecorded<T> : IEquatable<AsyncRecorded<T>>
     /// </summary>
     /// <remarks>
     /// Operations that are incomplete (either because a test is still in progress, or because the
-    /// operation did not completed during the test) will have an <see cref="OperationTime.End"/>
+    /// operation did not complete during the test) will have an <see cref="OperationTime.End"/>
     /// of <see cref="OperationTime.Infinite"/>.
     /// </remarks>
     public OperationTime Time { get; }

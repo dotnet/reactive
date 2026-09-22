@@ -11,10 +11,10 @@ namespace Microsoft.Reactive.Testing.Async;
 /// <para>
 /// This determines how <see cref="TestAsyncScheduler.YieldPoint"/> behaves. The
 /// <see cref="ITestableAsyncObservable{T}"/> implementations supplied by the scheduler's
-/// <see cref="TestScheduler.CreateHotObservable{T}(Microsoft.Reactive.Testing.Recorded{System.Reactive.Notification{T}}[])"/> and
-/// <see cref="TestScheduler.CreateColdObservable{T}(Microsoft.Reactive.Testing.Recorded{System.Reactive.Notification{T}}[])"/>
+/// <see cref="TestAsyncScheduler.CreateHotObservable{T}(Recorded{System.Reactive.Notification{T}}[])"/> and
+/// <see cref="TestAsyncScheduler.CreateColdObservable{T}(Recorded{System.Reactive.Notification{T}}[])"/>
 /// and also the <see cref="ITestableAsyncObserver{T}"/> supplied by
-/// <see cref="TestScheduler.CreateObserver{T}"/> all call <see cref="TestAsyncScheduler.YieldPoint"/>
+/// <see cref="TestAsyncScheduler.CreateObserver{T}()"/> all call <see cref="TestAsyncScheduler.YieldPoint"/>
 /// at various points to enable tests to determine what happens when the code under test uses
 /// <c>await</c> expressions.
 /// </para>

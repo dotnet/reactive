@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Microsoft.Reactive.Testing.Async;
 
 /// <summary>
-/// Records one operation's extent in virtual time
+/// Records one operation's extent in virtual time.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -21,7 +21,7 @@ namespace Microsoft.Reactive.Testing.Async;
 /// subscription and unsubscription.
 /// </para>
 /// <para>
-/// The <see cref="Infinite"/> fields is a sentinel value that can be used to indicate incomplete
+/// The <see cref="Infinite"/> field is a sentinel value that can be used to indicate incomplete
 /// operations. If <c>Start == Infinite</c>, this tells us that an operation never began. (For
 /// example, an <see cref="AsyncSubscription"/> can indicate that the subscription was never
 /// disposed by setting its <see cref="AsyncSubscription.Dispose"/> property's <see cref="Start"/>
@@ -63,7 +63,7 @@ public readonly struct OperationTime : IEquatable<OperationTime>
     }
 
     /// <summary>
-    /// Creates an incompleted operation.
+    /// Creates an uncompleted operation.
     /// </summary>
     /// <param name="start">The virtual time at which the operation began.</param>
     /// <returns>An operation that began at <paramref name="start"/> and has not (yet) completed.</returns>
@@ -131,7 +131,6 @@ public readonly struct OperationTime : IEquatable<OperationTime>
     /// <param name="right">The second instance to compare.</param>
     /// <returns><c>true</c> if the instances are equal; otherwise, <c>false</c>.</returns>
     public static bool operator ==(OperationTime left, OperationTime right) => left.Equals(right);
-
 
     /// <summary>
     /// Compares two <see cref="OperationTime"/> instances for inequality.

@@ -12,8 +12,8 @@
       and adding in cancellation tokens would actually change what the test is doing. So we have to
       do without this rule.
     CA2016: Forward CancellationToken - similar to the preceding misunderstanding.
-    CA1861: Prefer static readonly fields over constants - a performance-orientated suggestion that isn't
-      relevant to test code.
+    CA1861: Avoid constant arrays as arguments (prefer static readonly fields) - a performance-orientated
+      suggestion that isn't relevant to test code.
     -->
     <NoWarn>$(NoWarn);MSTEST0049;CA2016;CA1861</NoWarn>
   </PropertyGroup>

@@ -620,24 +620,24 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
         /// <summary>
         /// Gets an awaiter. Typically called by code generated for an <c>await</c> expression.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An <see cref="Awaiter"/> for this yield point.</returns>
         public Awaiter GetAwaiter() => new(scheduler);
 
         /// <summary>
         /// The awaiter for <see cref="YieldPointAwaitable"/>. Typically used by code generated for
         /// an <c>await</c> expression.
         /// </summary>
-        /// <param name="scheduler"></param>
+        /// <param name="scheduler">The scheduler whose <see cref="ExecutionShape"/> determines how this awaiter behaves.</param>
         public readonly struct Awaiter(TestAsyncScheduler scheduler) : ICriticalNotifyCompletion
         {
             /// <summary>
             /// Gets a value indicating whether the awaiter has completed. Typically called by code
-            /// generated for an <c>await</c> expression.   
+            /// generated for an <c>await</c> expression.
             /// </summary>
             public bool IsCompleted => scheduler.ExecutionShape == ExecutionShape.SynchronousCompletion;
 
             /// <summary>
-            /// Called by code generated for an <c>await</c> expression the operation completes.
+            /// Called by code generated for an <c>await</c> expression when the operation completes.
             /// </summary>
             /// <remarks>
             /// For <c>void</c>-typed awaiters, there is no value to return. This exists only to

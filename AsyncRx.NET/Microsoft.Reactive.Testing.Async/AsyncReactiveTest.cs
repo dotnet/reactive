@@ -53,7 +53,7 @@ public class AsyncReactiveTest : ReactiveTest
         new(delivery.Start, delivery.End, Notification.CreateOnNext(value));
 
     /// <summary>
-    /// Factory method for an OnError notification record with a given time range with a given error.
+    /// Factory method for an OnError notification record with a given time range and a given error.
     /// </summary>
     /// <typeparam name="T">
     /// The element type for the resulting notification object. For <c>OnError</c> notifications,
@@ -111,7 +111,7 @@ public class AsyncReactiveTest : ReactiveTest
     /// ranges.
     /// </summary>
     /// <param name="subscribeCalled">
-    /// Virtual time of the call <see cref="IAsyncObservable{T}.SubscribeAsync(IAsyncObserver{T})"/>.
+    /// Virtual time of the call to <see cref="IAsyncObservable{T}.SubscribeAsync(IAsyncObserver{T})"/>.
     /// </param>
     /// <param name="subscribeCompleted">
     /// Virtual time of the completion of the task returned by
@@ -126,14 +126,14 @@ public class AsyncReactiveTest : ReactiveTest
     /// <see cref="IAsyncDisposable.DisposeAsync"/>.
     /// </param>
     /// <returns><see cref="AsyncSubscription"/> object.</returns>
-    /// <summary>
+    /// <remarks>
     /// This is for scenarios in which we expect either subscription or disposal of a subscription
-    /// to be prolonged time (that is, one or both of the tasks returned by
+    /// to be prolonged (that is, one or both of the tasks returned by
     /// <see cref="IAsyncObservable{T}.SubscribeAsync(IAsyncObserver{T})"/> or
     /// <see cref="IAsyncDisposable.DisposeAsync"/> do not complete logically instantaneously).
     /// Tests that do not expect prolonged subscription or disposal should typically use the compact
     /// form, <see cref="ReactiveTest.Subscribe(long, long)"/>.
-    /// </summary>
+    /// </remarks>
     public static AsyncSubscription Subscribe(long subscribeCalled, long subscribeCompleted, long disposeCalled, long disposeCompleted) =>
         new(subscribeCalled, subscribeCompleted, disposeCalled, disposeCompleted);
 }

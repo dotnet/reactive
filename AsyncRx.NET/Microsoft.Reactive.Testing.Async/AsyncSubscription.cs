@@ -15,7 +15,7 @@ namespace Microsoft.Reactive.Testing.Async;
 /// This is the async counterpart of <see cref="Subscription"/>. Asynchronous operations don't
 /// necessarily complete at the same virtual time as they start, which is why
 /// <see cref="Subscribe"/> and <see cref="Dispose"/> have type <see cref="OperationTime"/>,
-/// enabling this type to defines start and end times for each operation.
+/// enabling this type to define start and end times for each operation.
 /// </para>
 /// </remarks>
 [DebuggerDisplay("{ToString(),nq}")]
@@ -57,7 +57,8 @@ public readonly struct AsyncSubscription : IEquatable<AsyncSubscription>
     public OperationTime Subscribe { get; }
 
     /// <summary>
-    /// Gets the timing of the <c>DisposeAsync</c> call that ended the subscription.
+    /// Gets the timing of the <c>DisposeAsync</c> call that ended the subscription, or
+    /// <see cref="OperationTime.Never"/> if the subscription was never disposed.
     /// </summary>
     public OperationTime Dispose { get; }
 

@@ -11,9 +11,9 @@
 
     <!--
     CA1510: Use ArgumentNullException.ThrowIfNull() - not available on netstandard2.0
-    CA1512: Use ArgumentOutOfRangeException.ThrowIfNull() - not available on netstandard2.0
+    CA1512: Use ArgumentOutOfRangeException throw helpers (ThrowIfNegative, ThrowIfGreaterThan, etc.) - not available on netstandard2.0
     -->
-    <NoWarn>$(NoWarn>;CA1510;CA1512</NoWarn>
+    <NoWarn>$(NoWarn);CA1510;CA1512</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
