@@ -49,7 +49,7 @@ public enum ExecutionShape
     /// Test harness await points complete synchronously.
     /// </summary>
     /// <remarks>
-    /// This causes <see cref="TestAsyncScheduler.YieldPoint"/> to return <see cref="ValueTask"/>s
+    /// This causes <see cref="TestAsyncScheduler.YieldPoint"/> to return awaitable objects
     /// that are already complete. This in turn will cause <c>await</c> expressions in the code
     /// under test to complete synchronously.
     /// </remarks>
