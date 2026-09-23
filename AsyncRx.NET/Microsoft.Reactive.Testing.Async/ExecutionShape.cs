@@ -19,7 +19,8 @@ namespace Microsoft.Reactive.Testing.Async;
 /// <c>await</c> expressions.
 /// </para>
 /// <para>
-/// Specifically, the fake observables call <see cref="TestAsyncScheduler.YieldPoint"/> at:
+/// Specifically, the fake observables call <see cref="TestAsyncScheduler.YieldPoint"/> at these
+/// points:
 /// </para>
 /// <list type="bullet">
 /// <item>Subscription</item>
@@ -28,8 +29,10 @@ namespace Microsoft.Reactive.Testing.Async;
 /// </list>
 /// <para>
 /// and the fake observers call it directly after recording each notification received from the
-/// observable (<c>OnNextAsync</c>, etc.), and before completing the task returned by the
-/// notification handler.
+/// observable (<c>OnNextAsync</c>, etc.), which happens before it completes the task that the
+/// notification method returns. (If a notification handler was supplied to the observer, that is
+/// called after the yield point and before the task returned by the notification handler
+/// completes.)
 /// </para>
 /// <para>
 /// Note that the intent here is path coverage, not schedule exploration: a test will attempt

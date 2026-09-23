@@ -13,8 +13,13 @@ public sealed partial class TestAsyncScheduler
     /// virtual times, and which records when subscriptions occur.
     /// </summary>
     /// <typeparam name="T">The element type.</typeparam>
-    /// <param name="messages">Notifications to surface through the created sequence at their specified absolute virtual times.</param>
-    /// <returns>Hot observable sequence that can be used to assert the timing of subscriptions and notifications.</returns>
+    /// <param name="messages">
+    /// Notifications to deliver at their specified absolute virtual times.
+    /// </param>
+    /// <returns>
+    /// A hot observable sequence that delivers notifications at the specified times, and which
+    /// can be used to assert the timing of subscriptions.
+    /// </returns>
     /// <exception cref="ArgumentNullException"><paramref name="messages"/> is null.</exception>
     public ITestableAsyncObservable<T> CreateHotObservable<T>(params Recorded<Notification<T>>[] messages)
     {
@@ -31,8 +36,14 @@ public sealed partial class TestAsyncScheduler
     /// subscription's start time, and which records when subscriptions occur.
     /// </summary>
     /// <typeparam name="T">The element type.</typeparam>
-    /// <param name="messages">Notifications to surface through the created sequence at their specified virtual time offsets from the subscription time.</param>
-    /// <returns>Cold observable sequence that can be used to assert the timing of subscriptions and notifications.</returns>
+    /// <param name="messages">
+    /// Notifications to surface through the created sequence at their specified virtual time
+    /// offsets from the subscription time.
+    /// </param>
+    /// <returns>
+    /// A cold observable sequence that delivers notifications at the specified times relative to
+    /// the subscription time, and which can be used to assert the timing of subscriptions.
+    /// </returns>
     /// <exception cref="ArgumentNullException"><paramref name="messages"/> is null.</exception>
     public ITestableAsyncObservable<T> CreateColdObservable<T>(params Recorded<Notification<T>>[] messages)
     {
@@ -55,15 +66,19 @@ public sealed partial class TestAsyncScheduler
     public ITestableAsyncObserver<T> CreateObserver<T>() => new MockAsyncObserver<T>(this);
 
     /// <summary>
-    /// Creates a recording observer that records received notifications, passing each message
-    /// to a handler.
+    /// Creates an observer that records received notifications, passing each message to a handler
+    /// that may choose to prolong handling.
     /// </summary>
     /// <typeparam name="T">The element type.</typeparam>
     /// <param name="onNotification">
-    /// Handler invoked for each notification after it has been recorded. The delivery of the
-    /// notification is not considered complete until the task returned by this handler completes.
+    /// Handler invoked for each notification after it has been recorded. The tasks returned by the
+    /// observer's notification methods (<c>OnNextAsync</c>, etc.) will not complete until the task
+    /// returned by this handler completes.
     /// </param>
-    /// <returns>Observer that can be used to assert the timing of received notifications.</returns>
+    /// <returns>
+    /// An observer that can be used to assert the timing of received notifications, and also, if
+    /// required, to prolong the handling of notifications.
+    /// </returns>
     /// <exception cref="ArgumentNullException"><paramref name="onNotification"/> is null.</exception>
     /// <remarks>
     /// If the handler chooses to prolong handling, this will be reflected with different start

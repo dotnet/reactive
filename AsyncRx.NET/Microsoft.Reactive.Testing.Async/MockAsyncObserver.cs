@@ -20,9 +20,9 @@ internal sealed class MockAsyncObserver<T>(TestAsyncScheduler scheduler, Func<No
 
     private async ValueTask RecordAsync(Notification<T> notification)
     {
-        // Delivery start is recorded on entry and completion when the returned task
-        // completes; a record left Incomplete after the pump finishes diagnoses delivery
-        // that was cut off in flight.
+        // Delivery start is recorded on entry and completion when the returned task completes. A
+        // record left Incomplete after the pump finishes tells us that the observer did not finish
+        // processing the notification before the scheduler was disposed.
         scheduler.EnsurePumpThread($"delivery of {notification} to a recording observer");
 
         var index = _messages.Count;
@@ -32,8 +32,9 @@ internal sealed class MockAsyncObserver<T>(TestAsyncScheduler scheduler, Func<No
 
         if (onNotification is not null)
         {
-            // The handler's work is part of the delivery: a handler that awaits something
-            // logically in the future makes the completion prolonged (end tick > start tick).
+            // The handler's work is part of the delivery. Tests can use this to prolong delivery
+            // handling (simulating the behaviour of a real handler that needs to wait for
+            // something that will happen in the future).
             await onNotification(notification);
         }
 

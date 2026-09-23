@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyTitle>Microsoft.Reactive.Testing.Async - Testing Helper Library for AsyncRx.NET</AssemblyTitle>
     <Description>Reactive Extensions (AsyncRx) for .NET - Testing Library</Description>
-    <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events;Async</PackageTags>
+    <PackageTags>Rx;AsyncRx;Reactive;Extensions;Observable;LINQ;Events;Async</PackageTags>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
 
     <!--

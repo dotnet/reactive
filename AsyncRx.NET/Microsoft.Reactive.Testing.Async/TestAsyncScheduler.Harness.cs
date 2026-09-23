@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Concurrency;
+
 namespace Microsoft.Reactive.Testing.Async;
 
 public sealed partial class TestAsyncScheduler
@@ -25,6 +27,14 @@ public sealed partial class TestAsyncScheduler
     /// test reports this as a failure. (This should not happen in a properly constructed test. But
     /// with subscription being an asynchronous operation, it is technically possible for this to
     /// happen, so we detect it.)
+    /// </para>
+    /// <para>
+    /// Note that this executes all work on the current thread. Work delivered to this instance's
+    /// <see cref="IAsyncScheduler"/> implementation is dispatched by a loop that runs inside this
+    /// method, but this also completes tasks returned by <see cref="YieldPoint"/> from the same
+    /// loop. (If the code under test attempts to schedule work by any other means, e.g., via the
+    /// task pool, this method can't guarantee deterministic behaviour. It detects when other
+    /// threads enter the execution context and reports an error in order to avoid this situation.)
     /// </para>
     /// </remarks>
     /// <typeparam name="T">The element type of the observable sequence being tested.</typeparam>

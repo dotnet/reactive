@@ -19,7 +19,7 @@ namespace System.Reactive.Concurrency
     /// stateless overloads that <see cref="AsyncScheduler"/> provides as extension methods.
     /// </para>
     /// <para>
-    /// The scheduled action receives a <see cref="CancellationToken"/> that is signalled when the
+    /// The scheduled action receives a <see cref="CancellationToken"/> that is signalled if the
     /// <see cref="IAsyncDisposable"/> returned from the scheduling call is disposed.
     /// </para>
     /// </remarks>

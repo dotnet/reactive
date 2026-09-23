@@ -21,11 +21,11 @@ namespace Microsoft.Reactive.Testing.Async;
 /// <para>
 /// Where Rx.NET's <c>Microsoft.Reactive.Testing</c> library defines <see cref="Recorded{T}"/>,
 /// which wraps a value in a single timestamp, this library defines <see cref="AsyncRecorded{T}"/>,
-/// which wraps a value in a start and end timestamp. Similarly, where <see cref="Subscription"/>
-/// has a pair of timestamps indicating when subscription and disposal occur, this library's
-/// <see cref="AsyncSubscription"/> has two <em>pairs</em> of timestamps, because both the
-/// subscribe and dispose events might yield, meaning they might start and end on different
-/// timestamps.
+/// which wraps a value in a <em>pair</em> of timestamps, so it can represent different start and
+/// end times. Similarly, where <see cref="Subscription"/> has two timestamps so it can indicate
+/// when subscription and disposal occur, this library's <see cref="AsyncSubscription"/> has two
+/// <em>pairs</em> of timestamps, because both the subscribe and dispose events might yield,
+/// meaning each might start and end on different timestamps.
 /// </para>
 /// <para>
 /// This class defines assertions as extension methods for collections of type
@@ -111,7 +111,7 @@ public static class AsyncReactiveAssert
 
         var actualList = actual.ToList();
 
-        AssertSameCount("notification", actualList.Count, expected.Length, () => Sequences(expected, actualList));
+        AssertSameCount("notification", actualList.Count, expected.Length, () => FormatSequences(expected, actualList));
 
         for (var i = 0; i < expected.Length; i++)
         {
@@ -120,12 +120,12 @@ public static class AsyncReactiveAssert
 
             if (!a.Time.IsComplete)
             {
-                Fail($"Notification #{i}: delivery of {a.Value} started at {a.Start} and never completed.", Sequences(expected, actualList));
+                Fail($"Notification #{i}: delivery of {a.Value} started at {a.Start} and never completed.", FormatSequences(expected, actualList));
             }
 
             if (a.Start != e.Time)
             {
-                Fail($"Notification #{i}: delivery of {a.Value} started at {a.Start}, expected {e.Time}.", Sequences(expected, actualList));
+                Fail($"Notification #{i}: delivery of {a.Value} started at {a.Start}, expected {e.Time}.", FormatSequences(expected, actualList));
             }
 
             if (a.End != a.Start)
@@ -133,13 +133,13 @@ public static class AsyncReactiveAssert
                 Fail(
                     $"Notification #{i}: delivery started at {a.Start} but completed at {a.End}; the compact form asserts " +
                     "start and completion at the same tick. If prolonged completion is intended, use the extended (start, end) expectation.",
-                    Sequences(expected, actualList));
+                    FormatSequences(expected, actualList));
             }
 
             // Expected is the receiver so predicate-based expectations (OnNext(ticks, v => ...)) work.
             if (!e.Value.Equals(a.Value))
             {
-                Fail($"Notification #{i}: expected {e.Value}, but got {a.Value}.", Sequences(expected, actualList));
+                Fail($"Notification #{i}: expected {e.Value}, but got {a.Value}.", FormatSequences(expected, actualList));
             }
         }
     }
@@ -168,7 +168,7 @@ public static class AsyncReactiveAssert
 
         var actualList = actual.ToList();
 
-        AssertSameCount("notification", actualList.Count, expected.Length, () => Sequences(expected, actualList));
+        AssertSameCount("notification", actualList.Count, expected.Length, () => FormatSequences(expected, actualList));
 
         for (var i = 0; i < expected.Length; i++)
         {
@@ -177,17 +177,17 @@ public static class AsyncReactiveAssert
 
             if (a.Start != e.Start)
             {
-                Fail($"Notification #{i}: delivery of {a.Value} started at {a.Start}, expected {e.Start}.", Sequences(expected, actualList));
+                Fail($"Notification #{i}: delivery of {a.Value} started at {a.Start}, expected {e.Start}.", FormatSequences(expected, actualList));
             }
 
             if (a.End != e.End)
             {
-                Fail($"Notification #{i}: delivery of {a.Value} completed at {FormatEnd(a.End)}, expected {FormatEnd(e.End)}.", Sequences(expected, actualList));
+                Fail($"Notification #{i}: delivery of {a.Value} completed at {FormatEnd(a.End)}, expected {FormatEnd(e.End)}.", FormatSequences(expected, actualList));
             }
 
             if (!e.Value.Equals(a.Value))
             {
-                Fail($"Notification #{i}: expected {e.Value}, but got {a.Value}.", Sequences(expected, actualList));
+                Fail($"Notification #{i}: expected {e.Value}, but got {a.Value}.", FormatSequences(expected, actualList));
             }
         }
     }
@@ -222,7 +222,7 @@ public static class AsyncReactiveAssert
 
         var actualList = actual.ToList();
 
-        AssertSameCount("subscription", actualList.Count, expected.Length, () => Sequences(expected, actualList));
+        AssertSameCount("subscription", actualList.Count, expected.Length, () => FormatSequences(expected, actualList));
 
         for (var i = 0; i < expected.Length; i++)
         {
@@ -261,7 +261,7 @@ public static class AsyncReactiveAssert
 
         var actualList = actual.ToList();
 
-        AssertSameCount("subscription", actualList.Count, expected.Length, () => Sequences(expected, actualList));
+        AssertSameCount("subscription", actualList.Count, expected.Length, () => FormatSequences(expected, actualList));
 
         for (var i = 0; i < expected.Length; i++)
         {
@@ -283,15 +283,15 @@ public static class AsyncReactiveAssert
                 ? " (the compact form asserts call and completion at the same tick; use the broken-down four-timestamp form if the divergence is intended)"
                 : string.Empty;
 
-            Fail($"Subscription #{index}: {name} was {FormatTime(actual)}, expected {FormatTime(expected)}{note}.", Sequences(expectedSeq, actualSeq));
+            Fail($"Subscription #{index}: {name} was {FormatTime(actual)}, expected {FormatTime(expected)}{note}.", FormatSequences(expectedSeq, actualSeq));
         }
     }
 
-    private static void AssertSameCount(string what, int actualCount, int expectedCount, Func<string> sequences)
+    private static void AssertSameCount(string what, int actualCount, int expectedCount, Func<string> formatSequences)
     {
         if (actualCount != expectedCount)
         {
-            Fail($"Expected {expectedCount} {what}(s) but got {actualCount}.", sequences());
+            Fail($"Expected {expectedCount} {what}(s) but got {actualCount}.", formatSequences());
         }
     }
 
@@ -299,7 +299,7 @@ public static class AsyncReactiveAssert
 
     private static string FormatTime(long time) => time == OperationTime.Infinite ? "Infinite" : time.ToString();
 
-    private static string Sequences<TExpected, TActual>(IEnumerable<TExpected> expected, IEnumerable<TActual> actual)
+    private static string FormatSequences<TExpected, TActual>(IEnumerable<TExpected> expected, IEnumerable<TActual> actual)
     {
         var sb = new StringBuilder();
         sb.AppendLine();

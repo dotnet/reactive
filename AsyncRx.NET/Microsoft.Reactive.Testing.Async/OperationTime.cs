@@ -70,10 +70,13 @@ public readonly struct OperationTime : IEquatable<OperationTime>
     public static OperationTime StartingAt(long start) => new(start, Infinite);
 
     /// <summary>
-    /// Returns a new <see cref="OperationTime"/> with the same start time and the given end time.
+    /// Returns a new <see cref="OperationTime"/> with the same start time as this one, and the
+    /// given end time.
     /// </summary>
     /// <param name="end">The virtual time at which the operation completed.</param>
-    /// <returns>A new <see cref="OperationTime"/> with the same start time and the given end time.</returns>
+    /// <returns>
+    /// A new <see cref="OperationTime"/> with the same start time as this, and the given end time.
+    /// </returns>
     public OperationTime CompletedAt(long end) => new(Start, end);
 
     /// <summary>

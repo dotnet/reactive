@@ -14,8 +14,17 @@ namespace System.Reactive.Concurrency
         //
         // Stateless scheduling overloads. These pass the caller's delegate through as the state of
         // the underlying IAsyncScheduler call, so they add no allocation of their own.
-        //
+        // In earlier previews of this library, IAsyncScheduler did not support user-supplied
+        // state. These extension methods effectively provide backwards compatibility with those
+        // earlier previews, and also provide a more convenient API for callers who don't need to
+        // pass state.
 
+        /// <summary>
+        /// Schedules an action to be executed.
+        /// </summary>
+        /// <param name="scheduler">The scheduler to use for scheduling the action.</param>
+        /// <param name="action">Action to be executed.</param>
+        /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
         public static ValueTask<IAsyncDisposable> ScheduleAsync(this IAsyncScheduler scheduler, Func<CancellationToken, ValueTask> action)
         {
             if (scheduler == null)
@@ -26,6 +35,13 @@ namespace System.Reactive.Concurrency
             return scheduler.ScheduleAsync(action, static (action, ct) => action(ct));
         }
 
+        /// <summary>
+        /// Schedules an action to be executed after the specified relative due time.
+        /// </summary>
+        /// <param name="scheduler">The scheduler to use for scheduling the action.</param>
+        /// <param name="action">Action to be executed.</param>
+        /// <param name="dueTime">Relative time after which to execute the action.</param>
+        /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
         public static ValueTask<IAsyncDisposable> ScheduleAsync(this IAsyncScheduler scheduler, Func<CancellationToken, ValueTask> action, TimeSpan dueTime)
         {
             if (scheduler == null)
@@ -36,6 +52,13 @@ namespace System.Reactive.Concurrency
             return scheduler.ScheduleAsync(action, dueTime, static (action, ct) => action(ct));
         }
 
+        /// <summary>
+        /// Schedules an action to be executed at the specified absolute due time.
+        /// </summary>
+        /// <param name="scheduler">The scheduler to use for scheduling the action.</param>
+        /// <param name="dueTime">Absolute time at which to execute the action.</param>
+        /// <param name="action">Action to be executed.</param>
+        /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
         public static ValueTask<IAsyncDisposable> ScheduleAsync(this IAsyncScheduler scheduler, Func<CancellationToken, ValueTask> action, DateTimeOffset dueTime)
         {
             if (scheduler == null)
