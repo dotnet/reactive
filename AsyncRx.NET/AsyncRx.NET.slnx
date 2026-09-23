@@ -1,9 +1,4 @@
 <Solution>
-  <Configurations>
-    <Platform Name="Any CPU" />
-    <Platform Name="x64" />
-    <Platform Name="x86" />
-  </Configurations>
   <Folder Name="/dev/">
     <Project Path="ApiCompare/ApiCompare.csproj" />
     <Project Path="Playground/Playground.csproj" />
