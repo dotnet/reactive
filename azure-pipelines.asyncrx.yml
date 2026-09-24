@@ -66,7 +66,10 @@ stages:
     - task: DotNetCoreCLI@2
       inputs:
         command: test
-        projects: AsyncRx.NET/Tests.Microsoft.Reactive.Testing.Async/Tests.Microsoft.Reactive.Testing.Async.csproj
+        projects: |
+          AsyncRx.NET/Tests.Microsoft.Reactive.Testing.Async/Tests.Microsoft.Reactive.Testing.Async.csproj
+          AsyncRx.NET/Tests.System.Reactive.Async/Tests.System.Reactive.Async.csproj
+          AsyncRx.NET/Tests.System.Reactive.Shared.Rx/Tests.System.Reactive.Shared.Rx.csproj
         arguments: -c $(BuildConfiguration) --no-build
       displayName: Run Unit Tests
 

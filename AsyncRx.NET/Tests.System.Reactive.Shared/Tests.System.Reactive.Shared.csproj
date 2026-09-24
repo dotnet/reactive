@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+
+    <!-- Directory.Build.props infers a test project from the name. This project holds the shared
+         scenarios as abstract classes; the runnable [TestClass]es are in the per-platform projects
+         (Tests.System.Reactive.Async and Tests.System.Reactive.Shared.Rx). -->
+    <IsTestProject>false</IsTestProject>
+
+    <!--
+    MSTEST0049: Use CancellationToken - the analyzer misunderstands virtual-time tests.
+    CA2016: Forward CancellationToken - the same misunderstanding.
+    CA1861: Avoid constant arrays as arguments - not relevant to test code.
+    -->
+    <NoWarn>$(NoWarn);MSTEST0049;CA2016;CA1861</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Platform-neutral by construction: this project references neither Rx.NET nor AsyncRx.NET.
+         It needs only the shared testing vocabulary (Recorded, Notification, Subscription,
+         ReactiveTest, TimeInterval) and the MSTest attributes and assertions. A query written in
+         a scenario is a tree of neutral nodes (Seq<T>); each platform project materializes it. -->
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="6.0.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
+  </ItemGroup>
+
+</Project>
