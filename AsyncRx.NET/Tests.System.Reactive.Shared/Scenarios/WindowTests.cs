@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace Tests.System.Reactive.Shared.Scenarios;
 
 /// <summary>
@@ -25,7 +23,7 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// usage via a <c>PeriodicTestScheduler</c>, a sync-scheduler feature with no async counterpart) —
 /// all five belong to the per-platform native stratum.
 /// </remarks>
-public abstract class WindowTests : DescribedTest
+public abstract class WindowTests : SharedReactiveTest
 {
     [TestMethod]
     public void Window_Closings_Basic()

@@ -5,6 +5,7 @@
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+
 using Microsoft.Reactive.Testing;
 // The kit declares its own Observable (the neutral creation operators) in the enclosing
 // namespace, which C# finds before any using directive; the platform's is reached by alias.

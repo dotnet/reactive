@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace Tests.System.Reactive.Shared.Scenarios;
 
 /// <summary>
@@ -21,7 +19,7 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// overflow to signal failure) and <c>Take_Default</c> (runs <c>Range</c> on the real default
 /// scheduler and blocks on a <c>ManualResetEvent</c>).
 /// </remarks>
-public abstract class TakeTests : DescribedTest
+public abstract class TakeTests : SharedReactiveTest
 {
     [TestMethod]
     public void Take_Complete_After()

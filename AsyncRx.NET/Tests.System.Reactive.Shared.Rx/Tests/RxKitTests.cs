@@ -2,13 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace Tests.System.Reactive.Shared.Rx;
 
 /// <summary>Two properties of the representation itself: the tree prints as the query, and a failure names it.</summary>
 [TestClass]
-public sealed class RxKitTests : DescribedTest
+public sealed class RxKitTests : SharedReactiveTest
 {
     protected override IPlatform Platform => RxPlatform.Instance;
 

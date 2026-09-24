@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive;
-using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.System.Reactive.Shared.Scenarios;
 
@@ -18,7 +16,7 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// Transcribed mechanically from the sync file; only the two helpers at the bottom are
 /// hand-written.
 /// </remarks>
-public abstract class GroupJoinTests : DescribedTest
+public abstract class GroupJoinTests : SharedReactiveTest
 {
     [TestMethod]
     public void GroupJoinOp_Normal_I()

@@ -5,11 +5,11 @@
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+
 using Microsoft.Reactive.Testing.Async;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tests.System.Reactive.Shared.Scenarios;
+
 using Tests.System.Reactive.Shared;
-using TestScheduler = Tests.System.Reactive.Shared.TestScheduler;
+using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async;
 
@@ -51,9 +51,9 @@ public abstract class AsyncRxTakeTests(ExecutionShape shape) : TakeTests
         var res = Pump.Start(() => ((IAsyncObservable<int>)xs.Native).Take(2), ProlongingObserver<int>(50));
 
         res.Messages.AssertEqual(
-            AsyncReactiveTest.OnNext((210, 260), 1),
-            AsyncReactiveTest.OnNext((260, 310), 2),
-            AsyncReactiveTest.OnCompleted<int>((310, 310))
+            OnNext((210, 260), 1),
+            OnNext((260, 310), 2),
+            OnCompleted<int>((310, 310))
         );
 
         xs.Subscriptions.AssertEqual(
@@ -77,7 +77,7 @@ public abstract class AsyncRxTakeTests(ExecutionShape shape) : TakeTests
         var res = Pump.Start(() => ((IAsyncObservable<int>)xs.Native).Take(3), ProlongingObserver<int>(50), disposed: 230);
 
         res.Messages.AssertEqual(
-            AsyncReactiveTest.OnNext((210, 260), 1)
+            OnNext((210, 260), 1)
         );
 
         xs.Subscriptions.AssertEqual(
@@ -101,8 +101,8 @@ public abstract class AsyncRxTakeTests(ExecutionShape shape) : TakeTests
         var res = Pump.Start(() => ((IAsyncObservable<int>)xs.Native).Take(TimeSpan.FromTicks(30), Pump), ProlongingObserver<int>(50));
 
         res.Messages.AssertEqual(
-            AsyncReactiveTest.OnNext((210, 260), 1),
-            AsyncReactiveTest.OnCompleted<int>((260, 260))
+            OnNext((210, 260), 1),
+            OnCompleted<int>((260, 260))
         );
 
         xs.Subscriptions.AssertEqual(

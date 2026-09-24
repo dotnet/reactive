@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information. 
 
 using Microsoft.Reactive.Testing.Async;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tests.System.Reactive.Shared.Scenarios;
+
 using Tests.System.Reactive.Shared;
+using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async;
 

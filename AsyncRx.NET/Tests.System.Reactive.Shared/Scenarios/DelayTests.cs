@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive;
+
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.System.Reactive.Shared.Scenarios;
 
@@ -25,7 +25,7 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// (a hand-written <c>IScheduler</c> with events), and the two <c>Delay_LongRunning_*</c> tests
 /// (a hand-written <c>ISchedulerLongRunning</c>).
 /// </remarks>
-public abstract class DelayTests : DescribedTest
+public abstract class DelayTests : SharedReactiveTest
 {
     [TestMethod]
     public void Delay_TimeSpan_Simple1()

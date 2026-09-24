@@ -6,7 +6,7 @@ sibling projects run them.
 
 | Project | Role |
 |---|---|
-| `Tests.System.Reactive.Shared` (this project) | The platform-neutral kit: the query description (`Seq.cs`, `Operators/`), the environment a test runs in (`Harness.cs`), and the shared scenarios (`Scenarios/`, one abstract class per operator). References only the shared testing vocabulary (`Microsoft.Reactive.Testing`) and MSTest. Not itself a test project. |
+| `Tests.System.Reactive.Shared` (this project) | The platform-neutral kit: the query description (`Query/`, with one folder per operator under `Operators/`), the environment a test runs in (`Harness/`, including the `SharedReactiveTest` base class), and the shared scenarios (`Scenarios/`, one abstract class per operator). References only the two testing vocabularies (`Microsoft.Reactive.Testing` and `Microsoft.Reactive.Testing.Async`) and MSTest; it calls no operator on either platform. Not itself a test project. |
 | `Tests.System.Reactive.Async` | The AsyncRx.NET test suite: `AsyncRxPlatform` over `TestAsyncScheduler`, one `[TestClass]` per shared class and execution shape, plus scenarios that only make sense on the async platform (a consumer that prolongs completion, for example). |
 | `Tests.System.Reactive.Shared.Rx` | Runs the same shared scenarios against the released Rx.NET package. Its purpose is to keep the shared scenarios honest: a scenario that passes here is a faithful migration of the Rx.NET test it came from. |
 
@@ -45,7 +45,8 @@ Assertion failures name the query as written, then give the platform's own diff.
 ## Adding things
 
 * **A scenario:** one `[TestMethod]` in the operator's shared class. Nothing else changes.
-* **An operator overload:** a node class and a fluent method in `Operators/`, a member on
-  `ISeqVisitor`, and one line in each platform.
+* **An operator overload:** in the operator's folder under `Operators/`, a node class (one file), a fluent method in the operator's extensions class, and a member on that folder's `ISeqVisitor` part; then one line in each platform.
 * **A test that only one platform can express:** put it in that platform's test project, next
-  to the shared ones, using the platform's native scheduler directly.
+  to the shared ones, using the platform's native scheduler directly. The extended expectation
+  forms (`OnNext((210, 260), 1)`, four-timestamp `Subscribe`) come from `SharedReactiveTest` by
+  inheritance, as the compact ones do.

@@ -20,12 +20,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Platform-neutral by construction: this project references neither Rx.NET nor AsyncRx.NET.
-         It needs only the shared testing vocabulary (Recorded, Notification, Subscription,
-         ReactiveTest, TimeInterval) and the MSTest attributes and assertions. A query written in
-         a scenario is a tree of neutral nodes (Seq<T>); each platform project materializes it. -->
+    <!-- Platform-neutral: this project calls no operator on either platform. It needs only the
+         shared testing vocabulary (Recorded, Notification, Subscription, ReactiveTest, TimeInterval)
+         and the MSTest attributes and assertions. A query written in a scenario is a tree of
+         neutral nodes (Seq<T>); each platform project materializes it. -->
     <PackageReference Include="Microsoft.Reactive.Testing" Version="6.0.0" />
     <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- For the extended expectation forms (AsyncReactiveTest: prolonged deliveries, four-timestamp
+         subscriptions), so that tests get them by inheritance from SharedReactiveTest. This is a
+         dependency on the async testing vocabulary, as the package above is on the sync one; the
+         kit still calls no operator on either platform. -->
+    <ProjectReference Include="..\Microsoft.Reactive.Testing.Async\Microsoft.Reactive.Testing.Async.csproj" />
   </ItemGroup>
 
 </Project>

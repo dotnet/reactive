@@ -5,11 +5,11 @@
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+
 using Microsoft.Reactive.Testing.Async;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tests.System.Reactive.Shared.Scenarios;
+
 using Tests.System.Reactive.Shared;
-using TestScheduler = Tests.System.Reactive.Shared.TestScheduler;
+using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async;
 
@@ -48,11 +48,11 @@ public abstract class AsyncRxWindowTests(ExecutionShape shape) : WindowTests
             observer);
 
         res.Messages.AssertEqual(
-            AsyncReactiveTest.OnNext((210, 250), "0 1"),
-            AsyncReactiveTest.OnNext((250, 290), "0 2"),
-            AsyncReactiveTest.OnNext((290, 330), "1 3"),
-            AsyncReactiveTest.OnNext((330, 370), "1 4"),
-            AsyncReactiveTest.OnCompleted<string>((370, 370))
+            OnNext((210, 250), "0 1"),
+            OnNext((250, 290), "0 2"),
+            OnNext((290, 330), "1 3"),
+            OnNext((330, 370), "1 4"),
+            OnCompleted<string>((370, 370))
         );
 
         xs.Subscriptions.AssertEqual(
