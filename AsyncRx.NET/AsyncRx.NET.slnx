@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/dev/">
+    <Project Path="ApiCompare/ApiCompare.csproj" />
+    <Project Path="Playground/Playground.csproj" />
+  </Folder>
+  <Folder Name="/lib/">
+    <Project Path="Microsoft.Reactive.Testing.Async/Microsoft.Reactive.Testing.Async.csproj" />
+    <Project Path="System.Reactive.Async/System.Reactive.Async.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="Tests.Microsoft.Reactive.Testing.Async/Tests.Microsoft.Reactive.Testing.Async.csproj" />
+  </Folder>
+</Solution>

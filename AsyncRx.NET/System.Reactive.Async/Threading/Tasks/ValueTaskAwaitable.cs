@@ -48,48 +48,15 @@ namespace System.Threading.Tasks
 
             public void OnCompleted(Action continuation)
             {
-                var cancel = default(IDisposable);
-
-                if (_token.CanBeCanceled)
-                {
-                    cancel = _token.Register(() =>
-                    {
-                        Interlocked.Exchange(ref continuation, null)?.Invoke();
-                    });
-                }
+                var c = ScheduledContinuation.Create(continuation, _scheduler, _token);
 
                 try
                 {
-                    var scheduler = _scheduler;
-                    var token = _token;
-
-                    _awaiter.OnCompleted(() =>
-                    {
-                        void Invoke()
-                        {
-                            cancel?.Dispose();
-
-                            Interlocked.Exchange(ref continuation, null)?.Invoke();
-                        }
-
-                        if (scheduler != null)
-                        {
-                            var t = scheduler.ExecuteAsync(ct =>
-                            {
-                                Invoke();
-
-                                return default;
-                            }, token);
-                        }
-                        else
-                        {
-                            Invoke();
-                        }
-                    });
+                    _awaiter.OnCompleted(c.Run);
                 }
                 catch
                 {
-                    cancel?.Dispose();
+                    c.DisposeCancellation();
                     throw;
                 }
             }
@@ -137,48 +104,15 @@ namespace System.Threading.Tasks
 
             public void OnCompleted(Action continuation)
             {
-                var cancel = default(IDisposable);
-
-                if (_token.CanBeCanceled)
-                {
-                    cancel = _token.Register(() =>
-                    {
-                        Interlocked.Exchange(ref continuation, null)?.Invoke();
-                    });
-                }
+                var c = ScheduledContinuation.Create(continuation, _scheduler, _token);
 
                 try
                 {
-                    var scheduler = _scheduler;
-                    var token = _token;
-
-                    _awaiter.OnCompleted(() =>
-                    {
-                        void Invoke()
-                        {
-                            cancel?.Dispose();
-
-                            Interlocked.Exchange(ref continuation, null)?.Invoke();
-                        }
-
-                        if (scheduler != null)
-                        {
-                            var t = scheduler.ExecuteAsync(ct =>
-                            {
-                                Invoke();
-
-                                return default;
-                            }, token);
-                        }
-                        else
-                        {
-                            Invoke();
-                        }
-                    });
+                    _awaiter.OnCompleted(c.Run);
                 }
                 catch
                 {
-                    cancel?.Dispose();
+                    c.DisposeCancellation();
                     throw;
                 }
             }

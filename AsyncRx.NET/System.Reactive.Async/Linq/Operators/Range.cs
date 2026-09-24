@@ -41,8 +41,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return scheduler.ScheduleAsync(async ct =>
+            return scheduler.ScheduleAsync((observer, scheduler, start, count), static async (state, ct) =>
             {
+                var (observer, scheduler, start, count) = state;
+
                 if (ct.IsCancellationRequested)
                     return;
 

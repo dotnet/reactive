@@ -181,8 +181,10 @@ namespace System.Reactive.Linq
                         observer.OnErrorAsync,
                         async () =>
                         {
-                            var drain = await scheduler.ScheduleAsync(async ct =>
+                            var drain = await scheduler.ScheduleAsync((observer, scheduler, queue), static async (state, ct) =>
                             {
+                                var (observer, scheduler, queue) = state;
+
                                 while (!ct.IsCancellationRequested && queue.Count > 0)
                                 {
                                     await observer.OnNextAsync(queue.Dequeue()).RendezVous(scheduler, ct);
@@ -245,8 +247,10 @@ namespace System.Reactive.Linq
                         {
                             Trim(clock.Now);
 
-                            var drain = await scheduler.ScheduleAsync(async ct =>
+                            var drain = await scheduler.ScheduleAsync((observer, scheduler, queue), static async (state, ct) =>
                             {
+                                var (observer, scheduler, queue) = state;
+
                                 while (!ct.IsCancellationRequested && queue.Count > 0)
                                 {
                                     await observer.OnNextAsync(queue.Dequeue().Value).RendezVous(scheduler, ct);

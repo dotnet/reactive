@@ -34,10 +34,9 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET 9.0.x SDK
+      displayName: Use .NET Core 10.x SDK
       inputs:
-        version: 9.0.x
-        performMultiLevelLookup: true
+        version: 10.x
         includePreviewVersions: true
 
     - task: DotNetCoreCLI@2
@@ -50,13 +49,12 @@ stages:
     - script: nbgv cloud -a -p AsyncRx.NET
       displayName: Set Version
 
-    - task: MSBuild@1
-      displayName: Build AsyncRx.NET.sln
+    - task: DotNetCoreCLI@2
+      displayName: Build AsyncRx.NET.slnx
       inputs:
-        solution: AsyncRx.NET/AsyncRx.NET.sln
-        msbuildArguments: /restore /t:build /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
-        configuration: $(BuildConfiguration)
-        maximumCpuCount: false
+        command: build
+        projects: AsyncRx.NET/AsyncRx.NET.slnx
+        arguments: -c $(BuildConfiguration) -p:CreatePackage=true -p:NoPackageAnalysis=true -p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -65,9 +63,15 @@ stages:
         arguments: install --tool-path . dotnet-reportgenerator-globaltool
       displayName: Install ReportGenerator tool
 
-    # Normally we'd run tests here, but AsyncRx.NET doesn't have any yet!
-    # Once we're ready to stablize, we'd also add API surface area tests too
-  
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: test
+        projects: AsyncRx.NET/Tests.Microsoft.Reactive.Testing.Async/Tests.Microsoft.Reactive.Testing.Async.csproj
+        arguments: -c $(BuildConfiguration) --no-build
+      displayName: Run Unit Tests
+
+    # Once we're ready to stabilize, we'd also add API surface area tests too
+
     - publish:  AsyncRx.NET/build
       artifact: config
       displayName: Publish signing config
