@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- Modern runtimes only: the diagnostics tooling (dotnet-counters/trace/monitor) targets .NET Core+. -->
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AnalysisLevelNaming>7.0-none</AnalysisLevelNaming>
+    <AnalysisLevelPerformance>7.0-none</AnalysisLevelPerformance>
+    <NoWarn>$(NoWarn);IDE1006</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <GlobalAnalyzerConfigFiles Remove="$(MSBuildThisFileDirectory)..\..\analyzers.globalconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
+  </ItemGroup>
+
+</Project>
