@@ -7,7 +7,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
 using Microsoft.Reactive.Testing;
-// The kit declares its own Observable (the neutral creation operators) in the enclosing
+// The shared library declares its own Observable (the neutral creation operators) in the enclosing
 // namespace, which C# finds before any using directive; Rx.NET's is reached by alias.
 using RxObservable = System.Reactive.Linq.Observable;
 using RxTestScheduler = Microsoft.Reactive.Testing.TestScheduler;
@@ -213,7 +213,7 @@ public sealed class RxTarget : IRxTarget
         Materialize(seq.Source).Delay(Materialize(seq.SubscriptionDelay), x => Materialize(seq.DelayDurationSelector(x)));
 }
 
-/// <summary>Presents a sync subscription through the kit's async-shaped raw surface.</summary>
+/// <summary>Presents a sync subscription through the shared, async-shaped raw surface.</summary>
 internal sealed class RxDisposable(IDisposable disposable) : IAsyncDisposable
 {
     public ValueTask DisposeAsync()

@@ -9,7 +9,7 @@ using Microsoft.Reactive.Testing;
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>
-/// The per-test virtual-time scheduler: the kit's counterpart of Rx.NET's <c>TestScheduler</c>,
+/// The per-test virtual-time scheduler: the target-neutral counterpart of Rx.NET's <c>TestScheduler</c>,
 /// usable both as the harness and as the scheduler argument to operators (it is a
 /// <see cref="SchedulerRef"/>), the two roles the sync suite's <c>scheduler</c> local plays.
 /// Every member forwards to the <see cref="Target"/>. Its <see cref="SchedulerRef.Native"/> is the

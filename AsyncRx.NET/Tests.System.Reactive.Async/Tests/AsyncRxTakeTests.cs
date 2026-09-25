@@ -14,8 +14,8 @@ using Tests.System.Reactive.Shared.Scenarios;
 namespace Tests.System.Reactive.Async.Tests;
 
 /// <summary>
-/// Runs the kit's shared <c>Take</c> scenarios against AsyncRx.NET. The shared class needs
-/// nothing from here — the witness supplies the operator — so this intermediate class exists
+/// Runs the shared <c>Take</c> scenarios against AsyncRx.NET. The shared class needs
+/// nothing from here — the target supplies the operator — so this intermediate class exists
 /// only to hold the target supplements below; the two sealed classes pin the execution shape.
 /// </summary>
 public abstract class AsyncRxTakeTests(ExecutionShape shape) : TakeTests

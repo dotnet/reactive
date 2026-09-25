@@ -10,8 +10,9 @@ namespace Tests.System.Reactive.Shared;
 /// callback. Materializing it is the identity.
 /// </summary>
 /// <remarks>
-/// Throughout the kit, <c>Native</c> means "the target's own object that this kit object
-/// stands for", typed as <see cref="object"/> because the kit does not know the target's types;
+/// Throughout the shared library, <c>Native</c> means "the target's own object that this
+/// target-neutral object stands for", typed as <see cref="object"/> because the shared code does
+/// not know the target's types;
 /// only the target casts it. Here it is the target's observable: an <c>IObservable&lt;T&gt;</c>
 /// on Rx.NET, an <c>IAsyncObservable&lt;T&gt;</c> on AsyncRx.NET.
 /// </remarks>

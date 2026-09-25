@@ -14,7 +14,7 @@ using Tests.System.Reactive.Shared.Scenarios;
 namespace Tests.System.Reactive.Async.Tests;
 
 /// <summary>
-/// Runs the kit's shared <c>Window</c> scenarios against AsyncRx.NET, under both execution
+/// Runs the shared <c>Window</c> scenarios against AsyncRx.NET, under both execution
 /// shapes, plus the target supplement below.
 /// </summary>
 public abstract class AsyncRxWindowTests(ExecutionShape shape) : WindowTests

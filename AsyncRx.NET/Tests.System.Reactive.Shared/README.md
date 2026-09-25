@@ -1,14 +1,19 @@
 ﻿# Shared Rx scenarios
 
 The behavioural tests for AsyncRx.NET's operators are Rx.NET's own operator tests, run against
-both implementations. This project holds the parts that are common to both targets; the two
-sibling projects run them.
+both implementations. This project, the shared library, holds everything that is common to both
+targets, in three parts: the **query model** (`Query/` and `Operators/`), a target-neutral
+description of a query that each target turns into its own real query; the **shared harness**
+(`Harness/`), the per-test scheduler, testable sources, assertion handles and test base class
+that forward to whichever target is running; and the **shared scenarios** (`Scenarios/`), the
+tests themselves, one abstract class per operator. The two sibling projects run the scenarios
+against a target each.
 
 | Project | Role |
 |---|---|
-| `Tests.System.Reactive.Shared` (this project) | The target-neutral kit: the query description (`Query/`, with one folder per operator under `Operators/`), the environment a test runs in (`Harness/`, including the `SharedReactiveTest` base class), and the shared scenarios (`Scenarios/`, one abstract class per operator). References only the two testing vocabularies (`Microsoft.Reactive.Testing` and `Microsoft.Reactive.Testing.Async`) and MSTest; it calls no operator on either target. Not itself a test project. |
+| `Tests.System.Reactive.Shared` (this project) | The shared library: query model (`Query/`, with one folder per operator under `Operators/`), shared harness (`Harness/`, including the `SharedReactiveTest` base class) and shared scenarios (`Scenarios/`). References only the two testing vocabularies (`Microsoft.Reactive.Testing` and `Microsoft.Reactive.Testing.Async`) and MSTest; it calls no operator on either target. Not itself a test project. |
 | `Tests.System.Reactive.Async` | The AsyncRx.NET test suite: `AsyncRxTarget` over `TestAsyncScheduler`, one `[TestClass]` per shared class and execution shape, plus scenarios that only make sense on the async target (a consumer that prolongs completion, for example). |
-| `Tests.System.Reactive.Shared.Rx` | Runs the same shared scenarios against the released Rx.NET package. Its purpose is to keep the shared scenarios honest: a scenario that passes here is a faithful migration of the Rx.NET test it came from. |
+| `Tests.System.Reactive.Shared.Rx` | Runs the same shared scenarios against the released Rx.NET package. Its purpose is to keep the shared scenarios honest: a scenario that passes here is a faithful migration of the Rx.NET test it came from. Also holds the two tests of the query model itself (`QueryDescriptionTests`). |
 
 ## How a shared scenario works
 
@@ -42,13 +47,13 @@ that it, too, can be shared; on Rx.NET it completes synchronously.
 
 Assertion failures name the query as written, then give the target's own diff.
 
-## `Native`, and what the kit does not hold
+## `Native`, and what the shared library does not hold
 
-The kit never holds a target's observable, observer, scheduler or recorded data under its own
-type. Each kit object that stands for a target object carries it as `object` in a property
-named `Native`, and only the target casts it:
+The shared library never holds a target's observable, observer, scheduler or recorded data under
+its own type. Each shared object that stands for a target object carries it as `object` in a
+property named `Native`, and only the target casts it:
 
-| Kit object | Its `Native` on Rx.NET | On AsyncRx.NET |
+| Shared object | Its `Native` on Rx.NET | On AsyncRx.NET |
 |---|---|---|
 | `TestScheduler` (a `SchedulerRef`) | `Microsoft.Reactive.Testing.TestScheduler` | `TestAsyncScheduler` |
 | `NativeSeq<T>` (a leaf) | `IObservable<T>` | `IAsyncObservable<T>` |
@@ -56,7 +61,7 @@ named `Native`, and only the target casts it:
 | `TestableObserver<T>` (what `Start` returns) | `ITestableObserver<T>` | `ITestableAsyncObserver<T>` |
 
 `res.Messages` and `xs.Subscriptions` are not collections. They are handles (`MessageLog<T>`,
-`SubscriptionLog<T>`) that hold the kit observer or source and whose `AssertEqual` asks the
+`SubscriptionLog<T>`) that hold the shared observer or source and whose `AssertEqual` asks the
 target to compare that object's own records against the shared expectations. The records stay in
 the target's own type because that is where the information is: on AsyncRx.NET a recorded
 message has a delivery start and end tick and a subscription has four timestamps, and the

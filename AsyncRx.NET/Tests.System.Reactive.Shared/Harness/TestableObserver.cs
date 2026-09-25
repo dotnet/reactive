@@ -9,7 +9,7 @@ namespace Tests.System.Reactive.Shared;
 /// returns, or what <see cref="TestScheduler.CreateObserver{T}"/> creates for the raw surface.
 /// </summary>
 /// <remarks>
-/// The kit records nothing itself. <see cref="Native"/> is the target's own testable observer,
+/// Nothing in the shared library records anything itself. <see cref="Native"/> is the target's own testable observer,
 /// which holds the recorded messages in the target's own record type: on Rx.NET an
 /// <c>ITestableObserver&lt;T&gt;</c> whose <c>Messages</c> are <c>Recorded&lt;Notification&lt;T&gt;&gt;</c>;
 /// on AsyncRx.NET an <c>ITestableAsyncObserver&lt;T&gt;</c> whose <c>Messages</c> are
