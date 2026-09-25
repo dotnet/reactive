@@ -61,8 +61,13 @@ public interface IRxTarget : ISeqVisitor
     void Run(TestScheduler scheduler);
 
     // ---- Assertions ----
+    //
+    // The target compares, because the records live in its own observer/observable (the handles'
+    // Native) in its own record type, and its diagnostics are the ones worth reporting.
 
-    void AssertEqual<T>(MessageLog<T> actual, Recorded<Notification<T>>[] expected);
+    /// <summary>Asserts that the messages <paramref name="observer"/>'s <see cref="TestableObserver{T}.Native"/> recorded are <paramref name="expected"/> (compact form: delivered and completed at the tick).</summary>
+    void AssertMessages<T>(TestableObserver<T> observer, Recorded<Notification<T>>[] expected);
 
-    void AssertEqual<T>(SubscriptionLog<T> actual, Subscription[] expected);
+    /// <summary>Asserts that the subscriptions <paramref name="source"/>'s <see cref="NativeSeq{T}.Native"/> recorded are <paramref name="expected"/> (compact form: subscribed and disposed at the ticks).</summary>
+    void AssertSubscriptions<T>(TestableSeq<T> source, Subscription[] expected);
 }

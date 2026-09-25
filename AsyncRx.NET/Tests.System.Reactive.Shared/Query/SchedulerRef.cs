@@ -11,6 +11,7 @@ namespace Tests.System.Reactive.Shared;
 /// </summary>
 public class SchedulerRef(object native, string description)
 {
+    /// <summary>The target's own scheduler: an <c>IScheduler</c> on Rx.NET, an <c>IAsyncScheduler</c> on AsyncRx.NET. Only the target casts it.</summary>
     public object Native => native;
 
     public override string ToString() => description;

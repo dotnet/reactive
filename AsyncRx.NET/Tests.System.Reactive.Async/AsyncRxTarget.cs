@@ -114,11 +114,11 @@ public sealed class AsyncRxTarget(ExecutionShape shape) : IRxTarget
 
     // ---- Assertions (compact form: delivery started and completed at the tick; all four subscription timestamps) ----
 
-    public void AssertEqual<T>(MessageLog<T> actual, Recorded<Notification<T>>[] expected) =>
-        ((ITestableAsyncObserver<T>)actual.Native).Messages.AssertEqual(expected);
+    public void AssertMessages<T>(TestableObserver<T> observer, Recorded<Notification<T>>[] expected) =>
+        ((ITestableAsyncObserver<T>)observer.Native).Messages.AssertEqual(expected);
 
-    public void AssertEqual<T>(SubscriptionLog<T> actual, Subscription[] expected) =>
-        ((ITestableAsyncObservable<T>)actual.Native).Subscriptions.AssertEqual(expected);
+    public void AssertSubscriptions<T>(TestableSeq<T> source, Subscription[] expected) =>
+        ((ITestableAsyncObservable<T>)source.Native).Subscriptions.AssertEqual(expected);
 
     // ---- The visitor: leaves and creation ----
 

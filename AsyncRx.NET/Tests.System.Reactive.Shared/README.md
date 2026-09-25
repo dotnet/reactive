@@ -42,6 +42,28 @@ that it, too, can be shared; on Rx.NET it completes synchronously.
 
 Assertion failures name the query as written, then give the target's own diff.
 
+## `Native`, and what the kit does not hold
+
+The kit never holds a target's observable, observer, scheduler or recorded data under its own
+type. Each kit object that stands for a target object carries it as `object` in a property
+named `Native`, and only the target casts it:
+
+| Kit object | Its `Native` on Rx.NET | On AsyncRx.NET |
+|---|---|---|
+| `TestScheduler` (a `SchedulerRef`) | `Microsoft.Reactive.Testing.TestScheduler` | `TestAsyncScheduler` |
+| `NativeSeq<T>` (a leaf) | `IObservable<T>` | `IAsyncObservable<T>` |
+| `TestableSeq<T>` (a source the scheduler created) | `ITestableObservable<T>` | `ITestableAsyncObservable<T>` |
+| `TestableObserver<T>` (what `Start` returns) | `ITestableObserver<T>` | `ITestableAsyncObserver<T>` |
+
+`res.Messages` and `xs.Subscriptions` are not collections. They are handles (`MessageLog<T>`,
+`SubscriptionLog<T>`) that hold the kit observer or source and whose `AssertEqual` asks the
+target to compare that object's own records against the shared expectations. The records stay in
+the target's own type because that is where the information is: on AsyncRx.NET a recorded
+message has a delivery start and end tick and a subscription has four timestamps, and the
+target's comparison is what can check a compact `OnNext(210, 1)` against that and name the
+timestamp that mismatched. Target-specific tests that need the richer forms cast `Native`
+(for example `(TestAsyncScheduler)Scheduler.Native`) and use the target's own API directly.
+
 ## Adding things
 
 * **A scenario:** one `[TestMethod]` in the operator's shared class. Nothing else changes.
