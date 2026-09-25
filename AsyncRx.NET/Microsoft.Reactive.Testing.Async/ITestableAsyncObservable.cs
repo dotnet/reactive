@@ -22,11 +22,11 @@ public interface ITestableAsyncObservable<T> : IAsyncObservable<T>
     /// <summary>
     /// Gets a list of all the subscriptions to the observable sequence, including their lifetimes.
     /// </summary>
-    public IReadOnlyList<AsyncSubscription> Subscriptions { get; }
+    IReadOnlyList<AsyncSubscription> Subscriptions { get; }
 
     /// <summary>
     /// Gets the recorded timestamped notification messages that were sent by the observable
     /// sequence to its observers.
     /// </summary>
-    public IReadOnlyList<Recorded<Notification<T>>> Messages { get; }
+    IReadOnlyList<Recorded<Notification<T>>> Messages { get; }
 }

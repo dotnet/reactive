@@ -1,0 +1,79 @@
+﻿# Shared Rx scenarios
+
+The behavioural tests for AsyncRx.NET's operators are Rx.NET's own operator tests, run against
+both implementations. This project, the shared library, holds everything that is common to both
+targets, in three parts: the **query model** (`Query/` and `Operators/`), a target-neutral
+description of a query that each target turns into its own real query; the **shared harness**
+(`Harness/`), the per-test scheduler, testable sources, assertion handles and test base class
+that forward to whichever target is running; and the **shared scenarios** (`Scenarios/`), the
+tests themselves, one abstract class per operator. The two sibling projects run the scenarios
+against a target each.
+
+| Project | Role |
+|---|---|
+| `Tests.System.Reactive.Shared` (this project) | The shared library: query model (`Query/`, with one folder per operator under `Operators/`), shared harness (`Harness/`, including the `SharedReactiveTest` base class) and shared scenarios (`Scenarios/`). References only the two testing vocabularies (`Microsoft.Reactive.Testing` and `Microsoft.Reactive.Testing.Async`) and MSTest; it calls no operator on either target. Not itself a test project. |
+| `Tests.System.Reactive.Async` | The AsyncRx.NET test suite: `AsyncRxTarget` over `TestAsyncScheduler`, one `[TestClass]` per shared class and execution shape, plus scenarios that only make sense on the async target (a consumer that prolongs completion, for example). |
+| `Tests.System.Reactive.Shared.Rx` | Runs the same shared scenarios against the released Rx.NET package. Its purpose is to keep the shared scenarios honest: a scenario that passes here is a faithful migration of the Rx.NET test it came from. Also holds the two tests of the query model itself (`QueryDescriptionTests`). |
+
+## How a shared scenario works
+
+A scenario is written in the shape of the Rx.NET test it was migrated from. The differences are
+that `var scheduler = new TestScheduler();` is gone (the base class supplies a fresh `Scheduler`
+per test) and `IObservable<T>` is `Seq<T>`:
+
+```csharp
+var xs = Scheduler.CreateHotObservable(OnNext(210, 1), OnNext(220, 2), OnCompleted<int>(230));
+
+var res = Scheduler.Start(() => xs.Take(1));
+
+res.Messages.AssertEqual(OnNext(210, 1), OnCompleted<int>(210));
+xs.Subscriptions.AssertEqual(Subscribe(200, 210));
+```
+
+`xs.Take(1)` does not run anything. A `Seq<T>` is a *description* of an observable sequence: a
+tree whose leaves are the target's own objects (a testable source the scheduler created, or an
+inner window or group handed to a callback) and whose interior nodes are operator applications,
+one node type per overload. Inside `Start`, the target walks that tree as a visitor and builds
+its own pipeline, so the operators under test are the target's real operators with nothing in
+between. Where a scenario nests sequences (`xs.Window(...).Select((w, i) => w.Select(...)).Merge()`),
+the inner window reaches the projection callback as a value and the description the callback
+returns is materialized in place; no wrapping is needed at either level.
+
+Everything a scenario touches other than the query (the scheduler, testable sources, `Start`,
+the assertions) forwards to the target instance the running test class supplies, so the same
+scenario text runs against Rx.NET's `TestScheduler` and AsyncRx.NET's `TestAsyncScheduler`. The
+raw surface (`ScheduleAbsolute`, `CreateObserver`, `SubscribeAsync`, `Start()`) is async-shaped so
+that it, too, can be shared; on Rx.NET it completes synchronously.
+
+Assertion failures name the query as written, then give the target's own diff.
+
+## `Native`, and what the shared library does not hold
+
+The shared library never holds a target's observable, observer, scheduler or recorded data under
+its own type. Each shared object that stands for a target object carries it as `object` in a
+property named `Native`, and only the target casts it:
+
+| Shared object | Its `Native` on Rx.NET | On AsyncRx.NET |
+|---|---|---|
+| `TestScheduler` (a `SchedulerRef`) | `Microsoft.Reactive.Testing.TestScheduler` | `TestAsyncScheduler` |
+| `NativeSeq<T>` (a leaf) | `IObservable<T>` | `IAsyncObservable<T>` |
+| `TestableSeq<T>` (a source the scheduler created) | `ITestableObservable<T>` | `ITestableAsyncObservable<T>` |
+| `TestableObserver<T>` (what `Start` returns) | `ITestableObserver<T>` | `ITestableAsyncObserver<T>` |
+
+`res.Messages` and `xs.Subscriptions` are not collections. They are handles (`MessageLog<T>`,
+`SubscriptionLog<T>`) that hold the shared observer or source and whose `AssertEqual` asks the
+target to compare that object's own records against the shared expectations. The records stay in
+the target's own type because that is where the information is: on AsyncRx.NET a recorded
+message has a delivery start and end tick and a subscription has four timestamps, and the
+target's comparison is what can check a compact `OnNext(210, 1)` against that and name the
+timestamp that mismatched. Target-specific tests that need the richer forms cast `Native`
+(for example `(TestAsyncScheduler)Scheduler.Native`) and use the target's own API directly.
+
+## Adding things
+
+* **A scenario:** one `[TestMethod]` in the operator's shared class. Nothing else changes.
+* **An operator overload:** in the operator's folder under `Operators/`, a node class (one file), a fluent method in the operator's extensions class, and a member on that folder's `ISeqVisitor` part; then one line in each target.
+* **A test that only one target can express:** put it in that target's test project, next
+  to the shared ones, using the target's native scheduler directly. The extended expectation
+  forms (`OnNext((210, 260), 1)`, four-timestamp `Subscribe`) come from `SharedReactiveTest` by
+  inheritance, as the compact ones do.

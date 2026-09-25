@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+
+    <!--
+    MSTEST0049: Use CancellationToken - the analyzer misunderstands virtual-time tests.
+    CA2016: Forward CancellationToken - the same misunderstanding.
+    CA1861: Avoid constant arrays as arguments - not relevant to test code.
+    -->
+    <NoWarn>$(NoWarn);MSTEST0049;CA2016;CA1861</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="Microsoft.VisualStudio.TestTools.UnitTesting.ParallelizeAttribute"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- MSTest, not xunit: Rx.NET continues to support old-style UWP apps, and xunit's
+         UWP support is broken with no prospect of a fix. -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tests.System.Reactive.Shared\Tests.System.Reactive.Shared.csproj" />
+    <ProjectReference Include="..\Microsoft.Reactive.Testing.Async\Microsoft.Reactive.Testing.Async.csproj" />
+    <ProjectReference Include="..\System.Reactive.Async\System.Reactive.Async.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
+
 using Microsoft.Reactive.Testing.Async;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Microsoft.Reactive.Testing.Async;
 
