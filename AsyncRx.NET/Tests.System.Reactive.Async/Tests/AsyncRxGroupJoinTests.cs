@@ -7,7 +7,7 @@ using Microsoft.Reactive.Testing.Async;
 using Tests.System.Reactive.Shared;
 using Tests.System.Reactive.Shared.Scenarios;
 
-namespace Tests.System.Reactive.Async;
+namespace Tests.System.Reactive.Async.Tests;
 
 public abstract class AsyncRxGroupJoinTests(ExecutionShape shape) : GroupJoinTests
 {

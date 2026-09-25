@@ -4,7 +4,7 @@
 
 using Tests.System.Reactive.Shared.Scenarios;
 
-namespace Tests.System.Reactive.Shared.Rx;
+namespace Tests.System.Reactive.Shared.Rx.Tests;
 
 [TestClass]
 public sealed class RxDelayTests : DelayTests

@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-namespace Tests.System.Reactive.Shared.Rx;
+namespace Tests.System.Reactive.Shared.Rx.Tests;
 
 /// <summary>Two properties of the representation itself: the tree prints as the query, and a failure names it.</summary>
 [TestClass]
@@ -31,6 +31,6 @@ public sealed class RxKitTests : SharedReactiveTest
 
         var failure = Assert.ThrowsExactly<AssertFailedException>(() => res.Messages.AssertEqual(OnNext(210, 2)));
 
-        StringAssert.StartsWith(failure.Message, "Messages of Hot(2 messages).Take(1): ");
+        Assert.StartsWith("Messages of Hot(2 messages).Take(1): ", failure.Message);
     }
 }

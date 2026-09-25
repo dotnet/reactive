@@ -4,8 +4,8 @@
 
 using System.Reactive.Concurrency;
 using System.Runtime.CompilerServices;
+
 using Microsoft.Reactive.Testing.Async;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Microsoft.Reactive.Testing.Async;
 

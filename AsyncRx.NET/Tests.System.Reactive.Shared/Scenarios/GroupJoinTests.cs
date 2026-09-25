@@ -1106,7 +1106,7 @@ public abstract class GroupJoinTests : SharedReactiveTest
 
     private static void AssertDurations<T, U>(TestableSeq<TimeInterval<T>> xs, List<TestableSeq<U>> xsd, long lastEnd)
     {
-        Assert.AreEqual(xs.Messages.Where(x => x.Value.Kind == NotificationKind.OnNext && x.Time <= lastEnd).Count(), xsd.Count);
+        Assert.HasCount(xs.Messages.Where(x => x.Value.Kind == NotificationKind.OnNext && x.Time <= lastEnd).Count(), xsd);
 
         foreach (var pair in xs.Messages.Zip(xsd, (x, y) => new { Item1 = x, Item2 = y }))
         {

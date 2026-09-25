@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.System.Reactive.Shared;
 

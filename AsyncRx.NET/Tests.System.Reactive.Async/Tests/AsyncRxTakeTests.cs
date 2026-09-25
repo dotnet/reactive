@@ -11,7 +11,7 @@ using Microsoft.Reactive.Testing.Async;
 using Tests.System.Reactive.Shared;
 using Tests.System.Reactive.Shared.Scenarios;
 
-namespace Tests.System.Reactive.Async;
+namespace Tests.System.Reactive.Async.Tests;
 
 /// <summary>
 /// Runs the kit's shared <c>Take</c> scenarios against AsyncRx.NET. The shared class needs

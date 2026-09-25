@@ -1364,7 +1364,7 @@ public abstract class WindowTests : SharedReactiveTest
 
         Scheduler.Start();
 
-        Assert.AreEqual(5, observers.Count);
+        Assert.HasCount(5, observers);
 
         observers[0].Messages.AssertEqual(
             OnNext(210, 2),
@@ -1449,9 +1449,9 @@ public abstract class WindowTests : SharedReactiveTest
 
         Scheduler.Start();
 
-        Assert.IsTrue(windowCreationTimes.Last() < 400);
+        Assert.IsLessThan(400, windowCreationTimes.Last());
 
-        Assert.AreEqual(4, observers.Count);
+        Assert.HasCount(4, observers);
 
         observers[0].Messages.AssertEqual(
             OnNext(210, 2),
@@ -1536,9 +1536,9 @@ public abstract class WindowTests : SharedReactiveTest
 
         Scheduler.Start();
 
-        Assert.IsTrue(windowCreationTimes.Last() < 400);
+        Assert.IsLessThan(400, windowCreationTimes.Last());
 
-        Assert.AreEqual(4, observers.Count);
+        Assert.HasCount(4, observers);
 
         observers[0].Messages.AssertEqual(
             OnNext(210, 2),

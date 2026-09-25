@@ -5,7 +5,6 @@
 using System.Reactive;
 
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.System.Reactive.Shared;
 

@@ -15,8 +15,11 @@
     MSTEST0049: Use CancellationToken - the analyzer misunderstands virtual-time tests.
     CA2016: Forward CancellationToken - the same misunderstanding.
     CA1861: Avoid constant arrays as arguments - not relevant to test code.
+    IDE0130: Namespace does not match folder structure - we are using folder structure to make it easier
+        to understand the code in this project, but in the test projects that consume this code, it makes
+        more sense to have a flat namespace. so we need to disable this analyzer for this project.
     -->
-    <NoWarn>$(NoWarn);MSTEST0049;CA2016;CA1861</NoWarn>
+    <NoWarn>$(NoWarn);MSTEST0049;CA2016;CA1861;IDE0130</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
