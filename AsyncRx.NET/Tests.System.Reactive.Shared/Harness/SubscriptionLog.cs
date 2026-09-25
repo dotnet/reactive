@@ -7,7 +7,7 @@ using Microsoft.Reactive.Testing;
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>Recorded subscriptions, assertable in the shared (sync) vocabulary.</summary>
-public readonly struct SubscriptionLog<T>(IPlatform platform, object native, string source)
+public readonly struct SubscriptionLog<T>(IRxTarget target, object native, string source)
 {
     public object Native => native;
 
@@ -15,7 +15,7 @@ public readonly struct SubscriptionLog<T>(IPlatform platform, object native, str
     {
         try
         {
-            platform.AssertEqual(this, expected);
+            target.AssertEqual(this, expected);
         }
         catch (Exception ex)
         {

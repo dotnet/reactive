@@ -5,7 +5,7 @@
 namespace Tests.System.Reactive.Shared;
 
 // The Take operator as data: one node per overload, one fluent method per overload restoring
-// the sync suite's spelling, and one materializer method per overload for each platform to
+// the sync suite's spelling, and one materializer method per overload for each target to
 // implement. This folder is the whole of what the kit says about Take.
 
 public static class TakeExtensions

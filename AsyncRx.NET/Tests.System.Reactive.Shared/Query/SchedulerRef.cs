@@ -5,7 +5,7 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>
-/// A scheduler argument in a description: the platform's own scheduler, carried as
+/// A scheduler argument in a description: the target's own scheduler, carried as
 /// <see cref="object"/>. The test's <see cref="TestScheduler"/> is one; the result of its
 /// <c>DisableOptimizations()</c> is another.
 /// </summary>

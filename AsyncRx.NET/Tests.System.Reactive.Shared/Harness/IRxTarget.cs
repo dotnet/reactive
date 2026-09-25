@@ -8,20 +8,26 @@ using Microsoft.Reactive.Testing;
 
 namespace Tests.System.Reactive.Shared;
 
-// The environment a shared test runs in: a per-test virtual-time scheduler that is both the
-// harness (CreateHotObservable, Start) and the scheduler argument to operators, testable sources
-// with Subscriptions, a recording observer with Messages, the raw surface, and the two assertions —
-// all forwarding to a platform *instance* (no static abstract members, so nothing here needs a
-// runtime newer than .NET Framework's). The sequences a test holds are descriptions (Seq<T>,
-// Nested<T>), so the platform's part is a visitor plus this environment, and the only place a
-// platform object is wrapped is at a leaf.
+// What the shared tests need from one Rx implementation in order to run against it. The
+// scenarios are written once, in the sync suite's vocabulary; everything that differs between
+// one Rx-like LINQ implementation and another is behind this interface: the observable and
+// observer types themselves (reached only through a target's own objects at the leaves of a
+// description), the test scheduler and testable sources, the target's timing conventions
+// (ScheduledAt), the materialization of a Seq<T> description into the target's real query (the
+// ISeqVisitor half), and the assertions over its recorded messages and subscriptions. A target
+// is an instance (no static abstract members), so nothing here needs a runtime newer than .NET
+// Framework's.
 
-/// <summary>What a platform supplies: the environment (the harness operations, as instance members) and the visitor that materializes descriptions.</summary>
-public interface IPlatform : ISeqVisitor
+/// <summary>
+/// One Rx implementation as the shared tests see it: its test scheduler, testable sources and
+/// timing conventions (the harness half), and the visitor that materializes a description into
+/// its own query (the <see cref="ISeqVisitor"/> half).
+/// </summary>
+public interface IRxTarget : ISeqVisitor
 {
-    // ---- Environment ----
+    // ---- Harness ----
 
-    /// <summary>The platform's own virtual-time scheduler, for a <see cref="TestScheduler"/> to carry.</summary>
+    /// <summary>The target's own virtual-time scheduler, for a <see cref="TestScheduler"/> to carry.</summary>
     object CreateTestScheduler();
 
     /// <summary>The scheduler with its optional capabilities hidden (the sync <c>DisableOptimizations()</c>), or itself where the concept does not exist.</summary>
@@ -37,7 +43,7 @@ public interface IPlatform : ISeqVisitor
     /// <summary>The tick at which work scheduled "now" at <paramref name="tick"/> actually runs (the sync scheduler bumps it; the pump does not).</summary>
     long ScheduledAt(long tick);
 
-    // ---- Raw surface (async-shaped, so the same test text runs on both platforms; the sync platform completes synchronously) ----
+    // ---- Raw surface (async-shaped, so the same test text runs on both targets; the sync target completes synchronously) ----
 
     long Clock(TestScheduler scheduler);
 

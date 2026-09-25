@@ -11,14 +11,14 @@ public static class SubscribeExtensions
     {
         ArgumentNullException.ThrowIfNull(observer);
 
-        return observer.Platform.SubscribeAsync(source, observer);
+        return observer.Target.SubscribeAsync(source, observer);
     }
 
     public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Seq<T> source, TestScheduler scheduler, Func<T, ValueTask> onNext)
     {
         ArgumentNullException.ThrowIfNull(scheduler);
 
-        return scheduler.Platform.SubscribeAsync(scheduler, source, onNext);
+        return scheduler.Target.SubscribeAsync(scheduler, source, onNext);
     }
 
     public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Seq<T> source, TestScheduler scheduler, Action<T> onNext)
@@ -36,7 +36,7 @@ public static class SubscribeExtensions
     {
         ArgumentNullException.ThrowIfNull(scheduler);
 
-        return scheduler.Platform.SubscribeAsync(scheduler, source, onNext);
+        return scheduler.Target.SubscribeAsync(scheduler, source, onNext);
     }
 
     public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Nested<T> source, TestScheduler scheduler, Action<Seq<T>> onNext)

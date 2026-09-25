@@ -5,8 +5,8 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>
-/// A platform is a visitor: one member per node type, each returning the platform's own
-/// observable as <see cref="object"/>. The platform casts; nothing outside it does. The
+/// A target is a visitor: one member per node type, each returning the target's own
+/// observable as <see cref="object"/>. The target casts; nothing outside it does. The
 /// interface is partial and each operator's folder adds its members.
 /// </summary>
 public partial interface ISeqVisitor

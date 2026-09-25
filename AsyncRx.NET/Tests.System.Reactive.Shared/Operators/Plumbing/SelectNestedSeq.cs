@@ -6,7 +6,7 @@ namespace Tests.System.Reactive.Shared;
 
 /// <summary>
 /// The flattening idiom's projection over a nested sequence. The callback receives each inner
-/// sequence as a <see cref="NativeSeq{T}"/> and returns a description; the platform materializes
+/// sequence as a <see cref="NativeSeq{T}"/> and returns a description; the target materializes
 /// that description in place, over the real inner sequence.
 /// </summary>
 public sealed class SelectNestedSeq<TIn, TOut>(Nested<TIn> source, Func<Seq<TIn>, int, Seq<TOut>> selector, string text) : Nested<TOut>

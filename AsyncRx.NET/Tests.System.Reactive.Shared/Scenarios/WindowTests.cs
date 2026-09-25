@@ -8,20 +8,20 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// Shared <c>Window</c> scenarios: every behavioural test from Rx.NET's <c>WindowTest.cs</c>.
 /// <c>Window</c> returns a <see cref="Nested{T}"/> description; the flattening idiom's
 /// <c>Select((w, i) =&gt; w.Select(...))</c> receives each window as a value and returns a
-/// description materialized in place, so the pipeline the platform runs is the one written here,
+/// description materialized in place, so the pipeline the target runs is the one written here,
 /// with no wrapping <c>Select</c> around the windows.
 /// </summary>
 /// <remarks>
 /// Transcribed mechanically from the sync file, except the three
 /// <c>WindowWithCount_InnerTimings*</c> tests, which were ported by hand into the raw surface's
 /// async shape. The two scenarios whose closing selector throws need explicit
-/// type arguments in the sync suite too; here the platform is one of them
+/// type arguments in the sync suite too; here the target is one of them
 /// (<c>xs.Window&lt;int, int&gt;(...)</c>), since extension methods take all or none. Deliberately not here:
 /// the four <c>*_ArgumentChecking</c> tests (the code-generated stratum); the three <c>*_Default</c>
 /// tests (they block on <c>First()</c> over the real default scheduler) and the two
 /// <c>Window_Time_Basic_Periodic*</c> tests (they assert on Rx.NET's <c>ISchedulerPeriodic</c>
 /// usage via a <c>PeriodicTestScheduler</c>, a sync-scheduler feature with no async counterpart) —
-/// all five belong to the per-platform native stratum.
+/// all five belong to the per-target native stratum.
 /// </remarks>
 public abstract class WindowTests : SharedReactiveTest
 {

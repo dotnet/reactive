@@ -8,10 +8,10 @@ using Microsoft.Reactive.Testing;
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>A testable source (hot or cold) the platform created: a leaf that also records its subscriptions and knows the messages it plays.</summary>
-public sealed class TestableSeq<T>(IPlatform platform, object native, IReadOnlyList<Recorded<Notification<T>>> messages, string description) : NativeSeq<T>(native, description)
+/// <summary>A testable source (hot or cold) the target created: a leaf that also records its subscriptions and knows the messages it plays.</summary>
+public sealed class TestableSeq<T>(IRxTarget target, object native, IReadOnlyList<Recorded<Notification<T>>> messages, string description) : NativeSeq<T>(native, description)
 {
-    public SubscriptionLog<T> Subscriptions => new(platform, Native, ToString());
+    public SubscriptionLog<T> Subscriptions => new(target, Native, ToString());
 
     public IReadOnlyList<Recorded<Notification<T>>> Messages => messages;
 }

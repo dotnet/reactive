@@ -16,15 +16,15 @@ namespace Tests.System.Reactive.Async;
 /// <summary>
 /// Runs the kit's shared <c>Take</c> scenarios against AsyncRx.NET. The shared class needs
 /// nothing from here — the witness supplies the operator — so this intermediate class exists
-/// only to hold the platform supplements below; the two sealed classes pin the execution shape.
+/// only to hold the target supplements below; the two sealed classes pin the execution shape.
 /// </summary>
 public abstract class AsyncRxTakeTests(ExecutionShape shape) : TakeTests
 {
-    protected override IPlatform Platform { get; } = new AsyncRxPlatform(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
 
     // ---- AsyncRx.NET-specific scenarios: a consumer that prolongs completion ----
     //
-    // Platform supplements in the sense of the doc: ordinary [TestMethod]s next to the shared
+    // Target-specific scenarios: ordinary [TestMethod]s next to the shared
     // ones, exercising what sync Rx cannot express — an OnNextAsync whose returned task
     // completes later than it started. They use the harness's extended expectation forms
     // directly, through the native scheduler ((TestAsyncScheduler)Scheduler.Native).

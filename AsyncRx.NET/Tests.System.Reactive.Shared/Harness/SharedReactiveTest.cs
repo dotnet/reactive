@@ -8,23 +8,23 @@ using Microsoft.Reactive.Testing.Async;
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>
-/// Base class for the shared test classes and for platform-specific tests written beside them.
+/// Base class for the shared test classes and for target-specific tests written beside them.
 /// Supplies the expectation vocabulary by inheritance — the sync forms from
 /// <see cref="ReactiveTest"/> (<c>OnNext(210, 1)</c>, <c>Subscribe(200, 300)</c>,
 /// <c>Created</c>/<c>Subscribed</c>/<c>Disposed</c>) and the extended forms from
 /// <see cref="AsyncReactiveTest"/> (<c>OnNext((210, 260), 1)</c>, four-timestamp
-/// <c>Subscribe</c>) that only the async platform can produce — plus a fresh
-/// <see cref="Scheduler"/> per test and the platform's scheduling convention.
+/// <c>Subscribe</c>) that only the async target can produce — plus a fresh
+/// <see cref="Scheduler"/> per test and the target's scheduling convention.
 /// </summary>
 public abstract class SharedReactiveTest : AsyncReactiveTest
 {
     /// <summary>Supplied by the adapter subclass.</summary>
-    protected abstract IPlatform Platform { get; }
+    protected abstract IRxTarget Target { get; }
 
     protected TestScheduler Scheduler { get; private set; } = null!;
 
     [TestInitialize]
-    public void CreateScheduler() => Scheduler = new TestScheduler(Platform);
+    public void CreateScheduler() => Scheduler = new TestScheduler(Target);
 
-    protected long ScheduledAt(long tick) => Platform.ScheduledAt(tick);
+    protected long ScheduledAt(long tick) => Target.ScheduledAt(tick);
 }

@@ -8,7 +8,7 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 
 /// <summary>
 /// Shared <c>GroupJoin</c> scenarios: every behavioural test from Rx.NET's <c>GroupJoinTest.cs</c>.
-/// The result selector receives the group as a value and returns a description; the platform
+/// The result selector receives the group as a value and returns a description; the target
 /// materializes it in place, as for <c>Window</c>. <c>NewTimer</c> keeps its sync signature: the
 /// scheduler creates cold sources eagerly, exactly as the sync <c>TestScheduler</c> does.
 /// </summary>

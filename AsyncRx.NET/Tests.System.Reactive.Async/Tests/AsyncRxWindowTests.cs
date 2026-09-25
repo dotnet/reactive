@@ -15,11 +15,11 @@ namespace Tests.System.Reactive.Async;
 
 /// <summary>
 /// Runs the kit's shared <c>Window</c> scenarios against AsyncRx.NET, under both execution
-/// shapes, plus the platform supplement below.
+/// shapes, plus the target supplement below.
 /// </summary>
 public abstract class AsyncRxWindowTests(ExecutionShape shape) : WindowTests
 {
-    protected override IPlatform Platform { get; } = new AsyncRxPlatform(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
 
     // ---- AsyncRx.NET-specific scenario: a consumer that prolongs completion ----
 

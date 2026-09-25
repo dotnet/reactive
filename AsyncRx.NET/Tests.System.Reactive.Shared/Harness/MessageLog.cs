@@ -9,7 +9,7 @@ using Microsoft.Reactive.Testing;
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>Recorded notifications, assertable in the shared (sync) vocabulary; a failure is prefixed with the query.</summary>
-public readonly struct MessageLog<T>(IPlatform platform, object native, string query)
+public readonly struct MessageLog<T>(IRxTarget target, object native, string query)
 {
     public object Native => native;
 
@@ -17,7 +17,7 @@ public readonly struct MessageLog<T>(IPlatform platform, object native, string q
     {
         try
         {
-            platform.AssertEqual(this, expected);
+            target.AssertEqual(this, expected);
         }
         catch (Exception ex) when (query != "")
         {

@@ -15,43 +15,43 @@ namespace Tests.System.Reactive.Shared;
 /// </summary>
 public sealed class TestScheduler : SchedulerRef
 {
-    public TestScheduler(IPlatform platform)
-        : base(platform.CreateTestScheduler(), "Scheduler")
+    public TestScheduler(IRxTarget target)
+        : base(target.CreateTestScheduler(), "Scheduler")
     {
-        Platform = platform;
+        Target = target;
     }
 
-    public IPlatform Platform { get; }
+    public IRxTarget Target { get; }
 
-    public TestableSeq<T> CreateHotObservable<T>(params Recorded<Notification<T>>[] messages) => Platform.CreateHotObservable(this, messages);
+    public TestableSeq<T> CreateHotObservable<T>(params Recorded<Notification<T>>[] messages) => Target.CreateHotObservable(this, messages);
 
-    public TestableSeq<T> CreateColdObservable<T>(params Recorded<Notification<T>>[] messages) => Platform.CreateColdObservable(this, messages);
+    public TestableSeq<T> CreateColdObservable<T>(params Recorded<Notification<T>>[] messages) => Target.CreateColdObservable(this, messages);
 
-    public TestableObserver<T> Start<T>(Func<Seq<T>> create) => Platform.Start(this, create, ReactiveTest.Created, ReactiveTest.Subscribed, ReactiveTest.Disposed);
+    public TestableObserver<T> Start<T>(Func<Seq<T>> create) => Target.Start(this, create, ReactiveTest.Created, ReactiveTest.Subscribed, ReactiveTest.Disposed);
 
-    public TestableObserver<T> Start<T>(Func<Seq<T>> create, long disposed) => Platform.Start(this, create, ReactiveTest.Created, ReactiveTest.Subscribed, disposed);
+    public TestableObserver<T> Start<T>(Func<Seq<T>> create, long disposed) => Target.Start(this, create, ReactiveTest.Created, ReactiveTest.Subscribed, disposed);
 
-    public TestableObserver<T> Start<T>(Func<Seq<T>> create, long created, long subscribed, long disposed) => Platform.Start(this, create, created, subscribed, disposed);
+    public TestableObserver<T> Start<T>(Func<Seq<T>> create, long created, long subscribed, long disposed) => Target.Start(this, create, created, subscribed, disposed);
 
     /// <summary>Runs virtual time to exhaustion (the parameterless <c>TestScheduler.Start()</c>).</summary>
-    public void Start() => Platform.Run(this);
+    public void Start() => Target.Run(this);
 
-    public SchedulerRef DisableOptimizations() => Platform.DisableOptimizations(this);
+    public SchedulerRef DisableOptimizations() => Target.DisableOptimizations(this);
 
-    public long Clock => Platform.Clock(this);
+    public long Clock => Target.Clock(this);
 
-    public void ScheduleAbsolute(long tick, Func<ValueTask> action) => Platform.ScheduleAbsolute(this, tick, action);
+    public void ScheduleAbsolute(long tick, Func<ValueTask> action) => Target.ScheduleAbsolute(this, tick, action);
 
     public void ScheduleAbsolute(long tick, Action action)
     {
         ArgumentNullException.ThrowIfNull(action);
 
-        Platform.ScheduleAbsolute(this, tick, () =>
+        Target.ScheduleAbsolute(this, tick, () =>
         {
             action();
             return default;
         });
     }
 
-    public TestableObserver<T> CreateObserver<T>() => Platform.CreateObserver<T>(this);
+    public TestableObserver<T> CreateObserver<T>() => Target.CreateObserver<T>(this);
 }

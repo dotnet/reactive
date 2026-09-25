@@ -8,7 +8,7 @@ namespace Tests.System.Reactive.Shared.Rx;
 [TestClass]
 public sealed class RxKitTests : SharedReactiveTest
 {
-    protected override IPlatform Platform => RxPlatform.Instance;
+    protected override IRxTarget Target => RxTarget.Instance;
 
     [TestMethod]
     public void TheQueryPrintsAsWritten()

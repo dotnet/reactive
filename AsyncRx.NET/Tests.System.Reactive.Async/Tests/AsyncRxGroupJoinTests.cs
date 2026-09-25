@@ -11,7 +11,7 @@ namespace Tests.System.Reactive.Async;
 
 public abstract class AsyncRxGroupJoinTests(ExecutionShape shape) : GroupJoinTests
 {
-    protected override IPlatform Platform { get; } = new AsyncRxPlatform(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
 }
 
 [TestClass]

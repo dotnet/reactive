@@ -5,7 +5,7 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>
-/// The platform's own observable, as a leaf of a description: a testable source the test
+/// The target's own observable, as a leaf of a description: a testable source the test
 /// created (see <see cref="TestableSeq{T}"/>), or an inner window or group handed to a
 /// callback. Materializing it is the identity.
 /// </summary>

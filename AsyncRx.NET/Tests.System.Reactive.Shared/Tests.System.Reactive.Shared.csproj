@@ -7,7 +7,7 @@
     <IsPackable>false</IsPackable>
 
     <!-- Directory.Build.props infers a test project from the name. This project holds the shared
-         scenarios as abstract classes; the runnable [TestClass]es are in the per-platform projects
+         scenarios as abstract classes; the runnable [TestClass]es are in the per-target projects
          (Tests.System.Reactive.Async and Tests.System.Reactive.Shared.Rx). -->
     <IsTestProject>false</IsTestProject>
 
@@ -20,10 +20,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Platform-neutral: this project calls no operator on either platform. It needs only the
+    <!-- Target-neutral: this project calls no operator on either target. It needs only the
          shared testing vocabulary (Recorded, Notification, Subscription, ReactiveTest, TimeInterval)
          and the MSTest attributes and assertions. A query written in a scenario is a tree of
-         neutral nodes (Seq<T>); each platform project materializes it. -->
+         neutral nodes (Seq<T>); each target project materializes it. -->
     <PackageReference Include="Microsoft.Reactive.Testing" Version="6.0.0" />
     <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
   </ItemGroup>
@@ -32,7 +32,7 @@
     <!-- For the extended expectation forms (AsyncReactiveTest: prolonged deliveries, four-timestamp
          subscriptions), so that tests get them by inheritance from SharedReactiveTest. This is a
          dependency on the async testing vocabulary, as the package above is on the sync one; the
-         kit still calls no operator on either platform. -->
+         kit still calls no operator on either target. -->
     <ProjectReference Include="..\Microsoft.Reactive.Testing.Async\Microsoft.Reactive.Testing.Async.csproj" />
   </ItemGroup>
 

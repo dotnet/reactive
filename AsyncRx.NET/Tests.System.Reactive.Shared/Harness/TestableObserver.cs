@@ -5,14 +5,14 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>The recording observer returned by <see cref="TestScheduler.Start{T}(Func{Seq{T}})"/>, or created for the raw surface.</summary>
-public sealed class TestableObserver<T>(IPlatform platform, object native, string query)
+public sealed class TestableObserver<T>(IRxTarget target, object native, string query)
 {
-    public IPlatform Platform => platform;
+    public IRxTarget Target => target;
 
     public object Native => native;
 
     /// <summary>The query this observer was started over (its description), for diagnostics.</summary>
     public string Query => query;
 
-    public MessageLog<T> Messages => new(platform, native, query);
+    public MessageLog<T> Messages => new(target, native, query);
 }

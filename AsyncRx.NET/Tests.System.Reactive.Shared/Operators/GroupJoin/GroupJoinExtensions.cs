@@ -7,9 +7,9 @@ using System.Runtime.CompilerServices;
 namespace Tests.System.Reactive.Shared;
 
 // GroupJoin as data. The result selector receives the group as a Seq<TRight> — a NativeSeq
-// wrapping the platform's group — and returns a neutral sequence that is materialized in
+// wrapping the target's group — and returns a neutral sequence that is materialized in
 // place, so the sync suite's (x, yy) => yy.Select(y => x.Value + y.Value) is written
-// unchanged and becomes the platform's yy.Select(...) with nothing in between.
+// unchanged and becomes the target's yy.Select(...) with nothing in between.
 
 public static class GroupJoinExtensions
 {

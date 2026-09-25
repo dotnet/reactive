@@ -9,5 +9,5 @@ namespace Tests.System.Reactive.Shared.Rx;
 [TestClass]
 public sealed class RxTakeTests : TakeTests
 {
-    protected override IPlatform Platform => RxPlatform.Instance;
+    protected override IRxTarget Target => RxTarget.Instance;
 }

@@ -12,7 +12,7 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// Shared <c>Delay</c> scenarios: every behavioural test from Rx.NET's <c>DelayTest.cs</c>, with the
 /// overloads AsyncRx.NET gained to match Rx.NET's surface. The stopwatch axis is the sync text
 /// (<c>useStopwatch ? Scheduler : Scheduler.DisableOptimizations()</c>): both are scheduler
-/// references in a description, resolved by the platform.
+/// references in a description, resolved by the target.
 /// </summary>
 /// <remarks>
 /// Transcribed mechanically from the sync file,
@@ -1426,7 +1426,7 @@ public abstract class DelayTests : SharedReactiveTest
         var list = new List<int>();
 
         // Scheduler-free in the sync suite; here driven through the raw surface so the async
-        // platform can run it (subscription is awaited within the pump).
+        // target can run it (subscription is awaited within the pump).
         Scheduler.ScheduleAbsolute(Created, async () =>
         {
             await Observable.Range(1, 5).Delay(_ => Observable.Return(1)).SubscribeAsync(Scheduler, list.Add);

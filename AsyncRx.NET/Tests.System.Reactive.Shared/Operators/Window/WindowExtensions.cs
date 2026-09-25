@@ -7,8 +7,8 @@ using System.Runtime.CompilerServices;
 namespace Tests.System.Reactive.Shared;
 
 // Window as data. Every form returns a Nested<T>; the callbacks return neutral sequences
-// (Seq<TClosing>), which the materializer materializes at the moment the platform invokes
-// the callback — so a closing selector that throws, throws inside the platform's own call.
+// (Seq<TClosing>), which the materializer materializes at the moment the target invokes
+// the callback — so a closing selector that throws, throws inside the target's own call.
 
 public static class WindowExtensions
 {

@@ -7,46 +7,47 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
 using Microsoft.Reactive.Testing;
-using Microsoft.Reactive.Testing.Async;
+// The kit declares its own Observable (the neutral creation operators) in the enclosing
+// namespace, which C# finds before any using directive; Rx.NET's is reached by alias.
+using RxObservable = System.Reactive.Linq.Observable;
+using RxTestScheduler = Microsoft.Reactive.Testing.TestScheduler;
 
-using Tests.System.Reactive.Shared;
-
-using TestScheduler = Tests.System.Reactive.Shared.TestScheduler;
-
-namespace Tests.System.Reactive.Async;
+namespace Tests.System.Reactive.Shared.Rx;
 
 /// <summary>
-/// The AsyncRx.NET platform: the environment and raw surface over <c>TestAsyncScheduler</c>
-/// plus the materializer. The execution shape is a constructor argument, since the platform
-/// is an instance.
+/// The Rx.NET target: the harness and raw surface (one line each over
+/// <c>TestScheduler</c>) plus the materializer (one line per node). The only casts
+/// are of leaves' <c>Native</c>; the pipeline a scenario describes is built by the target's
+/// own operators with nothing in between.
 /// </summary>
-public sealed class AsyncRxPlatform(ExecutionShape shape) : IPlatform
+public sealed class RxTarget : IRxTarget
 {
-    private static TestAsyncScheduler Unwrap(TestScheduler scheduler) => (TestAsyncScheduler)scheduler.Native;
+    public static RxTarget Instance { get; } = new();
 
-    private static IAsyncScheduler Unwrap(SchedulerRef scheduler) => (IAsyncScheduler)scheduler.Native;
+    private static RxTestScheduler Unwrap(TestScheduler scheduler) => (RxTestScheduler)scheduler.Native;
 
-    private IAsyncObservable<T> Materialize<T>(Seq<T> seq) => (IAsyncObservable<T>)seq.Accept(this);
+    private static IScheduler Unwrap(SchedulerRef scheduler) => (IScheduler)scheduler.Native;
 
-    private IAsyncObservable<IAsyncObservable<T>> Materialize<T>(Nested<T> seq) => (IAsyncObservable<IAsyncObservable<T>>)seq.Accept(this);
+    private IObservable<T> Materialize<T>(Seq<T> seq) => (IObservable<T>)seq.Accept(this);
 
-    // ---- Environment ----
+    private IObservable<IObservable<T>> Materialize<T>(Nested<T> seq) => (IObservable<IObservable<T>>)seq.Accept(this);
 
-    public object CreateTestScheduler() => new TestAsyncScheduler(shape);
+    // ---- Harness ----
 
-    // No optimisation interfaces to hide on this platform: the scheduler is its own unoptimized form.
-    public SchedulerRef DisableOptimizations(TestScheduler scheduler) => scheduler;
+    public object CreateTestScheduler() => new RxTestScheduler();
+
+    public SchedulerRef DisableOptimizations(TestScheduler scheduler) => new(Unwrap(scheduler).DisableOptimizations(), "Scheduler.DisableOptimizations()");
 
     public TestableSeq<T> CreateHotObservable<T>(TestScheduler scheduler, Recorded<Notification<T>>[] messages)
     {
         var source = Unwrap(scheduler).CreateHotObservable(messages);
-        return new(this, source, source.Messages, $"Hot({messages.Length} messages)");
+        return new(this, source, (IReadOnlyList<Recorded<Notification<T>>>)source.Messages, $"Hot({messages.Length} messages)");
     }
 
     public TestableSeq<T> CreateColdObservable<T>(TestScheduler scheduler, Recorded<Notification<T>>[] messages)
     {
         var source = Unwrap(scheduler).CreateColdObservable(messages);
-        return new(this, source, source.Messages, $"Cold({messages.Length} messages)");
+        return new(this, source, (IReadOnlyList<Recorded<Notification<T>>>)source.Messages, $"Cold({messages.Length} messages)");
     }
 
     public TestableObserver<T> Start<T>(TestScheduler scheduler, Func<Seq<T>> create, long created, long subscribed, long disposed)
@@ -67,10 +68,13 @@ public sealed class AsyncRxPlatform(ExecutionShape shape) : IPlatform
         return new(this, observer, query);
     }
 
-    // The pump runs work due now within the current tick.
-    public long ScheduledAt(long tick) => tick;
+    // TestScheduler.ScheduleAbsolute bumps work due now (or in the past) to Clock + 1.
+    public long ScheduledAt(long tick) => tick + 1;
 
     // ---- Raw surface ----
+    //
+    // The shared delegates are async-shaped; on this target everything they can await
+    // completes synchronously, and Complete() enforces that.
 
     public long Clock(TestScheduler scheduler) => Unwrap(scheduler).Clock;
 
@@ -78,63 +82,62 @@ public sealed class AsyncRxPlatform(ExecutionShape shape) : IPlatform
     {
         ArgumentNullException.ThrowIfNull(action);
 
-        Unwrap(scheduler).ScheduleAbsolute(tick, _ => action(), $"scenario work scheduled at tick {tick}");
+        Unwrap(scheduler).ScheduleAbsolute(tick, () => Complete(action()));
     }
 
     public TestableObserver<T> CreateObserver<T>(TestScheduler scheduler) => new(this, Unwrap(scheduler).CreateObserver<T>(), "");
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestableObserver<T> observer) =>
-        Materialize(source).SubscribeAsync((ITestableAsyncObserver<T>)observer.Native);
+        new(new RxDisposable(Materialize(source).Subscribe((ITestableObserver<T>)observer.Native)));
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestScheduler scheduler, Seq<T> source, Func<T, ValueTask> onNext)
     {
         ArgumentNullException.ThrowIfNull(onNext);
 
-        var pump = Unwrap(scheduler);
-        return Materialize(source).SubscribeAsync(AsyncObserver.Create<T>(x =>
-        {
-            pump.EnsurePumpThread("delivery to a scenario's OnNext handler");
-            return onNext(x);
-        }));
+        return new(new RxDisposable(Materialize(source).Subscribe(x => Complete(onNext(x)))));
     }
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestScheduler scheduler, Nested<T> source, Func<Seq<T>, ValueTask> onNext)
     {
         ArgumentNullException.ThrowIfNull(onNext);
 
-        var pump = Unwrap(scheduler);
-        return Materialize(source).SubscribeAsync(AsyncObserver.Create<IAsyncObservable<T>>(window =>
-        {
-            pump.EnsurePumpThread("delivery of a window to a scenario's handler");
-            return onNext(new NativeSeq<T>(window, "window"));
-        }));
+        return new(new RxDisposable(Materialize(source).Subscribe(window => Complete(onNext(new NativeSeq<T>(window, "window"))))));
     }
 
     public void Run(TestScheduler scheduler) => Unwrap(scheduler).Start();
 
-    // ---- Assertions (compact form: delivery started and completed at the tick; all four subscription timestamps) ----
+    private static void Complete(ValueTask task)
+    {
+        if (!task.IsCompleted)
+        {
+            throw new InvalidOperationException(
+                "On the Rx.NET target every operation a shared scenario can await completes synchronously, but this delegate returned an incomplete task.");
+        }
+
+        task.GetAwaiter().GetResult();
+    }
+
+    // ---- Assertions ----
 
     public void AssertEqual<T>(MessageLog<T> actual, Recorded<Notification<T>>[] expected) =>
-        ((ITestableAsyncObserver<T>)actual.Native).Messages.AssertEqual(expected);
+        ((ITestableObserver<T>)actual.Native).Messages.AssertEqual(expected);
 
     public void AssertEqual<T>(SubscriptionLog<T> actual, Subscription[] expected) =>
-        ((ITestableAsyncObservable<T>)actual.Native).Subscriptions.AssertEqual(expected);
+        ((ITestableObservable<T>)actual.Native).Subscriptions.AssertEqual(expected);
 
     // ---- The visitor: leaves and creation ----
 
     public object Native<T>(NativeSeq<T> seq) => seq.Native;
 
-    public object Timer(TimerSeq seq) => AsyncObservable.Timer(seq.DueTime, Unwrap(seq.Scheduler));
+    public object Timer(TimerSeq seq) => RxObservable.Timer(seq.DueTime, Unwrap(seq.Scheduler));
 
-    public object Return<T>(ReturnSeq<T> seq) => AsyncObservable.Return(seq.Value);
+    public object Return<T>(ReturnSeq<T> seq) => RxObservable.Return(seq.Value);
 
-    // Rx.NET's Range(start, count) runs on the current-thread scheduler; the immediate scheduler
-    // is the equivalent here (a plumbing decision).
-    public object Range(RangeSeq seq) => AsyncObservable.Range(seq.Start, seq.Count, ImmediateAsyncScheduler.Instance);
+    public object Range(RangeSeq seq) => RxObservable.Range(seq.Start, seq.Count);
 
-    public object Empty<T>(EmptySeq<T> seq) => AsyncObservable.Empty<T>();
+    public object Empty<T>(EmptySeq<T> seq) => RxObservable.Empty<T>();
 
-    public object Throw<T>(ThrowSeq<T> seq) => seq.Scheduler is null ? AsyncObservable.Throw<T>(seq.Error) : AsyncObservable.Throw<T>(seq.Error, Unwrap(seq.Scheduler));
+    public object Throw<T>(ThrowSeq<T> seq) => seq.Scheduler is null ? RxObservable.Throw<T>(seq.Error) : RxObservable.Throw<T>(seq.Error, Unwrap(seq.Scheduler));
 
     // ---- Plumbing ----
 
@@ -144,17 +147,14 @@ public sealed class AsyncRxPlatform(ExecutionShape shape) : IPlatform
 
     public object Where<T>(WhereSeq<T> seq) => Materialize(seq.Source).Where(seq.Predicate);
 
-    // AsyncRx.NET has no SelectMany(other) overload; Rx.NET defines it as SelectMany(_ => other).
-    public object SelectMany<TIn, TOut>(SelectManySeq<TIn, TOut> seq)
-    {
-        var other = Materialize(seq.Other);
-        return Materialize(seq.Source).SelectMany(_ => other);
-    }
+    public object SelectMany<TIn, TOut>(SelectManySeq<TIn, TOut> seq) => Materialize(seq.Source).SelectMany(Materialize(seq.Other));
 
     public object Concat<T>(ConcatSeq<T> seq) => Materialize(seq.First).Concat(Materialize(seq.Second));
 
     public object Merge<T>(MergeSeq<T> seq) => Materialize(seq.Sources).Merge();
 
+    // The inner window reaches the callback as a value; what the callback returns is
+    // materialized in place, over the real window. No Select wraps the windows.
     public object SelectNested<TIn, TOut>(SelectNestedSeq<TIn, TOut> seq) =>
         Materialize(seq.Source).Select((window, i) => Materialize(seq.Selector(new NativeSeq<TIn>(window, "window"), i)));
 
@@ -211,4 +211,14 @@ public sealed class AsyncRxPlatform(ExecutionShape shape) : IPlatform
 
     public object DelaySubscription<T, TDelay>(DelaySubscriptionSeq<T, TDelay> seq) =>
         Materialize(seq.Source).Delay(Materialize(seq.SubscriptionDelay), x => Materialize(seq.DelayDurationSelector(x)));
+}
+
+/// <summary>Presents a sync subscription through the kit's async-shaped raw surface.</summary>
+internal sealed class RxDisposable(IDisposable disposable) : IAsyncDisposable
+{
+    public ValueTask DisposeAsync()
+    {
+        disposable.Dispose();
+        return default;
+    }
 }

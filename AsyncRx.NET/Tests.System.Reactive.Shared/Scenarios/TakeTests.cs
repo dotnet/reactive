@@ -6,15 +6,15 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 
 /// <summary>
 /// Shared <c>Take</c> scenarios: every behavioural test from Rx.NET's <c>TakeTest.cs</c>. The
-/// scenario data, expectations and vocabulary are platform-neutral; <c>xs.Take(20)</c> builds a
-/// description (<see cref="Seq{T}"/>) that the platform materializes inside <c>Start</c>, so the
+/// scenario data, expectations and vocabulary are target-neutral; <c>xs.Take(20)</c> builds a
+/// description (<see cref="Seq{T}"/>) that the target materializes inside <c>Start</c>, so the
 /// operator application is written exactly as in the sync suite, and the scheduler is the base
 /// class's <c>Scheduler</c> where the sync suite has a <c>scheduler</c> local.
 /// </summary>
 /// <remarks>
 /// Transcribed mechanically from the sync file. Deliberately not here: the two
 /// <c>*_ArgumentChecking</c> tests (the code-generated stratum), and two tests that belong to the
-/// per-platform native stratum — <c>Take_DecrementsCountFirst</c> (a reentrancy regression test
+/// per-target native stratum — <c>Take_DecrementsCountFirst</c> (a reentrancy regression test
 /// with no assertion, driving a <c>BehaviorSubject</c> back into itself and relying on a stack
 /// overflow to signal failure) and <c>Take_Default</c> (runs <c>Range</c> on the real default
 /// scheduler and blocks on a <c>ManualResetEvent</c>).
