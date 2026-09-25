@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>source.Window(windowBoundaries)</c>.</summary>
+/// <remarks>Built by <see cref="WindowExtensions.Window{T, TWindowBoundary}(Seq{T}, Seq{TWindowBoundary})"/>; materialized by each target through <see cref="ISeqVisitor.WindowBoundaries{T, TWindowBoundary}(WindowBoundariesSeq{T, TWindowBoundary})"/>.</remarks>
 public sealed class WindowBoundariesSeq<T, TWindowBoundary>(Seq<T> source, Seq<TWindowBoundary> windowBoundaries) : Nested<T>
 {
     public Seq<T> Source => source;

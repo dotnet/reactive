@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>source.Window(windowClosingSelector)</c>.</summary>
+/// <remarks>Built by <see cref="WindowExtensions.Window{T, TWindowClosing}(Seq{T}, Func{Seq{TWindowClosing}}, string)"/>; materialized by each target through <see cref="ISeqVisitor.WindowClosings{T, TWindowClosing}(WindowClosingsSeq{T, TWindowClosing})"/>.</remarks>
 public sealed class WindowClosingsSeq<T, TWindowClosing>(Seq<T> source, Func<Seq<TWindowClosing>> windowClosingSelector, string text) : Nested<T>
 {
     public Seq<T> Source => source;

@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>Observable.Return(value)</c>.</summary>
+/// <remarks>Built by <see cref="Observable.Return{T}(T)"/>; materialized by each target through <see cref="ISeqVisitor.Return{T}(ReturnSeq{T})"/>.</remarks>
 public sealed class ReturnSeq<T>(T value) : Seq<T>
 {
     public T Value => value;

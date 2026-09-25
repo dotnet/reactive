@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>source.Delay(dueTime, scheduler)</c> with a relative due time.</summary>
+/// <remarks>Built by <see cref="DelayExtensions.Delay{T}(Seq{T}, TimeSpan, SchedulerRef)"/>; materialized by each target through <see cref="ISeqVisitor.DelayTime{T}(DelayTimeSeq{T})"/>.</remarks>
 public sealed class DelayTimeSeq<T>(Seq<T> source, TimeSpan dueTime, SchedulerRef scheduler) : Seq<T>
 {
     public Seq<T> Source => source;

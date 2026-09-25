@@ -9,6 +9,7 @@ namespace Tests.System.Reactive.Shared;
 /// sequence as a <see cref="NativeSeq{T}"/> and returns a description; the target materializes
 /// that description in place, over the real inner sequence.
 /// </summary>
+/// <remarks>Built by <see cref="SeqExtensions.Select{TIn, TOut}(Nested{TIn}, Func{Seq{TIn}, int, Seq{TOut}}, string)"/>; materialized by each target through <see cref="ISeqVisitor.SelectNested{TIn, TOut}(SelectNestedSeq{TIn, TOut})"/>.</remarks>
 public sealed class SelectNestedSeq<TIn, TOut>(Nested<TIn> source, Func<Seq<TIn>, int, Seq<TOut>> selector, string text) : Nested<TOut>
 {
     public Nested<TIn> Source => source;

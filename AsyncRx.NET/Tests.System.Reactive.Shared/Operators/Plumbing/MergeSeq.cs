@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>sources.Merge()</c> over a nested sequence.</summary>
+/// <remarks>Built by <see cref="SeqExtensions.Merge{T}(Nested{T})"/>; materialized by each target through <see cref="ISeqVisitor.Merge{T}(MergeSeq{T})"/>.</remarks>
 public sealed class MergeSeq<T>(Nested<T> sources) : Seq<T>
 {
     public Nested<T> Sources => sources;

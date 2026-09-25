@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>source.Delay(dueTime, scheduler)</c> with an absolute due time.</summary>
+/// <remarks>Built by <see cref="DelayExtensions.Delay{T}(Seq{T}, DateTimeOffset, SchedulerRef)"/>; materialized by each target through <see cref="ISeqVisitor.DelayAbsolute{T}(DelayAbsoluteSeq{T})"/>.</remarks>
 public sealed class DelayAbsoluteSeq<T>(Seq<T> source, DateTimeOffset dueTime, SchedulerRef scheduler) : Seq<T>
 {
     public Seq<T> Source => source;

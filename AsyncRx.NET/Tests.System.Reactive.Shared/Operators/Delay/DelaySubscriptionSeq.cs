@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>source.Delay(subscriptionDelay, delayDurationSelector)</c>.</summary>
+/// <remarks>Built by <see cref="DelayExtensions.Delay{T, TDelay}(Seq{T}, Seq{TDelay}, Func{T, Seq{TDelay}}, string)"/>; materialized by each target through <see cref="ISeqVisitor.DelaySubscription{T, TDelay}(DelaySubscriptionSeq{T, TDelay})"/>.</remarks>
 public sealed class DelaySubscriptionSeq<T, TDelay>(Seq<T> source, Seq<TDelay> subscriptionDelay, Func<T, Seq<TDelay>> delayDurationSelector, string text) : Seq<T>
 {
     public Seq<T> Source => source;

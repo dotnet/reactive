@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>Observable.Range(start, count)</c>.</summary>
+/// <remarks>Built by <see cref="Observable.Range(int, int)"/>; materialized by each target through <see cref="ISeqVisitor.Range(RangeSeq)"/>.</remarks>
 public sealed class RangeSeq(int start, int count) : Seq<int>
 {
     public int Start => start;

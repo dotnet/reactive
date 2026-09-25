@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>source.Window(timeSpan, count, scheduler)</c>.</summary>
+/// <remarks>Built by <see cref="WindowExtensions.Window{T}(Seq{T}, TimeSpan, int, SchedulerRef)"/>; materialized by each target through <see cref="ISeqVisitor.WindowTimeOrCount{T}(WindowTimeOrCountSeq{T})"/>.</remarks>
 public sealed class WindowTimeOrCountSeq<T>(Seq<T> source, TimeSpan timeSpan, int count, SchedulerRef scheduler) : Nested<T>
 {
     public Seq<T> Source => source;

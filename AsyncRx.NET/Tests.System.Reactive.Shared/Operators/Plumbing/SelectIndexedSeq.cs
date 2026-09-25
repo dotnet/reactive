@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>source.Select((x, i) =&gt; ...)</c>.</summary>
+/// <remarks>Built by <see cref="SeqExtensions.Select{TIn, TOut}(Seq{TIn}, Func{TIn, int, TOut}, string)"/>; materialized by each target through <see cref="ISeqVisitor.SelectIndexed{TIn, TOut}(SelectIndexedSeq{TIn, TOut})"/>.</remarks>
 public sealed class SelectIndexedSeq<TIn, TOut>(Seq<TIn> source, Func<TIn, int, TOut> selector, string text) : Seq<TOut>
 {
     public Seq<TIn> Source => source;

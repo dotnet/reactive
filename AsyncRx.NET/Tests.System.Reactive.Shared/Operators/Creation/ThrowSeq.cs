@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>Observable.Throw&lt;T&gt;(error)</c> or <c>Observable.Throw&lt;T&gt;(error, scheduler)</c>.</summary>
+/// <remarks>Built by <see cref="Observable.Throw{T}(Exception)"/>; materialized by each target through <see cref="ISeqVisitor.Throw{T}(ThrowSeq{T})"/>.</remarks>
 public sealed class ThrowSeq<T>(Exception error, SchedulerRef? scheduler) : Seq<T>
 {
     public Exception Error => error;

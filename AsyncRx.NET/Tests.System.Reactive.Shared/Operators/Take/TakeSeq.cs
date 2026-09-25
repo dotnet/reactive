@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>source.Take(count)</c>.</summary>
+/// <remarks>Built by <see cref="TakeExtensions.Take{T}(Seq{T}, int)"/>; materialized by each target through <see cref="ISeqVisitor.Take{T}(TakeSeq{T})"/>.</remarks>
 public sealed class TakeSeq<T>(Seq<T> source, int count) : Seq<T>
 {
     public Seq<T> Source => source;

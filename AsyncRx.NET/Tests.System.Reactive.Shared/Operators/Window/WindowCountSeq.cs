@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>source.Window(count, skip)</c>.</summary>
+/// <remarks>Built by <see cref="WindowExtensions.Window{T}(Seq{T}, int, int)"/>; materialized by each target through <see cref="ISeqVisitor.WindowCount{T}(WindowCountSeq{T})"/>.</remarks>
 public sealed class WindowCountSeq<T>(Seq<T> source, int count, int skip) : Nested<T>
 {
     public Seq<T> Source => source;

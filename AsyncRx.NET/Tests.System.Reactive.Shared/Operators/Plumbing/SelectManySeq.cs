@@ -5,6 +5,7 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>The <c>SelectMany(other)</c> form the scenarios use; AsyncRx.NET spells it <c>SelectMany(_ =&gt; other)</c>.</summary>
+/// <remarks>Built by <see cref="SeqExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Seq{TOut})"/>; materialized by each target through <see cref="ISeqVisitor.SelectMany{TIn, TOut}(SelectManySeq{TIn, TOut})"/>.</remarks>
 public sealed class SelectManySeq<TIn, TOut>(Seq<TIn> source, Seq<TOut> other) : Seq<TOut>
 {
     public Seq<TIn> Source => source;

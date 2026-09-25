@@ -5,6 +5,7 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>The general form: a result selector that returns a value rather than a sequence.</summary>
+/// <remarks>Built by <see cref="GroupJoinValueExtensions.GroupJoin{TLeft, TRight, TLeftDuration, TRightDuration, TResult}"/>; materialized by each target through <see cref="ISeqVisitor.GroupJoinValue{TLeft, TRight, TLeftDuration, TRightDuration, TResult}(GroupJoinValueSeq{TLeft, TRight, TLeftDuration, TRightDuration, TResult})"/>.</remarks>
 public sealed class GroupJoinValueSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(
     Seq<TLeft> left,
     Seq<TRight> right,

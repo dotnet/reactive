@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>Observable.Timer(dueTime, scheduler)</c>.</summary>
+/// <remarks>Built by <see cref="Observable.Timer(TimeSpan, SchedulerRef)"/>; materialized by each target through <see cref="ISeqVisitor.Timer(TimerSeq)"/>.</remarks>
 public sealed class TimerSeq(TimeSpan dueTime, SchedulerRef scheduler) : Seq<long>
 {
     public TimeSpan DueTime => dueTime;

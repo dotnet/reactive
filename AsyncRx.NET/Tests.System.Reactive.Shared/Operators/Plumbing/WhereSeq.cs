@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>source.Where(predicate)</c>.</summary>
+/// <remarks>Built by <see cref="SeqExtensions.Where{T}(Seq{T}, Func{T, bool}, string)"/>; materialized by each target through <see cref="ISeqVisitor.Where{T}(WhereSeq{T})"/>.</remarks>
 public sealed class WhereSeq<T>(Seq<T> source, Func<T, bool> predicate, string text) : Seq<T>
 {
     public Seq<T> Source => source;

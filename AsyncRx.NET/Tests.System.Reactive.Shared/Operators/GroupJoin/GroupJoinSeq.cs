@@ -4,6 +4,8 @@
 
 namespace Tests.System.Reactive.Shared;
 
+/// <summary>Describes <c>left.GroupJoin(right, leftDurationSelector, rightDurationSelector, resultSelector)</c> with a result selector that returns a sequence.</summary>
+/// <remarks>Built by <see cref="GroupJoinExtensions.GroupJoin{TLeft, TRight, TLeftDuration, TRightDuration, TResult}"/>; materialized by each target through <see cref="ISeqVisitor.GroupJoin{TLeft, TRight, TLeftDuration, TRightDuration, TResult}(GroupJoinSeq{TLeft, TRight, TLeftDuration, TRightDuration, TResult})"/>.</remarks>
 public sealed class GroupJoinSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(
     Seq<TLeft> left,
     Seq<TRight> right,
