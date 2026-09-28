@@ -29,12 +29,12 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
     /// The harness (<c>CreateHotObservable</c>, <c>Start</c>) and the scheduler argument to
     /// operators, where the Rx.NET test had a <c>scheduler</c> local.
     /// </remarks>
-    protected TestScheduler Scheduler { get; private set; } = null!;
+    protected TestSchedulerRef Scheduler { get; private set; } = null!;
 
     /// <summary>Creates <see cref="Scheduler"/> before each test.</summary>
     /// <remarks>Called by MSTest.</remarks>
     [TestInitialize]
-    public void CreateScheduler() => Scheduler = new TestScheduler(Target);
+    public void CreateScheduler() => Scheduler = new TestSchedulerRef(Target);
 
     /// <summary>
     /// The virtual time at which work scheduled "now" at <paramref name="tick"/> runs on this

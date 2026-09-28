@@ -1100,7 +1100,7 @@ public abstract class GroupJoinTests : SharedReactiveTest
         );
     }
 
-    private static TestableSeq<long> NewTimer(List<TestableSeq<long>> l, TimeSpan t, TestScheduler scheduler)
+    private static TestableSeq<long> NewTimer(List<TestableSeq<long>> l, TimeSpan t, TestSchedulerRef scheduler)
     {
         var timer = scheduler.CreateColdObservable(OnNext(t.Ticks, 0L), OnCompleted<long>(t.Ticks));
         l.Add(timer);

@@ -11,7 +11,6 @@ using Microsoft.Reactive.Testing.Async;
 
 using Tests.System.Reactive.Shared;
 
-using TestScheduler = Tests.System.Reactive.Shared.TestScheduler;
 
 namespace Tests.System.Reactive.Async;
 
@@ -24,7 +23,7 @@ namespace Tests.System.Reactive.Async;
 /// </remarks>
 public sealed class AsyncRxTarget(ExecutionShape shape) : IRxTarget
 {
-    private static TestAsyncScheduler Unwrap(TestScheduler scheduler) => (TestAsyncScheduler)scheduler.Native;
+    private static TestAsyncScheduler Unwrap(TestSchedulerRef scheduler) => (TestAsyncScheduler)scheduler.Native;
 
     private static IAsyncScheduler Unwrap(SchedulerRef scheduler) => (IAsyncScheduler)scheduler.Native;
 
@@ -37,21 +36,21 @@ public sealed class AsyncRxTarget(ExecutionShape shape) : IRxTarget
     public object CreateTestScheduler() => new TestAsyncScheduler(shape);
 
     // No optimisation interfaces to hide on this target: the scheduler is its own unoptimized form.
-    public SchedulerRef DisableOptimizations(TestScheduler scheduler) => scheduler;
+    public SchedulerRef DisableOptimizations(TestSchedulerRef scheduler) => scheduler;
 
-    public TestableSeq<T> CreateHotObservable<T>(TestScheduler scheduler, Recorded<Notification<T>>[] messages)
+    public TestableSeq<T> CreateHotObservable<T>(TestSchedulerRef scheduler, Recorded<Notification<T>>[] messages)
     {
         var source = Unwrap(scheduler).CreateHotObservable(messages);
         return new(this, source, source.Messages, $"Hot({messages.Length} messages)");
     }
 
-    public TestableSeq<T> CreateColdObservable<T>(TestScheduler scheduler, Recorded<Notification<T>>[] messages)
+    public TestableSeq<T> CreateColdObservable<T>(TestSchedulerRef scheduler, Recorded<Notification<T>>[] messages)
     {
         var source = Unwrap(scheduler).CreateColdObservable(messages);
         return new(this, source, source.Messages, $"Cold({messages.Length} messages)");
     }
 
-    public TestableObserver<T> Start<T>(TestScheduler scheduler, Func<Seq<T>> create, long created, long subscribed, long disposed)
+    public TestableObserver<T> Start<T>(TestSchedulerRef scheduler, Func<Seq<T>> create, long created, long subscribed, long disposed)
     {
         ArgumentNullException.ThrowIfNull(create);
 
@@ -74,21 +73,21 @@ public sealed class AsyncRxTarget(ExecutionShape shape) : IRxTarget
 
     // ---- Raw surface ----
 
-    public long Clock(TestScheduler scheduler) => Unwrap(scheduler).Clock;
+    public long Clock(TestSchedulerRef scheduler) => Unwrap(scheduler).Clock;
 
-    public void ScheduleAbsolute(TestScheduler scheduler, long tick, Func<ValueTask> action)
+    public void ScheduleAbsolute(TestSchedulerRef scheduler, long tick, Func<ValueTask> action)
     {
         ArgumentNullException.ThrowIfNull(action);
 
         Unwrap(scheduler).ScheduleAbsolute(tick, _ => action(), $"scenario work scheduled at tick {tick}");
     }
 
-    public TestableObserver<T> CreateObserver<T>(TestScheduler scheduler) => new(this, Unwrap(scheduler).CreateObserver<T>(), "");
+    public TestableObserver<T> CreateObserver<T>(TestSchedulerRef scheduler) => new(this, Unwrap(scheduler).CreateObserver<T>(), "");
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestableObserver<T> observer) =>
         Materialize(source).SubscribeAsync((ITestableAsyncObserver<T>)observer.Native);
 
-    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestScheduler scheduler, Seq<T> source, Func<T, ValueTask> onNext)
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Seq<T> source, Func<T, ValueTask> onNext)
     {
         ArgumentNullException.ThrowIfNull(onNext);
 
@@ -100,7 +99,7 @@ public sealed class AsyncRxTarget(ExecutionShape shape) : IRxTarget
         }));
     }
 
-    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestScheduler scheduler, Nested<T> source, Func<Seq<T>, ValueTask> onNext)
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Nested<T> source, Func<Seq<T>, ValueTask> onNext)
     {
         ArgumentNullException.ThrowIfNull(onNext);
 
@@ -112,7 +111,7 @@ public sealed class AsyncRxTarget(ExecutionShape shape) : IRxTarget
         }));
     }
 
-    public void Run(TestScheduler scheduler) => Unwrap(scheduler).Start();
+    public void Run(TestSchedulerRef scheduler) => Unwrap(scheduler).Start();
 
     // ---- Assertions (compact form: delivery started and completed at the tick; all four subscription timestamps) ----
 

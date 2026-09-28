@@ -55,7 +55,7 @@ property named `Native`, and only the target casts it:
 
 | Shared object | Its `Native` on Rx.NET | On AsyncRx.NET |
 |---|---|---|
-| `TestScheduler` (a `SchedulerRef`) | `Microsoft.Reactive.Testing.TestScheduler` | `TestAsyncScheduler` |
+| `TestSchedulerRef` (a `SchedulerRef`) | `Microsoft.Reactive.Testing.TestScheduler` | `TestAsyncScheduler` |
 | `NativeSeq<T>` (a leaf) | `IObservable<T>` | `IAsyncObservable<T>` |
 | `TestableSeq<T>` (a source the scheduler created) | `ITestableObservable<T>` | `ITestableAsyncObservable<T>` |
 | `TestableObserver<T>` (what `Start` returns) | `ITestableObserver<T>` | `ITestableAsyncObserver<T>` |

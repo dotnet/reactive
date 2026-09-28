@@ -6,8 +6,8 @@ namespace Tests.System.Reactive.Shared;
 
 /// <summary>
 /// The recording observer a scenario ends in: what
-/// <see cref="TestScheduler.Start{T}(Func{Seq{T}})"/> returns, or what
-/// <see cref="TestScheduler.CreateObserver{T}"/> creates for the raw surface.
+/// <see cref="TestSchedulerRef.Start{T}(Func{Seq{T}})"/> returns, or what
+/// <see cref="TestSchedulerRef.CreateObserver{T}"/> creates for the raw surface.
 /// </summary>
 /// <remarks>
 /// Nothing in the shared library records anything itself. <see cref="Native"/> is the target's

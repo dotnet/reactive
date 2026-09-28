@@ -10,8 +10,8 @@ namespace Tests.System.Reactive.Shared;
 
 /// <summary>
 /// A testable source (hot or cold) the target created through
-/// <see cref="TestScheduler.CreateHotObservable{T}"/> or
-/// <see cref="TestScheduler.CreateColdObservable{T}"/>.
+/// <see cref="TestSchedulerRef.CreateHotObservable{T}"/> or
+/// <see cref="TestSchedulerRef.CreateColdObservable{T}"/>.
 /// </summary>
 /// <remarks>
 /// A leaf of a description that also records its subscriptions and knows the messages it plays.

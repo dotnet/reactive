@@ -30,7 +30,7 @@ public interface IRxTarget : ISeqVisitor
     // ---- Harness ----
 
     /// <summary>
-    /// The target's own virtual-time scheduler, for a <see cref="TestScheduler"/> to carry.
+    /// The target's own virtual-time scheduler, for a <see cref="TestSchedulerRef"/> to carry.
     /// </summary>
     object CreateTestScheduler();
 
@@ -38,19 +38,19 @@ public interface IRxTarget : ISeqVisitor
     /// The scheduler with its optional capabilities hidden (the sync
     /// <c>DisableOptimizations()</c>), or itself where the concept does not exist.
     /// </summary>
-    SchedulerRef DisableOptimizations(TestScheduler scheduler);
+    SchedulerRef DisableOptimizations(TestSchedulerRef scheduler);
 
     /// <summary>
     /// Creates the target's own hot testable observable, playing <paramref name="messages"/> at
     /// their absolute virtual times, wrapped as a leaf.
     /// </summary>
-    TestableSeq<T> CreateHotObservable<T>(TestScheduler scheduler, Recorded<Notification<T>>[] messages);
+    TestableSeq<T> CreateHotObservable<T>(TestSchedulerRef scheduler, Recorded<Notification<T>>[] messages);
 
     /// <summary>
     /// Creates the target's own cold testable observable, playing <paramref name="messages"/>
     /// relative to each subscription, wrapped as a leaf.
     /// </summary>
-    TestableSeq<T> CreateColdObservable<T>(TestScheduler scheduler, Recorded<Notification<T>>[] messages);
+    TestableSeq<T> CreateColdObservable<T>(TestSchedulerRef scheduler, Recorded<Notification<T>>[] messages);
 
     /// <summary>Runs a scenario.</summary>
     /// <remarks>
@@ -58,7 +58,7 @@ public interface IRxTarget : ISeqVisitor
     /// returns, subscribes at <paramref name="subscribed"/> and disposes at
     /// <paramref name="disposed"/>.
     /// </remarks>
-    TestableObserver<T> Start<T>(TestScheduler scheduler, Func<Seq<T>> create, long created, long subscribed, long disposed);
+    TestableObserver<T> Start<T>(TestSchedulerRef scheduler, Func<Seq<T>> create, long created, long subscribed, long disposed);
 
     /// <summary>
     /// The tick at which work scheduled "now" at <paramref name="tick"/> actually runs.
@@ -74,19 +74,19 @@ public interface IRxTarget : ISeqVisitor
     // synchronously.
 
     /// <summary>The current virtual time of <paramref name="scheduler"/>.</summary>
-    long Clock(TestScheduler scheduler);
+    long Clock(TestSchedulerRef scheduler);
 
     /// <summary>
     /// Schedules <paramref name="action"/> to run at absolute virtual time <paramref name="tick"/>.
     /// </summary>
     /// <remarks>On the sync target the returned task is expected to be complete.</remarks>
-    void ScheduleAbsolute(TestScheduler scheduler, long tick, Func<ValueTask> action);
+    void ScheduleAbsolute(TestSchedulerRef scheduler, long tick, Func<ValueTask> action);
 
     /// <summary>
     /// Creates the target's own recording observer, wrapped, for a scenario that subscribes by
     /// hand rather than through <see cref="Start{T}"/>.
     /// </summary>
-    TestableObserver<T> CreateObserver<T>(TestScheduler scheduler);
+    TestableObserver<T> CreateObserver<T>(TestSchedulerRef scheduler);
 
     /// <summary>
     /// Materializes <paramref name="source"/> and subscribes <paramref name="observer"/>'s
@@ -96,19 +96,19 @@ public interface IRxTarget : ISeqVisitor
 
     /// <summary>Materializes <paramref name="source"/> and subscribes a handler to it.</summary>
     /// <remarks>Each element reaches <paramref name="onNext"/> as a value.</remarks>
-    ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestScheduler scheduler, Seq<T> source, Func<T, ValueTask> onNext);
+    ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Seq<T> source, Func<T, ValueTask> onNext);
 
     /// <summary>Subscribes to a nested sequence.</summary>
     /// <remarks>
     /// Each inner sequence reaches the handler as a <see cref="NativeSeq{T}"/> (a wrap at the
     /// test's own observer, not in the pipeline).
     /// </remarks>
-    ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestScheduler scheduler, Nested<T> source, Func<Seq<T>, ValueTask> onNext);
+    ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Nested<T> source, Func<Seq<T>, ValueTask> onNext);
 
     /// <summary>
     /// Runs virtual time to exhaustion (the parameterless <c>TestScheduler.Start()</c>).
     /// </summary>
-    void Run(TestScheduler scheduler);
+    void Run(TestSchedulerRef scheduler);
 
     // ---- Assertions ----
     //

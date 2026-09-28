@@ -16,7 +16,7 @@ public static class SubscribeExtensions
     /// <typeparam name="T">The type of the elements.</typeparam>
     /// <param name="source">The description to subscribe to.</param>
     /// <param name="observer">
-    /// A recording observer from <see cref="TestScheduler.CreateObserver{T}"/>.
+    /// A recording observer from <see cref="TestSchedulerRef.CreateObserver{T}"/>.
     /// </param>
     /// <returns>The subscription; on the sync target the task is already complete.</returns>
     public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Seq<T> source, TestableObserver<T> observer)
@@ -37,7 +37,7 @@ public static class SubscribeExtensions
     /// Receives each element; async-shaped so the same scenario text runs on both targets.
     /// </param>
     /// <returns>The subscription; on the sync target the task is already complete.</returns>
-    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Seq<T> source, TestScheduler scheduler, Func<T, ValueTask> onNext)
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Seq<T> source, TestSchedulerRef scheduler, Func<T, ValueTask> onNext)
     {
         ArgumentNullException.ThrowIfNull(scheduler);
 
@@ -45,7 +45,7 @@ public static class SubscribeExtensions
     }
 
     /// <summary>
-    /// As <see cref="SubscribeAsync{T}(Seq{T}, TestScheduler, Func{T, ValueTask})"/>, with a
+    /// As <see cref="SubscribeAsync{T}(Seq{T}, TestSchedulerRef, Func{T, ValueTask})"/>, with a
     /// synchronous handler.
     /// </summary>
     /// <typeparam name="T">The type of the elements.</typeparam>
@@ -53,7 +53,7 @@ public static class SubscribeExtensions
     /// <param name="scheduler">The test's scheduler, which identifies the target.</param>
     /// <param name="onNext">Receives each element.</param>
     /// <returns>The subscription.</returns>
-    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Seq<T> source, TestScheduler scheduler, Action<T> onNext)
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Seq<T> source, TestSchedulerRef scheduler, Action<T> onNext)
     {
         ArgumentNullException.ThrowIfNull(onNext);
 
@@ -76,7 +76,7 @@ public static class SubscribeExtensions
     /// Receives each inner sequence; async-shaped so the same scenario text runs on both targets.
     /// </param>
     /// <returns>The subscription; on the sync target the task is already complete.</returns>
-    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Nested<T> source, TestScheduler scheduler, Func<Seq<T>, ValueTask> onNext)
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Nested<T> source, TestSchedulerRef scheduler, Func<Seq<T>, ValueTask> onNext)
     {
         ArgumentNullException.ThrowIfNull(scheduler);
 
@@ -84,15 +84,15 @@ public static class SubscribeExtensions
     }
 
     /// <summary>
-    /// As <see cref="SubscribeAsync{T}(Nested{T}, TestScheduler, Func{Seq{T}, ValueTask})"/>, with
-    /// a synchronous handler.
+    /// As <see cref="SubscribeAsync{T}(Nested{T}, TestSchedulerRef, Func{Seq{T}, ValueTask})"/>,
+    /// with a synchronous handler.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the inner sequences.</typeparam>
     /// <param name="source">The nested description to subscribe to.</param>
     /// <param name="scheduler">The test's scheduler, which identifies the target.</param>
     /// <param name="onNext">Receives each inner sequence.</param>
     /// <returns>The subscription.</returns>
-    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Nested<T> source, TestScheduler scheduler, Action<Seq<T>> onNext)
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Nested<T> source, TestSchedulerRef scheduler, Action<Seq<T>> onNext)
     {
         ArgumentNullException.ThrowIfNull(onNext);
 

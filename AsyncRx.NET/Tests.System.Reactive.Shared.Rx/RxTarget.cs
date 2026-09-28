@@ -24,7 +24,7 @@ public sealed class RxTarget : IRxTarget
 {
     public static RxTarget Instance { get; } = new();
 
-    private static RxTestScheduler Unwrap(TestScheduler scheduler) => (RxTestScheduler)scheduler.Native;
+    private static RxTestScheduler Unwrap(TestSchedulerRef scheduler) => (RxTestScheduler)scheduler.Native;
 
     private static IScheduler Unwrap(SchedulerRef scheduler) => (IScheduler)scheduler.Native;
 
@@ -36,21 +36,21 @@ public sealed class RxTarget : IRxTarget
 
     public object CreateTestScheduler() => new RxTestScheduler();
 
-    public SchedulerRef DisableOptimizations(TestScheduler scheduler) => new(Unwrap(scheduler).DisableOptimizations(), "Scheduler.DisableOptimizations()");
+    public SchedulerRef DisableOptimizations(TestSchedulerRef scheduler) => new(Unwrap(scheduler).DisableOptimizations(), "Scheduler.DisableOptimizations()");
 
-    public TestableSeq<T> CreateHotObservable<T>(TestScheduler scheduler, Recorded<Notification<T>>[] messages)
+    public TestableSeq<T> CreateHotObservable<T>(TestSchedulerRef scheduler, Recorded<Notification<T>>[] messages)
     {
         var source = Unwrap(scheduler).CreateHotObservable(messages);
         return new(this, source, (IReadOnlyList<Recorded<Notification<T>>>)source.Messages, $"Hot({messages.Length} messages)");
     }
 
-    public TestableSeq<T> CreateColdObservable<T>(TestScheduler scheduler, Recorded<Notification<T>>[] messages)
+    public TestableSeq<T> CreateColdObservable<T>(TestSchedulerRef scheduler, Recorded<Notification<T>>[] messages)
     {
         var source = Unwrap(scheduler).CreateColdObservable(messages);
         return new(this, source, (IReadOnlyList<Recorded<Notification<T>>>)source.Messages, $"Cold({messages.Length} messages)");
     }
 
-    public TestableObserver<T> Start<T>(TestScheduler scheduler, Func<Seq<T>> create, long created, long subscribed, long disposed)
+    public TestableObserver<T> Start<T>(TestSchedulerRef scheduler, Func<Seq<T>> create, long created, long subscribed, long disposed)
     {
         ArgumentNullException.ThrowIfNull(create);
 
@@ -76,35 +76,35 @@ public sealed class RxTarget : IRxTarget
     // The shared delegates are async-shaped; on this target everything they can await
     // completes synchronously, and Complete() enforces that.
 
-    public long Clock(TestScheduler scheduler) => Unwrap(scheduler).Clock;
+    public long Clock(TestSchedulerRef scheduler) => Unwrap(scheduler).Clock;
 
-    public void ScheduleAbsolute(TestScheduler scheduler, long tick, Func<ValueTask> action)
+    public void ScheduleAbsolute(TestSchedulerRef scheduler, long tick, Func<ValueTask> action)
     {
         ArgumentNullException.ThrowIfNull(action);
 
         Unwrap(scheduler).ScheduleAbsolute(tick, () => Complete(action()));
     }
 
-    public TestableObserver<T> CreateObserver<T>(TestScheduler scheduler) => new(this, Unwrap(scheduler).CreateObserver<T>(), "");
+    public TestableObserver<T> CreateObserver<T>(TestSchedulerRef scheduler) => new(this, Unwrap(scheduler).CreateObserver<T>(), "");
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestableObserver<T> observer) =>
         new(new RxDisposable(Materialize(source).Subscribe((ITestableObserver<T>)observer.Native)));
 
-    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestScheduler scheduler, Seq<T> source, Func<T, ValueTask> onNext)
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Seq<T> source, Func<T, ValueTask> onNext)
     {
         ArgumentNullException.ThrowIfNull(onNext);
 
         return new(new RxDisposable(Materialize(source).Subscribe(x => Complete(onNext(x)))));
     }
 
-    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestScheduler scheduler, Nested<T> source, Func<Seq<T>, ValueTask> onNext)
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Nested<T> source, Func<Seq<T>, ValueTask> onNext)
     {
         ArgumentNullException.ThrowIfNull(onNext);
 
         return new(new RxDisposable(Materialize(source).Subscribe(window => Complete(onNext(new NativeSeq<T>(window, "window"))))));
     }
 
-    public void Run(TestScheduler scheduler) => Unwrap(scheduler).Start();
+    public void Run(TestSchedulerRef scheduler) => Unwrap(scheduler).Start();
 
     private static void Complete(ValueTask task)
     {

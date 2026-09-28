@@ -14,20 +14,22 @@ namespace Tests.System.Reactive.Shared;
 /// <remarks>
 /// The target-neutral counterpart of Rx.NET's <c>TestScheduler</c>, usable both as the harness and
 /// as the scheduler argument to operators (it is a <see cref="SchedulerRef"/>), the two roles the
-/// sync suite's <c>scheduler</c> local plays. Every member forwards to the <see cref="Target"/>.
+/// sync suite's <c>scheduler</c> local plays. It is named after its base class rather than after
+/// <c>TestScheduler</c> so that the two are never confused: this is a reference to the target's
+/// test scheduler, not a test scheduler itself. Every member forwards to the <see cref="Target"/>.
 /// Its <see cref="SchedulerRef.Native"/> is the target's own test scheduler —
 /// <c>Microsoft.Reactive.Testing.TestScheduler</c> on Rx.NET, <c>TestAsyncScheduler</c> on
 /// AsyncRx.NET — which target-specific tests may cast to reach features the shared surface does
 /// not expose.
 /// </remarks>
-public sealed class TestScheduler : SchedulerRef
+public sealed class TestSchedulerRef : SchedulerRef
 {
     /// <summary>Creates a scheduler over <paramref name="target"/>'s own test scheduler.</summary>
     /// <param name="target">
     /// The target this scheduler, and every source and observer created through it, belongs to.
     /// </param>
     /// <remarks><see cref="SharedReactiveTest"/> does this once per test.</remarks>
-    public TestScheduler(IRxTarget target)
+    public TestSchedulerRef(IRxTarget target)
         : base(target.CreateTestScheduler(), "Scheduler")
     {
         Target = target;

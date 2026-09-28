@@ -9,7 +9,8 @@ namespace Tests.System.Reactive.Shared;
 /// <param name="description">How this scheduler prints in the query text.</param>
 /// <remarks>
 /// The target's own scheduler, carried as <see cref="object"/>. The test's
-/// <see cref="TestScheduler"/> is one; the result of its <c>DisableOptimizations()</c> is another.
+/// <see cref="TestSchedulerRef"/> is one; the result of its <c>DisableOptimizations()</c> is
+/// another.
 /// </remarks>
 public class SchedulerRef(object native, string description)
 {
