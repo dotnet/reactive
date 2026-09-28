@@ -4,9 +4,9 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>Describes <c>Observable.Empty&lt;T&gt;()</c>.</summary>
+/// <summary>Describes <c>Seq.Empty&lt;T&gt;()</c>.</summary>
 /// <remarks>
-/// Built by <see cref="Observable.Empty{T}"/>;
+/// Built by <see cref="Seq.Empty{T}"/>;
 /// materialized by each target through <see cref="ISeqVisitor.Empty{T}(EmptySeq{T})"/>.
 /// </remarks>
 public sealed class EmptySeq<T> : Seq<T>
@@ -15,5 +15,5 @@ public sealed class EmptySeq<T> : Seq<T>
     public override object Accept(ISeqVisitor visitor) => visitor.Empty(this);
 
     /// <inheritdoc/>
-    public override string ToString() => $"Observable.Empty<{typeof(T).Name}>()";
+    public override string ToString() => $"Seq.Empty<{typeof(T).Name}>()";
 }

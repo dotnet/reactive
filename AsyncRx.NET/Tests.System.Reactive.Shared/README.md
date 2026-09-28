@@ -19,7 +19,8 @@ against a target each.
 
 A scenario is written in the shape of the Rx.NET test it was migrated from. The differences are
 that `var scheduler = new TestScheduler();` is gone (the base class supplies a fresh `Scheduler`
-per test) and `IObservable<T>` is `Seq<T>`:
+per test), `IObservable<T>` is `Seq<T>`, and the creation operators are `Seq.Timer(...)`,
+`Seq.Return(...)` and so on rather than `Observable.Timer(...)`, named for what they return:
 
 ```csharp
 var xs = Scheduler.CreateHotObservable(OnNext(210, 1), OnNext(220, 2), OnCompleted<int>(230));

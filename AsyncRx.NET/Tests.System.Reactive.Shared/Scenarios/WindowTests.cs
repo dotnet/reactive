@@ -49,7 +49,7 @@ public abstract class WindowTests : SharedReactiveTest
         var window = 1;
 
         var res = Scheduler.Start(() =>
-            xs.Window(() => Observable.Timer(TimeSpan.FromTicks((window++) * 100), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
+            xs.Window(() => Seq.Timer(TimeSpan.FromTicks((window++) * 100), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
         );
 
         res.Messages.AssertEqual(
@@ -166,7 +166,7 @@ public abstract class WindowTests : SharedReactiveTest
         var window = 1;
 
         var res = Scheduler.Start(() =>
-            xs.Window(() => Observable.Empty<int>().Delay(TimeSpan.FromTicks((window++) * 100), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
+            xs.Window(() => Seq.Empty<int>().Delay(TimeSpan.FromTicks((window++) * 100), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
         );
 
         res.Messages.AssertEqual(
@@ -207,7 +207,7 @@ public abstract class WindowTests : SharedReactiveTest
         var window = 1;
 
         var res = Scheduler.Start(() =>
-            xs.Window(() => Observable.Timer(TimeSpan.FromTicks((window++) * 100), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge(),
+            xs.Window(() => Seq.Timer(TimeSpan.FromTicks((window++) * 100), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge(),
             400
         );
 
@@ -246,7 +246,7 @@ public abstract class WindowTests : SharedReactiveTest
         var window = 1;
 
         var res = Scheduler.Start(() =>
-            xs.Window(() => Observable.Timer(TimeSpan.FromTicks((window++) * 100), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
+            xs.Window(() => Seq.Timer(TimeSpan.FromTicks((window++) * 100), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
         );
 
         res.Messages.AssertEqual(
@@ -320,7 +320,7 @@ public abstract class WindowTests : SharedReactiveTest
         );
 
         var res = Scheduler.Start(() =>
-            xs.Window(() => Observable.Throw<int>(ex, Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
+            xs.Window(() => Seq.Throw<int>(ex, Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
         );
 
         res.Messages.AssertEqual(
@@ -353,7 +353,7 @@ public abstract class WindowTests : SharedReactiveTest
         var window = 1;
 
         var res = Scheduler.Start(() =>
-            xs.Window(() => Observable.Timer(TimeSpan.FromTicks((window++) * 100), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
+            xs.Window(() => Seq.Timer(TimeSpan.FromTicks((window++) * 100), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
         );
 
         res.Messages.AssertEqual(
@@ -400,7 +400,7 @@ public abstract class WindowTests : SharedReactiveTest
         );
 
         var res = Scheduler.Start(() =>
-            xs.Window(ys, x => Observable.Timer(TimeSpan.FromTicks(x), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
+            xs.Window(ys, x => Seq.Timer(TimeSpan.FromTicks(x), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
         );
 
         res.Messages.AssertEqual(
@@ -495,7 +495,7 @@ public abstract class WindowTests : SharedReactiveTest
         );
 
         var res = Scheduler.Start(() =>
-            xs.Window(ys, x => Observable.Timer(TimeSpan.FromTicks(x), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge(),
+            xs.Window(ys, x => Seq.Timer(TimeSpan.FromTicks(x), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge(),
             415
         );
 
@@ -541,7 +541,7 @@ public abstract class WindowTests : SharedReactiveTest
         );
 
         var res = Scheduler.Start(() =>
-            xs.Window(ys, x => Observable.Timer(TimeSpan.FromTicks(x), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
+            xs.Window(ys, x => Seq.Timer(TimeSpan.FromTicks(x), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
         );
 
         res.Messages.AssertEqual(
@@ -590,7 +590,7 @@ public abstract class WindowTests : SharedReactiveTest
         );
 
         var res = Scheduler.Start(() =>
-            xs.Window(ys, x => Observable.Timer(TimeSpan.FromTicks(x), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
+            xs.Window(ys, x => Seq.Timer(TimeSpan.FromTicks(x), Scheduler)).Select((w, i) => w.Select(x => i.ToString() + " " + x.ToString())).Merge()
         );
 
         res.Messages.AssertEqual(
@@ -939,7 +939,7 @@ public abstract class WindowTests : SharedReactiveTest
         );
 
         var res = Scheduler.Start(() =>
-            xs.Window(TimeSpan.FromTicks(100), Scheduler).Select((ys, i) => ys.Select(y => i + " " + y).Concat(Observable.Return(i + " end"))).Merge()
+            xs.Window(TimeSpan.FromTicks(100), Scheduler).Select((ys, i) => ys.Select(y => i + " " + y).Concat(Seq.Return(i + " end"))).Merge()
         );
 
         res.Messages.AssertEqual(
@@ -982,7 +982,7 @@ public abstract class WindowTests : SharedReactiveTest
         );
 
         var res = Scheduler.Start(() =>
-            xs.Window(TimeSpan.FromTicks(100), TimeSpan.FromTicks(50), Scheduler).Select((ys, i) => ys.Select(y => i + " " + y).Concat(Observable.Return(i + " end"))).Merge()
+            xs.Window(TimeSpan.FromTicks(100), TimeSpan.FromTicks(50), Scheduler).Select((ys, i) => ys.Select(y => i + " " + y).Concat(Seq.Return(i + " end"))).Merge()
         );
 
         res.Messages.AssertEqual(

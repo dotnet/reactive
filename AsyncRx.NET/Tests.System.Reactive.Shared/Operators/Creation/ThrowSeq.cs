@@ -5,11 +5,11 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>
-/// Describes <c>Observable.Throw&lt;T&gt;(error)</c> or
-/// <c>Observable.Throw&lt;T&gt;(error, scheduler)</c>.
+/// Describes <c>Seq.Throw&lt;T&gt;(error)</c> or
+/// <c>Seq.Throw&lt;T&gt;(error, scheduler)</c>.
 /// </summary>
 /// <remarks>
-/// Built by <see cref="Observable.Throw{T}(Exception)"/>;
+/// Built by <see cref="Seq.Throw{T}(Exception)"/>;
 /// materialized by each target through <see cref="ISeqVisitor.Throw{T}(ThrowSeq{T})"/>.
 /// </remarks>
 public sealed class ThrowSeq<T>(Exception error, SchedulerRef? scheduler) : Seq<T>
@@ -25,5 +25,5 @@ public sealed class ThrowSeq<T>(Exception error, SchedulerRef? scheduler) : Seq<
 
     /// <inheritdoc/>
     public override string ToString() =>
-        scheduler is null ? $"Observable.Throw<{typeof(T).Name}>({error.GetType().Name})" : $"Observable.Throw<{typeof(T).Name}>({error.GetType().Name}, {scheduler})";
+        scheduler is null ? $"Seq.Throw<{typeof(T).Name}>({error.GetType().Name})" : $"Seq.Throw<{typeof(T).Name}>({error.GetType().Name}, {scheduler})";
 }

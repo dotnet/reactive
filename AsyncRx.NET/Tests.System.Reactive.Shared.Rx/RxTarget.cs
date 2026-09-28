@@ -7,9 +7,6 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
 using Microsoft.Reactive.Testing;
-// The shared library declares its own Observable (the neutral creation operators) in the enclosing
-// namespace, which C# finds before any using directive; Rx.NET's is reached by alias.
-using RxObservable = System.Reactive.Linq.Observable;
 using RxTestScheduler = Microsoft.Reactive.Testing.TestScheduler;
 
 namespace Tests.System.Reactive.Shared.Rx;
@@ -129,15 +126,15 @@ public sealed class RxTarget : IRxTarget
 
     public object Native<T>(NativeSeq<T> seq) => seq.Native;
 
-    public object Timer(TimerSeq seq) => RxObservable.Timer(seq.DueTime, Unwrap(seq.Scheduler));
+    public object Timer(TimerSeq seq) => Observable.Timer(seq.DueTime, Unwrap(seq.Scheduler));
 
-    public object Return<T>(ReturnSeq<T> seq) => RxObservable.Return(seq.Value);
+    public object Return<T>(ReturnSeq<T> seq) => Observable.Return(seq.Value);
 
-    public object Range(RangeSeq seq) => RxObservable.Range(seq.Start, seq.Count);
+    public object Range(RangeSeq seq) => Observable.Range(seq.Start, seq.Count);
 
-    public object Empty<T>(EmptySeq<T> seq) => RxObservable.Empty<T>();
+    public object Empty<T>(EmptySeq<T> seq) => Observable.Empty<T>();
 
-    public object Throw<T>(ThrowSeq<T> seq) => seq.Scheduler is null ? RxObservable.Throw<T>(seq.Error) : RxObservable.Throw<T>(seq.Error, Unwrap(seq.Scheduler));
+    public object Throw<T>(ThrowSeq<T> seq) => seq.Scheduler is null ? Observable.Throw<T>(seq.Error) : Observable.Throw<T>(seq.Error, Unwrap(seq.Scheduler));
 
     // ---- Plumbing ----
 

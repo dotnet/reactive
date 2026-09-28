@@ -4,17 +4,20 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>The creation operators, under the sync suite's own name.</summary>
+/// <summary>The creation operators, as static methods returning descriptions.</summary>
 /// <remarks>
-/// So that <c>Observable.Timer(t, Scheduler)</c> is the sync text with <c>scheduler</c>
-/// capitalised; targets that also import <c>System.Reactive.Linq</c> alias one of the two.
-/// Nothing here runs an operator. Each method builds a leaf node of the query description, which
+/// Where an Rx.NET test writes <c>Observable.Timer(t, scheduler)</c>, a shared scenario writes
+/// <c>Seq.Timer(t, Scheduler)</c>. The class is named for what its methods return, a
+/// <see cref="Seq{T}"/>, rather than shadowing Rx.NET's <c>Observable</c>, so that a reader who
+/// looks past the scenario text sees the mechanism rather than a disguise; the pairing with
+/// <see cref="Seq{T}"/> is the <c>Task</c>/<c>Task&lt;T&gt;</c> idiom. Nothing here runs an
+/// operator. Each method builds a leaf node of the query description, which
 /// each target materializes as its own creation operator through the matching member of
 /// <see cref="ISeqVisitor"/>; each method's own comment names its node and visitor member.
 /// </remarks>
-public static class Observable
+public static class Seq
 {
-    /// <summary>Describes <c>Observable.Timer(dueTime, scheduler)</c>.</summary>
+    /// <summary>Describes <c>Seq.Timer(dueTime, scheduler)</c>.</summary>
     /// <param name="dueTime">
     /// Relative time at which to produce the value. If this value is less than or equal to
     /// TimeSpan.Zero, the timer will fire as soon as possible.
@@ -26,7 +29,7 @@ public static class Observable
     /// </remarks>
     public static Seq<long> Timer(TimeSpan dueTime, SchedulerRef scheduler) => new TimerSeq(dueTime, scheduler);
 
-    /// <summary>Describes <c>Observable.Return(value)</c>.</summary>
+    /// <summary>Describes <c>Seq.Return(value)</c>.</summary>
     /// <typeparam name="T">
     /// The type of the element that will be returned in the produced sequence.
     /// </typeparam>
@@ -37,7 +40,7 @@ public static class Observable
     /// </remarks>
     public static Seq<T> Return<T>(T value) => new ReturnSeq<T>(value);
 
-    /// <summary>Describes <c>Observable.Range(start, count)</c>.</summary>
+    /// <summary>Describes <c>Seq.Range(start, count)</c>.</summary>
     /// <param name="start">The value of the first integer in the sequence.</param>
     /// <param name="count">The number of sequential integers to generate.</param>
     /// <remarks>
@@ -46,7 +49,7 @@ public static class Observable
     /// </remarks>
     public static Seq<int> Range(int start, int count) => new RangeSeq(start, count);
 
-    /// <summary>Describes <c>Observable.Empty&lt;T&gt;()</c>.</summary>
+    /// <summary>Describes <c>Seq.Empty&lt;T&gt;()</c>.</summary>
     /// <typeparam name="T">
     /// The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.
     /// </typeparam>
@@ -56,7 +59,7 @@ public static class Observable
     /// </remarks>
     public static Seq<T> Empty<T>() => new EmptySeq<T>();
 
-    /// <summary>Describes <c>Observable.Throw&lt;T&gt;(error)</c>.</summary>
+    /// <summary>Describes <c>Seq.Throw&lt;T&gt;(error)</c>.</summary>
     /// <typeparam name="T">
     /// The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.
     /// </typeparam>
@@ -67,7 +70,7 @@ public static class Observable
     /// </remarks>
     public static Seq<T> Throw<T>(Exception error) => new ThrowSeq<T>(error, null);
 
-    /// <summary>Describes <c>Observable.Throw&lt;T&gt;(error, scheduler)</c>.</summary>
+    /// <summary>Describes <c>Seq.Throw&lt;T&gt;(error, scheduler)</c>.</summary>
     /// <typeparam name="T">
     /// The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.
     /// </typeparam>

@@ -1429,7 +1429,7 @@ public abstract class DelayTests : SharedReactiveTest
         // target can run it (subscription is awaited within the pump).
         Scheduler.ScheduleAbsolute(Created, async () =>
         {
-            await Observable.Range(1, 5).Delay(_ => Observable.Return(1)).SubscribeAsync(Scheduler, list.Add);
+            await Seq.Range(1, 5).Delay(_ => Seq.Return(1)).SubscribeAsync(Scheduler, list.Add);
         });
 
         Scheduler.Start();
@@ -1444,8 +1444,8 @@ public abstract class DelayTests : SharedReactiveTest
 
         Scheduler.ScheduleAbsolute(Created, async () =>
         {
-            var source = Observable.Return(1);
-            var delayed = source.Delay(_ => Observable.Return(2));
+            var source = Seq.Return(1);
+            var delayed = source.Delay(_ => Seq.Return(2));
             await delayed.SubscribeAsync(Scheduler, v => result = v);
         });
 

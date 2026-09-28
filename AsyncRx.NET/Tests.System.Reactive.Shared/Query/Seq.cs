@@ -17,7 +17,7 @@ namespace Tests.System.Reactive.Shared;
 /// A <see cref="Seq{T}"/> is a description, not an observable: nothing here runs. It is a tree
 /// whose leaves are the target's own objects (<see cref="NativeSeq{T}"/>: a testable source the
 /// test created through the scheduler, or an inner window or group handed to a callback) and the
-/// neutral creation operators (<see cref="Observable"/>), and whose interior nodes are operator
+/// neutral creation operators (<see cref="Seq"/>), and whose interior nodes are operator
 /// applications, one node type per overload (see the <c>Operators</c> folder).
 /// </para>
 /// <para>

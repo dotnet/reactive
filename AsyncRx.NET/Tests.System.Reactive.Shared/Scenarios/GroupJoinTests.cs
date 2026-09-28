@@ -772,7 +772,7 @@ public abstract class GroupJoinTests : SharedReactiveTest
         var ysd = new List<TestableSeq<long>>();
 
         var res = Scheduler.Start(() =>
-            xs.GroupJoin(ys, x => NewTimer(xsd, x.Interval, Scheduler).SelectMany(x.Value == 6 ? Observable.Throw<long>(ex) : Observable.Empty<long>()), y => NewTimer(ysd, y.Interval, Scheduler), (x, yy) => yy.Select(y => x.Value + y.Value)).Merge()
+            xs.GroupJoin(ys, x => NewTimer(xsd, x.Interval, Scheduler).SelectMany(x.Value == 6 ? Seq.Throw<long>(ex) : Seq.Empty<long>()), y => NewTimer(ysd, y.Interval, Scheduler), (x, yy) => yy.Select(y => x.Value + y.Value)).Merge()
         );
 
         res.Messages.AssertEqual(
@@ -846,7 +846,7 @@ public abstract class GroupJoinTests : SharedReactiveTest
         var ysd = new List<TestableSeq<long>>();
 
         var res = Scheduler.Start(() =>
-            xs.GroupJoin(ys, x => NewTimer(xsd, x.Interval, Scheduler), y => NewTimer(ysd, y.Interval, Scheduler).SelectMany(y.Value == "tin" ? Observable.Throw<long>(ex) : Observable.Empty<long>()), (x, yy) => yy.Select(y => x.Value + y.Value)).Merge()
+            xs.GroupJoin(ys, x => NewTimer(xsd, x.Interval, Scheduler), y => NewTimer(ysd, y.Interval, Scheduler).SelectMany(y.Value == "tin" ? Seq.Throw<long>(ex) : Seq.Empty<long>()), (x, yy) => yy.Select(y => x.Value + y.Value)).Merge()
         );
 
         res.Messages.AssertEqual(
@@ -916,7 +916,7 @@ public abstract class GroupJoinTests : SharedReactiveTest
         var ysd = new List<TestableSeq<long>>();
 
         var res = Scheduler.Start(() =>
-            xs.GroupJoin(ys, x => { if (x.Value >= 0) { throw ex; } return Observable.Empty<long>(); }, y => NewTimer(ysd, y.Interval, Scheduler), (x, yy) => yy.Select(y => x.Value + y.Value)).Merge()
+            xs.GroupJoin(ys, x => { if (x.Value >= 0) { throw ex; } return Seq.Empty<long>(); }, y => NewTimer(ysd, y.Interval, Scheduler), (x, yy) => yy.Select(y => x.Value + y.Value)).Merge()
         );
 
         res.Messages.AssertEqual(
@@ -970,7 +970,7 @@ public abstract class GroupJoinTests : SharedReactiveTest
         var xsd = new List<TestableSeq<long>>();
 
         var res = Scheduler.Start(() =>
-            xs.GroupJoin(ys, x => NewTimer(xsd, x.Interval, Scheduler), y => { if (y.Value.Length >= 0) { throw ex; } return Observable.Empty<long>(); }, (x, yy) => yy.Select(y => x.Value + y.Value)).Merge()
+            xs.GroupJoin(ys, x => NewTimer(xsd, x.Interval, Scheduler), y => { if (y.Value.Length >= 0) { throw ex; } return Seq.Empty<long>(); }, (x, yy) => yy.Select(y => x.Value + y.Value)).Merge()
         );
 
         res.Messages.AssertEqual(

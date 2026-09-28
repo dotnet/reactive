@@ -4,9 +4,9 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>Describes <c>Observable.Timer(dueTime, scheduler)</c>.</summary>
+/// <summary>Describes <c>Seq.Timer(dueTime, scheduler)</c>.</summary>
 /// <remarks>
-/// Built by <see cref="Observable.Timer(TimeSpan, SchedulerRef)"/>;
+/// Built by <see cref="Seq.Timer(TimeSpan, SchedulerRef)"/>;
 /// materialized by each target through <see cref="ISeqVisitor.Timer(TimerSeq)"/>.
 /// </remarks>
 public sealed class TimerSeq(TimeSpan dueTime, SchedulerRef scheduler) : Seq<long>
@@ -25,5 +25,5 @@ public sealed class TimerSeq(TimeSpan dueTime, SchedulerRef scheduler) : Seq<lon
     public override object Accept(ISeqVisitor visitor) => visitor.Timer(this);
 
     /// <inheritdoc/>
-    public override string ToString() => $"Observable.Timer({dueTime.Ticks} ticks, {scheduler})";
+    public override string ToString() => $"Seq.Timer({dueTime.Ticks} ticks, {scheduler})";
 }

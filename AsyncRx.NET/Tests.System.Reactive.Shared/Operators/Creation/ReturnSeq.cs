@@ -4,9 +4,9 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>Describes <c>Observable.Return(value)</c>.</summary>
+/// <summary>Describes <c>Seq.Return(value)</c>.</summary>
 /// <remarks>
-/// Built by <see cref="Observable.Return{T}(T)"/>;
+/// Built by <see cref="Seq.Return{T}(T)"/>;
 /// materialized by each target through <see cref="ISeqVisitor.Return{T}(ReturnSeq{T})"/>.
 /// </remarks>
 public sealed class ReturnSeq<T>(T value) : Seq<T>
@@ -18,5 +18,5 @@ public sealed class ReturnSeq<T>(T value) : Seq<T>
     public override object Accept(ISeqVisitor visitor) => visitor.Return(this);
 
     /// <inheritdoc/>
-    public override string ToString() => $"Observable.Return({value})";
+    public override string ToString() => $"Seq.Return({value})";
 }

@@ -4,9 +4,9 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>Describes <c>Observable.Range(start, count)</c>.</summary>
+/// <summary>Describes <c>Seq.Range(start, count)</c>.</summary>
 /// <remarks>
-/// Built by <see cref="Observable.Range(int, int)"/>;
+/// Built by <see cref="Seq.Range(int, int)"/>;
 /// materialized by each target through <see cref="ISeqVisitor.Range(RangeSeq)"/>.
 /// </remarks>
 public sealed class RangeSeq(int start, int count) : Seq<int>
@@ -21,5 +21,5 @@ public sealed class RangeSeq(int start, int count) : Seq<int>
     public override object Accept(ISeqVisitor visitor) => visitor.Range(this);
 
     /// <inheritdoc/>
-    public override string ToString() => $"Observable.Range({start}, {count})";
+    public override string ToString() => $"Seq.Range({start}, {count})";
 }

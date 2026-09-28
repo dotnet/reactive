@@ -20,32 +20,32 @@ public partial interface ISeqVisitor
     /// <summary>
     /// Materializes a <see cref="TimerSeq"/> as the target's own <c>Timer(dueTime, scheduler)</c>.
     /// </summary>
-    /// <remarks>Built by <see cref="Observable.Timer(TimeSpan, SchedulerRef)"/>.</remarks>
+    /// <remarks>Built by <see cref="Seq.Timer(TimeSpan, SchedulerRef)"/>.</remarks>
     object Timer(TimerSeq seq);
 
     /// <summary>
     /// Materializes a <see cref="ReturnSeq{T}"/> as the target's own <c>Return(value)</c>.
     /// </summary>
-    /// <remarks>Built by <see cref="Observable.Return{T}(T)"/>.</remarks>
+    /// <remarks>Built by <see cref="Seq.Return{T}(T)"/>.</remarks>
     object Return<T>(ReturnSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="RangeSeq"/> as the target's own <c>Range(start, count)</c>.
     /// </summary>
-    /// <remarks>Built by <see cref="Observable.Range(int, int)"/>.</remarks>
+    /// <remarks>Built by <see cref="Seq.Range(int, int)"/>.</remarks>
     object Range(RangeSeq seq);
 
     /// <summary>
     /// Materializes a <see cref="EmptySeq{T}"/> as the target's own <c>Empty&lt;T&gt;()</c>.
     /// </summary>
-    /// <remarks>Built by <see cref="Observable.Empty{T}"/>.</remarks>
+    /// <remarks>Built by <see cref="Seq.Empty{T}"/>.</remarks>
     object Empty<T>(EmptySeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="ThrowSeq{T}"/> as the target's own
     /// <c>Throw&lt;T&gt;(error[, scheduler])</c>.
     /// </summary>
-    /// <remarks>Built by <see cref="Observable.Throw{T}(Exception)"/>.</remarks>
+    /// <remarks>Built by <see cref="Seq.Throw{T}(Exception)"/>.</remarks>
     object Throw<T>(ThrowSeq<T> seq);
 
     /// <summary>
