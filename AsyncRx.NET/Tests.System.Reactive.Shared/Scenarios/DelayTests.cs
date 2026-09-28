@@ -41,7 +41,6 @@ public abstract class DelayTests : SharedReactiveTest
 
     private void Delay_TimeSpan_Simple1_Impl(bool useStopwatch)
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(250, 2),
@@ -80,7 +79,6 @@ public abstract class DelayTests : SharedReactiveTest
 
     private void Delay_DateTimeOffset_Simple1_Impl(bool useStopwatch)
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(250, 2),
@@ -119,7 +117,6 @@ public abstract class DelayTests : SharedReactiveTest
 
     private void Delay_TimeSpan_Simple2_Impl(bool useStopwatch)
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(250, 2),
@@ -158,7 +155,6 @@ public abstract class DelayTests : SharedReactiveTest
 
     private void Delay_DateTimeOffset_Simple2_Impl(bool useStopwatch)
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(250, 2),
@@ -197,7 +193,6 @@ public abstract class DelayTests : SharedReactiveTest
 
     private void Delay_TimeSpan_Simple3_Impl(bool useStopwatch)
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(250, 2),
@@ -236,7 +231,6 @@ public abstract class DelayTests : SharedReactiveTest
 
     private void Delay_DateTimeOffset_Simple3_Impl(bool useStopwatch)
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(250, 2),
@@ -275,7 +269,6 @@ public abstract class DelayTests : SharedReactiveTest
 
     private void Delay_TimeSpan_Error1_Impl(bool useStopwatch)
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -316,7 +309,6 @@ public abstract class DelayTests : SharedReactiveTest
 
     private void Delay_DateTimeOffset_Error1_Impl(bool useStopwatch)
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -357,7 +349,6 @@ public abstract class DelayTests : SharedReactiveTest
 
     private void Delay_TimeSpan_Error2_Impl(bool useStopwatch)
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -397,7 +388,6 @@ public abstract class DelayTests : SharedReactiveTest
 
     private void Delay_DateTimeOffset_Error2_Impl(bool useStopwatch)
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -426,7 +416,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_TimeSpan_Positive()
     {
-
         var msgs = new[] {
             OnNext(150, 1),
             OnNext(250, 2),
@@ -453,7 +442,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Empty()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnCompleted<int>(550)
@@ -475,7 +463,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Error()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -499,7 +486,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Never()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1)
         );
@@ -519,7 +505,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_Simple1()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(210, 10),
@@ -551,7 +536,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_Simple2()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(210, 2),
@@ -595,7 +579,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_Simple3()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(210, 2),
@@ -639,7 +622,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_Simple4_InnerEmpty()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(210, 2),
@@ -683,7 +665,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_Dispose1()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(210, 2),
@@ -724,7 +705,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_Dispose2()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(210, 2),
@@ -757,7 +737,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_OuterError1()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -798,7 +777,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_OuterError2()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -844,7 +822,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_InnerError1()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -891,7 +868,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_InnerError2()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -932,7 +908,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_SelectorThrows1()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -979,7 +954,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_Simple()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(250, 2),
@@ -1012,7 +986,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_DeferOnCompleted()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(250, 2),
@@ -1045,7 +1018,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_InnerError()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(250, 2),
@@ -1082,7 +1054,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_OuterError()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -1116,7 +1087,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_SelectorThrows2()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(250, 2),
@@ -1158,7 +1128,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_InnerDone()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(250, 2),
@@ -1192,7 +1161,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_Duration_InnerSubscriptionTimes()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, -1),
             OnNext(250, 0),
@@ -1239,7 +1207,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_DurationAndSubscription_Simple1()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(210, 10),
@@ -1278,7 +1245,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_DurationAndSubscription_Simple2()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(210, 10),
@@ -1317,7 +1283,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_DurationAndSubscription_Dispose1()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(210, 10),
@@ -1353,7 +1318,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_DurationAndSubscription_Dispose2()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(210, 10),
@@ -1387,7 +1351,6 @@ public abstract class DelayTests : SharedReactiveTest
     [TestMethod]
     public void Delay_DurationAndSubscription_Error()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(

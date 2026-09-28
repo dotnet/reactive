@@ -27,7 +27,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Complete_After()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(70, 6),
             OnNext(150, 4),
@@ -84,7 +83,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Complete_Same()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(70, 6),
             OnNext(150, 4),
@@ -141,7 +139,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Complete_Before()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(70, 6),
             OnNext(150, 4),
@@ -191,7 +188,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Error_After()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -250,7 +246,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Error_Same()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(70, 6),
             OnNext(150, 4),
@@ -307,7 +302,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Error_Before()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(70, 6),
             OnNext(150, 4),
@@ -350,7 +344,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Dispose_Before()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(70, 6),
             OnNext(150, 4),
@@ -391,7 +384,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Dispose_After()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(70, 6),
             OnNext(150, 4),
@@ -434,7 +426,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_0_Scheduler()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(70, 6),
             OnNext(150, 4),
@@ -457,7 +448,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_0_DefaultScheduler()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(70, 6),
             OnNext(150, 4),
@@ -480,7 +470,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Non0_Scheduler()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(70, 6),
             OnNext(150, 4),
@@ -505,7 +494,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Take1()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(70, 6),
             OnNext(150, 4),
@@ -539,7 +527,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Take2()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(70, 6),
             OnNext(150, 4),
@@ -573,7 +560,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Zero()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(210, 1),
             OnNext(220, 2),
@@ -596,7 +582,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Some()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(210, 1),
             OnNext(220, 2),
@@ -622,7 +607,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Late()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(210, 1),
             OnNext(220, 2),
@@ -647,7 +631,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Error()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -670,7 +653,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Never()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable<int>(
@@ -692,7 +674,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Twice1()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -724,7 +705,6 @@ public abstract class TakeTests : SharedReactiveTest
     [TestMethod]
     public void Take_Twice2()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(

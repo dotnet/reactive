@@ -31,7 +31,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_Closings_Basic()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(90, 1),
             OnNext(180, 2),
@@ -72,7 +71,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_Closings_InnerSubscriptions()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(90, 1),
             OnNext(180, 2),
@@ -148,7 +146,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_Closings_Empty()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(90, 1),
             OnNext(180, 2),
@@ -189,7 +186,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_Closings_Dispose()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(90, 1),
             OnNext(180, 2),
@@ -226,7 +222,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_Closings_Error()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -269,7 +264,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_Closings_Throw()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -302,7 +296,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_Closings_WindowClose_Error()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -335,7 +328,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_Closings_Default()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(90, 1),
             OnNext(180, 2),
@@ -376,7 +368,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_OpeningClosings_Basic()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(90, 1),
             OnNext(180, 2),
@@ -426,7 +417,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_OpeningClosings_Throw()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(90, 1),
             OnNext(180, 2),
@@ -471,7 +461,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_OpeningClosings_Dispose()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(90, 1),
             OnNext(180, 2),
@@ -518,7 +507,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_OpeningClosings_Data_Error()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -564,7 +552,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_OpeningClosings_Window_Error()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -613,7 +600,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_Boundaries_Simple()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(90, 1),
             OnNext(180, 2),
@@ -665,7 +651,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_Boundaries_OnCompletedBoundaries()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(90, 1),
             OnNext(180, 2),
@@ -803,7 +788,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void WindowWithCount_Basic()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(100, 1),
             OnNext(210, 2),
@@ -844,7 +828,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void WindowWithCount_Disposed()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(100, 1),
             OnNext(210, 2),
@@ -880,7 +863,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void WindowWithCount_Error()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -923,7 +905,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_Time_Basic()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(210, 2),
@@ -966,7 +947,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void Window_Time_Basic_Both()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(150, 1),
             OnNext(210, 2),
@@ -1019,7 +999,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void WindowWithTime_Basic1()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(100, 1),
             OnNext(210, 2),
@@ -1060,7 +1039,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void WindowWithTime_Basic2()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(100, 1),
             OnNext(210, 2),
@@ -1096,7 +1074,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void WindowWithTime_Error()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -1139,7 +1116,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void WindowWithTime_Disposed()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(100, 1),
             OnNext(210, 2),
@@ -1176,7 +1152,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void WindowWithTime_Basic_Same()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(100, 1),
             OnNext(210, 2),
@@ -1214,7 +1189,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void WindowWithTimeOrCount_Basic()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(205, 1),
             OnNext(210, 2),
@@ -1253,7 +1227,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void WindowWithTimeOrCount_Error()
     {
-
         var ex = new Exception();
 
         var xs = Scheduler.CreateHotObservable(
@@ -1294,7 +1267,6 @@ public abstract class WindowTests : SharedReactiveTest
     [TestMethod]
     public void WindowWithTimeOrCount_Disposed()
     {
-
         var xs = Scheduler.CreateHotObservable(
             OnNext(205, 1),
             OnNext(210, 2),
