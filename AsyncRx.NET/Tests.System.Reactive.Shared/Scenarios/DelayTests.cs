@@ -9,21 +9,21 @@ using Microsoft.Reactive.Testing;
 namespace Tests.System.Reactive.Shared.Scenarios;
 
 /// <summary>
-/// Shared <c>Delay</c> scenarios: every behavioural test from Rx.NET's <c>DelayTest.cs</c>, with the
-/// overloads AsyncRx.NET gained to match Rx.NET's surface. The stopwatch axis is the sync text
-/// (<c>useStopwatch ? Scheduler : Scheduler.DisableOptimizations()</c>): both are scheduler
-/// references in a description, resolved by the target.
+/// Shared <c>Delay</c> scenarios.
 /// </summary>
 /// <remarks>
-/// Transcribed mechanically from the sync file,
-/// including its <c>*_Stopwatch</c> pairs, which run the same scenario with and without the
+/// Every behavioural test from Rx.NET's <c>DelayTest.cs</c>, with the overloads AsyncRx.NET
+/// gained to match Rx.NET's surface. The stopwatch axis is the sync text
+/// (<c>useStopwatch ? Scheduler : Scheduler.DisableOptimizations()</c>): both are scheduler
+/// references in a description, resolved by the target. Transcribed mechanically from the sync
+/// file, including its <c>*_Stopwatch</c> pairs, which run the same scenario with and without the
 /// scheduler's optional capabilities — written as <c>Scheduler.DisableOptimizations()</c>, as in
 /// the sync suite; on AsyncRx.NET the two are the same run. Two scheduler-free tests were
-/// hand-ported onto the raw surface. Deliberately not here: the two <c>*_ArgumentChecking</c> tests, and the native
-/// stratum — the eight <c>*_Real_*</c> tests (thread-pool scheduler and <c>Subject</c>s), the two
-/// <c>*_DefaultScheduler</c> tests, <c>Delay_CrossingMessages</c>, <c>Delay_ErrorHandling1</c>
-/// (a hand-written <c>IScheduler</c> with events), and the two <c>Delay_LongRunning_*</c> tests
-/// (a hand-written <c>ISchedulerLongRunning</c>).
+/// hand-ported onto the raw surface. Deliberately not here: the two <c>*_ArgumentChecking</c>
+/// tests, and the native stratum — the eight <c>*_Real_*</c> tests (thread-pool scheduler and
+/// <c>Subject</c>s), the two <c>*_DefaultScheduler</c> tests, <c>Delay_CrossingMessages</c>,
+/// <c>Delay_ErrorHandling1</c> (a hand-written <c>IScheduler</c> with events), and the two
+/// <c>Delay_LongRunning_*</c> tests (a hand-written <c>ISchedulerLongRunning</c>).
 /// </remarks>
 public abstract class DelayTests : SharedReactiveTest
 {

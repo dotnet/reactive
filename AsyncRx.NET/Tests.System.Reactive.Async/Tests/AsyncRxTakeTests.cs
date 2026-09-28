@@ -13,11 +13,12 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-/// <summary>
-/// Runs the shared <c>Take</c> scenarios against AsyncRx.NET. The shared class needs
-/// nothing from here — the target supplies the operator — so this intermediate class exists
-/// only to hold the target supplements below; the two sealed classes pin the execution shape.
-/// </summary>
+/// <summary>Runs the shared <c>Take</c> scenarios against AsyncRx.NET.</summary>
+/// <remarks>
+/// The shared class needs nothing from here — the target supplies the operator — so this
+/// intermediate class exists only to hold the target-specific scenarios below. The two sealed
+/// classes pin the execution shape.
+/// </remarks>
 public abstract class AsyncRxTakeTests(ExecutionShape shape) : TakeTests
 {
     protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);

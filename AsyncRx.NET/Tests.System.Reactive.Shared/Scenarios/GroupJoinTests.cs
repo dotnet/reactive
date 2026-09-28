@@ -6,15 +6,18 @@ using System.Reactive;
 
 namespace Tests.System.Reactive.Shared.Scenarios;
 
-/// <summary>
-/// Shared <c>GroupJoin</c> scenarios: every behavioural test from Rx.NET's <c>GroupJoinTest.cs</c>.
-/// The result selector receives the group as a value and returns a description; the target
-/// materializes it in place, as for <c>Window</c>. <c>NewTimer</c> keeps its sync signature: the
-/// scheduler creates cold sources eagerly, exactly as the sync <c>TestScheduler</c> does.
-/// </summary>
+/// <summary>Shared <c>GroupJoin</c> scenarios.</summary>
 /// <remarks>
+/// <para>
+/// Every behavioural test from Rx.NET's <c>GroupJoinTest.cs</c>. The result selector receives the
+/// group as a value and returns a description, which the target materializes in place, as for
+/// <c>Window</c>. <c>NewTimer</c> keeps its sync signature: the scheduler creates cold sources
+/// eagerly, exactly as the sync <c>TestScheduler</c> does.
+/// </para>
+/// <para>
 /// Transcribed mechanically from the sync file; only the two helpers at the bottom are
 /// hand-written.
+/// </para>
 /// </remarks>
 public abstract class GroupJoinTests : SharedReactiveTest
 {

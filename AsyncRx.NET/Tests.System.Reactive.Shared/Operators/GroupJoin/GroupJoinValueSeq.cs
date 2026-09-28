@@ -4,8 +4,15 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>The general form: a result selector that returns a value rather than a sequence.</summary>
-/// <remarks>Built by <see cref="GroupJoinValueExtensions.GroupJoin{TLeft, TRight, TLeftDuration, TRightDuration, TResult}"/>; materialized by each target through <see cref="ISeqVisitor.GroupJoinValue{TLeft, TRight, TLeftDuration, TRightDuration, TResult}(GroupJoinValueSeq{TLeft, TRight, TLeftDuration, TRightDuration, TResult})"/>.</remarks>
+/// <summary>
+/// The general form: a result selector that returns a value rather than a sequence.
+/// </summary>
+/// <remarks>
+/// Built by
+/// <see cref="GroupJoinValueExtensions.GroupJoin{TLeft, TRight, TLeftDuration, TRightDuration, TResult}"/>;
+/// materialized by each target through
+/// <see cref="ISeqVisitor.GroupJoinValue{TLeft, TRight, TLeftDuration, TRightDuration, TResult}(GroupJoinValueSeq{TLeft, TRight, TLeftDuration, TRightDuration, TResult})"/>.
+/// </remarks>
 public sealed class GroupJoinValueSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(
     Seq<TLeft> left,
     Seq<TRight> right,
@@ -14,17 +21,33 @@ public sealed class GroupJoinValueSeq<TLeft, TRight, TLeftDuration, TRightDurati
     Func<TLeft, Seq<TRight>, TResult> resultSelector,
     string text) : Seq<TResult>
 {
+    /// <summary>The left observable sequence to join elements for.</summary>
     public Seq<TLeft> Left => left;
 
+    /// <summary>The right observable sequence to join elements for.</summary>
     public Seq<TRight> Right => right;
 
+    /// <summary>
+    /// A function to select the duration of each element of the left observable sequence, used
+    /// to determine overlap.
+    /// </summary>
     public Func<TLeft, Seq<TLeftDuration>> LeftDurationSelector => leftDurationSelector;
 
+    /// <summary>
+    /// A function to select the duration of each element of the right observable sequence, used
+    /// to determine overlap.
+    /// </summary>
     public Func<TRight, Seq<TRightDuration>> RightDurationSelector => rightDurationSelector;
 
+    /// <summary>
+    /// A function invoked to compute a result element for any element of the left sequence with
+    /// overlapping elements from the right observable sequence.
+    /// </summary>
     public Func<TLeft, Seq<TRight>, TResult> ResultSelector => resultSelector;
 
+    /// <inheritdoc/>
     public override object Accept(ISeqVisitor visitor) => visitor.GroupJoinValue(this);
 
+    /// <inheritdoc/>
     public override string ToString() => $"{left}.GroupJoin({right}, {text})";
 }

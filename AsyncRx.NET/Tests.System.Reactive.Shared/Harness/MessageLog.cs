@@ -13,15 +13,21 @@ namespace Tests.System.Reactive.Shared;
 /// assert over in the sync vocabulary: <c>res.Messages.AssertEqual(OnNext(210, 1), ...)</c>.
 /// </summary>
 /// <remarks>
-/// This is a handle, not a collection. The records live in the observer's <see cref="TestableObserver{T}.Native"/>,
-/// in the target's own record type, and <see cref="AssertEqual(Recorded{Notification{T}}[])"/> hands the
-/// observer and the expectations to <see cref="IRxTarget.AssertMessages{T}"/> for the target to compare.
-/// That is what lets the async target check a compact <c>OnNext(210, 1)</c> against a record that has
-/// both a delivery start and end tick, and name the timestamp that mismatched. A failure is prefixed
-/// with the query the observer was started over.
+/// This is a handle, not a collection. The records live in the observer's
+/// <see cref="TestableObserver{T}.Native"/>, in the target's own record type, and
+/// <see cref="AssertEqual(Recorded{Notification{T}}[])"/> hands the observer and the expectations
+/// to <see cref="IRxTarget.AssertMessages{T}"/> for the target to compare. That is what lets the
+/// async target check a compact <c>OnNext(210, 1)</c> against a record that has both a delivery
+/// start and end tick, and name the timestamp that mismatched. A failure is prefixed with the
+/// query the observer was started over.
 /// </remarks>
 public readonly struct MessageLog<T>(TestableObserver<T> observer)
 {
+    /// <summary>
+    /// Asserts that the recorded messages are exactly <paramref name="expected"/>, in order.
+    /// </summary>
+    /// <param name="expected">The expected notifications, in the shared vocabulary.</param>
+    /// <remarks>A compact <c>OnNext(210, 1)</c> means delivered and completed at 210.</remarks>
     public void AssertEqual(params Recorded<Notification<T>>[] expected)
     {
         try
@@ -34,5 +40,10 @@ public readonly struct MessageLog<T>(TestableObserver<T> observer)
         }
     }
 
+    /// <summary>
+    /// As <see cref="AssertEqual(Recorded{Notification{T}}[])"/>, for expectations built as a
+    /// sequence.
+    /// </summary>
+    /// <param name="expected">The expected notifications, in the shared vocabulary.</param>
     public void AssertEqual(IEnumerable<Recorded<Notification<T>>> expected) => AssertEqual(expected.ToArray());
 }

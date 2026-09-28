@@ -14,10 +14,19 @@ namespace Tests.System.Reactive.Shared;
 /// A handle, not a collection, for the same reason as <see cref="MessageLog{T}"/>: the records
 /// live in the source's <see cref="NativeSeq{T}.Native"/> (the target's own testable observable)
 /// in the target's own record type — on AsyncRx.NET a subscription has four timestamps — and
-/// <see cref="IRxTarget.AssertSubscriptions{T}"/> compares them. A failure is prefixed with the source's description.
+/// <see cref="IRxTarget.AssertSubscriptions{T}"/> compares them. A failure is prefixed with the
+/// source's description.
 /// </remarks>
 public readonly struct SubscriptionLog<T>(TestableSeq<T> source)
 {
+    /// <summary>
+    /// Asserts that the recorded subscriptions are exactly <paramref name="expected"/>, in order.
+    /// </summary>
+    /// <param name="expected">The expected subscriptions, in the shared vocabulary.</param>
+    /// <remarks>
+    /// A compact <c>Subscribe(200, 300)</c> means subscribed and completed at 200, disposed and
+    /// completed at 300.
+    /// </remarks>
     public void AssertEqual(params Subscription[] expected)
     {
         try

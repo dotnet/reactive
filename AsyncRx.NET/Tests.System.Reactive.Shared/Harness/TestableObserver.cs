@@ -5,28 +5,36 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>
-/// The recording observer a scenario ends in: what <see cref="TestScheduler.Start{T}(Func{Seq{T}})"/>
-/// returns, or what <see cref="TestScheduler.CreateObserver{T}"/> creates for the raw surface.
+/// The recording observer a scenario ends in: what
+/// <see cref="TestScheduler.Start{T}(Func{Seq{T}})"/> returns, or what
+/// <see cref="TestScheduler.CreateObserver{T}"/> creates for the raw surface.
 /// </summary>
 /// <remarks>
-/// Nothing in the shared library records anything itself. <see cref="Native"/> is the target's own testable observer,
-/// which holds the recorded messages in the target's own record type: on Rx.NET an
-/// <c>ITestableObserver&lt;T&gt;</c> whose <c>Messages</c> are <c>Recorded&lt;Notification&lt;T&gt;&gt;</c>;
-/// on AsyncRx.NET an <c>ITestableAsyncObserver&lt;T&gt;</c> whose <c>Messages</c> are
+/// Nothing in the shared library records anything itself. <see cref="Native"/> is the target's
+/// own testable observer, which holds the recorded messages in the target's own record type: on
+/// Rx.NET an <c>ITestableObserver&lt;T&gt;</c> whose <c>Messages</c> are
+/// <c>Recorded&lt;Notification&lt;T&gt;&gt;</c>; on AsyncRx.NET an
+/// <c>ITestableAsyncObserver&lt;T&gt;</c> whose <c>Messages</c> are
 /// <c>AsyncRecorded&lt;Notification&lt;T&gt;&gt;</c>, each carrying a delivery start and end tick.
 /// <see cref="Messages"/> is therefore not that collection but a handle for asserting over it:
 /// the target does the comparison, so that its own diagnostics are the ones a failure reports.
 /// </remarks>
 public sealed class TestableObserver<T>(IRxTarget target, object native, string query)
 {
+    /// <summary>The target that created this observer.</summary>
     public IRxTarget Target => target;
 
     /// <summary>The target's own testable observer (see the remarks on this type).</summary>
     public object Native => native;
 
-    /// <summary>The query this observer was started over (its description), for diagnostics; empty for a raw-surface observer.</summary>
+    /// <summary>
+    /// The query this observer was started over (its description), for diagnostics.
+    /// </summary>
+    /// <remarks>Empty for a raw-surface observer.</remarks>
     public string Query => query;
 
-    /// <summary>The recorded messages, as something to assert over in the shared vocabulary.</summary>
+    /// <summary>
+    /// The recorded messages, as something to assert over in the shared vocabulary.
+    /// </summary>
     public MessageLog<T> Messages => new(this);
 }

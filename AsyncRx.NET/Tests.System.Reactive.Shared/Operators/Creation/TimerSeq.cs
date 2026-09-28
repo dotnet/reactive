@@ -5,14 +5,25 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>Describes <c>Observable.Timer(dueTime, scheduler)</c>.</summary>
-/// <remarks>Built by <see cref="Observable.Timer(TimeSpan, SchedulerRef)"/>; materialized by each target through <see cref="ISeqVisitor.Timer(TimerSeq)"/>.</remarks>
+/// <remarks>
+/// Built by <see cref="Observable.Timer(TimeSpan, SchedulerRef)"/>;
+/// materialized by each target through <see cref="ISeqVisitor.Timer(TimerSeq)"/>.
+/// </remarks>
 public sealed class TimerSeq(TimeSpan dueTime, SchedulerRef scheduler) : Seq<long>
 {
+    /// <summary>Relative time at which to produce the value.</summary>
+    /// <remarks>
+    /// If this value is less than or equal to TimeSpan.Zero, the timer will fire as soon as
+    /// possible.
+    /// </remarks>
     public TimeSpan DueTime => dueTime;
 
+    /// <summary>Scheduler to run the timer on.</summary>
     public SchedulerRef Scheduler => scheduler;
 
+    /// <inheritdoc/>
     public override object Accept(ISeqVisitor visitor) => visitor.Timer(this);
 
+    /// <inheritdoc/>
     public override string ToString() => $"Observable.Timer({dueTime.Ticks} ticks, {scheduler})";
 }

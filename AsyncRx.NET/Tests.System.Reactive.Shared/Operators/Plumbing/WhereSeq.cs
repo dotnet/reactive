@@ -5,14 +5,21 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>Describes <c>source.Where(predicate)</c>.</summary>
-/// <remarks>Built by <see cref="SeqExtensions.Where{T}(Seq{T}, Func{T, bool}, string)"/>; materialized by each target through <see cref="ISeqVisitor.Where{T}(WhereSeq{T})"/>.</remarks>
+/// <remarks>
+/// Built by <see cref="SeqExtensions.Where{T}(Seq{T}, Func{T, bool}, string)"/>;
+/// materialized by each target through <see cref="ISeqVisitor.Where{T}(WhereSeq{T})"/>.
+/// </remarks>
 public sealed class WhereSeq<T>(Seq<T> source, Func<T, bool> predicate, string text) : Seq<T>
 {
+    /// <summary>An observable sequence whose elements to filter.</summary>
     public Seq<T> Source => source;
 
+    /// <summary>A function to test each source element for a condition.</summary>
     public Func<T, bool> Predicate => predicate;
 
+    /// <inheritdoc/>
     public override object Accept(ISeqVisitor visitor) => visitor.Where(this);
 
+    /// <inheritdoc/>
     public override string ToString() => $"{source}.Where({text})";
 }

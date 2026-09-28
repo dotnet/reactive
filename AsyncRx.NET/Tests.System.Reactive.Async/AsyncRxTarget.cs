@@ -16,10 +16,12 @@ using TestScheduler = Tests.System.Reactive.Shared.TestScheduler;
 namespace Tests.System.Reactive.Async;
 
 /// <summary>
-/// The AsyncRx.NET target: the harness and raw surface over <c>TestAsyncScheduler</c>
-/// plus the materializer. The execution shape is a constructor argument, since the target
-/// is an instance.
+/// The AsyncRx.NET target.
 /// </summary>
+/// <remarks>
+/// The harness and raw surface over <c>TestAsyncScheduler</c> plus the materializer. The
+/// execution shape is a constructor argument, since the target is an instance.
+/// </remarks>
 public sealed class AsyncRxTarget(ExecutionShape shape) : IRxTarget
 {
     private static TestAsyncScheduler Unwrap(TestScheduler scheduler) => (TestAsyncScheduler)scheduler.Native;

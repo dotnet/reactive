@@ -4,7 +4,8 @@
 
 namespace Tests.System.Reactive.Shared.Rx.Tests;
 
-/// <summary>Two properties of the query description itself, checked on the Rx.NET target: the tree prints as the query was written, and an assertion failure names it.</summary>
+/// <summary>Two properties of the query description itself, checked on the Rx.NET target.</summary>
+/// <remarks>The tree prints as the query was written, and an assertion failure names it.</remarks>
 [TestClass]
 public sealed class QueryDescriptionTests : SharedReactiveTest
 {

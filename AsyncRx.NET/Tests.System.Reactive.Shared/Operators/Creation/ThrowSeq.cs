@@ -4,16 +4,26 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>Describes <c>Observable.Throw&lt;T&gt;(error)</c> or <c>Observable.Throw&lt;T&gt;(error, scheduler)</c>.</summary>
-/// <remarks>Built by <see cref="Observable.Throw{T}(Exception)"/>; materialized by each target through <see cref="ISeqVisitor.Throw{T}(ThrowSeq{T})"/>.</remarks>
+/// <summary>
+/// Describes <c>Observable.Throw&lt;T&gt;(error)</c> or
+/// <c>Observable.Throw&lt;T&gt;(error, scheduler)</c>.
+/// </summary>
+/// <remarks>
+/// Built by <see cref="Observable.Throw{T}(Exception)"/>;
+/// materialized by each target through <see cref="ISeqVisitor.Throw{T}(ThrowSeq{T})"/>.
+/// </remarks>
 public sealed class ThrowSeq<T>(Exception error, SchedulerRef? scheduler) : Seq<T>
 {
+    /// <summary>Exception object used for the sequence's termination.</summary>
     public Exception Error => error;
 
+    /// <summary>Scheduler to send the exceptional termination call on.</summary>
     public SchedulerRef? Scheduler => scheduler;
 
+    /// <inheritdoc/>
     public override object Accept(ISeqVisitor visitor) => visitor.Throw(this);
 
+    /// <inheritdoc/>
     public override string ToString() =>
         scheduler is null ? $"Observable.Throw<{typeof(T).Name}>({error.GetType().Name})" : $"Observable.Throw<{typeof(T).Name}>({error.GetType().Name}, {scheduler})";
 }

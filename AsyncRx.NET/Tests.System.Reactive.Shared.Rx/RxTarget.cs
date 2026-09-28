@@ -14,12 +14,12 @@ using RxTestScheduler = Microsoft.Reactive.Testing.TestScheduler;
 
 namespace Tests.System.Reactive.Shared.Rx;
 
-/// <summary>
-/// The Rx.NET target: the harness and raw surface (one line each over
-/// <c>TestScheduler</c>) plus the materializer (one line per node). The only casts
-/// are of leaves' <c>Native</c>; the pipeline a scenario describes is built by the target's
-/// own operators with nothing in between.
-/// </summary>
+/// <summary>The Rx.NET target.</summary>
+/// <remarks>
+/// The harness and raw surface (one line each over <c>TestScheduler</c>) plus the materializer
+/// (one line per node). The only casts are of leaves' <c>Native</c>; the pipeline a scenario
+/// describes is built by the target's own operators with nothing in between.
+/// </remarks>
 public sealed class RxTarget : IRxTarget
 {
     public static RxTarget Instance { get; } = new();
