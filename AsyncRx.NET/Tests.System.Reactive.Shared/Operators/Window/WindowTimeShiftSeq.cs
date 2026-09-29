@@ -25,7 +25,7 @@ public sealed class WindowTimeShiftSeq<T>(Seq<T> source, TimeSpan timeSpan, Time
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.WindowTimeShift(this);
+    public override RSeq<ISeq<T>> Accept(ISeqVisitor visitor) => new RSeqResult(visitor.WindowTimeShift(this));
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Window({timeSpan.Ticks} ticks, {timeShift.Ticks} ticks, {scheduler})";

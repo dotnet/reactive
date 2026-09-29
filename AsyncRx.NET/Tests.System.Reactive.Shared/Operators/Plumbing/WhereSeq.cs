@@ -18,7 +18,7 @@ public sealed class WhereSeq<T>(Seq<T> source, Func<T, bool> predicate, string t
     public Func<T, bool> Predicate => predicate;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.Where(this);
+    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.Where(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Where({text})";

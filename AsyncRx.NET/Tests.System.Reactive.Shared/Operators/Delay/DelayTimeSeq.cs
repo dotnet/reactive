@@ -25,7 +25,7 @@ public sealed class DelayTimeSeq<T>(Seq<T> source, TimeSpan dueTime, SchedulerRe
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.DelayTime(this);
+    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.DelayTime(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Delay({dueTime.Ticks} ticks, {scheduler})";

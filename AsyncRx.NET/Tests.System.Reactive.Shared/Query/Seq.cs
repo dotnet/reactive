@@ -33,10 +33,10 @@ namespace Tests.System.Reactive.Shared;
 /// assertions — is in the <c>Harness</c> folder.
 /// </para>
 /// </remarks>
-public abstract class Seq<T> : ISeq
+public abstract class Seq<T> : ISeq<T>
 {
     /// <inheritdoc/>
-    public abstract object Accept(ISeqVisitor visitor);
+    public abstract RSeq<T> Accept(ISeqVisitor visitor);
 
     /// <summary>
     /// The description as the query was written in the scenario (for example

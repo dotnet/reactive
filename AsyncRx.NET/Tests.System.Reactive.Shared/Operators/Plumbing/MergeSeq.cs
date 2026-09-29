@@ -15,7 +15,7 @@ public sealed class MergeSeq<T>(Nested<T> sources) : Seq<T>
     public Nested<T> Sources => sources;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.Merge(this);
+    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.Merge(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{sources}.Merge()";

@@ -25,7 +25,7 @@ public sealed class WindowTimeOrCountSeq<T>(Seq<T> source, TimeSpan timeSpan, in
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.WindowTimeOrCount(this);
+    public override RSeq<ISeq<T>> Accept(ISeqVisitor visitor) => new RSeqResult(visitor.WindowTimeOrCount(this));
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Window({timeSpan.Ticks} ticks, {count}, {scheduler})";

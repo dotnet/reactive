@@ -18,7 +18,7 @@ public sealed class TakeSeq<T>(Seq<T> source, int count) : Seq<T>
     public int Count => count;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.Take(this);
+    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.Take(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Take({count})";

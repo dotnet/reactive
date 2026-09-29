@@ -27,9 +27,9 @@ public sealed class AsyncRxTarget(ExecutionShape shape) : IRxTarget
 
     private static IAsyncScheduler Unwrap(SchedulerRef scheduler) => (IAsyncScheduler)scheduler.Native;
 
-    private IAsyncObservable<T> Materialize<T>(Seq<T> seq) => (IAsyncObservable<T>)seq.Accept(this);
+    private IAsyncObservable<T> Materialize<T>(Seq<T> seq) => seq.Accept(this).Get<IAsyncObservable<T>>();
 
-    private IAsyncObservable<IAsyncObservable<T>> Materialize<T>(Nested<T> seq) => (IAsyncObservable<IAsyncObservable<T>>)seq.Accept(this);
+    private IAsyncObservable<IAsyncObservable<T>> Materialize<T>(Nested<T> seq) => seq.Accept(this).Get<IAsyncObservable<IAsyncObservable<T>>>();
 
     // ---- Harness ----
 
@@ -123,93 +123,127 @@ public sealed class AsyncRxTarget(ExecutionShape shape) : IRxTarget
 
     // ---- The visitor: leaves and creation ----
 
-    public object Native<T>(NativeSeq<T> seq) => seq.Native;
+    public RSeq<T> Native<T>(NativeSeq<T> seq) => AsRSeq((IAsyncObservable<T>)seq.Native);
 
-    public object Timer(TimerSeq seq) => AsyncObservable.Timer(seq.DueTime, Unwrap(seq.Scheduler));
+    public RSeq<long> Timer(TimerSeq seq) => AsRSeq(AsyncObservable.Timer(seq.DueTime, Unwrap(seq.Scheduler)));
 
-    public object Return<T>(ReturnSeq<T> seq) => AsyncObservable.Return(seq.Value);
+    public RSeq<T> Return<T>(ReturnSeq<T> seq) => AsRSeq(AsyncObservable.Return(seq.Value));
 
     // Rx.NET's Range(start, count) runs on the current-thread scheduler; the immediate scheduler
     // is the equivalent here (a plumbing decision).
-    public object Range(RangeSeq seq) => AsyncObservable.Range(seq.Start, seq.Count, ImmediateAsyncScheduler.Instance);
+    public RSeq<int> Range(RangeSeq seq) => AsRSeq(AsyncObservable.Range(seq.Start, seq.Count, ImmediateAsyncScheduler.Instance));
 
-    public object Empty<T>(EmptySeq<T> seq) => AsyncObservable.Empty<T>();
+    public RSeq<T> Empty<T>(EmptySeq<T> seq) => AsRSeq(AsyncObservable.Empty<T>());
 
-    public object Throw<T>(ThrowSeq<T> seq) => seq.Scheduler is null ? AsyncObservable.Throw<T>(seq.Error) : AsyncObservable.Throw<T>(seq.Error, Unwrap(seq.Scheduler));
+    public RSeq<T> Throw<T>(ThrowSeq<T> seq) => seq.Scheduler is null ? AsRSeq(AsyncObservable.Throw<T>(seq.Error)) : AsRSeq(AsyncObservable.Throw<T>(seq.Error, Unwrap(seq.Scheduler)));
 
     // ---- Plumbing ----
 
-    public object Select<TIn, TOut>(SelectSeq<TIn, TOut> seq) => Materialize(seq.Source).Select(seq.Selector);
+    public RSeq<TOut> Select<TIn, TOut>(SelectSeq<TIn, TOut> seq) => AsRSeq(Materialize(seq.Source).Select(seq.Selector));
 
-    public object SelectIndexed<TIn, TOut>(SelectIndexedSeq<TIn, TOut> seq) => Materialize(seq.Source).Select(seq.Selector);
+    public RSeq<TOut> SelectIndexed<TIn, TOut>(SelectIndexedSeq<TIn, TOut> seq) => AsRSeq(Materialize(seq.Source).Select(seq.Selector));
 
-    public object Where<T>(WhereSeq<T> seq) => Materialize(seq.Source).Where(seq.Predicate);
+    public RSeq<T> Where<T>(WhereSeq<T> seq) => AsRSeq(Materialize(seq.Source).Where(seq.Predicate));
 
     // AsyncRx.NET has no SelectMany(other) overload; Rx.NET defines it as SelectMany(_ => other).
-    public object SelectMany<TIn, TOut>(SelectManySeq<TIn, TOut> seq)
+    public RSeq<TOut> SelectMany<TIn, TOut>(SelectManySeq<TIn, TOut> seq)
     {
         var other = Materialize(seq.Other);
-        return Materialize(seq.Source).SelectMany(_ => other);
+        return AsRSeq(Materialize(seq.Source).SelectMany(_ => other));
     }
 
-    public object Concat<T>(ConcatSeq<T> seq) => Materialize(seq.First).Concat(Materialize(seq.Second));
+    public RSeq<T> Concat<T>(ConcatSeq<T> seq) => AsRSeq(Materialize(seq.First).Concat(Materialize(seq.Second)));
 
-    public object Merge<T>(MergeSeq<T> seq) => Materialize(seq.Sources).Merge();
+    public RSeq<T> Merge<T>(MergeSeq<T> seq) => AsRSeq(Materialize(seq.Sources).Merge());
 
-    public object SelectNested<TIn, TOut>(SelectNestedSeq<TIn, TOut> seq) =>
-        Materialize(seq.Source).Select((window, i) => Materialize(seq.Selector(new NativeSeq<TIn>(window, "window"), i)));
+    public RSeq<RSeq<TOut>> SelectNested<TIn, TOut>(SelectNestedSeq<TIn, TOut> seq) =>
+        AsNestedRSeq(Materialize(seq.Source).Select((window, i) => Materialize(seq.Selector(new NativeSeq<TIn>(window, "window"), i))));
 
     // ---- Take ----
 
-    public object Take<T>(TakeSeq<T> seq) => Materialize(seq.Source).Take(seq.Count);
+    public RSeq<T> Take<T>(TakeSeq<T> seq) => AsRSeq(Materialize(seq.Source).Take(seq.Count));
 
-    public object TakeScheduled<T>(TakeScheduledSeq<T> seq) => Materialize(seq.Source).Take(seq.Count, Unwrap(seq.Scheduler));
+    public RSeq<T> TakeScheduled<T>(TakeScheduledSeq<T> seq) => AsRSeq(Materialize(seq.Source).Take(seq.Count, Unwrap(seq.Scheduler)));
 
-    public object TakeTime<T>(TakeTimeSeq<T> seq) => Materialize(seq.Source).Take(seq.Duration, Unwrap(seq.Scheduler));
+    public RSeq<T> TakeTime<T>(TakeTimeSeq<T> seq) => AsRSeq(Materialize(seq.Source).Take(seq.Duration, Unwrap(seq.Scheduler)));
 
     // ---- Window ----
 
-    public object WindowClosings<T, TWindowClosing>(WindowClosingsSeq<T, TWindowClosing> seq) =>
-        Materialize(seq.Source).Window(() => Materialize(seq.WindowClosingSelector()));
+    public RSeq<RSeq<T>> WindowClosings<T, TWindowClosing>(WindowClosingsSeq<T, TWindowClosing> seq) =>
+        AsNestedRSeq(Materialize(seq.Source).Window(() => Materialize(seq.WindowClosingSelector())));
 
-    public object WindowOpenings<T, TWindowOpening, TWindowClosing>(WindowOpeningsSeq<T, TWindowOpening, TWindowClosing> seq) =>
-        Materialize(seq.Source).Window(Materialize(seq.WindowOpenings), opening => Materialize(seq.WindowClosingSelector(opening)));
+    public RSeq<RSeq<T>> WindowOpenings<T, TWindowOpening, TWindowClosing>(WindowOpeningsSeq<T, TWindowOpening, TWindowClosing> seq) =>
+        AsNestedRSeq(Materialize(seq.Source).Window(Materialize(seq.WindowOpenings), opening => Materialize(seq.WindowClosingSelector(opening))));
 
-    public object WindowBoundaries<T, TWindowBoundary>(WindowBoundariesSeq<T, TWindowBoundary> seq) =>
-        Materialize(seq.Source).Window(Materialize(seq.WindowBoundaries));
+    public RSeq<RSeq<T>> WindowBoundaries<T, TWindowBoundary>(WindowBoundariesSeq<T, TWindowBoundary> seq) =>
+        AsNestedRSeq(Materialize(seq.Source).Window(Materialize(seq.WindowBoundaries)));
 
-    public object WindowCount<T>(WindowCountSeq<T> seq) => Materialize(seq.Source).Window(seq.Count, seq.Skip);
+    public RSeq<RSeq<T>> WindowCount<T>(WindowCountSeq<T> seq) => AsNestedRSeq(Materialize(seq.Source).Window(seq.Count, seq.Skip));
 
-    public object WindowTime<T>(WindowTimeSeq<T> seq) => Materialize(seq.Source).Window(seq.TimeSpan, Unwrap(seq.Scheduler));
+    public RSeq<RSeq<T>> WindowTime<T>(WindowTimeSeq<T> seq) => AsNestedRSeq(Materialize(seq.Source).Window(seq.TimeSpan, Unwrap(seq.Scheduler)));
 
-    public object WindowTimeShift<T>(WindowTimeShiftSeq<T> seq) => Materialize(seq.Source).Window(seq.TimeSpan, seq.TimeShift, Unwrap(seq.Scheduler));
+    public RSeq<RSeq<T>> WindowTimeShift<T>(WindowTimeShiftSeq<T> seq) => AsNestedRSeq(Materialize(seq.Source).Window(seq.TimeSpan, seq.TimeShift, Unwrap(seq.Scheduler)));
 
-    public object WindowTimeOrCount<T>(WindowTimeOrCountSeq<T> seq) => Materialize(seq.Source).Window(seq.TimeSpan, seq.Count, Unwrap(seq.Scheduler));
+    public RSeq<RSeq<T>> WindowTimeOrCount<T>(WindowTimeOrCountSeq<T> seq) => AsNestedRSeq(Materialize(seq.Source).Window(seq.TimeSpan, seq.Count, Unwrap(seq.Scheduler)));
 
     // ---- GroupJoin ----
 
-    public object GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(GroupJoinSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult> seq) =>
-        Materialize(seq.Left).GroupJoin(
-            Materialize(seq.Right),
+    public RSeq<RSeq<TResult>> GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(GroupJoinSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult> seq)
+    {
+        var left = Materialize(seq.Left);
+        var right = Materialize(seq.Right);
+        var output = left.GroupJoin(
+            right,
             left => Materialize(seq.LeftDurationSelector(left)),
             right => Materialize(seq.RightDurationSelector(right)),
             (left, group) => Materialize(seq.ResultSelector(left, new NativeSeq<TRight>(group, "group"))));
+        return AsNestedRSeq(output);
+    }
 
-    public object GroupJoinValue<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(GroupJoinValueSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult> seq) =>
-        Materialize(seq.Left).GroupJoin(
+    public RSeq<TResult> GroupJoinValue<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(GroupJoinValueSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult> seq) =>
+        AsRSeq(Materialize(seq.Left).GroupJoin(
             Materialize(seq.Right),
             left => Materialize(seq.LeftDurationSelector(left)),
             right => Materialize(seq.RightDurationSelector(right)),
-            (left, group) => seq.ResultSelector(left, new NativeSeq<TRight>(group, "group")));
+            (left, group) => seq.ResultSelector(left, new NativeSeq<TRight>(group, "group"))));
 
     // ---- Delay ----
 
-    public object DelayTime<T>(DelayTimeSeq<T> seq) => Materialize(seq.Source).Delay(seq.DueTime, Unwrap(seq.Scheduler));
+    public RSeq<T> DelayTime<T>(DelayTimeSeq<T> seq) => AsRSeq(Materialize(seq.Source).Delay(seq.DueTime, Unwrap(seq.Scheduler)));
 
-    public object DelayAbsolute<T>(DelayAbsoluteSeq<T> seq) => Materialize(seq.Source).Delay(seq.DueTime, Unwrap(seq.Scheduler));
+    public RSeq<T> DelayAbsolute<T>(DelayAbsoluteSeq<T> seq) => AsRSeq(Materialize(seq.Source).Delay(seq.DueTime, Unwrap(seq.Scheduler)));
 
-    public object DelaySelector<T, TDelay>(DelaySelectorSeq<T, TDelay> seq) => Materialize(seq.Source).Delay(x => Materialize(seq.DelayDurationSelector(x)));
+    public RSeq<T> DelaySelector<T, TDelay>(DelaySelectorSeq<T, TDelay> seq) => AsRSeq(Materialize(seq.Source).Delay(x => Materialize(seq.DelayDurationSelector(x))));
 
-    public object DelaySubscription<T, TDelay>(DelaySubscriptionSeq<T, TDelay> seq) =>
-        Materialize(seq.Source).Delay(Materialize(seq.SubscriptionDelay), x => Materialize(seq.DelayDurationSelector(x)));
+    public RSeq<T> DelaySubscription<T, TDelay>(DelaySubscriptionSeq<T, TDelay> seq) =>
+        AsRSeq(Materialize(seq.Source).Delay(Materialize(seq.SubscriptionDelay), x => Materialize(seq.DelayDurationSelector(x))));
+
+    private static RSeq<T> AsRSeq<T>(IAsyncObservable<T> source) => new AsyncRSeq<T>(source);
+    private static RSeq<RSeq<T>> AsNestedRSeq<T>(IAsyncObservable<IAsyncObservable<T>> source) => new NestedAsyncRSeq<T>(source);
+
+    private class AsyncRSeq<T>(IAsyncObservable<T> source) : RSeq<T>
+    {
+        public override TS Get<TS>()
+        {
+            if (typeof(TS) != typeof(IAsyncObservable<T>))
+            {
+                throw new InvalidOperationException($"This sequence is an IAsyncObservable<T>, but the requested type was {typeof(TS)}.");
+            }
+
+            return (TS)(object)source;
+        }
+    }
+
+    private class NestedAsyncRSeq<T>(IAsyncObservable<IAsyncObservable<T>> source) : RSeq<RSeq<T>>
+    {
+        public override TS Get<TS>()
+        {
+            if (typeof(TS) != typeof(IAsyncObservable<IAsyncObservable<T>>))
+            {
+                throw new InvalidOperationException($"This sequence is an IAsyncObservable<IAsyncObservable<T>>, but the requested type was {typeof(TS)}.");
+            }
+
+            return (TS)(object)source;
+        }
+    }
 }

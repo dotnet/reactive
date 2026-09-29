@@ -14,7 +14,7 @@ public partial interface ISeqVisitor
     /// Built by
     /// <see cref="WindowExtensions.Window{T, TWindowClosing}(Seq{T}, Func{Seq{TWindowClosing}}, string)"/>.
     /// </remarks>
-    object WindowClosings<T, TWindowClosing>(WindowClosingsSeq<T, TWindowClosing> seq);
+    RSeq<RSeq<T>> WindowClosings<T, TWindowClosing>(WindowClosingsSeq<T, TWindowClosing> seq);
 
     /// <summary>
     /// Materializes a <see cref="WindowOpeningsSeq{T, TWindowOpening, TWindowClosing}"/> as the
@@ -24,7 +24,7 @@ public partial interface ISeqVisitor
     /// Built by
     /// <see cref="WindowExtensions.Window{T, TWindowOpening, TWindowClosing}(Seq{T}, Seq{TWindowOpening}, Func{TWindowOpening, Seq{TWindowClosing}}, string)"/>.
     /// </remarks>
-    object WindowOpenings<T, TWindowOpening, TWindowClosing>(WindowOpeningsSeq<T, TWindowOpening, TWindowClosing> seq);
+    RSeq<RSeq<T>> WindowOpenings<T, TWindowOpening, TWindowClosing>(WindowOpeningsSeq<T, TWindowOpening, TWindowClosing> seq);
 
     /// <summary>
     /// Materializes a <see cref="WindowBoundariesSeq{T, TWindowBoundary}"/> as the target's own
@@ -34,14 +34,14 @@ public partial interface ISeqVisitor
     /// Built by
     /// <see cref="WindowExtensions.Window{T, TWindowBoundary}(Seq{T}, Seq{TWindowBoundary})"/>.
     /// </remarks>
-    object WindowBoundaries<T, TWindowBoundary>(WindowBoundariesSeq<T, TWindowBoundary> seq);
+    RSeq<RSeq<T>> WindowBoundaries<T, TWindowBoundary>(WindowBoundariesSeq<T, TWindowBoundary> seq);
 
     /// <summary>
     /// Materializes a <see cref="WindowCountSeq{T}"/> as the target's own
     /// <c>Window(count, skip)</c>.
     /// </summary>
     /// <remarks>Built by <see cref="WindowExtensions.Window{T}(Seq{T}, int, int)"/>.</remarks>
-    object WindowCount<T>(WindowCountSeq<T> seq);
+    RSeq<RSeq<T>> WindowCount<T>(WindowCountSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="WindowTimeSeq{T}"/> as the target's own
@@ -50,7 +50,7 @@ public partial interface ISeqVisitor
     /// <remarks>
     /// Built by <see cref="WindowExtensions.Window{T}(Seq{T}, TimeSpan, SchedulerRef)"/>.
     /// </remarks>
-    object WindowTime<T>(WindowTimeSeq<T> seq);
+    RSeq<RSeq<T>> WindowTime<T>(WindowTimeSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="WindowTimeShiftSeq{T}"/> as the target's own
@@ -60,7 +60,7 @@ public partial interface ISeqVisitor
     /// Built by
     /// <see cref="WindowExtensions.Window{T}(Seq{T}, TimeSpan, TimeSpan, SchedulerRef)"/>.
     /// </remarks>
-    object WindowTimeShift<T>(WindowTimeShiftSeq<T> seq);
+    RSeq<RSeq<T>> WindowTimeShift<T>(WindowTimeShiftSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="WindowTimeOrCountSeq{T}"/> as the target's own
@@ -69,5 +69,5 @@ public partial interface ISeqVisitor
     /// <remarks>
     /// Built by <see cref="WindowExtensions.Window{T}(Seq{T}, TimeSpan, int, SchedulerRef)"/>.
     /// </remarks>
-    object WindowTimeOrCount<T>(WindowTimeOrCountSeq<T> seq);
+    RSeq<RSeq<T>> WindowTimeOrCount<T>(WindowTimeOrCountSeq<T> seq);
 }

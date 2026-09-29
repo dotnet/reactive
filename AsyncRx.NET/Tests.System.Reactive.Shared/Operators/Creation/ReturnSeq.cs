@@ -15,7 +15,7 @@ public sealed class ReturnSeq<T>(T value) : Seq<T>
     public T Value => value;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.Return(this);
+    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.Return(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"Seq.Return({value})";

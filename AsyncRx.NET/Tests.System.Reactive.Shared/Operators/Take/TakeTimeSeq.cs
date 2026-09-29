@@ -21,7 +21,7 @@ public sealed class TakeTimeSeq<T>(Seq<T> source, TimeSpan duration, SchedulerRe
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.TakeTime(this);
+    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.TakeTime(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Take({duration.Ticks} ticks, {scheduler})";

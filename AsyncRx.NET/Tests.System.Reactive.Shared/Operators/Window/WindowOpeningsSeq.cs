@@ -23,7 +23,7 @@ public sealed class WindowOpeningsSeq<T, TWindowOpening, TWindowClosing>(Seq<T> 
     public Func<TWindowOpening, Seq<TWindowClosing>> WindowClosingSelector => windowClosingSelector;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.WindowOpenings(this);
+    public override RSeq<ISeq<T>> Accept(ISeqVisitor visitor) => new RSeqResult(visitor.WindowOpenings(this));
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Window({windowOpenings}, {text})";

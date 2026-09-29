@@ -24,7 +24,7 @@ public sealed class TakeScheduledSeq<T>(Seq<T> source, int count, SchedulerRef s
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.TakeScheduled(this);
+    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.TakeScheduled(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Take({count}, {scheduler})";

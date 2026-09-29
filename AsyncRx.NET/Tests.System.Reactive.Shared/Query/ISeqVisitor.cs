@@ -15,38 +15,38 @@ public partial interface ISeqVisitor
     /// Materializes a <see cref="NativeSeq{T}"/>: the identity, returning its
     /// <see cref="NativeSeq{T}.Native"/>.
     /// </summary>
-    object Native<T>(NativeSeq<T> seq);
+    RSeq<T> Native<T>(NativeSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="TimerSeq"/> as the target's own <c>Timer(dueTime, scheduler)</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Timer(TimeSpan, SchedulerRef)"/>.</remarks>
-    object Timer(TimerSeq seq);
+    RSeq<long> Timer(TimerSeq seq);
 
     /// <summary>
     /// Materializes a <see cref="ReturnSeq{T}"/> as the target's own <c>Return(value)</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Return{T}(T)"/>.</remarks>
-    object Return<T>(ReturnSeq<T> seq);
+    RSeq<T> Return<T>(ReturnSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="RangeSeq"/> as the target's own <c>Range(start, count)</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Range(int, int)"/>.</remarks>
-    object Range(RangeSeq seq);
+    RSeq<int> Range(RangeSeq seq);
 
     /// <summary>
     /// Materializes a <see cref="EmptySeq{T}"/> as the target's own <c>Empty&lt;T&gt;()</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Empty{T}"/>.</remarks>
-    object Empty<T>(EmptySeq<T> seq);
+    RSeq<T> Empty<T>(EmptySeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="ThrowSeq{T}"/> as the target's own
     /// <c>Throw&lt;T&gt;(error[, scheduler])</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Throw{T}(Exception)"/>.</remarks>
-    object Throw<T>(ThrowSeq<T> seq);
+    RSeq<T> Throw<T>(ThrowSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="SelectSeq{TIn, TOut}"/> as the target's own
@@ -55,7 +55,7 @@ public partial interface ISeqVisitor
     /// <remarks>
     /// Built by <see cref="SeqExtensions.Select{TIn, TOut}(Seq{TIn}, Func{TIn, TOut}, string)"/>.
     /// </remarks>
-    object Select<TIn, TOut>(SelectSeq<TIn, TOut> seq);
+    RSeq<TOut> Select<TIn, TOut>(SelectSeq<TIn, TOut> seq);
 
     /// <summary>
     /// Materializes a <see cref="SelectIndexedSeq{TIn, TOut}"/> as the target's own
@@ -65,7 +65,7 @@ public partial interface ISeqVisitor
     /// Built by
     /// <see cref="SeqExtensions.Select{TIn, TOut}(Seq{TIn}, Func{TIn, int, TOut}, string)"/>.
     /// </remarks>
-    object SelectIndexed<TIn, TOut>(SelectIndexedSeq<TIn, TOut> seq);
+    RSeq<TOut> SelectIndexed<TIn, TOut>(SelectIndexedSeq<TIn, TOut> seq);
 
     /// <summary>
     /// Materializes a <see cref="WhereSeq{T}"/> as the target's own <c>Where(predicate)</c>.
@@ -73,7 +73,7 @@ public partial interface ISeqVisitor
     /// <remarks>
     /// Built by <see cref="SeqExtensions.Where{T}(Seq{T}, Func{T, bool}, string)"/>.
     /// </remarks>
-    object Where<T>(WhereSeq<T> seq);
+    RSeq<T> Where<T>(WhereSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="SelectManySeq{TIn, TOut}"/> as the target's own
@@ -82,19 +82,19 @@ public partial interface ISeqVisitor
     /// <remarks>
     /// Built by <see cref="SeqExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Seq{TOut})"/>.
     /// </remarks>
-    object SelectMany<TIn, TOut>(SelectManySeq<TIn, TOut> seq);
+    RSeq<TOut> SelectMany<TIn, TOut>(SelectManySeq<TIn, TOut> seq);
 
     /// <summary>
     /// Materializes a <see cref="ConcatSeq{T}"/> as the target's own <c>Concat(second)</c>.
     /// </summary>
     /// <remarks>Built by <see cref="SeqExtensions.Concat{T}(Seq{T}, Seq{T})"/>.</remarks>
-    object Concat<T>(ConcatSeq<T> seq);
+    RSeq<T> Concat<T>(ConcatSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="MergeSeq{T}"/> as the target's own <c>Merge()</c>.
     /// </summary>
     /// <remarks>Built by <see cref="SeqExtensions.Merge{T}(Nested{T})"/>.</remarks>
-    object Merge<T>(MergeSeq<T> seq);
+    RSeq<T> Merge<T>(MergeSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="SelectNestedSeq{TIn, TOut}"/> as the target's own indexed
@@ -105,5 +105,5 @@ public partial interface ISeqVisitor
     /// <see cref="SeqExtensions.Select{TIn, TOut}(Nested{TIn}, Func{Seq{TIn}, int, Seq{TOut}}, string)"/>.
     /// The description each callback returns is materialized in place over the real window.
     /// </remarks>
-    object SelectNested<TIn, TOut>(SelectNestedSeq<TIn, TOut> seq);
+    RSeq<RSeq<TOut>> SelectNested<TIn, TOut>(SelectNestedSeq<TIn, TOut> seq);
 }

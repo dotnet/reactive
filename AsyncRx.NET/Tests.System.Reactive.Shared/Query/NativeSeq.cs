@@ -26,7 +26,7 @@ public class NativeSeq<T>(object native, string description) : Seq<T>
     public object Native => native;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.Native(this);
+    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.Native(this);
 
     /// <inheritdoc/>
     public override string ToString() => description;

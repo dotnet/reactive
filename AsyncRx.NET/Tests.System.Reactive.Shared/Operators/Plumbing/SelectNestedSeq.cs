@@ -24,7 +24,7 @@ public sealed class SelectNestedSeq<TIn, TOut>(Nested<TIn> source, Func<Seq<TIn>
     public Func<Seq<TIn>, int, Seq<TOut>> Selector => selector;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.SelectNested(this);
+    public override RSeq<ISeq<TOut>> Accept(ISeqVisitor visitor) => new RSeqResult(visitor.SelectNested(this));
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Select({text})";

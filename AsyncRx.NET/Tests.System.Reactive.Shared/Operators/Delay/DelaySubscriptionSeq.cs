@@ -25,7 +25,7 @@ public sealed class DelaySubscriptionSeq<T, TDelay>(Seq<T> source, Seq<TDelay> s
     public Func<T, Seq<TDelay>> DelayDurationSelector => delayDurationSelector;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.DelaySubscription(this);
+    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.DelaySubscription(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Delay({subscriptionDelay}, {text})";

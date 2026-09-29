@@ -23,7 +23,7 @@ public sealed class WindowBoundariesSeq<T, TWindowBoundary>(Seq<T> source, Seq<T
     public Seq<TWindowBoundary> WindowBoundaries => windowBoundaries;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.WindowBoundaries(this);
+    public override RSeq<ISeq<T>> Accept(ISeqVisitor visitor) => new RSeqResult(visitor.WindowBoundaries(this));
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Window({windowBoundaries})";

@@ -11,7 +11,7 @@ namespace Tests.System.Reactive.Shared;
 /// What <see cref="Seq{T}"/> (a sequence) and <see cref="Nested{T}"/> (a sequence of sequences)
 /// have in common, which is only that a target can materialize it.
 /// </remarks>
-public interface ISeq
+public interface ISeq<T>
 {
     /// <summary>Materializes this description on <paramref name="visitor"/>, a target.</summary>
     /// <param name="visitor">The target materializing the query.</param>
@@ -20,5 +20,5 @@ public interface ISeq
     /// Dispatches to the visitor member for this node type and returns the target's own
     /// observable as <see cref="object"/>. Only the target casts it.
     /// </remarks>
-    object Accept(ISeqVisitor visitor);
+    RSeq<T> Accept(ISeqVisitor visitor);
 }

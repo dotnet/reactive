@@ -23,7 +23,7 @@ public sealed class SelectIndexedSeq<TIn, TOut>(Seq<TIn> source, Func<TIn, int, 
     public Func<TIn, int, TOut> Selector => selector;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.SelectIndexed(this);
+    public override RSeq<TOut> Accept(ISeqVisitor visitor) => visitor.SelectIndexed(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Select({text})";

@@ -18,7 +18,7 @@ public sealed class RangeSeq(int start, int count) : Seq<int>
     public int Count => count;
 
     /// <inheritdoc/>
-    public override object Accept(ISeqVisitor visitor) => visitor.Range(this);
+    public override RSeq<int> Accept(ISeqVisitor visitor) => visitor.Range(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"Seq.Range({start}, {count})";
