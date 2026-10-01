@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 using System.Reactive.Disposables;
-using System.Threading;
+using System.Reactive.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
@@ -59,7 +59,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             var group = new CompositeAsyncDisposable(subscriptions);
 

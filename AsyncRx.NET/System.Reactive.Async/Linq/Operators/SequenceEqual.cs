@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 using System.Reactive.Disposables;
-using System.Threading;
+using System.Reactive.Threading;
 
 namespace System.Reactive.Linq
 {
@@ -84,7 +84,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            var gate = new AsyncGate();
+            var gate = AsyncGate.Create();
 
             var queueLeft = new Queue<TSource>();
             var queueRight = new Queue<TSource>();

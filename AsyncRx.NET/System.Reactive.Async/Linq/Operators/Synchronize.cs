@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Threading;
+using System.Reactive.Threading;
 
 namespace System.Reactive.Linq
 {
@@ -16,7 +16,7 @@ namespace System.Reactive.Linq
             return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.Synchronize(observer)));
         }
 
-        public static IAsyncObservable<TSource> Synchronize<TSource>(this IAsyncObservable<TSource> source, AsyncGate gate)
+        public static IAsyncObservable<TSource> Synchronize<TSource>(this IAsyncObservable<TSource> source, IAsyncGate gate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -37,10 +37,10 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            return Synchronize(observer, new AsyncGate());
+            return Synchronize(observer, AsyncGate.Create());
         }
 
-        public static IAsyncObserver<TSource> Synchronize<TSource>(IAsyncObserver<TSource> observer, AsyncGate gate)
+        public static IAsyncObserver<TSource> Synchronize<TSource>(IAsyncObserver<TSource> observer, IAsyncGate gate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
