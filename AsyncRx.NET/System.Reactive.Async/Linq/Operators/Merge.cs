@@ -19,9 +19,12 @@ namespace System.Reactive.Linq
 
             return Create<TSource>(async observer =>
             {
-                var (sink, cancel) = AsyncObserver.Merge(observer);
+                var subscription = new SingleAssignmentAsyncDisposable();
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                var (sink, cancel) = AsyncObserver.Merge(observer, subscription);
+
+                var inner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                await subscription.AssignAsync(inner).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, cancel);
             });
@@ -30,10 +33,22 @@ namespace System.Reactive.Linq
 
     public partial class AsyncObserver
     {
-        public static (IAsyncObserver<IAsyncObservable<TSource>>, IAsyncDisposable) Merge<TSource>(IAsyncObserver<TSource> observer)
+        /// <summary>
+        /// Creates an observer that merges the inner sequences it receives into
+        /// <paramref name="observer"/>.
+        /// </summary>
+        /// <param name="observer">The observer to merge the inner sequences into.</param>
+        /// <param name="subscription">
+        /// The subscription to the outer sequence. The returned observer disposes it when the
+        /// outer sequence completes while inner sequences are still active, so that the outer
+        /// source is released as soon as nothing more can come from it, as Rx.NET does.
+        /// </param>
+        public static (IAsyncObserver<IAsyncObservable<TSource>>, IAsyncDisposable) Merge<TSource>(IAsyncObserver<TSource> observer, IAsyncDisposable subscription)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
+            if (subscription == null)
+                throw new ArgumentNullException(nameof(subscription));
 
             var gate = new AsyncGate();
 
@@ -56,6 +71,23 @@ namespace System.Reactive.Linq
                     if (--count == 0)
                     {
                         await observer.OnCompletedAsync().ConfigureAwait(false);
+                    }
+                }
+            };
+
+            async ValueTask OnOuterCompletedAsync()
+            {
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    if (--count == 0)
+                    {
+                        await observer.OnCompletedAsync().ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        // Inner sequences are still running. Nothing more can arrive from the
+                        // outer source, so release it now rather than when the result completes.
+                        await subscription.DisposeAsync().ConfigureAwait(false);
                     }
                 }
             };
@@ -96,7 +128,7 @@ namespace System.Reactive.Linq
                             await inner.AssignAsync(innerSubscription).ConfigureAwait(false);
                         },
                         OnErrorAsync,
-                        OnCompletedAsync
+                        OnOuterCompletedAsync
                     ),
                     disposable
                 );
