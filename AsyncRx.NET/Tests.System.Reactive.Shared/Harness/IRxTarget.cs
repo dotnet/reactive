@@ -40,6 +40,26 @@ public interface IRxTarget : ISeqVisitor
     /// </summary>
     SchedulerRef DisableOptimizations(TestSchedulerRef scheduler);
 
+    /// <summary>The target's default scheduler, for real-time scenarios.</summary>
+    /// <remarks>
+    /// Rx.NET's <c>Scheduler.Default</c>; on AsyncRx.NET the task pool scheduler that its
+    /// scheduler-less overloads use. A real-time scenario names it where the Rx.NET test has
+    /// <c>Scheduler.Default</c>, and awaits completion through <see cref="ToListAsync{T}"/>
+    /// rather than driving a <see cref="TestSchedulerRef"/>.
+    /// </remarks>
+    SchedulerRef DefaultScheduler { get; }
+
+    /// <summary>
+    /// Materializes <paramref name="source"/>, subscribes, and completes with every element it
+    /// produced once it completes.
+    /// </summary>
+    /// <remarks>
+    /// The shared replacement for the Rx.NET tests' <c>Subscribe(lst.Add, () => e.Set())</c>
+    /// followed by <c>e.WaitOne()</c>: a real-time scenario is an <c>async Task</c> test method
+    /// that awaits this. An error from the sequence faults the task.
+    /// </remarks>
+    ValueTask<IList<T>> ToListAsync<T>(Seq<T> source);
+
     /// <summary>
     /// Creates the target's own hot testable observable, playing <paramref name="messages"/> at
     /// their absolute virtual times, wrapped as a leaf.

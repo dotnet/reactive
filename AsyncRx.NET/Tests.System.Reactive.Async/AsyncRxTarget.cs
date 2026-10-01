@@ -54,6 +54,13 @@ public sealed partial class AsyncRxTarget : IRxTarget
     // No optimisation interfaces to hide on this target: the scheduler is its own unoptimized form.
     public SchedulerRef DisableOptimizations(TestSchedulerRef scheduler) => scheduler;
 
+    // The scheduler AsyncRx.NET's scheduler-less overloads use.
+    public SchedulerRef DefaultScheduler { get; } =
+        new(TaskPoolAsyncScheduler.Default, "Scheduler.Default");
+
+    public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) =>
+        await Materialize(source).ToList();
+
     public TestableSeq<T> CreateHotObservable<T>(TestSchedulerRef scheduler, Recorded<Notification<T>>[] messages) =>
         new(this, _bridge.Run<Seq<T>>(HotImpl<T>, Unwrap(scheduler), messages), messages, $"Hot({messages.Length} messages)");
 

@@ -18,6 +18,9 @@ public sealed partial class RxTarget
     Realized<Seq<int>> ISeqVisitor.Range(RangeSeq seq) =>
         Realized.Of<Seq<int>>(Observable.Range(seq.Start, seq.Count));
 
+    Realized<Seq<int>> ISeqVisitor.RangeScheduled(RangeScheduledSeq seq) =>
+        Realized.Of<Seq<int>>(Observable.Range(seq.Start, seq.Count, Unwrap(seq.Scheduler)));
+
     Realized<Seq<T>> ISeqVisitor.Empty<T>(EmptySeq<T> seq) => _bridge.Run<Seq<T>>(EmptyImpl<T>);
 
     Realized<Seq<T>> ISeqVisitor.Throw<T>(ThrowSeq<T> seq) =>

@@ -87,6 +87,33 @@ that it, too, can be shared; on Rx.NET it completes synchronously.
 
 Assertion failures name the query as written, then give the target's own diff.
 
+## Real-time scenarios
+
+A few Rx.NET tests run on the real default scheduler rather than a `TestScheduler`: they build a
+query over `Observable.Range(0, 10, Scheduler.Default)`, subscribe with `lst.Add`, block on a
+`ManualResetEvent` until completion, and assert on the list. The shared form of such a test is an
+`async Task` test method that names `DefaultScheduler` where the original has
+`Scheduler.Default` and awaits `ToListAsync(res)` where the original blocks:
+
+```csharp
+[TestMethod]
+public async Task Skip_Default()
+{
+    var xs = Seq.Range(0, 10, DefaultScheduler);
+
+    var res = xs.Skip(TimeSpan.FromSeconds(60));
+
+    var lst = await ToListAsync(res);
+
+    Assert.IsEmpty(lst);
+}
+```
+
+`DefaultScheduler` is `Scheduler.Default` on Rx.NET and the task pool scheduler on AsyncRx.NET,
+which is what its scheduler-less overloads use. `ToListAsync` materializes the query, subscribes,
+and completes with everything the sequence produced; an error faults the task. The `Scheduler`
+property still exists in such a test but is unused.
+
 ## `Native`, and what the shared library does not hold
 
 The shared library never holds a target's observable, observer, scheduler or recorded data under

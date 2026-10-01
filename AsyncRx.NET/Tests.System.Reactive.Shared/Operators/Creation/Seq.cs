@@ -49,6 +49,17 @@ public static class Seq
     /// </remarks>
     public static Seq<int> Range(int start, int count) => new RangeSeq(start, count);
 
+    /// <summary>Describes <c>Seq.Range(start, count, scheduler)</c>.</summary>
+    /// <param name="start">The value of the first integer in the sequence.</param>
+    /// <param name="count">The number of sequential integers to generate.</param>
+    /// <param name="scheduler">Scheduler to run the generator loop on.</param>
+    /// <remarks>
+    /// Builds a <see cref="RangeScheduledSeq"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.RangeScheduled(RangeScheduledSeq)"/>.
+    /// </remarks>
+    public static Seq<int> Range(int start, int count, SchedulerRef scheduler) =>
+        new RangeScheduledSeq(start, count, scheduler);
+
     /// <summary>Describes <c>Seq.Empty&lt;T&gt;()</c>.</summary>
     /// <typeparam name="T">
     /// The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.

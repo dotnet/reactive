@@ -31,6 +31,12 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
     /// </remarks>
     protected TestSchedulerRef Scheduler { get; private set; } = null!;
 
+    /// <summary>The target's default scheduler, for real-time scenarios.</summary>
+    /// <remarks>
+    /// Where the Rx.NET test has <c>Scheduler.Default</c>. See <see cref="ToListAsync{T}"/>.
+    /// </remarks>
+    protected SchedulerRef DefaultScheduler => Target.DefaultScheduler;
+
     /// <summary>Creates <see cref="Scheduler"/> before each test.</summary>
     /// <remarks>Called by MSTest.</remarks>
     [TestInitialize]
@@ -46,4 +52,14 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
     /// scenarios whose expectations depend on that.
     /// </remarks>
     protected long ScheduledAt(long tick) => Target.ScheduledAt(tick);
+
+    /// <summary>Runs a real-time query to completion and returns everything it produced.</summary>
+    /// <param name="source">The query to run.</param>
+    /// <remarks>
+    /// For the scenarios that run on <see cref="DefaultScheduler"/> in real time rather than on
+    /// <see cref="Scheduler"/> in virtual time. Where the Rx.NET test subscribes with
+    /// <c>lst.Add</c> and blocks on a <c>ManualResetEvent</c> until completion, the shared
+    /// scenario is an <c>async Task</c> test method that awaits this instead.
+    /// </remarks>
+    protected ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) => Target.ToListAsync(source);
 }

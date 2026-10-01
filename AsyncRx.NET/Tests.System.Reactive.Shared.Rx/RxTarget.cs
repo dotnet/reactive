@@ -55,6 +55,11 @@ public sealed partial class RxTarget : IRxTarget
     public SchedulerRef DisableOptimizations(TestSchedulerRef scheduler) =>
         new(Unwrap(scheduler).DisableOptimizations(), "Scheduler.DisableOptimizations()");
 
+    public SchedulerRef DefaultScheduler { get; } = new(Scheduler.Default, "Scheduler.Default");
+
+    public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) =>
+        await Materialize(source).ToList();
+
     public TestableSeq<T> CreateHotObservable<T>(TestSchedulerRef scheduler, Recorded<Notification<T>>[] messages) =>
         new(this, _bridge.Run<Seq<T>>(HotImpl<T>, Unwrap(scheduler), messages), messages, $"Hot({messages.Length} messages)");
 

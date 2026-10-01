@@ -36,6 +36,13 @@ public partial interface ISeqVisitor
     Realized<Seq<int>> Range(RangeSeq seq);
 
     /// <summary>
+    /// Materializes a <see cref="RangeScheduledSeq"/> as the target's own
+    /// <c>Range(start, count, scheduler)</c>.
+    /// </summary>
+    /// <remarks>Built by <see cref="Seq.Range(int, int, SchedulerRef)"/>.</remarks>
+    Realized<Seq<int>> RangeScheduled(RangeScheduledSeq seq);
+
+    /// <summary>
     /// Materializes a <see cref="EmptySeq{T}"/> as the target's own <c>Empty&lt;T&gt;()</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Empty{T}"/>.</remarks>
