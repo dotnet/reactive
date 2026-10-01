@@ -144,7 +144,13 @@ namespace System.Reactive.Linq
                 });
         }
 
-        public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler) => TakeLast(source, duration, scheduler, scheduler);
+        public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler)
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return TakeLast(source, duration, scheduler, scheduler);
+        }
     }
 
     public partial class AsyncObserver

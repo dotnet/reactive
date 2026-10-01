@@ -17,6 +17,8 @@ namespace System.Reactive.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
+            if (dueTime < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(dueTime));
 
             return Delay(source, dueTime, TaskPoolAsyncScheduler.Default);
         }
@@ -25,6 +27,8 @@ namespace System.Reactive.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
+            if (dueTime < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(dueTime));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 

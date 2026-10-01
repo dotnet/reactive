@@ -118,6 +118,23 @@ expects one awaits it inside `Assert.ThrowsExactlyAsync`. Where the original dri
 its async-shaped `OnNextAsync`, `OnErrorAsync` and `OnCompletedAsync`, which complete
 synchronously on Rx.NET. The `Scheduler` property still exists in such a test but is unused.
 
+## The argument-validation stratum
+
+Rx.NET's `*_ArgumentChecking` tests are not migrated; they are derived from the API surface. Each
+runner project has an `ArgumentCheckingTests` class with one `[TestMethod]` per operator name,
+`Take_ArgumentChecking` and so on, and each is one line: `ArgumentChecks` walks every overload of
+that name on the target's surface (`IApiSurface`: the static operator class, the observable
+interface, and its subscribe method) and applies Rx.NET's rules. Every non-nullable reference
+parameter passed as null must raise `ArgumentNullException` naming it; every parameter whose name
+says it is a count or duration passed as minus one must raise `ArgumentOutOfRangeException`
+naming it (with a short, documented list of exceptions where Rx.NET accepts the value); and where
+the overload returns an observable, subscribing a null observer must raise
+`ArgumentNullException`. The other arguments come from `Dummies`, which builds a plausible
+argument of any type. The Rx.NET runner is the oracle for the rules: they pass there, so an
+AsyncRx.NET failure is a library defect. An operator a target does not have is inconclusive, and
+a meta-test fails if a surface method has no test, so a new operator is covered the moment it is
+added.
+
 ## `Native`, and what the shared library does not hold
 
 The shared library never holds a target's observable, observer, scheduler or recorded data under

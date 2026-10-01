@@ -15,6 +15,8 @@ namespace System.Reactive.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
+            if (dueTime < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(dueTime));
 
             return CreateAsyncObservable<TSource>.From(
                 source,
@@ -37,6 +39,8 @@ namespace System.Reactive.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
+            if (dueTime < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(dueTime));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
@@ -61,6 +65,8 @@ namespace System.Reactive.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
+            if (dueTime < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(dueTime));
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
@@ -85,6 +91,8 @@ namespace System.Reactive.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
+            if (dueTime < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(dueTime));
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
             if (scheduler == null)
