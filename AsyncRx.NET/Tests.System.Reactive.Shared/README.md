@@ -111,8 +111,11 @@ public async Task Skip_Default()
 
 `DefaultScheduler` is `Scheduler.Default` on Rx.NET and the task pool scheduler on AsyncRx.NET,
 which is what its scheduler-less overloads use. `ToListAsync` materializes the query, subscribes,
-and completes with everything the sequence produced; an error faults the task. The `Scheduler`
-property still exists in such a test but is unused.
+and completes with everything the sequence produced; an error faults the task, so a test that
+expects one awaits it inside `Assert.ThrowsExactlyAsync`. Where the original drives a
+`Subject<T>` from the test body, the shared scenario drives a `CreateSubject<T>()` leaf through
+its async-shaped `OnNextAsync`, `OnErrorAsync` and `OnCompletedAsync`, which complete
+synchronously on Rx.NET. The `Scheduler` property still exists in such a test but is unused.
 
 ## `Native`, and what the shared library does not hold
 
@@ -128,6 +131,7 @@ realizes), and only the target, or a target-specific test, gets at the real type
 | `Group<TKey, T>` (a leaf with a `Key`): a `Realized<Seq<T>>` | `IGroupedObservable<TKey, T>` | `IGroupedAsyncObservable<TKey, T>` |
 | `TestableSeq<T>` (a source the scheduler created) | `ITestableObservable<T>` | `ITestableAsyncObservable<T>` |
 | `TestableObserver<T>` (what `Start` returns) | `ITestableObserver<T>` | `ITestableAsyncObserver<T>` |
+| `SubjectSeq<T>` (a leaf a real-time scenario drives by hand) | `Subject<T>` | `SequentialSimpleAsyncSubject<T>` |
 
 `res.Messages` and `xs.Subscriptions` are not collections. They are handles (`MessageLog<T>`,
 `SubscriptionLog<T>`) that hold the shared observer or source and whose `AssertEqual` asks the
@@ -142,7 +146,7 @@ and use the target's own API directly.
 ## Adding things
 
 * **A scenario:** one `[TestMethod]` in the operator's shared class. Nothing else changes.
-* **An operator overload:** in the operator's folder under `Operators/`, a node class (one file), a fluent method in the operator's extensions class, and a member on that folder's `ISeqVisitor` part; then, in each target's partial file for that operator (`RxTarget.Take.cs`, `AsyncRxTarget.Take.cs`), an `*Impl` method that makes the real call and a one-line visitor member that hands it to the bridge. A new operator gets a new folder and a new partial file in each target, named the same way. A method parameter that is a sequence is a `Seq<T>` in the node and the library's observable type in the `*Impl`; a callback that returns a sequence is a `Func<..., Seq<T>>` in the node and `Func<..., IObservable<T>>` in the `*Impl`. The bridge does the rest.
+* **An operator overload:** in the operator's folder under `Operators/`, a node class (one file), a fluent method in the operator's extensions class (or, as for `Merge`, in a partial of `Seq` when the Rx.NET tests also call the operator statically, as `Observable.Merge(scheduler, xs, ys)`), and a member on that folder's `ISeqVisitor` part; then, in each target's partial file for that operator (`RxTarget.Take.cs`, `AsyncRxTarget.Take.cs`), an `*Impl` method that makes the real call and a one-line visitor member that hands it to the bridge. A new operator gets a new folder and a new partial file in each target, named the same way. A method parameter that is a sequence is a `Seq<T>` in the node and the library's observable type in the `*Impl`; a callback that returns a sequence is a `Func<..., Seq<T>>` in the node and `Func<..., IObservable<T>>` in the `*Impl`. The bridge does the rest.
 * **A scenario that passes on Rx.NET and fails on AsyncRx.NET:** that is the suite doing its job. Leave it failing and fix AsyncRx.NET in a commit of its own.
 * **A test that only one target can express:** put it in that target's test project, next
   to the shared ones, using the target's native scheduler directly. The extended expectation

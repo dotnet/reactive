@@ -5,6 +5,7 @@
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using Microsoft.Reactive.Testing;
 
@@ -59,6 +60,28 @@ public sealed partial class RxTarget : IRxTarget
 
     public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) =>
         await Materialize(source).ToList();
+
+    public SubjectSeq<T> CreateSubject<T>()
+    {
+        var subject = new Subject<T>();
+        return new(
+            Realized.Of<Seq<T>>(subject),
+            x =>
+            {
+                subject.OnNext(x);
+                return default;
+            },
+            ex =>
+            {
+                subject.OnError(ex);
+                return default;
+            },
+            () =>
+            {
+                subject.OnCompleted();
+                return default;
+            });
+    }
 
     public TestableSeq<T> CreateHotObservable<T>(TestSchedulerRef scheduler, Recorded<Notification<T>>[] messages) =>
         new(this, _bridge.Run<Seq<T>>(HotImpl<T>, Unwrap(scheduler), messages), messages, $"Hot({messages.Length} messages)");

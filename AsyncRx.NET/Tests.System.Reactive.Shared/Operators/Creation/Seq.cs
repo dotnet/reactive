@@ -15,7 +15,7 @@ namespace Tests.System.Reactive.Shared;
 /// each target materializes as its own creation operator through the matching member of
 /// <see cref="ISeqVisitor"/>; each method's own comment names its node and visitor member.
 /// </remarks>
-public static class Seq
+public static partial class Seq
 {
     /// <summary>Describes <c>Seq.Timer(dueTime, scheduler)</c>.</summary>
     /// <param name="dueTime">
@@ -59,6 +59,16 @@ public static class Seq
     /// </remarks>
     public static Seq<int> Range(int start, int count, SchedulerRef scheduler) =>
         new RangeScheduledSeq(start, count, scheduler);
+
+    /// <summary>Describes <c>source.ToSeq()</c>, an enumerable as a sequence.</summary>
+    /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+    /// <param name="source">Enumerable sequence to convert to an observable sequence.</param>
+    /// <remarks>
+    /// Where the Rx.NET test has <c>ToObservable()</c>. Builds an <see cref="EnumerableSeq{T}"/>,
+    /// which each target materializes through
+    /// <see cref="ISeqVisitor.Enumerable{T}(EnumerableSeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> ToSeq<T>(this IEnumerable<T> source) => new EnumerableSeq<T>(source);
 
     /// <summary>Describes <c>Seq.Empty&lt;T&gt;()</c>.</summary>
     /// <typeparam name="T">

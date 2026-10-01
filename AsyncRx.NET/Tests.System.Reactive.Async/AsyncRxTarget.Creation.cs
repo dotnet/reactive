@@ -26,6 +26,11 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<int>> ISeqVisitor.RangeScheduled(RangeScheduledSeq seq) =>
         Realized.Of<Seq<int>>(AsyncObservable.Range(seq.Start, seq.Count, Unwrap(seq.Scheduler)));
 
+    // Rx.NET's ToObservable() runs on the current-thread scheduler; the immediate scheduler is
+    // the equivalent here (a plumbing decision, as for Range).
+    Realized<Seq<T>> ISeqVisitor.Enumerable<T>(EnumerableSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(EnumerableImpl<T>, seq.Source);
+
     Realized<Seq<T>> ISeqVisitor.Empty<T>(EmptySeq<T> seq) => _bridge.Run<Seq<T>>(EmptyImpl<T>);
 
     Realized<Seq<T>> ISeqVisitor.Throw<T>(ThrowSeq<T> seq) =>
@@ -34,6 +39,9 @@ public sealed partial class AsyncRxTarget
             seq.Error) : _bridge.Run<Seq<T>>(ThrowOnImpl<T>,
             seq.Error,
             Unwrap(seq.Scheduler));
+
+    private static IAsyncObservable<T> EnumerableImpl<T>(IEnumerable<T> source) =>
+        source.ToAsyncObservable(ImmediateAsyncScheduler.Instance);
 
     private static IAsyncObservable<T> ReturnImpl<T>(T value) => AsyncObservable.Return(value);
 

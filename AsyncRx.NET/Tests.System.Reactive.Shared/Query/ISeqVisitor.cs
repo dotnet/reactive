@@ -43,6 +43,13 @@ public partial interface ISeqVisitor
     Realized<Seq<int>> RangeScheduled(RangeScheduledSeq seq);
 
     /// <summary>
+    /// Materializes an <see cref="EnumerableSeq{T}"/> as the target's own conversion of an
+    /// enumerable to a sequence.
+    /// </summary>
+    /// <remarks>Built by <see cref="Seq.ToSeq{T}(IEnumerable{T})"/>.</remarks>
+    Realized<Seq<T>> Enumerable<T>(EnumerableSeq<T> seq);
+
+    /// <summary>
     /// Materializes a <see cref="EmptySeq{T}"/> as the target's own <c>Empty&lt;T&gt;()</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Empty{T}"/>.</remarks>
@@ -98,9 +105,10 @@ public partial interface ISeqVisitor
     Realized<Seq<T>> Concat<T>(ConcatSeq<T> seq);
 
     /// <summary>
-    /// Materializes a <see cref="MergeSeq{T}"/> as the target's own <c>Merge()</c>.
+    /// Materializes a <see cref="ConcatNestedSeq{T}"/> as the target's own <c>Concat()</c> over a
+    /// nested sequence.
     /// </summary>
-    /// <remarks>Built by <see cref="SeqExtensions.Merge{T}(Seq{Seq{T}})"/>.</remarks>
-    Realized<Seq<T>> Merge<T>(MergeSeq<T> seq);
+    /// <remarks>Built by <see cref="SeqExtensions.Concat{T}(Seq{Seq{T}})"/>.</remarks>
+    Realized<Seq<T>> ConcatNested<T>(ConcatNestedSeq<T> seq);
 
 }

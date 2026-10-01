@@ -25,8 +25,8 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<T>> ISeqVisitor.Concat<T>(ConcatSeq<T> seq) =>
         _bridge.Run<Seq<T>>(ConcatImpl<T>, seq.First, seq.Second);
 
-    Realized<Seq<T>> ISeqVisitor.Merge<T>(MergeSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(MergeImpl<T>, seq.Sources);
+    Realized<Seq<T>> ISeqVisitor.ConcatNested<T>(ConcatNestedSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(ConcatNestedImpl<T>, seq.Sources);
 
     private static IAsyncObservable<TOut> SelectImpl<TIn, TOut>(
         IAsyncObservable<TIn> source,
@@ -54,7 +54,6 @@ public sealed partial class AsyncRxTarget
         IAsyncObservable<T> second) =>
         first.Concat(second);
 
-    private static IAsyncObservable<T> MergeImpl<T>(
-        IAsyncObservable<IAsyncObservable<T>> sources) =>
-        sources.Merge();
+    private static IAsyncObservable<T> ConcatNestedImpl<T>(IAsyncObservable<IAsyncObservable<T>> sources) =>
+        sources.Concat();
 }

@@ -220,7 +220,7 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
             case Delegate callback:
                 return realType.IsInstanceOfType(callback) ? callback : Adapt(callback, describedType, realType);
 
-            case Array array:
+            case Array array when realType.IsArray && !realType.IsInstanceOfType(array):
             {
                 var elementType = realType.GetElementType()!;
                 var result = Array.CreateInstance(elementType, array.Length);
@@ -236,6 +236,22 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
                 if (realType.IsInstanceOfType(value))
                 {
                     return value;
+                }
+
+                if (value is global::System.Collections.IEnumerable items
+                    && Instantiation(realType, typeof(IEnumerable<>)) is { } enumerable)
+                {
+                    // An enumerable of descriptions (a LINQ query over Seq<T>s, say), materialized
+                    // element by element into a list of the target's own sequences.
+                    var elementType = enumerable.GetGenericArguments()[0];
+                    var list = (global::System.Collections.IList)Activator.CreateInstance(
+                        typeof(List<>).MakeGenericType(elementType))!;
+                    foreach (var item in items)
+                    {
+                        list.Add(ToReal(item, elementType));
+                    }
+
+                    return list;
                 }
 
                 if (Instantiation(describedType, typeof(Recorded<>)) is { } recorded)
@@ -346,8 +362,8 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
         return Expression.Lambda(realType, body, parameters).Compile();
     }
 
-    // The closed form of an open generic definition in a type's base chain, if any (a
-    // Notification<T> value is an instance of a nested subclass, for example).
+    // The closed form of an open generic definition in a type's base chain or interfaces, if any
+    // (a Notification<T> value is an instance of a nested subclass, for example).
     private static Type? Instantiation(Type type, Type definition)
     {
         for (var t = type; t is not null; t = t.BaseType)
@@ -356,6 +372,12 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
             {
                 return t;
             }
+        }
+
+        if (definition.IsInterface)
+        {
+            return type.GetInterfaces()
+                .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == definition);
         }
 
         return null;

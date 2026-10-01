@@ -53,6 +53,33 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
     /// </remarks>
     protected long ScheduledAt(long tick) => Target.ScheduledAt(tick);
 
+    /// <summary>
+    /// The virtual time at which work reached through <paramref name="hops"/> successive
+    /// "now" schedulings from <paramref name="tick"/> runs on this target.
+    /// </summary>
+    /// <param name="tick">The virtual time at which the first scheduling happened.</param>
+    /// <param name="hops">The number of successive schedulings.</param>
+    /// <remarks>
+    /// For operators that subscribe to each of several sources in its own scheduled step, such
+    /// as <c>Merge(scheduler, xs, ys)</c>: the Rx.NET test expects <c>Subscribe(201, ...)</c>
+    /// and <c>Subscribe(202, ...)</c>, which is <c>ScheduledAt(200, 1)</c> and
+    /// <c>ScheduledAt(200, 2)</c> here.
+    /// </remarks>
+    protected long ScheduledAt(long tick, int hops)
+    {
+        for (var i = 0; i < hops; i++)
+        {
+            tick = Target.ScheduledAt(tick);
+        }
+
+        return tick;
+    }
+
+    /// <summary>Creates a subject the scenario drives by hand.</summary>
+    /// <typeparam name="T">The type of the elements the subject carries.</typeparam>
+    /// <remarks>Where the Rx.NET test has <c>new Subject&lt;T&gt;()</c>.</remarks>
+    protected SubjectSeq<T> CreateSubject<T>() => Target.CreateSubject<T>();
+
     /// <summary>Runs a real-time query to completion and returns everything it produced.</summary>
     /// <param name="source">The query to run.</param>
     /// <remarks>

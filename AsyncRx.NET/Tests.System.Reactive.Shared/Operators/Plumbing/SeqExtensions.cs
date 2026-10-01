@@ -11,13 +11,13 @@ namespace Tests.System.Reactive.Shared;
 /// extension methods on <see cref="Seq{T}"/>.
 /// </summary>
 /// <remarks>
-/// <c>Select</c>, <c>Where</c>, <c>SelectMany</c>, <c>Concat</c>, <c>Merge</c>, and the indexed
-/// <c>Select</c> over a <c>Seq&lt;Seq&lt;T&gt;&gt;</c> that the flattening idiom
-/// <c>xs.Window(...).Select((w, i) =&gt; w.Select(...)).Merge()</c> needs. These exist so that a
-/// scenario writes them exactly as the Rx.NET test it was migrated from does. Each method builds
-/// one node of the query description (one node type per overload, in this folder), and each
-/// target turns that node into its own operator call through the matching member of
-/// <see cref="ISeqVisitor"/>.
+/// <c>Select</c>, <c>Where</c>, <c>SelectMany</c>, <c>Concat</c> (binary and nested), and the
+/// indexed <c>Select</c> over a <c>Seq&lt;Seq&lt;T&gt;&gt;</c> that the flattening idiom
+/// <c>xs.Window(...).Select((w, i) =&gt; w.Select(...)).Merge()</c> needs (<c>Merge</c> itself is
+/// an operator under test, in <c>Operators/Merge</c>). These exist so that a scenario writes them
+/// exactly as the Rx.NET test it was migrated from does. Each method builds one node of the query
+/// description (one node type per overload, in this folder), and each target turns that node into
+/// its own operator call through the matching member of <see cref="ISeqVisitor"/>.
 /// </remarks>
 public static class SeqExtensions
 {
@@ -104,13 +104,13 @@ public static class SeqExtensions
     public static Seq<T> Concat<T>(this Seq<T> first, Seq<T> second) =>
         new ConcatSeq<T>(first, second);
 
-    /// <summary>Describes <c>sources.Merge()</c> over a nested sequence.</summary>
+    /// <summary>Describes <c>sources.Concat()</c> over a nested sequence.</summary>
     /// <typeparam name="T">The type of the elements in the source sequences.</typeparam>
     /// <param name="sources">Observable sequence of inner observable sequences.</param>
     /// <remarks>
-    /// Builds a <see cref="MergeSeq{T}"/>, which each target materializes through
-    /// <see cref="ISeqVisitor.Merge{T}(MergeSeq{T})"/>.
+    /// Builds a <see cref="ConcatNestedSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.ConcatNested{T}(ConcatNestedSeq{T})"/>.
     /// </remarks>
-    public static Seq<T> Merge<T>(this Seq<Seq<T>> sources) => new MergeSeq<T>(sources);
+    public static Seq<T> Concat<T>(this Seq<Seq<T>> sources) => new ConcatNestedSeq<T>(sources);
 
 }

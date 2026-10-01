@@ -23,8 +23,8 @@ public sealed partial class RxTarget
     Realized<Seq<T>> ISeqVisitor.Concat<T>(ConcatSeq<T> seq) =>
         _bridge.Run<Seq<T>>(ConcatImpl<T>, seq.First, seq.Second);
 
-    Realized<Seq<T>> ISeqVisitor.Merge<T>(MergeSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(MergeImpl<T>, seq.Sources);
+    Realized<Seq<T>> ISeqVisitor.ConcatNested<T>(ConcatNestedSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(ConcatNestedImpl<T>, seq.Sources);
 
     private static IObservable<TOut> SelectImpl<TIn, TOut>(
         IObservable<TIn> source,
@@ -47,6 +47,6 @@ public sealed partial class RxTarget
     private static IObservable<T> ConcatImpl<T>(IObservable<T> first, IObservable<T> second) =>
         first.Concat(second);
 
-    private static IObservable<T> MergeImpl<T>(IObservable<IObservable<T>> sources) =>
-        sources.Merge();
+    private static IObservable<T> ConcatNestedImpl<T>(IObservable<IObservable<T>> sources) =>
+        sources.Concat();
 }

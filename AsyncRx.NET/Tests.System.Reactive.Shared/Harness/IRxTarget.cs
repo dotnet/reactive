@@ -60,6 +60,13 @@ public interface IRxTarget : ISeqVisitor
     /// </remarks>
     ValueTask<IList<T>> ToListAsync<T>(Seq<T> source);
 
+    /// <summary>Creates a subject the scenario drives by hand, as a leaf.</summary>
+    /// <remarks>
+    /// Rx.NET's <c>Subject&lt;T&gt;</c>; AsyncRx.NET's sequential simple subject. For the
+    /// real-time scenarios that push values from the test body.
+    /// </remarks>
+    SubjectSeq<T> CreateSubject<T>();
+
     /// <summary>
     /// Creates the target's own hot testable observable, playing <paramref name="messages"/> at
     /// their absolute virtual times, wrapped as a leaf.
