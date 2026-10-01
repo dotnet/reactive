@@ -29,4 +29,11 @@ public partial interface ISeqVisitor
     /// Built by <see cref="TakeExtensions.Take{T}(Seq{T}, TimeSpan, SchedulerRef)"/>.
     /// </remarks>
     Realized<Seq<T>> TakeTime<T>(TakeTimeSeq<T> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="TakeTimeDefaultSeq{T}"/> as the target's own
+    /// <c>Take(duration)</c>.
+    /// </summary>
+    /// <remarks>Built by <see cref="TakeExtensions.Take{T}(Seq{T}, TimeSpan)"/>.</remarks>
+    Realized<Seq<T>> TakeTimeDefault<T>(TakeTimeDefaultSeq<T> seq);
 }

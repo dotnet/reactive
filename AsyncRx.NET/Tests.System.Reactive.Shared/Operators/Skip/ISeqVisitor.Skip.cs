@@ -22,8 +22,9 @@ public partial interface ISeqVisitor
     Realized<Seq<T>> SkipTime<T>(SkipTimeSeq<T> seq);
 
     /// <summary>
-    /// Materializes a <see cref="SkipDurationSeq{T}"/> as the target's own <c>Skip(duration)</c>.
+    /// Materializes a <see cref="SkipTimeDefaultSeq{T}"/> as the target's own
+    /// <c>Skip(duration)</c>.
     /// </summary>
     /// <remarks>Built by <see cref="SkipExtensions.Skip{T}(Seq{T}, TimeSpan)"/>.</remarks>
-    Realized<Seq<T>> SkipDuration<T>(SkipDurationSeq<T> seq);
+    Realized<Seq<T>> SkipTimeDefault<T>(SkipTimeDefaultSeq<T> seq);
 }

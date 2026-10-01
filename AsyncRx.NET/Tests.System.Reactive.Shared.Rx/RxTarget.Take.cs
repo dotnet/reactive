@@ -32,4 +32,10 @@ public sealed partial class RxTarget
         TimeSpan duration,
         IScheduler scheduler) =>
         source.Take(duration, scheduler);
+
+    Realized<Seq<T>> ISeqVisitor.TakeTimeDefault<T>(TakeTimeDefaultSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(TakeTimeDefaultImpl<T>, seq.Source, seq.Duration);
+
+    private static IObservable<T> TakeTimeDefaultImpl<T>(IObservable<T> source, TimeSpan duration) =>
+        source.Take(duration);
 }

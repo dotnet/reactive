@@ -50,4 +50,16 @@ public static class TakeExtensions
     /// <see cref="ISeqVisitor.TakeTime{T}(TakeTimeSeq{T})"/>.
     /// </remarks>
     public static Seq<T> Take<T>(this Seq<T> source, TimeSpan duration, SchedulerRef scheduler) => new TakeTimeSeq<T>(source, duration, scheduler);
+
+    /// <summary>Describes <c>source.Take(duration)</c> on the default scheduler.</summary>
+    /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+    /// <param name="source">Source sequence to take elements from.</param>
+    /// <param name="duration">Duration for taking elements from the start of the sequence.</param>
+    /// <remarks>
+    /// Builds a <see cref="TakeTimeDefaultSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.TakeTimeDefault{T}(TakeTimeDefaultSeq{T})"/>. Only a real-time
+    /// scenario can use this form, since a virtual-time one must name the scheduler.
+    /// </remarks>
+    public static Seq<T> Take<T>(this Seq<T> source, TimeSpan duration) =>
+        new TakeTimeDefaultSeq<T>(source, duration);
 }

@@ -152,4 +152,67 @@ public static class WindowExtensions
     /// </remarks>
     public static Seq<Seq<T>> Window<T>(this Seq<T> source, TimeSpan timeSpan, int count, SchedulerRef scheduler) =>
         new WindowTimeOrCountSeq<T>(source, timeSpan, count, scheduler);
+
+    /// <summary>Describes <c>source.Window(count)</c>.</summary>
+    /// <typeparam name="T">
+    /// The type of the elements in the source sequence, and in the windows in the result sequence.
+    /// </typeparam>
+    /// <param name="source">Source sequence to produce windows over.</param>
+    /// <param name="count">Length of each window.</param>
+    /// <remarks>
+    /// Builds a <see cref="WindowCountOnlySeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.WindowCountOnly{T}(WindowCountOnlySeq{T})"/>.
+    /// </remarks>
+    public static Seq<Seq<T>> Window<T>(this Seq<T> source, int count) =>
+        new WindowCountOnlySeq<T>(source, count);
+
+    /// <summary>Describes <c>source.Window(timeSpan)</c> on the default scheduler.</summary>
+    /// <typeparam name="T">
+    /// The type of the elements in the source sequence, and in the windows in the result sequence.
+    /// </typeparam>
+    /// <param name="source">Source sequence to produce windows over.</param>
+    /// <param name="timeSpan">Length of each window.</param>
+    /// <remarks>
+    /// Builds a <see cref="WindowTimeDefaultSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.WindowTimeDefault{T}(WindowTimeDefaultSeq{T})"/>. Only a real-time
+    /// scenario can use this form, since a virtual-time one must name the scheduler.
+    /// </remarks>
+    public static Seq<Seq<T>> Window<T>(this Seq<T> source, TimeSpan timeSpan) =>
+        new WindowTimeDefaultSeq<T>(source, timeSpan);
+
+    /// <summary>
+    /// Describes <c>source.Window(timeSpan, timeShift)</c> on the default scheduler.
+    /// </summary>
+    /// <typeparam name="T">
+    /// The type of the elements in the source sequence, and in the windows in the result sequence.
+    /// </typeparam>
+    /// <param name="source">Source sequence to produce windows over.</param>
+    /// <param name="timeSpan">Length of each window.</param>
+    /// <param name="timeShift">Interval between creation of consecutive windows.</param>
+    /// <remarks>
+    /// Builds a <see cref="WindowTimeShiftDefaultSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.WindowTimeShiftDefault{T}(WindowTimeShiftDefaultSeq{T})"/>. Only a
+    /// real-time scenario can use this form, since a virtual-time one must name the scheduler.
+    /// </remarks>
+    public static Seq<Seq<T>> Window<T>(this Seq<T> source, TimeSpan timeSpan, TimeSpan timeShift) =>
+        new WindowTimeShiftDefaultSeq<T>(source, timeSpan, timeShift);
+
+    /// <summary>
+    /// Describes <c>source.Window(timeSpan, count)</c> on the default scheduler.
+    /// </summary>
+    /// <typeparam name="T">
+    /// The type of the elements in the source sequence, and in the windows in the result sequence.
+    /// </typeparam>
+    /// <param name="source">Source sequence to produce windows over.</param>
+    /// <param name="timeSpan">Maximum time length of a window.</param>
+    /// <param name="count">Maximum element count of a window.</param>
+    /// <remarks>
+    /// Builds a <see cref="WindowTimeOrCountDefaultSeq{T}"/>, which each target materializes
+    /// through
+    /// <see cref="ISeqVisitor.WindowTimeOrCountDefault{T}(WindowTimeOrCountDefaultSeq{T})"/>.
+    /// Only a real-time scenario can use this form, since a virtual-time one must name the
+    /// scheduler.
+    /// </remarks>
+    public static Seq<Seq<T>> Window<T>(this Seq<T> source, TimeSpan timeSpan, int count) =>
+        new WindowTimeOrCountDefaultSeq<T>(source, timeSpan, count);
 }

@@ -34,4 +34,10 @@ public sealed partial class AsyncRxTarget
         TimeSpan duration,
         IAsyncScheduler scheduler) =>
         source.Take(duration, scheduler);
+
+    Realized<Seq<T>> ISeqVisitor.TakeTimeDefault<T>(TakeTimeDefaultSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(TakeTimeDefaultImpl<T>, seq.Source, seq.Duration);
+
+    private static IAsyncObservable<T> TakeTimeDefaultImpl<T>(IAsyncObservable<T> source, TimeSpan duration) =>
+        source.Take(duration);
 }

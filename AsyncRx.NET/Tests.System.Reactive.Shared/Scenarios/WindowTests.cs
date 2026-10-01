@@ -19,11 +19,20 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// async shape. The two scenarios whose closing selector throws need explicit type arguments in
 /// the sync suite too; here the target is one of them (<c>xs.Window&lt;int, int&gt;(...)</c>),
 /// since extension methods take all or none. Deliberately not here: the four
-/// <c>*_ArgumentChecking</c> tests (the code-generated stratum); the three <c>*_Default</c> tests
-/// (they block on <c>First()</c> over the real default scheduler) and the two
+/// <c>*_ArgumentChecking</c> tests (the code-generated stratum) and the two
 /// <c>Window_Time_Basic_Periodic*</c> tests (they assert on Rx.NET's <c>ISchedulerPeriodic</c>
-/// usage via a <c>PeriodicTestScheduler</c>, a sync-scheduler feature with no async counterpart)
-/// — all five belong to the per-target native stratum.
+/// usage via a <c>PeriodicTestScheduler</c>, a sync-scheduler feature with no async counterpart),
+/// which belong to the per-target native stratum.
+/// </para>
+/// <para>
+/// The three <c>*_Default</c> tests run the scheduler-less overloads on the real default
+/// scheduler. The originals block on <c>First()</c> and, in two of the three, build a
+/// <c>SequenceEqual</c> query they never subscribe to, so they assert nothing. Here they are
+/// <c>async Task</c> methods that flatten the windows with the suite's usual
+/// <c>Select((w, i) =&gt; w.Select(...)).Merge()</c> idiom, await the result through
+/// <see cref="SharedReactiveTest.ToListAsync{T}"/>, and assert the whole labelled output, which
+/// includes what the originals meant to check (the second window of <c>Window(3)</c> is 4, 5, 6,
+/// and so on).
 /// </para>
 /// </remarks>
 public abstract class WindowTests : SharedReactiveTest
@@ -1541,4 +1550,44 @@ public abstract class WindowTests : SharedReactiveTest
             Subscribe(200, 400)
         );
     }
+
+    [TestMethod]
+    public async Task WindowWithCount_Default()
+    {
+        var res = await ToListAsync(
+            Seq.Range(1, 10).Window(3).Select((w, i) => w.Select(x => i + " " + x)).Merge());
+
+        Assert.IsTrue(res.SequenceEqual(["0 1", "0 2", "0 3", "1 4", "1 5", "1 6", "2 7", "2 8", "2 9", "3 10"]));
+
+        var res2 = await ToListAsync(
+            Seq.Range(1, 10).Window(3, 2).Select((w, i) => w.Select(x => i + " " + x)).Merge());
+
+        Assert.IsTrue(res2.SequenceEqual(["0 1", "0 2", "0 3", "1 3", "1 4", "1 5", "2 5", "2 6", "2 7", "3 7", "3 8", "3 9", "4 9", "4 10"]));
+    }
+
+    [TestMethod]
+    public async Task WindowWithTime_Default()
+    {
+        var expected = Enumerable.Range(0, 10).Select(x => "0 " + x);
+
+        var res = await ToListAsync(
+            Seq.Range(0, 10).Window(TimeSpan.FromDays(1), TimeSpan.FromDays(1)).Select((w, i) => w.Select(x => i + " " + x)).Merge());
+
+        Assert.IsTrue(res.SequenceEqual(expected));
+
+        var res2 = await ToListAsync(
+            Seq.Range(0, 10).Window(TimeSpan.FromDays(1)).Select((w, i) => w.Select(x => i + " " + x)).Merge());
+
+        Assert.IsTrue(res2.SequenceEqual(expected));
+    }
+
+    [TestMethod]
+    public async Task WindowWithTimeOrCount_Default()
+    {
+        var res = await ToListAsync(
+            Seq.Range(1, 10).Window(TimeSpan.FromDays(1), 3).Select((w, i) => w.Select(x => i + " " + x)).Merge());
+
+        Assert.IsTrue(res.SequenceEqual(["0 1", "0 2", "0 3", "1 4", "1 5", "1 6", "2 7", "2 8", "2 9", "3 10"]));
+    }
+
 }

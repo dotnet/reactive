@@ -46,10 +46,11 @@ public static class SkipExtensions
     /// Duration for skipping elements from the start of the sequence.
     /// </param>
     /// <remarks>
-    /// Builds a <see cref="SkipDurationSeq{T}"/>, which each target materializes through
-    /// <see cref="ISeqVisitor.SkipDuration{T}(SkipDurationSeq{T})"/>. Only a real-time scenario can
-    /// use this form, since a virtual-time one must name the scheduler the timer runs on.
+    /// Builds a <see cref="SkipTimeDefaultSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.SkipTimeDefault{T}(SkipTimeDefaultSeq{T})"/>. Only a real-time
+    /// scenario can use this form, since a virtual-time one must name the scheduler the timer
+    /// runs on.
     /// </remarks>
     public static Seq<T> Skip<T>(this Seq<T> source, TimeSpan duration) =>
-        new SkipDurationSeq<T>(source, duration);
+        new SkipTimeDefaultSeq<T>(source, duration);
 }

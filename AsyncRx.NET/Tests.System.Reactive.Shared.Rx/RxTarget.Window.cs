@@ -94,4 +94,34 @@ public sealed partial class RxTarget
         int count,
         IScheduler scheduler) =>
         source.Window(timeSpan, count, scheduler);
+
+    Realized<Seq<Seq<T>>> ISeqVisitor.WindowCountOnly<T>(WindowCountOnlySeq<T> seq) =>
+        _bridge.Run<Seq<Seq<T>>>(WindowCountOnlyImpl<T>, seq.Source, seq.Count);
+
+    Realized<Seq<Seq<T>>> ISeqVisitor.WindowTimeDefault<T>(WindowTimeDefaultSeq<T> seq) =>
+        _bridge.Run<Seq<Seq<T>>>(WindowTimeDefaultImpl<T>, seq.Source, seq.TimeSpan);
+
+    Realized<Seq<Seq<T>>> ISeqVisitor.WindowTimeShiftDefault<T>(WindowTimeShiftDefaultSeq<T> seq) =>
+        _bridge.Run<Seq<Seq<T>>>(WindowTimeShiftDefaultImpl<T>, seq.Source, seq.TimeSpan, seq.TimeShift);
+
+    Realized<Seq<Seq<T>>> ISeqVisitor.WindowTimeOrCountDefault<T>(WindowTimeOrCountDefaultSeq<T> seq) =>
+        _bridge.Run<Seq<Seq<T>>>(WindowTimeOrCountDefaultImpl<T>, seq.Source, seq.TimeSpan, seq.Count);
+
+    private static IObservable<IObservable<T>> WindowCountOnlyImpl<T>(IObservable<T> source, int count) =>
+        source.Window(count);
+
+    private static IObservable<IObservable<T>> WindowTimeDefaultImpl<T>(IObservable<T> source, TimeSpan timeSpan) =>
+        source.Window(timeSpan);
+
+    private static IObservable<IObservable<T>> WindowTimeShiftDefaultImpl<T>(
+        IObservable<T> source,
+        TimeSpan timeSpan,
+        TimeSpan timeShift) =>
+        source.Window(timeSpan, timeShift);
+
+    private static IObservable<IObservable<T>> WindowTimeOrCountDefaultImpl<T>(
+        IObservable<T> source,
+        TimeSpan timeSpan,
+        int count) =>
+        source.Window(timeSpan, count);
 }

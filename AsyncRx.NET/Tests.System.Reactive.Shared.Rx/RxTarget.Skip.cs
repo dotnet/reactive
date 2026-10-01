@@ -15,8 +15,8 @@ public sealed partial class RxTarget
     Realized<Seq<T>> ISeqVisitor.SkipTime<T>(SkipTimeSeq<T> seq) =>
         _bridge.Run<Seq<T>>(SkipTimeImpl<T>, seq.Source, seq.Duration, Unwrap(seq.Scheduler));
 
-    Realized<Seq<T>> ISeqVisitor.SkipDuration<T>(SkipDurationSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(SkipDurationImpl<T>, seq.Source, seq.Duration);
+    Realized<Seq<T>> ISeqVisitor.SkipTimeDefault<T>(SkipTimeDefaultSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(SkipTimeDefaultImpl<T>, seq.Source, seq.Duration);
 
     private static IObservable<T> SkipImpl<T>(IObservable<T> source, int count) =>
         source.Skip(count);
@@ -27,6 +27,6 @@ public sealed partial class RxTarget
         IScheduler scheduler) =>
         source.Skip(duration, scheduler);
 
-    private static IObservable<T> SkipDurationImpl<T>(IObservable<T> source, TimeSpan duration) =>
+    private static IObservable<T> SkipTimeDefaultImpl<T>(IObservable<T> source, TimeSpan duration) =>
         source.Skip(duration);
 }

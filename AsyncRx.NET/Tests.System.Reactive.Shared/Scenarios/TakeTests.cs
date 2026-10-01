@@ -15,11 +15,13 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// </para>
 /// <para>
 /// Transcribed mechanically from the sync file. Deliberately not here: the two
-/// <c>*_ArgumentChecking</c> tests (the code-generated stratum), and two tests that belong to the
-/// per-target native stratum — <c>Take_DecrementsCountFirst</c> (a reentrancy regression test
-/// with no assertion, driving a <c>BehaviorSubject</c> back into itself and relying on a stack
-/// overflow to signal failure) and <c>Take_Default</c> (runs <c>Range</c> on the real default
-/// scheduler and blocks on a <c>ManualResetEvent</c>).
+/// <c>*_ArgumentChecking</c> tests (the code-generated stratum) and
+/// <c>Take_DecrementsCountFirst</c>, which belongs to the per-target native stratum (a reentrancy
+/// regression test with no assertion, driving a <c>BehaviorSubject</c> back into itself and
+/// relying on a stack overflow to signal failure). <c>Take_Default</c>, a real-time test, runs
+/// on <see cref="SharedReactiveTest.DefaultScheduler"/> and awaits completion through
+/// <see cref="SharedReactiveTest.ToListAsync{T}"/> where the original blocks on a
+/// <c>ManualResetEvent</c>.
 /// </para>
 /// </remarks>
 public abstract class TakeTests : SharedReactiveTest
@@ -732,4 +734,17 @@ public abstract class TakeTests : SharedReactiveTest
             Subscribe(200, 235)
         );
     }
+
+    [TestMethod]
+    public async Task Take_Default()
+    {
+        var xs = Seq.Range(0, 10, DefaultScheduler);
+
+        var res = xs.Take(TimeSpan.FromSeconds(60));
+
+        var lst = await ToListAsync(res);
+
+        Assert.IsTrue(lst.SequenceEqual(Enumerable.Range(0, 10)));
+    }
+
 }

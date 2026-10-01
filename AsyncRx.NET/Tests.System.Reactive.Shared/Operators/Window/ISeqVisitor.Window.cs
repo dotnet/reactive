@@ -70,4 +70,35 @@ public partial interface ISeqVisitor
     /// Built by <see cref="WindowExtensions.Window{T}(Seq{T}, TimeSpan, int, SchedulerRef)"/>.
     /// </remarks>
     Realized<Seq<Seq<T>>> WindowTimeOrCount<T>(WindowTimeOrCountSeq<T> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="WindowCountOnlySeq{T}"/> as the target's own <c>Window(count)</c>.
+    /// </summary>
+    /// <remarks>Built by <see cref="WindowExtensions.Window{T}(Seq{T}, int)"/>.</remarks>
+    Realized<Seq<Seq<T>>> WindowCountOnly<T>(WindowCountOnlySeq<T> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="WindowTimeDefaultSeq{T}"/> as the target's own
+    /// <c>Window(timeSpan)</c>.
+    /// </summary>
+    /// <remarks>Built by <see cref="WindowExtensions.Window{T}(Seq{T}, TimeSpan)"/>.</remarks>
+    Realized<Seq<Seq<T>>> WindowTimeDefault<T>(WindowTimeDefaultSeq<T> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="WindowTimeShiftDefaultSeq{T}"/> as the target's own
+    /// <c>Window(timeSpan, timeShift)</c>.
+    /// </summary>
+    /// <remarks>
+    /// Built by <see cref="WindowExtensions.Window{T}(Seq{T}, TimeSpan, TimeSpan)"/>.
+    /// </remarks>
+    Realized<Seq<Seq<T>>> WindowTimeShiftDefault<T>(WindowTimeShiftDefaultSeq<T> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="WindowTimeOrCountDefaultSeq{T}"/> as the target's own
+    /// <c>Window(timeSpan, count)</c>.
+    /// </summary>
+    /// <remarks>
+    /// Built by <see cref="WindowExtensions.Window{T}(Seq{T}, TimeSpan, int)"/>.
+    /// </remarks>
+    Realized<Seq<Seq<T>>> WindowTimeOrCountDefault<T>(WindowTimeOrCountDefaultSeq<T> seq);
 }
