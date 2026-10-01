@@ -77,7 +77,7 @@ public static class GroupJoinExtensions
     /// which each target materializes through
     /// <see cref="ISeqVisitor.GroupJoin{TLeft, TRight, TLeftDuration, TRightDuration, TResult}(GroupJoinSeq{TLeft, TRight, TLeftDuration, TRightDuration, TResult})"/>.
     /// </remarks>
-    public static Nested<TResult> GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(
+    public static Seq<Seq<TResult>> GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(
         this Seq<TLeft> left,
         Seq<TRight> right,
         Func<TLeft, Seq<TLeftDuration>> leftDurationSelector,

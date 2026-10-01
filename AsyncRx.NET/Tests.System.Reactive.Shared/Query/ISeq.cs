@@ -4,21 +4,15 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>
-/// A node of a query description.
-/// </summary>
+/// <summary>A description of any shape.</summary>
 /// <remarks>
-/// What <see cref="Seq{T}"/> (a sequence) and <see cref="Nested{T}"/> (a sequence of sequences)
-/// have in common, which is only that a target can materialize it.
+/// What every <see cref="Seq{T}"/> is, seen without its element type: something a target can
+/// materialize. The <see cref="DescriptionBridge"/> works at this level, because it learns a
+/// description's shape at run time.
 /// </remarks>
-public interface ISeq<T>
+public interface ISeq
 {
     /// <summary>Materializes this description on <paramref name="visitor"/>, a target.</summary>
     /// <param name="visitor">The target materializing the query.</param>
-    /// <returns>The target's own observable for this node.</returns>
-    /// <remarks>
-    /// Dispatches to the visitor member for this node type and returns the target's own
-    /// observable as <see cref="object"/>. Only the target casts it.
-    /// </remarks>
-    RSeq<T> Accept(ISeqVisitor visitor);
+    Realized Accept(ISeqVisitor visitor);
 }

@@ -11,7 +11,7 @@ namespace Tests.System.Reactive.Shared;
 /// materialized by each target through
 /// <see cref="ISeqVisitor.WindowOpenings{T, TWindowOpening, TWindowClosing}(WindowOpeningsSeq{T, TWindowOpening, TWindowClosing})"/>.
 /// </remarks>
-public sealed class WindowOpeningsSeq<T, TWindowOpening, TWindowClosing>(Seq<T> source, Seq<TWindowOpening> windowOpenings, Func<TWindowOpening, Seq<TWindowClosing>> windowClosingSelector, string text) : Nested<T>
+public sealed class WindowOpeningsSeq<T, TWindowOpening, TWindowClosing>(Seq<T> source, Seq<TWindowOpening> windowOpenings, Func<TWindowOpening, Seq<TWindowClosing>> windowClosingSelector, string text) : Seq<Seq<T>>
 {
     /// <summary>Source sequence to produce windows over.</summary>
     public Seq<T> Source => source;
@@ -23,7 +23,8 @@ public sealed class WindowOpeningsSeq<T, TWindowOpening, TWindowClosing>(Seq<T> 
     public Func<TWindowOpening, Seq<TWindowClosing>> WindowClosingSelector => windowClosingSelector;
 
     /// <inheritdoc/>
-    public override RSeq<ISeq<T>> Accept(ISeqVisitor visitor) => new RSeqResult(visitor.WindowOpenings(this));
+    public override Realized<Seq<Seq<T>>> Accept(ISeqVisitor visitor) =>
+        visitor.WindowOpenings(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Window({windowOpenings}, {text})";

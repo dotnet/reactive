@@ -20,13 +20,13 @@ namespace Tests.System.Reactive.Shared;
 /// the target casts it. Here it is the target's observable: an <c>IObservable&lt;T&gt;</c> on
 /// Rx.NET, an <c>IAsyncObservable&lt;T&gt;</c> on AsyncRx.NET.
 /// </remarks>
-public class NativeSeq<T>(object native, string description) : Seq<T>
+public class NativeSeq<T>(Realized<Seq<T>> native, string description) : Seq<T>
 {
     /// <summary>The target's own observable (see the remarks on this type).</summary>
-    public object Native => native;
+    public Realized<Seq<T>> Native => native;
 
     /// <inheritdoc/>
-    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.Native(this);
+    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.Native(this);
 
     /// <inheritdoc/>
     public override string ToString() => description;

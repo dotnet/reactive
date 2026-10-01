@@ -8,7 +8,7 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// <remarks>
 /// <para>
 /// Every behavioural test from Rx.NET's <c>WindowTest.cs</c>. <c>Window</c> returns a
-/// <see cref="Nested{T}"/> description; the flattening idiom's
+/// <c>Seq&lt;Seq&lt;T&gt;&gt;</c> description; the flattening idiom's
 /// <c>Select((w, i) =&gt; w.Select(...))</c> receives each window as a value and returns a
 /// description materialized in place, so the pipeline the target runs is the one written here,
 /// with no wrapping <c>Select</c> around the windows.
@@ -1316,7 +1316,7 @@ public abstract class WindowTests : SharedReactiveTest
             OnCompleted<int>(600)
         );
 
-        var res = default(Nested<int>);
+        var res = default(Seq<Seq<int>>);
         var outerSubscription = default(IAsyncDisposable);
         var innerSubscriptions = new List<IAsyncDisposable>();
         var windows = new List<Seq<int>>();
@@ -1393,7 +1393,7 @@ public abstract class WindowTests : SharedReactiveTest
             OnCompleted<int>(600)
         );
 
-        var res = default(Nested<int>);
+        var res = default(Seq<Seq<int>>);
         var outerSubscription = default(IAsyncDisposable);
         var innerSubscriptions = new List<IAsyncDisposable>();
         var windows = new List<Seq<int>>();
@@ -1476,7 +1476,7 @@ public abstract class WindowTests : SharedReactiveTest
             OnCompleted<int>(600)
         );
 
-        var res = default(Nested<int>);
+        var res = default(Seq<Seq<int>>);
         var outerSubscription = default(IAsyncDisposable);
         var innerSubscriptions = new List<IAsyncDisposable>();
         var windows = new List<Seq<int>>();

@@ -46,7 +46,8 @@ public sealed class GroupJoinValueSeq<TLeft, TRight, TLeftDuration, TRightDurati
     public Func<TLeft, Seq<TRight>, TResult> ResultSelector => resultSelector;
 
     /// <inheritdoc/>
-    public override RSeq<TResult> Accept(ISeqVisitor visitor) => visitor.GroupJoinValue(this);
+    public override Realized<Seq<TResult>> Accept(ISeqVisitor visitor) =>
+        visitor.GroupJoinValue(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{left}.GroupJoin({right}, {text})";

@@ -6,16 +6,16 @@ namespace Tests.System.Reactive.Shared;
 
 /// <summary>Describes <c>sources.Merge()</c> over a nested sequence.</summary>
 /// <remarks>
-/// Built by <see cref="SeqExtensions.Merge{T}(Nested{T})"/>;
+/// Built by <see cref="SeqExtensions.Merge{T}(Seq{Seq{T}})"/>;
 /// materialized by each target through <see cref="ISeqVisitor.Merge{T}(MergeSeq{T})"/>.
 /// </remarks>
-public sealed class MergeSeq<T>(Nested<T> sources) : Seq<T>
+public sealed class MergeSeq<T>(Seq<Seq<T>> sources) : Seq<T>
 {
     /// <summary>Observable sequence of inner observable sequences.</summary>
-    public Nested<T> Sources => sources;
+    public Seq<Seq<T>> Sources => sources;
 
     /// <inheritdoc/>
-    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.Merge(this);
+    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.Merge(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{sources}.Merge()";

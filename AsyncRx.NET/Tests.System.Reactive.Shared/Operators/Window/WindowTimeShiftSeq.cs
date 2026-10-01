@@ -10,7 +10,7 @@ namespace Tests.System.Reactive.Shared;
 /// materialized by each target through
 /// <see cref="ISeqVisitor.WindowTimeShift{T}(WindowTimeShiftSeq{T})"/>.
 /// </remarks>
-public sealed class WindowTimeShiftSeq<T>(Seq<T> source, TimeSpan timeSpan, TimeSpan timeShift, SchedulerRef scheduler) : Nested<T>
+public sealed class WindowTimeShiftSeq<T>(Seq<T> source, TimeSpan timeSpan, TimeSpan timeShift, SchedulerRef scheduler) : Seq<Seq<T>>
 {
     /// <summary>Source sequence to produce windows over.</summary>
     public Seq<T> Source => source;
@@ -25,8 +25,10 @@ public sealed class WindowTimeShiftSeq<T>(Seq<T> source, TimeSpan timeSpan, Time
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override RSeq<ISeq<T>> Accept(ISeqVisitor visitor) => new RSeqResult(visitor.WindowTimeShift(this));
+    public override Realized<Seq<Seq<T>>> Accept(ISeqVisitor visitor) =>
+        visitor.WindowTimeShift(this);
 
     /// <inheritdoc/>
-    public override string ToString() => $"{source}.Window({timeSpan.Ticks} ticks, {timeShift.Ticks} ticks, {scheduler})";
+    public override string ToString() =>
+        $"{source}.Window({timeSpan.Ticks} ticks, {timeShift.Ticks} ticks, {scheduler})";
 }

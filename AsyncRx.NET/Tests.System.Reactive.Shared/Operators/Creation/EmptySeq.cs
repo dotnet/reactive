@@ -12,7 +12,7 @@ namespace Tests.System.Reactive.Shared;
 public sealed class EmptySeq<T> : Seq<T>
 {
     /// <inheritdoc/>
-    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.Empty(this);
+    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.Empty(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"Seq.Empty<{typeof(T).Name}>()";

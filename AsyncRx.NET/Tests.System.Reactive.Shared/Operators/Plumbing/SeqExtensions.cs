@@ -12,7 +12,7 @@ namespace Tests.System.Reactive.Shared;
 /// </summary>
 /// <remarks>
 /// <c>Select</c>, <c>Where</c>, <c>SelectMany</c>, <c>Concat</c>, <c>Merge</c>, and the indexed
-/// <c>Select</c> over a <see cref="Nested{T}"/> that the flattening idiom
+/// <c>Select</c> over a <c>Seq&lt;Seq&lt;T&gt;&gt;</c> that the flattening idiom
 /// <c>xs.Window(...).Select((w, i) =&gt; w.Select(...)).Merge()</c> needs. These exist so that a
 /// scenario writes them exactly as the Rx.NET test it was migrated from does. Each method builds
 /// one node of the query description (one node type per overload, in this folder), and each
@@ -90,7 +90,8 @@ public static class SeqExtensions
     /// Builds a <see cref="SelectManySeq{TIn, TOut}"/>, which each target materializes through
     /// <see cref="ISeqVisitor.SelectMany{TIn, TOut}(SelectManySeq{TIn, TOut})"/>.
     /// </remarks>
-    public static Seq<TOut> SelectMany<TIn, TOut>(this Seq<TIn> source, Seq<TOut> other) => new SelectManySeq<TIn, TOut>(source, other);
+    public static Seq<TOut> SelectMany<TIn, TOut>(this Seq<TIn> source, Seq<TOut> other) =>
+        new SelectManySeq<TIn, TOut>(source, other);
 
     /// <summary>Describes <c>first.Concat(second)</c>.</summary>
     /// <typeparam name="T">The type of the elements in the source sequences.</typeparam>
@@ -100,7 +101,8 @@ public static class SeqExtensions
     /// Builds a <see cref="ConcatSeq{T}"/>, which each target materializes through
     /// <see cref="ISeqVisitor.Concat{T}(ConcatSeq{T})"/>.
     /// </remarks>
-    public static Seq<T> Concat<T>(this Seq<T> first, Seq<T> second) => new ConcatSeq<T>(first, second);
+    public static Seq<T> Concat<T>(this Seq<T> first, Seq<T> second) =>
+        new ConcatSeq<T>(first, second);
 
     /// <summary>Describes <c>sources.Merge()</c> over a nested sequence.</summary>
     /// <typeparam name="T">The type of the elements in the source sequences.</typeparam>
@@ -109,29 +111,6 @@ public static class SeqExtensions
     /// Builds a <see cref="MergeSeq{T}"/>, which each target materializes through
     /// <see cref="ISeqVisitor.Merge{T}(MergeSeq{T})"/>.
     /// </remarks>
-    public static Seq<T> Merge<T>(this Nested<T> sources) => new MergeSeq<T>(sources);
+    public static Seq<T> Merge<T>(this Seq<Seq<T>> sources) => new MergeSeq<T>(sources);
 
-    /// <summary>
-    /// Describes <c>nested.Select((window, i) =&gt; ...)</c> over a nested sequence.
-    /// </summary>
-    /// <typeparam name="TIn">The type of the elements in the source sequence.</typeparam>
-    /// <typeparam name="TOut">
-    /// The type of the elements in the result sequence, obtained by running the selector function
-    /// for each element in the source sequence.
-    /// </typeparam>
-    /// <param name="source">A sequence of elements to invoke a transform function on.</param>
-    /// <param name="selector">
-    /// A transform function to apply to each source element; the second parameter of the function
-    /// represents the index of the source element.
-    /// </param>
-    /// <param name="text">
-    /// Supplied by the compiler (the source text of the selector), for printing the query in
-    /// diagnostics; do not pass it.
-    /// </param>
-    /// <remarks>
-    /// Builds a <see cref="SelectNestedSeq{TIn, TOut}"/>, which each target materializes through
-    /// <see cref="ISeqVisitor.SelectNested{TIn, TOut}(SelectNestedSeq{TIn, TOut})"/>.
-    /// </remarks>
-    public static Nested<TOut> Select<TIn, TOut>(this Nested<TIn> source, Func<Seq<TIn>, int, Seq<TOut>> selector, [CallerArgumentExpression(nameof(selector))] string text = "") =>
-        new SelectNestedSeq<TIn, TOut>(source, selector, text);
 }

@@ -11,7 +11,7 @@ namespace Tests.System.Reactive.Shared;
 /// materialized by each target through
 /// <see cref="ISeqVisitor.WindowBoundaries{T, TWindowBoundary}(WindowBoundariesSeq{T, TWindowBoundary})"/>.
 /// </remarks>
-public sealed class WindowBoundariesSeq<T, TWindowBoundary>(Seq<T> source, Seq<TWindowBoundary> windowBoundaries) : Nested<T>
+public sealed class WindowBoundariesSeq<T, TWindowBoundary>(Seq<T> source, Seq<TWindowBoundary> windowBoundaries) : Seq<Seq<T>>
 {
     /// <summary>Source sequence to produce windows over.</summary>
     public Seq<T> Source => source;
@@ -23,7 +23,8 @@ public sealed class WindowBoundariesSeq<T, TWindowBoundary>(Seq<T> source, Seq<T
     public Seq<TWindowBoundary> WindowBoundaries => windowBoundaries;
 
     /// <inheritdoc/>
-    public override RSeq<ISeq<T>> Accept(ISeqVisitor visitor) => new RSeqResult(visitor.WindowBoundaries(this));
+    public override Realized<Seq<Seq<T>>> Accept(ISeqVisitor visitor) =>
+        visitor.WindowBoundaries(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Window({windowBoundaries})";

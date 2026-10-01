@@ -36,9 +36,48 @@ tree whose leaves are the target's own objects (a testable source the scheduler 
 inner window or group handed to a callback) and whose interior nodes are operator applications,
 one node type per overload. Inside `Start`, the target walks that tree as a visitor and builds
 its own pipeline, so the operators under test are the target's real operators with nothing in
-between. Where a scenario nests sequences (`xs.Window(...).Select((w, i) => w.Select(...)).Merge()`),
-the inner window reaches the projection callback as a value and the description the callback
-returns is materialized in place; no wrapping is needed at either level.
+between.
+
+A nested sequence is a `Seq<Seq<T>>`, and a sequence of groups a `Seq<Group<TKey, T>>`. Nothing
+in the query model knows about nesting: `xs.Window(2, 2).Skip(1).Merge()` applies the ordinary
+generic `Skip` to a sequence of windows, and `Window(2, 2).Window(1, 1).Merge().Merge()` nests two
+deep, with no code written for either. Where a scenario's callback receives a window or group
+(`xs.Window(...).Select((w, i) => w.Select(...)).Merge()`), it arrives as a leaf and the
+description the callback returns is materialized in place.
+
+## How a target materializes a description
+
+Each target (`RxTarget`, `AsyncRxTarget`) writes every operator once, as an ordinary generic
+method over the library's own types with the library's own genericity, in a partial file named
+for the operator's folder (`RxTarget.Take.cs` for `Operators/Take/`):
+
+```csharp
+private static IObservable<T> TakeImpl<T>(IObservable<T> source, int count) => source.Take(count);
+```
+
+These `*Impl` methods are the real calls into the library: a breakpoint there is a breakpoint on
+the operator under test, and a wrong call is a compiler error. The visitor member for a node is
+one line that hands the method and the node's parts to the target's `DescriptionBridge`:
+
+```csharp
+public Realized<Seq<T>> Take<T>(TakeSeq<T> seq) => bridge.Run<Seq<T>>(TakeImpl<T>, seq.Source, seq.Count);
+```
+
+The bridge is the one place that crosses from descriptions to real objects, and the only place
+that uses reflection. It rewrites each description type to the target's real type at any depth
+(`Seq<Seq<int>>` to `IObservable<IObservable<int>>`, `Group<string, int>` to
+`IGroupedObservable<string, int>`), re-instantiates the `*Impl` method at those types, converts
+the arguments (descriptions are materialized, delegates over descriptions are adapted so that a
+callback sees leaves and its returned description is materialized, recorded messages are mapped
+element-wise), invokes the method, and returns the result as a `Realized<Seq<...>>`. A
+mismatch between a node and its `*Impl` surfaces at run time, in the first test that uses the
+member, with a message that names the method, the argument and both types. The bridge's frames
+are hidden from stack traces.
+
+One rule follows from this: an `*Impl` must keep the library's genericity. `TakeImpl<T>` over
+`IObservable<T>` serves flat and nested sequences alike; `TakeImpl` over `IObservable<int>` would
+compile and pass every flat scenario, then fail the first nested one. Each target's test project
+has an `ImplSignatureTests` class that checks every `*Impl` for this and fails immediately.
 
 Everything a scenario touches other than the query (the scheduler, testable sources, `Start`,
 the assertions) forwards to the target instance the running test class supplies, so the same
@@ -51,13 +90,15 @@ Assertion failures name the query as written, then give the target's own diff.
 ## `Native`, and what the shared library does not hold
 
 The shared library never holds a target's observable, observer, scheduler or recorded data under
-its own type. Each shared object that stands for a target object carries it as `object` in a
-property named `Native`, and only the target casts it:
+its own type. Each shared object that stands for a target object carries it in a property named
+`Native`, as `object` or as a `Realized<...>` (an `object` that records which description it
+realizes), and only the target, or a target-specific test, gets at the real type:
 
 | Shared object | Its `Native` on Rx.NET | On AsyncRx.NET |
 |---|---|---|
 | `TestSchedulerRef` (a `SchedulerRef`) | `Microsoft.Reactive.Testing.TestScheduler` | `TestAsyncScheduler` |
-| `NativeSeq<T>` (a leaf) | `IObservable<T>` | `IAsyncObservable<T>` |
+| `NativeSeq<T>` (a leaf): a `Realized<Seq<T>>` | `IObservable<T>` | `IAsyncObservable<T>` |
+| `Group<TKey, T>` (a leaf with a `Key`): a `Realized<Seq<T>>` | `IGroupedObservable<TKey, T>` | `IGroupedAsyncObservable<TKey, T>` |
 | `TestableSeq<T>` (a source the scheduler created) | `ITestableObservable<T>` | `ITestableAsyncObservable<T>` |
 | `TestableObserver<T>` (what `Start` returns) | `ITestableObserver<T>` | `ITestableAsyncObserver<T>` |
 
@@ -68,12 +109,14 @@ the target's own type because that is where the information is: on AsyncRx.NET a
 message has a delivery start and end tick and a subscription has four timestamps, and the
 target's comparison is what can check a compact `OnNext(210, 1)` against that and name the
 timestamp that mismatched. Target-specific tests that need the richer forms cast `Native`
-(for example `(TestAsyncScheduler)Scheduler.Native`) and use the target's own API directly.
+(for example `(TestAsyncScheduler)Scheduler.Native` or `xs.Native.Get<IAsyncObservable<int>>()`)
+and use the target's own API directly.
 
 ## Adding things
 
 * **A scenario:** one `[TestMethod]` in the operator's shared class. Nothing else changes.
-* **An operator overload:** in the operator's folder under `Operators/`, a node class (one file), a fluent method in the operator's extensions class, and a member on that folder's `ISeqVisitor` part; then one line in each target.
+* **An operator overload:** in the operator's folder under `Operators/`, a node class (one file), a fluent method in the operator's extensions class, and a member on that folder's `ISeqVisitor` part; then, in each target's partial file for that operator (`RxTarget.Take.cs`, `AsyncRxTarget.Take.cs`), an `*Impl` method that makes the real call and a one-line visitor member that hands it to the bridge. A new operator gets a new folder and a new partial file in each target, named the same way. A method parameter that is a sequence is a `Seq<T>` in the node and the library's observable type in the `*Impl`; a callback that returns a sequence is a `Func<..., Seq<T>>` in the node and `Func<..., IObservable<T>>` in the `*Impl`. The bridge does the rest.
+* **A scenario that passes on Rx.NET and fails on AsyncRx.NET:** that is the suite doing its job. Leave it failing and fix AsyncRx.NET in a commit of its own.
 * **A test that only one target can express:** put it in that target's test project, next
   to the shared ones, using the target's native scheduler directly. The extended expectation
   forms (`OnNext((210, 260), 1)`, four-timestamp `Subscribe`) come from `SharedReactiveTest` by

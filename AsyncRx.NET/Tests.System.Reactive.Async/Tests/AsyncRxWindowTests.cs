@@ -44,7 +44,7 @@ public abstract class AsyncRxWindowTests(ExecutionShape shape) : WindowTests
         var observer = Pump.CreateObserver<string>(n => n.Kind == NotificationKind.OnNext ? Pump.Delay(TimeSpan.FromTicks(40)) : default);
 
         var res = Pump.Start(
-            () => ((IAsyncObservable<int>)xs.Native).Window(2).Select((w, i) => w.Select(x => i + " " + x)).Merge(),
+            () => xs.Native.Get<IAsyncObservable<int>>().Window(2).Select((w, i) => w.Select(x => i + " " + x)).Merge(),
             observer);
 
         res.Messages.AssertEqual(

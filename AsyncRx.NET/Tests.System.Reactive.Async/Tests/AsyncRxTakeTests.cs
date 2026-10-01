@@ -49,7 +49,7 @@ public abstract class AsyncRxTakeTests(ExecutionShape shape) : TakeTests
             OnCompleted<int>(300)
         );
 
-        var res = Pump.Start(() => ((IAsyncObservable<int>)xs.Native).Take(2), ProlongingObserver<int>(50));
+        var res = Pump.Start(() => xs.Native.Get<IAsyncObservable<int>>().Take(2), ProlongingObserver<int>(50));
 
         res.Messages.AssertEqual(
             OnNext((210, 260), 1),
@@ -75,7 +75,7 @@ public abstract class AsyncRxTakeTests(ExecutionShape shape) : TakeTests
             OnCompleted<int>(300)
         );
 
-        var res = Pump.Start(() => ((IAsyncObservable<int>)xs.Native).Take(3), ProlongingObserver<int>(50), disposed: 230);
+        var res = Pump.Start(() => xs.Native.Get<IAsyncObservable<int>>().Take(3), ProlongingObserver<int>(50), disposed: 230);
 
         res.Messages.AssertEqual(
             OnNext((210, 260), 1)
@@ -99,7 +99,7 @@ public abstract class AsyncRxTakeTests(ExecutionShape shape) : TakeTests
             OnCompleted<int>(300)
         );
 
-        var res = Pump.Start(() => ((IAsyncObservable<int>)xs.Native).Take(TimeSpan.FromTicks(30), Pump), ProlongingObserver<int>(50));
+        var res = Pump.Start(() => xs.Native.Get<IAsyncObservable<int>>().Take(TimeSpan.FromTicks(30), Pump), ProlongingObserver<int>(50));
 
         res.Messages.AssertEqual(
             OnNext((210, 260), 1),

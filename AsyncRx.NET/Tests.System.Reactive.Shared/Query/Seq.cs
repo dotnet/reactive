@@ -33,10 +33,18 @@ namespace Tests.System.Reactive.Shared;
 /// assertions — is in the <c>Harness</c> folder.
 /// </para>
 /// </remarks>
-public abstract class Seq<T> : ISeq<T>
+public abstract class Seq<T> : ISeq
 {
-    /// <inheritdoc/>
-    public abstract RSeq<T> Accept(ISeqVisitor visitor);
+    /// <summary>Materializes this description on <paramref name="visitor"/>, a target.</summary>
+    /// <param name="visitor">The target materializing the query.</param>
+    /// <remarks>
+    /// Dispatches to the visitor member for this node type. The result is the target's own
+    /// observable, held under the description it realizes; only the target's own code
+    /// looks inside.
+    /// </remarks>
+    public abstract Realized<Seq<T>> Accept(ISeqVisitor visitor);
+
+    Realized ISeq.Accept(ISeqVisitor visitor) => Accept(visitor);
 
     /// <summary>
     /// The description as the query was written in the scenario (for example

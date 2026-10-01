@@ -21,7 +21,7 @@ public sealed class GroupJoinSeq<TLeft, TRight, TLeftDuration, TRightDuration, T
     Func<TLeft, Seq<TLeftDuration>> leftDurationSelector,
     Func<TRight, Seq<TRightDuration>> rightDurationSelector,
     Func<TLeft, Seq<TRight>, Seq<TResult>> resultSelector,
-    string text) : Nested<TResult>
+    string text) : Seq<Seq<TResult>>
 {
     /// <summary>The left observable sequence to join elements for.</summary>
     public Seq<TLeft> Left => left;
@@ -48,7 +48,8 @@ public sealed class GroupJoinSeq<TLeft, TRight, TLeftDuration, TRightDuration, T
     public Func<TLeft, Seq<TRight>, Seq<TResult>> ResultSelector => resultSelector;
 
     /// <inheritdoc/>
-    public override RSeq<ISeq<TResult>> Accept(ISeqVisitor visitor) => new RSeqResult(visitor.GroupJoin(this));
+    public override Realized<Seq<Seq<TResult>>> Accept(ISeqVisitor visitor) =>
+        visitor.GroupJoin(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{left}.GroupJoin({right}, {text})";

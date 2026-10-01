@@ -10,7 +10,7 @@ public partial interface ISeqVisitor
     /// Materializes a <see cref="TakeSeq{T}"/> as the target's own <c>Take(count)</c>.
     /// </summary>
     /// <remarks>Built by <see cref="TakeExtensions.Take{T}(Seq{T}, int)"/>.</remarks>
-    RSeq<T> Take<T>(TakeSeq<T> seq);
+    Realized<Seq<T>> Take<T>(TakeSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="TakeScheduledSeq{T}"/> as the target's own
@@ -19,7 +19,7 @@ public partial interface ISeqVisitor
     /// <remarks>
     /// Built by <see cref="TakeExtensions.Take{T}(Seq{T}, int, SchedulerRef)"/>.
     /// </remarks>
-    RSeq<T> TakeScheduled<T>(TakeScheduledSeq<T> seq);
+    Realized<Seq<T>> TakeScheduled<T>(TakeScheduledSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="TakeTimeSeq{T}"/> as the target's own
@@ -28,5 +28,5 @@ public partial interface ISeqVisitor
     /// <remarks>
     /// Built by <see cref="TakeExtensions.Take{T}(Seq{T}, TimeSpan, SchedulerRef)"/>.
     /// </remarks>
-    RSeq<T> TakeTime<T>(TakeTimeSeq<T> seq);
+    Realized<Seq<T>> TakeTime<T>(TakeTimeSeq<T> seq);
 }

@@ -9,7 +9,7 @@ namespace Tests.System.Reactive.Shared;
 /// Built by <see cref="WindowExtensions.Window{T}(Seq{T}, int, int)"/>;
 /// materialized by each target through <see cref="ISeqVisitor.WindowCount{T}(WindowCountSeq{T})"/>.
 /// </remarks>
-public sealed class WindowCountSeq<T>(Seq<T> source, int count, int skip) : Nested<T>
+public sealed class WindowCountSeq<T>(Seq<T> source, int count, int skip) : Seq<Seq<T>>
 {
     /// <summary>Source sequence to produce windows over.</summary>
     public Seq<T> Source => source;
@@ -21,7 +21,7 @@ public sealed class WindowCountSeq<T>(Seq<T> source, int count, int skip) : Nest
     public int Skip => skip;
 
     /// <inheritdoc/>
-    public override RSeq<ISeq<T>> Accept(ISeqVisitor visitor) => new RSeqResult(visitor.WindowCount(this));
+    public override Realized<Seq<Seq<T>>> Accept(ISeqVisitor visitor) => visitor.WindowCount(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Window({count}, {skip})";

@@ -13,7 +13,7 @@ public partial interface ISeqVisitor
     /// <remarks>
     /// Built by <see cref="DelayExtensions.Delay{T}(Seq{T}, TimeSpan, SchedulerRef)"/>.
     /// </remarks>
-    RSeq<T> DelayTime<T>(DelayTimeSeq<T> seq);
+    Realized<Seq<T>> DelayTime<T>(DelayTimeSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="DelayAbsoluteSeq{T}"/> as the target's own
@@ -22,7 +22,7 @@ public partial interface ISeqVisitor
     /// <remarks>
     /// Built by <see cref="DelayExtensions.Delay{T}(Seq{T}, DateTimeOffset, SchedulerRef)"/>.
     /// </remarks>
-    RSeq<T> DelayAbsolute<T>(DelayAbsoluteSeq<T> seq);
+    Realized<Seq<T>> DelayAbsolute<T>(DelayAbsoluteSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="DelaySelectorSeq{T, TDelay}"/> as the target's own
@@ -32,7 +32,7 @@ public partial interface ISeqVisitor
     /// Built by
     /// <see cref="DelayExtensions.Delay{T, TDelay}(Seq{T}, Func{T, Seq{TDelay}}, string)"/>.
     /// </remarks>
-    RSeq<T> DelaySelector<T, TDelay>(DelaySelectorSeq<T, TDelay> seq);
+    Realized<Seq<T>> DelaySelector<T, TDelay>(DelaySelectorSeq<T, TDelay> seq);
 
     /// <summary>
     /// Materializes a <see cref="DelaySubscriptionSeq{T, TDelay}"/> as the target's own
@@ -42,5 +42,5 @@ public partial interface ISeqVisitor
     /// Built by
     /// <see cref="DelayExtensions.Delay{T, TDelay}(Seq{T}, Seq{TDelay}, Func{T, Seq{TDelay}}, string)"/>.
     /// </remarks>
-    RSeq<T> DelaySubscription<T, TDelay>(DelaySubscriptionSeq<T, TDelay> seq);
+    Realized<Seq<T>> DelaySubscription<T, TDelay>(DelaySubscriptionSeq<T, TDelay> seq);
 }

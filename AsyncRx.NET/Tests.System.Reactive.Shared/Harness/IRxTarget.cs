@@ -103,7 +103,7 @@ public interface IRxTarget : ISeqVisitor
     /// Each inner sequence reaches the handler as a <see cref="NativeSeq{T}"/> (a wrap at the
     /// test's own observer, not in the pipeline).
     /// </remarks>
-    ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Nested<T> source, Func<Seq<T>, ValueTask> onNext);
+    ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Seq<Seq<T>> source, Func<Seq<T>, ValueTask> onNext);
 
     /// <summary>
     /// Runs virtual time to exhaustion (the parameterless <c>TestScheduler.Start()</c>).

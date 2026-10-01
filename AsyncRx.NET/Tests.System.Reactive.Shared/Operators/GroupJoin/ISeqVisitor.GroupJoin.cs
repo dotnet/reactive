@@ -17,7 +17,7 @@ public partial interface ISeqVisitor
     /// The description the result selector returns is materialized in place over the target's
     /// group.
     /// </remarks>
-    RSeq<RSeq<TResult>> GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(GroupJoinSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult> seq);
+    Realized<Seq<Seq<TResult>>> GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(GroupJoinSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult> seq);
 
     /// <summary>
     /// Materializes a
@@ -28,5 +28,5 @@ public partial interface ISeqVisitor
     /// Built by
     /// <see cref="GroupJoinValueExtensions.GroupJoin{TLeft, TRight, TLeftDuration, TRightDuration, TResult}"/>.
     /// </remarks>
-    RSeq<TResult> GroupJoinValue<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(GroupJoinValueSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult> seq);
+    Realized<Seq<TResult>> GroupJoinValue<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(GroupJoinValueSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult> seq);
 }

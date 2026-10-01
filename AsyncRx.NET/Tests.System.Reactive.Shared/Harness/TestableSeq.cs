@@ -20,7 +20,7 @@ namespace Tests.System.Reactive.Shared;
 /// <see cref="Subscriptions"/> is a handle for asserting over the subscriptions it recorded, not
 /// the collection itself.
 /// </remarks>
-public sealed class TestableSeq<T>(IRxTarget target, object native, IReadOnlyList<Recorded<Notification<T>>> messages, string description) : NativeSeq<T>(native, description)
+public sealed class TestableSeq<T>(IRxTarget target, Realized<Seq<T>> native, IReadOnlyList<Recorded<Notification<T>>> messages, string description) : NativeSeq<T>(native, description)
 {
     /// <summary>The target that created this source.</summary>
     public IRxTarget Target => target;

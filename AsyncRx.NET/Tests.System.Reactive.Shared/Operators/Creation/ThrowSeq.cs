@@ -21,7 +21,7 @@ public sealed class ThrowSeq<T>(Exception error, SchedulerRef? scheduler) : Seq<
     public SchedulerRef? Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override RSeq<T> Accept(ISeqVisitor visitor) => visitor.Throw(this);
+    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.Throw(this);
 
     /// <inheritdoc/>
     public override string ToString() =>

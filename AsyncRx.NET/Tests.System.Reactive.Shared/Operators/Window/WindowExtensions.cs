@@ -12,7 +12,7 @@ namespace Tests.System.Reactive.Shared;
 /// it was migrated from does. Each method builds one node of the query description (one node type
 /// per overload, in this folder), and each target turns that node into its own <c>Window</c> call
 /// through the matching <see cref="ISeqVisitor"/> member in <c>ISeqVisitor.Window.cs</c>. Every
-/// form returns a <see cref="Nested{T}"/>. The callbacks return descriptions
+/// form returns a <c>Seq&lt;Seq&lt;T&gt;&gt;</c>. The callbacks return descriptions
 /// (<c>Seq&lt;TWindowClosing&gt;</c>), which the target materializes at the moment it invokes the
 /// callback — so a closing selector that throws, throws inside the target's own call, as in the
 /// original test.
@@ -40,7 +40,7 @@ public static class WindowExtensions
     /// through
     /// <see cref="ISeqVisitor.WindowClosings{T, TWindowClosing}(WindowClosingsSeq{T, TWindowClosing})"/>.
     /// </remarks>
-    public static Nested<T> Window<T, TWindowClosing>(this Seq<T> source, Func<Seq<TWindowClosing>> windowClosingSelector, [CallerArgumentExpression(nameof(windowClosingSelector))] string text = "") =>
+    public static Seq<Seq<T>> Window<T, TWindowClosing>(this Seq<T> source, Func<Seq<TWindowClosing>> windowClosingSelector, [CallerArgumentExpression(nameof(windowClosingSelector))] string text = "") =>
         new WindowClosingsSeq<T, TWindowClosing>(source, windowClosingSelector, text);
 
     /// <summary>Describes <c>source.Window(windowOpenings, windowClosingSelector)</c>.</summary>
@@ -70,7 +70,7 @@ public static class WindowExtensions
     /// target materializes through
     /// <see cref="ISeqVisitor.WindowOpenings{T, TWindowOpening, TWindowClosing}(WindowOpeningsSeq{T, TWindowOpening, TWindowClosing})"/>.
     /// </remarks>
-    public static Nested<T> Window<T, TWindowOpening, TWindowClosing>(this Seq<T> source, Seq<TWindowOpening> windowOpenings, Func<TWindowOpening, Seq<TWindowClosing>> windowClosingSelector, [CallerArgumentExpression(nameof(windowClosingSelector))] string text = "") =>
+    public static Seq<Seq<T>> Window<T, TWindowOpening, TWindowClosing>(this Seq<T> source, Seq<TWindowOpening> windowOpenings, Func<TWindowOpening, Seq<TWindowClosing>> windowClosingSelector, [CallerArgumentExpression(nameof(windowClosingSelector))] string text = "") =>
         new WindowOpeningsSeq<T, TWindowOpening, TWindowClosing>(source, windowOpenings, windowClosingSelector, text);
 
     /// <summary>Describes <c>source.Window(windowBoundaries)</c>.</summary>
@@ -90,7 +90,7 @@ public static class WindowExtensions
     /// materializes through
     /// <see cref="ISeqVisitor.WindowBoundaries{T, TWindowBoundary}(WindowBoundariesSeq{T, TWindowBoundary})"/>.
     /// </remarks>
-    public static Nested<T> Window<T, TWindowBoundary>(this Seq<T> source, Seq<TWindowBoundary> windowBoundaries) =>
+    public static Seq<Seq<T>> Window<T, TWindowBoundary>(this Seq<T> source, Seq<TWindowBoundary> windowBoundaries) =>
         new WindowBoundariesSeq<T, TWindowBoundary>(source, windowBoundaries);
 
     /// <summary>Describes <c>source.Window(count, skip)</c>.</summary>
@@ -106,7 +106,8 @@ public static class WindowExtensions
     /// Builds a <see cref="WindowCountSeq{T}"/>, which each target materializes through
     /// <see cref="ISeqVisitor.WindowCount{T}(WindowCountSeq{T})"/>.
     /// </remarks>
-    public static Nested<T> Window<T>(this Seq<T> source, int count, int skip) => new WindowCountSeq<T>(source, count, skip);
+    public static Seq<Seq<T>> Window<T>(this Seq<T> source, int count, int skip) =>
+        new WindowCountSeq<T>(source, count, skip);
 
     /// <summary>Describes <c>source.Window(timeSpan, scheduler)</c>.</summary>
     /// <typeparam name="T">
@@ -119,7 +120,8 @@ public static class WindowExtensions
     /// Builds a <see cref="WindowTimeSeq{T}"/>, which each target materializes through
     /// <see cref="ISeqVisitor.WindowTime{T}(WindowTimeSeq{T})"/>.
     /// </remarks>
-    public static Nested<T> Window<T>(this Seq<T> source, TimeSpan timeSpan, SchedulerRef scheduler) => new WindowTimeSeq<T>(source, timeSpan, scheduler);
+    public static Seq<Seq<T>> Window<T>(this Seq<T> source, TimeSpan timeSpan, SchedulerRef scheduler) =>
+        new WindowTimeSeq<T>(source, timeSpan, scheduler);
 
     /// <summary>Describes <c>source.Window(timeSpan, timeShift, scheduler)</c>.</summary>
     /// <typeparam name="T">
@@ -133,7 +135,8 @@ public static class WindowExtensions
     /// Builds a <see cref="WindowTimeShiftSeq{T}"/>, which each target materializes through
     /// <see cref="ISeqVisitor.WindowTimeShift{T}(WindowTimeShiftSeq{T})"/>.
     /// </remarks>
-    public static Nested<T> Window<T>(this Seq<T> source, TimeSpan timeSpan, TimeSpan timeShift, SchedulerRef scheduler) => new WindowTimeShiftSeq<T>(source, timeSpan, timeShift, scheduler);
+    public static Seq<Seq<T>> Window<T>(this Seq<T> source, TimeSpan timeSpan, TimeSpan timeShift, SchedulerRef scheduler) =>
+        new WindowTimeShiftSeq<T>(source, timeSpan, timeShift, scheduler);
 
     /// <summary>Describes <c>source.Window(timeSpan, count, scheduler)</c>.</summary>
     /// <typeparam name="T">
@@ -147,5 +150,6 @@ public static class WindowExtensions
     /// Builds a <see cref="WindowTimeOrCountSeq{T}"/>, which each target materializes through
     /// <see cref="ISeqVisitor.WindowTimeOrCount{T}(WindowTimeOrCountSeq{T})"/>.
     /// </remarks>
-    public static Nested<T> Window<T>(this Seq<T> source, TimeSpan timeSpan, int count, SchedulerRef scheduler) => new WindowTimeOrCountSeq<T>(source, timeSpan, count, scheduler);
+    public static Seq<Seq<T>> Window<T>(this Seq<T> source, TimeSpan timeSpan, int count, SchedulerRef scheduler) =>
+        new WindowTimeOrCountSeq<T>(source, timeSpan, count, scheduler);
 }
