@@ -5,7 +5,7 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>
-/// Describes <c> sources.Merge(maxConcurrent)</c> over an enumerable of sequences.
+/// Describes <c>sources.Merge(maxConcurrent)</c> over an enumerable of sequences.
 /// </summary>
 /// <remarks>
 /// Built by <see cref="Seq.Merge{T}(IEnumerable{Seq{T}}, int)"/>; materialized by each

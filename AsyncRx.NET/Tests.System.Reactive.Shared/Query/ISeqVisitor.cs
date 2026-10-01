@@ -105,6 +105,17 @@ public partial interface ISeqVisitor
     Realized<Seq<T>> Concat<T>(ConcatSeq<T> seq);
 
     /// <summary>
+    /// Materializes a <see cref="SelectManyCollectionSeq{TIn, TCollection, TOut}"/> as the
+    /// target's own <c>SelectMany(collectionSelector, resultSelector)</c>.
+    /// </summary>
+    /// <remarks>
+    /// Built by the three-argument
+    /// <see cref="SeqExtensions.SelectMany{TIn, TCollection, TOut}(Seq{TIn}, Func{TIn, Seq{TCollection}}, Func{TIn, TCollection, TOut}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyCollection<TIn, TCollection, TOut>(
+        SelectManyCollectionSeq<TIn, TCollection, TOut> seq);
+
+    /// <summary>
     /// Materializes a <see cref="ConcatNestedSeq{T}"/> as the target's own <c>Concat()</c> over a
     /// nested sequence.
     /// </summary>

@@ -37,4 +37,19 @@ public sealed class TestableObserver<T>(IRxTarget target, object native, string 
     /// The recorded messages, as something to assert over in the shared vocabulary.
     /// </summary>
     public MessageLog<T> Messages => new(this);
+
+    /// <summary>Records <paramref name="value"/> as if the sequence had produced it.</summary>
+    /// <param name="value">The value to record.</param>
+    /// <remarks>
+    /// For scenarios that feed an observer by hand (an outer observer told each group's key, say)
+    /// or pass its handlers to a subscription. Async-shaped like the raw surface.
+    /// </remarks>
+    public ValueTask OnNextAsync(T value) => target.OnNextAsync(this, value);
+
+    /// <summary>Records <paramref name="error"/> as if the sequence had failed with it.</summary>
+    /// <param name="error">The error to record.</param>
+    public ValueTask OnErrorAsync(Exception error) => target.OnErrorAsync(this, error);
+
+    /// <summary>Records completion.</summary>
+    public ValueTask OnCompletedAsync() => target.OnCompletedAsync(this);
 }

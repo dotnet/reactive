@@ -133,6 +133,31 @@ public interface IRxTarget : ISeqVisitor
     ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Seq<Seq<T>> source, Func<Seq<T>, ValueTask> onNext);
 
     /// <summary>
+    /// Subscribes the three handlers to <paramref name="source"/>, the target's own
+    /// <c>Subscribe(onNext, onError, onCompleted)</c>.
+    /// </summary>
+    /// <remarks>
+    /// As the single-handler form, for the scenarios that route a group sequence's error and
+    /// completion to a separate observer. <paramref name="onError"/> may be the only extra
+    /// handler, for the target's <c>Subscribe(onNext, onError)</c>.
+    /// </remarks>
+    ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        TestSchedulerRef scheduler,
+        Seq<T> source,
+        Func<T, ValueTask> onNext,
+        Func<Exception, ValueTask> onError,
+        Func<ValueTask>? onCompleted);
+
+    /// <summary>Pushes a value into a testable observer, which records it.</summary>
+    ValueTask OnNextAsync<T>(TestableObserver<T> observer, T value);
+
+    /// <summary>Pushes an error into a testable observer.</summary>
+    ValueTask OnErrorAsync<T>(TestableObserver<T> observer, Exception error);
+
+    /// <summary>Completes a testable observer.</summary>
+    ValueTask OnCompletedAsync<T>(TestableObserver<T> observer);
+
+    /// <summary>
     /// Runs virtual time to exhaustion (the parameterless <c>TestScheduler.Start()</c>).
     /// </summary>
     void Run(TestSchedulerRef scheduler);

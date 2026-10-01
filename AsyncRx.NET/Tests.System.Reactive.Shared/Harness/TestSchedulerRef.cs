@@ -146,4 +146,22 @@ public sealed class TestSchedulerRef : SchedulerRef
     /// </summary>
     /// <typeparam name="T">The type of the elements it records.</typeparam>
     public TestableObserver<T> CreateObserver<T>() => Target.CreateObserver<T>(this);
+
+    /// <summary>Schedules an action a number of ticks from now.</summary>
+    /// <param name="dueTime">The number of ticks after the current time to run the action.</param>
+    /// <param name="action">The action to run.</param>
+    /// <remarks>
+    /// The sync <c>ScheduleRelative</c>: an absolute scheduling at the current clock plus the
+    /// due time, which is how the virtual-time schedulers define it.
+    /// </remarks>
+    public void ScheduleRelative(long dueTime, Func<ValueTask> action) =>
+        ScheduleAbsolute(Clock + dueTime, action);
+
+    /// <summary>
+    /// As <see cref="ScheduleRelative(long, Func{ValueTask})"/>, for a synchronous action.
+    /// </summary>
+    /// <param name="dueTime">The number of ticks after the current time to run the action.</param>
+    /// <param name="action">The action to run.</param>
+    public void ScheduleRelative(long dueTime, Action action) =>
+        ScheduleAbsolute(Clock + dueTime, action);
 }

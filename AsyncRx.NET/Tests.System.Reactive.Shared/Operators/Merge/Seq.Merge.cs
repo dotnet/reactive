@@ -82,7 +82,7 @@ public static partial class Seq
     public static Seq<T> Merge<T>(params Seq<T>[] sources) => new MergeParamsSeq<T>(sources);
 
     /// <summary>
-    /// Describes <c> Seq.Merge(scheduler, sources)</c> over an array of sequences.
+    /// Describes <c>Seq.Merge(scheduler, sources)</c> over an array of sequences.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the source sequences.</typeparam>
     /// <param name="scheduler">
@@ -107,7 +107,7 @@ public static partial class Seq
         new MergeEnumerableSeq<T>(sources);
 
     /// <summary>
-    /// Describes <c> sources.Merge(scheduler)</c> over an enumerable of sequences.
+    /// Describes <c>sources.Merge(scheduler)</c> over an enumerable of sequences.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the source sequences.</typeparam>
     /// <param name="sources">Enumerable sequence of observable sequences.</param>

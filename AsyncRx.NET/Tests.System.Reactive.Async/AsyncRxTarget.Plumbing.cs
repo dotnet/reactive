@@ -22,6 +22,14 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TOut>> ISeqVisitor.SelectMany<TIn, TOut>(SelectManySeq<TIn, TOut> seq) =>
         _bridge.Run<Seq<TOut>>(SelectManyImpl<TIn, TOut>, seq.Source, seq.Other);
 
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyCollection<TIn, TCollection, TOut>(
+        SelectManyCollectionSeq<TIn, TCollection, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyCollectionImpl<TIn, TCollection, TOut>,
+            seq.Source,
+            seq.CollectionSelector,
+            seq.ResultSelector);
+
     Realized<Seq<T>> ISeqVisitor.Concat<T>(ConcatSeq<T> seq) =>
         _bridge.Run<Seq<T>>(ConcatImpl<T>, seq.First, seq.Second);
 
@@ -48,6 +56,12 @@ public sealed partial class AsyncRxTarget
         IAsyncObservable<TIn> source,
         IAsyncObservable<TOut> other) =>
         source.SelectMany(_ => other);
+
+    private static IAsyncObservable<TOut> SelectManyCollectionImpl<TIn, TCollection, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, IAsyncObservable<TCollection>> collectionSelector,
+        Func<TIn, TCollection, TOut> resultSelector) =>
+        source.SelectMany(collectionSelector, resultSelector);
 
     private static IAsyncObservable<T> ConcatImpl<T>(
         IAsyncObservable<T> first,

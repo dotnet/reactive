@@ -102,4 +102,82 @@ public static class SubscribeExtensions
             return default;
         });
     }
+
+    /// <summary>
+    /// Subscribes <paramref name="onNext"/> and <paramref name="onError"/> to
+    /// <paramref name="source"/>, the target's own <c>Subscribe(onNext, onError)</c>.
+    /// </summary>
+    /// <param name="source">The sequence to subscribe to.</param>
+    /// <param name="scheduler">The test's scheduler, which carries the target.</param>
+    /// <param name="onNext">Handler for each element, awaited before the next delivery.</param>
+    /// <param name="onError">Handler for an error.</param>
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        this Seq<T> source,
+        TestSchedulerRef scheduler,
+        Func<T, ValueTask> onNext,
+        Action<Exception> onError)
+    {
+        ArgumentNullException.ThrowIfNull(scheduler);
+        ArgumentNullException.ThrowIfNull(onError);
+
+        return scheduler.Target.SubscribeAsync(
+            scheduler,
+            source,
+            onNext,
+            ex =>
+            {
+                onError(ex);
+                return default;
+            },
+            null);
+    }
+
+    /// <summary>
+    /// Subscribes three handlers to <paramref name="source"/>, the target's own
+    /// <c>Subscribe(onNext, onError, onCompleted)</c>.
+    /// </summary>
+    /// <param name="source">The sequence to subscribe to.</param>
+    /// <param name="scheduler">The test's scheduler, which carries the target.</param>
+    /// <param name="onNext">Handler for each element, awaited before the next delivery.</param>
+    /// <param name="onError">Handler for an error.</param>
+    /// <param name="onCompleted">Handler for completion.</param>
+    /// <remarks>
+    /// The error and completion handlers are typically a testable observer's
+    /// <see cref="TestableObserver{T}.OnErrorAsync"/> and
+    /// <see cref="TestableObserver{T}.OnCompletedAsync"/>.
+    /// </remarks>
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        this Seq<T> source,
+        TestSchedulerRef scheduler,
+        Func<T, ValueTask> onNext,
+        Func<Exception, ValueTask> onError,
+        Func<ValueTask> onCompleted)
+    {
+        ArgumentNullException.ThrowIfNull(scheduler);
+
+        return scheduler.Target.SubscribeAsync(scheduler, source, onNext, onError, onCompleted);
+    }
+
+    /// <summary>Subscribes synchronous element and error handlers.</summary>
+    /// <param name="source">The sequence to subscribe to.</param>
+    /// <param name="scheduler">The test's scheduler, which carries the target.</param>
+    /// <param name="onNext">Handler for each element.</param>
+    /// <param name="onError">Handler for an error.</param>
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        this Seq<T> source,
+        TestSchedulerRef scheduler,
+        Action<T> onNext,
+        Action<Exception> onError)
+    {
+        ArgumentNullException.ThrowIfNull(onNext);
+
+        return source.SubscribeAsync(
+            scheduler,
+            x =>
+            {
+                onNext(x);
+                return default;
+            },
+            onError);
+    }
 }

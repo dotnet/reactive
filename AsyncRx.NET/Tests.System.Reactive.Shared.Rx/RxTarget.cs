@@ -146,6 +146,40 @@ public sealed partial class RxTarget : IRxTarget
         return new(new RxDisposable(_bridge.Call<IDisposable>(SubscribeImpl<Seq<T>>, source, onNext)));
     }
 
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        TestSchedulerRef scheduler,
+        Seq<T> source,
+        Func<T, ValueTask> onNext,
+        Func<Exception, ValueTask> onError,
+        Func<ValueTask>? onCompleted)
+    {
+        ArgumentNullException.ThrowIfNull(onNext);
+        ArgumentNullException.ThrowIfNull(onError);
+
+        var subscription = onCompleted is null
+            ? _bridge.Call<IDisposable>(SubscribeWithErrorImpl<T>, source, onNext, onError)
+            : _bridge.Call<IDisposable>(SubscribeWithHandlersImpl<T>, source, onNext, onError, onCompleted);
+        return new(new RxDisposable(subscription));
+    }
+
+    public ValueTask OnNextAsync<T>(TestableObserver<T> observer, T value)
+    {
+        ((ITestableObserver<T>)observer.Native).OnNext(value);
+        return default;
+    }
+
+    public ValueTask OnErrorAsync<T>(TestableObserver<T> observer, Exception error)
+    {
+        ((ITestableObserver<T>)observer.Native).OnError(error);
+        return default;
+    }
+
+    public ValueTask OnCompletedAsync<T>(TestableObserver<T> observer)
+    {
+        ((ITestableObserver<T>)observer.Native).OnCompleted();
+        return default;
+    }
+
     public void Run(TestSchedulerRef scheduler) => Unwrap(scheduler).Start();
 
     private static void Complete(ValueTask task)
@@ -193,4 +227,20 @@ public sealed partial class RxTarget : IRxTarget
 
     private static IDisposable SubscribeImpl<T>(IObservable<T> source, Func<T, ValueTask> onNext) =>
         source.Subscribe(x => Complete(onNext(x)));
+
+    private static IDisposable SubscribeWithErrorImpl<T>(
+        IObservable<T> source,
+        Func<T, ValueTask> onNext,
+        Func<Exception, ValueTask> onError) =>
+        source.Subscribe(x => Complete(onNext(x)), ex => Complete(onError(ex)));
+
+    private static IDisposable SubscribeWithHandlersImpl<T>(
+        IObservable<T> source,
+        Func<T, ValueTask> onNext,
+        Func<Exception, ValueTask> onError,
+        Func<ValueTask> onCompleted) =>
+        source.Subscribe(
+            x => Complete(onNext(x)),
+            ex => Complete(onError(ex)),
+            () => Complete(onCompleted()));
 }

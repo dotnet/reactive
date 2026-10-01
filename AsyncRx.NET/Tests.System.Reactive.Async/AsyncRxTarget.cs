@@ -130,6 +130,34 @@ public sealed partial class AsyncRxTarget : IRxTarget
         return _bridge.Call<ValueTask<IAsyncDisposable>>(SubscribeImpl<Seq<T>>, source, onNext, Unwrap(scheduler));
     }
 
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        TestSchedulerRef scheduler,
+        Seq<T> source,
+        Func<T, ValueTask> onNext,
+        Func<Exception, ValueTask> onError,
+        Func<ValueTask>? onCompleted)
+    {
+        ArgumentNullException.ThrowIfNull(onNext);
+        ArgumentNullException.ThrowIfNull(onError);
+
+        return _bridge.Call<ValueTask<IAsyncDisposable>>(
+            SubscribeWithHandlersImpl<T>,
+            source,
+            onNext,
+            onError,
+            onCompleted ?? (() => default),
+            Unwrap(scheduler));
+    }
+
+    public ValueTask OnNextAsync<T>(TestableObserver<T> observer, T value) =>
+        ((ITestableAsyncObserver<T>)observer.Native).OnNextAsync(value);
+
+    public ValueTask OnErrorAsync<T>(TestableObserver<T> observer, Exception error) =>
+        ((ITestableAsyncObserver<T>)observer.Native).OnErrorAsync(error);
+
+    public ValueTask OnCompletedAsync<T>(TestableObserver<T> observer) =>
+        ((ITestableAsyncObserver<T>)observer.Native).OnCompletedAsync();
+
     public void Run(TestSchedulerRef scheduler) => Unwrap(scheduler).Start();
 
     // ---- Assertions ----
@@ -171,4 +199,27 @@ public sealed partial class AsyncRxTarget : IRxTarget
             pump.EnsurePumpThread("delivery to a scenario's handler");
             return onNext(x);
         }));
+
+    private static ValueTask<IAsyncDisposable> SubscribeWithHandlersImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask> onNext,
+        Func<Exception, ValueTask> onError,
+        Func<ValueTask> onCompleted,
+        TestAsyncScheduler pump) =>
+        source.SubscribeAsync(AsyncObserver.Create<T>(
+            x =>
+            {
+                pump.EnsurePumpThread("delivery to a scenario's handler");
+                return onNext(x);
+            },
+            ex =>
+            {
+                pump.EnsurePumpThread("delivery of an error to a scenario's handler");
+                return onError(ex);
+            },
+            () =>
+            {
+                pump.EnsurePumpThread("delivery of completion to a scenario's handler");
+                return onCompleted();
+            }));
 }

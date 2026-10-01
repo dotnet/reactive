@@ -93,6 +93,35 @@ public static class SeqExtensions
     public static Seq<TOut> SelectMany<TIn, TOut>(this Seq<TIn> source, Seq<TOut> other) =>
         new SelectManySeq<TIn, TOut>(source, other);
 
+    /// <summary>Describes <c>source.SelectMany(collectionSelector, resultSelector)</c>.</summary>
+    /// <typeparam name="TIn">The type of the elements in the source sequence.</typeparam>
+    /// <typeparam name="TCollection">
+    /// The type of the elements in the intermediate sequences produced by the collection
+    /// selector.
+    /// </typeparam>
+    /// <typeparam name="TOut">The type of the elements in the result sequence.</typeparam>
+    /// <param name="source">An observable sequence of elements to project.</param>
+    /// <param name="collectionSelector">
+    /// A transform function to apply to each element, returning the collection to flatten.
+    /// </param>
+    /// <param name="resultSelector">
+    /// A transform function to apply to each element of the intermediate sequence.
+    /// </param>
+    /// <param name="text">
+    /// Supplied by the compiler (the source text of the collection selector), for printing the
+    /// query in diagnostics; do not pass it.
+    /// </param>
+    /// <remarks>
+    /// Builds a <see cref="SelectManyCollectionSeq{TIn, TCollection, TOut}"/>, which each target
+    /// materializes through its <c>SelectManyCollection</c> visitor member.
+    /// </remarks>
+    public static Seq<TOut> SelectMany<TIn, TCollection, TOut>(
+        this Seq<TIn> source,
+        Func<TIn, Seq<TCollection>> collectionSelector,
+        Func<TIn, TCollection, TOut> resultSelector,
+        [CallerArgumentExpression(nameof(collectionSelector))] string text = "") =>
+        new SelectManyCollectionSeq<TIn, TCollection, TOut>(source, collectionSelector, resultSelector, text);
+
     /// <summary>Describes <c>first.Concat(second)</c>.</summary>
     /// <typeparam name="T">The type of the elements in the source sequences.</typeparam>
     /// <param name="first">First observable sequence.</param>

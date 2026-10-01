@@ -4,16 +4,21 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>Describes <c>source.GroupBy(keySelector, elementSelector, comparer)</c>.</summary>
+/// <summary>Describes <c>source.GroupBy(keySelector, elementSelector, capacity)</c>.</summary>
 /// <remarks>
-/// The result is a sequence of <see cref="Group{TKey, T}"/> descriptions; every generic operator
-/// applies to it, and a callback receives each group with its key.
+/// Built by
+/// <see cref="GroupByExtensions.GroupBy{T, TKey, TElement}(Seq{T}, Func{T, TKey}, Func{T, TElement}, int, string)"/>;
+/// materialized by each target through
+/// <see cref="ISeqVisitor.GroupByKeyElementCapacity{T, TKey, TElement}(GroupByKeyElementCapacitySeq{T, TKey, TElement})"/>.
+/// The result is a sequence of <see cref="Group{TKey, T}"/> descriptions, each with its key.
 /// </remarks>
-public sealed class GroupBySeq<T, TKey, TElement>(
+public sealed class GroupByKeyElementCapacitySeq<T, TKey, TElement>(
     Seq<T> source,
-    Func<T, TKey> keySelector,
-    Func<T, TElement> elementSelector,
-    IEqualityComparer<TKey> comparer,
+    Func<T,
+    TKey> keySelector,
+    Func<T,
+    TElement> elementSelector,
+    int capacity,
     string text) : Seq<Group<TKey, TElement>>
 {
     /// <summary>An observable sequence whose elements to group.</summary>
@@ -25,12 +30,14 @@ public sealed class GroupBySeq<T, TKey, TElement>(
     /// <summary>A function to map each source element to an element in a group.</summary>
     public Func<T, TElement> ElementSelector => elementSelector;
 
-    /// <summary>An equality comparer to compare keys with.</summary>
-    public IEqualityComparer<TKey> Comparer => comparer;
+    /// <summary>
+    /// The number of groups the operator expects to create, used to size its lookup.
+    /// </summary>
+    public int Capacity => capacity;
 
     /// <inheritdoc/>
     public override Realized<Seq<Group<TKey, TElement>>> Accept(ISeqVisitor visitor) =>
-        visitor.GroupBy(this);
+        visitor.GroupByKeyElementCapacity(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.GroupBy({text})";

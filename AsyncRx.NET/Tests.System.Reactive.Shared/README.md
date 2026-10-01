@@ -82,8 +82,9 @@ has an `ImplSignatureTests` class that checks every `*Impl` for this and fails i
 Everything a scenario touches other than the query (the scheduler, testable sources, `Start`,
 the assertions) forwards to the target instance the running test class supplies, so the same
 scenario text runs against Rx.NET's `TestScheduler` and AsyncRx.NET's `TestAsyncScheduler`. The
-raw surface (`ScheduleAbsolute`, `CreateObserver`, `SubscribeAsync`, `Start()`) is async-shaped so
-that it, too, can be shared; on Rx.NET it completes synchronously.
+raw surface (`ScheduleAbsolute`, `ScheduleRelative`, `CreateObserver`, `SubscribeAsync` with one,
+two or three handlers, a testable observer's `OnNextAsync`/`OnErrorAsync`/`OnCompletedAsync`,
+`Start()`) is async-shaped so that it, too, can be shared; on Rx.NET it completes synchronously.
 
 Assertion failures name the query as written, then give the target's own diff.
 

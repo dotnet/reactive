@@ -10,19 +10,79 @@ namespace Tests.System.Reactive.Async;
 
 public sealed partial class AsyncRxTarget
 {
-    Realized<Seq<Group<TKey, TElement>>> ISeqVisitor.GroupBy<T, TKey, TElement>(
-        GroupBySeq<T, TKey, TElement> seq) =>
-        _bridge.Run<Seq<Group<TKey, TElement>>>(
-            GroupByImpl<T, TKey, TElement>,
-            seq.Source,
-            seq.KeySelector,
-            seq.ElementSelector,
-            seq.Comparer);
+    Realized<Seq<Group<TKey, T>>> ISeqVisitor.GroupByKey<T, TKey>(GroupByKeySeq<T, TKey> seq) =>
+        _bridge.Run<Seq<Group<TKey, T>>>(GroupByKeyImpl<T, TKey>, seq.Source, seq.KeySelector);
 
-    private static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupByImpl<T, TKey, TElement>(
+    Realized<Seq<Group<TKey, T>>> ISeqVisitor.GroupByKeyComparer<T, TKey>(GroupByKeyComparerSeq<T, TKey> seq) =>
+        _bridge.Run<Seq<Group<TKey, T>>>(GroupByKeyComparerImpl<T, TKey>, seq.Source, seq.KeySelector, seq.Comparer);
+
+    Realized<Seq<Group<TKey, TElement>>> ISeqVisitor.GroupByKeyElement<T, TKey, TElement>(GroupByKeyElementSeq<T, TKey, TElement> seq) =>
+        _bridge.Run<Seq<Group<TKey, TElement>>>(GroupByKeyElementImpl<T, TKey, TElement>, seq.Source, seq.KeySelector, seq.ElementSelector);
+
+    Realized<Seq<Group<TKey, TElement>>> ISeqVisitor.GroupByKeyElementComparer<T, TKey, TElement>(GroupByKeyElementComparerSeq<T, TKey, TElement> seq) =>
+        _bridge.Run<Seq<Group<TKey, TElement>>>(GroupByKeyElementComparerImpl<T, TKey, TElement>, seq.Source, seq.KeySelector, seq.ElementSelector, seq.Comparer);
+
+    Realized<Seq<Group<TKey, T>>> ISeqVisitor.GroupByKeyCapacity<T, TKey>(GroupByKeyCapacitySeq<T, TKey> seq) =>
+        _bridge.Run<Seq<Group<TKey, T>>>(GroupByKeyCapacityImpl<T, TKey>, seq.Source, seq.KeySelector, seq.Capacity);
+
+    Realized<Seq<Group<TKey, T>>> ISeqVisitor.GroupByKeyCapacityComparer<T, TKey>(GroupByKeyCapacityComparerSeq<T, TKey> seq) =>
+        _bridge.Run<Seq<Group<TKey, T>>>(GroupByKeyCapacityComparerImpl<T, TKey>, seq.Source, seq.KeySelector, seq.Capacity, seq.Comparer);
+
+    Realized<Seq<Group<TKey, TElement>>> ISeqVisitor.GroupByKeyElementCapacity<T, TKey, TElement>(GroupByKeyElementCapacitySeq<T, TKey, TElement> seq) =>
+        _bridge.Run<Seq<Group<TKey, TElement>>>(GroupByKeyElementCapacityImpl<T, TKey, TElement>, seq.Source, seq.KeySelector, seq.ElementSelector, seq.Capacity);
+
+    Realized<Seq<Group<TKey, TElement>>> ISeqVisitor.GroupByKeyElementCapacityComparer<T, TKey, TElement>(GroupByKeyElementCapacityComparerSeq<T, TKey, TElement> seq) =>
+        _bridge.Run<Seq<Group<TKey, TElement>>>(GroupByKeyElementCapacityComparerImpl<T, TKey, TElement>, seq.Source, seq.KeySelector, seq.ElementSelector, seq.Capacity, seq.Comparer);
+
+    private static IAsyncObservable<IGroupedAsyncObservable<TKey, T>> GroupByKeyImpl<T, TKey>(
+        IAsyncObservable<T> source,
+        Func<T, TKey> keySelector) =>
+        source.GroupBy(keySelector);
+
+    private static IAsyncObservable<IGroupedAsyncObservable<TKey, T>> GroupByKeyComparerImpl<T, TKey>(
+        IAsyncObservable<T> source,
+        Func<T, TKey> keySelector,
+        IEqualityComparer<TKey> comparer) =>
+        source.GroupBy(keySelector, comparer);
+
+    private static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupByKeyElementImpl<T, TKey, TElement>(
+        IAsyncObservable<T> source,
+        Func<T, TKey> keySelector,
+        Func<T, TElement> elementSelector) =>
+        source.GroupBy(keySelector, elementSelector);
+
+    private static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupByKeyElementComparerImpl<T, TKey, TElement>(
         IAsyncObservable<T> source,
         Func<T, TKey> keySelector,
         Func<T, TElement> elementSelector,
         IEqualityComparer<TKey> comparer) =>
         source.GroupBy(keySelector, elementSelector, comparer);
+
+    private static IAsyncObservable<IGroupedAsyncObservable<TKey, T>> GroupByKeyCapacityImpl<T, TKey>(
+        IAsyncObservable<T> source,
+        Func<T, TKey> keySelector,
+        int capacity) =>
+        source.GroupBy(keySelector, capacity);
+
+    private static IAsyncObservable<IGroupedAsyncObservable<TKey, T>> GroupByKeyCapacityComparerImpl<T, TKey>(
+        IAsyncObservable<T> source,
+        Func<T, TKey> keySelector,
+        int capacity,
+        IEqualityComparer<TKey> comparer) =>
+        source.GroupBy(keySelector, capacity, comparer);
+
+    private static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupByKeyElementCapacityImpl<T, TKey, TElement>(
+        IAsyncObservable<T> source,
+        Func<T, TKey> keySelector,
+        Func<T, TElement> elementSelector,
+        int capacity) =>
+        source.GroupBy(keySelector, elementSelector, capacity);
+
+    private static IAsyncObservable<IGroupedAsyncObservable<TKey, TElement>> GroupByKeyElementCapacityComparerImpl<T, TKey, TElement>(
+        IAsyncObservable<T> source,
+        Func<T, TKey> keySelector,
+        Func<T, TElement> elementSelector,
+        int capacity,
+        IEqualityComparer<TKey> comparer) =>
+        source.GroupBy(keySelector, elementSelector, capacity, comparer);
 }
