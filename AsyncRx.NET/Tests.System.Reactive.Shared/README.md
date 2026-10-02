@@ -45,6 +45,23 @@ deep, with no code written for either. Where a scenario's callback receives a wi
 (`xs.Window(...).Select((w, i) => w.Select(...)).Merge()`), it arrives as a leaf and the
 description the callback returns is materialized in place.
 
+One operator's scenarios drive an observer themselves: `Create`. Its callback receives an
+`ObserverRef<T>` and awaits `OnNextAsync` where the Rx.NET test calls `OnNext`, in an `async`
+lambda that returns its action or disposable through a `ValueTask`:
+
+```csharp
+Seq.Create<int>(async o =>
+{
+    await o.OnNextAsync(1);
+    await o.OnNextAsync(2);
+    return () => { };
+})
+```
+
+The bridge hands the callback the target's real observer wrapped as an `ObserverRef<T>`. On
+Rx.NET every await completes synchronously and the target runs the callback as a synchronous
+subscribe function; on AsyncRx.NET the callback is the subscribe function.
+
 ## How a target materializes a description
 
 Each target (`RxTarget`, `AsyncRxTarget`) writes every operator once, as an ordinary generic

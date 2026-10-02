@@ -6,6 +6,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reflection;
 
 using Microsoft.Reactive.Testing;
 using Microsoft.Reactive.Testing.Async;
@@ -36,7 +37,14 @@ public sealed partial class AsyncRxTarget : IRxTarget
             GroupedOf: (key, element) => typeof(IGroupedAsyncObservable<,>).MakeGenericType(key, element),
             KeyOf: group => group.GetType().GetInterfaces()
                 .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IGroupedAsyncObservable<,>))
-                .GetProperty("Key")!.GetValue(group)));
+                .GetProperty("Key")!.GetValue(group),
+            ObserverOf: element => typeof(IAsyncObserver<>).MakeGenericType(element),
+            WrapObserver: observer => typeof(AsyncRxTarget)
+                .GetMethod(nameof(WrapObserverImpl), BindingFlags.NonPublic | BindingFlags.Static)!
+                .MakeGenericMethod(observer.GetType().GetInterfaces()
+                    .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAsyncObserver<>))
+                    .GetGenericArguments()[0])
+                .Invoke(null, [observer])!));
     }
 
     private static TestAsyncScheduler Unwrap(TestSchedulerRef scheduler) =>
@@ -189,6 +197,10 @@ public sealed partial class AsyncRxTarget : IRxTarget
     private static IReadOnlyList<AsyncSubscription> SubscriptionsImpl<T>(
         ITestableAsyncObservable<T> source) =>
         source.Subscriptions;
+
+    // The observer a Create callback drives.
+    private static ObserverRef<T> WrapObserverImpl<T>(IAsyncObserver<T> observer) =>
+        new(observer.OnNextAsync, observer.OnErrorAsync, observer.OnCompletedAsync);
 
     private static ValueTask<IAsyncDisposable> SubscribeImpl<T>(
         IAsyncObservable<T> source,

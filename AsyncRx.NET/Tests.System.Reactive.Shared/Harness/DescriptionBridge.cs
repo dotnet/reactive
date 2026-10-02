@@ -52,10 +52,22 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
     /// Reads the key of one of the target's grouped observables, so the bridge can set
     /// <see cref="Group{TKey, T}.Key"/> when it hands a real group to a scenario's callback.
     /// </param>
+    /// <param name="ObserverOf">
+    /// Builds the target's observer type for an element type: on Rx.NET,
+    /// <c>ObserverOf(typeof(int))</c> returns <c>typeof(IObserver&lt;int&gt;)</c>; on
+    /// AsyncRx.NET, <c>typeof(IAsyncObserver&lt;int&gt;)</c>. The bridge calls it for
+    /// <c>ObserverRef&lt;int&gt;</c>, the observer a <c>Create</c> callback drives.
+    /// </param>
+    /// <param name="WrapObserver">
+    /// Wraps one of the target's observers as the <see cref="ObserverRef{T}"/> a scenario's
+    /// callback drives, so the bridge can hand a real observer to the callback.
+    /// </param>
     public sealed record TargetTypes(
         Func<Type, Type> ObservableOf,
         Func<Type, Type, Type> GroupedOf,
-        Func<object, object?> KeyOf);
+        Func<object, object?> KeyOf,
+        Func<Type, Type> ObserverOf,
+        Func<object, object> WrapObserver);
 
     /// <summary>The target's real type for a description type, at any depth of nesting.</summary>
     /// <param name="descriptionType">
@@ -103,6 +115,11 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
         if (definition == typeof(Group<,>))
         {
             return types.GroupedOf(args[0], Real(args[1]));
+        }
+
+        if (definition == typeof(ObserverRef<>))
+        {
+            return types.ObserverOf(Real(args[0]));
         }
 
         if (typeof(ISeq).IsAssignableFrom(descriptionType))
@@ -297,6 +314,12 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
         if (real is null || describedType.IsInstanceOfType(real))
         {
             return real;
+        }
+
+        if (describedType.IsGenericType
+            && describedType.GetGenericTypeDefinition() == typeof(ObserverRef<>))
+        {
+            return types.WrapObserver(real);
         }
 
         if (describedType.IsGenericType

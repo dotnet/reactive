@@ -6,6 +6,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reflection;
 
 using Microsoft.Reactive.Testing;
 
@@ -37,7 +38,14 @@ public sealed partial class RxTarget : IRxTarget
             GroupedOf: (key, element) => typeof(IGroupedObservable<,>).MakeGenericType(key, element),
             KeyOf: group => group.GetType().GetInterfaces()
                 .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IGroupedObservable<,>))
-                .GetProperty("Key")!.GetValue(group)));
+                .GetProperty("Key")!.GetValue(group),
+            ObserverOf: element => typeof(IObserver<>).MakeGenericType(element),
+            WrapObserver: observer => typeof(RxTarget)
+                .GetMethod(nameof(WrapObserverImpl), BindingFlags.NonPublic | BindingFlags.Static)!
+                .MakeGenericMethod(observer.GetType().GetInterfaces()
+                    .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IObserver<>))
+                    .GetGenericArguments()[0])
+                .Invoke(null, [observer])!));
     }
 
     private static RxTestScheduler Unwrap(TestSchedulerRef scheduler) =>
@@ -182,6 +190,17 @@ public sealed partial class RxTarget : IRxTarget
 
     public void Run(TestSchedulerRef scheduler) => Unwrap(scheduler).Start();
 
+    private static TResult Complete<TResult>(ValueTask<TResult> task)
+    {
+        if (!task.IsCompleted)
+        {
+            throw new InvalidOperationException(
+                "On the Rx.NET target every operation a shared scenario can await completes synchronously, but this delegate returned an incomplete task.");
+        }
+
+        return task.GetAwaiter().GetResult();
+    }
+
     private static void Complete(ValueTask task)
     {
         if (!task.IsCompleted)
@@ -224,6 +243,25 @@ public sealed partial class RxTarget : IRxTarget
 
     private static IList<Subscription> SubscriptionsImpl<T>(ITestableObservable<T> source) =>
         source.Subscriptions;
+
+    // The observer a Create callback drives: each call completes synchronously here.
+    private static ObserverRef<T> WrapObserverImpl<T>(IObserver<T> observer) =>
+        new(
+            x =>
+            {
+                observer.OnNext(x);
+                return default;
+            },
+            ex =>
+            {
+                observer.OnError(ex);
+                return default;
+            },
+            () =>
+            {
+                observer.OnCompleted();
+                return default;
+            });
 
     private static IDisposable SubscribeImpl<T>(IObservable<T> source, Func<T, ValueTask> onNext) =>
         source.Subscribe(x => Complete(onNext(x)));

@@ -180,4 +180,42 @@ public static class SubscribeExtensions
             },
             onError);
     }
+
+    /// <summary>Subscribes three synchronous handlers to <paramref name="source"/>.</summary>
+    /// <param name="source">The sequence to subscribe to.</param>
+    /// <param name="scheduler">The test's scheduler, which carries the target.</param>
+    /// <param name="onNext">Handler for each element.</param>
+    /// <param name="onError">Handler for an error.</param>
+    /// <param name="onCompleted">Handler for completion.</param>
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        this Seq<T> source,
+        TestSchedulerRef scheduler,
+        Action<T> onNext,
+        Action<Exception> onError,
+        Action onCompleted)
+    {
+        ArgumentNullException.ThrowIfNull(scheduler);
+        ArgumentNullException.ThrowIfNull(onNext);
+        ArgumentNullException.ThrowIfNull(onError);
+        ArgumentNullException.ThrowIfNull(onCompleted);
+
+        return scheduler.Target.SubscribeAsync(
+            scheduler,
+            source,
+            x =>
+            {
+                onNext(x);
+                return default;
+            },
+            ex =>
+            {
+                onError(ex);
+                return default;
+            },
+            () =>
+            {
+                onCompleted();
+                return default;
+            });
+    }
 }
