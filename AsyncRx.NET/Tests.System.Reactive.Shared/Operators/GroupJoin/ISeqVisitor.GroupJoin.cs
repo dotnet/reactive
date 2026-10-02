@@ -1,0 +1,32 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT License.
+// See the LICENSE file in the project root for more information. 
+
+namespace Tests.System.Reactive.Shared;
+
+public partial interface ISeqVisitor
+{
+    /// <summary>
+    /// Materializes a
+    /// <see cref="GroupJoinSeq{TLeft, TRight, TLeftDuration, TRightDuration, TResult}"/> as the
+    /// target's own <c>GroupJoin(...)</c>.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="GroupJoinExtensions.GroupJoin{TLeft, TRight, TLeftDuration, TRightDuration, TResult}"/>.
+    /// The description the result selector returns is materialized in place over the target's
+    /// group.
+    /// </remarks>
+    Realized<Seq<Seq<TResult>>> GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(GroupJoinSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult> seq);
+
+    /// <summary>
+    /// Materializes a
+    /// <see cref="GroupJoinValueSeq{TLeft, TRight, TLeftDuration, TRightDuration, TResult}"/> as
+    /// the target's own <c>GroupJoin(...)</c> with a value-returning result selector.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="GroupJoinValueExtensions.GroupJoin{TLeft, TRight, TLeftDuration, TRightDuration, TResult}"/>.
+    /// </remarks>
+    Realized<Seq<TResult>> GroupJoinValue<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(GroupJoinValueSeq<TLeft, TRight, TLeftDuration, TRightDuration, TResult> seq);
+}

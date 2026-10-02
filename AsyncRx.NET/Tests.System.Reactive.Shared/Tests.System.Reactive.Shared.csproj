@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+
+    <!-- Directory.Build.props infers a test project from the name. This project holds the shared
+         scenarios as abstract classes; the runnable [TestClass]es are in the per-target projects
+         (Tests.System.Reactive.Async and Tests.System.Reactive.Shared.Rx). -->
+    <IsTestProject>false</IsTestProject>
+
+    <!--
+    MSTEST0049: Use CancellationToken - the analyzer misunderstands virtual-time tests.
+    CA2016: Forward CancellationToken - the same misunderstanding.
+    CA1861: Avoid constant arrays as arguments - not relevant to test code.
+    IDE0130: Namespace does not match folder structure - we are using folder structure to make it easier
+        to understand the code in this project, but in the test projects that consume this code, it makes
+        more sense to have a flat namespace. so we need to disable this analyzer for this project.
+    -->
+    <NoWarn>$(NoWarn);MSTEST0049;CA2016;CA1861;IDE0130</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Target-neutral: this project calls no operator on either target. It needs only the
+         shared testing vocabulary (Recorded, Notification, Subscription, ReactiveTest, TimeInterval)
+         and the MSTest attributes and assertions. A query written in a scenario is a tree of
+         neutral nodes (Seq<T>); each target project materializes it. -->
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="6.0.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- For the extended expectation forms (AsyncReactiveTest: prolonged deliveries, four-timestamp
+         subscriptions), so that tests get them by inheritance from SharedReactiveTest. This is a
+         dependency on the async testing vocabulary, as the package above is on the sync one; the
+         kit still calls no operator on either target. -->
+    <ProjectReference Include="..\Microsoft.Reactive.Testing.Async\Microsoft.Reactive.Testing.Async.csproj" />
+  </ItemGroup>
+
+</Project>

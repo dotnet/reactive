@@ -36,6 +36,8 @@ namespace System.Reactive.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
+            if (interval < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(interval));
 
             return CreateAsyncObservable<TSource>.From(
                 source,
@@ -54,6 +56,8 @@ namespace System.Reactive.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
+            if (interval < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(interval));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 

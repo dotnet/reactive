@@ -17,7 +17,10 @@ namespace System.Reactive
 
         public ValueTask OnCompletedAsync()
         {
-            TryEnter();
+            if (!TryEnter())
+            {
+                return default;
+            }
 
             try
             {
@@ -36,7 +39,10 @@ namespace System.Reactive
             if (error == null)
                 throw new ArgumentNullException(nameof(error));
 
-            TryEnter();
+            if (!TryEnter())
+            {
+                return default;
+            }
 
             try
             {
@@ -52,7 +58,10 @@ namespace System.Reactive
 
         public ValueTask OnNextAsync(T value)
         {
-            TryEnter();
+            if (!TryEnter())
+            {
+                return default;
+            }
 
             try
             {
@@ -66,7 +75,11 @@ namespace System.Reactive
 
         protected abstract ValueTask OnNextAsyncCore(T value);
 
-        private void TryEnter()
+        // Returns false when the observer has already terminated: as in Rx.NET's ObserverBase,
+        // a notification after OnError or OnCompleted is ignored rather than an error, so a
+        // source that keeps calling after it has terminated (as Create's callback may) is
+        // harmless. A concurrent call is still an error.
+        private bool TryEnter()
         {
             var old = Interlocked.CompareExchange(ref _status, Busy, Idle);
 
@@ -75,8 +88,10 @@ namespace System.Reactive
                 case Busy:
                     throw new InvalidOperationException("The observer is currently processing a notification.");
                 case Done:
-                    throw new InvalidOperationException("The observer has already terminated.");
+                    return false;
             }
+
+            return true;
         }
     }
 }

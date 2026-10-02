@@ -18,11 +18,8 @@ namespace System.Reactive.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            if (count == 0)
-            {
-                return source;
-            }
-
+            // No shortcut for a count of zero: as in Rx.NET, the operator always wraps the source,
+            // so that the subscription is torn down when the sequence completes.
             return CreateAsyncObservable<TSource>.From(
                 source,
                 count,
@@ -36,10 +33,8 @@ namespace System.Reactive.Linq
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
 
-            if (duration == TimeSpan.Zero)
-            {
-                return source;
-            }
+            // No shortcut for a zero duration: as in Rx.NET, the operator always wraps the source,
+            // so that the subscription is torn down when the sequence completes.
 
             // REVIEW: May be easier to just use SkipUntil with a Timer parameter. Do we want Skip on the observer?
 
@@ -65,10 +60,8 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            if (duration == TimeSpan.Zero)
-            {
-                return source;
-            }
+            // No shortcut for a zero duration: as in Rx.NET, the operator always wraps the source,
+            // so that the subscription is torn down when the sequence completes.
 
             // REVIEW: May be easier to just use SkipUntil with a Timer parameter. Do we want Skip on the observer?
 
@@ -77,7 +70,7 @@ namespace System.Reactive.Linq
                 (duration, scheduler),
                 static async (source, state, observer) =>
                 {
-                    var (sourceObserver, timer) = await AsyncObserver.Skip(observer, state.duration).ConfigureAwait(false);
+                    var (sourceObserver, timer) = await AsyncObserver.Skip(observer, state.duration, state.scheduler).ConfigureAwait(false);
 
                     var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
@@ -92,7 +85,7 @@ namespace System.Reactive.Linq
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
-            if (count <= 0)
+            if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
             return Create<TSource>(

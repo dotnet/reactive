@@ -14,7 +14,13 @@ namespace System.Reactive.Linq
     {
         // TODO: Add Zip<T>(IAsyncObservable<T>, IAsyncEnumerable<T>) overload when we have reference to IAsyncEnumerable<T>.
 
-        public static IAsyncObservable<IList<TSource>> Zip<TSource>(IEnumerable<IAsyncObservable<TSource>> sources) => Zip(sources.ToArray());
+        public static IAsyncObservable<IList<TSource>> Zip<TSource>(IEnumerable<IAsyncObservable<TSource>> sources)
+        {
+            if (sources == null)
+                throw new ArgumentNullException(nameof(sources));
+
+            return Zip(sources.ToArray());
+        }
 
         public static IAsyncObservable<IList<TSource>> Zip<TSource>(params IAsyncObservable<TSource>[] sources)
         {
