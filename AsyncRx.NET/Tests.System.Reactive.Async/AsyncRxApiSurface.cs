@@ -21,6 +21,9 @@ public sealed class AsyncRxApiSurface : IApiSurface
     public Type Operators => typeof(AsyncObservable);
 
     /// <inheritdoc/>
+    public Type Extensions => typeof(AsyncObservableExtensions);
+
+    /// <inheritdoc/>
     public Type ObservableDefinition => typeof(IAsyncObservable<>);
 
     /// <inheritdoc/>

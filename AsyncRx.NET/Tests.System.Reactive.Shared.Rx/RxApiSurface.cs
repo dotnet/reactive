@@ -19,6 +19,9 @@ public sealed class RxApiSurface : IApiSurface
     public Type Operators => typeof(Observable);
 
     /// <inheritdoc/>
+    public Type Extensions => typeof(ObservableExtensions);
+
+    /// <inheritdoc/>
     public Type ObservableDefinition => typeof(IObservable<>);
 
     /// <inheritdoc/>

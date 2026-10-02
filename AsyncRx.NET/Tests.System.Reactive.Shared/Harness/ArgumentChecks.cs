@@ -10,10 +10,10 @@ namespace Tests.System.Reactive.Shared;
 /// <remarks>
 /// <para>
 /// The shared replacement for Rx.NET's hand-written <c>*_ArgumentChecking</c> tests, derived
-/// from the API surface itself. For each public static method of the surface with the operator's
-/// name, instantiated at <see cref="int"/> where generic: every non-nullable reference parameter
-/// passed as null must raise <see cref="ArgumentNullException"/> naming that parameter; every
-/// parameter whose name says it is a count or a duration (<c>count</c>, <c>skip</c>,
+/// from the API surface itself. For each public static method of the surface's classes with the
+/// operator's name, instantiated at <see cref="int"/> where generic: every non-nullable reference
+/// parameter passed as null must raise <see cref="ArgumentNullException"/> naming that parameter;
+/// every parameter whose name says it is a count or a duration (<c>count</c>, <c>skip</c>,
 /// <c>capacity</c>, <c>bufferSize</c>, <c>maxConcurrent</c>, <c>duration</c>, <c>timeSpan</c>,
 /// <c>timeShift</c>, <c>dueTime</c>, <c>period</c>, <c>window</c>, <c>interval</c>,
 /// <c>index</c>, <c>repeatCount</c>, <c>retryCount</c>, <c>minObservers</c>) passed as minus one
@@ -49,26 +49,49 @@ public static class ArgumentChecks
     /// <summary>The overloads of <paramref name="operatorName"/> on the surface.</summary>
     /// <param name="surface">The target's operator surface.</param>
     /// <param name="operatorName">The operator's method name.</param>
-    public static IReadOnlyList<MethodInfo> Overloads(IApiSurface surface, string operatorName)
+    /// <param name="scope">Which of the surface's classes to look at.</param>
+    public static IReadOnlyList<MethodInfo> Overloads(
+        IApiSurface surface,
+        string operatorName,
+        SurfaceClass scope = SurfaceClass.Any)
     {
         ArgumentNullException.ThrowIfNull(surface);
 
-        return surface.Operators
-            .GetMethods(BindingFlags.Public | BindingFlags.Static)
+        return Classes(surface, scope)
+            .SelectMany(c => c.GetMethods(BindingFlags.Public | BindingFlags.Static))
             .Where(m => m.Name == operatorName)
             .ToArray();
+    }
+
+    /// <summary>The surface's classes that <paramref name="scope"/> names.</summary>
+    /// <param name="surface">The target's operator surface.</param>
+    /// <param name="scope">Which of the surface's classes to name.</param>
+    public static IReadOnlyList<Type> Classes(IApiSurface surface, SurfaceClass scope)
+    {
+        ArgumentNullException.ThrowIfNull(surface);
+
+        return scope switch
+        {
+            SurfaceClass.Operators => [surface.Operators],
+            SurfaceClass.Extensions => [surface.Extensions],
+            _ => [surface.Operators, surface.Extensions],
+        };
     }
 
     /// <summary>Runs the checks over every overload and describes each defect.</summary>
     /// <param name="surface">The target's operator surface.</param>
     /// <param name="operatorName">The operator's method name.</param>
-    public static IReadOnlyList<string> Check(IApiSurface surface, string operatorName)
+    /// <param name="scope">Which of the surface's classes to look at.</param>
+    public static IReadOnlyList<string> Check(
+        IApiSurface surface,
+        string operatorName,
+        SurfaceClass scope = SurfaceClass.Any)
     {
         ArgumentNullException.ThrowIfNull(surface);
 
         var problems = new List<string>();
         var nullability = new NullabilityInfoContext();
-        foreach (var overload in Overloads(surface, operatorName))
+        foreach (var overload in Overloads(surface, operatorName, scope))
         {
             var method = overload;
             if (method.IsGenericMethodDefinition)

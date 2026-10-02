@@ -11,14 +11,21 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// <para>
 /// Where Rx.NET has a hand-written <c>*_ArgumentChecking</c> test per operator, each test here
 /// is one line: <see cref="ArgumentChecks"/> walks the operator's overloads on the running
-/// target's surface and applies the rules. An operator a target does not have is reported as
-/// inconclusive here; whether its absence is acceptable is the API-surface parity test's
-/// business, not this class's.
+/// target's surface and applies the rules.
 /// </para>
 /// <para>
-/// The list of tests is the union of both surfaces, 144 names. <see cref="EveryOperatorHasATest"/>
-/// keeps it complete: it fails on a target whose surface has a public static method with no test
-/// here, so a new operator gets its argument checks the moment it is added.
+/// This class declares the 122 operator names both surfaces have, and the 16 that only one
+/// has. The latter are inconclusive on the target that lacks them, on purpose: each is an
+/// unresolved difference between the libraries, to be looked at one by one as the operators'
+/// behavioural tests are reached, and the skip is the reminder. The only one-sided names not
+/// here are the pairs that differ only in name (<c>AsObservable</c>, <c>ToObservable</c> and
+/// <c>SubscribeSafe</c> against <c>AsAsyncObservable</c>, <c>ToAsyncObservable</c> and
+/// <c>SubscribeSafeAsync</c>; the handler-based <c>SubscribeAsync</c> family against the same
+/// family under Rx.NET's <c>Subscribe</c>; <c>UsingAsync</c> against Rx.NET's asynchronous
+/// <c>Using</c> overload), which each target's derived class declares as its own, since nothing
+/// is unresolved about them. <see cref="EveryOperatorHasATest"/> keeps the lists
+/// complete: it fails on a target whose surface has a public static method with no test, so a
+/// new operator gets its argument checks the moment it is added.
 /// </para>
 /// </remarks>
 public abstract class ArgumentCheckingTests
@@ -29,17 +36,25 @@ public abstract class ArgumentCheckingTests
     [TestMethod]
     public void EveryOperatorHasATest()
     {
+        // A method on either class is covered by a test named for it, or by one scoped to its
+        // class: Subscribe_Operators_ArgumentChecking covers Subscribe on the operator class.
         var tests = GetType().GetMethods().Select(m => m.Name).ToHashSet(StringComparer.Ordinal);
-        var missing = Surface.Operators
-            .GetMethods(BindingFlags.Public | BindingFlags.Static)
-            .Select(m => m.Name)
-            .Distinct()
-            .Where(n => !tests.Contains(n + "_ArgumentChecking"))
-            .Order()
-            .ToList();
+        var missing = new List<string>();
+        foreach (var scope in new[] { SurfaceClass.Operators, SurfaceClass.Extensions })
+        {
+            var type = ArgumentChecks.Classes(Surface, scope)[0];
+            missing.AddRange(type
+                .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .Select(m => m.Name)
+                .Distinct()
+                .Where(n => !tests.Contains(n + "_ArgumentChecking") && !tests.Contains($"{n}_{scope}_ArgumentChecking"))
+                .Select(n => $"{type.Name}.{n}"));
+        }
 
-        Assert.IsEmpty(missing, "Operators with no argument-checking test: " + string.Join(", ", missing));
+        Assert.IsEmpty(missing, "Operators with no argument-checking test: " + string.Join(", ", missing.Order()));
     }
+
+    // ---- Operators both targets have ----
 
     [TestMethod]
     public void Aggregate_ArgumentChecking() => Check("Aggregate");
@@ -60,15 +75,6 @@ public abstract class ArgumentCheckingTests
     public void Append_ArgumentChecking() => Check("Append");
 
     [TestMethod]
-    public void AsAsyncObservable_ArgumentChecking() => Check("AsAsyncObservable");
-
-    [TestMethod]
-    public void AsObservable_ArgumentChecking() => Check("AsObservable");
-
-    [TestMethod]
-    public void AutoConnect_ArgumentChecking() => Check("AutoConnect");
-
-    [TestMethod]
     public void Average_ArgumentChecking() => Check("Average");
 
     [TestMethod]
@@ -82,12 +88,6 @@ public abstract class ArgumentCheckingTests
 
     [TestMethod]
     public void Catch_ArgumentChecking() => Check("Catch");
-
-    [TestMethod]
-    public void Chunkify_ArgumentChecking() => Check("Chunkify");
-
-    [TestMethod]
-    public void Collect_ArgumentChecking() => Check("Collect");
 
     [TestMethod]
     public void CombineLatest_ArgumentChecking() => Check("CombineLatest");
@@ -162,9 +162,6 @@ public abstract class ArgumentCheckingTests
     public void For_ArgumentChecking() => Check("For");
 
     [TestMethod]
-    public void ForEach_ArgumentChecking() => Check("ForEach");
-
-    [TestMethod]
     public void ForEachAsync_ArgumentChecking() => Check("ForEachAsync");
 
     [TestMethod]
@@ -184,9 +181,6 @@ public abstract class ArgumentCheckingTests
 
     [TestMethod]
     public void GetAwaiter_ArgumentChecking() => Check("GetAwaiter");
-
-    [TestMethod]
-    public void GetEnumerator_ArgumentChecking() => Check("GetEnumerator");
 
     [TestMethod]
     public void GroupBy_ArgumentChecking() => Check("GroupBy");
@@ -225,9 +219,6 @@ public abstract class ArgumentCheckingTests
     public void LastOrDefaultAsync_ArgumentChecking() => Check("LastOrDefaultAsync");
 
     [TestMethod]
-    public void Latest_ArgumentChecking() => Check("Latest");
-
-    [TestMethod]
     public void LongCount_ArgumentChecking() => Check("LongCount");
 
     [TestMethod]
@@ -249,16 +240,10 @@ public abstract class ArgumentCheckingTests
     public void MinBy_ArgumentChecking() => Check("MinBy");
 
     [TestMethod]
-    public void MostRecent_ArgumentChecking() => Check("MostRecent");
-
-    [TestMethod]
     public void Multicast_ArgumentChecking() => Check("Multicast");
 
     [TestMethod]
     public void Never_ArgumentChecking() => Check("Never");
-
-    [TestMethod]
-    public void Next_ArgumentChecking() => Check("Next");
 
     [TestMethod]
     public void ObserveOn_ArgumentChecking() => Check("ObserveOn");
@@ -288,16 +273,10 @@ public abstract class ArgumentCheckingTests
     public void Repeat_ArgumentChecking() => Check("Repeat");
 
     [TestMethod]
-    public void RepeatWhen_ArgumentChecking() => Check("RepeatWhen");
-
-    [TestMethod]
     public void Replay_ArgumentChecking() => Check("Replay");
 
     [TestMethod]
     public void Retry_ArgumentChecking() => Check("Retry");
-
-    [TestMethod]
-    public void RetryWhen_ArgumentChecking() => Check("RetryWhen");
 
     [TestMethod]
     public void Return_ArgumentChecking() => Check("Return");
@@ -354,13 +333,7 @@ public abstract class ArgumentCheckingTests
     public void StartWith_ArgumentChecking() => Check("StartWith");
 
     [TestMethod]
-    public void Subscribe_ArgumentChecking() => Check("Subscribe");
-
-    [TestMethod]
     public void SubscribeOn_ArgumentChecking() => Check("SubscribeOn");
-
-    [TestMethod]
-    public void SubscribeSafeAsync_ArgumentChecking() => Check("SubscribeSafeAsync");
 
     [TestMethod]
     public void Sum_ArgumentChecking() => Check("Sum");
@@ -414,13 +387,7 @@ public abstract class ArgumentCheckingTests
     public void ToAsync_ArgumentChecking() => Check("ToAsync");
 
     [TestMethod]
-    public void ToAsyncObservable_ArgumentChecking() => Check("ToAsyncObservable");
-
-    [TestMethod]
     public void ToDictionary_ArgumentChecking() => Check("ToDictionary");
-
-    [TestMethod]
-    public void ToEnumerable_ArgumentChecking() => Check("ToEnumerable");
 
     [TestMethod]
     public void ToEvent_ArgumentChecking() => Check("ToEvent");
@@ -429,31 +396,13 @@ public abstract class ArgumentCheckingTests
     public void ToEventPattern_ArgumentChecking() => Check("ToEventPattern");
 
     [TestMethod]
-    public void ToHashSet_ArgumentChecking() => Check("ToHashSet");
-
-    [TestMethod]
     public void ToList_ArgumentChecking() => Check("ToList");
 
     [TestMethod]
     public void ToLookup_ArgumentChecking() => Check("ToLookup");
 
     [TestMethod]
-    public void ToObservable_ArgumentChecking() => Check("ToObservable");
-
-    [TestMethod]
     public void Using_ArgumentChecking() => Check("Using");
-
-    [TestMethod]
-    public void UsingAsync_ArgumentChecking() => Check("UsingAsync");
-
-    [TestMethod]
-    public void UsingAwait_ArgumentChecking() => Check("UsingAwait");
-
-    [TestMethod]
-    public void UsingAwaitAsync_ArgumentChecking() => Check("UsingAwaitAsync");
-
-    [TestMethod]
-    public void Wait_ArgumentChecking() => Check("Wait");
 
     [TestMethod]
     public void When_ArgumentChecking() => Check("When");
@@ -473,15 +422,94 @@ public abstract class ArgumentCheckingTests
     [TestMethod]
     public void Zip_ArgumentChecking() => Check("Zip");
 
-    private void Check(string operatorName)
+    // ---- Operators only Rx.NET has: unresolved differences, inconclusive on AsyncRx.NET ----
+
+    [TestMethod]
+    public void AutoConnect_ArgumentChecking() => CheckIfPresent("AutoConnect");
+
+    [TestMethod]
+    public void Chunkify_ArgumentChecking() => CheckIfPresent("Chunkify");
+
+    [TestMethod]
+    public void Collect_ArgumentChecking() => CheckIfPresent("Collect");
+
+    [TestMethod]
+    public void ForEach_ArgumentChecking() => CheckIfPresent("ForEach");
+
+    [TestMethod]
+    public void GetEnumerator_ArgumentChecking() => CheckIfPresent("GetEnumerator");
+
+    [TestMethod]
+    public void Latest_ArgumentChecking() => CheckIfPresent("Latest");
+
+    [TestMethod]
+    public void MostRecent_ArgumentChecking() => CheckIfPresent("MostRecent");
+
+    [TestMethod]
+    public void Next_ArgumentChecking() => CheckIfPresent("Next");
+
+    [TestMethod]
+    public void RepeatWhen_ArgumentChecking() => CheckIfPresent("RepeatWhen");
+
+    [TestMethod]
+    public void RetryWhen_ArgumentChecking() => CheckIfPresent("RetryWhen");
+
+    // Rx.NET's enumerable Subscribe, a shortcut for ToObservable(scheduler).Subscribe(observer);
+    // its handler-based Subscribe family lives on the extensions class and is paired with
+    // AsyncRx.NET's SubscribeAsync in the derived classes.
+    [TestMethod]
+    public void Subscribe_Operators_ArgumentChecking() => CheckIfPresent("Subscribe", SurfaceClass.Operators);
+
+    [TestMethod]
+    public void ToEnumerable_ArgumentChecking() => CheckIfPresent("ToEnumerable");
+
+    [TestMethod]
+    public void Wait_ArgumentChecking() => CheckIfPresent("Wait");
+
+    // ---- Operators only AsyncRx.NET has: unresolved differences, inconclusive on Rx.NET ----
+
+    [TestMethod]
+    public void ToHashSet_ArgumentChecking() => CheckIfPresent("ToHashSet");
+
+    [TestMethod]
+    public void UsingAwait_ArgumentChecking() => CheckIfPresent("UsingAwait");
+
+    [TestMethod]
+    public void UsingAwaitAsync_ArgumentChecking() => CheckIfPresent("UsingAwaitAsync");
+
+    /// <summary>Runs the argument checks over every overload of an operator.</summary>
+    /// <param name="operatorName">The operator's method name.</param>
+    /// <param name="scope">Which of the surface's classes to look at.</param>
+    /// <remarks>
+    /// An operator with no overloads on the surface is a failure: the declaring class claims it
+    /// is there. For the operators both targets have, and for a derived class to declare the
+    /// ones its target has under its own name.
+    /// </remarks>
+    protected void Check(string operatorName, SurfaceClass scope = SurfaceClass.Any)
     {
-        if (ArgumentChecks.Overloads(Surface, operatorName).Count == 0)
+        if (ArgumentChecks.Overloads(Surface, operatorName, scope).Count == 0)
         {
-            Assert.Inconclusive($"{operatorName} is not on this target's surface.");
+            Assert.Fail($"{operatorName} has no overloads on this target's surface.");
         }
 
-        var problems = ArgumentChecks.Check(Surface, operatorName);
+        var problems = ArgumentChecks.Check(Surface, operatorName, scope);
 
         Assert.IsEmpty(problems, string.Join(Environment.NewLine, problems));
+    }
+
+    /// <summary>
+    /// As <see cref="Check"/>, but inconclusive on a target that does not have the operator.
+    /// </summary>
+    /// <param name="operatorName">The operator's method name.</param>
+    /// <param name="scope">Which of the surface's classes to look at.</param>
+    /// <remarks>For the operators only one library has, while that is unresolved.</remarks>
+    protected void CheckIfPresent(string operatorName, SurfaceClass scope = SurfaceClass.Any)
+    {
+        if (ArgumentChecks.Overloads(Surface, operatorName, scope).Count == 0)
+        {
+            Assert.Inconclusive($"{operatorName} is not on this target's surface: an unresolved difference between the libraries.");
+        }
+
+        Check(operatorName, scope);
     }
 }
