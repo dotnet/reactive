@@ -12,6 +12,8 @@ using Microsoft.Reactive.Testing;
 
 using RxTestScheduler = Microsoft.Reactive.Testing.TestScheduler;
 
+using Tests.System.Reactive.Shared.Scenarios;
+
 namespace Tests.System.Reactive.Shared.Rx;
 
 /// <summary>The Rx.NET target.</summary>
@@ -45,7 +47,8 @@ public sealed partial class RxTarget : IRxTarget
                 .MakeGenericMethod(observer.GetType().GetInterfaces()
                     .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IObserver<>))
                     .GetGenericArguments()[0])
-                .Invoke(null, [observer])!));
+                .Invoke(null, [observer])!,
+            ConnectableOf: element => typeof(IConnectableObservable<>).MakeGenericType(element)));
     }
 
     private static RxTestScheduler Unwrap(TestSchedulerRef scheduler) =>
@@ -64,14 +67,24 @@ public sealed partial class RxTarget : IRxTarget
     public SchedulerRef DisableOptimizations(TestSchedulerRef scheduler) =>
         new(Unwrap(scheduler).DisableOptimizations(), "Scheduler.DisableOptimizations()");
 
+    public SchedulerRef ImmediateScheduler { get; } = new(Scheduler.Immediate, "Scheduler.Immediate");
+
     public SchedulerRef DefaultScheduler { get; } = new(Scheduler.Default, "Scheduler.Default");
 
     public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) =>
         await Materialize(source).ToList();
 
-    public SubjectSeq<T> CreateSubject<T>()
+    public SubjectSeq<T> CreateReplaySubject<T>(int bufferSize) => Wrap(new ReplaySubject<T>(bufferSize));
+
+    public SubjectSeq<T> CreateBehaviorSubject<T>(T value) => Wrap(new BehaviorSubject<T>(value));
+
+    public Realized<Seq<T>> CreateRefCountTestConnectable<T>(RefCountTests.SerialSingleNotificationConnectable<T>.State state) =>
+        Realized.Of<Seq<T>>(new RxSerialSingleNotificationConnectable<T>(state));
+
+    public SubjectSeq<T> CreateSubject<T>() => Wrap(new Subject<T>());
+
+    private static SubjectSeq<T> Wrap<T>(ISubject<T> subject)
     {
-        var subject = new Subject<T>();
         return new(
             Realized.Of<Seq<T>>(subject),
             x =>

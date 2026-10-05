@@ -14,7 +14,7 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// target's surface and applies the rules.
 /// </para>
 /// <para>
-/// This class declares the 122 operator names both surfaces have, and the 16 that only one
+/// This class declares the 122 operator names both surfaces have, and the 17 that only one
 /// has. The latter are inconclusive on the target that lacks them, on purpose: each is an
 /// unresolved difference between the libraries, to be looked at one by one as the operators'
 /// behavioural tests are reached, and the skip is the reminder. The only one-sided names not
@@ -450,6 +450,10 @@ public abstract class ArgumentCheckingTests
 
     [TestMethod]
     public void RepeatWhen_ArgumentChecking() => CheckIfPresent("RepeatWhen");
+
+    // New in Rx.NET 7.0: resets the exception dispatch state captured by Rx's rethrow helpers.
+    [TestMethod]
+    public void ResetExceptionDispatchState_ArgumentChecking() => CheckIfPresent("ResetExceptionDispatchState");
 
     [TestMethod]
     public void RetryWhen_ArgumentChecking() => CheckIfPresent("RetryWhen");

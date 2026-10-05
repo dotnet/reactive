@@ -123,6 +123,12 @@ public partial interface ISeqVisitor
     Realized<Seq<TResult>> Zip<TFirst, TSecond, TResult>(ZipSeq<TFirst, TSecond, TResult> seq);
 
     /// <summary>
+    /// Materializes a <see cref="DeferSeq{T}"/> as the target's own <c>Defer(factory)</c>.
+    /// </summary>
+    /// <remarks>Built by <see cref="Seq.Defer{T}(Func{Seq{T}}, string)"/>.</remarks>
+    Realized<Seq<T>> Defer<T>(DeferSeq<T> seq);
+
+    /// <summary>
     /// Materializes a <see cref="NeverSeq{T}"/> as the target's own <c>Never()</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Never{T}"/>.</remarks>

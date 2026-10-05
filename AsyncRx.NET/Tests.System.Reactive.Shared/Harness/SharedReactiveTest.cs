@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive;
 using Microsoft.Reactive.Testing;
 using Microsoft.Reactive.Testing.Async;
 
@@ -31,9 +32,16 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
     /// </remarks>
     protected TestSchedulerRef Scheduler { get; private set; } = null!;
 
+    /// <summary>The target's immediate scheduler.</summary>
+    /// <remarks>
+    /// A scenario names this where the Rx.NET test writes <c>Scheduler.Immediate</c>.
+    /// </remarks>
+    protected SchedulerRef ImmediateScheduler => Target.ImmediateScheduler;
+
     /// <summary>The target's default scheduler, for real-time scenarios.</summary>
     /// <remarks>
-    /// Where the Rx.NET test has <c>Scheduler.Default</c>. See <see cref="ToListAsync{T}"/>.
+    /// A scenario names this where the Rx.NET test writes <c>Scheduler.Default</c>. See
+    /// <see cref="ToListAsync{T}"/>.
     /// </remarks>
     protected SchedulerRef DefaultScheduler => Target.DefaultScheduler;
 
@@ -77,8 +85,26 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
 
     /// <summary>Creates a subject the scenario drives by hand.</summary>
     /// <typeparam name="T">The type of the elements the subject carries.</typeparam>
-    /// <remarks>Where the Rx.NET test has <c>new Subject&lt;T&gt;()</c>.</remarks>
+    /// <remarks>
+    /// A scenario calls this where the Rx.NET test writes <c>new Subject&lt;T&gt;()</c>.
+    /// </remarks>
     protected SubjectSeq<T> CreateSubject<T>() => Target.CreateSubject<T>();
+
+    /// <summary>Creates a replay subject the scenario drives by hand.</summary>
+    /// <typeparam name="T">The type of the elements the subject carries.</typeparam>
+    /// <param name="bufferSize">The number of elements replayed to a new subscriber.</param>
+    /// <remarks>
+    /// A scenario calls this where the Rx.NET test writes <c>new ReplaySubject&lt;T&gt;(n)</c>.
+    /// </remarks>
+    protected SubjectSeq<T> CreateReplaySubject<T>(int bufferSize) => Target.CreateReplaySubject<T>(bufferSize);
+
+    /// <summary>Creates a behavior subject the scenario drives by hand.</summary>
+    /// <typeparam name="T">The type of the elements the subject carries.</typeparam>
+    /// <param name="value">The subject's initial value.</param>
+    /// <remarks>
+    /// A scenario calls this where the Rx.NET test writes <c>new BehaviorSubject&lt;T&gt;(v)</c>.
+    /// </remarks>
+    protected SubjectSeq<T> CreateBehaviorSubject<T>(T value) => Target.CreateBehaviorSubject(value);
 
     /// <summary>Runs a real-time query to completion and returns everything it produced.</summary>
     /// <param name="source">The query to run.</param>

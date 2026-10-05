@@ -5,7 +5,9 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>A disposable that does nothing, for a scenario to return from a callback.</summary>
-/// <remarks>Where the Rx.NET test has <c>Disposable.Empty</c>.</remarks>
+/// <remarks>
+/// A scenario returns this where the Rx.NET test returns <c>Disposable.Empty</c>.
+/// </remarks>
 public sealed class EmptyAsyncDisposable : IAsyncDisposable
 {
     /// <summary>The one instance.</summary>

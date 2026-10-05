@@ -5,7 +5,7 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>A disposable that records whether it has been disposed.</summary>
-/// <remarks>Where the Rx.NET test has <c>BooleanDisposable</c>.</remarks>
+/// <remarks>A scenario uses this where the Rx.NET test uses a <c>BooleanDisposable</c>.</remarks>
 public sealed class BooleanAsyncDisposable : IAsyncDisposable
 {
     /// <summary>Whether <see cref="DisposeAsync"/> has been called.</summary>

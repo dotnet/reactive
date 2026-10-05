@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Runtime.CompilerServices;
+
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>The creation operators, as static methods returning descriptions.</summary>
@@ -60,6 +62,24 @@ public static partial class Seq
     public static Seq<int> Range(int start, int count, SchedulerRef scheduler) =>
         new RangeScheduledSeq(start, count, scheduler);
 
+    /// <summary>Describes <c>Seq.Defer(observableFactory)</c>.</summary>
+    /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+    /// <param name="observableFactory">
+    /// Observable factory function to invoke for each observer that subscribes.
+    /// </param>
+    /// <param name="text">
+    /// Supplied by the compiler (the source text of the factory), for printing the query in
+    /// diagnostics; do not pass it.
+    /// </param>
+    /// <remarks>
+    /// Builds a <see cref="DeferSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.Defer{T}(DeferSeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> Defer<T>(
+        Func<Seq<T>> observableFactory,
+        [CallerArgumentExpression(nameof(observableFactory))] string text = "") =>
+        new DeferSeq<T>(observableFactory, text);
+
     /// <summary>Describes <c>Seq.Never()</c>, a sequence that never produces anything.</summary>
     /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
     /// <remarks>
@@ -72,7 +92,8 @@ public static partial class Seq
     /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
     /// <param name="source">Enumerable sequence to convert to an observable sequence.</param>
     /// <remarks>
-    /// Where the Rx.NET test has <c>ToObservable()</c>. Builds an <see cref="EnumerableSeq{T}"/>,
+    /// A scenario calls this where the Rx.NET test calls <c>ToObservable()</c>. Builds an
+    /// <see cref="EnumerableSeq{T}"/>,
     /// which each target materializes through
     /// <see cref="ISeqVisitor.Enumerable{T}(EnumerableSeq{T})"/>.
     /// </remarks>

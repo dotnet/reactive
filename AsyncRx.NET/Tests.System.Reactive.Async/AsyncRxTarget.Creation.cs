@@ -31,6 +31,9 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<T>> ISeqVisitor.Enumerable<T>(EnumerableSeq<T> seq) =>
         _bridge.Run<Seq<T>>(EnumerableImpl<T>, seq.Source);
 
+    Realized<Seq<T>> ISeqVisitor.Defer<T>(DeferSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(DeferImpl<T>, seq.ObservableFactory);
+
     Realized<Seq<T>> ISeqVisitor.Never<T>(NeverSeq<T> seq) => _bridge.Run<Seq<T>>(NeverImpl<T>);
 
     Realized<Seq<T>> ISeqVisitor.Empty<T>(EmptySeq<T> seq) => _bridge.Run<Seq<T>>(EmptyImpl<T>);
@@ -46,6 +49,9 @@ public sealed partial class AsyncRxTarget
         source.ToAsyncObservable(ImmediateAsyncScheduler.Instance);
 
     private static IAsyncObservable<T> ReturnImpl<T>(T value) => AsyncObservable.Return(value);
+
+    private static IAsyncObservable<T> DeferImpl<T>(Func<IAsyncObservable<T>> observableFactory) =>
+        AsyncObservable.Defer(observableFactory);
 
     private static IAsyncObservable<T> NeverImpl<T>() => AsyncObservable.Never<T>();
 

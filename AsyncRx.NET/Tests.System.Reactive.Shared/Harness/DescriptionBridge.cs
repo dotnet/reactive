@@ -52,6 +52,12 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
     /// Reads the key of one of the target's grouped observables, so the bridge can set
     /// <see cref="Group{TKey, T}.Key"/> when it hands a real group to a scenario's callback.
     /// </param>
+    /// <param name="ConnectableOf">
+    /// Builds the target's connectable type for an element type: on Rx.NET,
+    /// <c>ConnectableOf(typeof(int))</c> returns <c>typeof(IConnectableObservable&lt;int&gt;)</c>;
+    /// on AsyncRx.NET, <c>typeof(IConnectableAsyncObservable&lt;int&gt;)</c>. The bridge calls it
+    /// for a <c>ConnectableSeq&lt;int&gt;</c> parameter, the input of <c>RefCount</c>.
+    /// </param>
     /// <param name="ObserverOf">
     /// Builds the target's observer type for an element type: on Rx.NET,
     /// <c>ObserverOf(typeof(int))</c> returns <c>typeof(IObserver&lt;int&gt;)</c>; on
@@ -67,7 +73,8 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
         Func<Type, Type, Type> GroupedOf,
         Func<object, object?> KeyOf,
         Func<Type, Type> ObserverOf,
-        Func<object, object> WrapObserver);
+        Func<object, object> WrapObserver,
+        Func<Type, Type> ConnectableOf);
 
     /// <summary>The target's real type for a description type, at any depth of nesting.</summary>
     /// <param name="descriptionType">
@@ -120,6 +127,11 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
         if (definition == typeof(ObserverRef<>))
         {
             return types.ObserverOf(Real(args[0]));
+        }
+
+        if (definition == typeof(ConnectableSeq<>))
+        {
+            return types.ConnectableOf(Real(args[0]));
         }
 
         if (typeof(ISeq).IsAssignableFrom(descriptionType))

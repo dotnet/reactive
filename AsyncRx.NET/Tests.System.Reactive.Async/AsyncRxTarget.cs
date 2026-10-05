@@ -13,6 +13,8 @@ using Microsoft.Reactive.Testing.Async;
 
 using Tests.System.Reactive.Shared;
 
+using Tests.System.Reactive.Shared.Scenarios;
+
 namespace Tests.System.Reactive.Async;
 
 /// <summary>The AsyncRx.NET target.</summary>
@@ -44,7 +46,8 @@ public sealed partial class AsyncRxTarget : IRxTarget
                 .MakeGenericMethod(observer.GetType().GetInterfaces()
                     .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAsyncObserver<>))
                     .GetGenericArguments()[0])
-                .Invoke(null, [observer])!));
+                .Invoke(null, [observer])!,
+            ConnectableOf: element => typeof(IConnectableAsyncObservable<>).MakeGenericType(element)));
     }
 
     private static TestAsyncScheduler Unwrap(TestSchedulerRef scheduler) =>
@@ -63,6 +66,9 @@ public sealed partial class AsyncRxTarget : IRxTarget
     // No optimisation interfaces to hide on this target: the scheduler is its own unoptimized form.
     public SchedulerRef DisableOptimizations(TestSchedulerRef scheduler) => scheduler;
 
+    public SchedulerRef ImmediateScheduler { get; } =
+        new(ImmediateAsyncScheduler.Instance, "Scheduler.Immediate");
+
     // The scheduler AsyncRx.NET's scheduler-less overloads use.
     public SchedulerRef DefaultScheduler { get; } =
         new(TaskPoolAsyncScheduler.Default, "Scheduler.Default");
@@ -70,9 +76,18 @@ public sealed partial class AsyncRxTarget : IRxTarget
     public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) =>
         await Materialize(source).ToList();
 
-    public SubjectSeq<T> CreateSubject<T>()
+    public SubjectSeq<T> CreateReplaySubject<T>(int bufferSize) =>
+        Wrap(new SequentialReplayAsyncSubject<T>(bufferSize));
+
+    public SubjectSeq<T> CreateBehaviorSubject<T>(T value) => Wrap(new SequentialBehaviorAsyncSubject<T>(value));
+
+    public Realized<Seq<T>> CreateRefCountTestConnectable<T>(RefCountTests.SerialSingleNotificationConnectable<T>.State state) =>
+        Realized.Of<Seq<T>>(new AsyncRxSerialSingleNotificationConnectable<T>(state));
+
+    public SubjectSeq<T> CreateSubject<T>() => Wrap(new SequentialSimpleAsyncSubject<T>());
+
+    private static SubjectSeq<T> Wrap<T>(IAsyncSubject<T> subject)
     {
-        var subject = new SequentialSimpleAsyncSubject<T>();
         return new(
             Realized.Of<Seq<T>>(subject),
             subject.OnNextAsync,

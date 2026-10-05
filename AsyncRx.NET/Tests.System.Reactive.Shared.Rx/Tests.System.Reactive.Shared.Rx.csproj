@@ -27,8 +27,8 @@
 
     <!-- Runs the shared scenarios against the released Rx.NET (the same version AsyncRx.NET's own
          packages build against), which is what makes them a faithful migration of Rx.NET's tests. -->
-    <PackageReference Include="System.Reactive" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Reactive.Testing" Version="6.0.0" />
+    <PackageReference Include="System.Reactive" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

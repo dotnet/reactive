@@ -40,6 +40,13 @@ public interface IRxTarget : ISeqVisitor
     /// </summary>
     SchedulerRef DisableOptimizations(TestSchedulerRef scheduler);
 
+    /// <summary>The target's immediate scheduler, which runs work where it is scheduled.</summary>
+    /// <remarks>
+    /// Rx.NET's <c>Scheduler.Immediate</c>; AsyncRx.NET's <c>ImmediateAsyncScheduler.Instance</c>.
+    /// For scenarios that name it where the Rx.NET test does.
+    /// </remarks>
+    SchedulerRef ImmediateScheduler { get; }
+
     /// <summary>The target's default scheduler, for real-time scenarios.</summary>
     /// <remarks>
     /// Rx.NET's <c>Scheduler.Default</c>; on AsyncRx.NET the task pool scheduler that its
@@ -66,6 +73,30 @@ public interface IRxTarget : ISeqVisitor
     /// real-time scenarios that push values from the test body.
     /// </remarks>
     SubjectSeq<T> CreateSubject<T>();
+
+    /// <summary>Builds the connectable behind the <c>RefCount</c> tests' double.</summary>
+    /// <param name="state">The double's state, which the object records into.</param>
+    /// <remarks>
+    /// The double itself, <c>RefCountTests.SerialSingleNotificationConnectable&lt;T&gt;</c>,
+    /// belongs to those tests and is declared there, as its Rx.NET original is a private nested
+    /// type of <c>RefCountTest</c>; only its per-target object is a target's business. The object
+    /// must behave as that type's documentation says, over this target's own subjects.
+    /// </remarks>
+    Realized<Seq<T>> CreateRefCountTestConnectable<T>(Scenarios.RefCountTests.SerialSingleNotificationConnectable<T>.State state);
+
+    /// <summary>Creates a replay subject the scenario drives by hand, as a leaf.</summary>
+    /// <param name="bufferSize">The number of elements replayed to a new subscriber.</param>
+    /// <remarks>
+    /// Rx.NET's <c>ReplaySubject&lt;T&gt;</c>; AsyncRx.NET's sequential replay subject.
+    /// </remarks>
+    SubjectSeq<T> CreateReplaySubject<T>(int bufferSize);
+
+    /// <summary>Creates a behavior subject the scenario drives by hand, as a leaf.</summary>
+    /// <param name="value">The subject's initial value.</param>
+    /// <remarks>
+    /// Rx.NET's <c>BehaviorSubject&lt;T&gt;</c>; AsyncRx.NET's sequential behavior subject.
+    /// </remarks>
+    SubjectSeq<T> CreateBehaviorSubject<T>(T value);
 
     /// <summary>
     /// Creates the target's own hot testable observable, playing <paramref name="messages"/> at

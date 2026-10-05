@@ -162,6 +162,20 @@ target's own derived class are the resolved pairs that differ by a word in the n
 Rx.NET's asynchronous-factory `Using` overload against `UsingAsync`. A meta-test fails if a surface
 method has no test, so a new operator is covered the moment it is added.
 
+## Test doubles
+
+Some Rx.NET test files define their own observables to provoke behaviour a real operator cannot:
+`RefCountTest.cs` has a connectable that delivers completion to one connection and then values to
+the next, which `Publish` cannot do. Such a double stays owned by the scenario class that uses
+it, as a nested type, exactly as the Rx.NET original is a private nested type of its test class:
+`RefCountTests.SerialSingleNotificationConnectable<T>` is a leaf with the operations the tests perform
+on it (a notification to set for the next connection, and a log of connections with their
+disposed state), its behaviour specified in that type's documentation. Only what differs per
+target, the connectable object built over the target's own subjects, is a target capability
+(`IRxTarget.CreateRefCountTestConnectable`), named for the tests it serves so that it does not
+read as a general facility. A scenario then reads as the original does, asserting on the double's
+log.
+
 ## `Native`, and what the shared library does not hold
 
 The shared library never holds a target's observable, observer, scheduler or recorded data under
@@ -177,7 +191,8 @@ realizes), and only the target, or a target-specific test, gets at the real type
 | `TestableSeq<T>` (a source the scheduler created) | `ITestableObservable<T>` | `ITestableAsyncObservable<T>` |
 | `TestableObserver<T>` (what `Start` returns) | `ITestableObserver<T>` | `ITestableAsyncObserver<T>` |
 | `SubjectSeq<T>` (a leaf a real-time scenario drives by hand) | `Subject<T>` | `SequentialSimpleAsyncSubject<T>` |
-| `ConnectableSeq<T>` (what `Publish` returns; connected through `ConnectAsync`) | `IConnectableObservable<T>` | `IConnectableAsyncObservable<T>` |
+| `ConnectableSeq<T>` (what `Publish` returns; connected through `ConnectAsync`; also what `RefCount` consumes) | `IConnectableObservable<T>` | `IConnectableAsyncObservable<T>` |
+| `RefCountTests.SerialSingleNotificationConnectable<T>` (a test double owned by the `RefCount` scenarios; each target supplies its object) | `RxSerialSingleNotificationConnectable<T>` | `AsyncRxSerialSingleNotificationConnectable<T>` |
 
 `res.Messages` and `xs.Subscriptions` are not collections. They are handles (`MessageLog<T>`,
 `SubscriptionLog<T>`) that hold the shared observer or source and whose `AssertEqual` asks the
