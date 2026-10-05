@@ -84,6 +84,17 @@ public interface IRxTarget : ISeqVisitor
     /// </remarks>
     Realized<Seq<T>> CreateRefCountTestConnectable<T>(Scenarios.RefCountTests.SerialSingleNotificationConnectable<T>.State state);
 
+    /// <summary>Builds the subject behind the <see cref="Scenarios.MySubject"/> double.</summary>
+    /// <param name="state">The double's state, which the object records into and reads.</param>
+    /// <remarks>
+    /// The double is shared by scenario classes, as Rx.NET's <c>MySubject</c> is shared across
+    /// its test assembly; only the per-target object is a target's business. It must behave as
+    /// that type's documentation says: count subscriptions, record a disposal, and dispose what
+    /// the state registers for a value after forwarding it. The result is the plain wrapper, from
+    /// which the double is built.
+    /// </remarks>
+    SubjectSeq<int> CreateMySubject(Scenarios.MySubject.State state);
+
     /// <summary>
     /// Builds the connectable behind the <c>RefCount</c> tests' connect-ignoring double.
     /// </summary>

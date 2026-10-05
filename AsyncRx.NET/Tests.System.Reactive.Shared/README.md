@@ -179,6 +179,16 @@ target, the connectable object built over the target's own subjects, is a target
 read as a general facility. A scenario then reads as the original does, asserting on the double's
 log.
 
+A double that Rx.NET shares between test classes is shared here too. Its `MySubject`
+(`Tests/MySubject.cs`), a subject that counts its subscriptions, records a disposal, and can
+dispose a registered disposable after forwarding a given value, serves both `RefCountTest` and
+`ConnectableObservableTest`, so the shared `MySubject` is a top-level type in `Scenarios/`, a
+`SubjectSeq<int>` that goes wherever a subject does, created through
+`SharedReactiveTest.CreateMySubject()`; each target supplies the object
+(`IRxTarget.CreateMySubject`). The six `RefCount` tests that build a connectable from it with the
+internal `ConnectableObservable<int>(xs, subject)` constructor write `xs.Multicast(subject)`,
+that constructor's public spelling.
+
 ## `Native`, and what the shared library does not hold
 
 The shared library never holds a target's observable, observer, scheduler or recorded data under
@@ -193,7 +203,8 @@ realizes), and only the target, or a target-specific test, gets at the real type
 | `Group<TKey, T>` (a leaf with a `Key`): a `Realized<Seq<T>>` | `IGroupedObservable<TKey, T>` | `IGroupedAsyncObservable<TKey, T>` |
 | `TestableSeq<T>` (a source the scheduler created) | `ITestableObservable<T>` | `ITestableAsyncObservable<T>` |
 | `TestableObserver<T>` (what `Start` returns) | `ITestableObserver<T>` | `ITestableAsyncObserver<T>` |
-| `SubjectSeq<T>` (a leaf a real-time scenario drives by hand) | `Subject<T>` | `SequentialSimpleAsyncSubject<T>` |
+| `SubjectSeq<T>` (a leaf a real-time scenario drives by hand; also what `Multicast` consumes, where the bridge maps it to `ISubject<T>`/`IAsyncSubject<T>`) | `Subject<T>` | `SequentialSimpleAsyncSubject<T>` |
+| `MySubject` (a `SubjectSeq<int>` that counts subscriptions, shared by scenario classes as Rx.NET's is; each target supplies its object) | `RxMySubject` | `AsyncRxMySubject` |
 | `ConnectableSeq<T>` (what `Publish` returns; connected through `ConnectAsync`; also what `RefCount` consumes) | `IConnectableObservable<T>` | `IConnectableAsyncObservable<T>` |
 | `RefCountTests.SerialSingleNotificationConnectable<T>` (a test double owned by the `RefCount` scenarios; each target supplies its object) | `RxSerialSingleNotificationConnectable<T>` | `AsyncRxSerialSingleNotificationConnectable<T>` |
 
@@ -210,8 +221,8 @@ and use the target's own API directly.
 ## Adding things
 
 * **A scenario:** one `[TestMethod]` in the operator's shared class. Nothing else changes.
-* **An operator overload:** in the operator's folder under `Operators/`, a node class (one file), a fluent method in the operator's extensions class (or, as for `Merge`, in a partial of `Seq` when the Rx.NET tests also call the operator statically, as `Observable.Merge(scheduler, xs, ys)`), and a member on that folder's `ISeqVisitor` part; then, in each target's partial file for that operator (`RxTarget.Take.cs`, `AsyncRxTarget.Take.cs`), an `*Impl` method that makes the real call and a one-line visitor member that hands it to the bridge. A new operator gets a new folder and a new partial file in each target, named the same way. A method parameter that is a sequence is a `Seq<T>` in the node and the library's observable type in the `*Impl`; a callback that returns a sequence is a `Func<..., Seq<T>>` in the node and `Func<..., IObservable<T>>` in the `*Impl`. The bridge does the rest.
-* **A scenario that passes on Rx.NET and fails on AsyncRx.NET:** that is the suite doing its job. Leave it failing and fix AsyncRx.NET in a commit of its own.
+* **An operator overload:** in the operator's folder under `Operators/`, a node class (one file), a fluent method in the operator's extensions class (or, as for `Merge`, in a partial of `Seq` when the Rx.NET tests also call the operator statically, as `Observable.Merge(scheduler, xs, ys)`), and a member on that folder's `ISeqVisitor` part; then, in each target's partial file for that operator (`RxTarget.Take.cs`, `AsyncRxTarget.Take.cs`), an `*Impl` method that makes the real call and a one-line visitor member that hands it to the bridge. A new operator gets a new folder and a new partial file in each target, named the same way. A method parameter that is a sequence is a `Seq<T>` in the node and the library's observable type in the `*Impl`; a connectable is a `ConnectableSeq<T>`; a subject is a `SubjectSeq<T>` and the library's subject interface in the `*Impl`; a callback that returns a sequence is a `Func<..., Seq<T>>` in the node and `Func<..., IObservable<T>>` in the `*Impl` (likewise for a callback returning a subject). The bridge does the rest.
+* **A scenario that passes on Rx.NET and fails on AsyncRx.NET:** that is the suite doing its job. Fix AsyncRx.NET, in the same commit that adds the operator's tests.
 * **A test that only one target can express:** put it in that target's test project, next
   to the shared ones, using the target's native scheduler directly. The extended expectation
   forms (`OnNext((210, 260), 1)`, four-timestamp `Subscribe`) come from `SharedReactiveTest` by

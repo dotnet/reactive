@@ -89,6 +89,16 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
     /// </remarks>
     protected SubjectSeq<T> CreateSubject<T>() => Target.CreateSubject<T>();
 
+    /// <summary>Creates the counting subject double on the target under test.</summary>
+    /// <remarks>
+    /// A scenario calls this where the Rx.NET test writes <c>new MySubject()</c>.
+    /// </remarks>
+    protected Scenarios.MySubject CreateMySubject()
+    {
+        var state = new Scenarios.MySubject.State();
+        return new(Target.CreateMySubject(state), state);
+    }
+
     /// <summary>Creates a replay subject the scenario drives by hand.</summary>
     /// <typeparam name="T">The type of the elements the subject carries.</typeparam>
     /// <param name="bufferSize">The number of elements replayed to a new subscriber.</param>

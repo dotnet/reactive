@@ -9,11 +9,11 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// <summary>Shared <c>RefCount</c> scenarios, from Rx.NET's <c>RefCountTest.cs</c>.</summary>
 /// <remarks>
 /// <para>
-/// Both halves of the file: 35 of its 41 tests (one is a <c>DataRow</c> pair in the original).
-/// Deliberately not here: the two <c>*_ArgumentChecking</c> tests (the code-generated stratum)
-/// and the six tests that build a
-/// connectable by hand from a <c>MySubject</c> and
-/// <c>ConnectableObservable&lt;int&gt;(xs, subject)</c>, which belong with <c>Multicast</c>.
+/// Both halves of the file: every test but the two <c>*_ArgumentChecking</c> tests (the
+/// code-generated stratum), one of them a <c>DataRow</c> pair in the original. The six that
+/// build a connectable by hand from a <see cref="MySubject"/> and the internal
+/// <c>ConnectableObservable&lt;int&gt;(xs, subject)</c> write it as <c>xs.Multicast(subject)</c>,
+/// that constructor's public spelling, which is what the internal type implements.
 /// The <c>DelayedDisconnect</c> tests step the clock by hand with
 /// <c>Scheduler.AdvanceBy</c> between subscriptions and assertions, and one of them is a
 /// <c>DataRow</c> pair in the original, written here as two tests.
@@ -1758,4 +1758,231 @@ public abstract class RefCountTests : SharedReactiveTest
         }
     }
 
+    // The tests that build a connectable by hand from a MySubject and the internal
+    // ConnectableObservable<int>(xs, subject); xs.Multicast(subject) is its public spelling.
+
+    [TestMethod]
+    public void RefCount_NoDelay_ConnectsOnFirst()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 1),
+            OnNext(220, 2),
+            OnNext(230, 3),
+            OnNext(240, 4),
+            OnCompleted<int>(250)
+        );
+
+        var subject = CreateMySubject();
+        var conn = xs.Multicast(subject);
+
+        var res = Scheduler.Start(() =>
+            conn.RefCount()
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 1),
+            OnNext(220, 2),
+            OnNext(230, 3),
+            OnNext(240, 4),
+            OnCompleted<int>(250)
+        );
+
+        Assert.IsTrue(subject.Disposed);
+    }
+
+    [TestMethod]
+    public void RefCount_NoDelay_minObservers_ConnectsOnObserverThresholdReached()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 1),
+            OnNext(220, 2),
+            OnNext(230, 3),
+            OnNext(240, 4),
+            OnCompleted<int>(250)
+        );
+
+        var subject = CreateMySubject();
+        var conn = xs.Multicast(subject);
+
+        var res = conn.RefCount(2);
+
+        var d1 = default(IAsyncDisposable);
+        var o1 = Scheduler.CreateObserver<int>();
+        Scheduler.ScheduleAbsolute(205, async () => { d1 = await res.SubscribeAsync(o1); });
+
+        var d2 = default(IAsyncDisposable);
+        var o2 = Scheduler.CreateObserver<int>();
+        Scheduler.ScheduleAbsolute(225, async () => { d2 = await res.SubscribeAsync(o2); });
+
+        Scheduler.Start();
+
+        o1.Messages.AssertEqual(
+            OnNext(230, 3),
+            OnNext(240, 4),
+            OnCompleted<int>(250)
+        );
+
+        Assert.IsTrue(subject.Disposed);
+    }
+
+    [TestMethod]
+    public async Task RefCount_NoDelay_NotConnected()
+    {
+        var disconnected = false;
+        var count = 0;
+
+        var xs = Seq.Defer(() =>
+        {
+            count++;
+            return Seq.Create<int>(obs =>
+                new ValueTask<Action?>(() => { disconnected = true; }));
+        });
+
+        var subject = CreateMySubject();
+        var conn = xs.Multicast(subject);
+
+        var refd = conn.RefCount();
+
+        var dis1 = await refd.SubscribeAsync(Scheduler, _ => { });
+        Assert.AreEqual(1, count);
+        Assert.AreEqual(1, subject.SubscribeCount);
+        Assert.IsFalse(disconnected);
+
+        var dis2 = await refd.SubscribeAsync(Scheduler, _ => { });
+        Assert.AreEqual(1, count);
+        Assert.AreEqual(2, subject.SubscribeCount);
+        Assert.IsFalse(disconnected);
+
+        await dis1.DisposeAsync();
+        Assert.IsFalse(disconnected);
+
+        await dis2.DisposeAsync();
+        Assert.IsTrue(disconnected);
+
+        disconnected = false;
+
+        var dis3 = await refd.SubscribeAsync(Scheduler, _ => { });
+        Assert.AreEqual(2, count);
+        Assert.AreEqual(3, subject.SubscribeCount);
+        Assert.IsFalse(disconnected);
+
+        await dis3.DisposeAsync();
+        Assert.IsTrue(disconnected);
+    }
+
+    [TestMethod]
+    public void RefCount_DelayedDisconnect_ConnectsOnFirst()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 1),
+            OnNext(220, 2),
+            OnNext(230, 3),
+            OnNext(240, 4),
+            OnCompleted<int>(250)
+        );
+
+        var subject = CreateMySubject();
+        var conn = xs.Multicast(subject);
+
+        var res = Scheduler.Start(() =>
+            conn.RefCount(TimeSpan.FromSeconds(2))
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 1),
+            OnNext(220, 2),
+            OnNext(230, 3),
+            OnNext(240, 4),
+            OnCompleted<int>(250)
+        );
+
+        Assert.IsTrue(subject.Disposed);
+    }
+
+    [TestMethod]
+    public void RefCount_DelayedDisconnect_minObservers_ConnectsOnObserverThresholdReached()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 1),
+            OnNext(220, 2),
+            OnNext(230, 3),
+            OnNext(240, 4),
+            OnCompleted<int>(250)
+        );
+
+        var subject = CreateMySubject();
+        var conn = xs.Multicast(subject);
+
+        var res = conn.RefCount(2, TimeSpan.FromTicks(300));
+
+        var d1 = default(IAsyncDisposable);
+        var o1 = Scheduler.CreateObserver<int>();
+        Scheduler.ScheduleAbsolute(210, async () => { d1 = await res.SubscribeAsync(o1); });
+
+        var d2 = default(IAsyncDisposable);
+        var o2 = Scheduler.CreateObserver<int>();
+        Scheduler.ScheduleAbsolute(225, async () => { d2 = await res.SubscribeAsync(o2); });
+
+        Scheduler.Start();
+
+        o1.Messages.AssertEqual(
+            OnNext(230, 3),
+            OnNext(240, 4),
+            OnCompleted<int>(250)
+        );
+
+        Assert.IsTrue(subject.Disposed);
+    }
+
+    [TestMethod]
+    public async Task RefCount_DelayedDisconnect_NotConnected()
+    {
+        var disconnected = false;
+        var count = 0;
+
+        var xs = Seq.Defer(() =>
+        {
+            count++;
+            return Seq.Create<int>(obs =>
+                new ValueTask<Action?>(() => { disconnected = true; }));
+        });
+
+        var subject = CreateMySubject();
+        var conn = xs.Multicast(subject);
+
+        var refd = conn.RefCount(TimeSpan.FromTicks(20), Scheduler);
+
+        var dis1 = await refd.SubscribeAsync(Scheduler, _ => { });
+        Assert.AreEqual(1, count);
+        Assert.AreEqual(1, subject.SubscribeCount);
+        Assert.IsFalse(disconnected);
+
+        var dis2 = await refd.SubscribeAsync(Scheduler, _ => { });
+        Assert.AreEqual(1, count);
+        Assert.AreEqual(2, subject.SubscribeCount);
+        Assert.IsFalse(disconnected);
+
+        await dis1.DisposeAsync();
+        Assert.IsFalse(disconnected);
+
+        await dis2.DisposeAsync();
+        Assert.IsFalse(disconnected);
+
+        Scheduler.AdvanceBy(19);
+        Assert.IsFalse(disconnected);
+
+        Scheduler.AdvanceBy(1);
+        Assert.IsTrue(disconnected);
+
+        disconnected = false;
+
+        var dis3 = await refd.SubscribeAsync(Scheduler, _ => { });
+        Assert.AreEqual(2, count);
+        Assert.AreEqual(3, subject.SubscribeCount);
+        Assert.IsFalse(disconnected);
+
+        await dis3.DisposeAsync();
+        Scheduler.AdvanceBy(20);
+        Assert.IsTrue(disconnected);
+    }
 }

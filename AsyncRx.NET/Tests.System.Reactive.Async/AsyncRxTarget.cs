@@ -47,7 +47,8 @@ public sealed partial class AsyncRxTarget : IRxTarget
                     .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAsyncObserver<>))
                     .GetGenericArguments()[0])
                 .Invoke(null, [observer])!,
-            ConnectableOf: element => typeof(IConnectableAsyncObservable<>).MakeGenericType(element)));
+            ConnectableOf: element => typeof(IConnectableAsyncObservable<>).MakeGenericType(element),
+            SubjectOf: element => typeof(IAsyncSubject<>).MakeGenericType(element)));
     }
 
     private static TestAsyncScheduler Unwrap(TestSchedulerRef scheduler) =>
@@ -83,6 +84,8 @@ public sealed partial class AsyncRxTarget : IRxTarget
 
     public Realized<Seq<T>> CreateRefCountTestConnectable<T>(RefCountTests.SerialSingleNotificationConnectable<T>.State state) =>
         Realized.Of<Seq<T>>(new AsyncRxSerialSingleNotificationConnectable<T>(state, this));
+
+    public SubjectSeq<int> CreateMySubject(MySubject.State state) => Wrap(new AsyncRxMySubject(state));
 
     public Realized<Seq<T>> CreateRefCountTestConnectableIgnoringConnect<T>(RefCountTests.SerialConnectableIgnoringConnect<T>.State state) =>
         Realized.Of<Seq<T>>(new AsyncRxSerialConnectableIgnoringConnect<T>(state, this));

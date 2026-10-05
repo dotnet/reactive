@@ -48,7 +48,8 @@ public sealed partial class RxTarget : IRxTarget
                     .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IObserver<>))
                     .GetGenericArguments()[0])
                 .Invoke(null, [observer])!,
-            ConnectableOf: element => typeof(IConnectableObservable<>).MakeGenericType(element)));
+            ConnectableOf: element => typeof(IConnectableObservable<>).MakeGenericType(element),
+            SubjectOf: element => typeof(ISubject<>).MakeGenericType(element)));
     }
 
     private static RxTestScheduler Unwrap(TestSchedulerRef scheduler) =>
@@ -80,6 +81,8 @@ public sealed partial class RxTarget : IRxTarget
 
     public Realized<Seq<T>> CreateRefCountTestConnectable<T>(RefCountTests.SerialSingleNotificationConnectable<T>.State state) =>
         Realized.Of<Seq<T>>(new RxSerialSingleNotificationConnectable<T>(state, this));
+
+    public SubjectSeq<int> CreateMySubject(MySubject.State state) => Wrap(new RxMySubject(state));
 
     public Realized<Seq<T>> CreateRefCountTestConnectableIgnoringConnect<T>(RefCountTests.SerialConnectableIgnoringConnect<T>.State state) =>
         Realized.Of<Seq<T>>(new RxSerialConnectableIgnoringConnect<T>(state, this));
@@ -214,7 +217,7 @@ public sealed partial class RxTarget : IRxTarget
     public ValueTask<IAsyncDisposable> ConnectAsync<T>(TestSchedulerRef scheduler, ConnectableSeq<T> source) =>
         new(RxDisposable.For(_bridge.Call<IDisposable>(ConnectImpl<T>, source)));
 
-    private static TResult Complete<TResult>(ValueTask<TResult> task)
+    internal static TResult Complete<TResult>(ValueTask<TResult> task)
     {
         if (!task.IsCompleted)
         {
@@ -225,7 +228,7 @@ public sealed partial class RxTarget : IRxTarget
         return task.GetAwaiter().GetResult();
     }
 
-    private static void Complete(ValueTask task)
+    internal static void Complete(ValueTask task)
     {
         if (!task.IsCompleted)
         {
