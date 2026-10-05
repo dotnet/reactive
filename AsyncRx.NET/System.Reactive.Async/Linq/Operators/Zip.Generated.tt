@@ -53,14 +53,7 @@ for (var j = 1; j <= i; j++)
 }
 #>
 
-<#
-for (var j = 1; j <= i; j++)
-{
-#>
-                await d.AddAsync(await sub<#=j#>.ConfigureAwait(false)).ConfigureAwait(false);
-<#
-}
-#>
+                await CollectAsync(d, <#=string.Join(", ", Enumerable.Range(1, i).Select(j => "sub" + j))#>).ConfigureAwait(false);
 
                 return d;
             });
@@ -95,14 +88,7 @@ for (var j = 1; j <= i; j++)
 }
 #>
 
-<#
-for (var j = 1; j <= i; j++)
-{
-#>
-                await d.AddAsync(await sub<#=j#>.ConfigureAwait(false)).ConfigureAwait(false);
-<#
-}
-#>
+                await CollectAsync(d, <#=string.Join(", ", Enumerable.Range(1, i).Select(j => "sub" + j))#>).ConfigureAwait(false);
 
                 return d;
             });
@@ -137,14 +123,7 @@ for (var j = 1; j <= i; j++)
 }
 #>
 
-<#
-for (var j = 1; j <= i; j++)
-{
-#>
-                await d.AddAsync(await sub<#=j#>.ConfigureAwait(false)).ConfigureAwait(false);
-<#
-}
-#>
+                await CollectAsync(d, <#=string.Join(", ", Enumerable.Range(1, i).Select(j => "sub" + j))#>).ConfigureAwait(false);
 
                 return d;
             });

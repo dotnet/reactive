@@ -14,6 +14,33 @@ namespace System.Reactive.Linq
     {
         // TODO: Add Zip<T>(IAsyncObservable<T>, IAsyncEnumerable<T>) overload when we have reference to IAsyncEnumerable<T>.
 
+        // Collects subscriptions that were all started before any was awaited, so that the
+        // sources are subscribed concurrently. If any of them faults, the rest are still
+        // collected and everything collected so far is disposed, so that no subscription is
+        // left running with no one holding it.
+        internal static async ValueTask CollectAsync(CompositeAsyncDisposable composite, params ValueTask<IAsyncDisposable>[] subscriptions)
+        {
+            Exception error = null;
+
+            foreach (var subscription in subscriptions)
+            {
+                try
+                {
+                    await composite.AddAsync(await subscription.ConfigureAwait(false)).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    error ??= ex;
+                }
+            }
+
+            if (error != null)
+            {
+                await composite.DisposeAsync().ConfigureAwait(false);
+                System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(error).Throw();
+            }
+        }
+
         public static IAsyncObservable<IList<TSource>> Zip<TSource>(IEnumerable<IAsyncObservable<TSource>> sources)
         {
             if (sources == null)
