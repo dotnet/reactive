@@ -48,7 +48,7 @@ public sealed class GroupJoinSeq<TLeft, TRight, TLeftDuration, TRightDuration, T
     public Func<TLeft, Seq<TRight>, Seq<TResult>> ResultSelector => resultSelector;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Seq<TResult>>> Accept(ISeqVisitor visitor) =>
+    protected override Realized<Seq<Seq<TResult>>> AcceptCore(ISeqVisitor visitor) =>
         visitor.GroupJoin(this);
 
     /// <inheritdoc/>

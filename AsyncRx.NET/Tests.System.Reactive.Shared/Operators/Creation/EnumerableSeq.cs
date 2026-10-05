@@ -15,7 +15,7 @@ public sealed class EnumerableSeq<T>(IEnumerable<T> source) : Seq<T>
     public IEnumerable<T> Source => source;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.Enumerable(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.Enumerable(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{{{string.Join(", ", source)}}}.ToSeq()";

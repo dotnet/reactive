@@ -162,6 +162,10 @@ public interface IRxTarget : ISeqVisitor
     /// </summary>
     void Run(TestSchedulerRef scheduler);
 
+    /// <summary>Connects a connectable sequence, the target's own <c>Connect()</c>.</summary>
+    /// <remarks>Returns the connection, whose disposal disconnects.</remarks>
+    ValueTask<IAsyncDisposable> ConnectAsync<T>(TestSchedulerRef scheduler, ConnectableSeq<T> source);
+
     // ---- Assertions ----
     //
     // The target compares, because the records live in its own observer/observable (the handles'

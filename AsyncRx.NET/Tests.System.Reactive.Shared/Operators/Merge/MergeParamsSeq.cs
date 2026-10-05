@@ -15,7 +15,7 @@ public sealed class MergeParamsSeq<T>(Seq<T>[] sources) : Seq<T>
     public Seq<T>[] Sources => sources;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.MergeParams(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.MergeParams(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"Seq.Merge({string.Join(", ", sources.AsEnumerable())})";

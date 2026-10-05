@@ -21,7 +21,7 @@ public sealed class SkipTimeSeq<T>(Seq<T> source, TimeSpan duration, SchedulerRe
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.SkipTime(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.SkipTime(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Skip({duration.Ticks} ticks, {scheduler})";

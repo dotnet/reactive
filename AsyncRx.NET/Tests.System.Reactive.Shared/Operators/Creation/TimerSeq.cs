@@ -22,7 +22,7 @@ public sealed class TimerSeq(TimeSpan dueTime, SchedulerRef scheduler) : Seq<lon
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override Realized<Seq<long>> Accept(ISeqVisitor visitor) => visitor.Timer(this);
+    protected override Realized<Seq<long>> AcceptCore(ISeqVisitor visitor) => visitor.Timer(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"Seq.Timer({dueTime.Ticks} ticks, {scheduler})";

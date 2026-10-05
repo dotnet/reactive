@@ -15,7 +15,7 @@ public sealed class MergeTasksSeq<T>(Seq<Task<T>> sources) : Seq<T>
     public Seq<Task<T>> Sources => sources;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.MergeTasks(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.MergeTasks(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{sources}.Merge()";

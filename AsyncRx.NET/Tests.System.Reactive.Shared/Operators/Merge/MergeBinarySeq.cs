@@ -18,7 +18,7 @@ public sealed class MergeBinarySeq<T>(Seq<T> first, Seq<T> second) : Seq<T>
     public Seq<T> Second => second;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.MergeBinary(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.MergeBinary(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{first}.Merge({second})";

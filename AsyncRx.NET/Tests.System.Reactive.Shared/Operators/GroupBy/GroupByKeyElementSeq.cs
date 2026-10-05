@@ -30,7 +30,7 @@ public sealed class GroupByKeyElementSeq<T, TKey, TElement>(
     public Func<T, TElement> ElementSelector => elementSelector;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Group<TKey, TElement>>> Accept(ISeqVisitor visitor) =>
+    protected override Realized<Seq<Group<TKey, TElement>>> AcceptCore(ISeqVisitor visitor) =>
         visitor.GroupByKeyElement(this);
 
     /// <inheritdoc/>

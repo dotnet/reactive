@@ -21,7 +21,7 @@ public sealed class WindowClosingsSeq<T, TWindowClosing>(Seq<T> source, Func<Seq
     public Func<Seq<TWindowClosing>> WindowClosingSelector => windowClosingSelector;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Seq<T>>> Accept(ISeqVisitor visitor) =>
+    protected override Realized<Seq<Seq<T>>> AcceptCore(ISeqVisitor visitor) =>
         visitor.WindowClosings(this);
 
     /// <inheritdoc/>

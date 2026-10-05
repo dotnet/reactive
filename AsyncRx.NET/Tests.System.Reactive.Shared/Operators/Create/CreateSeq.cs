@@ -21,7 +21,7 @@ public sealed class CreateSeq<T>(Func<ObserverRef<T>, ValueTask<Action?>> subscr
     public Func<ObserverRef<T>, ValueTask<Action?>> Subscribe => subscribe;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.Create(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.Create(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"Seq.Create({text})";

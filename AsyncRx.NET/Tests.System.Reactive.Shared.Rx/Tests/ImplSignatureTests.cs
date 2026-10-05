@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using Microsoft.Reactive.Testing;
 
@@ -23,7 +24,8 @@ public sealed class ImplSignatureTests
             typeof(RxTarget),
             typeof(IObservable<>),
             typeof(IGroupedObservable<,>),
-            typeof(ITestableObservable<>));
+            typeof(ITestableObservable<>),
+            typeof(IConnectableObservable<>));
 
         Assert.IsEmpty(problems, string.Join(Environment.NewLine, problems));
     }

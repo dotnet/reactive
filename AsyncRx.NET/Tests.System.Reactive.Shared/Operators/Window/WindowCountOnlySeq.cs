@@ -18,7 +18,7 @@ public sealed class WindowCountOnlySeq<T>(Seq<T> source, int count) : Seq<Seq<T>
     public int Count => count;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Seq<T>>> Accept(ISeqVisitor visitor) => visitor.WindowCountOnly(this);
+    protected override Realized<Seq<Seq<T>>> AcceptCore(ISeqVisitor visitor) => visitor.WindowCountOnly(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Window({count})";

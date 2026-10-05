@@ -24,7 +24,7 @@ public sealed class MergeEnumerableMaxConcurrentScheduledSeq<T>(IEnumerable<Seq<
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.MergeEnumerableMaxConcurrentScheduled(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.MergeEnumerableMaxConcurrentScheduled(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{{{string.Join(", ", sources)}}}.Merge({maxConcurrent}, {scheduler})";

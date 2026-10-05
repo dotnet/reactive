@@ -23,7 +23,7 @@ public sealed class CreateDisposableSeq<T>(
     public Func<ObserverRef<T>, ValueTask<IAsyncDisposable?>> Subscribe => subscribe;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.CreateDisposable(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.CreateDisposable(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"Seq.Create({text})";

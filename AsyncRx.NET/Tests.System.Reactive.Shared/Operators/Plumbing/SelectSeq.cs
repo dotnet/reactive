@@ -19,7 +19,7 @@ public sealed class SelectSeq<TIn, TOut>(Seq<TIn> source, Func<TIn, TOut> select
     public Func<TIn, TOut> Selector => selector;
 
     /// <inheritdoc/>
-    public override Realized<Seq<TOut>> Accept(ISeqVisitor visitor) => visitor.Select(this);
+    protected override Realized<Seq<TOut>> AcceptCore(ISeqVisitor visitor) => visitor.Select(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Select({text})";

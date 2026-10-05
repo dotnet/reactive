@@ -18,7 +18,7 @@ public sealed class ConcatSeq<T>(Seq<T> first, Seq<T> second) : Seq<T>
     public Seq<T> Second => second;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.Concat(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.Concat(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{first}.Concat({second})";

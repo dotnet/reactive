@@ -168,6 +168,9 @@ public sealed partial class AsyncRxTarget : IRxTarget
 
     public void Run(TestSchedulerRef scheduler) => Unwrap(scheduler).Start();
 
+    public ValueTask<IAsyncDisposable> ConnectAsync<T>(TestSchedulerRef scheduler, ConnectableSeq<T> source) =>
+        _bridge.Call<ValueTask<IAsyncDisposable>>(ConnectImpl<T>, source);
+
     // ---- Assertions ----
     //
     // Compact form: delivery started and completed at the tick; all four subscription timestamps.
@@ -193,6 +196,9 @@ public sealed partial class AsyncRxTarget : IRxTarget
         TestAsyncScheduler scheduler,
         Recorded<Notification<T>>[] messages) =>
         scheduler.CreateColdObservable(messages);
+
+    private static ValueTask<IAsyncDisposable> ConnectImpl<T>(IConnectableAsyncObservable<T> connectable) =>
+        connectable.ConnectAsync();
 
     private static IReadOnlyList<AsyncSubscription> SubscriptionsImpl<T>(
         ITestableAsyncObservable<T> source) =>

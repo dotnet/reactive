@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Runtime.CompilerServices;
+
 namespace Tests.System.Reactive.Shared.Rx;
 
 /// <summary>Presents a sync subscription through the shared, async-shaped raw surface.</summary>
@@ -19,14 +21,37 @@ namespace Tests.System.Reactive.Shared.Rx;
 /// await completes synchronously.
 /// </para>
 /// <para>
+/// <see cref="For"/> returns the same wrapper for the same real disposable, so a scenario that
+/// compares two results by identity (a connectable's <c>Connect()</c> returns the same
+/// connection while it is connected) sees what it would see on Rx.NET.
+/// </para>
+/// <para>
 /// AsyncRx.NET needs no counterpart, since its subscriptions already have the shared shape.
 /// </para>
 /// </remarks>
-internal sealed class RxDisposable(IDisposable disposable) : IAsyncDisposable
+internal sealed class RxDisposable : IAsyncDisposable
 {
+    private static readonly ConditionalWeakTable<IDisposable, RxDisposable> Wrappers = new();
+
+    private readonly IDisposable _disposable;
+
+    private RxDisposable(IDisposable disposable)
+    {
+        _disposable = disposable;
+    }
+
+    /// <summary>The wrapper for <paramref name="disposable"/>, the same one each time.</summary>
+    /// <param name="disposable">The real subscription or connection.</param>
+    public static RxDisposable For(IDisposable disposable)
+    {
+        ArgumentNullException.ThrowIfNull(disposable);
+
+        return Wrappers.GetValue(disposable, d => new RxDisposable(d));
+    }
+
     public ValueTask DisposeAsync()
     {
-        disposable.Dispose();
+        _disposable.Dispose();
         return default;
     }
 }

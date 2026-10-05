@@ -27,7 +27,7 @@ public sealed class DelayAbsoluteSeq<T>(Seq<T> source, DateTimeOffset dueTime, S
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.DelayAbsolute(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.DelayAbsolute(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Delay(@{dueTime.Ticks}, {scheduler})";

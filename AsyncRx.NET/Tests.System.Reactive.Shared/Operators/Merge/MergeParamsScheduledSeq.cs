@@ -20,7 +20,7 @@ public sealed class MergeParamsScheduledSeq<T>(SchedulerRef scheduler, Seq<T>[] 
     public Seq<T>[] Sources => sources;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.MergeParamsScheduled(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.MergeParamsScheduled(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"Seq.Merge({scheduler}, {string.Join(", ", sources.AsEnumerable())})";

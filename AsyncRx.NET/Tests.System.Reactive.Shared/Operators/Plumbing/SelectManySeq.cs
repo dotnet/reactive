@@ -21,7 +21,7 @@ public sealed class SelectManySeq<TIn, TOut>(Seq<TIn> source, Seq<TOut> other) :
     public Seq<TOut> Other => other;
 
     /// <inheritdoc/>
-    public override Realized<Seq<TOut>> Accept(ISeqVisitor visitor) => visitor.SelectMany(this);
+    protected override Realized<Seq<TOut>> AcceptCore(ISeqVisitor visitor) => visitor.SelectMany(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.SelectMany({other})";

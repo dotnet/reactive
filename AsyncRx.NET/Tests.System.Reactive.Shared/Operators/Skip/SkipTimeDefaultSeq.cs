@@ -18,7 +18,7 @@ public sealed class SkipTimeDefaultSeq<T>(Seq<T> source, TimeSpan duration) : Se
     public TimeSpan Duration => duration;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.SkipTimeDefault(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.SkipTimeDefault(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Skip({duration.Ticks} ticks)";

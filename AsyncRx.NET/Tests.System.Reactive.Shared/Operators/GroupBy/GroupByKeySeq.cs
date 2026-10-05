@@ -24,7 +24,7 @@ public sealed class GroupByKeySeq<T, TKey>(
     public Func<T, TKey> KeySelector => keySelector;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Group<TKey, T>>> Accept(ISeqVisitor visitor) =>
+    protected override Realized<Seq<Group<TKey, T>>> AcceptCore(ISeqVisitor visitor) =>
         visitor.GroupByKey(this);
 
     /// <inheritdoc/>

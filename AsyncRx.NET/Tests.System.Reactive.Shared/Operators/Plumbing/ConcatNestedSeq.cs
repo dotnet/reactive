@@ -15,7 +15,7 @@ public sealed class ConcatNestedSeq<T>(Seq<Seq<T>> sources) : Seq<T>
     public Seq<Seq<T>> Sources => sources;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.ConcatNested(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.ConcatNested(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{sources}.Concat()";

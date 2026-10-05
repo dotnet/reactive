@@ -31,7 +31,7 @@ public sealed class SelectManyCollectionSeq<TIn, TCollection, TOut>(
     public Func<TIn, TCollection, TOut> ResultSelector => resultSelector;
 
     /// <inheritdoc/>
-    public override Realized<Seq<TOut>> Accept(ISeqVisitor visitor) =>
+    protected override Realized<Seq<TOut>> AcceptCore(ISeqVisitor visitor) =>
         visitor.SelectManyCollection(this);
 
     /// <inheritdoc/>

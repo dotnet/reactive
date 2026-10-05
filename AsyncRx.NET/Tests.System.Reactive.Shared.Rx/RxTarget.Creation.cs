@@ -24,6 +24,8 @@ public sealed partial class RxTarget
     Realized<Seq<T>> ISeqVisitor.Enumerable<T>(EnumerableSeq<T> seq) =>
         _bridge.Run<Seq<T>>(EnumerableImpl<T>, seq.Source);
 
+    Realized<Seq<T>> ISeqVisitor.Never<T>(NeverSeq<T> seq) => _bridge.Run<Seq<T>>(NeverImpl<T>);
+
     Realized<Seq<T>> ISeqVisitor.Empty<T>(EmptySeq<T> seq) => _bridge.Run<Seq<T>>(EmptyImpl<T>);
 
     Realized<Seq<T>> ISeqVisitor.Throw<T>(ThrowSeq<T> seq) =>
@@ -36,6 +38,8 @@ public sealed partial class RxTarget
     private static IObservable<T> EnumerableImpl<T>(IEnumerable<T> source) => source.ToObservable();
 
     private static IObservable<T> ReturnImpl<T>(T value) => Observable.Return(value);
+
+    private static IObservable<T> NeverImpl<T>() => Observable.Never<T>();
 
     private static IObservable<T> EmptyImpl<T>() => Observable.Empty<T>();
 

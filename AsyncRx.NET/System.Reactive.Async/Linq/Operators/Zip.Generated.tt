@@ -48,12 +48,19 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>);
 <#
 }
 #>
 
-                await Task.WhenAll(<#=string.Join(", ", Enumerable.Range(1, i).Select(j => "sub" + j))#>).ConfigureAwait(false);
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                await d.AddAsync(await sub<#=j#>.ConfigureAwait(false)).ConfigureAwait(false);
+<#
+}
+#>
 
                 return d;
             });
@@ -83,12 +90,19 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>);
 <#
 }
 #>
 
-                await Task.WhenAll(<#=string.Join(", ", Enumerable.Range(1, i).Select(j => "sub" + j))#>).ConfigureAwait(false);
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                await d.AddAsync(await sub<#=j#>.ConfigureAwait(false)).ConfigureAwait(false);
+<#
+}
+#>
 
                 return d;
             });
@@ -118,12 +132,19 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>);
 <#
 }
 #>
 
-                await Task.WhenAll(<#=string.Join(", ", Enumerable.Range(1, i).Select(j => "sub" + j))#>).ConfigureAwait(false);
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                await d.AddAsync(await sub<#=j#>.ConfigureAwait(false)).ConfigureAwait(false);
+<#
+}
+#>
 
                 return d;
             });
@@ -234,7 +255,7 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                CreateObserver<T<#=j#>>(<#=j#>, values<#=j#>)<#=(j < i ? "," : "")#>
+                CreateObserver<T<#=j#>>(<#=j - 1#>, values<#=j#>)<#=(j < i ? "," : "")#>
 <#
 }
 #>
@@ -352,7 +373,7 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                CreateObserver<T<#=j#>>(<#=j#>, values<#=j#>)<#=(j < i ? "," : "")#>
+                CreateObserver<T<#=j#>>(<#=j - 1#>, values<#=j#>)<#=(j < i ? "," : "")#>
 <#
 }
 #>

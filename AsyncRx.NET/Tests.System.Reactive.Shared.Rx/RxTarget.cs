@@ -136,13 +136,13 @@ public sealed partial class RxTarget : IRxTarget
         new(this, Unwrap(scheduler).CreateObserver<T>(), "");
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestableObserver<T> observer) =>
-        new(new RxDisposable(Materialize(source).Subscribe((ITestableObserver<T>)observer.Native)));
+        new(RxDisposable.For(Materialize(source).Subscribe((ITestableObserver<T>)observer.Native)));
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Seq<T> source, Func<T, ValueTask> onNext)
     {
         ArgumentNullException.ThrowIfNull(onNext);
 
-        return new(new RxDisposable(_bridge.Call<IDisposable>(SubscribeImpl<T>, source, onNext)));
+        return new(RxDisposable.For(_bridge.Call<IDisposable>(SubscribeImpl<T>, source, onNext)));
     }
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Seq<Seq<T>> source, Func<Seq<T>, ValueTask> onNext)
@@ -151,7 +151,7 @@ public sealed partial class RxTarget : IRxTarget
 
         // The same impl as above, instantiated at Seq<T>: the bridge subscribes to the real
         // IObservable<IObservable<T>> and hands each window to onNext as a leaf description.
-        return new(new RxDisposable(_bridge.Call<IDisposable>(SubscribeImpl<Seq<T>>, source, onNext)));
+        return new(RxDisposable.For(_bridge.Call<IDisposable>(SubscribeImpl<Seq<T>>, source, onNext)));
     }
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(
@@ -167,7 +167,7 @@ public sealed partial class RxTarget : IRxTarget
         var subscription = onCompleted is null
             ? _bridge.Call<IDisposable>(SubscribeWithErrorImpl<T>, source, onNext, onError)
             : _bridge.Call<IDisposable>(SubscribeWithHandlersImpl<T>, source, onNext, onError, onCompleted);
-        return new(new RxDisposable(subscription));
+        return new(RxDisposable.For(subscription));
     }
 
     public ValueTask OnNextAsync<T>(TestableObserver<T> observer, T value)
@@ -189,6 +189,9 @@ public sealed partial class RxTarget : IRxTarget
     }
 
     public void Run(TestSchedulerRef scheduler) => Unwrap(scheduler).Start();
+
+    public ValueTask<IAsyncDisposable> ConnectAsync<T>(TestSchedulerRef scheduler, ConnectableSeq<T> source) =>
+        new(RxDisposable.For(_bridge.Call<IDisposable>(ConnectImpl<T>, source)));
 
     private static TResult Complete<TResult>(ValueTask<TResult> task)
     {
@@ -240,6 +243,9 @@ public sealed partial class RxTarget : IRxTarget
         RxTestScheduler scheduler,
         Recorded<Notification<T>>[] messages) =>
         scheduler.CreateColdObservable(messages);
+
+    private static IDisposable ConnectImpl<T>(IConnectableObservable<T> connectable) =>
+        connectable.Connect();
 
     private static IList<Subscription> SubscriptionsImpl<T>(ITestableObservable<T> source) =>
         source.Subscriptions;

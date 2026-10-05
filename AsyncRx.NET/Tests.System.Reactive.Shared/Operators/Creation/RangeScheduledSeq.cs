@@ -21,7 +21,7 @@ public sealed class RangeScheduledSeq(int start, int count, SchedulerRef schedul
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override Realized<Seq<int>> Accept(ISeqVisitor visitor) => visitor.RangeScheduled(this);
+    protected override Realized<Seq<int>> AcceptCore(ISeqVisitor visitor) => visitor.RangeScheduled(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"Seq.Range({start}, {count}, {scheduler})";

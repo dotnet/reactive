@@ -35,14 +35,45 @@ namespace Tests.System.Reactive.Shared;
 /// </remarks>
 public abstract class Seq<T> : ISeq
 {
-    /// <summary>Materializes this description on <paramref name="visitor"/>, a target.</summary>
+    private ISeqVisitor? _visitor;
+    private Realized<Seq<T>>? _realized;
+
+    /// <summary>Materializes this description on a target, once.</summary>
     /// <param name="visitor">The target materializing the query.</param>
     /// <remarks>
-    /// Dispatches to the visitor member for this node type. The result is the target's own
-    /// observable, held under the description it realizes; only the target's own code
-    /// looks inside.
+    /// The first call dispatches to the visitor member for this node type; later calls return
+    /// the same realization, so a description names one real sequence however many times it is
+    /// used. Operators with construction-time state need that (<c>Publish</c> makes its subject
+    /// when it is built, and a scenario that connects a published sequence at one tick and
+    /// subscribes to it at another must reach the same subject); the rest do not notice. A
+    /// description belongs to one target: a second target asking is an error. The result is the
+    /// target's own observable, held under the description it realizes; only the target's own
+    /// code looks inside.
     /// </remarks>
-    public abstract Realized<Seq<T>> Accept(ISeqVisitor visitor);
+    /// <exception cref="InvalidOperationException">
+    /// The description was first materialized by a different target.
+    /// </exception>
+    public Realized<Seq<T>> Accept(ISeqVisitor visitor)
+    {
+        ArgumentNullException.ThrowIfNull(visitor);
+
+        if (_realized is null)
+        {
+            _visitor = visitor;
+            _realized = AcceptCore(visitor);
+        }
+        else if (!ReferenceEquals(_visitor, visitor))
+        {
+            throw new InvalidOperationException(
+                $"{this} was materialized by {_visitor}; a description belongs to one target.");
+        }
+
+        return _realized;
+    }
+
+    /// <summary>Dispatches to the visitor member for this node type.</summary>
+    /// <param name="visitor">The target materializing the query.</param>
+    protected abstract Realized<Seq<T>> AcceptCore(ISeqVisitor visitor);
 
     Realized ISeq.Accept(ISeqVisitor visitor) => Accept(visitor);
 

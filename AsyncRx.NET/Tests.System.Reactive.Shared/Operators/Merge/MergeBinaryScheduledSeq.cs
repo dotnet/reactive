@@ -24,7 +24,7 @@ public sealed class MergeBinaryScheduledSeq<T>(Seq<T> first, Seq<T> second, Sche
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.MergeBinaryScheduled(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.MergeBinaryScheduled(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{first}.Merge({second}, {scheduler})";

@@ -11,7 +11,7 @@ public sealed class SwitchSeq<T>(Seq<Seq<T>> sources) : Seq<T>
     public Seq<Seq<T>> Sources => sources;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.Switch(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.Switch(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{sources}.Switch()";

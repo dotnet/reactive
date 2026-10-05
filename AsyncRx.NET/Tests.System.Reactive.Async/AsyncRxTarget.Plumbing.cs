@@ -30,6 +30,9 @@ public sealed partial class AsyncRxTarget
             seq.CollectionSelector,
             seq.ResultSelector);
 
+    Realized<Seq<TResult>> ISeqVisitor.Zip<TFirst, TSecond, TResult>(ZipSeq<TFirst, TSecond, TResult> seq) =>
+        _bridge.Run<Seq<TResult>>(ZipImpl<TFirst, TSecond, TResult>, seq.First, seq.Second, seq.ResultSelector);
+
     Realized<Seq<T>> ISeqVisitor.Concat<T>(ConcatSeq<T> seq) =>
         _bridge.Run<Seq<T>>(ConcatImpl<T>, seq.First, seq.Second);
 
@@ -62,6 +65,12 @@ public sealed partial class AsyncRxTarget
         Func<TIn, IAsyncObservable<TCollection>> collectionSelector,
         Func<TIn, TCollection, TOut> resultSelector) =>
         source.SelectMany(collectionSelector, resultSelector);
+
+    private static IAsyncObservable<TResult> ZipImpl<TFirst, TSecond, TResult>(
+        IAsyncObservable<TFirst> first,
+        IAsyncObservable<TSecond> second,
+        Func<TFirst, TSecond, TResult> resultSelector) =>
+        first.Zip(second, resultSelector);
 
     private static IAsyncObservable<T> ConcatImpl<T>(
         IAsyncObservable<T> first,

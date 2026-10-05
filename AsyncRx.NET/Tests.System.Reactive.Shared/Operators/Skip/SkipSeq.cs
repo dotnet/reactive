@@ -14,7 +14,7 @@ public sealed class SkipSeq<T>(Seq<T> source, int count) : Seq<T>
     public int Count => count;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.Skip(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.Skip(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Skip({count})";

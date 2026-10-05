@@ -30,7 +30,7 @@ public sealed class GroupByKeyCapacitySeq<T, TKey>(
     public int Capacity => capacity;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Group<TKey, T>>> Accept(ISeqVisitor visitor) =>
+    protected override Realized<Seq<Group<TKey, T>>> AcceptCore(ISeqVisitor visitor) =>
         visitor.GroupByKeyCapacity(this);
 
     /// <inheritdoc/>

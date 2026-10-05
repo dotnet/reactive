@@ -36,7 +36,9 @@ tree whose leaves are the target's own objects (a testable source the scheduler 
 inner window or group handed to a callback) and whose interior nodes are operator applications,
 one node type per overload. Inside `Start`, the target walks that tree as a visitor and builds
 its own pipeline, so the operators under test are the target's real operators with nothing in
-between.
+between. A description materializes once: the first use builds the real sequence and every later
+use reaches the same one, which is what lets a scenario build `ys = xs.Publish()` at one tick,
+subscribe to `ys` at another and connect it at several more and always mean the same subject.
 
 A nested sequence is a `Seq<Seq<T>>`, and a sequence of groups a `Seq<Group<TKey, T>>`. Nothing
 in the query model knows about nesting: `xs.Window(2, 2).Skip(1).Merge()` applies the ordinary
@@ -101,7 +103,7 @@ the assertions) forwards to the target instance the running test class supplies,
 scenario text runs against Rx.NET's `TestScheduler` and AsyncRx.NET's `TestAsyncScheduler`. The
 raw surface (`ScheduleAbsolute`, `ScheduleRelative`, `CreateObserver`, `SubscribeAsync` with one,
 two or three handlers, a testable observer's `OnNextAsync`/`OnErrorAsync`/`OnCompletedAsync`,
-`Start()`) is async-shaped so that it, too, can be shared; on Rx.NET it completes synchronously.
+a connectable's `ConnectAsync`, `Start()`) is async-shaped so that it, too, can be shared; on Rx.NET it completes synchronously.
 
 Assertion failures name the query as written, then give the target's own diff.
 
@@ -175,6 +177,7 @@ realizes), and only the target, or a target-specific test, gets at the real type
 | `TestableSeq<T>` (a source the scheduler created) | `ITestableObservable<T>` | `ITestableAsyncObservable<T>` |
 | `TestableObserver<T>` (what `Start` returns) | `ITestableObserver<T>` | `ITestableAsyncObserver<T>` |
 | `SubjectSeq<T>` (a leaf a real-time scenario drives by hand) | `Subject<T>` | `SequentialSimpleAsyncSubject<T>` |
+| `ConnectableSeq<T>` (what `Publish` returns; connected through `ConnectAsync`) | `IConnectableObservable<T>` | `IConnectableAsyncObservable<T>` |
 
 `res.Messages` and `xs.Subscriptions` are not collections. They are handles (`MessageLog<T>`,
 `SubscriptionLog<T>`) that hold the shared observer or source and whose `AssertEqual` asks the

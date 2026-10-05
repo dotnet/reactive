@@ -24,7 +24,7 @@ public sealed class WindowTimeShiftDefaultSeq<T>(Seq<T> source, TimeSpan timeSpa
     public TimeSpan TimeShift => timeShift;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Seq<T>>> Accept(ISeqVisitor visitor) => visitor.WindowTimeShiftDefault(this);
+    protected override Realized<Seq<Seq<T>>> AcceptCore(ISeqVisitor visitor) => visitor.WindowTimeShiftDefault(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Window({timeSpan.Ticks} ticks, {timeShift.Ticks} ticks)";

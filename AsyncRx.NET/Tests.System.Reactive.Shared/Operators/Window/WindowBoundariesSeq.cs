@@ -23,7 +23,7 @@ public sealed class WindowBoundariesSeq<T, TWindowBoundary>(Seq<T> source, Seq<T
     public Seq<TWindowBoundary> WindowBoundaries => windowBoundaries;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Seq<T>>> Accept(ISeqVisitor visitor) =>
+    protected override Realized<Seq<Seq<T>>> AcceptCore(ISeqVisitor visitor) =>
         visitor.WindowBoundaries(this);
 
     /// <inheritdoc/>

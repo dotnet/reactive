@@ -60,6 +60,14 @@ public static partial class Seq
     public static Seq<int> Range(int start, int count, SchedulerRef scheduler) =>
         new RangeScheduledSeq(start, count, scheduler);
 
+    /// <summary>Describes <c>Seq.Never()</c>, a sequence that never produces anything.</summary>
+    /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+    /// <remarks>
+    /// Builds a <see cref="NeverSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.Never{T}(NeverSeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> Never<T>() => new NeverSeq<T>();
+
     /// <summary>Describes <c>source.ToSeq()</c>, an enumerable as a sequence.</summary>
     /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
     /// <param name="source">Enumerable sequence to convert to an observable sequence.</param>

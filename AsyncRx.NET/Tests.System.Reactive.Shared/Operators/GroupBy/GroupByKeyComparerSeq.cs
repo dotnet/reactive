@@ -29,7 +29,7 @@ public sealed class GroupByKeyComparerSeq<T, TKey>(
     public IEqualityComparer<TKey> Comparer => comparer;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Group<TKey, T>>> Accept(ISeqVisitor visitor) =>
+    protected override Realized<Seq<Group<TKey, T>>> AcceptCore(ISeqVisitor visitor) =>
         visitor.GroupByKeyComparer(this);
 
     /// <inheritdoc/>

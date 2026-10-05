@@ -42,7 +42,7 @@ public sealed class GroupByKeyElementCapacityComparerSeq<T, TKey, TElement>(
     public IEqualityComparer<TKey> Comparer => comparer;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Group<TKey, TElement>>> Accept(ISeqVisitor visitor) =>
+    protected override Realized<Seq<Group<TKey, TElement>>> AcceptCore(ISeqVisitor visitor) =>
         visitor.GroupByKeyElementCapacityComparer(this);
 
     /// <inheritdoc/>

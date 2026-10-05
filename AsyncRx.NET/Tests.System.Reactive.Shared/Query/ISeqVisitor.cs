@@ -116,6 +116,19 @@ public partial interface ISeqVisitor
         SelectManyCollectionSeq<TIn, TCollection, TOut> seq);
 
     /// <summary>
+    /// Materializes a <see cref="ZipSeq{TFirst, TSecond, TResult}"/> as the target's own
+    /// <c>Zip(second, resultSelector)</c>.
+    /// </summary>
+    /// <remarks>Built by the three-argument <c>Zip</c> on <see cref="SeqExtensions"/>.</remarks>
+    Realized<Seq<TResult>> Zip<TFirst, TSecond, TResult>(ZipSeq<TFirst, TSecond, TResult> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="NeverSeq{T}"/> as the target's own <c>Never()</c>.
+    /// </summary>
+    /// <remarks>Built by <see cref="Seq.Never{T}"/>.</remarks>
+    Realized<Seq<T>> Never<T>(NeverSeq<T> seq);
+
+    /// <summary>
     /// Materializes a <see cref="ConcatNestedSeq{T}"/> as the target's own <c>Concat()</c> over a
     /// nested sequence.
     /// </summary>

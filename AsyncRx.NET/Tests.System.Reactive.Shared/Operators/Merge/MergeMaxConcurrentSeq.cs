@@ -20,7 +20,7 @@ public sealed class MergeMaxConcurrentSeq<T>(Seq<Seq<T>> sources, int maxConcurr
     public int MaxConcurrent => maxConcurrent;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.MergeMaxConcurrent(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.MergeMaxConcurrent(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{sources}.Merge({maxConcurrent})";

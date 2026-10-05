@@ -15,7 +15,7 @@ public sealed class MergeEnumerableSeq<T>(IEnumerable<Seq<T>> sources) : Seq<T>
     public IEnumerable<Seq<T>> Sources => sources;
 
     /// <inheritdoc/>
-    public override Realized<Seq<T>> Accept(ISeqVisitor visitor) => visitor.MergeEnumerable(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.MergeEnumerable(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{{{string.Join(", ", sources)}}}.Merge()";

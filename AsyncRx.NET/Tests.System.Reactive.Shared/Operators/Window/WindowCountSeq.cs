@@ -21,7 +21,7 @@ public sealed class WindowCountSeq<T>(Seq<T> source, int count, int skip) : Seq<
     public int Skip => skip;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Seq<T>>> Accept(ISeqVisitor visitor) => visitor.WindowCount(this);
+    protected override Realized<Seq<Seq<T>>> AcceptCore(ISeqVisitor visitor) => visitor.WindowCount(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Window({count}, {skip})";

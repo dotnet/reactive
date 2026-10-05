@@ -25,7 +25,7 @@ public sealed class WindowTimeShiftSeq<T>(Seq<T> source, TimeSpan timeSpan, Time
     public SchedulerRef Scheduler => scheduler;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Seq<T>>> Accept(ISeqVisitor visitor) =>
+    protected override Realized<Seq<Seq<T>>> AcceptCore(ISeqVisitor visitor) =>
         visitor.WindowTimeShift(this);
 
     /// <inheritdoc/>

@@ -24,7 +24,7 @@ public sealed class WindowTimeOrCountDefaultSeq<T>(Seq<T> source, TimeSpan timeS
     public int Count => count;
 
     /// <inheritdoc/>
-    public override Realized<Seq<Seq<T>>> Accept(ISeqVisitor visitor) => visitor.WindowTimeOrCountDefault(this);
+    protected override Realized<Seq<Seq<T>>> AcceptCore(ISeqVisitor visitor) => visitor.WindowTimeOrCountDefault(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Window({timeSpan.Ticks} ticks, {count})";
