@@ -84,6 +84,19 @@ public interface IRxTarget : ISeqVisitor
     /// </remarks>
     Realized<Seq<T>> CreateRefCountTestConnectable<T>(Scenarios.RefCountTests.SerialSingleNotificationConnectable<T>.State state);
 
+    /// <summary>
+    /// Builds the connectable behind the <c>RefCount</c> tests' connect-ignoring double.
+    /// </summary>
+    /// <param name="state">
+    /// The double's state, which the object records into and reads from.
+    /// </param>
+    /// <remarks>
+    /// As <see cref="CreateRefCountTestConnectable{T}"/>, for
+    /// <c>RefCountTests.SerialConnectableIgnoringConnect&lt;T&gt;</c>: subscriptions go to the
+    /// state's current source, materialized on this target, and <c>Connect()</c> only logs.
+    /// </remarks>
+    Realized<Seq<T>> CreateRefCountTestConnectableIgnoringConnect<T>(Scenarios.RefCountTests.SerialConnectableIgnoringConnect<T>.State state);
+
     /// <summary>Creates a replay subject the scenario drives by hand, as a leaf.</summary>
     /// <param name="bufferSize">The number of elements replayed to a new subscriber.</param>
     /// <remarks>
@@ -192,6 +205,15 @@ public interface IRxTarget : ISeqVisitor
     /// Runs virtual time to exhaustion (the parameterless <c>TestScheduler.Start()</c>).
     /// </summary>
     void Run(TestSchedulerRef scheduler);
+
+    /// <summary>
+    /// Advances virtual time by <paramref name="ticks"/>, running work due on the way.
+    /// </summary>
+    /// <remarks>
+    /// The target's own <c>AdvanceBy</c>. For scenarios that drive the query by hand between
+    /// advances, rather than scheduling everything and calling <c>Start()</c>.
+    /// </remarks>
+    void AdvanceBy(TestSchedulerRef scheduler, long ticks);
 
     /// <summary>Connects a connectable sequence, the target's own <c>Connect()</c>.</summary>
     /// <remarks>Returns the connection, whose disposal disconnects.</remarks>

@@ -103,7 +103,7 @@ the assertions) forwards to the target instance the running test class supplies,
 scenario text runs against Rx.NET's `TestScheduler` and AsyncRx.NET's `TestAsyncScheduler`. The
 raw surface (`ScheduleAbsolute`, `ScheduleRelative`, `CreateObserver`, `SubscribeAsync` with one,
 two or three handlers, a testable observer's `OnNextAsync`/`OnErrorAsync`/`OnCompletedAsync`,
-a connectable's `ConnectAsync`, `Start()`) is async-shaped so that it, too, can be shared; on Rx.NET it completes synchronously.
+a connectable's `ConnectAsync`, `Start()`, `AdvanceBy`) is async-shaped so that it, too, can be shared; on Rx.NET it completes synchronously.
 
 Assertion failures name the query as written, then give the target's own diff.
 
@@ -169,8 +169,11 @@ Some Rx.NET test files define their own observables to provoke behaviour a real 
 the next, which `Publish` cannot do. Such a double stays owned by the scenario class that uses
 it, as a nested type, exactly as the Rx.NET original is a private nested type of its test class:
 `RefCountTests.SerialSingleNotificationConnectable<T>` is a leaf with the operations the tests perform
-on it (a notification to set for the next connection, and a log of connections with their
-disposed state), its behaviour specified in that type's documentation. Only what differs per
+on it (a notification to set for the next connection, a log of connections with their disposed
+state, delivery into the active connection, and per-connection source replacement), its
+behaviour specified in that type's documentation; `SerialConnectableIgnoringConnect<T>` beside it
+logs connections without acting on them, so a scenario can simulate notifications arriving before
+`Connect`. Only what differs per
 target, the connectable object built over the target's own subjects, is a target capability
 (`IRxTarget.CreateRefCountTestConnectable`), named for the tests it serves so that it does not
 read as a general facility. A scenario then reads as the original does, asserting on the double's

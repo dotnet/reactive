@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
@@ -16,6 +17,46 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<T>> ISeqVisitor.RefCountMinObservers<T>(RefCountMinObserversSeq<T> seq) =>
         _bridge.Run<Seq<T>>(RefCountMinObserversImpl<T>, seq.Source, seq.MinObservers);
+
+    Realized<Seq<T>> ISeqVisitor.RefCountDelay<T>(RefCountDelaySeq<T> seq) =>
+        _bridge.Run<Seq<T>>(RefCountDelayImpl<T>, seq.Source, seq.DisconnectDelay);
+
+    Realized<Seq<T>> ISeqVisitor.RefCountDelayScheduled<T>(RefCountDelayScheduledSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(RefCountDelayScheduledImpl<T>, seq.Source, seq.DisconnectDelay, Unwrap(seq.Scheduler));
+
+    Realized<Seq<T>> ISeqVisitor.RefCountMinObserversDelay<T>(RefCountMinObserversDelaySeq<T> seq) =>
+        _bridge.Run<Seq<T>>(RefCountMinObserversDelayImpl<T>, seq.Source, seq.MinObservers, seq.DisconnectDelay);
+
+    Realized<Seq<T>> ISeqVisitor.RefCountMinObserversDelayScheduled<T>(
+        RefCountMinObserversDelayScheduledSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(
+            RefCountMinObserversDelayScheduledImpl<T>,
+            seq.Source,
+            seq.MinObservers,
+            seq.DisconnectDelay,
+            Unwrap(seq.Scheduler));
+
+    private static IAsyncObservable<T> RefCountDelayImpl<T>(IConnectableAsyncObservable<T> source, TimeSpan disconnectDelay) =>
+        source.RefCount(disconnectDelay);
+
+    private static IAsyncObservable<T> RefCountDelayScheduledImpl<T>(
+        IConnectableAsyncObservable<T> source,
+        TimeSpan disconnectDelay,
+        IAsyncScheduler scheduler) =>
+        source.RefCount(disconnectDelay, scheduler);
+
+    private static IAsyncObservable<T> RefCountMinObserversDelayImpl<T>(
+        IConnectableAsyncObservable<T> source,
+        int minObservers,
+        TimeSpan disconnectDelay) =>
+        source.RefCount(minObservers, disconnectDelay);
+
+    private static IAsyncObservable<T> RefCountMinObserversDelayScheduledImpl<T>(
+        IConnectableAsyncObservable<T> source,
+        int minObservers,
+        TimeSpan disconnectDelay,
+        IAsyncScheduler scheduler) =>
+        source.RefCount(minObservers, disconnectDelay, scheduler);
 
     private static IAsyncObservable<T> RefCountImpl<T>(IConnectableAsyncObservable<T> source) =>
         source.RefCount();

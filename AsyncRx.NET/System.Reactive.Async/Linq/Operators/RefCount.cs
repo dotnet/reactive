@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 using System.Threading;
@@ -137,6 +138,192 @@ namespace System.Reactive.Linq
 
                 return disposal;
             });
+        }
+
+        public static IAsyncObservable<TSource> RefCount<TSource>(this IConnectableAsyncObservable<TSource> source, TimeSpan disconnectDelay)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return RefCount(source, 1, disconnectDelay, TaskPoolAsyncScheduler.Default);
+        }
+
+        public static IAsyncObservable<TSource> RefCount<TSource>(this IConnectableAsyncObservable<TSource> source, TimeSpan disconnectDelay, IAsyncScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return RefCount(source, 1, disconnectDelay, scheduler);
+        }
+
+        public static IAsyncObservable<TSource> RefCount<TSource>(this IConnectableAsyncObservable<TSource> source, int minObservers, TimeSpan disconnectDelay)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (minObservers <= 0)
+                throw new ArgumentOutOfRangeException(nameof(minObservers));
+
+            return RefCount(source, minObservers, disconnectDelay, TaskPoolAsyncScheduler.Default);
+        }
+
+        public static IAsyncObservable<TSource> RefCount<TSource>(this IConnectableAsyncObservable<TSource> source, int minObservers, TimeSpan disconnectDelay, IAsyncScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (minObservers <= 0)
+                throw new ArgumentOutOfRangeException(nameof(minObservers));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            // A port of Rx.NET's delayed-disconnect RefCount, whose state machine is shared across
+            // all subscriptions to one instance (see the State enum). Connecting may complete
+            // subscribers synchronously, which runs their disposal re-entrantly under the same
+            // gate; that is why the state is re-read after Connect rather than assumed.
+            var gate = new AsyncGate();
+            var state = LazyState.DisconnectedNoSubscribers;
+            var count = 0;
+            var connection = default(IAsyncDisposable);
+            var pendingDisconnect = default(IAsyncDisposable);
+            var pendingDisconnectId = 0L;
+
+            return Create<TSource>(async observer =>
+            {
+                var terminated = false;
+                var subscription = await source.SubscribeSafeAsync(AsyncObserver.Create<TSource>(
+                    observer.OnNextAsync,
+                    async ex =>
+                    {
+                        terminated = true;
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                    },
+                    async () =>
+                    {
+                        terminated = true;
+                        await observer.OnCompletedAsync().ConfigureAwait(false);
+                    })).ConfigureAwait(false);
+
+                var disposed = 0;
+                var disposal = AsyncDisposable.Create(async () =>
+                {
+                    if (Interlocked.Exchange(ref disposed, 1) != 0)
+                    {
+                        return;
+                    }
+
+                    await subscription.DisposeAsync().ConfigureAwait(false);
+
+                    using (await gate.LockAsync().ConfigureAwait(false))
+                    {
+                        if (--count != 0)
+                        {
+                            return;
+                        }
+
+                        if (state == LazyState.ConnectedWithSubscribers)
+                        {
+                            // Nothing more may arrive before the delay: keep the connection, and
+                            // schedule the disconnection; a new subscriber cancels it by
+                            // bumping the id, so a stale work item finds its id superseded.
+                            state = LazyState.ConnectedWithNoSubscribers;
+                            var id = ++pendingDisconnectId;
+                            pendingDisconnect = await scheduler.ScheduleAsync(id, disconnectDelay, async (myId, ct) =>
+                            {
+                                IAsyncDisposable toDispose = null;
+                                using (await gate.LockAsync().RendezVous(scheduler, ct))
+                                {
+                                    if (pendingDisconnectId == myId && state == LazyState.ConnectedWithNoSubscribers)
+                                    {
+                                        state = LazyState.DisconnectedNoSubscribers;
+                                        toDispose = connection;
+                                        connection = null;
+                                    }
+                                }
+
+                                if (toDispose != null)
+                                {
+                                    await toDispose.DisposeAsync().RendezVous(scheduler, ct);
+                                }
+                            }).ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            // Below the threshold and never connected in this cycle.
+                            state = LazyState.DisconnectedNoSubscribers;
+                        }
+                    }
+                });
+
+                if (terminated)
+                {
+                    // The source completed this subscriber inside SubscribeAsync, so the count
+                    // it will contribute has already come and gone; account for it before we
+                    // decide whether its arrival connects. The count is incremented below.
+                }
+
+                bool shouldConnect;
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    count++;
+                    shouldConnect = false;
+                    switch (state)
+                    {
+                        case LazyState.DisconnectedNoSubscribers:
+                        case LazyState.DisconnectedWithSubscribers:
+                            shouldConnect = count == minObservers;
+                            state = shouldConnect ? LazyState.ConnectedWithSubscribers : LazyState.DisconnectedWithSubscribers;
+                            break;
+                        case LazyState.ConnectedWithNoSubscribers:
+                            // A subscriber arrived before the delayed disconnect: cancel it.
+                            state = LazyState.ConnectedWithSubscribers;
+                            pendingDisconnectId++;
+                            break;
+                    }
+                }
+
+                if (shouldConnect)
+                {
+                    var connected = await source.ConnectAsync().ConfigureAwait(false);
+
+                    IAsyncDisposable disposeNow = null;
+                    using (await gate.LockAsync().ConfigureAwait(false))
+                    {
+                        // Connect may have completed every subscriber synchronously; the
+                        // disposals then ran under the gate and moved the state on. Only hold
+                        // the connection if we are still connected with subscribers, or waiting
+                        // out the delay.
+                        if (state == LazyState.ConnectedWithSubscribers || state == LazyState.ConnectedWithNoSubscribers)
+                        {
+                            connection = connected;
+                        }
+                        else
+                        {
+                            disposeNow = connected;
+                        }
+                    }
+
+                    if (disposeNow != null)
+                    {
+                        await disposeNow.DisposeAsync().ConfigureAwait(false);
+                    }
+                }
+
+                if (terminated)
+                {
+                    await disposal.DisposeAsync().ConfigureAwait(false);
+                }
+
+                return disposal;
+            });
+        }
+
+        private enum LazyState
+        {
+            DisconnectedNoSubscribers,
+            DisconnectedWithSubscribers,
+            ConnectedWithSubscribers,
+            ConnectedWithNoSubscribers,
         }
 
         private sealed class RefConnection

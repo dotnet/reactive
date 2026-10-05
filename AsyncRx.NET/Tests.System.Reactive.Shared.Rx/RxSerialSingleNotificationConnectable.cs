@@ -14,12 +14,40 @@ namespace Tests.System.Reactive.Shared.Rx;
 /// The behaviour <see cref="RefCountTests.SerialSingleNotificationConnectable{T}"/> documents,
 /// over <see cref="Subject{T}"/>, recording into the shared state.
 /// </remarks>
-internal sealed class RxSerialSingleNotificationConnectable<T>(RefCountTests.SerialSingleNotificationConnectable<T>.State state)
-    : IConnectableObservable<T>
+internal sealed class RxSerialSingleNotificationConnectable<T> : IConnectableObservable<T>
 {
+    private readonly RefCountTests.SerialSingleNotificationConnectable<T>.State _state;
+    private readonly RxTarget _target;
     private readonly object _gate = new();
     private Subject<T> _sourceForNextConnect = new();
     private (RefCountTests.SerialSingleNotificationConnectable<T>.Connection Record, Subject<T> Source)? _active;
+
+    public RxSerialSingleNotificationConnectable(RefCountTests.SerialSingleNotificationConnectable<T>.State state, RxTarget target)
+    {
+        _state = state;
+        _target = target;
+        state.DeliverToActive = notification =>
+        {
+            Subject<T> source;
+            lock (_gate)
+            {
+                if (_active is not { Record.Disposed: false } active)
+                {
+                    throw new InvalidOperationException("No connection is currently active");
+                }
+
+                if (active.Record.ReplacedSource is not null)
+                {
+                    throw new InvalidOperationException("Active connection's source has been replaced and is no longer a Subject<T>, so it is not possible to deliver further notifications to current subscribers");
+                }
+
+                source = active.Source;
+            }
+
+            notification.Accept(source);
+            return default;
+        };
+    }
 
     public IDisposable Connect()
     {
@@ -29,10 +57,10 @@ internal sealed class RxSerialSingleNotificationConnectable<T>(RefCountTests.Ser
         lock (_gate)
         {
             source = _sourceForNextConnect;
-            notification = state.Next;
+            notification = _state.Next;
             _sourceForNextConnect = new Subject<T>();
             _active = (record, source);
-            state.Connections.Add(record);
+            _state.Connections.Add(record);
         }
 
         notification.Accept(source);
@@ -41,10 +69,12 @@ internal sealed class RxSerialSingleNotificationConnectable<T>(RefCountTests.Ser
 
     public IDisposable Subscribe(IObserver<T> observer)
     {
-        Subject<T> source;
+        IObservable<T> source;
         lock (_gate)
         {
-            source = _active is { Record.Disposed: false } active ? active.Source : _sourceForNextConnect;
+            source = _active is { Record.Disposed: false } active
+                ? active.Record.ReplacedSource is { } replaced ? _target.MaterializeForDouble(replaced) : active.Source
+                : _sourceForNextConnect;
         }
 
         return source.Subscribe(observer);

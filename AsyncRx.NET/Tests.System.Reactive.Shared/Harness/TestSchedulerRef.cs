@@ -102,6 +102,15 @@ public sealed class TestSchedulerRef : SchedulerRef
     public void Start() => Target.Run(this);
 
     /// <summary>
+    /// Advances virtual time by <paramref name="ticks"/>, running work due on the way.
+    /// </summary>
+    /// <param name="ticks">The number of ticks to advance by.</param>
+    /// <remarks>
+    /// The sync <c>AdvanceBy</c>, for scenarios that drive the query by hand between advances.
+    /// </remarks>
+    public void AdvanceBy(long ticks) => Target.AdvanceBy(this, ticks);
+
+    /// <summary>
     /// This scheduler with its optional capabilities hidden, for passing to an operator.
     /// </summary>
     /// <remarks>

@@ -5,8 +5,6 @@
 using System.Reactive;
 using System.Reactive.Subjects;
 
-using Tests.System.Reactive.Shared;
-
 using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async;
@@ -16,12 +14,47 @@ namespace Tests.System.Reactive.Async;
 /// The behaviour <see cref="RefCountTests.SerialSingleNotificationConnectable{T}"/> documents,
 /// over <see cref="SequentialSimpleAsyncSubject{T}"/>, recording into the shared state.
 /// </remarks>
-internal sealed class AsyncRxSerialSingleNotificationConnectable<T>(RefCountTests.SerialSingleNotificationConnectable<T>.State state)
-    : IConnectableAsyncObservable<T>
+internal sealed class AsyncRxSerialSingleNotificationConnectable<T> : IConnectableAsyncObservable<T>
 {
+    private readonly RefCountTests.SerialSingleNotificationConnectable<T>.State _state;
+    private readonly AsyncRxTarget _target;
     private readonly object _gate = new();
     private SequentialSimpleAsyncSubject<T> _sourceForNextConnect = new();
     private (RefCountTests.SerialSingleNotificationConnectable<T>.Connection Record, SequentialSimpleAsyncSubject<T> Source)? _active;
+
+    public AsyncRxSerialSingleNotificationConnectable(RefCountTests.SerialSingleNotificationConnectable<T>.State state, AsyncRxTarget target)
+    {
+        _state = state;
+        _target = target;
+        state.DeliverToActive = notification =>
+        {
+            SequentialSimpleAsyncSubject<T> source;
+            lock (_gate)
+            {
+                if (_active is not { Record.Disposed: false } active)
+                {
+                    throw new InvalidOperationException("No connection is currently active");
+                }
+
+                if (active.Record.ReplacedSource is not null)
+                {
+                    throw new InvalidOperationException("Active connection's source has been replaced and is no longer a subject, so it is not possible to deliver further notifications to current subscribers");
+                }
+
+                source = active.Source;
+            }
+
+            return Deliver(source, notification);
+        };
+    }
+
+    private static ValueTask Deliver(SequentialSimpleAsyncSubject<T> source, Notification<T> notification) =>
+        notification.Kind switch
+        {
+            NotificationKind.OnNext => source.OnNextAsync(notification.Value),
+            NotificationKind.OnError => source.OnErrorAsync(notification.Exception!),
+            _ => source.OnCompletedAsync(),
+        };
 
     public async ValueTask<IAsyncDisposable> ConnectAsync()
     {
@@ -31,28 +64,24 @@ internal sealed class AsyncRxSerialSingleNotificationConnectable<T>(RefCountTest
         lock (_gate)
         {
             source = _sourceForNextConnect;
-            notification = state.Next;
+            notification = _state.Next;
             _sourceForNextConnect = new SequentialSimpleAsyncSubject<T>();
             _active = (record, source);
-            state.Connections.Add(record);
+            _state.Connections.Add(record);
         }
 
-        await (notification.Kind switch
-        {
-            NotificationKind.OnNext => source.OnNextAsync(notification.Value),
-            NotificationKind.OnError => source.OnErrorAsync(notification.Exception!),
-            _ => source.OnCompletedAsync(),
-        });
-
+        await Deliver(source, notification);
         return new Connection(record);
     }
 
     public ValueTask<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
     {
-        SequentialSimpleAsyncSubject<T> source;
+        IAsyncObservable<T> source;
         lock (_gate)
         {
-            source = _active is { Record.Disposed: false } active ? active.Source : _sourceForNextConnect;
+            source = _active is { Record.Disposed: false } active
+                ? active.Record.ReplacedSource is { } replaced ? _target.MaterializeForDouble(replaced) : active.Source
+                : _sourceForNextConnect;
         }
 
         return source.SubscribeAsync(observer);

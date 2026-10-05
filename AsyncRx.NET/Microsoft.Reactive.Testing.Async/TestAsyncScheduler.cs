@@ -149,7 +149,31 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     /// await continuation resumes inline (see the class remarks). Throws if any scheduled
     /// work failed, escaped to a real thread, or never completed.
     /// </summary>
-    public void Start()
+    public void Start() => Pump(long.MaxValue);
+
+    /// <summary>
+    /// Advances virtual time by <paramref name="ticks"/>, running every work item due on the way,
+    /// then sets the clock to the target and returns.
+    /// </summary>
+    /// <param name="ticks">The number of ticks to advance by.</param>
+    /// <remarks>
+    /// The async counterpart of the sync <c>TestScheduler.AdvanceBy</c>: for tests that drive a
+    /// scenario by hand between advances, rather than scheduling everything and calling
+    /// <see cref="Start"/>. Work due exactly at the target tick runs; work due later waits for
+    /// the next advance. The pump's failure checks apply as for <see cref="Start"/>, except that
+    /// outstanding work due in the future is expected, not an error.
+    /// </remarks>
+    public void AdvanceBy(long ticks)
+    {
+        if (ticks < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(ticks));
+        }
+
+        Pump(Clock + ticks);
+    }
+
+    private void Pump(long until)
     {
         if (_pumping)
         {
@@ -174,7 +198,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
                     node.Value();
                     CountDispatch(ref dispatchesThisTick);
                 }
-                else if (DequeueTimer() is { } timer)
+                else if (PeekTimerDueTime() is { } due && due <= until && DequeueTimer() is { } timer)
                 {
                     var (item, key) = timer;
 
@@ -199,8 +223,16 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
                 }
             }
 
+            if (until != long.MaxValue && Clock < until)
+            {
+                Clock = until;
+            }
+
             ThrowIfFailed();
-            ThrowIfWorkOutstanding();
+            if (until == long.MaxValue)
+            {
+                ThrowIfWorkOutstanding();
+            }
         }
         finally
         {
@@ -287,6 +319,8 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
             _timers.Add((dueTime, _nextSequence++), item);
         }
     }
+
+    private long? PeekTimerDueTime() => _timers.Count == 0 ? null : _timers.First().Key.DueTime;
 
     private (TimerItem Item, (long DueTime, long Sequence) Key)? DequeueTimer()
     {

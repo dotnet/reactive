@@ -82,7 +82,13 @@ public sealed partial class AsyncRxTarget : IRxTarget
     public SubjectSeq<T> CreateBehaviorSubject<T>(T value) => Wrap(new SequentialBehaviorAsyncSubject<T>(value));
 
     public Realized<Seq<T>> CreateRefCountTestConnectable<T>(RefCountTests.SerialSingleNotificationConnectable<T>.State state) =>
-        Realized.Of<Seq<T>>(new AsyncRxSerialSingleNotificationConnectable<T>(state));
+        Realized.Of<Seq<T>>(new AsyncRxSerialSingleNotificationConnectable<T>(state, this));
+
+    public Realized<Seq<T>> CreateRefCountTestConnectableIgnoringConnect<T>(RefCountTests.SerialConnectableIgnoringConnect<T>.State state) =>
+        Realized.Of<Seq<T>>(new AsyncRxSerialConnectableIgnoringConnect<T>(state, this));
+
+    // For the test doubles, which subscribe to a description a scenario handed them.
+    internal IAsyncObservable<T> MaterializeForDouble<T>(Seq<T> seq) => Materialize(seq);
 
     public SubjectSeq<T> CreateSubject<T>() => Wrap(new SequentialSimpleAsyncSubject<T>());
 
@@ -182,6 +188,8 @@ public sealed partial class AsyncRxTarget : IRxTarget
         ((ITestableAsyncObserver<T>)observer.Native).OnCompletedAsync();
 
     public void Run(TestSchedulerRef scheduler) => Unwrap(scheduler).Start();
+
+    public void AdvanceBy(TestSchedulerRef scheduler, long ticks) => Unwrap(scheduler).AdvanceBy(ticks);
 
     public ValueTask<IAsyncDisposable> ConnectAsync<T>(TestSchedulerRef scheduler, ConnectableSeq<T> source) =>
         _bridge.Call<ValueTask<IAsyncDisposable>>(ConnectImpl<T>, source);
