@@ -18,7 +18,9 @@ public sealed partial class AsyncRxTarget
         Realized.Of<Seq<long>>(AsyncObservable.Interval(seq.Period, Unwrap(seq.Scheduler)));
 
     Realized<Seq<T>> ISeqVisitor.Return<T>(ReturnSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(ReturnImpl<T>, seq.Value);
+        seq.Scheduler is null
+            ? _bridge.Run<Seq<T>>(ReturnImpl<T>, seq.Value)
+            : _bridge.Run<Seq<T>>(ReturnOnImpl<T>, seq.Value, Unwrap(seq.Scheduler));
 
     // Rx.NET's Range(start, count) runs on the current-thread scheduler; the immediate scheduler
     // is the equivalent here (a plumbing decision).
@@ -39,7 +41,10 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<T>> ISeqVisitor.Never<T>(NeverSeq<T> seq) => _bridge.Run<Seq<T>>(NeverImpl<T>);
 
-    Realized<Seq<T>> ISeqVisitor.Empty<T>(EmptySeq<T> seq) => _bridge.Run<Seq<T>>(EmptyImpl<T>);
+    Realized<Seq<T>> ISeqVisitor.Empty<T>(EmptySeq<T> seq) =>
+        seq.Scheduler is null
+            ? _bridge.Run<Seq<T>>(EmptyImpl<T>)
+            : _bridge.Run<Seq<T>>(EmptyOnImpl<T>, Unwrap(seq.Scheduler));
 
     Realized<Seq<T>> ISeqVisitor.Throw<T>(ThrowSeq<T> seq) =>
         seq.Scheduler is null ? _bridge.Run<Seq<T>>(
@@ -53,12 +58,17 @@ public sealed partial class AsyncRxTarget
 
     private static IAsyncObservable<T> ReturnImpl<T>(T value) => AsyncObservable.Return(value);
 
+    private static IAsyncObservable<T> ReturnOnImpl<T>(T value, IAsyncScheduler scheduler) =>
+        AsyncObservable.Return(value, scheduler);
+
     private static IAsyncObservable<T> DeferImpl<T>(Func<IAsyncObservable<T>> observableFactory) =>
         AsyncObservable.Defer(observableFactory);
 
     private static IAsyncObservable<T> NeverImpl<T>() => AsyncObservable.Never<T>();
 
     private static IAsyncObservable<T> EmptyImpl<T>() => AsyncObservable.Empty<T>();
+
+    private static IAsyncObservable<T> EmptyOnImpl<T>(IAsyncScheduler scheduler) => AsyncObservable.Empty<T>(scheduler);
 
     private static IAsyncObservable<T> ThrowImpl<T>(Exception error) =>
         AsyncObservable.Throw<T>(error);

@@ -61,4 +61,36 @@ public sealed partial class RxTarget
         Func<TIn, IObservable<TCollection>> collectionSelector,
         Func<TIn, TCollection, TOut> resultSelector) =>
         source.SelectMany(collectionSelector, resultSelector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManySelectors<TIn, TOut>(
+        SelectManySelectorsSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManySelectorsImpl<TIn, TOut>,
+            seq.Source,
+            seq.OnNext,
+            seq.OnError,
+            seq.OnCompleted);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManySelectorsIndexed<TIn, TOut>(
+        SelectManySelectorsIndexedSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManySelectorsIndexedImpl<TIn, TOut>,
+            seq.Source,
+            seq.OnNext,
+            seq.OnError,
+            seq.OnCompleted);
+
+    private static IObservable<TOut> SelectManySelectorsImpl<TIn, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, IObservable<TOut>> onNext,
+        Func<Exception, IObservable<TOut>> onError,
+        Func<IObservable<TOut>> onCompleted) =>
+        source.SelectMany(onNext, onError, onCompleted);
+
+    private static IObservable<TOut> SelectManySelectorsIndexedImpl<TIn, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, int, IObservable<TOut>> onNext,
+        Func<Exception, IObservable<TOut>> onError,
+        Func<IObservable<TOut>> onCompleted) =>
+        source.SelectMany(onNext, onError, onCompleted);
 }

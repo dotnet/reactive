@@ -7,11 +7,16 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// <summary>Shared <c>SelectMany</c> scenarios, from Rx.NET's <c>SelectManyTest.cs</c>.</summary>
 /// <remarks>
 /// <para>
-/// The first part of the file: its observable-selector families (<c>SelectMany_Then_*</c>, the
-/// plain and <c>WithIndex</c> selector tests, and both <c>QueryOperator</c> families), 39 of its
-/// 181 tests. The remaining families, over enumerable selectors, the three-selector form, and
-/// task-returning selectors, are overloads AsyncRx.NET does not yet have and follow in later
-/// steps; the five <c>*_ArgumentChecking</c> tests are the code-generated stratum.
+/// The observable-selector families (<c>SelectMany_Then_*</c>, the plain and <c>WithIndex</c>
+/// selector tests, and both <c>QueryOperator</c> families), and the three-selector
+/// <c>Triple</c> families: 72 of the file's 181 tests. The remaining families, over enumerable
+/// and task-returning selectors, are overloads AsyncRx.NET does not yet have and follow in later
+/// steps; the seven <c>*_ArgumentChecking</c> tests are the code-generated stratum. The
+/// <c>Triple</c> tests build their inners from scheduled creation operators
+/// (<c>Return(x, scheduler)</c>, <c>Empty(scheduler)</c>, <c>Range(1, 3, scheduler)</c>), whose
+/// delivery the original expects one tick later, written here with <c>ScheduledAt</c>; those
+/// that interleave several <c>Repeat(x, x, scheduler)</c> inners use the <see cref="Repeat"/>
+/// helper below instead, for the reason it gives.
 /// </para>
 /// <para>
 /// Where the original builds a hot sequence of cold sequences inline
@@ -29,6 +34,56 @@ public abstract class SelectManyTests : SharedReactiveTest
     {
         throw ex;
     }
+
+    /// <summary>
+    /// A sequence with the timing of Rx.NET's <c>Observable.Repeat(value, count, scheduler)</c>
+    /// on both targets' test schedulers.
+    /// </summary>
+    /// <remarks>
+    /// Rx.NET's scheduled <c>Repeat</c> schedules each value only when the previous one has been
+    /// delivered, and completes in the action that delivers the last (or in its first action,
+    /// for a count of zero); on <c>TestScheduler</c>, which moves one tick per scheduling, that
+    /// is one tick per value, and the <c>Triple</c> tests interleave several such inners by
+    /// those ticks and by the order their actions were scheduled. AsyncRx.NET's <c>Repeat</c>
+    /// loops within one scheduled action, so on the pump every value lands at the tick of
+    /// subscription and the interleaving differs, which <c>ScheduledAt</c> cannot express. This
+    /// sequence schedules each value one tick after the previous through the scenario's
+    /// scheduler, which both test schedulers order the same way, so those tests keep every
+    /// expectation of the original.
+    /// </remarks>
+    private Seq<int> Repeat(int value, int count) =>
+        Seq.Create<int>(observer =>
+        {
+            var disposed = false;
+            var remaining = count;
+
+            void ScheduleNext() =>
+                Scheduler.ScheduleRelative(1, async () =>
+                {
+                    if (disposed)
+                    {
+                        return;
+                    }
+
+                    if (remaining > 0)
+                    {
+                        await observer.OnNextAsync(value);
+                        remaining--;
+                    }
+
+                    if (remaining == 0)
+                    {
+                        await observer.OnCompletedAsync();
+                    }
+                    else
+                    {
+                        ScheduleNext();
+                    }
+                });
+
+            ScheduleNext();
+            return new ValueTask<Action?>(() => disposed = true);
+        });
 
     [TestMethod]
     public void SelectMany_Then_Complete_Complete()
@@ -2349,6 +2404,1442 @@ public abstract class SelectManyTests : SharedReactiveTest
 
         xs.Subscriptions.AssertEqual(
             Subscribe(200, 221)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_Identity()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Seq.Return(x, Scheduler),
+                ex => Seq.Throw<int>(ex, Scheduler),
+                () => Seq.Empty<int>(Scheduler)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(ScheduledAt(300), 0),
+            OnNext(ScheduledAt(301), 1),
+            OnNext(ScheduledAt(302), 2),
+            OnNext(ScheduledAt(303), 3),
+            OnNext(ScheduledAt(304), 4),
+            OnCompleted<int>(ScheduledAt(305))
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_InnersWithTiming1()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var ysn = Scheduler.CreateColdObservable(
+            OnNext(10, 10),
+            OnNext(20, 11),
+            OnNext(30, 12),
+            OnCompleted<int>(40)
+        );
+
+        var yse = Scheduler.CreateColdObservable(
+            OnNext(0, 99),
+            OnCompleted<int>(10)
+        );
+
+        var ysc = Scheduler.CreateColdObservable(
+            OnNext(10, 42),
+            OnCompleted<int>(20)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => ysn,
+                ex => yse,
+                () => ysc
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(310, 10),
+            OnNext(311, 10),
+            OnNext(312, 10),
+            OnNext(313, 10),
+            OnNext(314, 10),
+            OnNext(315, 42),
+            OnNext(320, 11),
+            OnNext(321, 11),
+            OnNext(322, 11),
+            OnNext(323, 11),
+            OnNext(324, 11),
+            OnNext(330, 12),
+            OnNext(331, 12),
+            OnNext(332, 12),
+            OnNext(333, 12),
+            OnNext(334, 12),
+            OnCompleted<int>(344)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+
+        ysn.Subscriptions.AssertEqual(
+            Subscribe(300, 340),
+            Subscribe(301, 341),
+            Subscribe(302, 342),
+            Subscribe(303, 343),
+            Subscribe(304, 344)
+        );
+
+        yse.Subscriptions.AssertEqual(
+        );
+
+        ysc.Subscriptions.AssertEqual(
+            Subscribe(305, 325)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_InnersWithTiming2()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var ysn = Scheduler.CreateColdObservable(
+            OnNext(10, 10),
+            OnNext(20, 11),
+            OnNext(30, 12),
+            OnCompleted<int>(40)
+        );
+
+        var yse = Scheduler.CreateColdObservable(
+            OnNext(0, 99),
+            OnCompleted<int>(10)
+        );
+
+        var ysc = Scheduler.CreateColdObservable(
+            OnNext(10, 42),
+            OnCompleted<int>(50)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => ysn,
+                ex => yse,
+                () => ysc
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(310, 10),
+            OnNext(311, 10),
+            OnNext(312, 10),
+            OnNext(313, 10),
+            OnNext(314, 10),
+            OnNext(315, 42),
+            OnNext(320, 11),
+            OnNext(321, 11),
+            OnNext(322, 11),
+            OnNext(323, 11),
+            OnNext(324, 11),
+            OnNext(330, 12),
+            OnNext(331, 12),
+            OnNext(332, 12),
+            OnNext(333, 12),
+            OnNext(334, 12),
+            OnCompleted<int>(355)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+
+        ysn.Subscriptions.AssertEqual(
+            Subscribe(300, 340),
+            Subscribe(301, 341),
+            Subscribe(302, 342),
+            Subscribe(303, 343),
+            Subscribe(304, 344)
+        );
+
+        yse.Subscriptions.AssertEqual(
+        );
+
+        ysc.Subscriptions.AssertEqual(
+            Subscribe(305, 355)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_InnersWithTiming3()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(400, 1),
+            OnNext(500, 2),
+            OnNext(600, 3),
+            OnNext(700, 4),
+            OnCompleted<int>(800)
+        );
+
+        var ysn = Scheduler.CreateColdObservable(
+            OnNext(10, 10),
+            OnNext(20, 11),
+            OnNext(30, 12),
+            OnCompleted<int>(40)
+        );
+
+        var yse = Scheduler.CreateColdObservable(
+            OnNext(0, 99),
+            OnCompleted<int>(10)
+        );
+
+        var ysc = Scheduler.CreateColdObservable(
+            OnNext(10, 42),
+            OnCompleted<int>(100)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => ysn,
+                ex => yse,
+                () => ysc
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(310, 10),
+            OnNext(320, 11),
+            OnNext(330, 12),
+            OnNext(410, 10),
+            OnNext(420, 11),
+            OnNext(430, 12),
+            OnNext(510, 10),
+            OnNext(520, 11),
+            OnNext(530, 12),
+            OnNext(610, 10),
+            OnNext(620, 11),
+            OnNext(630, 12),
+            OnNext(710, 10),
+            OnNext(720, 11),
+            OnNext(730, 12),
+            OnNext(810, 42),
+            OnCompleted<int>(900)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 800)
+        );
+
+        ysn.Subscriptions.AssertEqual(
+            Subscribe(300, 340),
+            Subscribe(400, 440),
+            Subscribe(500, 540),
+            Subscribe(600, 640),
+            Subscribe(700, 740)
+        );
+
+        yse.Subscriptions.AssertEqual(
+        );
+
+        ysc.Subscriptions.AssertEqual(
+            Subscribe(800, 900)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_Error_Identity()
+    {
+        var ex = new Exception();
+
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnError<int>(305, ex)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Seq.Return(x, Scheduler),
+                ex1 => Seq.Throw<int>(ex1, Scheduler),
+                () => Seq.Empty<int>(Scheduler)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(ScheduledAt(300), 0),
+            OnNext(ScheduledAt(301), 1),
+            OnNext(ScheduledAt(302), 2),
+            OnNext(ScheduledAt(303), 3),
+            OnNext(ScheduledAt(304), 4),
+            OnError<int>(ScheduledAt(305), ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_SelectMany()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Repeat(x, x),
+                ex => Seq.Throw<int>(ex, Scheduler),
+                () => Seq.Empty<int>(Scheduler)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2),
+            OnNext(304, 3),
+            OnNext(304, 2),
+            OnNext(305, 4),
+            OnNext(305, 3),
+            OnNext(306, 4),
+            OnNext(306, 3),
+            OnNext(307, 4),
+            OnNext(308, 4),
+            OnCompleted<int>(308)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_Concat()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Seq.Return(x, Scheduler),
+                ex => Seq.Throw<int>(ex, Scheduler),
+                () => Seq.Range(1, 3, Scheduler)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(ScheduledAt(300), 0),
+            OnNext(ScheduledAt(301), 1),
+            OnNext(ScheduledAt(302), 2),
+            OnNext(ScheduledAt(303), 3),
+            OnNext(ScheduledAt(304), 4),
+            OnNext(ScheduledAt(305), 1),
+            OnNext(ScheduledAt(305, 2), 2),
+            OnNext(ScheduledAt(305, 3), 3),
+            OnCompleted<int>(ScheduledAt(305, 4))
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_Catch()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Seq.Return(x, Scheduler),
+                ex => Seq.Range(1, 3, Scheduler),
+                () => Seq.Empty<int>(Scheduler)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(ScheduledAt(300), 0),
+            OnNext(ScheduledAt(301), 1),
+            OnNext(ScheduledAt(302), 2),
+            OnNext(ScheduledAt(303), 3),
+            OnNext(ScheduledAt(304), 4),
+            OnCompleted<int>(ScheduledAt(305))
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_Error_Catch()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnError<int>(305, new Exception())
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Seq.Return(x, Scheduler),
+                ex => Seq.Range(1, 3, Scheduler),
+                () => Seq.Empty<int>(Scheduler)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(ScheduledAt(300), 0),
+            OnNext(ScheduledAt(301), 1),
+            OnNext(ScheduledAt(302), 2),
+            OnNext(ScheduledAt(303), 3),
+            OnNext(ScheduledAt(304), 4),
+            OnNext(ScheduledAt(305), 1),
+            OnNext(ScheduledAt(305, 2), 2),
+            OnNext(ScheduledAt(305, 3), 3),
+            OnCompleted<int>(ScheduledAt(305, 4))
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_All()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Repeat(x, x),
+                ex => Repeat(0, 2),
+                () => Repeat(-1, 2)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2),
+            OnNext(304, 3),
+            OnNext(304, 2),
+            OnNext(305, 4),
+            OnNext(305, 3),
+            OnNext(306, -1),
+            OnNext(306, 4),
+            OnNext(306, 3),
+            OnNext(307, -1),
+            OnNext(307, 4),
+            OnNext(308, 4),
+            OnCompleted<int>(308)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_Error_All()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnError<int>(305, new Exception())
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Repeat(x, x),
+                ex => Repeat(0, 2),
+                () => Repeat(-1, 2)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2),
+            OnNext(304, 3),
+            OnNext(304, 2),
+            OnNext(305, 4),
+            OnNext(305, 3),
+            OnNext(306, 0),
+            OnNext(306, 4),
+            OnNext(306, 3),
+            OnNext(307, 0),
+            OnNext(307, 4),
+            OnNext(308, 4),
+            OnCompleted<int>(308)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_All_Dispose()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Repeat(x, x),
+                ex => Repeat(0, 2),
+                () => Repeat(-1, 2)
+            ),
+            307
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2),
+            OnNext(304, 3),
+            OnNext(304, 2),
+            OnNext(305, 4),
+            OnNext(305, 3),
+            OnNext(306, -1),
+            OnNext(306, 4),
+            OnNext(306, 3)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_All_Dispose_Before_First()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Repeat(x, x),
+                ex => Repeat(0, 2),
+                () => Repeat(-1, 2)
+            ),
+            304
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 304)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_OnNextThrow()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Throw<Seq<int>>(ex),
+                ex1 => Repeat(0, 2),
+                () => Repeat(-1, 2)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(300, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 300)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_OnErrorThrow()
+    {
+        var ex = new Exception();
+
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnError<int>(305, new Exception())
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Repeat(x, x),
+                ex1 => Throw<Seq<int>>(ex),
+                () => Repeat(-1, 2)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2),
+            OnNext(304, 3),
+            OnNext(304, 2),
+            OnError<int>(305, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Triple_OnCompletedThrow()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => Repeat(x, x),
+                ex1 => Repeat(0, 2),
+                () => Throw<Seq<int>>(ex)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2),
+            OnNext(304, 3),
+            OnNext(304, 2),
+            OnError<int>(305, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_Index()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var witness = new { x = 0, i = 0 };
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, i) => Seq.Return(new { x, i }, Scheduler),
+                ex => Seq.Throw(ex, Scheduler, witness),
+                () => Seq.Empty(Scheduler, witness)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(ScheduledAt(300), new { x = 0, i = 0 }),
+            OnNext(ScheduledAt(301), new { x = 1, i = 1 }),
+            OnNext(ScheduledAt(302), new { x = 2, i = 2 }),
+            OnNext(ScheduledAt(303), new { x = 3, i = 3 }),
+            OnNext(ScheduledAt(304), new { x = 4, i = 4 }),
+            OnCompleted(ScheduledAt(305), witness)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_Identity()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Seq.Return(x, Scheduler),
+                ex => Seq.Throw<int>(ex, Scheduler),
+                () => Seq.Empty<int>(Scheduler)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(ScheduledAt(300), 0),
+            OnNext(ScheduledAt(301), 1),
+            OnNext(ScheduledAt(302), 2),
+            OnNext(ScheduledAt(303), 3),
+            OnNext(ScheduledAt(304), 4),
+            OnCompleted<int>(ScheduledAt(305))
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_InnersWithTiming1()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var ysn = Scheduler.CreateColdObservable(
+            OnNext(10, 10),
+            OnNext(20, 11),
+            OnNext(30, 12),
+            OnCompleted<int>(40)
+        );
+
+        var yse = Scheduler.CreateColdObservable(
+            OnNext(0, 99),
+            OnCompleted<int>(10)
+        );
+
+        var ysc = Scheduler.CreateColdObservable(
+            OnNext(10, 42),
+            OnCompleted<int>(20)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => ysn,
+                ex => yse,
+                () => ysc
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(310, 10),
+            OnNext(311, 10),
+            OnNext(312, 10),
+            OnNext(313, 10),
+            OnNext(314, 10),
+            OnNext(315, 42),
+            OnNext(320, 11),
+            OnNext(321, 11),
+            OnNext(322, 11),
+            OnNext(323, 11),
+            OnNext(324, 11),
+            OnNext(330, 12),
+            OnNext(331, 12),
+            OnNext(332, 12),
+            OnNext(333, 12),
+            OnNext(334, 12),
+            OnCompleted<int>(344)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+
+        ysn.Subscriptions.AssertEqual(
+            Subscribe(300, 340),
+            Subscribe(301, 341),
+            Subscribe(302, 342),
+            Subscribe(303, 343),
+            Subscribe(304, 344)
+        );
+
+        yse.Subscriptions.AssertEqual(
+        );
+
+        ysc.Subscriptions.AssertEqual(
+            Subscribe(305, 325)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_InnersWithTiming2()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var ysn = Scheduler.CreateColdObservable(
+            OnNext(10, 10),
+            OnNext(20, 11),
+            OnNext(30, 12),
+            OnCompleted<int>(40)
+        );
+
+        var yse = Scheduler.CreateColdObservable(
+            OnNext(0, 99),
+            OnCompleted<int>(10)
+        );
+
+        var ysc = Scheduler.CreateColdObservable(
+            OnNext(10, 42),
+            OnCompleted<int>(50)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => ysn,
+                ex => yse,
+                () => ysc
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(310, 10),
+            OnNext(311, 10),
+            OnNext(312, 10),
+            OnNext(313, 10),
+            OnNext(314, 10),
+            OnNext(315, 42),
+            OnNext(320, 11),
+            OnNext(321, 11),
+            OnNext(322, 11),
+            OnNext(323, 11),
+            OnNext(324, 11),
+            OnNext(330, 12),
+            OnNext(331, 12),
+            OnNext(332, 12),
+            OnNext(333, 12),
+            OnNext(334, 12),
+            OnCompleted<int>(355)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+
+        ysn.Subscriptions.AssertEqual(
+            Subscribe(300, 340),
+            Subscribe(301, 341),
+            Subscribe(302, 342),
+            Subscribe(303, 343),
+            Subscribe(304, 344)
+        );
+
+        yse.Subscriptions.AssertEqual(
+        );
+
+        ysc.Subscriptions.AssertEqual(
+            Subscribe(305, 355)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_InnersWithTiming3()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(400, 1),
+            OnNext(500, 2),
+            OnNext(600, 3),
+            OnNext(700, 4),
+            OnCompleted<int>(800)
+        );
+
+        var ysn = Scheduler.CreateColdObservable(
+            OnNext(10, 10),
+            OnNext(20, 11),
+            OnNext(30, 12),
+            OnCompleted<int>(40)
+        );
+
+        var yse = Scheduler.CreateColdObservable(
+            OnNext(0, 99),
+            OnCompleted<int>(10)
+        );
+
+        var ysc = Scheduler.CreateColdObservable(
+            OnNext(10, 42),
+            OnCompleted<int>(100)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => ysn,
+                ex => yse,
+                () => ysc
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(310, 10),
+            OnNext(320, 11),
+            OnNext(330, 12),
+            OnNext(410, 10),
+            OnNext(420, 11),
+            OnNext(430, 12),
+            OnNext(510, 10),
+            OnNext(520, 11),
+            OnNext(530, 12),
+            OnNext(610, 10),
+            OnNext(620, 11),
+            OnNext(630, 12),
+            OnNext(710, 10),
+            OnNext(720, 11),
+            OnNext(730, 12),
+            OnNext(810, 42),
+            OnCompleted<int>(900)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 800)
+        );
+
+        ysn.Subscriptions.AssertEqual(
+            Subscribe(300, 340),
+            Subscribe(400, 440),
+            Subscribe(500, 540),
+            Subscribe(600, 640),
+            Subscribe(700, 740)
+        );
+
+        yse.Subscriptions.AssertEqual(
+        );
+
+        ysc.Subscriptions.AssertEqual(
+            Subscribe(800, 900)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_Error_Identity()
+    {
+        var ex = new Exception();
+
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnError<int>(305, ex)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Seq.Return(x, Scheduler),
+                ex1 => Seq.Throw<int>(ex1, Scheduler),
+                () => Seq.Empty<int>(Scheduler)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(ScheduledAt(300), 0),
+            OnNext(ScheduledAt(301), 1),
+            OnNext(ScheduledAt(302), 2),
+            OnNext(ScheduledAt(303), 3),
+            OnNext(ScheduledAt(304), 4),
+            OnError<int>(ScheduledAt(305), ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_SelectMany()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Repeat(x, x),
+                ex => Seq.Throw<int>(ex, Scheduler),
+                () => Seq.Empty<int>(Scheduler)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2),
+            OnNext(304, 3),
+            OnNext(304, 2),
+            OnNext(305, 4),
+            OnNext(305, 3),
+            OnNext(306, 4),
+            OnNext(306, 3),
+            OnNext(307, 4),
+            OnNext(308, 4),
+            OnCompleted<int>(308)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_Concat()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Seq.Return(x, Scheduler),
+                ex => Seq.Throw<int>(ex, Scheduler),
+                () => Seq.Range(1, 3, Scheduler)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(ScheduledAt(300), 0),
+            OnNext(ScheduledAt(301), 1),
+            OnNext(ScheduledAt(302), 2),
+            OnNext(ScheduledAt(303), 3),
+            OnNext(ScheduledAt(304), 4),
+            OnNext(ScheduledAt(305), 1),
+            OnNext(ScheduledAt(305, 2), 2),
+            OnNext(ScheduledAt(305, 3), 3),
+            OnCompleted<int>(ScheduledAt(305, 4))
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_Catch()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Seq.Return(x, Scheduler),
+                ex => Seq.Range(1, 3, Scheduler),
+                () => Seq.Empty<int>(Scheduler)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(ScheduledAt(300), 0),
+            OnNext(ScheduledAt(301), 1),
+            OnNext(ScheduledAt(302), 2),
+            OnNext(ScheduledAt(303), 3),
+            OnNext(ScheduledAt(304), 4),
+            OnCompleted<int>(ScheduledAt(305))
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_Error_Catch()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnError<int>(305, new Exception())
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Seq.Return(x, Scheduler),
+                ex => Seq.Range(1, 3, Scheduler),
+                () => Seq.Empty<int>(Scheduler)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(ScheduledAt(300), 0),
+            OnNext(ScheduledAt(301), 1),
+            OnNext(ScheduledAt(302), 2),
+            OnNext(ScheduledAt(303), 3),
+            OnNext(ScheduledAt(304), 4),
+            OnNext(ScheduledAt(305), 1),
+            OnNext(ScheduledAt(305, 2), 2),
+            OnNext(ScheduledAt(305, 3), 3),
+            OnCompleted<int>(ScheduledAt(305, 4))
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_All()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Repeat(x, x),
+                ex => Repeat(0, 2),
+                () => Repeat(-1, 2)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2),
+            OnNext(304, 3),
+            OnNext(304, 2),
+            OnNext(305, 4),
+            OnNext(305, 3),
+            OnNext(306, -1),
+            OnNext(306, 4),
+            OnNext(306, 3),
+            OnNext(307, -1),
+            OnNext(307, 4),
+            OnNext(308, 4),
+            OnCompleted<int>(308)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_Error_All()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnError<int>(305, new Exception())
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Repeat(x, x),
+                ex => Repeat(0, 2),
+                () => Repeat(-1, 2)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2),
+            OnNext(304, 3),
+            OnNext(304, 2),
+            OnNext(305, 4),
+            OnNext(305, 3),
+            OnNext(306, 0),
+            OnNext(306, 4),
+            OnNext(306, 3),
+            OnNext(307, 0),
+            OnNext(307, 4),
+            OnNext(308, 4),
+            OnCompleted<int>(308)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_All_Dispose()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Repeat(x, x),
+                ex => Repeat(0, 2),
+                () => Repeat(-1, 2)
+            ),
+            307
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2),
+            OnNext(304, 3),
+            OnNext(304, 2),
+            OnNext(305, 4),
+            OnNext(305, 3),
+            OnNext(306, -1),
+            OnNext(306, 4),
+            OnNext(306, 3)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_All_Dispose_Before_First()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Repeat(x, x),
+                ex => Repeat(0, 2),
+                () => Repeat(-1, 2)
+            ),
+            304
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 304)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_OnNextThrow()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Throw<Seq<int>>(ex),
+                ex1 => Repeat(0, 2),
+                () => Repeat(-1, 2)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(300, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 300)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_OnErrorThrow()
+    {
+        var ex = new Exception();
+
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnError<int>(305, new Exception())
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Repeat(x, x),
+                ex1 => Throw<Seq<int>>(ex),
+                () => Repeat(-1, 2)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2),
+            OnNext(304, 3),
+            OnNext(304, 2),
+            OnError<int>(305, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Triple_OnCompletedThrow()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(300, 0),
+            OnNext(301, 1),
+            OnNext(302, 2),
+            OnNext(303, 3),
+            OnNext(304, 4),
+            OnCompleted<int>(305)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => Repeat(x, x),
+                ex1 => Repeat(0, 2),
+                () => Throw<Seq<int>>(ex)
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(302, 1),
+            OnNext(303, 2),
+            OnNext(304, 3),
+            OnNext(304, 2),
+            OnError<int>(305, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 305)
         );
     }
 }

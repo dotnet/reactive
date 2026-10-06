@@ -64,4 +64,36 @@ public sealed partial class AsyncRxTarget
         Func<TIn, IAsyncObservable<TCollection>> collectionSelector,
         Func<TIn, TCollection, TOut> resultSelector) =>
         source.SelectMany(collectionSelector, resultSelector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManySelectors<TIn, TOut>(
+        SelectManySelectorsSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManySelectorsImpl<TIn, TOut>,
+            seq.Source,
+            seq.OnNext,
+            seq.OnError,
+            seq.OnCompleted);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManySelectorsIndexed<TIn, TOut>(
+        SelectManySelectorsIndexedSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManySelectorsIndexedImpl<TIn, TOut>,
+            seq.Source,
+            seq.OnNext,
+            seq.OnError,
+            seq.OnCompleted);
+
+    private static IAsyncObservable<TOut> SelectManySelectorsImpl<TIn, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, IAsyncObservable<TOut>> onNext,
+        Func<Exception, IAsyncObservable<TOut>> onError,
+        Func<IAsyncObservable<TOut>> onCompleted) =>
+        source.SelectMany(onNext, onError, onCompleted);
+
+    private static IAsyncObservable<TOut> SelectManySelectorsIndexedImpl<TIn, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, int, IAsyncObservable<TOut>> onNext,
+        Func<Exception, IAsyncObservable<TOut>> onError,
+        Func<IAsyncObservable<TOut>> onCompleted) =>
+        source.SelectMany(onNext, onError, onCompleted);
 }

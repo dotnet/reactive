@@ -16,7 +16,9 @@ public sealed partial class RxTarget
         Realized.Of<Seq<long>>(Observable.Interval(seq.Period, Unwrap(seq.Scheduler)));
 
     Realized<Seq<T>> ISeqVisitor.Return<T>(ReturnSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(ReturnImpl<T>, seq.Value);
+        seq.Scheduler is null
+            ? _bridge.Run<Seq<T>>(ReturnImpl<T>, seq.Value)
+            : _bridge.Run<Seq<T>>(ReturnOnImpl<T>, seq.Value, Unwrap(seq.Scheduler));
 
     Realized<Seq<int>> ISeqVisitor.Range(RangeSeq seq) =>
         Realized.Of<Seq<int>>(Observable.Range(seq.Start, seq.Count));
@@ -32,7 +34,10 @@ public sealed partial class RxTarget
 
     Realized<Seq<T>> ISeqVisitor.Never<T>(NeverSeq<T> seq) => _bridge.Run<Seq<T>>(NeverImpl<T>);
 
-    Realized<Seq<T>> ISeqVisitor.Empty<T>(EmptySeq<T> seq) => _bridge.Run<Seq<T>>(EmptyImpl<T>);
+    Realized<Seq<T>> ISeqVisitor.Empty<T>(EmptySeq<T> seq) =>
+        seq.Scheduler is null
+            ? _bridge.Run<Seq<T>>(EmptyImpl<T>)
+            : _bridge.Run<Seq<T>>(EmptyOnImpl<T>, Unwrap(seq.Scheduler));
 
     Realized<Seq<T>> ISeqVisitor.Throw<T>(ThrowSeq<T> seq) =>
         seq.Scheduler is null ? _bridge.Run<Seq<T>>(
@@ -45,12 +50,18 @@ public sealed partial class RxTarget
 
     private static IObservable<T> ReturnImpl<T>(T value) => Observable.Return(value);
 
+    private static IObservable<T> ReturnOnImpl<T>(T value, IScheduler scheduler) =>
+        Observable.Return(value, scheduler);
+
     private static IObservable<T> DeferImpl<T>(Func<IObservable<T>> observableFactory) =>
         Observable.Defer(observableFactory);
 
     private static IObservable<T> NeverImpl<T>() => Observable.Never<T>();
 
     private static IObservable<T> EmptyImpl<T>() => Observable.Empty<T>();
+
+    private static IObservable<T> EmptyOnImpl<T>(IScheduler scheduler) =>
+        Observable.Empty<T>(scheduler);
 
     private static IObservable<T> ThrowImpl<T>(Exception error) => Observable.Throw<T>(error);
 

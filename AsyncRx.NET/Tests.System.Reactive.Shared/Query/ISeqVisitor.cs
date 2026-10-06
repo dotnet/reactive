@@ -31,7 +31,8 @@ public partial interface ISeqVisitor
     Realized<Seq<long>> Interval(IntervalSeq seq);
 
     /// <summary>
-    /// Materializes a <see cref="ReturnSeq{T}"/> as the target's own <c>Return(value)</c>.
+    /// Materializes a <see cref="ReturnSeq{T}"/> as the target's own
+    /// <c>Return(value[, scheduler])</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Return{T}(T)"/>.</remarks>
     Realized<Seq<T>> Return<T>(ReturnSeq<T> seq);
@@ -57,9 +58,10 @@ public partial interface ISeqVisitor
     Realized<Seq<T>> Enumerable<T>(EnumerableSeq<T> seq);
 
     /// <summary>
-    /// Materializes a <see cref="EmptySeq{T}"/> as the target's own <c>Empty&lt;T&gt;()</c>.
+    /// Materializes a <see cref="EmptySeq{T}"/> as the target's own
+    /// <c>Empty&lt;T&gt;([scheduler])</c>.
     /// </summary>
-    /// <remarks>Built by <see cref="Seq.Empty{T}"/>.</remarks>
+    /// <remarks>Built by <see cref="Seq.Empty{T}()"/>.</remarks>
     Realized<Seq<T>> Empty<T>(EmptySeq<T> seq);
 
     /// <summary>

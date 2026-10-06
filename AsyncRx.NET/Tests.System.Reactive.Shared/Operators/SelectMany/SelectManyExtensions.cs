@@ -35,6 +35,72 @@ public static class SelectManyExtensions
     public static Seq<TOut> SelectMany<TIn, TOut>(this Seq<TIn> source, Seq<TOut> other) =>
         new SelectManySeq<TIn, TOut>(source, other);
 
+    /// <summary>Describes <c>source.SelectMany(onNext, onError, onCompleted)</c>.</summary>
+    /// <typeparam name="TIn">The type of the elements in the source sequence.</typeparam>
+    /// <typeparam name="TOut">
+    /// The type of the elements in the projected inner sequences and the elements in the merged
+    /// result sequence.
+    /// </typeparam>
+    /// <param name="source">An observable sequence of notifications to project.</param>
+    /// <param name="onNext">A transform function to apply to each element.</param>
+    /// <param name="onError">
+    /// A transform function to apply when an error occurs in the source sequence.
+    /// </param>
+    /// <param name="onCompleted">
+    /// A transform function to apply when the end of the source sequence is reached.
+    /// </param>
+    /// <param name="text">
+    /// Supplied by the compiler (the source text of the element selector), for printing the
+    /// query in diagnostics; do not pass it.
+    /// </param>
+    /// <remarks>
+    /// Builds a <see cref="SelectManySelectorsSeq{TIn, TOut}"/>, which each target materializes
+    /// through its <c>SelectManySelectors</c> visitor member.
+    /// </remarks>
+    public static Seq<TOut> SelectMany<TIn, TOut>(
+        this Seq<TIn> source,
+        Func<TIn, Seq<TOut>> onNext,
+        Func<Exception, Seq<TOut>> onError,
+        Func<Seq<TOut>> onCompleted,
+        [CallerArgumentExpression(nameof(onNext))] string text = "") =>
+        new SelectManySelectorsSeq<TIn, TOut>(source, onNext, onError, onCompleted, text);
+
+    /// <summary>
+    /// Describes <c>source.SelectMany(onNext, onError, onCompleted)</c> for an element selector
+    /// that takes the index.
+    /// </summary>
+    /// <typeparam name="TIn">The type of the elements in the source sequence.</typeparam>
+    /// <typeparam name="TOut">
+    /// The type of the elements in the projected inner sequences and the elements in the merged
+    /// result sequence.
+    /// </typeparam>
+    /// <param name="source">An observable sequence of notifications to project.</param>
+    /// <param name="onNext">
+    /// A transform function to apply to each element; the second parameter of the function
+    /// represents the index of the source element.
+    /// </param>
+    /// <param name="onError">
+    /// A transform function to apply when an error occurs in the source sequence.
+    /// </param>
+    /// <param name="onCompleted">
+    /// A transform function to apply when the end of the source sequence is reached.
+    /// </param>
+    /// <param name="text">
+    /// Supplied by the compiler (the source text of the element selector), for printing the
+    /// query in diagnostics; do not pass it.
+    /// </param>
+    /// <remarks>
+    /// Builds a <see cref="SelectManySelectorsIndexedSeq{TIn, TOut}"/>, which each target
+    /// materializes through its <c>SelectManySelectorsIndexed</c> visitor member.
+    /// </remarks>
+    public static Seq<TOut> SelectMany<TIn, TOut>(
+        this Seq<TIn> source,
+        Func<TIn, int, Seq<TOut>> onNext,
+        Func<Exception, Seq<TOut>> onError,
+        Func<Seq<TOut>> onCompleted,
+        [CallerArgumentExpression(nameof(onNext))] string text = "") =>
+        new SelectManySelectorsIndexedSeq<TIn, TOut>(source, onNext, onError, onCompleted, text);
+
     /// <summary>Describes <c>source.SelectMany(collectionSelector, resultSelector)</c>.</summary>
     /// <typeparam name="TIn">The type of the elements in the source sequence.</typeparam>
     /// <typeparam name="TCollection">

@@ -56,4 +56,25 @@ public partial interface ISeqVisitor
     /// </remarks>
     Realized<Seq<TOut>> SelectManyCollection<TIn, TCollection, TOut>(
         SelectManyCollectionSeq<TIn, TCollection, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManySelectorsSeq{TIn, TOut}"/> as the target's own
+    /// <c>SelectMany(onNext, onError, onCompleted)</c>.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Func{TIn, Seq{TOut}}, Func{Exception, Seq{TOut}}, Func{Seq{TOut}}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManySelectors<TIn, TOut>(SelectManySelectorsSeq<TIn, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManySelectorsIndexedSeq{TIn, TOut}"/> as the target's own
+    /// <c>SelectMany(onNext, onError, onCompleted)</c> with an element index.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Func{TIn, int, Seq{TOut}}, Func{Exception, Seq{TOut}}, Func{Seq{TOut}}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManySelectorsIndexed<TIn, TOut>(
+        SelectManySelectorsIndexedSeq<TIn, TOut> seq);
 }

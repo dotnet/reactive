@@ -116,6 +116,60 @@ namespace System.Reactive.Linq
                 });
         }
 
+        public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, IAsyncObservable<TResult>> onNext, Func<Exception, IAsyncObservable<TResult>> onError, Func<IAsyncObservable<TResult>> onCompleted)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (onNext == null)
+                throw new ArgumentNullException(nameof(onNext));
+            if (onError == null)
+                throw new ArgumentNullException(nameof(onError));
+            if (onCompleted == null)
+                throw new ArgumentNullException(nameof(onCompleted));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (onNext, onError, onCompleted),
+                static async (source, state, observer) =>
+                {
+                    var subscription = new SingleAssignmentAsyncDisposable();
+
+                    var (sink, inner) = AsyncObserver.SelectMany(observer, subscription, state.onNext, state.onError, state.onCompleted);
+
+                    var outer = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    await subscription.AssignAsync(outer).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
+        }
+
+        public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, IAsyncObservable<TResult>> onNext, Func<Exception, IAsyncObservable<TResult>> onError, Func<IAsyncObservable<TResult>> onCompleted)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (onNext == null)
+                throw new ArgumentNullException(nameof(onNext));
+            if (onError == null)
+                throw new ArgumentNullException(nameof(onError));
+            if (onCompleted == null)
+                throw new ArgumentNullException(nameof(onCompleted));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (onNext, onError, onCompleted),
+                static async (source, state, observer) =>
+                {
+                    var subscription = new SingleAssignmentAsyncDisposable();
+
+                    var (sink, inner) = AsyncObserver.SelectMany(observer, subscription, state.onNext, state.onError, state.onCompleted);
+
+                    var outer = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    await subscription.AssignAsync(outer).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                });
+        }
+
         public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, IAsyncObservable<TResult>> selector)
         {
             if (source == null)
@@ -443,6 +497,211 @@ namespace System.Reactive.Linq
             var outerObserver = Select<TSource, (TSource item, int i)>(outerObserverWithIndex, (item, i) => (item, i));
 
             return (outerObserver, disposable);
+        }
+
+        /// <summary>
+        /// Creates an observer that projects each element, the error, and the completion it
+        /// receives to an inner sequence through the respective selector and merges those
+        /// sequences into <paramref name="observer"/>.
+        /// </summary>
+        /// <param name="observer">The observer to merge the projected sequences into.</param>
+        /// <param name="subscription">
+        /// The subscription to the outer sequence. The returned observer disposes it when the
+        /// outer sequence terminates while inner sequences are still active, so that the outer
+        /// source is released as soon as nothing more can come from it, as Rx.NET does.
+        /// </param>
+        /// <param name="onNext">A transform function to apply to each element.</param>
+        /// <param name="onError">
+        /// A transform function to apply when an error occurs in the source sequence.
+        /// </param>
+        /// <param name="onCompleted">
+        /// A transform function to apply when the end of the source sequence is reached.
+        /// </param>
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, IAsyncDisposable subscription, Func<TSource, IAsyncObservable<TResult>> onNext, Func<Exception, IAsyncObservable<TResult>> onError, Func<IAsyncObservable<TResult>> onCompleted)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (subscription == null)
+                throw new ArgumentNullException(nameof(subscription));
+            if (onNext == null)
+                throw new ArgumentNullException(nameof(onNext));
+            if (onError == null)
+                throw new ArgumentNullException(nameof(onError));
+            if (onCompleted == null)
+                throw new ArgumentNullException(nameof(onCompleted));
+
+            var gate = new AsyncGate();
+
+            var count = 1;
+
+            var disposable = new CompositeAsyncDisposable();
+
+            async ValueTask OnErrorAsync(Exception ex)
+            {
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                }
+            };
+
+            async ValueTask OnInnerCompletedAsync()
+            {
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    if (--count == 0)
+                    {
+                        await observer.OnCompletedAsync().ConfigureAwait(false);
+                    }
+                }
+            };
+
+            async ValueTask OnOuterTerminatedAsync()
+            {
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    if (--count == 0)
+                    {
+                        await observer.OnCompletedAsync().ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        // Inner sequences are still running. Nothing more can arrive from the
+                        // outer source, so release it now rather than when the result completes.
+                        await subscription.DisposeAsync().ConfigureAwait(false);
+                    }
+                }
+            };
+
+            async ValueTask SubscribeInnerAsync(IAsyncObservable<TResult> collection)
+            {
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    count++;
+                }
+
+                var inner = new SingleAssignmentAsyncDisposable();
+
+                await disposable.AddAsync(inner).ConfigureAwait(false);
+
+                var innerObserver = Create<TResult>(
+                    async y =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnNextAsync(y).ConfigureAwait(false);
+                        }
+                    },
+                    OnErrorAsync,
+                    async () =>
+                    {
+                        await OnInnerCompletedAsync().ConfigureAwait(false);
+
+                        await disposable.RemoveAsync(inner).ConfigureAwait(false);
+                    }
+                );
+
+                var innerSubscription = await collection.SubscribeSafeAsync(innerObserver).ConfigureAwait(false);
+
+                await inner.AssignAsync(innerSubscription).ConfigureAwait(false);
+            }
+
+            // Each selector is applied outside the gate, and a selector that throws fails the
+            // result; the outer sequence's error and completion both select an inner and then
+            // count as the outer's termination.
+            return
+            (
+                Create<TSource>(
+                    async x =>
+                    {
+                        var collection = default(IAsyncObservable<TResult>);
+
+                        try
+                        {
+                            collection = onNext(x);
+                        }
+                        catch (Exception ex)
+                        {
+                            await OnErrorAsync(ex).ConfigureAwait(false);
+                            return;
+                        }
+
+                        await SubscribeInnerAsync(collection).ConfigureAwait(false);
+                    },
+                    async error =>
+                    {
+                        var collection = default(IAsyncObservable<TResult>);
+
+                        try
+                        {
+                            collection = onError(error);
+                        }
+                        catch (Exception ex)
+                        {
+                            await OnErrorAsync(ex).ConfigureAwait(false);
+                            return;
+                        }
+
+                        await SubscribeInnerAsync(collection).ConfigureAwait(false);
+                        await OnOuterTerminatedAsync().ConfigureAwait(false);
+                    },
+                    async () =>
+                    {
+                        var collection = default(IAsyncObservable<TResult>);
+
+                        try
+                        {
+                            collection = onCompleted();
+                        }
+                        catch (Exception ex)
+                        {
+                            await OnErrorAsync(ex).ConfigureAwait(false);
+                            return;
+                        }
+
+                        await SubscribeInnerAsync(collection).ConfigureAwait(false);
+                        await OnOuterTerminatedAsync().ConfigureAwait(false);
+                    }
+                ),
+                disposable
+            );
+        }
+
+        /// <summary>
+        /// Creates an observer that projects each element with its index, the error, and the
+        /// completion it receives to an inner sequence through the respective selector and
+        /// merges those sequences into <paramref name="observer"/>.
+        /// </summary>
+        /// <param name="observer">The observer to merge the projected sequences into.</param>
+        /// <param name="subscription">
+        /// The subscription to the outer sequence, disposed when the outer sequence terminates
+        /// while inner sequences are still active.
+        /// </param>
+        /// <param name="onNext">
+        /// A transform function to apply to each element; the second parameter of the function
+        /// represents the index of the source element.
+        /// </param>
+        /// <param name="onError">
+        /// A transform function to apply when an error occurs in the source sequence.
+        /// </param>
+        /// <param name="onCompleted">
+        /// A transform function to apply when the end of the source sequence is reached.
+        /// </param>
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, IAsyncDisposable subscription, Func<TSource, int, IAsyncObservable<TResult>> onNext, Func<Exception, IAsyncObservable<TResult>> onError, Func<IAsyncObservable<TResult>> onCompleted)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (subscription == null)
+                throw new ArgumentNullException(nameof(subscription));
+            if (onNext == null)
+                throw new ArgumentNullException(nameof(onNext));
+            if (onError == null)
+                throw new ArgumentNullException(nameof(onError));
+            if (onCompleted == null)
+                throw new ArgumentNullException(nameof(onCompleted));
+
+            var index = -1;
+
+            return SelectMany<TSource, TResult>(observer, subscription, x => onNext(x, checked(++index)), onError, onCompleted);
         }
     }
 }

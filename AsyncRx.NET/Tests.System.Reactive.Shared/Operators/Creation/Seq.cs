@@ -55,6 +55,19 @@ public static partial class Seq
     /// </remarks>
     public static Seq<T> Return<T>(T value) => new ReturnSeq<T>(value);
 
+    /// <summary>Describes <c>Seq.Return(value, scheduler)</c>.</summary>
+    /// <typeparam name="T">
+    /// The type of the element that will be returned in the produced sequence.
+    /// </typeparam>
+    /// <param name="value">Single element in the resulting observable sequence.</param>
+    /// <param name="scheduler">Scheduler to send the single element on.</param>
+    /// <remarks>
+    /// Builds a <see cref="ReturnSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.Return{T}(ReturnSeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> Return<T>(T value, SchedulerRef scheduler) =>
+        new ReturnSeq<T>(value, scheduler);
+
     /// <summary>Describes <c>Seq.Range(start, count)</c>.</summary>
     /// <param name="start">The value of the first integer in the sequence.</param>
     /// <param name="count">The number of sequential integers to generate.</param>
@@ -122,6 +135,31 @@ public static partial class Seq
     /// </remarks>
     public static Seq<T> Empty<T>() => new EmptySeq<T>();
 
+    /// <summary>Describes <c>Seq.Empty&lt;T&gt;(scheduler)</c>.</summary>
+    /// <typeparam name="T">
+    /// The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.
+    /// </typeparam>
+    /// <param name="scheduler">Scheduler to send the termination call on.</param>
+    /// <remarks>
+    /// Builds an <see cref="EmptySeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.Empty{T}(EmptySeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> Empty<T>(SchedulerRef scheduler) => new EmptySeq<T>(scheduler);
+
+    /// <summary>Describes <c>Seq.Empty(scheduler, witness)</c>.</summary>
+    /// <typeparam name="T">
+    /// The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.
+    /// </typeparam>
+    /// <param name="scheduler">Scheduler to send the termination call on.</param>
+    /// <param name="witness">
+    /// Object solely used to infer the type of the <typeparamref name="T"/> type parameter. This
+    /// parameter is typically used when creating a sequence of anonymously typed elements.
+    /// </param>
+    /// <remarks>
+    /// The witness form of <see cref="Empty{T}(SchedulerRef)"/>, for anonymous element types.
+    /// </remarks>
+    public static Seq<T> Empty<T>(SchedulerRef scheduler, T witness) => new EmptySeq<T>(scheduler);
+
     /// <summary>Describes <c>Seq.Throw&lt;T&gt;(error)</c>.</summary>
     /// <typeparam name="T">
     /// The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.
@@ -144,4 +182,21 @@ public static partial class Seq
     /// <see cref="ISeqVisitor.Throw{T}(ThrowSeq{T})"/>.
     /// </remarks>
     public static Seq<T> Throw<T>(Exception error, SchedulerRef scheduler) => new ThrowSeq<T>(error, scheduler);
+
+    /// <summary>Describes <c>Seq.Throw(error, scheduler, witness)</c>.</summary>
+    /// <typeparam name="T">
+    /// The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.
+    /// </typeparam>
+    /// <param name="error">Exception object used for the sequence's termination.</param>
+    /// <param name="scheduler">Scheduler to send the exceptional termination call on.</param>
+    /// <param name="witness">
+    /// Object solely used to infer the type of the <typeparamref name="T"/> type parameter. This
+    /// parameter is typically used when creating a sequence of anonymously typed elements.
+    /// </param>
+    /// <remarks>
+    /// The witness form of <see cref="Throw{T}(Exception, SchedulerRef)"/>, for anonymous
+    /// element types.
+    /// </remarks>
+    public static Seq<T> Throw<T>(Exception error, SchedulerRef scheduler, T witness) =>
+        new ThrowSeq<T>(error, scheduler);
 }
