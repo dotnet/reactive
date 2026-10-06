@@ -14,6 +14,9 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<long>> ISeqVisitor.Timer(TimerSeq seq) =>
         Realized.Of<Seq<long>>(AsyncObservable.Timer(seq.DueTime, Unwrap(seq.Scheduler)));
 
+    Realized<Seq<long>> ISeqVisitor.Interval(IntervalSeq seq) =>
+        Realized.Of<Seq<long>>(AsyncObservable.Interval(seq.Period, Unwrap(seq.Scheduler)));
+
     Realized<Seq<T>> ISeqVisitor.Return<T>(ReturnSeq<T> seq) =>
         _bridge.Run<Seq<T>>(ReturnImpl<T>, seq.Value);
 

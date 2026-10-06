@@ -17,17 +17,6 @@ public sealed partial class RxTarget
     Realized<Seq<T>> ISeqVisitor.Where<T>(WhereSeq<T> seq) =>
         _bridge.Run<Seq<T>>(WhereImpl<T>, seq.Source, seq.Predicate);
 
-    Realized<Seq<TOut>> ISeqVisitor.SelectMany<TIn, TOut>(SelectManySeq<TIn, TOut> seq) =>
-        _bridge.Run<Seq<TOut>>(SelectManyImpl<TIn, TOut>, seq.Source, seq.Other);
-
-    Realized<Seq<TOut>> ISeqVisitor.SelectManyCollection<TIn, TCollection, TOut>(
-        SelectManyCollectionSeq<TIn, TCollection, TOut> seq) =>
-        _bridge.Run<Seq<TOut>>(
-            SelectManyCollectionImpl<TIn, TCollection, TOut>,
-            seq.Source,
-            seq.CollectionSelector,
-            seq.ResultSelector);
-
     Realized<Seq<TResult>> ISeqVisitor.Zip<TFirst, TSecond, TResult>(ZipSeq<TFirst, TSecond, TResult> seq) =>
         _bridge.Run<Seq<TResult>>(ZipImpl<TFirst, TSecond, TResult>, seq.First, seq.Second, seq.ResultSelector);
 
@@ -55,17 +44,6 @@ public sealed partial class RxTarget
 
     private static IObservable<T> WhereImpl<T>(IObservable<T> source, Func<T, bool> predicate) =>
         source.Where(predicate);
-
-    private static IObservable<TOut> SelectManyImpl<TIn, TOut>(
-        IObservable<TIn> source,
-        IObservable<TOut> other) =>
-        source.SelectMany(other);
-
-    private static IObservable<TOut> SelectManyCollectionImpl<TIn, TCollection, TOut>(
-        IObservable<TIn> source,
-        Func<TIn, IObservable<TCollection>> collectionSelector,
-        Func<TIn, TCollection, TOut> resultSelector) =>
-        source.SelectMany(collectionSelector, resultSelector);
 
     private static IObservable<TResult> ZipImpl<TFirst, TSecond, TResult>(
         IObservable<TFirst> first,

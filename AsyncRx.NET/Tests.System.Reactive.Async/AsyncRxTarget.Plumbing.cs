@@ -19,17 +19,6 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<T>> ISeqVisitor.Where<T>(WhereSeq<T> seq) =>
         _bridge.Run<Seq<T>>(WhereImpl<T>, seq.Source, seq.Predicate);
 
-    Realized<Seq<TOut>> ISeqVisitor.SelectMany<TIn, TOut>(SelectManySeq<TIn, TOut> seq) =>
-        _bridge.Run<Seq<TOut>>(SelectManyImpl<TIn, TOut>, seq.Source, seq.Other);
-
-    Realized<Seq<TOut>> ISeqVisitor.SelectManyCollection<TIn, TCollection, TOut>(
-        SelectManyCollectionSeq<TIn, TCollection, TOut> seq) =>
-        _bridge.Run<Seq<TOut>>(
-            SelectManyCollectionImpl<TIn, TCollection, TOut>,
-            seq.Source,
-            seq.CollectionSelector,
-            seq.ResultSelector);
-
     Realized<Seq<TResult>> ISeqVisitor.Zip<TFirst, TSecond, TResult>(ZipSeq<TFirst, TSecond, TResult> seq) =>
         _bridge.Run<Seq<TResult>>(ZipImpl<TFirst, TSecond, TResult>, seq.First, seq.Second, seq.ResultSelector);
 
@@ -59,18 +48,6 @@ public sealed partial class AsyncRxTarget
         IAsyncObservable<T> source,
         Func<T, bool> predicate) =>
         source.Where(predicate);
-
-    // AsyncRx.NET has no SelectMany(other) overload; Rx.NET defines it as SelectMany(_ => other).
-    private static IAsyncObservable<TOut> SelectManyImpl<TIn, TOut>(
-        IAsyncObservable<TIn> source,
-        IAsyncObservable<TOut> other) =>
-        source.SelectMany(_ => other);
-
-    private static IAsyncObservable<TOut> SelectManyCollectionImpl<TIn, TCollection, TOut>(
-        IAsyncObservable<TIn> source,
-        Func<TIn, IAsyncObservable<TCollection>> collectionSelector,
-        Func<TIn, TCollection, TOut> resultSelector) =>
-        source.SelectMany(collectionSelector, resultSelector);
 
     private static IAsyncObservable<TResult> ZipImpl<TFirst, TSecond, TResult>(
         IAsyncObservable<TFirst> first,

@@ -4,10 +4,10 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>The <c>SelectMany(other)</c> form the scenarios use.</summary>
+/// <summary>Describes <c>source.SelectMany(other)</c>.</summary>
 /// <remarks>
-/// AsyncRx.NET spells it <c>SelectMany(_ =&gt; other)</c>. Built by
-/// <see cref="SeqExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Seq{TOut})"/>; materialized by each
+/// Built by
+/// <see cref="SelectManyExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Seq{TOut})"/>; materialized by each
 /// target through <see cref="ISeqVisitor.SelectMany{TIn, TOut}(SelectManySeq{TIn, TOut})"/>.
 /// </remarks>
 public sealed class SelectManySeq<TIn, TOut>(Seq<TIn> source, Seq<TOut> other) : Seq<TOut>
@@ -21,7 +21,8 @@ public sealed class SelectManySeq<TIn, TOut>(Seq<TIn> source, Seq<TOut> other) :
     public Seq<TOut> Other => other;
 
     /// <inheritdoc/>
-    protected override Realized<Seq<TOut>> AcceptCore(ISeqVisitor visitor) => visitor.SelectMany(this);
+    protected override Realized<Seq<TOut>> AcceptCore(ISeqVisitor visitor) =>
+        visitor.SelectMany(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.SelectMany({other})";

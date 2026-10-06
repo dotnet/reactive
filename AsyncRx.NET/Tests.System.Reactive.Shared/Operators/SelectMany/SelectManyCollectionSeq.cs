@@ -7,7 +7,7 @@ namespace Tests.System.Reactive.Shared;
 /// <summary>Describes <c>source.SelectMany(collectionSelector, resultSelector)</c>.</summary>
 /// <remarks>
 /// Built by
-/// <see cref="SeqExtensions.SelectMany{TIn, TCollection, TOut}(Seq{TIn}, Func{TIn, Seq{TCollection}}, Func{TIn, TCollection, TOut}, string)"/>;
+/// <see cref="SelectManyExtensions.SelectMany{TIn, TCollection, TOut}(Seq{TIn}, Func{TIn, Seq{TCollection}}, Func{TIn, TCollection, TOut}, string)"/>;
 /// materialized by each target through
 /// <see cref="ISeqVisitor.SelectManyCollection{TIn, TCollection, TOut}(SelectManyCollectionSeq{TIn, TCollection, TOut})"/>.
 /// </remarks>

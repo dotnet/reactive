@@ -24,6 +24,13 @@ public partial interface ISeqVisitor
     Realized<Seq<long>> Timer(TimerSeq seq);
 
     /// <summary>
+    /// Materializes an <see cref="IntervalSeq"/> as the target's own
+    /// <c>Interval(period, scheduler)</c>.
+    /// </summary>
+    /// <remarks>Built by <see cref="Seq.Interval(TimeSpan, SchedulerRef)"/>.</remarks>
+    Realized<Seq<long>> Interval(IntervalSeq seq);
+
+    /// <summary>
     /// Materializes a <see cref="ReturnSeq{T}"/> as the target's own <c>Return(value)</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Return{T}(T)"/>.</remarks>
@@ -90,30 +97,10 @@ public partial interface ISeqVisitor
     Realized<Seq<T>> Where<T>(WhereSeq<T> seq);
 
     /// <summary>
-    /// Materializes a <see cref="SelectManySeq{TIn, TOut}"/> as the target's own
-    /// <c>SelectMany(other)</c>.
-    /// </summary>
-    /// <remarks>
-    /// Built by <see cref="SeqExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Seq{TOut})"/>.
-    /// </remarks>
-    Realized<Seq<TOut>> SelectMany<TIn, TOut>(SelectManySeq<TIn, TOut> seq);
-
-    /// <summary>
     /// Materializes a <see cref="ConcatSeq{T}"/> as the target's own <c>Concat(second)</c>.
     /// </summary>
     /// <remarks>Built by <see cref="SeqExtensions.Concat{T}(Seq{T}, Seq{T})"/>.</remarks>
     Realized<Seq<T>> Concat<T>(ConcatSeq<T> seq);
-
-    /// <summary>
-    /// Materializes a <see cref="SelectManyCollectionSeq{TIn, TCollection, TOut}"/> as the
-    /// target's own <c>SelectMany(collectionSelector, resultSelector)</c>.
-    /// </summary>
-    /// <remarks>
-    /// Built by the three-argument
-    /// <see cref="SeqExtensions.SelectMany{TIn, TCollection, TOut}(Seq{TIn}, Func{TIn, Seq{TCollection}}, Func{TIn, TCollection, TOut}, string)"/>.
-    /// </remarks>
-    Realized<Seq<TOut>> SelectManyCollection<TIn, TCollection, TOut>(
-        SelectManyCollectionSeq<TIn, TCollection, TOut> seq);
 
     /// <summary>
     /// Materializes a <see cref="ZipSeq{TFirst, TSecond, TResult}"/> as the target's own
@@ -153,5 +140,4 @@ public partial interface ISeqVisitor
     /// </summary>
     /// <remarks>Built by <see cref="SeqExtensions.Repeat{T}(Seq{T}, int)"/>.</remarks>
     Realized<Seq<T>> RepeatCount<T>(RepeatCountSeq<T> seq);
-
 }
