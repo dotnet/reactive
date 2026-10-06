@@ -166,4 +166,24 @@ public static class SeqExtensions
     /// </remarks>
     public static Seq<T> Concat<T>(this Seq<Seq<T>> sources) => new ConcatNestedSeq<T>(sources);
 
+    /// <summary>Describes <c>source.Repeat()</c>.</summary>
+    /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+    /// <param name="source">Observable sequence to repeat.</param>
+    /// <remarks>
+    /// Builds a <see cref="RepeatSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.Repeat{T}(RepeatSeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> Repeat<T>(this Seq<T> source) => new RepeatSeq<T>(source);
+
+    /// <summary>Describes <c>source.Repeat(repeatCount)</c>.</summary>
+    /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+    /// <param name="source">Observable sequence to repeat.</param>
+    /// <param name="repeatCount">Number of times to repeat the sequence.</param>
+    /// <remarks>
+    /// Builds a <see cref="RepeatCountSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.RepeatCount{T}(RepeatCountSeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> Repeat<T>(this Seq<T> source, int repeatCount) =>
+        new RepeatCountSeq<T>(source, repeatCount);
+
 }

@@ -162,7 +162,17 @@ namespace System.Reactive.Linq
 
             async ValueTask<IAsyncDisposable> CoreAsync()
             {
-                var (sink, inner) = Concat(observer, Enumerable.Repeat(source, repeatCount).GetEnumerator());
+                if (repeatCount == 0)
+                {
+                    await observer.OnCompletedAsync().ConfigureAwait(false);
+                    return AsyncDisposable.Nop;
+                }
+
+                // The subscription made here is the first repetition; the sink's enumerator
+                // supplies the rest, so the sequence is repeated repeatCount times in all, as
+                // in Rx.NET. (With repeatCount copies in the enumerator, it ran once too often.)
+                var remaining = Enumerable.Repeat(source, repeatCount - 1).GetEnumerator();
+                var (sink, inner) = Concat(observer, remaining);
 
                 var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 

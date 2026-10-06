@@ -235,4 +235,6 @@ and use the target's own API directly.
 * **A test that only one target can express:** put it in that target's test project, next
   to the shared ones, using the target's native scheduler directly. The extended expectation
   forms (`OnNext((210, 260), 1)`, four-timestamp `Subscribe`) come from `SharedReactiveTest` by
-  inheritance, as the compact ones do.
+  inheritance, as the compact ones do. Before concluding a test is one of these, ask what it
+  verifies: `Replay`'s `Take(6).Repeat()` tests looked like Rx.NET-only tick-bump artefacts, and a
+  bounded `Repeat(n)` with the same rounds found a library bug on AsyncRx.NET.

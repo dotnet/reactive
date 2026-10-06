@@ -37,6 +37,12 @@ public sealed partial class RxTarget
     Realized<Seq<T>> ISeqVisitor.ConcatNested<T>(ConcatNestedSeq<T> seq) =>
         _bridge.Run<Seq<T>>(ConcatNestedImpl<T>, seq.Sources);
 
+    Realized<Seq<T>> ISeqVisitor.Repeat<T>(RepeatSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(RepeatImpl<T>, seq.Source);
+
+    Realized<Seq<T>> ISeqVisitor.RepeatCount<T>(RepeatCountSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(RepeatCountImpl<T>, seq.Source, seq.RepeatCount);
+
     private static IObservable<TOut> SelectImpl<TIn, TOut>(
         IObservable<TIn> source,
         Func<TIn, TOut> selector) =>
@@ -72,4 +78,9 @@ public sealed partial class RxTarget
 
     private static IObservable<T> ConcatNestedImpl<T>(IObservable<IObservable<T>> sources) =>
         sources.Concat();
+
+    private static IObservable<T> RepeatImpl<T>(IObservable<T> source) => source.Repeat();
+
+    private static IObservable<T> RepeatCountImpl<T>(IObservable<T> source, int repeatCount) =>
+        source.Repeat(repeatCount);
 }
