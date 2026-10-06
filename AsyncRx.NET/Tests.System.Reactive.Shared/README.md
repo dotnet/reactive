@@ -208,6 +208,15 @@ realizes), and only the target, or a target-specific test, gets at the real type
 | `ConnectableSeq<T>` (what `Publish` returns; connected through `ConnectAsync`; also what `RefCount` consumes) | `IConnectableObservable<T>` | `IConnectableAsyncObservable<T>` |
 | `RefCountTests.SerialSingleNotificationConnectable<T>` (a test double owned by the `RefCount` scenarios; each target supplies its object) | `RxSerialSingleNotificationConnectable<T>` | `AsyncRxSerialSingleNotificationConnectable<T>` |
 
+A scenario may call the raw surface (`SubscribeAsync` with handlers, `ConnectAsync`, and
+`DisposeAsync` on what they return) from its test body as well as from scheduled work, as the
+Rx.NET tests call `Subscribe`, `Connect` and `Dispose` before `Start()`. A body call completes at
+the current virtual time: on Rx.NET it simply runs; on AsyncRx.NET the target hands it to
+`TestAsyncScheduler.RunToCompletion`, which pumps the current tick so that an operation that
+suspended at a yield point finishes, and wraps the returned disposable (`AsyncRxDisposable`,
+identity-preserving like the Rx.NET target's `RxDisposable`) so that disposing it from the body
+completes the same way. From scheduled work, the same members are simply awaited.
+
 `res.Messages` and `xs.Subscriptions` are not collections. They are handles (`MessageLog<T>`,
 `SubscriptionLog<T>`) that hold the shared observer or source and whose `AssertEqual` asks the
 target to compare that object's own records against the shared expectations. The records stay in

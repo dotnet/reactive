@@ -173,6 +173,101 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
         Pump(Clock + ticks);
     }
 
+    /// <summary>
+    /// Completes an operation a test body started outside the pump, by running the work it is
+    /// waiting for at the current virtual time.
+    /// </summary>
+    /// <typeparam name="T">The operation's result type.</typeparam>
+    /// <param name="operation">The operation, as the test body received it.</param>
+    /// <returns>The same operation, now complete, for the caller to await or read.</returns>
+    /// <remarks>
+    /// <para>
+    /// The async counterpart of calling a synchronous API from a test body before
+    /// <see cref="Start"/>: on the sync <c>TestScheduler</c>, <c>xs.Subscribe(o)</c> or
+    /// <c>conn.Connect()</c> written in the test body simply runs, at the current clock. Here
+    /// the same operation may suspend at a <see cref="YieldPoint"/> (under
+    /// <see cref="ExecutionShape.ForcedYield"/> the testable observables do, on subscribe,
+    /// delivery and disposal), posting its continuation to the pump's ready queue, which
+    /// nothing runs until the next <see cref="Start"/> or <see cref="AdvanceBy"/>; awaiting it
+    /// from the test body would wait forever. This runs the pump at the current clock until
+    /// that queue is empty, as <c>AdvanceBy(0)</c> does, and returns the operation complete.
+    /// </para>
+    /// <para>
+    /// Called on the pump thread while the pump is running, it returns the operation unchanged:
+    /// the caller is itself pumped work, and awaiting is the right thing. An operation still
+    /// incomplete after the queue drains is waiting for a later tick, or for work the scenario
+    /// has not scheduled; that is reported as a failure rather than left to hang.
+    /// </para>
+    /// <para>
+    /// Where it comes into play: the shared test suite's AsyncRx.NET target routes every raw
+    /// surface member a scenario may call from its test body (<c>ConnectAsync</c>, the
+    /// handler forms of <c>SubscribeAsync</c>, and <c>DisposeAsync</c> on what they return,
+    /// through its <c>AsyncRxDisposable</c> wrapper) through this method, so a scenario never
+    /// calls it directly. The scenario that shows why is
+    /// <c>ConnectableObservableTests.ConnectableObservable_Connected</c>, which does
+    /// <c>await conn.ConnectAsync(Scheduler)</c> in its body, where <c>conn</c> multicasts a
+    /// hot testable observable, and only then calls <c>Start</c>. Under
+    /// <see cref="ExecutionShape.ForcedYield"/>, <c>Connect</c> subscribes to the hot
+    /// observable, whose <c>SubscribeAsync</c> suspends at its yield point and hands an
+    /// incomplete task back to the body; without this method the body's await would never
+    /// complete, because <c>Start</c> is the next line. With it, the target pumps tick 0, the
+    /// subscription finishes, and the await completes before <c>Start</c> is reached.
+    /// <c>ConnectableObservable_Disconnected</c> is the same for a body-level
+    /// <c>DisposeAsync</c>, whose unsubscribe also yields. Bypassing this method hangs those
+    /// scenarios (and <c>ConnectableObservable_DisconnectFuture</c>) under that shape, and
+    /// nothing else: scenarios whose body-level operations never yield (sources such as
+    /// <c>Return</c>, <c>Defer</c> and <c>Never</c>, or a plain subject) complete regardless,
+    /// and scenarios that connect or dispose from scheduled work run under the pump, where
+    /// this method stands aside.
+    /// </para>
+    /// </remarks>
+    public ValueTask<T> RunToCompletion<T>(ValueTask<T> operation)
+    {
+        if (PumpForBodyOperation(operation.IsCompleted) && !operation.IsCompleted)
+        {
+            throw NotCompletedAtCurrentTick();
+        }
+
+        return operation;
+    }
+
+    /// <summary>
+    /// Completes an operation a test body started outside the pump, by running the work it is
+    /// waiting for at the current virtual time.
+    /// </summary>
+    /// <param name="operation">The operation, as the test body received it.</param>
+    /// <returns>The same operation, now complete, for the caller to await.</returns>
+    /// <remarks>As <see cref="RunToCompletion{T}(ValueTask{T})"/>, for a disposal.</remarks>
+    public ValueTask RunToCompletion(ValueTask operation)
+    {
+        if (PumpForBodyOperation(operation.IsCompleted) && !operation.IsCompleted)
+        {
+            throw NotCompletedAtCurrentTick();
+        }
+
+        return operation;
+    }
+
+    // True when the pump ran for the operation, so that it is expected to be complete now; false
+    // when there was nothing to do (already complete) or when the caller is pumped work itself,
+    // in which case the operation is handed back to be awaited.
+    private bool PumpForBodyOperation(bool alreadyComplete)
+    {
+        if (alreadyComplete || _pumping)
+        {
+            return false;
+        }
+
+        Pump(Clock);
+        return true;
+    }
+
+    private TestAsyncSchedulerException NotCompletedAtCurrentTick() =>
+        new(
+            $"An operation started from the test body did not complete at tick {Clock}: it is " +
+            "waiting for a later tick, or for work the scenario has not scheduled. Advance the " +
+            "clock first, or start the operation from work scheduled in virtual time.");
+
     private void Pump(long until)
     {
         if (_pumping)

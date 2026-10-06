@@ -248,4 +248,49 @@ public class TestableAsyncObservableTest : AsyncReactiveTest
             throw new InvalidOperationException("unreachable");
         }
     }
+
+    [TestMethod]
+    public void RunToCompletion_completes_a_subscription_started_from_the_test_body_under_forced_yield()
+    {
+        var scheduler = new TestAsyncScheduler(ExecutionShape.ForcedYield);
+        var xs = scheduler.CreateHotObservable(OnNext(10, 1), OnCompleted<int>(20));
+        var observer = scheduler.CreateObserver<int>();
+
+        var subscribe = scheduler.RunToCompletion(xs.SubscribeAsync(observer));
+
+        // The yield point inside SubscribeAsync has been pumped, at tick 0.
+        Assert.IsTrue(subscribe.IsCompleted);
+        Assert.AreEqual(0, scheduler.Clock);
+        xs.Subscriptions.AssertEqual(Subscribe(0, long.MaxValue));
+
+        scheduler.Start();
+        observer.Messages.AssertEqual(OnNext(10, 1), OnCompleted<int>(20));
+
+        var dispose = scheduler.RunToCompletion(subscribe.Result.DisposeAsync());
+        Assert.IsTrue(dispose.IsCompleted);
+        xs.Subscriptions.AssertEqual(Subscribe(0, 20));
+    }
+
+
+    [TestMethod]
+    public void RunToCompletion_on_the_pump_thread_returns_the_operation_for_awaiting()
+    {
+        var scheduler = new TestAsyncScheduler(ExecutionShape.ForcedYield);
+        var xs = scheduler.CreateHotObservable(OnNext(10, 1));
+        var observer = scheduler.CreateObserver<int>();
+        var completeWhenReturned = default(bool?);
+
+        scheduler.ScheduleAbsolute(5, async _ =>
+        {
+            var subscribe = scheduler.RunToCompletion(xs.SubscribeAsync(observer));
+            completeWhenReturned = subscribe.IsCompleted;
+            await subscribe;
+        });
+
+        scheduler.Start();
+
+        Assert.IsFalse(completeWhenReturned);
+        xs.Subscriptions.AssertEqual(Subscribe(5, long.MaxValue));
+        observer.Messages.AssertEqual(OnNext(10, 1));
+    }
 }

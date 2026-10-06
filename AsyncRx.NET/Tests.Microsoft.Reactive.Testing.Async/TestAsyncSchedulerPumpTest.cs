@@ -449,6 +449,33 @@ public class TestAsyncSchedulerPumpTest
     }
 
     [TestMethod]
+    public void RunToCompletion_returns_a_completed_operation_without_pumping()
+    {
+        var scheduler = new TestAsyncScheduler(ExecutionShape.SynchronousCompletion);
+        var ran = false;
+        scheduler.ScheduleAbsolute(0, _ => { ran = true; return default; });
+
+        var result = scheduler.RunToCompletion(new ValueTask<int>(42));
+
+        Assert.AreEqual(42, result.Result);
+        Assert.IsFalse(ran);
+    }
+
+    [TestMethod]
+    public void RunToCompletion_fails_informatively_when_the_operation_waits_for_a_later_tick()
+    {
+        var scheduler = new TestAsyncScheduler(ExecutionShape.ForcedYield);
+        var tcs = new TaskCompletionSource();
+        scheduler.ScheduleAbsolute(10, _ => { tcs.SetResult(); return default; });
+
+        var ex = Assert.ThrowsExactly<TestAsyncSchedulerException>(() =>
+            scheduler.RunToCompletion(new ValueTask(tcs.Task)));
+
+        Assert.Contains("did not complete at tick 0", ex.Message);
+        Assert.AreEqual(0, scheduler.Clock);
+    }
+
+    [TestMethod]
     public void YieldPoint_completes_synchronously_in_synchronous_completion_shape()
     {
         var scheduler = new TestAsyncScheduler(ExecutionShape.SynchronousCompletion);

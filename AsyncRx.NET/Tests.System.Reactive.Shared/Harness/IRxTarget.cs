@@ -177,7 +177,18 @@ public interface IRxTarget : ISeqVisitor
     ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestableObserver<T> observer);
 
     /// <summary>Materializes <paramref name="source"/> and subscribes a handler to it.</summary>
-    /// <remarks>Each element reaches <paramref name="onNext"/> as a value.</remarks>
+    /// <remarks>
+    /// <para>Each element reaches <paramref name="onNext"/> as a value.</para>
+    /// <para>
+    /// This and the other members that take the scheduler are the raw surface a scenario may
+    /// call from its test body as well as from scheduled work. The Rx.NET tests call
+    /// <c>Subscribe</c>, <c>Connect</c> and <c>Dispose</c> before <c>Start()</c> and expect
+    /// them to have happened, at the current clock, when the call returns. A target whose
+    /// operations may suspend must make a body call complete at the current virtual time, and
+    /// make what it returns dispose the same way; from scheduled work, the operation is simply
+    /// awaited.
+    /// </para>
+    /// </remarks>
     ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Seq<T> source, Func<T, ValueTask> onNext);
 
     /// <summary>Subscribes to a nested sequence.</summary>
@@ -227,7 +238,10 @@ public interface IRxTarget : ISeqVisitor
     void AdvanceBy(TestSchedulerRef scheduler, long ticks);
 
     /// <summary>Connects a connectable sequence, the target's own <c>Connect()</c>.</summary>
-    /// <remarks>Returns the connection, whose disposal disconnects.</remarks>
+    /// <remarks>
+    /// Returns the connection, whose disposal disconnects. Callable from a test body, as
+    /// <see cref="SubscribeAsync{T}(TestSchedulerRef, Seq{T}, Func{T, ValueTask})"/> describes.
+    /// </remarks>
     ValueTask<IAsyncDisposable> ConnectAsync<T>(TestSchedulerRef scheduler, ConnectableSeq<T> source);
 
     // ---- Assertions ----

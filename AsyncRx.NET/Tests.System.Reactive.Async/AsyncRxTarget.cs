@@ -152,14 +152,26 @@ public sealed partial class AsyncRxTarget : IRxTarget
     {
         ArgumentNullException.ThrowIfNull(onNext);
 
-        return _bridge.Call<ValueTask<IAsyncDisposable>>(SubscribeImpl<T>, source, onNext, Unwrap(scheduler));
+        return FromBody(
+            Unwrap(scheduler),
+            _bridge.Call<ValueTask<IAsyncDisposable>>(
+                SubscribeImpl<T>,
+                source,
+                onNext,
+                Unwrap(scheduler)));
     }
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Seq<Seq<T>> source, Func<Seq<T>, ValueTask> onNext)
     {
         ArgumentNullException.ThrowIfNull(onNext);
 
-        return _bridge.Call<ValueTask<IAsyncDisposable>>(SubscribeImpl<Seq<T>>, source, onNext, Unwrap(scheduler));
+        return FromBody(
+            Unwrap(scheduler),
+            _bridge.Call<ValueTask<IAsyncDisposable>>(
+                SubscribeImpl<Seq<T>>,
+                source,
+                onNext,
+                Unwrap(scheduler)));
     }
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(
@@ -172,13 +184,15 @@ public sealed partial class AsyncRxTarget : IRxTarget
         ArgumentNullException.ThrowIfNull(onNext);
         ArgumentNullException.ThrowIfNull(onError);
 
-        return _bridge.Call<ValueTask<IAsyncDisposable>>(
-            SubscribeWithHandlersImpl<T>,
-            source,
-            onNext,
-            onError,
-            onCompleted ?? (() => default),
-            Unwrap(scheduler));
+        return FromBody(
+            Unwrap(scheduler),
+            _bridge.Call<ValueTask<IAsyncDisposable>>(
+                SubscribeWithHandlersImpl<T>,
+                source,
+                onNext,
+                onError,
+                onCompleted ?? (() => default),
+                Unwrap(scheduler)));
     }
 
     public ValueTask OnNextAsync<T>(TestableObserver<T> observer, T value) =>
@@ -195,7 +209,23 @@ public sealed partial class AsyncRxTarget : IRxTarget
     public void AdvanceBy(TestSchedulerRef scheduler, long ticks) => Unwrap(scheduler).AdvanceBy(ticks);
 
     public ValueTask<IAsyncDisposable> ConnectAsync<T>(TestSchedulerRef scheduler, ConnectableSeq<T> source) =>
-        _bridge.Call<ValueTask<IAsyncDisposable>>(ConnectImpl<T>, source);
+        FromBody(
+            Unwrap(scheduler),
+            _bridge.Call<ValueTask<IAsyncDisposable>>(ConnectImpl<T>, source));
+
+    // The raw surface a scenario can call from its test body: a subscription or connection
+    // started there completes at the current virtual time (the sync tests' Subscribe or
+    // Connect before Start), and what comes back disposes the same way. From scheduled work,
+    // both are simply awaited, and the wrapper only preserves identity.
+    private static ValueTask<IAsyncDisposable> FromBody(
+        TestAsyncScheduler scheduler,
+        ValueTask<IAsyncDisposable> operation) =>
+        Wrap(scheduler, scheduler.RunToCompletion(operation));
+
+    private static async ValueTask<IAsyncDisposable> Wrap(
+        TestAsyncScheduler scheduler,
+        ValueTask<IAsyncDisposable> operation) =>
+        AsyncRxDisposable.For(await operation, scheduler);
 
     // ---- Assertions ----
     //
