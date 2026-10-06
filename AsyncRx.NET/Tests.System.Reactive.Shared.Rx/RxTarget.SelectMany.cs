@@ -93,4 +93,53 @@ public sealed partial class RxTarget
         Func<Exception, IObservable<TOut>> onError,
         Func<IObservable<TOut>> onCompleted) =>
         source.SelectMany(onNext, onError, onCompleted);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyEnumerable<TIn, TOut>(
+        SelectManyEnumerableSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(SelectManyEnumerableImpl<TIn, TOut>, seq.Source, seq.Selector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyEnumerableIndexed<TIn, TOut>(
+        SelectManyEnumerableIndexedSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyEnumerableIndexedImpl<TIn, TOut>,
+            seq.Source,
+            seq.Selector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyEnumerableResult<TIn, TCollection, TOut>(
+        SelectManyEnumerableResultSeq<TIn, TCollection, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyEnumerableResultImpl<TIn, TCollection, TOut>,
+            seq.Source,
+            seq.CollectionSelector,
+            seq.ResultSelector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyEnumerableResultIndexed<TIn, TCollection, TOut>(
+        SelectManyEnumerableResultIndexedSeq<TIn, TCollection, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyEnumerableResultIndexedImpl<TIn, TCollection, TOut>,
+            seq.Source,
+            seq.CollectionSelector,
+            seq.ResultSelector);
+
+    private static IObservable<TOut> SelectManyEnumerableImpl<TIn, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, IEnumerable<TOut>> selector) =>
+        source.SelectMany(selector);
+
+    private static IObservable<TOut> SelectManyEnumerableIndexedImpl<TIn, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, int, IEnumerable<TOut>> selector) =>
+        source.SelectMany(selector);
+
+    private static IObservable<TOut> SelectManyEnumerableResultImpl<TIn, TCollection, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, IEnumerable<TCollection>> collectionSelector,
+        Func<TIn, TCollection, TOut> resultSelector) =>
+        source.SelectMany(collectionSelector, resultSelector);
+
+    private static IObservable<TOut> SelectManyEnumerableResultIndexedImpl<TIn, TCollection, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, int, IEnumerable<TCollection>> collectionSelector,
+        Func<TIn, int, TCollection, int, TOut> resultSelector) =>
+        source.SelectMany(collectionSelector, resultSelector);
 }

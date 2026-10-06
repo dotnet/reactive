@@ -10,9 +10,10 @@ namespace Tests.System.Reactive.Shared;
 /// The <c>SelectMany</c> overloads, as extension methods on <see cref="Seq{T}"/>.
 /// </summary>
 /// <remarks>
-/// The forms AsyncRx.NET has: an <c>other</c> sequence, a selector, and a collection selector
-/// with a result selector, the last two with and without the element index. The enumerable,
-/// three-selector and task-returning forms of Rx.NET join as their scenarios are migrated. Each
+/// An <c>other</c> sequence; an observable or enumerable selector; a collection selector with a
+/// result selector, over observables or enumerables; and the three-selector form, each selector
+/// form with and without the element index. The task-returning forms of Rx.NET join as their
+/// scenarios are migrated. Each
 /// method builds one node of the query description (one node type per overload, in this folder),
 /// and each target turns that node into its own <c>SelectMany</c> call through the matching
 /// <see cref="ISeqVisitor"/> member in <c>ISeqVisitor.SelectMany.cs</c>.
@@ -219,6 +220,131 @@ public static class SelectManyExtensions
         Func<TIn, int, TCollection, int, TOut> resultSelector,
         [CallerArgumentExpression(nameof(collectionSelector))] string text = "") =>
         new SelectManyCollectionIndexedSeq<TIn, TCollection, TOut>(
+            source,
+            collectionSelector,
+            resultSelector,
+            text);
+
+    /// <summary>Describes <c>source.SelectMany(selector)</c> for an enumerable selector.</summary>
+    /// <typeparam name="TIn">The type of the elements in the source sequence.</typeparam>
+    /// <typeparam name="TOut">
+    /// The type of the elements in the projected inner enumerable sequences and the elements in
+    /// the merged result sequence.
+    /// </typeparam>
+    /// <param name="source">An observable sequence of elements to project.</param>
+    /// <param name="selector">A transform function to apply to each element.</param>
+    /// <param name="text">
+    /// Supplied by the compiler (the source text of the selector), for printing the query in
+    /// diagnostics; do not pass it.
+    /// </param>
+    /// <remarks>
+    /// Builds a <see cref="SelectManyEnumerableSeq{TIn, TOut}"/>, which each target materializes
+    /// through its <c>SelectManyEnumerable</c> visitor member. An enumerable is the same type on
+    /// both targets, so the selector's result passes through the bridge unchanged.
+    /// </remarks>
+    public static Seq<TOut> SelectMany<TIn, TOut>(
+        this Seq<TIn> source,
+        Func<TIn, IEnumerable<TOut>> selector,
+        [CallerArgumentExpression(nameof(selector))] string text = "") =>
+        new SelectManyEnumerableSeq<TIn, TOut>(source, selector, text);
+
+    /// <summary>
+    /// Describes <c>source.SelectMany(selector)</c> for an enumerable selector that takes the
+    /// index.
+    /// </summary>
+    /// <typeparam name="TIn">The type of the elements in the source sequence.</typeparam>
+    /// <typeparam name="TOut">
+    /// The type of the elements in the projected inner enumerable sequences and the elements in
+    /// the merged result sequence.
+    /// </typeparam>
+    /// <param name="source">An observable sequence of elements to project.</param>
+    /// <param name="selector">
+    /// A transform function to apply to each element; the second parameter of the function
+    /// represents the index of the source element.
+    /// </param>
+    /// <param name="text">
+    /// Supplied by the compiler (the source text of the selector), for printing the query in
+    /// diagnostics; do not pass it.
+    /// </param>
+    /// <remarks>
+    /// Builds a <see cref="SelectManyEnumerableIndexedSeq{TIn, TOut}"/>, which each target
+    /// materializes through its <c>SelectManyEnumerableIndexed</c> visitor member.
+    /// </remarks>
+    public static Seq<TOut> SelectMany<TIn, TOut>(
+        this Seq<TIn> source,
+        Func<TIn, int, IEnumerable<TOut>> selector,
+        [CallerArgumentExpression(nameof(selector))] string text = "") =>
+        new SelectManyEnumerableIndexedSeq<TIn, TOut>(source, selector, text);
+
+    /// <summary>
+    /// Describes <c>source.SelectMany(collectionSelector, resultSelector)</c> for an enumerable
+    /// collection selector.
+    /// </summary>
+    /// <typeparam name="TIn">The type of the elements in the source sequence.</typeparam>
+    /// <typeparam name="TCollection">
+    /// The type of the elements in the intermediate enumerable sequences produced by the
+    /// collection selector.
+    /// </typeparam>
+    /// <typeparam name="TOut">The type of the elements in the result sequence.</typeparam>
+    /// <param name="source">An observable sequence of elements to project.</param>
+    /// <param name="collectionSelector">A transform function to apply to each element.</param>
+    /// <param name="resultSelector">
+    /// A transform function to apply to each element of the intermediate sequence.
+    /// </param>
+    /// <param name="text">
+    /// Supplied by the compiler (the source text of the collection selector), for printing the
+    /// query in diagnostics; do not pass it.
+    /// </param>
+    /// <remarks>
+    /// Builds a <see cref="SelectManyEnumerableResultSeq{TIn, TCollection, TOut}"/>, which each
+    /// target materializes through its <c>SelectManyEnumerableResult</c> visitor member.
+    /// </remarks>
+    public static Seq<TOut> SelectMany<TIn, TCollection, TOut>(
+        this Seq<TIn> source,
+        Func<TIn, IEnumerable<TCollection>> collectionSelector,
+        Func<TIn, TCollection, TOut> resultSelector,
+        [CallerArgumentExpression(nameof(collectionSelector))] string text = "") =>
+        new SelectManyEnumerableResultSeq<TIn, TCollection, TOut>(
+            source,
+            collectionSelector,
+            resultSelector,
+            text);
+
+    /// <summary>
+    /// Describes <c>source.SelectMany(collectionSelector, resultSelector)</c> for an enumerable
+    /// collection selector and selectors that take the indexes.
+    /// </summary>
+    /// <typeparam name="TIn">The type of the elements in the source sequence.</typeparam>
+    /// <typeparam name="TCollection">
+    /// The type of the elements in the intermediate enumerable sequences produced by the
+    /// collection selector.
+    /// </typeparam>
+    /// <typeparam name="TOut">The type of the elements in the result sequence.</typeparam>
+    /// <param name="source">An observable sequence of elements to project.</param>
+    /// <param name="collectionSelector">
+    /// A transform function to apply to each element; the second parameter of the function
+    /// represents the index of the source element.
+    /// </param>
+    /// <param name="resultSelector">
+    /// A transform function to apply to each element of the intermediate sequence; the second
+    /// parameter of the function represents the index of the source element and the fourth
+    /// parameter represents the index of the intermediate element.
+    /// </param>
+    /// <param name="text">
+    /// Supplied by the compiler (the source text of the collection selector), for printing the
+    /// query in diagnostics; do not pass it.
+    /// </param>
+    /// <remarks>
+    /// Builds a <see cref="SelectManyEnumerableResultIndexedSeq{TIn, TCollection, TOut}"/>, which
+    /// each target materializes through its <c>SelectManyEnumerableResultIndexed</c> visitor
+    /// member.
+    /// </remarks>
+    public static Seq<TOut> SelectMany<TIn, TCollection, TOut>(
+        this Seq<TIn> source,
+        Func<TIn, int, IEnumerable<TCollection>> collectionSelector,
+        Func<TIn, int, TCollection, int, TOut> resultSelector,
+        [CallerArgumentExpression(nameof(collectionSelector))] string text = "") =>
+        new SelectManyEnumerableResultIndexedSeq<TIn, TCollection, TOut>(
             source,
             collectionSelector,
             resultSelector,

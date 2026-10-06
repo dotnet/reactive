@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
@@ -168,6 +169,62 @@ namespace System.Reactive.Linq
 
                     return StableCompositeAsyncDisposable.Create(subscription, inner);
                 });
+        }
+
+        public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                selector,
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.SelectMany(observer, state)));
+        }
+
+        public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, IEnumerable<TResult>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                selector,
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.SelectMany(observer, state)));
+        }
+
+        public static IAsyncObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (collectionSelector == null)
+                throw new ArgumentNullException(nameof(collectionSelector));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (collectionSelector, resultSelector),
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector)));
+        }
+
+        public static IAsyncObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (collectionSelector == null)
+                throw new ArgumentNullException(nameof(collectionSelector));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (collectionSelector, resultSelector),
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector)));
         }
 
         public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, IAsyncObservable<TResult>> selector)
@@ -702,6 +759,159 @@ namespace System.Reactive.Linq
             var index = -1;
 
             return SelectMany<TSource, TResult>(observer, subscription, x => onNext(x, checked(++index)), onError, onCompleted);
+        }
+
+        /// <summary>
+        /// Creates an observer that projects each element it receives to an enumerable sequence
+        /// and forwards that sequence's elements to <paramref name="observer"/>.
+        /// </summary>
+        /// <param name="observer">The observer to forward the projected elements to.</param>
+        /// <param name="selector">A transform function to apply to each element.</param>
+        public static IAsyncObserver<TSource> SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, IEnumerable<TResult>> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return SelectMany<TSource, TResult, TResult>(observer, selector, (x, y) => y);
+        }
+
+        /// <summary>
+        /// Creates an observer that projects each element it receives, with its index, to an
+        /// enumerable sequence and forwards that sequence's elements to
+        /// <paramref name="observer"/>.
+        /// </summary>
+        /// <param name="observer">The observer to forward the projected elements to.</param>
+        /// <param name="selector">
+        /// A transform function to apply to each element; the second parameter of the function
+        /// represents the index of the source element.
+        /// </param>
+        public static IAsyncObserver<TSource> SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, IEnumerable<TResult>> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            var index = -1;
+
+            return SelectMany<TSource, TResult, TResult>(observer, x => selector(x, checked(++index)), (x, y) => y);
+        }
+
+        /// <summary>
+        /// Creates an observer that projects each element it receives, with its index, to an
+        /// enumerable sequence and forwards each of that sequence's elements, with its index,
+        /// through a result selector to <paramref name="observer"/>.
+        /// </summary>
+        /// <param name="observer">The observer to forward the projected elements to.</param>
+        /// <param name="collectionSelector">
+        /// A transform function to apply to each element; the second parameter of the function
+        /// represents the index of the source element.
+        /// </param>
+        /// <param name="resultSelector">
+        /// A transform function to apply to each element of the intermediate sequence; the
+        /// second parameter of the function represents the index of the source element and the
+        /// fourth parameter represents the index of the intermediate element.
+        /// </param>
+        public static IAsyncObserver<TSource> SelectMany<TSource, TCollection, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (collectionSelector == null)
+                throw new ArgumentNullException(nameof(collectionSelector));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            var index = -1;
+
+            return SelectMany<TSource, (TCollection item, int j, int outerIndex), TResult>(
+                observer,
+                x =>
+                {
+                    var i = checked(++index);
+                    return WithIndex(collectionSelector(x, i), i);
+                },
+                (x, y) => resultSelector(x, y.outerIndex, y.item, y.j));
+
+            static IEnumerable<(TCollection item, int j, int outerIndex)> WithIndex(IEnumerable<TCollection> source, int outerIndex)
+            {
+                var j = 0;
+
+                foreach (var item in source)
+                {
+                    yield return (item, checked(j++), outerIndex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates an observer that projects each element it receives to an enumerable sequence
+        /// and forwards each of that sequence's elements through a result selector to
+        /// <paramref name="observer"/>.
+        /// </summary>
+        /// <param name="observer">The observer to forward the projected elements to.</param>
+        /// <param name="collectionSelector">A transform function to apply to each element.</param>
+        /// <param name="resultSelector">
+        /// A transform function to apply to each element of the intermediate sequence.
+        /// </param>
+        /// <remarks>
+        /// The enumeration happens synchronously within the delivery of the source element, as
+        /// in Rx.NET: a selector, <c>GetEnumerator</c>, <c>MoveNext</c>, <c>Current</c> or result
+        /// selector that throws ends the result with that error.
+        /// </remarks>
+        public static IAsyncObserver<TSource> SelectMany<TSource, TCollection, TResult>(IAsyncObserver<TResult> observer, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (collectionSelector == null)
+                throw new ArgumentNullException(nameof(collectionSelector));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            return Create<TSource>(
+                async x =>
+                {
+                    var enumerator = default(IEnumerator<TCollection>);
+
+                    try
+                    {
+                        enumerator = collectionSelector(x).GetEnumerator();
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        return;
+                    }
+
+                    using (enumerator)
+                    {
+                        while (true)
+                        {
+                            var result = default(TResult);
+
+                            try
+                            {
+                                if (!enumerator.MoveNext())
+                                {
+                                    break;
+                                }
+
+                                result = resultSelector(x, enumerator.Current);
+                            }
+                            catch (Exception ex)
+                            {
+                                await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                return;
+                            }
+
+                            await observer.OnNextAsync(result).ConfigureAwait(false);
+                        }
+                    }
+                },
+                observer.OnErrorAsync,
+                observer.OnCompletedAsync
+            );
         }
     }
 }

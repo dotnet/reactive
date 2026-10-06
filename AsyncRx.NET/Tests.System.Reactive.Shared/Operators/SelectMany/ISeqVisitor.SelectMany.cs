@@ -77,4 +77,49 @@ public partial interface ISeqVisitor
     /// </remarks>
     Realized<Seq<TOut>> SelectManySelectorsIndexed<TIn, TOut>(
         SelectManySelectorsIndexedSeq<TIn, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManyEnumerableSeq{TIn, TOut}"/> as the target's own
+    /// <c>SelectMany(selector)</c> over an enumerable selector.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Func{TIn, IEnumerable{TOut}}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyEnumerable<TIn, TOut>(SelectManyEnumerableSeq<TIn, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManyEnumerableIndexedSeq{TIn, TOut}"/> as the target's
+    /// own <c>SelectMany(selector)</c> over an enumerable selector with an element index.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Func{TIn, int, IEnumerable{TOut}}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyEnumerableIndexed<TIn, TOut>(
+        SelectManyEnumerableIndexedSeq<TIn, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManyEnumerableResultSeq{TIn, TCollection, TOut}"/> as the
+    /// target's own <c>SelectMany(collectionSelector, resultSelector)</c> over an enumerable
+    /// collection selector.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TCollection, TOut}(Seq{TIn}, Func{TIn, IEnumerable{TCollection}}, Func{TIn, TCollection, TOut}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyEnumerableResult<TIn, TCollection, TOut>(
+        SelectManyEnumerableResultSeq<TIn, TCollection, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManyEnumerableResultIndexedSeq{TIn, TCollection, TOut}"/>
+    /// as the target's own <c>SelectMany(collectionSelector, resultSelector)</c> over an
+    /// enumerable collection selector with element indexes.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TCollection, TOut}(Seq{TIn}, Func{TIn, int, IEnumerable{TCollection}}, Func{TIn, int, TCollection, int, TOut}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyEnumerableResultIndexed<TIn, TCollection, TOut>(
+        SelectManyEnumerableResultIndexedSeq<TIn, TCollection, TOut> seq);
 }

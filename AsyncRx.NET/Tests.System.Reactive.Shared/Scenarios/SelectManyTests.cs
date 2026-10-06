@@ -2,16 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections;
+
+using Microsoft.Reactive.Testing;
+
 namespace Tests.System.Reactive.Shared.Scenarios;
 
 /// <summary>Shared <c>SelectMany</c> scenarios, from Rx.NET's <c>SelectManyTest.cs</c>.</summary>
 /// <remarks>
 /// <para>
 /// The observable-selector families (<c>SelectMany_Then_*</c>, the plain and <c>WithIndex</c>
-/// selector tests, and both <c>QueryOperator</c> families), and the three-selector
-/// <c>Triple</c> families: 72 of the file's 181 tests. The remaining families, over enumerable
-/// and task-returning selectors, are overloads AsyncRx.NET does not yet have and follow in later
-/// steps; the seven <c>*_ArgumentChecking</c> tests are the code-generated stratum. The
+/// selector tests, and both <c>QueryOperator</c> families), the three-selector <c>Triple</c>
+/// families, and the <c>Enumerable</c> families: 104 of the file's 181 tests. The task-returning
+/// families remain, overloads AsyncRx.NET does not yet have; the nine <c>*_ArgumentChecking</c>
+/// tests are the code-generated stratum. The <c>Enumerable</c> tests drive the shared
+/// <see cref="MockEnumerable{T}"/> and <see cref="RogueEnumerable{T}"/>, and two throwing
+/// enumerables declared below, as the originals are private to Rx.NET's test class. The
 /// <c>Triple</c> tests build their inners from scheduled creation operators
 /// (<c>Return(x, scheduler)</c>, <c>Empty(scheduler)</c>, <c>Range(1, 3, scheduler)</c>), whose
 /// delivery the original expects one tick later, written here with <c>ScheduledAt</c>; those
@@ -33,6 +39,54 @@ public abstract class SelectManyTests : SharedReactiveTest
     private static T Throw<T>(Exception ex)
     {
         throw ex;
+    }
+
+    /// <summary>An enumerable whose enumerator throws from <c>Current</c>.</summary>
+    /// <remarks>Rx.NET's, a private nested type of its <c>SelectManyTest</c>.</remarks>
+    private sealed class CurrentThrowsEnumerable<T>(IEnumerable<T> e, Exception ex)
+        : IEnumerable<T>
+    {
+        public IEnumerator<T> GetEnumerator() => new Enumerator(e.GetEnumerator(), ex);
+
+        IEnumerator IEnumerable.GetEnumerator() =>
+            GetEnumerator();
+
+        private sealed class Enumerator(IEnumerator<T> e, Exception ex) : IEnumerator<T>
+        {
+            public T Current => throw ex;
+
+            object? IEnumerator.Current => Current;
+
+            public void Dispose() => e.Dispose();
+
+            public bool MoveNext() => e.MoveNext();
+
+            public void Reset() => e.Reset();
+        }
+    }
+
+    /// <summary>An enumerable whose enumerator throws from <c>MoveNext</c>.</summary>
+    /// <remarks>Rx.NET's, a private nested type of its <c>SelectManyTest</c>.</remarks>
+    private sealed class MoveNextThrowsEnumerable<T>(IEnumerable<T> e, Exception ex)
+        : IEnumerable<T>
+    {
+        public IEnumerator<T> GetEnumerator() => new Enumerator(e.GetEnumerator(), ex);
+
+        IEnumerator IEnumerable.GetEnumerator() =>
+            GetEnumerator();
+
+        private sealed class Enumerator(IEnumerator<T> e, Exception ex) : IEnumerator<T>
+        {
+            public T Current => e.Current;
+
+            object? IEnumerator.Current => Current;
+
+            public void Dispose() => e.Dispose();
+
+            public bool MoveNext() => throw ex;
+
+            public void Reset() => e.Reset();
+        }
     }
 
     /// <summary>
@@ -3840,6 +3894,1160 @@ public abstract class SelectManyTests : SharedReactiveTest
 
         xs.Subscriptions.AssertEqual(
             Subscribe(200, 305)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_Complete()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var inners = new List<MockEnumerable<int>>();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(x =>
+            {
+                var ys = new MockEnumerable<int>(Scheduler, Enumerable.Repeat(x, x));
+                inners.Add(ys);
+                return ys;
+            })
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 2),
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(420, 3),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 600)
+        );
+
+        Assert.AreEqual(4, inners.Count);
+
+        inners[0].Enumerations.AssertEqual(
+            new Enumeration(210, 210)
+        );
+
+        inners[1].Enumerations.AssertEqual(
+            new Enumeration(340, 340)
+        );
+
+        inners[2].Enumerations.AssertEqual(
+            new Enumeration(420, 420)
+        );
+
+        inners[3].Enumerations.AssertEqual(
+            new Enumeration(510, 510)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_Complete_ResultSelector()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(x => Enumerable.Repeat(x, x), (x, y) => x + y)
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 4),
+            OnNext(210, 4),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(420, 6),
+            OnNext(420, 6),
+            OnNext(420, 6),
+            OnNext(510, 4),
+            OnNext(510, 4),
+            OnCompleted<int>(600)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 600)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_Error()
+    {
+        var ex = new Exception();
+
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnError<int>(600, ex)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(x => Enumerable.Repeat(x, x))
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 2),
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(420, 3),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnNext(510, 2),
+            OnError<int>(600, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 600)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_Error_ResultSelector()
+    {
+        var ex = new Exception();
+
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnError<int>(600, ex)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(x => Enumerable.Repeat(x, x), (x, y) => x + y)
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 4),
+            OnNext(210, 4),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(420, 6),
+            OnNext(420, 6),
+            OnNext(420, 6),
+            OnNext(510, 4),
+            OnNext(510, 4),
+            OnError<int>(600, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 600)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_Dispose()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(x => Enumerable.Repeat(x, x)),
+            350
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 2),
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 350)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_Dispose_ResultSelector()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(x => Enumerable.Repeat(x, x), (x, y) => x + y),
+            350
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 4),
+            OnNext(210, 4),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 350)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_SelectorThrows()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var invoked = 0;
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(x =>
+            {
+                invoked++;
+                if (invoked == 3)
+                {
+                    throw ex;
+                }
+
+                return Enumerable.Repeat(x, x);
+            })
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 2),
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnError<int>(420, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 420)
+        );
+
+        Assert.AreEqual(3, invoked);
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_ResultSelectorThrows()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var inners = new List<MockEnumerable<int>>();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x =>
+                {
+                    var ys = new MockEnumerable<int>(Scheduler, Enumerable.Repeat(x, x));
+                    inners.Add(ys);
+                    return ys;
+                },
+                (x, y) =>
+                {
+                    if (x == 3)
+                    {
+                        throw ex;
+                    }
+
+                    return x + y;
+                }
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 4),
+            OnNext(210, 4),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnError<int>(420, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 420)
+        );
+
+        Assert.AreEqual(3, inners.Count);
+
+        inners[0].Enumerations.AssertEqual(
+            new Enumeration(210, 210)
+        );
+
+        inners[1].Enumerations.AssertEqual(
+            new Enumeration(340, 340)
+        );
+
+        inners[2].Enumerations.AssertEqual(
+            new Enumeration(420, 420)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_ResultSelector_GetEnumeratorThrows()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(x => new RogueEnumerable<int>(ex), (x, y) => x + y)
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(210, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 210)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_SelectorThrows_ResultSelector()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var invoked = 0;
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x =>
+                {
+                    invoked++;
+                    if (invoked == 3)
+                    {
+                        throw ex;
+                    }
+
+                    return Enumerable.Repeat(x, x);
+                },
+                (x, y) => x + y
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 4),
+            OnNext(210, 4),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnError<int>(420, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 420)
+        );
+
+        Assert.AreEqual(3, invoked);
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_CurrentThrows()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(x => new CurrentThrowsEnumerable<int>(Enumerable.Repeat(x, x), ex))
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(210, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 210)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_CurrentThrows_ResultSelector()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => new CurrentThrowsEnumerable<int>(Enumerable.Repeat(x, x), ex),
+                (x, y) => x + y)
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(210, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 210)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_GetEnumeratorThrows()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(x => new RogueEnumerable<int>(ex))
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(210, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 210)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_MoveNextThrows()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(x => new MoveNextThrowsEnumerable<int>(Enumerable.Repeat(x, x), ex))
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(210, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 210)
+        );
+    }
+
+    [TestMethod]
+    public void SelectMany_Enumerable_MoveNextThrows_ResultSelector()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                x => new MoveNextThrowsEnumerable<int>(Enumerable.Repeat(x, x), ex),
+                (x, y) => x + y)
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(210, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 210)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_Index()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 4),
+            OnNext(220, 3),
+            OnNext(250, 5),
+            OnNext(270, 1),
+            OnCompleted<int>(290)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, i) => new[] { new { x, i } })
+        );
+
+        var witness = new { x = 0, i = 0 };
+
+        res.Messages.AssertEqual(
+            OnNext(210, new { x = 4, i = 0 }),
+            OnNext(220, new { x = 3, i = 1 }),
+            OnNext(250, new { x = 5, i = 2 }),
+            OnNext(270, new { x = 1, i = 3 }),
+            OnCompleted(290, witness)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 290)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_ResultSelector_Index()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 4),
+            OnNext(220, 3),
+            OnNext(250, 5),
+            OnNext(270, 1),
+            OnCompleted<int>(290)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, i) => Enumerable.Range(10, i + 1), (x, i, y, j) => new { x, i, y, j })
+        );
+
+        var witness = new { x = 0, i = 0, y = 0, j = 0 };
+
+        res.Messages.AssertEqual(
+            OnNext(210, new { x = 4, i = 0, y = 10, j = 0 }),
+            OnNext(220, new { x = 3, i = 1, y = 10, j = 0 }),
+            OnNext(220, new { x = 3, i = 1, y = 11, j = 1 }),
+            OnNext(250, new { x = 5, i = 2, y = 10, j = 0 }),
+            OnNext(250, new { x = 5, i = 2, y = 11, j = 1 }),
+            OnNext(250, new { x = 5, i = 2, y = 12, j = 2 }),
+            OnNext(270, new { x = 1, i = 3, y = 10, j = 0 }),
+            OnNext(270, new { x = 1, i = 3, y = 11, j = 1 }),
+            OnNext(270, new { x = 1, i = 3, y = 12, j = 2 }),
+            OnNext(270, new { x = 1, i = 3, y = 13, j = 3 }),
+            OnCompleted(290, witness)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 290)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_Complete()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var inners = new List<MockEnumerable<int>>();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, _) =>
+            {
+                var ys = new MockEnumerable<int>(Scheduler, Enumerable.Repeat(x, x));
+                inners.Add(ys);
+                return ys;
+            })
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 2),
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(420, 3),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 600)
+        );
+
+        Assert.AreEqual(4, inners.Count);
+
+        inners[0].Enumerations.AssertEqual(
+            new Enumeration(210, 210)
+        );
+
+        inners[1].Enumerations.AssertEqual(
+            new Enumeration(340, 340)
+        );
+
+        inners[2].Enumerations.AssertEqual(
+            new Enumeration(420, 420)
+        );
+
+        inners[3].Enumerations.AssertEqual(
+            new Enumeration(510, 510)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_Complete_ResultSelector()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, _) => Enumerable.Repeat(x, x), (x, _, y, __) => x + y)
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 4),
+            OnNext(210, 4),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(420, 6),
+            OnNext(420, 6),
+            OnNext(420, 6),
+            OnNext(510, 4),
+            OnNext(510, 4),
+            OnCompleted<int>(600)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 600)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_Error()
+    {
+        var ex = new Exception();
+
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnError<int>(600, ex)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, _) => Enumerable.Repeat(x, x))
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 2),
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(420, 3),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnNext(510, 2),
+            OnError<int>(600, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 600)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_Error_ResultSelector()
+    {
+        var ex = new Exception();
+
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnError<int>(600, ex)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, _) => Enumerable.Repeat(x, x), (x, _, y, __) => x + y)
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 4),
+            OnNext(210, 4),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(420, 6),
+            OnNext(420, 6),
+            OnNext(420, 6),
+            OnNext(510, 4),
+            OnNext(510, 4),
+            OnError<int>(600, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 600)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_Dispose()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, _) => Enumerable.Repeat(x, x)),
+            350
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 2),
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 350)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_Dispose_ResultSelector()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, _) => Enumerable.Repeat(x, x), (x, _, y, __) => x + y),
+            350
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 4),
+            OnNext(210, 4),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 350)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_SelectorThrows()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var invoked = 0;
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, _) =>
+            {
+                invoked++;
+                if (invoked == 3)
+                {
+                    throw ex;
+                }
+
+                return Enumerable.Repeat(x, x);
+            })
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 2),
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnNext(340, 4),
+            OnError<int>(420, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 420)
+        );
+
+        Assert.AreEqual(3, invoked);
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_ResultSelectorThrows()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var inners = new List<MockEnumerable<int>>();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) =>
+                {
+                    var ys = new MockEnumerable<int>(Scheduler, Enumerable.Repeat(x, x));
+                    inners.Add(ys);
+                    return ys;
+                },
+                (x, _, y, __) =>
+                {
+                    if (x == 3)
+                    {
+                        throw ex;
+                    }
+
+                    return x + y;
+                }
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 4),
+            OnNext(210, 4),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnError<int>(420, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 420)
+        );
+
+        Assert.AreEqual(3, inners.Count);
+
+        inners[0].Enumerations.AssertEqual(
+            new Enumeration(210, 210)
+        );
+
+        inners[1].Enumerations.AssertEqual(
+            new Enumeration(340, 340)
+        );
+
+        inners[2].Enumerations.AssertEqual(
+            new Enumeration(420, 420)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_ResultSelector_GetEnumeratorThrows()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, _) => new RogueEnumerable<int>(ex), (x, _, y, __) => x + y)
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(210, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 210)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_SelectorThrows_ResultSelector()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var invoked = 0;
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) =>
+                {
+                    invoked++;
+                    if (invoked == 3)
+                    {
+                        throw ex;
+                    }
+
+                    return Enumerable.Repeat(x, x);
+                },
+                (x, _, y, __) => x + y
+            )
+        );
+
+        res.Messages.AssertEqual(
+            OnNext(210, 4),
+            OnNext(210, 4),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnNext(340, 8),
+            OnError<int>(420, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 420)
+        );
+
+        Assert.AreEqual(3, invoked);
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_CurrentThrows()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, _) => new CurrentThrowsEnumerable<int>(Enumerable.Repeat(x, x), ex))
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(210, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 210)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_CurrentThrows_ResultSelector()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => new CurrentThrowsEnumerable<int>(Enumerable.Repeat(x, x), ex),
+                (x, _, y, __) => x + y)
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(210, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 210)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_GetEnumeratorThrows()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, _) => new RogueEnumerable<int>(ex))
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(210, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 210)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_MoveNextThrows()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany((x, _) => new MoveNextThrowsEnumerable<int>(Enumerable.Repeat(x, x), ex))
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(210, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 210)
+        );
+    }
+
+    [TestMethod]
+    public void SelectManyWithIndex_Enumerable_MoveNextThrows_ResultSelector()
+    {
+        var xs = Scheduler.CreateHotObservable(
+            OnNext(210, 2),
+            OnNext(340, 4),
+            OnNext(420, 3),
+            OnNext(510, 2),
+            OnCompleted<int>(600)
+        );
+
+        var ex = new Exception();
+
+        var res = Scheduler.Start(() =>
+            xs.SelectMany(
+                (x, _) => new MoveNextThrowsEnumerable<int>(Enumerable.Repeat(x, x), ex),
+                (x, _, y, __) => x + y)
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(210, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 210)
         );
     }
 }
