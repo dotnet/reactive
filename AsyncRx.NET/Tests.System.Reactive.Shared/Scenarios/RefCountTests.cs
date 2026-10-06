@@ -16,7 +16,14 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// that constructor's public spelling, which is what the internal type implements.
 /// The <c>DelayedDisconnect</c> tests step the clock by hand with
 /// <c>Scheduler.AdvanceBy</c> between subscriptions and assertions, and one of them is a
-/// <c>DataRow</c> pair in the original, written here as two tests.
+/// <c>DataRow</c> pair in the original, written here as two tests. Ten of them call a
+/// delayed-disconnect overload without a scheduler in the original, which puts the disconnect
+/// timer on the default scheduler, a real-time timer inside a virtual-time test that the
+/// original abandons when the test ends. Here they pass <c>Scheduler</c>: on a target whose
+/// harness owns all asynchrony, a timer started on a real scheduler while the pump is running is
+/// an escape, and whether it is reported is a race with the pump finishing, which load (such as
+/// NCrunch's parallelism) turns into a failure. Nothing in those tests asserts on real time, so
+/// the delay in virtual time means the same thing.
 /// </para>
 /// <para>
 /// This is the first operator whose input is a connectable. Two things shape the text. Most
@@ -832,7 +839,7 @@ public abstract class RefCountTests : SharedReactiveTest
             return Seq.Range(1, 5);
         })
         .Publish()
-        .RefCount(2, TimeSpan.FromMinutes(1));
+        .RefCount(2, TimeSpan.FromMinutes(1), Scheduler);
 
         Assert.AreEqual(0, connected);
 
@@ -861,7 +868,7 @@ public abstract class RefCountTests : SharedReactiveTest
             return () => unsubscribed++;
         });
 
-        var o2 = o1.Publish().RefCount(TimeSpan.FromSeconds(20));
+        var o2 = o1.Publish().RefCount(TimeSpan.FromSeconds(20), Scheduler);
 
         var s1 = await o2.SubscribeAsync(Scheduler, _ => { });
         Assert.AreEqual(1, subscribed);
@@ -935,7 +942,7 @@ public abstract class RefCountTests : SharedReactiveTest
             return Seq.Never<int>();
         })
         .Publish()
-        .RefCount(2, TimeSpan.FromMinutes(1));
+        .RefCount(2, TimeSpan.FromMinutes(1), Scheduler);
 
         Assert.AreEqual(0, connected);
 
@@ -949,7 +956,7 @@ public abstract class RefCountTests : SharedReactiveTest
         var ex = new Exception();
         var xs = Seq.Throw<int>(ex, ImmediateScheduler);
 
-        var res = xs.Publish().RefCount(TimeSpan.FromSeconds(2));
+        var res = xs.Publish().RefCount(TimeSpan.FromSeconds(2), Scheduler);
 
         await res.SubscribeAsync(Scheduler, _ => throw new Exception(), ex_ => Assert.AreSame(ex, ex_), () => throw new Exception());
         await res.SubscribeAsync(Scheduler, _ => throw new Exception(), ex_ => Assert.AreSame(ex, ex_), () => throw new Exception());
@@ -961,7 +968,7 @@ public abstract class RefCountTests : SharedReactiveTest
         var ex = new Exception();
         var xs = Seq.Throw<int>(ex, ImmediateScheduler);
 
-        var res = xs.Publish().RefCount(2, TimeSpan.FromSeconds(200));
+        var res = xs.Publish().RefCount(2, TimeSpan.FromSeconds(200), Scheduler);
 
         var exceptionsReceived = new List<Exception>();
 
@@ -1144,7 +1151,7 @@ public abstract class RefCountTests : SharedReactiveTest
             return subject;
         })
         .Publish()
-        .RefCount(2, TimeSpan.FromMinutes(1));
+        .RefCount(2, TimeSpan.FromMinutes(1), Scheduler);
 
         await subject.OnNextAsync(1);
         Assert.AreEqual(0, connected);
@@ -1342,7 +1349,7 @@ public abstract class RefCountTests : SharedReactiveTest
     public async Task RefCount_DelayedDisconnect_ValuesDuringAndAfterSubscribe()
     {
         var subject = CreateReplaySubject<int>(5);
-        var source = subject.Publish().RefCount(TimeSpan.FromSeconds(20));
+        var source = subject.Publish().RefCount(TimeSpan.FromSeconds(20), Scheduler);
 
         await subject.OnNextAsync(1);
 
@@ -1385,7 +1392,7 @@ public abstract class RefCountTests : SharedReactiveTest
     public async Task RefCount_DelayedDisconnect_minObservers_ValuesDuringAndAfterSubscribe()
     {
         var subject = CreateReplaySubject<int>(5);
-        var source = subject.Publish().RefCount(2, TimeSpan.FromSeconds(20));
+        var source = subject.Publish().RefCount(2, TimeSpan.FromSeconds(20), Scheduler);
 
         await subject.OnNextAsync(1);
 
@@ -1885,7 +1892,7 @@ public abstract class RefCountTests : SharedReactiveTest
         var conn = xs.Multicast(subject);
 
         var res = Scheduler.Start(() =>
-            conn.RefCount(TimeSpan.FromSeconds(2))
+            conn.RefCount(TimeSpan.FromSeconds(2), Scheduler)
         );
 
         res.Messages.AssertEqual(
@@ -1913,7 +1920,7 @@ public abstract class RefCountTests : SharedReactiveTest
         var subject = CreateMySubject();
         var conn = xs.Multicast(subject);
 
-        var res = conn.RefCount(2, TimeSpan.FromTicks(300));
+        var res = conn.RefCount(2, TimeSpan.FromTicks(300), Scheduler);
 
         var d1 = default(IAsyncDisposable);
         var o1 = Scheduler.CreateObserver<int>();
