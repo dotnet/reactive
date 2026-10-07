@@ -38,7 +38,8 @@ public interface IRxTarget : ISeqVisitor
     /// The scheduler with its optional capabilities hidden (the sync
     /// <c>DisableOptimizations()</c>), or itself where the concept does not exist.
     /// </summary>
-    SchedulerRef DisableOptimizations(TestSchedulerRef scheduler);
+    /// <param name="scheduler">Any scheduler reference: the test scheduler or a real one.</param>
+    SchedulerRef DisableOptimizations(SchedulerRef scheduler);
 
     /// <summary>The target's immediate scheduler, which runs work where it is scheduled.</summary>
     /// <remarks>
@@ -55,6 +56,15 @@ public interface IRxTarget : ISeqVisitor
     /// rather than driving a <see cref="TestSchedulerRef"/>.
     /// </remarks>
     SchedulerRef DefaultScheduler { get; }
+
+    /// <summary>The target's thread pool scheduler, for real-time scenarios.</summary>
+    /// <remarks>
+    /// Rx.NET's <c>ThreadPoolScheduler.Instance</c>, which unlike <c>Scheduler.Default</c> offers
+    /// the long-running path that some operators take; on AsyncRx.NET the task pool scheduler,
+    /// the same object as <see cref="DefaultScheduler"/>. A real-time scenario names it where the
+    /// Rx.NET test has <c>ThreadPoolScheduler.Instance</c>.
+    /// </remarks>
+    SchedulerRef ThreadPoolScheduler { get; }
 
     /// <summary>
     /// Materializes <paramref name="source"/>, subscribes, and completes with every element it

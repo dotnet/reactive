@@ -22,7 +22,9 @@ namespace Tests.System.Reactive.Async;
 /// Rx.NET tests write <c>disconnect.Dispose()</c> before <c>Start()</c>, would wait forever.
 /// <see cref="DisposeAsync"/> hands the real disposal to
 /// <see cref="TestAsyncScheduler.RunToCompletion(ValueTask)"/>, which pumps the current tick
-/// when called from the body and does nothing when called from scheduled work.
+/// when called from the body, does nothing when called from scheduled work, and, in a
+/// real-time scenario where nothing is scheduled in virtual time, lets the disposal complete
+/// on whatever thread is finishing it.
 /// </para>
 /// <para>
 /// <see cref="For"/> returns the same wrapper for the same real disposable, so a scenario that

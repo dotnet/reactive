@@ -209,7 +209,17 @@ namespace System.Reactive.Linq
         {
             var gate = new AsyncGate();
             var queue = new Queue<(TSource Value, DateTimeOffset Arrival)>();
-            var drain = new SerialAsyncDisposable();
+
+            // The handle of the drain most recently scheduled, so that disposal can cancel a
+            // drain still waiting for its due time. Guarded by the gate, with a version number,
+            // because a drain scheduled with a short delay can start, and schedule its own
+            // successor, before the drain that scheduled it has stored its handle: storing that
+            // stale handle through a serial disposable would cancel the successor before it ran
+            // and leave nothing draining. A stale handle belongs to a drain that has already
+            // finished, so it is simply dropped.
+            var pendingDrain = default(IAsyncDisposable);
+            var drainVersion = 0;
+            var isDisposed = false;
 
             var ready = relativeDueTime.HasValue;   // absolute: not until the due time is reached
             var delay = relativeDueTime.GetValueOrDefault();
@@ -222,9 +232,52 @@ namespace System.Reactive.Linq
 
             async ValueTask ScheduleDrainAsync(TimeSpan after)
             {
+                int version;
+
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    version = ++drainVersion;
+                }
+
                 var d = await scheduler.ScheduleAsync(DrainAsync, after).ConfigureAwait(false);
-                await drain.AssignAsync(d).ConfigureAwait(false);
+
+                var toDispose = default(IAsyncDisposable);
+
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    if (isDisposed || version != drainVersion)
+                    {
+                        toDispose = d;
+                    }
+                    else
+                    {
+                        toDispose = pendingDrain;
+                        pendingDrain = d;
+                    }
+                }
+
+                if (toDispose != null)
+                {
+                    await toDispose.DisposeAsync().ConfigureAwait(false);
+                }
             }
+
+            var drain = AsyncDisposable.Create(async () =>
+            {
+                var toDispose = default(IAsyncDisposable);
+
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    isDisposed = true;
+                    toDispose = pendingDrain;
+                    pendingDrain = null;
+                }
+
+                if (toDispose != null)
+                {
+                    await toDispose.DisposeAsync().ConfigureAwait(false);
+                }
+            });
 
             async ValueTask DrainAsync(CancellationToken ct)
             {

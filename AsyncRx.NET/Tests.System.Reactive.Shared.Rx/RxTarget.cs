@@ -66,16 +66,22 @@ public sealed partial class RxTarget : IRxTarget
     public Realized<TestSchedulerRef> CreateTestScheduler() =>
         Realized.Of<TestSchedulerRef>(new RxTestScheduler());
 
-    public SchedulerRef DisableOptimizations(TestSchedulerRef scheduler) =>
+    public SchedulerRef DisableOptimizations(SchedulerRef scheduler) =>
         new(
             Realized.Of<SchedulerRef>(Unwrap(scheduler).DisableOptimizations()),
-            "Scheduler.DisableOptimizations()");
+            $"{scheduler}.DisableOptimizations()");
 
     public SchedulerRef ImmediateScheduler { get; } =
         new(Realized.Of<SchedulerRef>(Scheduler.Immediate), "Scheduler.Immediate");
 
     public SchedulerRef DefaultScheduler { get; } =
         new(Realized.Of<SchedulerRef>(Scheduler.Default), "Scheduler.Default");
+
+    public SchedulerRef ThreadPoolScheduler { get; } =
+        new(
+            Realized.Of<SchedulerRef>(
+                global::System.Reactive.Concurrency.ThreadPoolScheduler.Instance),
+            "ThreadPoolScheduler.Instance");
 
     public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) =>
         await Materialize(source).ToList();

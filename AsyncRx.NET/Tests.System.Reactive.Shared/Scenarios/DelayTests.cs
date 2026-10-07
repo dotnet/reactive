@@ -8,22 +8,34 @@ using Microsoft.Reactive.Testing;
 
 namespace Tests.System.Reactive.Shared.Scenarios;
 
-/// <summary>
-/// Shared <c>Delay</c> scenarios.
-/// </summary>
+/// <summary>Shared <c>Delay</c> scenarios, from Rx.NET's <c>DelayTest.cs</c>.</summary>
 /// <remarks>
-/// Every behavioural test from Rx.NET's <c>DelayTest.cs</c>, with the overloads AsyncRx.NET
-/// gained to match Rx.NET's surface. The stopwatch axis is the sync text
-/// (<c>useStopwatch ? Scheduler : Scheduler.DisableOptimizations()</c>): both are scheduler
-/// references in a description, resolved by the target. Transcribed mechanically from the sync
-/// file, including its <c>*_Stopwatch</c> pairs, which run the same scenario with and without the
-/// scheduler's optional capabilities — written as <c>Scheduler.DisableOptimizations()</c>, as in
-/// the sync suite; on AsyncRx.NET the two are the same run. Two scheduler-free tests were
-/// hand-ported onto the raw surface. Deliberately not here: the two <c>*_ArgumentChecking</c>
-/// tests, and the native stratum — the eight <c>*_Real_*</c> tests (thread-pool scheduler and
-/// <c>Subject</c>s), the two <c>*_DefaultScheduler</c> tests, <c>Delay_CrossingMessages</c>,
-/// <c>Delay_ErrorHandling1</c> (a hand-written <c>IScheduler</c> with events), and the two
-/// <c>Delay_LongRunning_*</c> tests (a hand-written <c>ISchedulerLongRunning</c>).
+/// <para>
+/// 61 of the file's 65 tests, with the overloads AsyncRx.NET gained to match Rx.NET's surface.
+/// The virtual-time tests are transcribed mechanically from the sync file, including its
+/// <c>*_Stopwatch</c> pairs, which run the same scenario with and without the scheduler's
+/// optional capabilities, written as <c>Scheduler.DisableOptimizations()</c> as in the sync
+/// suite; on AsyncRx.NET the two are the same run. Two scheduler-free tests were hand-ported
+/// onto the raw surface.
+/// </para>
+/// <para>
+/// The real-time tests (2026-10-07) are <c>async Task</c> methods with the usual substitutions:
+/// the shared subject and its awaited notifications, a <c>TaskCompletionSource</c> awaited where
+/// the original blocks on an event, <c>await ToListAsync(...)</c> for <c>ToEnumerable()</c>, and
+/// the raw three-handler subscribe. The <c>*_Real_*</c> pairs run on
+/// <see cref="SharedReactiveTest.ThreadPoolScheduler"/> with and without its optimizations, the
+/// axis the original's <c>ThreadPoolScheduler.Instance.DisableOptimizations()</c> selects.
+/// <c>Delay_ErrorHandling1</c> drives <see cref="ImpulseScheduler"/>, a
+/// <see cref="SchedulerDouble"/> that holds timed work until the test releases it, so that the
+/// error can overtake the queued value.
+/// </para>
+/// <para>
+/// Not here: the two <c>*_ArgumentChecking</c> tests, the code-generated stratum; and the two
+/// <c>Delay_LongRunning_*</c> tests, which interrupt Rx.NET's long-running dispatch loop while it
+/// waits for input and while it waits for a due time. AsyncRx.NET has no such loop (a pending
+/// drain is one scheduled unit of work, cancelled by its handle), so those two live in the Rx.NET
+/// runner, <c>RxDelayTests</c>, with their doubles.
+/// </para>
 /// </remarks>
 public abstract class DelayTests : SharedReactiveTest
 {
@@ -1415,5 +1427,295 @@ public abstract class DelayTests : SharedReactiveTest
         Scheduler.Start();
 
         Assert.AreEqual(1, result);
+    }
+
+    /// <summary>
+    /// A scheduler that holds every unit of timed work until the test releases it.
+    /// </summary>
+    /// <param name="target">The target under test.</param>
+    /// <remarks>
+    /// Rx.NET's <c>ImpulseScheduler</c>, private to its <c>DelayTest</c>: timed work is run on
+    /// the thread pool once <see cref="Release"/> is called, and <see cref="Done"/> completes
+    /// when it has run; immediate work is not supported. <c>Delay_ErrorHandling1</c> uses it to
+    /// let an error overtake a queued value.
+    /// </remarks>
+    private sealed class ImpulseScheduler(IRxTarget target)
+        : SchedulerDouble(target, "ImpulseScheduler")
+    {
+        private readonly TaskCompletionSource _released =
+            new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        private readonly TaskCompletionSource _done =
+            new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        /// <summary>Completes when the held work has run.</summary>
+        public Task Done => _done.Task;
+
+        /// <inheritdoc/>
+        public override DateTimeOffset Now => DateTimeOffset.UtcNow;
+
+        /// <summary>Lets the held work run.</summary>
+        public void Release() => _released.TrySetResult();
+
+        /// <inheritdoc/>
+        public override ValueTask ScheduleAsync(
+            ScheduledWork work,
+            CancellationToken cancellationToken) =>
+            throw new NotImplementedException();
+
+        /// <inheritdoc/>
+        public override ValueTask ScheduleAsync(
+            TimeSpan dueTime,
+            ScheduledWork work,
+            CancellationToken cancellationToken)
+        {
+            _ = Task.Run(async () =>
+            {
+                await _released.Task.ConfigureAwait(false);
+                await work(cancellationToken).ConfigureAwait(false);
+                _done.TrySetResult();
+            });
+
+            return default;
+        }
+    }
+
+    [TestMethod]
+    public Task Delay_TimeSpan_Real_Simple1()
+    {
+        return Delay_TimeSpan_Real_Simple1_Impl(DisableOptimizations(ThreadPoolScheduler));
+    }
+
+    [TestMethod]
+    public Task Delay_TimeSpan_Real_Simple1_Stopwatch()
+    {
+        return Delay_TimeSpan_Real_Simple1_Impl(ThreadPoolScheduler);
+    }
+
+    private async Task Delay_TimeSpan_Real_Simple1_Impl(SchedulerRef scheduler)
+    {
+        var s = CreateSubject<int>();
+
+        var res = s.Delay(TimeSpan.FromMilliseconds(10), scheduler);
+
+        var lst = new List<int>();
+        var e = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex => e.TrySetException(ex),
+            () => e.TrySetResult());
+
+        _ = Task.Run(async () =>
+        {
+            await s.OnNextAsync(1);
+            await s.OnNextAsync(2);
+            await s.OnNextAsync(3);
+            await s.OnCompletedAsync();
+        });
+
+        await e.Task;
+        Assert.IsTrue(new[] { 1, 2, 3 }.SequenceEqual(lst));
+    }
+
+    [TestMethod]
+    public Task Delay_TimeSpan_Real_Error1()
+    {
+        return Delay_TimeSpan_Real_Error1_Impl(DisableOptimizations(ThreadPoolScheduler));
+    }
+
+    [TestMethod]
+    public Task Delay_TimeSpan_Real_Error1_Stopwatch()
+    {
+        return Delay_TimeSpan_Real_Error1_Impl(ThreadPoolScheduler);
+    }
+
+    private async Task Delay_TimeSpan_Real_Error1_Impl(SchedulerRef scheduler)
+    {
+        var ex = new Exception();
+
+        var s = CreateSubject<int>();
+
+        var res = s.Delay(TimeSpan.FromMilliseconds(10), scheduler);
+
+        var e = new TaskCompletionSource();
+        var err = default(Exception);
+        await res.SubscribeAsync(Scheduler, _ => { }, ex_ => { err = ex_; e.TrySetResult(); });
+
+        _ = Task.Run(async () =>
+        {
+            await s.OnNextAsync(1);
+            await s.OnNextAsync(2);
+            await s.OnNextAsync(3);
+            await s.OnErrorAsync(ex);
+        });
+
+        await e.Task;
+        Assert.AreSame(ex, err);
+    }
+
+    [TestMethod]
+    public Task Delay_TimeSpan_Real_Error2()
+    {
+        return Delay_TimeSpan_Real_Error2_Impl(DisableOptimizations(ThreadPoolScheduler));
+    }
+
+    [TestMethod]
+    public Task Delay_TimeSpan_Real_Error2_Stopwatch()
+    {
+        return Delay_TimeSpan_Real_Error2_Impl(ThreadPoolScheduler);
+    }
+
+    private async Task Delay_TimeSpan_Real_Error2_Impl(SchedulerRef scheduler)
+    {
+        var ex = new Exception();
+
+        var s = CreateSubject<int>();
+
+        var res = s.Delay(TimeSpan.FromMilliseconds(10), scheduler);
+
+        var next = new ManualResetEvent(false);
+        var e = new TaskCompletionSource();
+        var err = default(Exception);
+        await res.SubscribeAsync(
+            Scheduler,
+            _ => { next.Set(); },
+            ex_ => { err = ex_; e.TrySetResult(); });
+
+        _ = Task.Run(async () =>
+        {
+            await s.OnNextAsync(1);
+            next.WaitOne();
+
+            await s.OnErrorAsync(ex);
+        });
+
+        await e.Task;
+        Assert.AreSame(ex, err);
+    }
+
+    [TestMethod]
+    public Task Delay_TimeSpan_Real_Error3()
+    {
+        return Delay_TimeSpan_Real_Error3_Impl(DisableOptimizations(ThreadPoolScheduler));
+    }
+
+    [TestMethod]
+    public Task Delay_TimeSpan_Real_Error3_Stopwatch()
+    {
+        return Delay_TimeSpan_Real_Error3_Impl(ThreadPoolScheduler);
+    }
+
+    private async Task Delay_TimeSpan_Real_Error3_Impl(SchedulerRef scheduler)
+    {
+        var ex = new Exception();
+
+        var s = CreateSubject<int>();
+
+        var res = s.Delay(TimeSpan.FromMilliseconds(10), scheduler);
+
+        var next = new ManualResetEvent(false);
+        var ack = new ManualResetEvent(false);
+
+        var e = new TaskCompletionSource();
+        var err = default(Exception);
+        await res.SubscribeAsync(
+            Scheduler,
+            _ => { next.Set(); ack.WaitOne(); },
+            ex_ => { err = ex_; e.TrySetResult(); });
+
+        _ = Task.Run(async () =>
+        {
+            await s.OnNextAsync(1);
+            next.WaitOne();
+
+            await s.OnErrorAsync(ex);
+            ack.Set();
+        });
+
+        await e.Task;
+        Assert.AreSame(ex, err);
+    }
+
+    [TestMethod]
+    public async Task Delay_TimeSpan_DefaultScheduler()
+    {
+        Assert.IsTrue(
+            (await ToListAsync(Seq.Return(1).Delay(TimeSpan.FromMilliseconds(1))))
+                .SequenceEqual([1]));
+    }
+
+    [TestMethod]
+    public async Task Delay_DateTimeOffset_DefaultScheduler()
+    {
+        Assert.IsTrue(
+            (await ToListAsync(
+                Seq.Return(1).Delay(DateTimeOffset.UtcNow + TimeSpan.FromMilliseconds(1))))
+                .SequenceEqual([1]));
+    }
+
+    [TestMethod]
+    public async Task Delay_CrossingMessages()
+    {
+        var lst = new List<int>();
+
+        var evt = new TaskCompletionSource();
+
+        var s = CreateSubject<int>();
+        await s.Delay(TimeSpan.FromSeconds(0.01)).SubscribeAsync(
+            Scheduler,
+            async x =>
+            {
+                lst.Add(x);
+                if (x < 9)
+                {
+                    await s.OnNextAsync(x + 1);
+                }
+                else
+                {
+                    await s.OnCompletedAsync();
+                }
+            },
+            ex => evt.TrySetException(ex),
+            () => evt.TrySetResult());
+        await s.OnNextAsync(0);
+
+        await evt.Task;
+
+        Assert.IsTrue(Enumerable.Range(0, 10).SequenceEqual(lst));
+    }
+
+    [TestMethod]
+    public async Task Delay_ErrorHandling1()
+    {
+        //
+        // Checks for race condition between OnNext and OnError where the latter has a chance to
+        // send out the OnError message before the former gets a chance to run in the delayed
+        // queue. In that case, the OnNext message should not come out.
+        //
+        // See DrainQueue's first _hasFailed check.
+        //
+
+        var xs = Seq.Create<int>(async observer =>
+        {
+            await observer.OnNextAsync(42);
+            await observer.OnErrorAsync(new Exception());
+            return () => { };
+        });
+
+        var s = new ImpulseScheduler(Target);
+
+        var called = false;
+        var failed = new TaskCompletionSource();
+        await xs.Delay(TimeSpan.FromDays(1), s).SubscribeAsync(
+            Scheduler,
+            _ => { called = true; },
+            ex => { failed.TrySetResult(); });
+
+        await failed.Task;
+        s.Release();
+        await s.Done;
+
+        Assert.IsFalse(called);
     }
 }

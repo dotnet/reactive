@@ -476,6 +476,39 @@ public class TestAsyncSchedulerPumpTest
     }
 
     [TestMethod]
+    public async Task RunToCompletion_awaits_an_operation_outside_virtual_time()
+    {
+        var scheduler = new TestAsyncScheduler(ExecutionShape.ForcedYield);
+        var tcs = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(20);
+            tcs.SetResult(42);
+        });
+
+        var result = await scheduler.RunToCompletion(new ValueTask<int>(tcs.Task));
+
+        Assert.AreEqual(42, result);
+        Assert.AreEqual(0, scheduler.Clock);
+    }
+
+    [TestMethod]
+    public async Task RunToCompletion_fails_when_an_operation_outside_virtual_time_never_completes()
+    {
+        var scheduler = new TestAsyncScheduler(ExecutionShape.ForcedYield)
+        {
+            BodyOperationTimeout = TimeSpan.FromMilliseconds(100),
+        };
+        var tcs = new TaskCompletionSource();
+
+        var ex = await Assert.ThrowsExactlyAsync<TestAsyncSchedulerException>(async () =>
+            await scheduler.RunToCompletion(new ValueTask(tcs.Task)));
+
+        Assert.Contains("did not complete within 0.1s", ex.Message);
+        Assert.AreEqual(0, scheduler.Clock);
+    }
+
+    [TestMethod]
     public void YieldPoint_completes_synchronously_in_synchronous_completion_shape()
     {
         var scheduler = new TestAsyncScheduler(ExecutionShape.SynchronousCompletion);

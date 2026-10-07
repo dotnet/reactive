@@ -4,13 +4,20 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>Describes <c>source.Delay(dueTime, scheduler)</c> with an absolute due time.</summary>
+/// <summary>
+/// Describes <c>source.Delay(dueTime[, scheduler])</c> with an absolute due time.
+/// </summary>
 /// <remarks>
-/// Built by <see cref="DelayExtensions.Delay{T}(Seq{T}, DateTimeOffset, SchedulerRef)"/>;
+/// Built by <see cref="DelayExtensions.Delay{T}(Seq{T}, DateTimeOffset, SchedulerRef)"/> or,
+/// with no scheduler, by <see cref="DelayExtensions.Delay{T}(Seq{T}, DateTimeOffset)"/>;
 /// materialized by each target through
 /// <see cref="ISeqVisitor.DelayAbsolute{T}(DelayAbsoluteSeq{T})"/>.
 /// </remarks>
-public sealed class DelayAbsoluteSeq<T>(Seq<T> source, DateTimeOffset dueTime, SchedulerRef scheduler) : Seq<T>
+public sealed class DelayAbsoluteSeq<T>(
+    Seq<T> source,
+    DateTimeOffset dueTime,
+    SchedulerRef? scheduler)
+    : Seq<T>
 {
     /// <summary>Source sequence to delay values for.</summary>
     public Seq<T> Source => source;
@@ -23,12 +30,15 @@ public sealed class DelayAbsoluteSeq<T>(Seq<T> source, DateTimeOffset dueTime, S
     /// </remarks>
     public DateTimeOffset DueTime => dueTime;
 
-    /// <summary>Scheduler to run the delay timers on.</summary>
-    public SchedulerRef Scheduler => scheduler;
+    /// <summary>Scheduler to run the delay timers on, or null for the target's default.</summary>
+    public SchedulerRef? Scheduler => scheduler;
 
     /// <inheritdoc/>
     protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.DelayAbsolute(this);
 
     /// <inheritdoc/>
-    public override string ToString() => $"{source}.Delay(@{dueTime.Ticks}, {scheduler})";
+    public override string ToString() =>
+        scheduler is null
+            ? $"{source}.Delay(@{dueTime.Ticks})"
+            : $"{source}.Delay(@{dueTime.Ticks}, {scheduler})";
 }

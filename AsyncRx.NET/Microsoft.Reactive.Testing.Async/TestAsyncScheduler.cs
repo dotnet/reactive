@@ -195,8 +195,13 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     /// <para>
     /// Called on the pump thread while the pump is running, it returns the operation unchanged:
     /// the caller is itself pumped work, and awaiting is the right thing. An operation still
-    /// incomplete after the queue drains is waiting for a later tick, or for work the scenario
-    /// has not scheduled; that is reported as a failure rather than left to hang.
+    /// incomplete after the queue drains, while a timer is queued or pumped work is still
+    /// pending, is waiting for a later tick; that is reported as a failure rather than left to
+    /// hang. One still incomplete with nothing queued at all is waiting for something outside
+    /// virtual time, which is what a real-time scenario's operations do (a subscription whose
+    /// disposal is contending with a drain on a thread of its own, for instance), so it is
+    /// handed back to be awaited, under <see cref="BodyOperationTimeout"/> so that a
+    /// virtual-time scenario awaiting something it never scheduled still fails informatively.
     /// </para>
     /// <para>
     /// Where it comes into play: the shared test suite's AsyncRx.NET target routes every raw
@@ -225,7 +230,12 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     {
         if (PumpForBodyOperation(operation.IsCompleted) && !operation.IsCompleted)
         {
-            throw NotCompletedAtCurrentTick();
+            if (HasVirtualTimeAhead)
+            {
+                throw NotCompletedAtCurrentTick();
+            }
+
+            return AwaitOutsideVirtualTime(operation);
         }
 
         return operation;
@@ -242,11 +252,68 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     {
         if (PumpForBodyOperation(operation.IsCompleted) && !operation.IsCompleted)
         {
-            throw NotCompletedAtCurrentTick();
+            if (HasVirtualTimeAhead)
+            {
+                throw NotCompletedAtCurrentTick();
+            }
+
+            return AwaitOutsideVirtualTime(operation);
         }
 
         return operation;
     }
+
+    /// <summary>
+    /// How long <see cref="RunToCompletion{T}(ValueTask{T})"/> waits for an operation that
+    /// nothing in virtual time can complete, before failing.
+    /// </summary>
+    /// <remarks>
+    /// Thirty seconds by default: far longer than any real-time scenario's operation takes,
+    /// and short enough that a virtual-time scenario awaiting something it never scheduled is
+    /// reported rather than left to hang. A harness test lowers it.
+    /// </remarks>
+    public TimeSpan BodyOperationTimeout { get; set; } = TimeSpan.FromSeconds(30);
+
+    // After the pump has drained the current tick, whether anything remains that virtual time
+    // could still complete: a queued timer, or pumped work whose own task is still pending.
+    private bool HasVirtualTimeAhead => _timers.Count > 0 || _outstanding.Count > 0;
+
+    private async ValueTask<T> AwaitOutsideVirtualTime<T>(ValueTask<T> operation)
+    {
+        var task = operation.AsTask();
+
+        var first = await Task.WhenAny(task, Task.Delay(BodyOperationTimeout))
+            .ConfigureAwait(false);
+
+        if (first != task)
+        {
+            throw NotCompletedOutsideVirtualTime();
+        }
+
+        return await task.ConfigureAwait(false);
+    }
+
+    private async ValueTask AwaitOutsideVirtualTime(ValueTask operation)
+    {
+        var task = operation.AsTask();
+
+        var first = await Task.WhenAny(task, Task.Delay(BodyOperationTimeout))
+            .ConfigureAwait(false);
+
+        if (first != task)
+        {
+            throw NotCompletedOutsideVirtualTime();
+        }
+
+        await task.ConfigureAwait(false);
+    }
+
+    private TestAsyncSchedulerException NotCompletedOutsideVirtualTime() =>
+        new(
+            $"An operation started from the test body did not complete within " +
+            $"{BodyOperationTimeout.TotalSeconds:0.##}s. Nothing is scheduled in virtual time " +
+            "that could complete it, so it is waiting for something the scenario never set in " +
+            "motion.");
 
     // True when the pump ran for the operation, so that it is expected to be complete now; false
     // when there was nothing to do (already complete) or when the caller is pumped work itself,

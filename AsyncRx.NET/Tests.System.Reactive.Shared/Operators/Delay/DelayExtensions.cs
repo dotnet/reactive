@@ -9,8 +9,8 @@ namespace Tests.System.Reactive.Shared;
 /// <summary>The <c>Delay</c> overloads, as extension methods on <see cref="Seq{T}"/>.</summary>
 /// <remarks>
 /// These exist so that a shared scenario writes <c>xs.Delay(...)</c> exactly as the Rx.NET test
-/// it was migrated from does: the two time-based forms (relative and absolute, both taking the
-/// scheduler) and the two selector forms. Each method builds one node of the query description
+/// it was migrated from does: the two time-based forms (relative and absolute, with and without
+/// the scheduler) and the two selector forms. Each method builds one node of the query description
 /// (one node type per overload, in this folder), and each target turns that node into its own
 /// <c>Delay</c> call through the matching <see cref="ISeqVisitor"/> member in
 /// <c>ISeqVisitor.Delay.cs</c>. <c>Delay</c> is both an operator under test and plumbing other
@@ -36,6 +36,23 @@ public static class DelayExtensions
     public static Seq<T> Delay<T>(this Seq<T> source, TimeSpan dueTime, SchedulerRef scheduler) => new DelayTimeSeq<T>(source, dueTime, scheduler);
 
     /// <summary>
+    /// Describes <c>source.Delay(dueTime)</c> with a relative due time, on the target's default
+    /// scheduler.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+    /// <param name="source">Source sequence to delay values for.</param>
+    /// <param name="dueTime">
+    /// Relative time by which to shift the observable sequence. If this value is equal to
+    /// TimeSpan.Zero, the scheduler will dispatch observer callbacks as soon as possible.
+    /// </param>
+    /// <remarks>
+    /// Builds a <see cref="DelayTimeSeq{T}"/> with no scheduler, which each target materializes
+    /// through <see cref="ISeqVisitor.DelayTime{T}(DelayTimeSeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> Delay<T>(this Seq<T> source, TimeSpan dueTime) =>
+        new DelayTimeSeq<T>(source, dueTime, null);
+
+    /// <summary>
     /// Describes <c>source.Delay(dueTime, scheduler)</c> with an absolute due time.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
@@ -51,6 +68,24 @@ public static class DelayExtensions
     /// <see cref="ISeqVisitor.DelayAbsolute{T}(DelayAbsoluteSeq{T})"/>.
     /// </remarks>
     public static Seq<T> Delay<T>(this Seq<T> source, DateTimeOffset dueTime, SchedulerRef scheduler) => new DelayAbsoluteSeq<T>(source, dueTime, scheduler);
+
+    /// <summary>
+    /// Describes <c>source.Delay(dueTime)</c> with an absolute due time, on the target's default
+    /// scheduler.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+    /// <param name="source">Source sequence to delay values for.</param>
+    /// <param name="dueTime">
+    /// Absolute time used to shift the observable sequence; the relative time shift gets computed
+    /// upon subscription. If this value is less than or equal to DateTimeOffset.UtcNow, the
+    /// scheduler will dispatch observer callbacks as soon as possible.
+    /// </param>
+    /// <remarks>
+    /// Builds a <see cref="DelayAbsoluteSeq{T}"/> with no scheduler, which each target
+    /// materializes through <see cref="ISeqVisitor.DelayAbsolute{T}(DelayAbsoluteSeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> Delay<T>(this Seq<T> source, DateTimeOffset dueTime) =>
+        new DelayAbsoluteSeq<T>(source, dueTime, null);
 
     /// <summary>Describes <c>source.Delay(delayDurationSelector)</c>.</summary>
     /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>

@@ -66,7 +66,7 @@ public sealed partial class AsyncRxTarget : IRxTarget
         Realized.Of<TestSchedulerRef>(new TestAsyncScheduler(_shape));
 
     // No optimisation interfaces to hide on this target: the scheduler is its own unoptimized form.
-    public SchedulerRef DisableOptimizations(TestSchedulerRef scheduler) => scheduler;
+    public SchedulerRef DisableOptimizations(SchedulerRef scheduler) => scheduler;
 
     public SchedulerRef ImmediateScheduler { get; } =
         new(Realized.Of<SchedulerRef>(ImmediateAsyncScheduler.Instance), "Scheduler.Immediate");
@@ -74,6 +74,12 @@ public sealed partial class AsyncRxTarget : IRxTarget
     // The scheduler AsyncRx.NET's scheduler-less overloads use.
     public SchedulerRef DefaultScheduler { get; } =
         new(Realized.Of<SchedulerRef>(TaskPoolAsyncScheduler.Default), "Scheduler.Default");
+
+    // AsyncRx.NET has one pool scheduler, with no long-running path to distinguish it by.
+    public SchedulerRef ThreadPoolScheduler { get; } =
+        new(
+            Realized.Of<SchedulerRef>(TaskPoolAsyncScheduler.Default),
+            "ThreadPoolScheduler.Instance");
 
     public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) =>
         await Materialize(source).ToList();

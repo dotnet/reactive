@@ -4,12 +4,14 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>Describes <c>source.Delay(dueTime, scheduler)</c> with a relative due time.</summary>
+/// <summary>Describes <c>source.Delay(dueTime[, scheduler])</c> with a relative due time.</summary>
 /// <remarks>
-/// Built by <see cref="DelayExtensions.Delay{T}(Seq{T}, TimeSpan, SchedulerRef)"/>;
-/// materialized by each target through <see cref="ISeqVisitor.DelayTime{T}(DelayTimeSeq{T})"/>.
+/// Built by <see cref="DelayExtensions.Delay{T}(Seq{T}, TimeSpan, SchedulerRef)"/> or, with no
+/// scheduler, by <see cref="DelayExtensions.Delay{T}(Seq{T}, TimeSpan)"/>; materialized by each
+/// target through <see cref="ISeqVisitor.DelayTime{T}(DelayTimeSeq{T})"/>.
 /// </remarks>
-public sealed class DelayTimeSeq<T>(Seq<T> source, TimeSpan dueTime, SchedulerRef scheduler) : Seq<T>
+public sealed class DelayTimeSeq<T>(Seq<T> source, TimeSpan dueTime, SchedulerRef? scheduler)
+    : Seq<T>
 {
     /// <summary>Source sequence to delay values for.</summary>
     public Seq<T> Source => source;
@@ -21,12 +23,15 @@ public sealed class DelayTimeSeq<T>(Seq<T> source, TimeSpan dueTime, SchedulerRe
     /// </remarks>
     public TimeSpan DueTime => dueTime;
 
-    /// <summary>Scheduler to run the delay timers on.</summary>
-    public SchedulerRef Scheduler => scheduler;
+    /// <summary>Scheduler to run the delay timers on, or null for the target's default.</summary>
+    public SchedulerRef? Scheduler => scheduler;
 
     /// <inheritdoc/>
     protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.DelayTime(this);
 
     /// <inheritdoc/>
-    public override string ToString() => $"{source}.Delay({dueTime.Ticks} ticks, {scheduler})";
+    public override string ToString() =>
+        scheduler is null
+            ? $"{source}.Delay({dueTime.Ticks} ticks)"
+            : $"{source}.Delay({dueTime.Ticks} ticks, {scheduler})";
 }

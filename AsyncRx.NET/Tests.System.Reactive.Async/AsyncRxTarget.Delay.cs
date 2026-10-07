@@ -12,10 +12,18 @@ namespace Tests.System.Reactive.Async;
 public sealed partial class AsyncRxTarget
 {
     Realized<Seq<T>> ISeqVisitor.DelayTime<T>(DelayTimeSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(DelayTimeImpl<T>, seq.Source, seq.DueTime, Unwrap(seq.Scheduler));
+        seq.Scheduler is null
+            ? _bridge.Run<Seq<T>>(DelayTimeDefaultImpl<T>, seq.Source, seq.DueTime)
+            : _bridge.Run<Seq<T>>(DelayTimeImpl<T>, seq.Source, seq.DueTime, Unwrap(seq.Scheduler));
 
     Realized<Seq<T>> ISeqVisitor.DelayAbsolute<T>(DelayAbsoluteSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(DelayAbsoluteImpl<T>, seq.Source, seq.DueTime, Unwrap(seq.Scheduler));
+        seq.Scheduler is null
+            ? _bridge.Run<Seq<T>>(DelayAbsoluteDefaultImpl<T>, seq.Source, seq.DueTime)
+            : _bridge.Run<Seq<T>>(
+                DelayAbsoluteImpl<T>,
+                seq.Source,
+                seq.DueTime,
+                Unwrap(seq.Scheduler));
 
     Realized<Seq<T>> ISeqVisitor.DelaySelector<T, TDelay>(DelaySelectorSeq<T, TDelay> seq) =>
         _bridge.Run<Seq<T>>(DelaySelectorImpl<T, TDelay>, seq.Source, seq.DelayDurationSelector);
@@ -38,6 +46,16 @@ public sealed partial class AsyncRxTarget
         DateTimeOffset dueTime,
         IAsyncScheduler scheduler) =>
         source.Delay(dueTime, scheduler);
+
+    private static IAsyncObservable<T> DelayTimeDefaultImpl<T>(
+        IAsyncObservable<T> source,
+        TimeSpan dueTime) =>
+        source.Delay(dueTime);
+
+    private static IAsyncObservable<T> DelayAbsoluteDefaultImpl<T>(
+        IAsyncObservable<T> source,
+        DateTimeOffset dueTime) =>
+        source.Delay(dueTime);
 
     private static IAsyncObservable<T> DelaySelectorImpl<T, TDelay>(
         IAsyncObservable<T> source,

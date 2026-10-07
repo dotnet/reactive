@@ -8,19 +8,21 @@ public partial interface ISeqVisitor
 {
     /// <summary>
     /// Materializes a <see cref="DelayTimeSeq{T}"/> as the target's own
-    /// <c>Delay(dueTime, scheduler)</c> (relative).
+    /// <c>Delay(dueTime[, scheduler])</c> (relative).
     /// </summary>
     /// <remarks>
-    /// Built by <see cref="DelayExtensions.Delay{T}(Seq{T}, TimeSpan, SchedulerRef)"/>.
+    /// Built by <see cref="DelayExtensions.Delay{T}(Seq{T}, TimeSpan, SchedulerRef)"/> or
+    /// <see cref="DelayExtensions.Delay{T}(Seq{T}, TimeSpan)"/>.
     /// </remarks>
     Realized<Seq<T>> DelayTime<T>(DelayTimeSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="DelayAbsoluteSeq{T}"/> as the target's own
-    /// <c>Delay(dueTime, scheduler)</c> (absolute).
+    /// <c>Delay(dueTime[, scheduler])</c> (absolute).
     /// </summary>
     /// <remarks>
-    /// Built by <see cref="DelayExtensions.Delay{T}(Seq{T}, DateTimeOffset, SchedulerRef)"/>.
+    /// Built by <see cref="DelayExtensions.Delay{T}(Seq{T}, DateTimeOffset, SchedulerRef)"/> or
+    /// <see cref="DelayExtensions.Delay{T}(Seq{T}, DateTimeOffset)"/>.
     /// </remarks>
     Realized<Seq<T>> DelayAbsolute<T>(DelayAbsoluteSeq<T> seq);
 

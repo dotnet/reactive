@@ -44,6 +44,22 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
     /// </remarks>
     protected SchedulerRef DefaultScheduler => Target.DefaultScheduler;
 
+    /// <summary>The target's thread pool scheduler, for real-time scenarios.</summary>
+    /// <remarks>
+    /// A scenario names this where the Rx.NET test writes <c>ThreadPoolScheduler.Instance</c>.
+    /// </remarks>
+    protected SchedulerRef ThreadPoolScheduler => Target.ThreadPoolScheduler;
+
+    /// <summary>A scheduler with its optional capabilities hidden.</summary>
+    /// <param name="scheduler">The scheduler.</param>
+    /// <remarks>
+    /// A scenario calls this where the Rx.NET test writes <c>scheduler.DisableOptimizations()</c>
+    /// on a scheduler other than the test scheduler, which has the method itself. On a target
+    /// without the concept, the scheduler itself.
+    /// </remarks>
+    protected SchedulerRef DisableOptimizations(SchedulerRef scheduler) =>
+        Target.DisableOptimizations(scheduler);
+
     /// <summary>Creates <see cref="Scheduler"/> before each test.</summary>
     /// <remarks>Called by MSTest.</remarks>
     [TestInitialize]
