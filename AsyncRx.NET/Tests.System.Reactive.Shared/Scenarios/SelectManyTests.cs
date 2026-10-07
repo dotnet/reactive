@@ -11,11 +11,17 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// <summary>Shared <c>SelectMany</c> scenarios, from Rx.NET's <c>SelectManyTest.cs</c>.</summary>
 /// <remarks>
 /// <para>
-/// The observable-selector families (<c>SelectMany_Then_*</c>, the plain and <c>WithIndex</c>
-/// selector tests, and both <c>QueryOperator</c> families), the three-selector <c>Triple</c>
-/// families, and the <c>Enumerable</c> families: 104 of the file's 181 tests. The task-returning
-/// families remain, overloads AsyncRx.NET does not yet have; the nine <c>*_ArgumentChecking</c>
-/// tests are the code-generated stratum. The <c>Enumerable</c> tests drive the shared
+/// Every behavioural test from that file, 170 of its 181 (the eleven
+/// <c>*_ArgumentChecking</c> tests are the code-generated stratum): the observable-selector
+/// families (<c>SelectMany_Then_*</c>, the plain and <c>WithIndex</c> selector tests, and both
+/// <c>QueryOperator</c> families), the three-selector <c>Triple</c> families, the
+/// <c>Enumerable</c> families, and the <c>Task</c> families. The <c>Task</c> tests are real-time:
+/// they drive tasks from the test body through <c>TaskCompletionSource</c>, sort results whose
+/// completion order is not fixed, and are <c>async Task</c> methods that await a
+/// <c>TaskCompletionSource</c> where the original blocks on a <c>ManualResetEvent</c>. Their
+/// two-handler <c>Subscribe(onNext, onCompleted)</c> becomes the three-handler raw surface
+/// with an error handler that fails the awaited completion. The <c>Enumerable</c> tests drive the
+/// shared
 /// <see cref="MockEnumerable{T}"/> and <see cref="RogueEnumerable{T}"/>, and two throwing
 /// enumerables declared below, as the originals are private to Rx.NET's test class. The
 /// <c>Triple</c> tests build their inners from scheduled creation operators
@@ -5049,5 +5055,1997 @@ public abstract class SelectManyTests : SharedReactiveTest
         xs.Subscriptions.AssertEqual(
             Subscribe(200, 210)
         );
+    }
+
+    [TestMethod]
+    public async Task SelectMany_Task1()
+    {
+        var res = await ToListAsync(
+            Seq.Range(0, 10).SelectMany(x => Task.Factory.StartNew(() => x + 1)));
+        Assert.IsTrue(
+            Enumerable.Range(0, 10)
+                .SelectMany(x => new[] { x + 1 })
+                .SequenceEqual(res.OrderBy(x => x)));
+    }
+
+    [TestMethod]
+    public async Task SelectMany_Task2()
+    {
+        var res = await ToListAsync(
+            Seq.Range(0, 10).SelectMany((x, ct) => Task.Factory.StartNew(() => x + 1, ct)));
+        Assert.IsTrue(
+            Enumerable.Range(0, 10)
+                .SelectMany(x => new[] { x + 1 })
+                .SequenceEqual(res.OrderBy(x => x)));
+    }
+
+    [TestMethod]
+    public async Task SelectMany_Task_TaskThrows()
+    {
+        var ex = new Exception();
+
+        var res = Seq.Range(0, 10).SelectMany(x => Task.Factory.StartNew(() =>
+        {
+            if (x > 5)
+            {
+                throw ex;
+            }
+
+            return x + 1;
+        }));
+
+        var thrown = await Assert.ThrowsExactlyAsync<Exception>(async () => await ToListAsync(res));
+        Assert.AreSame(ex, thrown);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_Task_SelectorThrows()
+    {
+        var ex = new Exception();
+
+        var res = Seq.Range(0, 10).SelectMany(x =>
+        {
+            if (x > 5)
+            {
+                throw ex;
+            }
+
+            return Task.Factory.StartNew(() => x + 1);
+        });
+
+        var thrown = await Assert.ThrowsExactlyAsync<Exception>(async () => await ToListAsync(res));
+        Assert.AreSame(ex, thrown);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_Task_ResultSelector1()
+    {
+        var res = await ToListAsync(
+            Seq.Range(0, 10).SelectMany(x => Task.Factory.StartNew(() => x + 1), (x, y) => x + y));
+        Assert.IsTrue(
+            Enumerable.Range(0, 10)
+                .SelectMany(x => new[] { 2 * x + 1 })
+                .SequenceEqual(res.OrderBy(x => x)));
+    }
+
+    [TestMethod]
+    public async Task SelectMany_Task_ResultSelector2()
+    {
+        var res = await ToListAsync(
+            Seq.Range(0, 10).SelectMany(
+                (x, ct) => Task.Factory.StartNew(() => x + 1, ct),
+                (x, y) => x + y));
+        Assert.IsTrue(
+            Enumerable.Range(0, 10)
+                .SelectMany(x => new[] { 2 * x + 1 })
+                .SequenceEqual(res.OrderBy(x => x)));
+    }
+
+    [TestMethod]
+    public async Task SelectMany_Task_ResultSelectorThrows()
+    {
+        var ex = new Exception();
+
+        var res = Seq.Range(0, 10).SelectMany(x => Task.Factory.StartNew(() => x + 1), (x, y) =>
+        {
+            if (x > 5)
+            {
+                throw ex;
+            }
+
+            return x + y;
+        });
+
+        var thrown = await Assert.ThrowsExactlyAsync<Exception>(async () => await ToListAsync(res));
+        Assert.AreSame(ex, thrown);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_Simple_RanToCompletion_Async()
+    {
+        var tcss = new TaskCompletionSource<int>[2];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+
+        var res = Seq.Range(0, 2).SelectMany(x => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[0].SetResult(42);
+        tcss[1].SetResult(43);
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42, 43]);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_Simple_RanToCompletion_Sync()
+    {
+        var tcss = new TaskCompletionSource<int>[2];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+
+        tcss[0].SetResult(42);
+        tcss[1].SetResult(43);
+
+        var res = Seq.Range(0, 2).SelectMany(x => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42, 43]);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_Simple_Faulted_Async()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = Seq.Range(0, 3).SelectMany(x => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        var ex = new Exception();
+        tcss[1].SetException(ex);
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.AreSame(ex, err);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_Simple_Faulted_Sync()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var ex = new Exception();
+        tcss[1].SetException(ex);
+
+        var res = Seq.Range(0, 3).SelectMany(x => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.AreSame(ex, err);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_Simple_Canceled_Async()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = Seq.Range(0, 3).SelectMany(x => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        tcss[1].SetCanceled();
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.IsTrue(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_Simple_Canceled_Sync()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        tcss[1].SetCanceled();
+
+        var res = Seq.Range(0, 3).SelectMany(x => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.IsTrue(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_Simple_InnerCompleteBeforeOuter()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = xs.SelectMany(x => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+        await xs.OnNextAsync(2);
+
+        tcss[0].SetResult(43);
+        tcss[2].SetResult(44);
+
+        await xs.OnCompletedAsync();
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_Simple_OuterCompleteBeforeInner()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = xs.SelectMany(x => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+        await xs.OnNextAsync(2);
+        await xs.OnCompletedAsync();
+
+        tcss[0].SetResult(43);
+        tcss[2].SetResult(44);
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_Simple_Cancellation_NeverInvoked()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = xs.SelectMany((x, token) =>
+        {
+            var tcs = tcss[x];
+
+            token.Register(() => tcs.SetCanceled());
+
+            return tcs.Task;
+        });
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        var d = await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+        await xs.OnNextAsync(2);
+        await xs.OnCompletedAsync();
+
+        tcss[0].SetResult(43);
+        tcss[2].SetResult(44);
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_Simple_Cancellation_Invoked()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var n = 0;
+        var m = 0;
+
+        var res = xs.SelectMany((x, token) =>
+        {
+            var tcs = tcss[x];
+
+            token.Register(() => { n++; m += tcs.TrySetCanceled() ? 1 : 0; });
+
+            return tcs.Task;
+        });
+
+        var lst = new List<int>();
+
+        var done = false;
+        var d = await res.SubscribeAsync(Scheduler, lst.Add, ex_ => throw ex_, () => done = true);
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+
+        await d.DisposeAsync();
+
+        await xs.OnNextAsync(2);
+        await xs.OnCompletedAsync();
+
+        Assert.IsFalse(tcss[0].TrySetResult(43));
+        tcss[2].SetResult(44); // never observed because xs.OnNext(2) happened after dispose
+
+        lst.AssertEqual([42]);
+        Assert.IsFalse(done);
+        Assert.AreEqual(2, n);
+        Assert.AreEqual(1, m); // tcss[1] was already finished
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_Simple_Cancellation_AfterOuterError()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var n = 0;
+        var m = 0;
+
+        var res = xs.SelectMany((x, token) =>
+        {
+            var tcs = tcss[x];
+
+            token.Register(() => { n++; m += tcs.TrySetCanceled() ? 1 : 0; });
+
+            return tcs.Task;
+        });
+
+        var lst = new List<int>();
+
+        var done = false;
+        var err = default(Exception);
+        await res.SubscribeAsync(Scheduler, lst.Add, ex_ => err = ex_, () => done = true);
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+
+        var ex = new Exception();
+        await xs.OnErrorAsync(ex);
+
+        Assert.IsFalse(tcss[0].TrySetResult(43));
+        tcss[2].SetResult(44); // no-op
+
+        lst.AssertEqual([42]);
+        Assert.AreSame(ex, err);
+        Assert.IsFalse(done);
+        Assert.AreEqual(2, n);
+        Assert.AreEqual(1, m); // tcss[1] was already finished
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_Simple_Cancellation_AfterSelectorThrows()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[4];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+        tcss[3] = new TaskCompletionSource<int>();
+
+        var n = 0;
+        var m = 0;
+
+        var ex = new Exception();
+
+        var res = xs.SelectMany((x, token) =>
+        {
+            if (x == 2)
+            {
+                throw ex;
+            }
+
+            var tcs = tcss[x];
+
+            token.Register(() => { n++; m += tcs.TrySetCanceled() ? 1 : 0; });
+
+            return tcs.Task;
+        });
+
+        var lst = new List<int>();
+
+        var done = false;
+        var evt = new TaskCompletionSource();
+        var err = default(Exception);
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; evt.TrySetResult(); },
+            () => { done = true; evt.TrySetResult(); });
+
+        tcss[1].SetResult(43);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+
+        tcss[0].SetResult(42);
+
+        await xs.OnNextAsync(2); // causes error
+        await xs.OnCompletedAsync();
+
+        await evt.Task;
+
+        Assert.IsFalse(done);
+        Assert.AreSame(ex, err);
+        Assert.AreEqual(2, n);
+        Assert.AreEqual(0, m);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_WithResultSelector_RanToCompletion_Async()
+    {
+        var tcss = new TaskCompletionSource<int>[2];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+
+        var res = Seq.Range(0, 2).SelectMany(x => tcss[x].Task, (x, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[0].SetResult(42);
+        tcss[1].SetResult(43);
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42 + 0, 43 + 1]);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_WithResultSelector_RanToCompletion_Sync()
+    {
+        var tcss = new TaskCompletionSource<int>[2];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+
+        tcss[0].SetResult(42);
+        tcss[1].SetResult(43);
+
+        var res = Seq.Range(0, 2).SelectMany(x => tcss[x].Task, (x, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42 + 0, 43 + 1]);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_WithResultSelector_Faulted_Async()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = Seq.Range(0, 3).SelectMany(x => tcss[x].Task, (x, y) => x + y);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        var ex = new Exception();
+        tcss[1].SetException(ex);
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.AreSame(ex, err);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_WithResultSelector_Faulted_Sync()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var ex = new Exception();
+        tcss[1].SetException(ex);
+
+        var res = Seq.Range(0, 3).SelectMany(x => tcss[x].Task, (x, y) => x + y);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.AreSame(ex, err);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_WithResultSelector_Canceled_Async()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = Seq.Range(0, 3).SelectMany(x => tcss[x].Task, (x, y) => x + y);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        tcss[1].SetCanceled();
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.IsTrue(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_WithResultSelector_Canceled_Sync()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        tcss[1].SetCanceled();
+
+        var res = Seq.Range(0, 3).SelectMany(x => tcss[x].Task, (x, y) => x + y);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.IsTrue(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_WithResultSelector_InnerCompleteBeforeOuter()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = xs.SelectMany(x => tcss[x].Task, (x, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+        await xs.OnNextAsync(2);
+
+        tcss[0].SetResult(43);
+        tcss[2].SetResult(44);
+
+        await xs.OnCompletedAsync();
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_WithResultSelector_OuterCompleteBeforeInner()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = xs.SelectMany(x => tcss[x].Task, (x, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+        await xs.OnNextAsync(2);
+        await xs.OnCompletedAsync();
+
+        tcss[0].SetResult(43);
+        tcss[2].SetResult(44);
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_WithResultSelector_Cancellation_NeverInvoked()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = xs.SelectMany((x, token) =>
+        {
+            var tcs = tcss[x];
+
+            token.Register(() => tcs.SetCanceled());
+
+            return tcs.Task;
+        }, (x, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        var d = await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+        await xs.OnNextAsync(2);
+        await xs.OnCompletedAsync();
+
+        tcss[0].SetResult(43);
+        tcss[2].SetResult(44);
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_WithResultSelector_Cancellation_Invoked()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var n = 0;
+        var m = 0;
+
+        var res = xs.SelectMany((x, token) =>
+        {
+            var tcs = tcss[x];
+
+            token.Register(() => { n++; m += tcs.TrySetCanceled() ? 1 : 0; });
+
+            return tcs.Task;
+        }, (x, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = false;
+        var d = await res.SubscribeAsync(Scheduler, lst.Add, ex_ => throw ex_, () => done = true);
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+
+        await d.DisposeAsync();
+
+        await xs.OnNextAsync(2);
+        await xs.OnCompletedAsync();
+
+        Assert.IsFalse(tcss[0].TrySetResult(43));
+        tcss[2].SetResult(44); // never observed because xs.OnNext(2) happened after dispose
+
+        lst.AssertEqual([42 + 1]);
+        Assert.IsFalse(done);
+        Assert.AreEqual(2, n);
+        Assert.AreEqual(1, m); // tcss[1] was already finished
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_WithResultSelector_Cancellation_AfterOuterError()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var n = 0;
+        var m = 0;
+
+        var res = xs.SelectMany((x, token) =>
+        {
+            var tcs = tcss[x];
+
+            token.Register(() => { n++; m += tcs.TrySetCanceled() ? 1 : 0; });
+
+            return tcs.Task;
+        }, (x, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = false;
+        var err = default(Exception);
+        await res.SubscribeAsync(Scheduler, lst.Add, ex_ => err = ex_, () => done = true);
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+
+        var ex = new Exception();
+        await xs.OnErrorAsync(ex);
+
+        Assert.IsFalse(tcss[0].TrySetResult(43));
+        tcss[2].SetResult(44); // no-op
+
+        lst.AssertEqual([42 + 1]);
+        Assert.AreSame(ex, err);
+        Assert.IsFalse(done);
+        Assert.AreEqual(2, n);
+        Assert.AreEqual(1, m); // tcss[1] was already finished
+    }
+
+    [TestMethod]
+    public async Task SelectMany_TaskWithCompletionSource_WithResultSelector_Cancellation_AfterSelectorThrows()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[4];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+        tcss[3] = new TaskCompletionSource<int>();
+
+        var n = 0;
+        var m = 0;
+
+        var ex = new Exception();
+
+        var res = xs.SelectMany((x, token) =>
+        {
+            if (x == 2)
+            {
+                throw ex;
+            }
+
+            var tcs = tcss[x];
+
+            token.Register(() => { n++; m += tcs.TrySetCanceled() ? 1 : 0; });
+
+            return tcs.Task;
+        }, (x, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = false;
+        var evt = new TaskCompletionSource();
+        var err = default(Exception);
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; evt.TrySetResult(); },
+            () => { done = true; evt.TrySetResult(); });
+
+        tcss[1].SetResult(43);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+
+        tcss[0].SetResult(42);
+
+        await xs.OnNextAsync(2); // causes error
+        await xs.OnCompletedAsync();
+
+        await evt.Task;
+
+        Assert.IsFalse(done);
+        Assert.AreSame(ex, err);
+        Assert.AreEqual(2, n);
+        Assert.AreEqual(0, m);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_Task_Index()
+    {
+        var res = await ToListAsync(
+            Seq.Range(0, 10).SelectMany(
+                (int x, int i) => Task.Factory.StartNew(() => new { x, i })));
+        Assert.IsTrue(
+            Enumerable.Range(0, 10)
+                .SelectMany((x, i) => new[] { new { x, i } })
+                .SequenceEqual(res.OrderBy(v => v.i)));
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_Task_Cancellation_Index()
+    {
+        var res = await ToListAsync(
+            Seq.Range(0, 10).SelectMany(
+                (x, i, ctx) => Task.Factory.StartNew(() => new { x, i }, ctx)));
+        Assert.IsTrue(
+            Enumerable.Range(0, 10)
+                .SelectMany((x, i) => new[] { new { x, i } })
+                .SequenceEqual(res.OrderBy(v => v.i)));
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_Task_ResultSelector_Index()
+    {
+        var res = await ToListAsync(
+            Seq.Range(0, 10).SelectMany(
+                (int x, int i) => Task.Factory.StartNew(() => new { x, i }),
+                (x, i, r) => r));
+        Assert.IsTrue(
+            Enumerable.Range(0, 10)
+                .SelectMany((x, i) => new[] { new { x, i } })
+                .SequenceEqual(res.OrderBy(v => v.i)));
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_Task_ResultSelector_Cancellation_Index()
+    {
+        var res = await ToListAsync(
+            Seq.Range(0, 10).SelectMany(
+                (x, i, ctx) => Task.Factory.StartNew(() => new { x, i }, ctx),
+                (x, i, r) => r));
+        Assert.IsTrue(
+            Enumerable.Range(0, 10)
+                .SelectMany((x, i) => new[] { new { x, i } })
+                .SequenceEqual(res.OrderBy(v => v.i)));
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_Task1()
+    {
+        var res = await ToListAsync(
+            Seq.Range(0, 10).SelectMany((int x, int _) => Task.Factory.StartNew(() => x + 1)));
+        Assert.IsTrue(
+            Enumerable.Range(0, 10)
+                .SelectMany(x => new[] { x + 1 })
+                .SequenceEqual(res.OrderBy(x => x)));
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_Task2()
+    {
+        var res = await ToListAsync(
+            Seq.Range(0, 10).SelectMany((x, _, ct) => Task.Factory.StartNew(() => x + 1, ct)));
+        Assert.IsTrue(
+            Enumerable.Range(0, 10)
+                .SelectMany(x => new[] { x + 1 })
+                .SequenceEqual(res.OrderBy(x => x)));
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_Task_TaskThrows()
+    {
+        var ex = new Exception();
+
+        var res = Seq.Range(0, 10).SelectMany((int x, int _) => Task.Factory.StartNew(() =>
+        {
+            if (x > 5)
+            {
+                throw ex;
+            }
+
+            return x + 1;
+        }));
+
+        var thrown = await Assert.ThrowsExactlyAsync<Exception>(async () => await ToListAsync(res));
+        Assert.AreSame(ex, thrown);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_Task_SelectorThrows()
+    {
+        var ex = new Exception();
+
+        var res = Seq.Range(0, 10).SelectMany((int x, int _) =>
+        {
+            if (x > 5)
+            {
+                throw ex;
+            }
+
+            return Task.Factory.StartNew(() => x + 1);
+        });
+
+        var thrown = await Assert.ThrowsExactlyAsync<Exception>(async () => await ToListAsync(res));
+        Assert.AreSame(ex, thrown);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_Task_ResultSelector1()
+    {
+        var res = await ToListAsync(
+            Seq.Range(0, 10).SelectMany(
+                (x, _) => Task.Factory.StartNew(() => x + 1),
+                (x, _, y) => x + y));
+        Assert.IsTrue(
+            Enumerable.Range(0, 10)
+                .SelectMany(x => new[] { 2 * x + 1 })
+                .SequenceEqual(res.OrderBy(x => x)));
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_Task_ResultSelector2()
+    {
+        var res = await ToListAsync(
+            Seq.Range(0, 10).SelectMany(
+                (x, _, ct) => Task.Factory.StartNew(() => x + 1, ct),
+                (x, _, y) => x + y));
+        Assert.IsTrue(
+            Enumerable.Range(0, 10)
+                .SelectMany(x => new[] { 2 * x + 1 })
+                .SequenceEqual(res.OrderBy(x => x)));
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_Task_ResultSelectorThrows()
+    {
+        var ex = new Exception();
+
+        var res = Seq.Range(0, 10).SelectMany(
+            (x, _) => Task.Factory.StartNew(() => x + 1),
+            (x, _, y) =>
+            {
+                if (x > 5)
+                {
+                    throw ex;
+                }
+
+                return x + y;
+            });
+
+        var thrown = await Assert.ThrowsExactlyAsync<Exception>(async () => await ToListAsync(res));
+        Assert.AreSame(ex, thrown);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_Simple_RanToCompletion_Async()
+    {
+        var tcss = new TaskCompletionSource<int>[2];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+
+        var res = Seq.Range(0, 2).SelectMany((int x, int _) => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[0].SetResult(42);
+        tcss[1].SetResult(43);
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42, 43]);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_Simple_RanToCompletion_Sync()
+    {
+        var tcss = new TaskCompletionSource<int>[2];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+
+        tcss[0].SetResult(42);
+        tcss[1].SetResult(43);
+
+        var res = Seq.Range(0, 2).SelectMany((int x, int _) => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42, 43]);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_Simple_Faulted_Async()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = Seq.Range(0, 3).SelectMany((int x, int _) => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        var ex = new Exception();
+        tcss[1].SetException(ex);
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.AreSame(ex, err);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_Simple_Faulted_Sync()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var ex = new Exception();
+        tcss[1].SetException(ex);
+
+        var res = Seq.Range(0, 3).SelectMany((int x, int _) => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.AreSame(ex, err);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_Simple_Canceled_Async()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = Seq.Range(0, 3).SelectMany((int x, int _) => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        tcss[1].SetCanceled();
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.IsTrue(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_Simple_Canceled_Sync()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        tcss[1].SetCanceled();
+
+        var res = Seq.Range(0, 3).SelectMany((int x, int _) => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.IsTrue(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_Simple_InnerCompleteBeforeOuter()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = xs.SelectMany((int x, int _) => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+        await xs.OnNextAsync(2);
+
+        tcss[0].SetResult(43);
+        tcss[2].SetResult(44);
+
+        await xs.OnCompletedAsync();
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_Simple_OuterCompleteBeforeInner()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = xs.SelectMany((int x, int _) => tcss[x].Task);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+        await xs.OnNextAsync(2);
+        await xs.OnCompletedAsync();
+
+        tcss[0].SetResult(43);
+        tcss[2].SetResult(44);
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_Simple_Cancellation_NeverInvoked()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = xs.SelectMany((x, _, token) =>
+        {
+            var tcs = tcss[x];
+
+            token.Register(() => tcs.SetCanceled());
+
+            return tcs.Task;
+        });
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        var d = await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+        await xs.OnNextAsync(2);
+        await xs.OnCompletedAsync();
+
+        tcss[0].SetResult(43);
+        tcss[2].SetResult(44);
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42, 43, 44]);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_Simple_Cancellation_Invoked()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var n = 0;
+        var m = 0;
+
+        var res = xs.SelectMany((x, _, token) =>
+        {
+            var tcs = tcss[x];
+
+            token.Register(() => { n++; m += tcs.TrySetCanceled() ? 1 : 0; });
+
+            return tcs.Task;
+        });
+
+        var lst = new List<int>();
+
+        var done = false;
+        var d = await res.SubscribeAsync(Scheduler, lst.Add, ex_ => throw ex_, () => done = true);
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+
+        await d.DisposeAsync();
+
+        await xs.OnNextAsync(2);
+        await xs.OnCompletedAsync();
+
+        Assert.IsFalse(tcss[0].TrySetResult(43));
+        tcss[2].SetResult(44); // never observed because xs.OnNext(2) happened after dispose
+
+        lst.AssertEqual([42]);
+        Assert.IsFalse(done);
+        Assert.AreEqual(2, n);
+        Assert.AreEqual(1, m); // tcss[1] was already finished
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_Simple_Cancellation_AfterOuterError()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var n = 0;
+        var m = 0;
+
+        var res = xs.SelectMany((x, _, token) =>
+        {
+            var tcs = tcss[x];
+
+            token.Register(() => { n++; m += tcs.TrySetCanceled() ? 1 : 0; });
+
+            return tcs.Task;
+        });
+
+        var lst = new List<int>();
+
+        var done = false;
+        var err = default(Exception);
+        await res.SubscribeAsync(Scheduler, lst.Add, ex_ => err = ex_, () => done = true);
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+
+        var ex = new Exception();
+        await xs.OnErrorAsync(ex);
+
+        Assert.IsFalse(tcss[0].TrySetResult(43));
+        tcss[2].SetResult(44); // no-op
+
+        lst.AssertEqual([42]);
+        Assert.AreSame(ex, err);
+        Assert.IsFalse(done);
+        Assert.AreEqual(2, n);
+        Assert.AreEqual(1, m); // tcss[1] was already finished
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_Simple_Cancellation_AfterSelectorThrows()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[4];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+        tcss[3] = new TaskCompletionSource<int>();
+
+        var n = 0;
+        var m = 0;
+
+        var ex = new Exception();
+
+        var res = xs.SelectMany((x, _, token) =>
+        {
+            if (x == 2)
+            {
+                throw ex;
+            }
+
+            var tcs = tcss[x];
+
+            token.Register(() => { n++; m += tcs.TrySetCanceled() ? 1 : 0; });
+
+            return tcs.Task;
+        });
+
+        var lst = new List<int>();
+
+        var done = false;
+        var evt = new TaskCompletionSource();
+        var err = default(Exception);
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; evt.TrySetResult(); },
+            () => { done = true; evt.TrySetResult(); });
+
+        tcss[1].SetResult(43);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+
+        tcss[0].SetResult(42);
+
+        await xs.OnNextAsync(2); // causes error
+        await xs.OnCompletedAsync();
+
+        await evt.Task;
+
+        Assert.IsFalse(done);
+        Assert.AreSame(ex, err);
+        Assert.AreEqual(2, n);
+        Assert.AreEqual(0, m);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_RanToCompletion_Async()
+    {
+        var tcss = new TaskCompletionSource<int>[2];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+
+        var res = Seq.Range(0, 2).SelectMany((x, _) => tcss[x].Task, (x, _, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[0].SetResult(42);
+        tcss[1].SetResult(43);
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42 + 0, 43 + 1]);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_RanToCompletion_Sync()
+    {
+        var tcss = new TaskCompletionSource<int>[2];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+
+        tcss[0].SetResult(42);
+        tcss[1].SetResult(43);
+
+        var res = Seq.Range(0, 2).SelectMany((x, _) => tcss[x].Task, (x, _, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42 + 0, 43 + 1]);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Faulted_Async()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = Seq.Range(0, 3).SelectMany((x, _) => tcss[x].Task, (x, _, y) => x + y);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        var ex = new Exception();
+        tcss[1].SetException(ex);
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.AreSame(ex, err);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Faulted_Sync()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var ex = new Exception();
+        tcss[1].SetException(ex);
+
+        var res = Seq.Range(0, 3).SelectMany((x, _) => tcss[x].Task, (x, _, y) => x + y);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.AreSame(ex, err);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Canceled_Async()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = Seq.Range(0, 3).SelectMany((x, _) => tcss[x].Task, (x, _, y) => x + y);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        tcss[1].SetCanceled();
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.IsTrue(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Canceled_Sync()
+    {
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        tcss[1].SetCanceled();
+
+        var res = Seq.Range(0, 3).SelectMany((x, _) => tcss[x].Task, (x, _, y) => x + y);
+
+        var lst = new List<int>();
+
+        var err = default(Exception);
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; done.TrySetResult(); },
+            () => done.TrySetResult());
+
+        await done.Task;
+
+        lst.AssertEqual([]);
+        Assert.IsTrue(err is TaskCanceledException tcException && tcException.Task == tcss[1].Task);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_InnerCompleteBeforeOuter()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = xs.SelectMany((x, _) => tcss[x].Task, (x, _, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+        await xs.OnNextAsync(2);
+
+        tcss[0].SetResult(43);
+        tcss[2].SetResult(44);
+
+        await xs.OnCompletedAsync();
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_OuterCompleteBeforeInner()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = xs.SelectMany((x, _) => tcss[x].Task, (x, _, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+        await xs.OnNextAsync(2);
+        await xs.OnCompletedAsync();
+
+        tcss[0].SetResult(43);
+        tcss[2].SetResult(44);
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Cancellation_NeverInvoked()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var res = xs.SelectMany((x, _, token) =>
+        {
+            var tcs = tcss[x];
+
+            token.Register(() => tcs.SetCanceled());
+
+            return tcs.Task;
+        }, (x, _, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = new TaskCompletionSource();
+        var d = await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => done.TrySetException(ex_),
+            () => done.TrySetResult());
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+        await xs.OnNextAsync(2);
+        await xs.OnCompletedAsync();
+
+        tcss[0].SetResult(43);
+        tcss[2].SetResult(44);
+
+        await done.Task;
+
+        lst.OrderBy(x => x).AssertEqual([42 + 1, 43 + 0, 44 + 2]);
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Cancellation_Invoked()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var n = 0;
+        var m = 0;
+
+        var res = xs.SelectMany((x, _, token) =>
+        {
+            var tcs = tcss[x];
+
+            token.Register(() => { n++; m += tcs.TrySetCanceled() ? 1 : 0; });
+
+            return tcs.Task;
+        }, (x, _, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = false;
+        var d = await res.SubscribeAsync(Scheduler, lst.Add, ex_ => throw ex_, () => done = true);
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+
+        await d.DisposeAsync();
+
+        await xs.OnNextAsync(2);
+        await xs.OnCompletedAsync();
+
+        Assert.IsFalse(tcss[0].TrySetResult(43));
+        tcss[2].SetResult(44); // never observed because xs.OnNext(2) happened after dispose
+
+        lst.AssertEqual([42 + 1]);
+        Assert.IsFalse(done);
+        Assert.AreEqual(2, n);
+        Assert.AreEqual(1, m); // tcss[1] was already finished
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Cancellation_AfterOuterError()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[3];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+
+        var n = 0;
+        var m = 0;
+
+        var res = xs.SelectMany((x, _, token) =>
+        {
+            var tcs = tcss[x];
+
+            token.Register(() => { n++; m += tcs.TrySetCanceled() ? 1 : 0; });
+
+            return tcs.Task;
+        }, (x, _, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = false;
+        var err = default(Exception);
+        await res.SubscribeAsync(Scheduler, lst.Add, ex_ => err = ex_, () => done = true);
+
+        tcss[1].SetResult(42);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+
+        var ex = new Exception();
+        await xs.OnErrorAsync(ex);
+
+        Assert.IsFalse(tcss[0].TrySetResult(43));
+        tcss[2].SetResult(44); // no-op
+
+        lst.AssertEqual([42 + 1]);
+        Assert.AreSame(ex, err);
+        Assert.IsFalse(done);
+        Assert.AreEqual(2, n);
+        Assert.AreEqual(1, m); // tcss[1] was already finished
+    }
+
+    [TestMethod]
+    public async Task SelectManyWithIndex_TaskWithCompletionSource_WithResultSelector_Cancellation_AfterSelectorThrows()
+    {
+        var xs = CreateSubject<int>();
+
+        var tcss = new TaskCompletionSource<int>[4];
+        tcss[0] = new TaskCompletionSource<int>();
+        tcss[1] = new TaskCompletionSource<int>();
+        tcss[2] = new TaskCompletionSource<int>();
+        tcss[3] = new TaskCompletionSource<int>();
+
+        var n = 0;
+        var m = 0;
+
+        var ex = new Exception();
+
+        var res = xs.SelectMany((x, _, token) =>
+        {
+            if (x == 2)
+            {
+                throw ex;
+            }
+
+            var tcs = tcss[x];
+
+            token.Register(() => { n++; m += tcs.TrySetCanceled() ? 1 : 0; });
+
+            return tcs.Task;
+        }, (x, _, y) => x + y);
+
+        var lst = new List<int>();
+
+        var done = false;
+        var evt = new TaskCompletionSource();
+        var err = default(Exception);
+        await res.SubscribeAsync(
+            Scheduler,
+            lst.Add,
+            ex_ => { err = ex_; evt.TrySetResult(); },
+            () => { done = true; evt.TrySetResult(); });
+
+        tcss[1].SetResult(43);
+
+        await xs.OnNextAsync(0);
+        await xs.OnNextAsync(1);
+
+        tcss[0].SetResult(42);
+
+        await xs.OnNextAsync(2); // causes error
+        await xs.OnCompletedAsync();
+
+        await evt.Task;
+
+        Assert.IsFalse(done);
+        Assert.AreSame(ex, err);
+        Assert.AreEqual(2, n);
+        Assert.AreEqual(0, m);
     }
 }

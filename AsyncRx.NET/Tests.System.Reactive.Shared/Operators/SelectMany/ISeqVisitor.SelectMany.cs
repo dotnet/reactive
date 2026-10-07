@@ -122,4 +122,90 @@ public partial interface ISeqVisitor
     /// </remarks>
     Realized<Seq<TOut>> SelectManyEnumerableResultIndexed<TIn, TCollection, TOut>(
         SelectManyEnumerableResultIndexedSeq<TIn, TCollection, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManyTaskSeq{TIn, TOut}"/> as the target's own
+    /// <c>source.SelectMany(selector)</c> over a task-returning selector.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Func{TIn, Task{TOut}}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyTask<TIn, TOut>(SelectManyTaskSeq<TIn, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManyTaskCancellableSeq{TIn, TOut}"/> as the target's own
+    /// <c>source.SelectMany(selector)</c> over a task-returning selector.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Func{TIn, CancellationToken, Task{TOut}}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyTaskCancellable<TIn, TOut>(
+        SelectManyTaskCancellableSeq<TIn, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManyTaskIndexedSeq{TIn, TOut}"/> as the target's own
+    /// <c>source.SelectMany(selector)</c> over a task-returning selector.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Func{TIn, int, Task{TOut}}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyTaskIndexed<TIn, TOut>(SelectManyTaskIndexedSeq<TIn, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManyTaskIndexedCancellableSeq{TIn, TOut}"/> as the target's own
+    /// <c>source.SelectMany(selector)</c> over a task-returning selector.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TOut}(Seq{TIn}, Func{TIn, int, CancellationToken, Task{TOut}}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyTaskIndexedCancellable<TIn, TOut>(
+        SelectManyTaskIndexedCancellableSeq<TIn, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManyTaskResultSeq{TIn, TTask, TOut}"/> as the target's own
+    /// <c>source.SelectMany(taskSelector, resultSelector)</c> over a task-returning selector.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TTask, TOut}(Seq{TIn}, Func{TIn, Task{TTask}}, Func{TIn, TTask, TOut}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyTaskResult<TIn, TTask, TOut>(
+        SelectManyTaskResultSeq<TIn, TTask, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManyTaskResultCancellableSeq{TIn, TTask, TOut}"/> as the target's own
+    /// <c>source.SelectMany(taskSelector, resultSelector)</c> over a task-returning selector.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TTask, TOut}(Seq{TIn}, Func{TIn, CancellationToken, Task{TTask}}, Func{TIn, TTask, TOut}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyTaskResultCancellable<TIn, TTask, TOut>(
+        SelectManyTaskResultCancellableSeq<TIn, TTask, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManyTaskResultIndexedSeq{TIn, TTask, TOut}"/> as the target's own
+    /// <c>source.SelectMany(taskSelector, resultSelector)</c> over a task-returning selector.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TTask, TOut}(Seq{TIn}, Func{TIn, int, Task{TTask}}, Func{TIn, int, TTask, TOut}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyTaskResultIndexed<TIn, TTask, TOut>(
+        SelectManyTaskResultIndexedSeq<TIn, TTask, TOut> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="SelectManyTaskResultIndexedCancellableSeq{TIn, TTask, TOut}"/> as the target's own
+    /// <c>source.SelectMany(taskSelector, resultSelector)</c> over a task-returning selector.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="SelectManyExtensions.SelectMany{TIn, TTask, TOut}(Seq{TIn}, Func{TIn, int, CancellationToken, Task{TTask}}, Func{TIn, int, TTask, TOut}, string)"/>.
+    /// </remarks>
+    Realized<Seq<TOut>> SelectManyTaskResultIndexedCancellable<TIn, TTask, TOut>(
+        SelectManyTaskResultIndexedCancellableSeq<TIn, TTask, TOut> seq);
 }

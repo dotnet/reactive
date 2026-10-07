@@ -227,6 +227,174 @@ namespace System.Reactive.Linq
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.SelectMany(observer, state.collectionSelector, state.resultSelector)));
         }
 
+        public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                selector,
+                static async (source, state, observer) =>
+                {
+                    var (sink, cancel) = AsyncObserver.SelectMany(observer, state);
+
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(subscription, cancel);
+                });
+        }
+
+        public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                selector,
+                static async (source, state, observer) =>
+                {
+                    var (sink, cancel) = AsyncObserver.SelectMany(observer, state);
+
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(subscription, cancel);
+                });
+        }
+
+        public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                selector,
+                static async (source, state, observer) =>
+                {
+                    var (sink, cancel) = AsyncObserver.SelectMany(observer, state);
+
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(subscription, cancel);
+                });
+        }
+
+        public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<TResult>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                selector,
+                static async (source, state, observer) =>
+                {
+                    var (sink, cancel) = AsyncObserver.SelectMany(observer, state);
+
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(subscription, cancel);
+                });
+        }
+
+        public static IAsyncObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (taskSelector == null)
+                throw new ArgumentNullException(nameof(taskSelector));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (taskSelector, resultSelector),
+                static async (source, state, observer) =>
+                {
+                    var (sink, cancel) = AsyncObserver.SelectMany(observer, state.taskSelector, state.resultSelector);
+
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(subscription, cancel);
+                });
+        }
+
+        public static IAsyncObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IAsyncObservable<TSource> source, Func<TSource, CancellationToken, ValueTask<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (taskSelector == null)
+                throw new ArgumentNullException(nameof(taskSelector));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (taskSelector, resultSelector),
+                static async (source, state, observer) =>
+                {
+                    var (sink, cancel) = AsyncObserver.SelectMany(observer, state.taskSelector, state.resultSelector);
+
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(subscription, cancel);
+                });
+        }
+
+        public static IAsyncObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, ValueTask<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (taskSelector == null)
+                throw new ArgumentNullException(nameof(taskSelector));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (taskSelector, resultSelector),
+                static async (source, state, observer) =>
+                {
+                    var (sink, cancel) = AsyncObserver.SelectMany(observer, state.taskSelector, state.resultSelector);
+
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(subscription, cancel);
+                });
+        }
+
+        public static IAsyncObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (taskSelector == null)
+                throw new ArgumentNullException(nameof(taskSelector));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            return CreateAsyncObservable<TResult>.From(
+                source,
+                (taskSelector, resultSelector),
+                static async (source, state, observer) =>
+                {
+                    var (sink, cancel) = AsyncObserver.SelectMany(observer, state.taskSelector, state.resultSelector);
+
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(subscription, cancel);
+                });
+        }
+
         public static IAsyncObservable<TResult> SelectMany<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, IAsyncObservable<TResult>> selector)
         {
             if (source == null)
@@ -911,6 +1079,265 @@ namespace System.Reactive.Linq
                 },
                 observer.OnErrorAsync,
                 observer.OnCompletedAsync
+            );
+        }
+
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, ValueTask<TResult>> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return SelectMany<TSource, TResult, TResult>(observer, (x, _) => selector(x), (x, y) => y);
+        }
+
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, CancellationToken, ValueTask<TResult>> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return SelectMany<TSource, TResult, TResult>(observer, selector, (x, y) => y);
+        }
+
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, ValueTask<TResult>> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            var index = -1;
+
+            return SelectMany<TSource, TResult, TResult>(observer, (x, _) => selector(x, checked(++index)), (x, y) => y);
+        }
+
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, CancellationToken, ValueTask<TResult>> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            var index = -1;
+
+            return SelectMany<TSource, TResult, TResult>(observer, (x, ct) => selector(x, checked(++index), ct), (x, y) => y);
+        }
+
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TTaskResult, TResult>(IAsyncObserver<TResult> observer, Func<TSource, ValueTask<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (taskSelector == null)
+                throw new ArgumentNullException(nameof(taskSelector));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            return SelectMany<TSource, TTaskResult, TResult>(observer, (x, _) => taskSelector(x), resultSelector);
+        }
+
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TTaskResult, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, ValueTask<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (taskSelector == null)
+                throw new ArgumentNullException(nameof(taskSelector));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            var index = -1;
+
+            return SelectMany<(TSource item, int i), TTaskResult, TResult>(
+                observer,
+                (t, _) => taskSelector(t.item, t.i),
+                (t, y) => resultSelector(t.item, t.i, y)) is var (sink, cancel)
+                ? (Select<TSource, (TSource item, int i)>(sink, x => (x, checked(++index))), cancel)
+                : throw new InvalidOperationException();
+        }
+
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TTaskResult, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, CancellationToken, ValueTask<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (taskSelector == null)
+                throw new ArgumentNullException(nameof(taskSelector));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            var index = -1;
+
+            return SelectMany<(TSource item, int i), TTaskResult, TResult>(
+                observer,
+                (t, ct) => taskSelector(t.item, t.i, ct),
+                (t, y) => resultSelector(t.item, t.i, y)) is var (sink, cancel)
+                ? (Select<TSource, (TSource item, int i)>(sink, x => (x, checked(++index))), cancel)
+                : throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Creates an observer that projects each element it receives to an asynchronous
+        /// operation and forwards the operation's result, through a result selector, to
+        /// <paramref name="observer"/>.
+        /// </summary>
+        /// <param name="observer">The observer to forward the results to.</param>
+        /// <param name="taskSelector">
+        /// A transform function to apply to each element; the token it receives is cancelled
+        /// when the subscription is disposed, which the returned disposable does.
+        /// </param>
+        /// <param name="resultSelector">
+        /// A transform function to apply to each operation's result.
+        /// </param>
+        /// <remarks>
+        /// As Rx.NET's task-based <c>SelectMany</c>, over <see cref="ValueTask{TResult}"/> as the
+        /// library's other asynchronous callbacks are: the result completes when the source has
+        /// completed and every operation has delivered; a faulted operation ends the result with
+        /// its single exception; a cancelled operation ends it with a
+        /// <see cref="TaskCanceledException"/>, unless the subscription itself was cancelled, in
+        /// which case the operation's completion is ignored. An operation already complete when
+        /// its element arrives is handled inline, with no task allocated; one still running is
+        /// observed by a continuation that runs where the operation completes, not through the
+        /// thread pool.
+        /// </remarks>
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) SelectMany<TSource, TTaskResult, TResult>(IAsyncObserver<TResult> observer, Func<TSource, CancellationToken, ValueTask<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (taskSelector == null)
+                throw new ArgumentNullException(nameof(taskSelector));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            var gate = new AsyncGate();
+
+            var cancel = new CancellationTokenSource();
+
+            var count = 1;
+
+            async ValueTask OnErrorAsync(Exception ex)
+            {
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                }
+            };
+
+            async ValueTask OnCompletedAsync()
+            {
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    if (--count == 0)
+                    {
+                        await observer.OnCompletedAsync().ConfigureAwait(false);
+                    }
+                }
+            };
+
+            async ValueTask OnResultAsync(TSource x, TTaskResult value)
+            {
+                var result = default(TResult);
+
+                try
+                {
+                    result = resultSelector(x, value);
+                }
+                catch (Exception ex)
+                {
+                    await OnErrorAsync(ex).ConfigureAwait(false);
+                    return;
+                }
+
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    await observer.OnNextAsync(result).ConfigureAwait(false);
+                }
+
+                await OnCompletedAsync().ConfigureAwait(false);
+            }
+
+            async Task OnTaskCompletedAsync(TSource x, Task<TTaskResult> task)
+            {
+                try
+                {
+                    await task.ConfigureAwait(false);
+                }
+                catch
+                {
+                    // Handled below, by status.
+                }
+
+                switch (task.Status)
+                {
+                    case TaskStatus.RanToCompletion:
+                        await OnResultAsync(x, task.Result).ConfigureAwait(false);
+                        break;
+                    case TaskStatus.Faulted:
+                        {
+                            var exceptions = task.Exception.InnerExceptions;
+
+                            await OnErrorAsync(exceptions.Count == 1 ? exceptions[0] : task.Exception).ConfigureAwait(false);
+                            break;
+                        }
+                    case TaskStatus.Canceled:
+                        if (!cancel.IsCancellationRequested)
+                        {
+                            await OnErrorAsync(new TaskCanceledException(task)).ConfigureAwait(false);
+                        }
+
+                        break;
+                }
+            }
+
+            return
+            (
+                Create<TSource>(
+                    async x =>
+                    {
+                        var operation = default(ValueTask<TTaskResult>);
+
+                        try
+                        {
+                            using (await gate.LockAsync().ConfigureAwait(false))
+                            {
+                                count++;
+                            }
+
+                            operation = taskSelector(x, cancel.Token);
+                        }
+                        catch (Exception ex)
+                        {
+                            await OnErrorAsync(ex).ConfigureAwait(false);
+                            return;
+                        }
+
+                        if (operation.IsCompletedSuccessfully)
+                        {
+                            // The almost-synchronous case: no task is allocated.
+                            await OnResultAsync(x, operation.Result).ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            var task = operation.AsTask();
+
+                            if (task.IsCompleted)
+                            {
+                                await OnTaskCompletedAsync(x, task).ConfigureAwait(false);
+                            }
+                            else
+                            {
+                                _ = OnTaskCompletedAsync(x, task);
+                            }
+                        }
+                    },
+                    OnErrorAsync,
+                    OnCompletedAsync
+                ),
+                AsyncDisposable.Create(() =>
+                {
+                    cancel.Cancel();
+                    return default;
+                })
             );
         }
     }

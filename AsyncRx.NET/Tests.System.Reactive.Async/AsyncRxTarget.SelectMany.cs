@@ -145,4 +145,117 @@ public sealed partial class AsyncRxTarget
         Func<TIn, int, IEnumerable<TCollection>> collectionSelector,
         Func<TIn, int, TCollection, int, TOut> resultSelector) =>
         source.SelectMany(collectionSelector, resultSelector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTask<TIn, TOut>(SelectManyTaskSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskImpl<TIn, TOut>,
+            seq.Source,
+            seq.Selector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskCancellable<TIn, TOut>(
+        SelectManyTaskCancellableSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskCancellableImpl<TIn, TOut>,
+            seq.Source,
+            seq.Selector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskIndexed<TIn, TOut>(
+        SelectManyTaskIndexedSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskIndexedImpl<TIn, TOut>,
+            seq.Source,
+            seq.Selector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskIndexedCancellable<TIn, TOut>(
+        SelectManyTaskIndexedCancellableSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskIndexedCancellableImpl<TIn, TOut>,
+            seq.Source,
+            seq.Selector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskResult<TIn, TTask, TOut>(
+        SelectManyTaskResultSeq<TIn, TTask, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskResultImpl<TIn, TTask, TOut>,
+            seq.Source,
+            seq.TaskSelector,
+            seq.ResultSelector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskResultCancellable<TIn, TTask, TOut>(
+        SelectManyTaskResultCancellableSeq<TIn, TTask, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskResultCancellableImpl<TIn, TTask, TOut>,
+            seq.Source,
+            seq.TaskSelector,
+            seq.ResultSelector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskResultIndexed<TIn, TTask, TOut>(
+        SelectManyTaskResultIndexedSeq<TIn, TTask, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskResultIndexedImpl<TIn, TTask, TOut>,
+            seq.Source,
+            seq.TaskSelector,
+            seq.ResultSelector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskResultIndexedCancellable<TIn, TTask, TOut>(
+        SelectManyTaskResultIndexedCancellableSeq<TIn, TTask, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskResultIndexedCancellableImpl<TIn, TTask, TOut>,
+            seq.Source,
+            seq.TaskSelector,
+            seq.ResultSelector);
+
+    // The task-returning forms. The shared text keeps Rx.NET's Task<T>-returning selectors;
+    // AsyncRx.NET takes ValueTask<T>, as its other asynchronous callbacks do, so these wrap the
+    // selector's task. The wrapper exposes the same result, fault and cancellation, and AsTask()
+    // on it returns the original task, so a scenario that compares tasks by identity still holds.
+    private static IAsyncObservable<TOut> SelectManyTaskImpl<TIn, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, Task<TOut>> selector) =>
+        source.SelectMany(x => new ValueTask<TOut>(selector(x)));
+
+    private static IAsyncObservable<TOut> SelectManyTaskCancellableImpl<TIn, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, CancellationToken, Task<TOut>> selector) =>
+        source.SelectMany((x, ct) => new ValueTask<TOut>(selector(x, ct)));
+
+    private static IAsyncObservable<TOut> SelectManyTaskIndexedImpl<TIn, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, int, Task<TOut>> selector) =>
+        source.SelectMany((x, i) => new ValueTask<TOut>(selector(x, i)));
+
+    private static IAsyncObservable<TOut> SelectManyTaskIndexedCancellableImpl<TIn, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, int, CancellationToken, Task<TOut>> selector) =>
+        source.SelectMany((x, i, ct) => new ValueTask<TOut>(selector(x, i, ct)));
+
+    private static IAsyncObservable<TOut> SelectManyTaskResultImpl<TIn, TTask, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, Task<TTask>> taskSelector,
+        Func<TIn, TTask, TOut> resultSelector) =>
+        source.SelectMany(x => new ValueTask<TTask>(taskSelector(x)), resultSelector);
+
+    private static IAsyncObservable<TOut> SelectManyTaskResultCancellableImpl<TIn, TTask, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, CancellationToken, Task<TTask>> taskSelector,
+        Func<TIn, TTask, TOut> resultSelector) =>
+        source.SelectMany(
+            (x, ct) => new ValueTask<TTask>(taskSelector(x, ct)),
+            resultSelector);
+
+    private static IAsyncObservable<TOut> SelectManyTaskResultIndexedImpl<TIn, TTask, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, int, Task<TTask>> taskSelector,
+        Func<TIn, int, TTask, TOut> resultSelector) =>
+        source.SelectMany(
+            (x, i) => new ValueTask<TTask>(taskSelector(x, i)),
+            resultSelector);
+
+    private static IAsyncObservable<TOut> SelectManyTaskResultIndexedCancellableImpl<TIn, TTask, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, int, CancellationToken, Task<TTask>> taskSelector,
+        Func<TIn, int, TTask, TOut> resultSelector) =>
+        source.SelectMany(
+            (x, i, ct) => new ValueTask<TTask>(taskSelector(x, i, ct)),
+            resultSelector);
 }

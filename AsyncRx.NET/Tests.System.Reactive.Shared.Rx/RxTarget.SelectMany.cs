@@ -142,4 +142,107 @@ public sealed partial class RxTarget
         Func<TIn, int, IEnumerable<TCollection>> collectionSelector,
         Func<TIn, int, TCollection, int, TOut> resultSelector) =>
         source.SelectMany(collectionSelector, resultSelector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTask<TIn, TOut>(SelectManyTaskSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskImpl<TIn, TOut>,
+            seq.Source,
+            seq.Selector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskCancellable<TIn, TOut>(
+        SelectManyTaskCancellableSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskCancellableImpl<TIn, TOut>,
+            seq.Source,
+            seq.Selector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskIndexed<TIn, TOut>(
+        SelectManyTaskIndexedSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskIndexedImpl<TIn, TOut>,
+            seq.Source,
+            seq.Selector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskIndexedCancellable<TIn, TOut>(
+        SelectManyTaskIndexedCancellableSeq<TIn, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskIndexedCancellableImpl<TIn, TOut>,
+            seq.Source,
+            seq.Selector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskResult<TIn, TTask, TOut>(
+        SelectManyTaskResultSeq<TIn, TTask, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskResultImpl<TIn, TTask, TOut>,
+            seq.Source,
+            seq.TaskSelector,
+            seq.ResultSelector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskResultCancellable<TIn, TTask, TOut>(
+        SelectManyTaskResultCancellableSeq<TIn, TTask, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskResultCancellableImpl<TIn, TTask, TOut>,
+            seq.Source,
+            seq.TaskSelector,
+            seq.ResultSelector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskResultIndexed<TIn, TTask, TOut>(
+        SelectManyTaskResultIndexedSeq<TIn, TTask, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskResultIndexedImpl<TIn, TTask, TOut>,
+            seq.Source,
+            seq.TaskSelector,
+            seq.ResultSelector);
+
+    Realized<Seq<TOut>> ISeqVisitor.SelectManyTaskResultIndexedCancellable<TIn, TTask, TOut>(
+        SelectManyTaskResultIndexedCancellableSeq<TIn, TTask, TOut> seq) =>
+        _bridge.Run<Seq<TOut>>(
+            SelectManyTaskResultIndexedCancellableImpl<TIn, TTask, TOut>,
+            seq.Source,
+            seq.TaskSelector,
+            seq.ResultSelector);
+
+    private static IObservable<TOut> SelectManyTaskImpl<TIn, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, Task<TOut>> selector) =>
+        source.SelectMany(selector);
+
+    private static IObservable<TOut> SelectManyTaskCancellableImpl<TIn, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, CancellationToken, Task<TOut>> selector) =>
+        source.SelectMany(selector);
+
+    private static IObservable<TOut> SelectManyTaskIndexedImpl<TIn, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, int, Task<TOut>> selector) =>
+        source.SelectMany(selector);
+
+    private static IObservable<TOut> SelectManyTaskIndexedCancellableImpl<TIn, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, int, CancellationToken, Task<TOut>> selector) =>
+        source.SelectMany(selector);
+
+    private static IObservable<TOut> SelectManyTaskResultImpl<TIn, TTask, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, Task<TTask>> taskSelector,
+        Func<TIn, TTask, TOut> resultSelector) =>
+        source.SelectMany(taskSelector, resultSelector);
+
+    private static IObservable<TOut> SelectManyTaskResultCancellableImpl<TIn, TTask, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, CancellationToken, Task<TTask>> taskSelector,
+        Func<TIn, TTask, TOut> resultSelector) =>
+        source.SelectMany(taskSelector, resultSelector);
+
+    private static IObservable<TOut> SelectManyTaskResultIndexedImpl<TIn, TTask, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, int, Task<TTask>> taskSelector,
+        Func<TIn, int, TTask, TOut> resultSelector) =>
+        source.SelectMany(taskSelector, resultSelector);
+
+    private static IObservable<TOut> SelectManyTaskResultIndexedCancellableImpl<TIn, TTask, TOut>(
+        IObservable<TIn> source,
+        Func<TIn, int, CancellationToken, Task<TTask>> taskSelector,
+        Func<TIn, int, TTask, TOut> resultSelector) =>
+        source.SelectMany(taskSelector, resultSelector);
 }
