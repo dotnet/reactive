@@ -8,7 +8,8 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// <remarks>
 /// <para>
 /// Twelve of the file's 23 tests. The virtual-time tests run over the test scheduler and over a
-/// synchronization context that posts to it; <c>ObserveOn</c> delivers every notification through
+/// synchronization context that posts to it (<see cref="MyCtx"/>, shared with the
+/// <c>SubscribeOn</c> scenarios); <c>ObserveOn</c> delivers every notification through
 /// its scheduler, so where the original expects each one tick after the source's
 /// (<c>OnNext(231, 3)</c>), and the source released when the completion is delivered
 /// (<c>Subscribe(200, 531)</c>), the shared text writes <c>ScheduledAt</c>. The real-time tests
@@ -64,19 +65,6 @@ public abstract class ObserveOnTests : SharedReactiveTest
                 _faulted.TrySetResult();
             }
         }
-    }
-
-    /// <summary>A synchronization context that posts its callbacks to the test scheduler.</summary>
-    /// <remarks>
-    /// Rx.NET's <c>MyCtx</c>, which schedules each <c>Post</c> on the scheduler it was given.
-    /// Posting at the current clock is what Rx.NET's <c>TestScheduler</c> bumps by one tick and
-    /// the async pump runs at the same tick, so the scenario reads the delivery ticks through
-    /// <c>ScheduledAt</c>. A context is the same type on both targets, so one class serves both.
-    /// </remarks>
-    private sealed class MyCtx(TestSchedulerRef scheduler) : SynchronizationContext
-    {
-        public override void Post(SendOrPostCallback d, object? state) =>
-            scheduler.ScheduleAbsolute(scheduler.Clock, () => d(state));
     }
 
     [TestMethod]
