@@ -52,27 +52,28 @@ public sealed partial class AsyncRxTarget : IRxTarget
     }
 
     private static TestAsyncScheduler Unwrap(TestSchedulerRef scheduler) =>
-        (TestAsyncScheduler)scheduler.Native;
+        scheduler.Native.Get<TestAsyncScheduler>();
 
     private static IAsyncScheduler Unwrap(SchedulerRef scheduler) =>
-        (IAsyncScheduler)scheduler.Native;
+        scheduler.Native.Get<IAsyncScheduler>();
 
     private IAsyncObservable<T> Materialize<T>(Seq<T> seq) =>
         seq.Accept(this).Get<IAsyncObservable<T>>();
 
     // ---- Harness ----
 
-    public object CreateTestScheduler() => new TestAsyncScheduler(_shape);
+    public Realized<TestSchedulerRef> CreateTestScheduler() =>
+        Realized.Of<TestSchedulerRef>(new TestAsyncScheduler(_shape));
 
     // No optimisation interfaces to hide on this target: the scheduler is its own unoptimized form.
     public SchedulerRef DisableOptimizations(TestSchedulerRef scheduler) => scheduler;
 
     public SchedulerRef ImmediateScheduler { get; } =
-        new(ImmediateAsyncScheduler.Instance, "Scheduler.Immediate");
+        new(Realized.Of<SchedulerRef>(ImmediateAsyncScheduler.Instance), "Scheduler.Immediate");
 
     // The scheduler AsyncRx.NET's scheduler-less overloads use.
     public SchedulerRef DefaultScheduler { get; } =
-        new(TaskPoolAsyncScheduler.Default, "Scheduler.Default");
+        new(Realized.Of<SchedulerRef>(TaskPoolAsyncScheduler.Default), "Scheduler.Default");
 
     public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) =>
         await Materialize(source).ToList();
@@ -86,6 +87,9 @@ public sealed partial class AsyncRxTarget : IRxTarget
         Realized.Of<Seq<T>>(new AsyncRxSerialSingleNotificationConnectable<T>(state, this));
 
     public SubjectSeq<int> CreateMySubject(MySubject.State state) => Wrap(new AsyncRxMySubject(state));
+
+    public Realized<SchedulerDouble> CreateScheduler(SchedulerDouble scheduler) =>
+        Realized.Of<SchedulerDouble>(new AsyncRxSchedulerDouble(scheduler));
 
     public Realized<Seq<T>> CreateRefCountTestConnectableIgnoringConnect<T>(RefCountTests.SerialConnectableIgnoringConnect<T>.State state) =>
         Realized.Of<Seq<T>>(new AsyncRxSerialConnectableIgnoringConnect<T>(state, this));
@@ -125,7 +129,7 @@ public sealed partial class AsyncRxTarget : IRxTarget
             created,
             subscribed,
             disposed);
-        return new(this, observer, query);
+        return new(this, Realized.Of<TestableObserver<T>>(observer), query);
     }
 
     // The pump runs work due now within the current tick.
@@ -143,10 +147,10 @@ public sealed partial class AsyncRxTarget : IRxTarget
     }
 
     public TestableObserver<T> CreateObserver<T>(TestSchedulerRef scheduler) =>
-        new(this, Unwrap(scheduler).CreateObserver<T>(), "");
+        new(this, Realized.Of<TestableObserver<T>>(Unwrap(scheduler).CreateObserver<T>()), "");
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestableObserver<T> observer) =>
-        Materialize(source).SubscribeAsync((ITestableAsyncObserver<T>)observer.Native);
+        Materialize(source).SubscribeAsync(observer.Native.Get<ITestableAsyncObserver<T>>());
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Seq<T> source, Func<T, ValueTask> onNext)
     {
@@ -196,13 +200,13 @@ public sealed partial class AsyncRxTarget : IRxTarget
     }
 
     public ValueTask OnNextAsync<T>(TestableObserver<T> observer, T value) =>
-        ((ITestableAsyncObserver<T>)observer.Native).OnNextAsync(value);
+        observer.Native.Get<ITestableAsyncObserver<T>>().OnNextAsync(value);
 
     public ValueTask OnErrorAsync<T>(TestableObserver<T> observer, Exception error) =>
-        ((ITestableAsyncObserver<T>)observer.Native).OnErrorAsync(error);
+        observer.Native.Get<ITestableAsyncObserver<T>>().OnErrorAsync(error);
 
     public ValueTask OnCompletedAsync<T>(TestableObserver<T> observer) =>
-        ((ITestableAsyncObserver<T>)observer.Native).OnCompletedAsync();
+        observer.Native.Get<ITestableAsyncObserver<T>>().OnCompletedAsync();
 
     public void Run(TestSchedulerRef scheduler) => Unwrap(scheduler).Start();
 
@@ -232,7 +236,7 @@ public sealed partial class AsyncRxTarget : IRxTarget
     // Compact form: delivery started and completed at the tick; all four subscription timestamps.
 
     public void AssertMessages<T>(TestableObserver<T> observer, Recorded<Notification<T>>[] expected) =>
-        ((ITestableAsyncObserver<T>)observer.Native).Messages.AssertEqual(expected);
+        observer.Native.Get<ITestableAsyncObserver<T>>().Messages.AssertEqual(expected);
 
     public void AssertSubscriptions<T>(TestableSeq<T> source, Subscription[] expected) =>
         _bridge.Call<IReadOnlyList<AsyncSubscription>>(SubscriptionsImpl<T>, source.Native).AssertEqual(expected);

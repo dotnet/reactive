@@ -182,13 +182,13 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
     /// Rx.NET), never an observable of <c>Seq&lt;int&gt;</c>. The real type is always
     /// <see cref="Real"/> of the type argument, and that is what <see cref="ToReal"/> expects when
     /// the object is passed to another <c>*Impl</c>, and what a target must ask for through
-    /// <see cref="Realized{TDescription}.Get{TS}"/>, for example when <c>Start</c> subscribes the
+    /// <see cref="Realized.Get{TS}"/>, for example when <c>Start</c> subscribes the
     /// observer.
     /// </para>
     /// </remarks>
     [StackTraceHidden]
     public Realized<TDescription> Run<TDescription>(Delegate impl, params object?[] args)
-        where TDescription : ISeq => Realized.Of<TDescription>(Call<object>(impl, args));
+        => Realized.Of<TDescription>(Call<object>(impl, args));
 
     /// <summary>Runs one of the target's methods and returns its result.</summary>
     /// <typeparam name="TResult">The type of the result.</typeparam>

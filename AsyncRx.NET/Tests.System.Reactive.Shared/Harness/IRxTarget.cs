@@ -32,7 +32,7 @@ public interface IRxTarget : ISeqVisitor
     /// <summary>
     /// The target's own virtual-time scheduler, for a <see cref="TestSchedulerRef"/> to carry.
     /// </summary>
-    object CreateTestScheduler();
+    Realized<TestSchedulerRef> CreateTestScheduler();
 
     /// <summary>
     /// The scheduler with its optional capabilities hidden (the sync
@@ -83,6 +83,20 @@ public interface IRxTarget : ISeqVisitor
     /// must behave as that type's documentation says, over this target's own subjects.
     /// </remarks>
     Realized<Seq<T>> CreateRefCountTestConnectable<T>(Scenarios.RefCountTests.SerialSingleNotificationConnectable<T>.State state);
+
+    /// <summary>Builds the target's scheduler over a <see cref="SchedulerDouble"/>.</summary>
+    /// <param name="scheduler">The double, which decides what happens to each unit of work.</param>
+    /// <returns>
+    /// An <c>IScheduler</c> on Rx.NET, an <c>IAsyncScheduler</c> on AsyncRx.NET, for the double
+    /// to carry as its <see cref="SchedulerRef.Native"/>.
+    /// </returns>
+    /// <remarks>
+    /// One adapter per target serves every scheduler double in the suite; the doubles
+    /// themselves are written once, in the shared project, as the originals are written once.
+    /// Called from the double's constructor, so the adapter must not call back into it until
+    /// work is scheduled.
+    /// </remarks>
+    Realized<SchedulerDouble> CreateScheduler(SchedulerDouble scheduler);
 
     /// <summary>Builds the subject behind the <see cref="Scenarios.MySubject"/> double.</summary>
     /// <param name="state">The double's state, which the object records into and reads.</param>

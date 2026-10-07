@@ -5,21 +5,28 @@
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>A scheduler argument in a description.</summary>
-/// <param name="native">The target's own scheduler.</param>
+/// <param name="native">The target's own scheduler, held as a realization.</param>
 /// <param name="description">How this scheduler prints in the query text.</param>
 /// <remarks>
-/// The target's own scheduler, carried as <see cref="object"/>. The test's
+/// The target's own scheduler, carried as a <see cref="Realized"/>. The test's
 /// <see cref="TestSchedulerRef"/> is one; the result of its <c>DisableOptimizations()</c> is
-/// another.
+/// another; a <see cref="SchedulerDouble"/> is one that supplies its own <see cref="Native"/>.
 /// </remarks>
-public class SchedulerRef(object native, string description)
+public class SchedulerRef(Realized native, string description)
 {
+    /// <summary>Creates a reference whose derived type supplies <see cref="Native"/>.</summary>
+    /// <param name="description">How this scheduler prints in the query text.</param>
+    protected SchedulerRef(string description)
+        : this(null!, description)
+    {
+    }
+
     /// <summary>
     /// The target's own scheduler: an <c>IScheduler</c> on Rx.NET, an <c>IAsyncScheduler</c> on
     /// AsyncRx.NET.
     /// </summary>
-    /// <remarks>Only the target casts it.</remarks>
-    public object Native => native;
+    /// <remarks>Only the target gets it out, through <see cref="Realized.Get{TS}"/>.</remarks>
+    public virtual Realized Native => native;
 
     /// <summary>
     /// How this scheduler prints in the query text (<c>Scheduler</c>, or

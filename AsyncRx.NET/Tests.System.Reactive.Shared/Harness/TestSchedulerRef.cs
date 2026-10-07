@@ -17,10 +17,10 @@ namespace Tests.System.Reactive.Shared;
 /// sync suite's <c>scheduler</c> local plays. It is named after its base class rather than after
 /// <c>TestScheduler</c> so that the two are never confused: this is a reference to the target's
 /// test scheduler, not a test scheduler itself. Every member forwards to the <see cref="Target"/>.
-/// Its <see cref="SchedulerRef.Native"/> is the target's own test scheduler —
+/// Its <see cref="SchedulerRef.Native"/> holds the target's own test scheduler —
 /// <c>Microsoft.Reactive.Testing.TestScheduler</c> on Rx.NET, <c>TestAsyncScheduler</c> on
-/// AsyncRx.NET — which target-specific tests may cast to reach features the shared surface does
-/// not expose.
+/// AsyncRx.NET — which target-specific tests may get out to reach features the shared surface
+/// does not expose.
 /// </remarks>
 public sealed class TestSchedulerRef : SchedulerRef
 {

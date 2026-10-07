@@ -28,9 +28,9 @@ public abstract class AsyncRxTakeTests(ExecutionShape shape) : TakeTests
     // Target-specific scenarios: ordinary [TestMethod]s next to the shared
     // ones, exercising what sync Rx cannot express — an OnNextAsync whose returned task
     // completes later than it started. They use the harness's extended expectation forms
-    // directly, through the native scheduler ((TestAsyncScheduler)Scheduler.Native).
+    // directly, through the native scheduler (Scheduler.Native.Get<TestAsyncScheduler>()).
 
-    private TestAsyncScheduler Pump => (TestAsyncScheduler)Scheduler.Native;
+    private TestAsyncScheduler Pump => Scheduler.Native.Get<TestAsyncScheduler>();
 
     /// <summary>A recording observer whose OnNext completions take <paramref name="ticks"/> virtual ticks each.</summary>
     private ITestableAsyncObserver<T> ProlongingObserver<T>(long ticks) =>

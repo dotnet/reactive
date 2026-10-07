@@ -19,13 +19,16 @@ namespace Tests.System.Reactive.Shared;
 /// <see cref="Messages"/> is therefore not that collection but a handle for asserting over it:
 /// the target does the comparison, so that its own diagnostics are the ones a failure reports.
 /// </remarks>
-public sealed class TestableObserver<T>(IRxTarget target, object native, string query)
+public sealed class TestableObserver<T>(
+    IRxTarget target,
+    Realized<TestableObserver<T>> native,
+    string query)
 {
     /// <summary>The target that created this observer.</summary>
     public IRxTarget Target => target;
 
     /// <summary>The target's own testable observer (see the remarks on this type).</summary>
-    public object Native => native;
+    public Realized<TestableObserver<T>> Native => native;
 
     /// <summary>
     /// The query this observer was started over (its description), for diagnostics.

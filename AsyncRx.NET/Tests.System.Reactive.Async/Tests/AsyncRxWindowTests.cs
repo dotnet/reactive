@@ -23,7 +23,7 @@ public abstract class AsyncRxWindowTests(ExecutionShape shape) : WindowTests
 
     // ---- AsyncRx.NET-specific scenario: a consumer that prolongs completion ----
 
-    private TestAsyncScheduler Pump => (TestAsyncScheduler)Scheduler.Native;
+    private TestAsyncScheduler Pump => Scheduler.Native.Get<TestAsyncScheduler>();
 
     [TestMethod]
     public void WindowWithCount_ProlongedConsumer_BackPressureReachesTheSource()

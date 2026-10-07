@@ -53,9 +53,9 @@ public sealed partial class RxTarget : IRxTarget
     }
 
     private static RxTestScheduler Unwrap(TestSchedulerRef scheduler) =>
-        (RxTestScheduler)scheduler.Native;
+        scheduler.Native.Get<RxTestScheduler>();
 
-    private static IScheduler Unwrap(SchedulerRef scheduler) => (IScheduler)scheduler.Native;
+    private static IScheduler Unwrap(SchedulerRef scheduler) => scheduler.Native.Get<IScheduler>();
 
     // For a result whose elements are values (what Start records); nested results go through
     // the bridge.
@@ -63,14 +63,19 @@ public sealed partial class RxTarget : IRxTarget
 
     // ---- Harness ----
 
-    public object CreateTestScheduler() => new RxTestScheduler();
+    public Realized<TestSchedulerRef> CreateTestScheduler() =>
+        Realized.Of<TestSchedulerRef>(new RxTestScheduler());
 
     public SchedulerRef DisableOptimizations(TestSchedulerRef scheduler) =>
-        new(Unwrap(scheduler).DisableOptimizations(), "Scheduler.DisableOptimizations()");
+        new(
+            Realized.Of<SchedulerRef>(Unwrap(scheduler).DisableOptimizations()),
+            "Scheduler.DisableOptimizations()");
 
-    public SchedulerRef ImmediateScheduler { get; } = new(Scheduler.Immediate, "Scheduler.Immediate");
+    public SchedulerRef ImmediateScheduler { get; } =
+        new(Realized.Of<SchedulerRef>(Scheduler.Immediate), "Scheduler.Immediate");
 
-    public SchedulerRef DefaultScheduler { get; } = new(Scheduler.Default, "Scheduler.Default");
+    public SchedulerRef DefaultScheduler { get; } =
+        new(Realized.Of<SchedulerRef>(Scheduler.Default), "Scheduler.Default");
 
     public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) =>
         await Materialize(source).ToList();
@@ -83,6 +88,9 @@ public sealed partial class RxTarget : IRxTarget
         Realized.Of<Seq<T>>(new RxSerialSingleNotificationConnectable<T>(state, this));
 
     public SubjectSeq<int> CreateMySubject(MySubject.State state) => Wrap(new RxMySubject(state));
+
+    public Realized<SchedulerDouble> CreateScheduler(SchedulerDouble scheduler) =>
+        Realized.Of<SchedulerDouble>(new RxSchedulerDouble(scheduler));
 
     public Realized<Seq<T>> CreateRefCountTestConnectableIgnoringConnect<T>(RefCountTests.SerialConnectableIgnoringConnect<T>.State state) =>
         Realized.Of<Seq<T>>(new RxSerialConnectableIgnoringConnect<T>(state, this));
@@ -134,7 +142,7 @@ public sealed partial class RxTarget : IRxTarget
             created,
             subscribed,
             disposed);
-        return new(this, observer, query);
+        return new(this, Realized.Of<TestableObserver<T>>(observer), query);
     }
 
     // TestScheduler.ScheduleAbsolute bumps work due now (or in the past) to Clock + 1.
@@ -155,10 +163,11 @@ public sealed partial class RxTarget : IRxTarget
     }
 
     public TestableObserver<T> CreateObserver<T>(TestSchedulerRef scheduler) =>
-        new(this, Unwrap(scheduler).CreateObserver<T>(), "");
+        new(this, Realized.Of<TestableObserver<T>>(Unwrap(scheduler).CreateObserver<T>()), "");
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestableObserver<T> observer) =>
-        new(RxDisposable.For(Materialize(source).Subscribe((ITestableObserver<T>)observer.Native)));
+        new(RxDisposable.For(
+            Materialize(source).Subscribe(observer.Native.Get<ITestableObserver<T>>())));
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Seq<T> source, Func<T, ValueTask> onNext)
     {
@@ -194,19 +203,19 @@ public sealed partial class RxTarget : IRxTarget
 
     public ValueTask OnNextAsync<T>(TestableObserver<T> observer, T value)
     {
-        ((ITestableObserver<T>)observer.Native).OnNext(value);
+        observer.Native.Get<ITestableObserver<T>>().OnNext(value);
         return default;
     }
 
     public ValueTask OnErrorAsync<T>(TestableObserver<T> observer, Exception error)
     {
-        ((ITestableObserver<T>)observer.Native).OnError(error);
+        observer.Native.Get<ITestableObserver<T>>().OnError(error);
         return default;
     }
 
     public ValueTask OnCompletedAsync<T>(TestableObserver<T> observer)
     {
-        ((ITestableObserver<T>)observer.Native).OnCompleted();
+        observer.Native.Get<ITestableObserver<T>>().OnCompleted();
         return default;
     }
 
@@ -242,7 +251,7 @@ public sealed partial class RxTarget : IRxTarget
     // ---- Assertions ----
 
     public void AssertMessages<T>(TestableObserver<T> observer, Recorded<Notification<T>>[] expected) =>
-        ((ITestableObserver<T>)observer.Native).Messages.AssertEqual(expected);
+        observer.Native.Get<ITestableObserver<T>>().Messages.AssertEqual(expected);
 
     public void AssertSubscriptions<T>(TestableSeq<T> source, Subscription[] expected) =>
         _bridge.Call<IList<Subscription>>(SubscriptionsImpl<T>, source.Native).AssertEqual(expected);
