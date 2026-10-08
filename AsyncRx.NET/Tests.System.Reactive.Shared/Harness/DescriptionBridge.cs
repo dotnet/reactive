@@ -283,17 +283,16 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
                 if (value is global::System.Collections.IEnumerable items
                     && Instantiation(realType, typeof(IEnumerable<>)) is { } enumerable)
                 {
-                    // An enumerable of descriptions (a LINQ query over Seq<T>s, say), materialized
-                    // element by element into a list of the target's own sequences.
+                    // An enumerable of descriptions (a LINQ query over Seq<T>s, say), converted
+                    // element by element into the target's own sequences as it is enumerated, not
+                    // before: an operator that takes a sequence of sources enumerates it when it
+                    // subscribes, and a scenario may check exactly that (Zip_NAry_Enumerable_Simple
+                    // records the tick at which the enumeration began).
                     var elementType = enumerable.GetGenericArguments()[0];
-                    var list = (global::System.Collections.IList)Activator.CreateInstance(
-                        typeof(List<>).MakeGenericType(elementType))!;
-                    foreach (var item in items)
-                    {
-                        list.Add(ToReal(item, elementType));
-                    }
-
-                    return list;
+                    return Activator.CreateInstance(
+                        typeof(LazyRealEnumerable<>).MakeGenericType(elementType),
+                        items,
+                        new Func<object?, object?>(item => ToReal(item, elementType)))!;
                 }
 
                 if (Instantiation(describedType, typeof(Recorded<>)) is { } recorded)
@@ -442,5 +441,28 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
         }
 
         throw new InvalidOperationException($"{descriptionType} is not a Seq<T>.");
+    }
+
+    /// <summary>
+    /// An enumerable of the target's own values that converts each description as it is
+    /// enumerated.
+    /// </summary>
+    /// <typeparam name="TReal">The target's element type.</typeparam>
+    /// <param name="items">The descriptions.</param>
+    /// <param name="convert">Converts one description to the target's value.</param>
+    private sealed class LazyRealEnumerable<TReal>(
+        global::System.Collections.IEnumerable items,
+        Func<object?, object?> convert) : IEnumerable<TReal>
+    {
+        public IEnumerator<TReal> GetEnumerator()
+        {
+            foreach (var item in items)
+            {
+                yield return (TReal)convert(item)!;
+            }
+        }
+
+        global::System.Collections.IEnumerator
+            global::System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

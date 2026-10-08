@@ -14,39 +14,12 @@ namespace System.Reactive.Linq
     {
         // TODO: Add Zip<T>(IAsyncObservable<T>, IAsyncEnumerable<T>) overload when we have reference to IAsyncEnumerable<T>.
 
-        // Collects subscriptions that were all started before any was awaited, so that the
-        // sources are subscribed concurrently. If any of them faults, the rest are still
-        // collected and everything collected so far is disposed, so that no subscription is
-        // left running with no one holding it.
-        internal static async ValueTask CollectAsync(CompositeAsyncDisposable composite, params ValueTask<IAsyncDisposable>[] subscriptions)
-        {
-            Exception error = null;
-
-            foreach (var subscription in subscriptions)
-            {
-                try
-                {
-                    await composite.AddAsync(await subscription.ConfigureAwait(false)).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    error ??= ex;
-                }
-            }
-
-            if (error != null)
-            {
-                await composite.DisposeAsync().ConfigureAwait(false);
-                System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(error).Throw();
-            }
-        }
-
         public static IAsyncObservable<IList<TSource>> Zip<TSource>(IEnumerable<IAsyncObservable<TSource>> sources)
         {
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return Zip(sources.ToArray());
+            return Zip<TSource, IList<TSource>>(sources, static xs => new ValueTask<IList<TSource>>(xs));
         }
 
         public static IAsyncObservable<IList<TSource>> Zip<TSource>(params IAsyncObservable<TSource>[] sources)
@@ -54,22 +27,101 @@ namespace System.Reactive.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return Create<IList<TSource>>(async observer =>
+            return Zip<TSource, IList<TSource>>(sources, static xs => new ValueTask<IList<TSource>>(xs));
+        }
+
+        public static IAsyncObservable<TResult> Zip<TSource, TResult>(IEnumerable<IAsyncObservable<TSource>> sources, Func<IList<TSource>, TResult> resultSelector)
+        {
+            if (sources == null)
+                throw new ArgumentNullException(nameof(sources));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            return Zip<TSource, TResult>(sources, xs => new ValueTask<TResult>(resultSelector(xs)));
+        }
+
+        public static IAsyncObservable<TResult> Zip<TSource, TResult>(IEnumerable<IAsyncObservable<TSource>> sources, Func<IList<TSource>, ValueTask<TResult>> resultSelector)
+        {
+            if (sources == null)
+                throw new ArgumentNullException(nameof(sources));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            return Create<TResult>(async observer =>
             {
-                var count = sources.Length;
+                var array = sources.ToArray();
+                var count = array.Length;
 
-                var observers = AsyncObserver.Zip(observer, count);
+                var d = new CompositeAsyncDisposable();
 
-                var tasks = new Task<IAsyncDisposable>[count];
+                var observers = AsyncObserver.Zip(observer, count, resultSelector);
+
+                var subscriptions = new ValueTask<IAsyncDisposable>[count];
 
                 for (var i = 0; i < count; i++)
                 {
-                    tasks[i] = sources[i].SubscribeSafeAsync(observers[i]).AsTask();
+                    subscriptions[i] = SubscribeReleasingOnCompletedAsync(array[i], observers[i]);
                 }
 
-                await Task.WhenAll(tasks).ConfigureAwait(false);
+                await CollectAsync(d, subscriptions).ConfigureAwait(false);
 
-                return StableCompositeAsyncDisposable.Create(tasks.Select(t => t.Result));
+                return d;
+            });
+        }
+
+        public static IAsyncObservable<(T1, T2)> Zip<T1, T2>(this IAsyncObservable<T1> first, IEnumerable<T2> second)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+
+            return Zip<T1, T2, (T1, T2)>(first, second, static (x, y) => new ValueTask<(T1, T2)>((x, y)));
+        }
+
+        public static IAsyncObservable<TResult> Zip<T1, T2, TResult>(this IAsyncObservable<T1> first, IEnumerable<T2> second, Func<T1, T2, TResult> selector)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return Zip<T1, T2, TResult>(first, second, (x, y) => new ValueTask<TResult>(selector(x, y)));
+        }
+
+        // The enumerator is obtained before the observable is subscribed, as Rx.NET does, so that
+        // it is in place by the time the first element can arrive; an enumerable that throws on
+        // enumeration ends the result with that exception without subscribing at all.
+        public static IAsyncObservable<TResult> Zip<T1, T2, TResult>(this IAsyncObservable<T1> first, IEnumerable<T2> second, Func<T1, T2, ValueTask<TResult>> selector)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return Create<TResult>(async observer =>
+            {
+                IEnumerator<T2> enumerator;
+
+                try
+                {
+                    enumerator = second.GetEnumerator();
+                }
+                catch (Exception ex)
+                {
+                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                    return AsyncDisposable.Nop;
+                }
+
+                var (sink, disposeEnumerator) = AsyncObserver.Zip(observer, enumerator, selector);
+
+                var subscription = await first.SubscribeSafeAsync(sink).ConfigureAwait(false);
+
+                return StableCompositeAsyncDisposable.Create(subscription, disposeEnumerator);
             });
         }
     }
@@ -80,8 +132,28 @@ namespace System.Reactive.Linq
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
+
+            return Zip<TSource, IList<TSource>>(observer, count, static xs => new ValueTask<IList<TSource>>(xs));
+        }
+
+        public static IAsyncObserver<TSource>[] Zip<TSource, TResult>(IAsyncObserver<TResult> observer, int count, Func<IList<TSource>, TResult> resultSelector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+
+            return Zip<TSource, TResult>(observer, count, xs => new ValueTask<TResult>(resultSelector(xs)));
+        }
+
+        public static IAsyncObserver<TSource>[] Zip<TSource, TResult>(IAsyncObserver<TResult> observer, int count, Func<IList<TSource>, ValueTask<TResult>> resultSelector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
 
             var gate = new AsyncGate();
 
@@ -106,7 +178,19 @@ namespace System.Reactive.Linq
                                     list[i] = queues[i].Dequeue();
                                 }
 
-                                await observer.OnNextAsync(list).ConfigureAwait(false);
+                                TResult result;
+
+                                try
+                                {
+                                    result = await resultSelector(list).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(result).ConfigureAwait(false);
                             }
                             else
                             {
@@ -167,6 +251,116 @@ namespace System.Reactive.Linq
             }
 
             return res;
+        }
+
+        // The observable-with-enumerable sink, a port of Rx.NET's: each element from the observable
+        // takes the enumerator one step, and the pair goes through the selector; the enumerator
+        // running dry completes the result. Disposal from inside MoveNext or Current (an observer
+        // that unsubscribes on the first element) must not dispose the enumerator while it is in
+        // use, so disposal is counted against enumeration in progress and deferred to the end of
+        // that step, as Rx.NET's sink does.
+        public static (IAsyncObserver<T1>, IAsyncDisposable) Zip<T1, T2, TResult>(IAsyncObserver<TResult> observer, IEnumerator<T2> enumerator, Func<T1, T2, ValueTask<TResult>> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (enumerator == null)
+                throw new ArgumentNullException(nameof(enumerator));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            var current = enumerator;
+            var enumerationInProgress = 0;
+
+            void DisposeEnumerator()
+            {
+                Interlocked.Exchange(ref current, null)?.Dispose();
+            }
+
+            var sink = Create<T1>(
+                async x =>
+                {
+                    var e = Volatile.Read(ref current);
+
+                    if (e == null)
+                    {
+                        return;
+                    }
+
+                    if (Interlocked.Increment(ref enumerationInProgress) != 1)
+                    {
+                        return;
+                    }
+
+                    bool hasNext;
+                    var right = default(T2);
+                    var wasDisposed = false;
+
+                    try
+                    {
+                        try
+                        {
+                            hasNext = e.MoveNext();
+
+                            if (hasNext)
+                            {
+                                right = e.Current;
+                            }
+                        }
+                        finally
+                        {
+                            if (Interlocked.Decrement(ref enumerationInProgress) != 0)
+                            {
+                                DisposeEnumerator();
+                                wasDisposed = true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        return;
+                    }
+
+                    if (wasDisposed)
+                    {
+                        return;
+                    }
+
+                    if (hasNext)
+                    {
+                        TResult result;
+
+                        try
+                        {
+                            result = await selector(x, right).ConfigureAwait(false);
+                        }
+                        catch (Exception ex)
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                            return;
+                        }
+
+                        await observer.OnNextAsync(result).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await observer.OnCompletedAsync().ConfigureAwait(false);
+                    }
+                },
+                observer.OnErrorAsync,
+                observer.OnCompletedAsync);
+
+            var dispose = AsyncDisposable.Create(() =>
+            {
+                if (Interlocked.Increment(ref enumerationInProgress) == 1)
+                {
+                    DisposeEnumerator();
+                }
+
+                return default;
+            });
+
+            return (sink, dispose);
         }
     }
 }

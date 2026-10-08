@@ -77,30 +77,6 @@ public static class SeqExtensions
     public static Seq<T> Where<T>(this Seq<T> source, Func<T, bool> predicate, [CallerArgumentExpression(nameof(predicate))] string text = "") =>
         new WhereSeq<T>(source, predicate, text);
 
-    /// <summary>Describes <c>first.Zip(second, resultSelector)</c>.</summary>
-    /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
-    /// <typeparam name="TSecond">The type of the elements in the second sequence.</typeparam>
-    /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
-    /// <param name="first">First observable source.</param>
-    /// <param name="second">Second observable source.</param>
-    /// <param name="resultSelector">
-    /// Function to invoke for each consecutive pair of elements from the first and second source.
-    /// </param>
-    /// <param name="text">
-    /// Supplied by the compiler (the source text of the selector), for printing the query in
-    /// diagnostics; do not pass it.
-    /// </param>
-    /// <remarks>
-    /// Builds a <see cref="ZipSeq{TFirst, TSecond, TResult}"/>, which each target materializes
-    /// through its <c>Zip</c> visitor member.
-    /// </remarks>
-    public static Seq<TResult> Zip<TFirst, TSecond, TResult>(
-        this Seq<TFirst> first,
-        Seq<TSecond> second,
-        Func<TFirst, TSecond, TResult> resultSelector,
-        [CallerArgumentExpression(nameof(resultSelector))] string text = "") =>
-        new ZipSeq<TFirst, TSecond, TResult>(first, second, resultSelector, text);
-
     /// <summary>Describes <c>first.Concat(second)</c>.</summary>
     /// <typeparam name="T">The type of the elements in the source sequences.</typeparam>
     /// <param name="first">First observable sequence.</param>

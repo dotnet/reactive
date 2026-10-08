@@ -17,9 +17,6 @@ public sealed partial class RxTarget
     Realized<Seq<T>> ISeqVisitor.Where<T>(WhereSeq<T> seq) =>
         _bridge.Run<Seq<T>>(WhereImpl<T>, seq.Source, seq.Predicate);
 
-    Realized<Seq<TResult>> ISeqVisitor.Zip<TFirst, TSecond, TResult>(ZipSeq<TFirst, TSecond, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(ZipImpl<TFirst, TSecond, TResult>, seq.First, seq.Second, seq.ResultSelector);
-
     Realized<Seq<T>> ISeqVisitor.Concat<T>(ConcatSeq<T> seq) =>
         _bridge.Run<Seq<T>>(ConcatImpl<T>, seq.First, seq.Second);
 
@@ -44,12 +41,6 @@ public sealed partial class RxTarget
 
     private static IObservable<T> WhereImpl<T>(IObservable<T> source, Func<T, bool> predicate) =>
         source.Where(predicate);
-
-    private static IObservable<TResult> ZipImpl<TFirst, TSecond, TResult>(
-        IObservable<TFirst> first,
-        IObservable<TSecond> second,
-        Func<TFirst, TSecond, TResult> resultSelector) =>
-        first.Zip(second, resultSelector);
 
     private static IObservable<T> ConcatImpl<T>(IObservable<T> first, IObservable<T> second) =>
         first.Concat(second);

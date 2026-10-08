@@ -12,29 +12,6 @@ namespace System.Reactive.Linq
 {
     public partial class AsyncObservable
     {
-        // Subscribes one of CombineLatest's sources so that its subscription is released as soon
-        // as that source completes, while the others carry on, as Rx.NET's sinks do; the holder
-        // returned is what the operator's composite disposable keeps. A source that completes
-        // during the subscribe call disposes the holder before it is assigned, which disposes
-        // the subscription the moment it is.
-        internal static async ValueTask<IAsyncDisposable> SubscribeReleasingOnCompletedAsync<TSource>(IAsyncObservable<TSource> source, IAsyncObserver<TSource> observer)
-        {
-            var subscription = new SingleAssignmentAsyncDisposable();
-
-            var releasing = AsyncObserver.Create<TSource>(
-                observer.OnNextAsync,
-                observer.OnErrorAsync,
-                async () =>
-                {
-                    await subscription.DisposeAsync().ConfigureAwait(false);
-                    await observer.OnCompletedAsync().ConfigureAwait(false);
-                });
-
-            await subscription.AssignAsync(await source.SubscribeSafeAsync(releasing).ConfigureAwait(false)).ConfigureAwait(false);
-
-            return subscription;
-        }
-
         public static IAsyncObservable<IList<TSource>> CombineLatest<TSource>(IEnumerable<IAsyncObservable<TSource>> sources)
         {
             if (sources == null)

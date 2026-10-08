@@ -105,13 +105,6 @@ public partial interface ISeqVisitor
     Realized<Seq<T>> Concat<T>(ConcatSeq<T> seq);
 
     /// <summary>
-    /// Materializes a <see cref="ZipSeq{TFirst, TSecond, TResult}"/> as the target's own
-    /// <c>Zip(second, resultSelector)</c>.
-    /// </summary>
-    /// <remarks>Built by the three-argument <c>Zip</c> on <see cref="SeqExtensions"/>.</remarks>
-    Realized<Seq<TResult>> Zip<TFirst, TSecond, TResult>(ZipSeq<TFirst, TSecond, TResult> seq);
-
-    /// <summary>
     /// Materializes a <see cref="DeferSeq{T}"/> as the target's own <c>Defer(factory)</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Defer{T}(Func{Seq{T}}, string)"/>.</remarks>
