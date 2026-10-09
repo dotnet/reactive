@@ -34,6 +34,15 @@ namespace System.Reactive.Linq
 
         public static IAsyncObservable<TSource> Concat<TSource>(params IAsyncObservable<TSource>[] sources) => Concat((IEnumerable<IAsyncObservable<TSource>>)sources);
 
+        public static IAsyncObservable<TSource> Concat<TSource>(this IAsyncObservable<IAsyncObservable<TSource>> sources)
+        {
+            if (sources == null)
+                throw new ArgumentNullException(nameof(sources));
+
+            // As in Rx.NET: a merge that subscribes to one inner sequence at a time.
+            return sources.Merge(1);
+        }
+
         public static IAsyncObservable<TSource> Concat<TSource>(this IEnumerable<IAsyncObservable<TSource>> sources)
         {
             if (sources == null)

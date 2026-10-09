@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (count <= 0)
-                throw new ArgumentNullException(nameof(count));
+                throw new ArgumentOutOfRangeException(nameof(count));
 
             return CreateAsyncObservable<IList<TSource>>.From(
                 source,
@@ -30,9 +30,9 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (count <= 0)
-                throw new ArgumentNullException(nameof(count));
+                throw new ArgumentOutOfRangeException(nameof(count));
             if (skip <= 0)
-                throw new ArgumentNullException(nameof(skip));
+                throw new ArgumentOutOfRangeException(nameof(skip));
 
             return CreateAsyncObservable<IList<TSource>>.From(
                 source,
@@ -45,7 +45,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (timeSpan < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeSpan));
+                throw new ArgumentOutOfRangeException(nameof(timeSpan));
 
             return CreateAsyncObservable<IList<TSource>>.From(
                 source,
@@ -65,7 +65,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (timeSpan < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeSpan));
+                throw new ArgumentOutOfRangeException(nameof(timeSpan));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
@@ -87,9 +87,9 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (timeSpan < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeSpan));
+                throw new ArgumentOutOfRangeException(nameof(timeSpan));
             if (timeShift < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeShift));
+                throw new ArgumentOutOfRangeException(nameof(timeShift));
 
             return CreateAsyncObservable<IList<TSource>>.From(
                 source,
@@ -109,9 +109,9 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (timeSpan < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeSpan));
+                throw new ArgumentOutOfRangeException(nameof(timeSpan));
             if (timeShift < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeShift));
+                throw new ArgumentOutOfRangeException(nameof(timeShift));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
@@ -133,9 +133,9 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (timeSpan < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeSpan));
+                throw new ArgumentOutOfRangeException(nameof(timeSpan));
             if (count <= 0)
-                throw new ArgumentNullException(nameof(count));
+                throw new ArgumentOutOfRangeException(nameof(count));
 
             return CreateAsyncObservable<IList<TSource>>.From(
                 source,
@@ -155,9 +155,9 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (timeSpan < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeSpan));
+                throw new ArgumentOutOfRangeException(nameof(timeSpan));
             if (count <= 0)
-                throw new ArgumentNullException(nameof(count));
+                throw new ArgumentOutOfRangeException(nameof(count));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
@@ -227,9 +227,9 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (count <= 0)
-                throw new ArgumentNullException(nameof(count));
+                throw new ArgumentOutOfRangeException(nameof(count));
             if (skip <= 0)
-                throw new ArgumentNullException(nameof(skip));
+                throw new ArgumentOutOfRangeException(nameof(skip));
 
             var queue = new Queue<IList<TSource>>();
             var n = 0;
@@ -298,7 +298,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (timeSpan < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeSpan));
+                throw new ArgumentOutOfRangeException(nameof(timeSpan));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
@@ -368,9 +368,9 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (timeSpan < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeSpan));
+                throw new ArgumentOutOfRangeException(nameof(timeSpan));
             if (timeShift < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeShift));
+                throw new ArgumentOutOfRangeException(nameof(timeShift));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
@@ -499,9 +499,9 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (timeSpan < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeSpan));
+                throw new ArgumentOutOfRangeException(nameof(timeSpan));
             if (count <= 0)
-                throw new ArgumentNullException(nameof(count));
+                throw new ArgumentOutOfRangeException(nameof(count));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 

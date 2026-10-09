@@ -28,7 +28,7 @@ namespace System.Reactive.Linq
         public static IAsyncObservable<TSource> Repeat<TSource>(TSource value, int repeatCount)
         {
             if (repeatCount < 0)
-                throw new ArgumentNullException(nameof(repeatCount));
+                throw new ArgumentOutOfRangeException(nameof(repeatCount));
 
             return Create<TSource>(observer => AsyncObserver.Repeat(observer, value, repeatCount));
         }
@@ -36,7 +36,7 @@ namespace System.Reactive.Linq
         public static IAsyncObservable<TSource> Repeat<TSource>(TSource value, int repeatCount, IAsyncScheduler scheduler)
         {
             if (repeatCount < 0)
-                throw new ArgumentNullException(nameof(repeatCount));
+                throw new ArgumentOutOfRangeException(nameof(repeatCount));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
@@ -56,7 +56,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (repeatCount < 0)
-                throw new ArgumentNullException(nameof(repeatCount));
+                throw new ArgumentOutOfRangeException(nameof(repeatCount));
 
             return CreateAsyncObservable<TSource>.From(
                 source,
@@ -98,7 +98,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (repeatCount < 0)
-                throw new ArgumentNullException(nameof(repeatCount));
+                throw new ArgumentOutOfRangeException(nameof(repeatCount));
 
             return Repeat(observer, value, repeatCount, TaskPoolAsyncScheduler.Default);
         }
@@ -108,7 +108,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (repeatCount < 0)
-                throw new ArgumentNullException(nameof(repeatCount));
+                throw new ArgumentOutOfRangeException(nameof(repeatCount));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
@@ -158,11 +158,21 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (repeatCount < 0)
-                throw new ArgumentNullException(nameof(repeatCount));
+                throw new ArgumentOutOfRangeException(nameof(repeatCount));
 
             async ValueTask<IAsyncDisposable> CoreAsync()
             {
-                var (sink, inner) = Concat(observer, Enumerable.Repeat(source, repeatCount).GetEnumerator());
+                if (repeatCount == 0)
+                {
+                    await observer.OnCompletedAsync().ConfigureAwait(false);
+                    return AsyncDisposable.Nop;
+                }
+
+                // The subscription made here is the first repetition; the sink's enumerator
+                // supplies the rest, so the sequence is repeated repeatCount times in all, as
+                // in Rx.NET. (With repeatCount copies in the enumerator, it ran once too often.)
+                var remaining = Enumerable.Repeat(source, repeatCount - 1).GetEnumerator();
+                var (sink, inner) = Concat(observer, remaining);
 
                 var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 

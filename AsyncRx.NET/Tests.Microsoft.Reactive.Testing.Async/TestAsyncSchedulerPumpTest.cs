@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
+
 using Microsoft.Reactive.Testing.Async;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Microsoft.Reactive.Testing.Async;
 
@@ -446,6 +446,66 @@ public class TestAsyncSchedulerPumpTest
 
         var thrown = Assert.ThrowsExactly<TestAsyncSchedulerException>(scheduler.Start);
         Assert.Contains("escaped the virtual-time pump", thrown.Message);
+    }
+
+    [TestMethod]
+    public void RunToCompletion_returns_a_completed_operation_without_pumping()
+    {
+        var scheduler = new TestAsyncScheduler(ExecutionShape.SynchronousCompletion);
+        var ran = false;
+        scheduler.ScheduleAbsolute(0, _ => { ran = true; return default; });
+
+        var result = scheduler.RunToCompletion(new ValueTask<int>(42));
+
+        Assert.AreEqual(42, result.Result);
+        Assert.IsFalse(ran);
+    }
+
+    [TestMethod]
+    public void RunToCompletion_fails_informatively_when_the_operation_waits_for_a_later_tick()
+    {
+        var scheduler = new TestAsyncScheduler(ExecutionShape.ForcedYield);
+        var tcs = new TaskCompletionSource();
+        scheduler.ScheduleAbsolute(10, _ => { tcs.SetResult(); return default; });
+
+        var ex = Assert.ThrowsExactly<TestAsyncSchedulerException>(() =>
+            scheduler.RunToCompletion(new ValueTask(tcs.Task)));
+
+        Assert.Contains("did not complete at tick 0", ex.Message);
+        Assert.AreEqual(0, scheduler.Clock);
+    }
+
+    [TestMethod]
+    public async Task RunToCompletion_awaits_an_operation_outside_virtual_time()
+    {
+        var scheduler = new TestAsyncScheduler(ExecutionShape.ForcedYield);
+        var tcs = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(20);
+            tcs.SetResult(42);
+        });
+
+        var result = await scheduler.RunToCompletion(new ValueTask<int>(tcs.Task));
+
+        Assert.AreEqual(42, result);
+        Assert.AreEqual(0, scheduler.Clock);
+    }
+
+    [TestMethod]
+    public async Task RunToCompletion_fails_when_an_operation_outside_virtual_time_never_completes()
+    {
+        var scheduler = new TestAsyncScheduler(ExecutionShape.ForcedYield)
+        {
+            BodyOperationTimeout = TimeSpan.FromMilliseconds(100),
+        };
+        var tcs = new TaskCompletionSource();
+
+        var ex = await Assert.ThrowsExactlyAsync<TestAsyncSchedulerException>(async () =>
+            await scheduler.RunToCompletion(new ValueTask(tcs.Task)));
+
+        Assert.Contains("did not complete within 0.1s", ex.Message);
+        Assert.AreEqual(0, scheduler.Clock);
     }
 
     [TestMethod]

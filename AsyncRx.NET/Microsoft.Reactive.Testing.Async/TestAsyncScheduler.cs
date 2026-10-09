@@ -149,7 +149,193 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     /// await continuation resumes inline (see the class remarks). Throws if any scheduled
     /// work failed, escaped to a real thread, or never completed.
     /// </summary>
-    public void Start()
+    public void Start() => Pump(long.MaxValue);
+
+    /// <summary>
+    /// Advances virtual time by <paramref name="ticks"/>, running every work item due on the way,
+    /// then sets the clock to the target and returns.
+    /// </summary>
+    /// <param name="ticks">The number of ticks to advance by.</param>
+    /// <remarks>
+    /// The async counterpart of the sync <c>TestScheduler.AdvanceBy</c>: for tests that drive a
+    /// scenario by hand between advances, rather than scheduling everything and calling
+    /// <see cref="Start"/>. Work due exactly at the target tick runs; work due later waits for
+    /// the next advance. The pump's failure checks apply as for <see cref="Start"/>, except that
+    /// outstanding work due in the future is expected, not an error.
+    /// </remarks>
+    public void AdvanceBy(long ticks)
+    {
+        if (ticks < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(ticks));
+        }
+
+        Pump(Clock + ticks);
+    }
+
+    /// <summary>
+    /// Completes an operation a test body started outside the pump, by running the work it is
+    /// waiting for at the current virtual time.
+    /// </summary>
+    /// <typeparam name="T">The operation's result type.</typeparam>
+    /// <param name="operation">The operation, as the test body received it.</param>
+    /// <returns>The same operation, now complete, for the caller to await or read.</returns>
+    /// <remarks>
+    /// <para>
+    /// The async counterpart of calling a synchronous API from a test body before
+    /// <see cref="Start"/>: on the sync <c>TestScheduler</c>, <c>xs.Subscribe(o)</c> or
+    /// <c>conn.Connect()</c> written in the test body simply runs, at the current clock. Here
+    /// the same operation may suspend at a <see cref="YieldPoint"/> (under
+    /// <see cref="ExecutionShape.ForcedYield"/> the testable observables do, on subscribe,
+    /// delivery and disposal), posting its continuation to the pump's ready queue, which
+    /// nothing runs until the next <see cref="Start"/> or <see cref="AdvanceBy"/>; awaiting it
+    /// from the test body would wait forever. This runs the pump at the current clock until
+    /// that queue is empty, as <c>AdvanceBy(0)</c> does, and returns the operation complete.
+    /// </para>
+    /// <para>
+    /// Called on the pump thread while the pump is running, it returns the operation unchanged:
+    /// the caller is itself pumped work, and awaiting is the right thing. An operation still
+    /// incomplete after the queue drains, while a timer is queued or pumped work is still
+    /// pending, is waiting for a later tick; that is reported as a failure rather than left to
+    /// hang. One still incomplete with nothing queued at all is waiting for something outside
+    /// virtual time, which is what a real-time scenario's operations do (a subscription whose
+    /// disposal is contending with a drain on a thread of its own, for instance), so it is
+    /// handed back to be awaited, under <see cref="BodyOperationTimeout"/> so that a
+    /// virtual-time scenario awaiting something it never scheduled still fails informatively.
+    /// </para>
+    /// <para>
+    /// Where it comes into play: the shared test suite's AsyncRx.NET target routes every raw
+    /// surface member a scenario may call from its test body (<c>ConnectAsync</c>, the
+    /// handler forms of <c>SubscribeAsync</c>, and <c>DisposeAsync</c> on what they return,
+    /// through its <c>AsyncRxDisposable</c> wrapper) through this method, so a scenario never
+    /// calls it directly. The scenario that shows why is
+    /// <c>ConnectableObservableTests.ConnectableObservable_Connected</c>, which does
+    /// <c>await conn.ConnectAsync(Scheduler)</c> in its body, where <c>conn</c> multicasts a
+    /// hot testable observable, and only then calls <c>Start</c>. Under
+    /// <see cref="ExecutionShape.ForcedYield"/>, <c>Connect</c> subscribes to the hot
+    /// observable, whose <c>SubscribeAsync</c> suspends at its yield point and hands an
+    /// incomplete task back to the body; without this method the body's await would never
+    /// complete, because <c>Start</c> is the next line. With it, the target pumps tick 0, the
+    /// subscription finishes, and the await completes before <c>Start</c> is reached.
+    /// <c>ConnectableObservable_Disconnected</c> is the same for a body-level
+    /// <c>DisposeAsync</c>, whose unsubscribe also yields. Bypassing this method hangs those
+    /// scenarios (and <c>ConnectableObservable_DisconnectFuture</c>) under that shape, and
+    /// nothing else: scenarios whose body-level operations never yield (sources such as
+    /// <c>Return</c>, <c>Defer</c> and <c>Never</c>, or a plain subject) complete regardless,
+    /// and scenarios that connect or dispose from scheduled work run under the pump, where
+    /// this method stands aside.
+    /// </para>
+    /// </remarks>
+    public ValueTask<T> RunToCompletion<T>(ValueTask<T> operation)
+    {
+        if (PumpForBodyOperation(operation.IsCompleted) && !operation.IsCompleted)
+        {
+            if (HasVirtualTimeAhead)
+            {
+                throw NotCompletedAtCurrentTick();
+            }
+
+            return AwaitOutsideVirtualTime(operation);
+        }
+
+        return operation;
+    }
+
+    /// <summary>
+    /// Completes an operation a test body started outside the pump, by running the work it is
+    /// waiting for at the current virtual time.
+    /// </summary>
+    /// <param name="operation">The operation, as the test body received it.</param>
+    /// <returns>The same operation, now complete, for the caller to await.</returns>
+    /// <remarks>As <see cref="RunToCompletion{T}(ValueTask{T})"/>, for a disposal.</remarks>
+    public ValueTask RunToCompletion(ValueTask operation)
+    {
+        if (PumpForBodyOperation(operation.IsCompleted) && !operation.IsCompleted)
+        {
+            if (HasVirtualTimeAhead)
+            {
+                throw NotCompletedAtCurrentTick();
+            }
+
+            return AwaitOutsideVirtualTime(operation);
+        }
+
+        return operation;
+    }
+
+    /// <summary>
+    /// How long <see cref="RunToCompletion{T}(ValueTask{T})"/> waits for an operation that
+    /// nothing in virtual time can complete, before failing.
+    /// </summary>
+    /// <remarks>
+    /// Thirty seconds by default: far longer than any real-time scenario's operation takes,
+    /// and short enough that a virtual-time scenario awaiting something it never scheduled is
+    /// reported rather than left to hang. A harness test lowers it.
+    /// </remarks>
+    public TimeSpan BodyOperationTimeout { get; set; } = TimeSpan.FromSeconds(30);
+
+    // After the pump has drained the current tick, whether anything remains that virtual time
+    // could still complete: a queued timer, or pumped work whose own task is still pending.
+    private bool HasVirtualTimeAhead => _timers.Count > 0 || _outstanding.Count > 0;
+
+    private async ValueTask<T> AwaitOutsideVirtualTime<T>(ValueTask<T> operation)
+    {
+        var task = operation.AsTask();
+
+        var first = await Task.WhenAny(task, Task.Delay(BodyOperationTimeout))
+            .ConfigureAwait(false);
+
+        if (first != task)
+        {
+            throw NotCompletedOutsideVirtualTime();
+        }
+
+        return await task.ConfigureAwait(false);
+    }
+
+    private async ValueTask AwaitOutsideVirtualTime(ValueTask operation)
+    {
+        var task = operation.AsTask();
+
+        var first = await Task.WhenAny(task, Task.Delay(BodyOperationTimeout))
+            .ConfigureAwait(false);
+
+        if (first != task)
+        {
+            throw NotCompletedOutsideVirtualTime();
+        }
+
+        await task.ConfigureAwait(false);
+    }
+
+    private TestAsyncSchedulerException NotCompletedOutsideVirtualTime() =>
+        new(
+            $"An operation started from the test body did not complete within " +
+            $"{BodyOperationTimeout.TotalSeconds:0.##}s. Nothing is scheduled in virtual time " +
+            "that could complete it, so it is waiting for something the scenario never set in " +
+            "motion.");
+
+    // True when the pump ran for the operation, so that it is expected to be complete now; false
+    // when there was nothing to do (already complete) or when the caller is pumped work itself,
+    // in which case the operation is handed back to be awaited.
+    private bool PumpForBodyOperation(bool alreadyComplete)
+    {
+        if (alreadyComplete || _pumping)
+        {
+            return false;
+        }
+
+        Pump(Clock);
+        return true;
+    }
+
+    private TestAsyncSchedulerException NotCompletedAtCurrentTick() =>
+        new(
+            $"An operation started from the test body did not complete at tick {Clock}: it is " +
+            "waiting for a later tick, or for work the scenario has not scheduled. Advance the " +
+            "clock first, or start the operation from work scheduled in virtual time.");
+
+    private void Pump(long until)
     {
         if (_pumping)
         {
@@ -174,7 +360,7 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
                     node.Value();
                     CountDispatch(ref dispatchesThisTick);
                 }
-                else if (DequeueTimer() is { } timer)
+                else if (PeekTimerDueTime() is { } due && due <= until && DequeueTimer() is { } timer)
                 {
                     var (item, key) = timer;
 
@@ -199,8 +385,16 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
                 }
             }
 
+            if (until != long.MaxValue && Clock < until)
+            {
+                Clock = until;
+            }
+
             ThrowIfFailed();
-            ThrowIfWorkOutstanding();
+            if (until == long.MaxValue)
+            {
+                ThrowIfWorkOutstanding();
+            }
         }
         finally
         {
@@ -287,6 +481,8 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
             _timers.Add((dueTime, _nextSequence++), item);
         }
     }
+
+    private long? PeekTimerDueTime() => _timers.Count == 0 ? null : _timers.First().Key.DueTime;
 
     private (TimerItem Item, (long DueTime, long Sequence) Key)? DequeueTimer()
     {

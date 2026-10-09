@@ -94,6 +94,16 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
+            // The library's own observables are not safeguarded, as Rx.NET's SubscribeSafe does
+            // not safeguard its ObservableBase and producers: an exception from one of them
+            // during subscription is a fault in the subscriber's own handlers (the source's are
+            // already delivered as OnError), and it has to reach the caller of SubscribeAsync
+            // rather than be turned into a second OnError that a finished observer ignores.
+            if (source is AsyncObservableBase<T>)
+            {
+                return source.SubscribeAsync(observer);
+            }
+
             return CoreAsync();
 
             async ValueTask<IAsyncDisposable> CoreAsync()
