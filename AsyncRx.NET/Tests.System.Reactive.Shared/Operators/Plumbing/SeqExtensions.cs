@@ -11,57 +11,15 @@ namespace Tests.System.Reactive.Shared;
 /// extension methods on <see cref="Seq{T}"/>.
 /// </summary>
 /// <remarks>
-/// <c>Select</c>, <c>Where</c>, <c>Concat</c> (binary and nested), <c>Repeat</c>, and the
-/// indexed <c>Select</c> over a <c>Seq&lt;Seq&lt;T&gt;&gt;</c> that the flattening idiom
-/// <c>xs.Window(...).Select((w, i) =&gt; w.Select(...)).Merge()</c> needs (<c>Merge</c> itself is
-/// an operator under test, in <c>Operators/Merge</c>). These exist so that a scenario writes them
+/// <c>Where</c>, <c>Concat</c> (binary and nested) and <c>Repeat</c>; <c>Select</c>, <c>Zip</c>
+/// and <c>Merge</c> have left for their own folders as they came under test. These exist so that
+/// a scenario writes them
 /// exactly as the Rx.NET test it was migrated from does. Each method builds one node of the query
 /// description (one node type per overload, in this folder), and each target turns that node into
 /// its own operator call through the matching member of <see cref="ISeqVisitor"/>.
 /// </remarks>
 public static class SeqExtensions
 {
-    /// <summary>Describes <c>source.Select(selector)</c>.</summary>
-    /// <typeparam name="TIn">The type of the elements in the source sequence.</typeparam>
-    /// <typeparam name="TOut">
-    /// The type of the elements in the result sequence, obtained by running the selector function
-    /// for each element in the source sequence.
-    /// </typeparam>
-    /// <param name="source">A sequence of elements to invoke a transform function on.</param>
-    /// <param name="selector">A transform function to apply to each source element.</param>
-    /// <param name="text">
-    /// Supplied by the compiler (the source text of the selector), for printing the query in
-    /// diagnostics; do not pass it.
-    /// </param>
-    /// <remarks>
-    /// Builds a <see cref="SelectSeq{TIn, TOut}"/>, which each target materializes through
-    /// <see cref="ISeqVisitor.Select{TIn, TOut}(SelectSeq{TIn, TOut})"/>.
-    /// </remarks>
-    public static Seq<TOut> Select<TIn, TOut>(this Seq<TIn> source, Func<TIn, TOut> selector, [CallerArgumentExpression(nameof(selector))] string text = "") =>
-        new SelectSeq<TIn, TOut>(source, selector, text);
-
-    /// <summary>Describes <c>source.Select((x, i) =&gt; ...)</c>.</summary>
-    /// <typeparam name="TIn">The type of the elements in the source sequence.</typeparam>
-    /// <typeparam name="TOut">
-    /// The type of the elements in the result sequence, obtained by running the selector function
-    /// for each element in the source sequence.
-    /// </typeparam>
-    /// <param name="source">A sequence of elements to invoke a transform function on.</param>
-    /// <param name="selector">
-    /// A transform function to apply to each source element; the second parameter of the function
-    /// represents the index of the source element.
-    /// </param>
-    /// <param name="text">
-    /// Supplied by the compiler (the source text of the selector), for printing the query in
-    /// diagnostics; do not pass it.
-    /// </param>
-    /// <remarks>
-    /// Builds a <see cref="SelectIndexedSeq{TIn, TOut}"/>, which each target materializes through
-    /// <see cref="ISeqVisitor.SelectIndexed{TIn, TOut}(SelectIndexedSeq{TIn, TOut})"/>.
-    /// </remarks>
-    public static Seq<TOut> Select<TIn, TOut>(this Seq<TIn> source, Func<TIn, int, TOut> selector, [CallerArgumentExpression(nameof(selector))] string text = "") =>
-        new SelectIndexedSeq<TIn, TOut>(source, selector, text);
-
     /// <summary>Describes <c>source.Where(predicate)</c>.</summary>
     /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
     /// <param name="source">An observable sequence whose elements to filter.</param>

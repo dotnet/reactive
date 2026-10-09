@@ -135,7 +135,7 @@ public sealed partial class AsyncRxTarget : IRxTarget
             created,
             subscribed,
             disposed);
-        return new(this, Realized.Of<TestableObserver<T>>(observer), query);
+        return new(this, scheduler, Realized.Of<TestableObserver<T>>(observer), query);
     }
 
     // The pump runs work due now within the current tick.
@@ -153,10 +153,18 @@ public sealed partial class AsyncRxTarget : IRxTarget
     }
 
     public TestableObserver<T> CreateObserver<T>(TestSchedulerRef scheduler) =>
-        new(this, Realized.Of<TestableObserver<T>>(Unwrap(scheduler).CreateObserver<T>()), "");
+        new(
+            this,
+            scheduler,
+            Realized.Of<TestableObserver<T>>(Unwrap(scheduler).CreateObserver<T>()),
+            "");
 
+    // A body-level subscription like the handler forms below: under ForcedYield a testable
+    // source's subscribe yields, and only the pump completes it.
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestableObserver<T> observer) =>
-        Materialize(source).SubscribeAsync(observer.Native.Get<ITestableAsyncObserver<T>>());
+        FromBody(
+            Unwrap(observer.Scheduler),
+            Materialize(source).SubscribeAsync(observer.Native.Get<ITestableAsyncObserver<T>>()));
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(TestSchedulerRef scheduler, Seq<T> source, Func<T, ValueTask> onNext)
     {

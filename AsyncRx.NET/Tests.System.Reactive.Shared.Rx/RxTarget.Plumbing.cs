@@ -8,12 +8,6 @@ namespace Tests.System.Reactive.Shared.Rx;
 
 public sealed partial class RxTarget
 {
-    Realized<Seq<TOut>> ISeqVisitor.Select<TIn, TOut>(SelectSeq<TIn, TOut> seq) =>
-        _bridge.Run<Seq<TOut>>(SelectImpl<TIn, TOut>, seq.Source, seq.Selector);
-
-    Realized<Seq<TOut>> ISeqVisitor.SelectIndexed<TIn, TOut>(SelectIndexedSeq<TIn, TOut> seq) =>
-        _bridge.Run<Seq<TOut>>(SelectIndexedImpl<TIn, TOut>, seq.Source, seq.Selector);
-
     Realized<Seq<T>> ISeqVisitor.Where<T>(WhereSeq<T> seq) =>
         _bridge.Run<Seq<T>>(WhereImpl<T>, seq.Source, seq.Predicate);
 
@@ -28,16 +22,6 @@ public sealed partial class RxTarget
 
     Realized<Seq<T>> ISeqVisitor.RepeatCount<T>(RepeatCountSeq<T> seq) =>
         _bridge.Run<Seq<T>>(RepeatCountImpl<T>, seq.Source, seq.RepeatCount);
-
-    private static IObservable<TOut> SelectImpl<TIn, TOut>(
-        IObservable<TIn> source,
-        Func<TIn, TOut> selector) =>
-        source.Select(selector);
-
-    private static IObservable<TOut> SelectIndexedImpl<TIn, TOut>(
-        IObservable<TIn> source,
-        Func<TIn, int, TOut> selector) =>
-        source.Select(selector);
 
     private static IObservable<T> WhereImpl<T>(IObservable<T> source, Func<T, bool> predicate) =>
         source.Where(predicate);

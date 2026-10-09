@@ -72,25 +72,6 @@ public partial interface ISeqVisitor
     Realized<Seq<T>> Throw<T>(ThrowSeq<T> seq);
 
     /// <summary>
-    /// Materializes a <see cref="SelectSeq{TIn, TOut}"/> as the target's own
-    /// <c>Select(selector)</c>.
-    /// </summary>
-    /// <remarks>
-    /// Built by <see cref="SeqExtensions.Select{TIn, TOut}(Seq{TIn}, Func{TIn, TOut}, string)"/>.
-    /// </remarks>
-    Realized<Seq<TOut>> Select<TIn, TOut>(SelectSeq<TIn, TOut> seq);
-
-    /// <summary>
-    /// Materializes a <see cref="SelectIndexedSeq{TIn, TOut}"/> as the target's own
-    /// <c>Select((x, i) =&gt; ...)</c>.
-    /// </summary>
-    /// <remarks>
-    /// Built by
-    /// <see cref="SeqExtensions.Select{TIn, TOut}(Seq{TIn}, Func{TIn, int, TOut}, string)"/>.
-    /// </remarks>
-    Realized<Seq<TOut>> SelectIndexed<TIn, TOut>(SelectIndexedSeq<TIn, TOut> seq);
-
-    /// <summary>
     /// Materializes a <see cref="WhereSeq{T}"/> as the target's own <c>Where(predicate)</c>.
     /// </summary>
     /// <remarks>

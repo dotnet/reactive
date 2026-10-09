@@ -21,11 +21,19 @@ namespace Tests.System.Reactive.Shared;
 /// </remarks>
 public sealed class TestableObserver<T>(
     IRxTarget target,
+    TestSchedulerRef scheduler,
     Realized<TestableObserver<T>> native,
     string query)
 {
     /// <summary>The target that created this observer.</summary>
     public IRxTarget Target => target;
+
+    /// <summary>The scheduler this observer records against.</summary>
+    /// <remarks>
+    /// Also the scheduler whose pump completes a subscription made from the test body with
+    /// this observer, on the target that needs that.
+    /// </remarks>
+    public TestSchedulerRef Scheduler => scheduler;
 
     /// <summary>The target's own testable observer (see the remarks on this type).</summary>
     public Realized<TestableObserver<T>> Native => native;

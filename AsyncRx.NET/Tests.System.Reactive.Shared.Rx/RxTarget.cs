@@ -148,7 +148,7 @@ public sealed partial class RxTarget : IRxTarget
             created,
             subscribed,
             disposed);
-        return new(this, Realized.Of<TestableObserver<T>>(observer), query);
+        return new(this, scheduler, Realized.Of<TestableObserver<T>>(observer), query);
     }
 
     // TestScheduler.ScheduleAbsolute bumps work due now (or in the past) to Clock + 1.
@@ -169,7 +169,11 @@ public sealed partial class RxTarget : IRxTarget
     }
 
     public TestableObserver<T> CreateObserver<T>(TestSchedulerRef scheduler) =>
-        new(this, Realized.Of<TestableObserver<T>>(Unwrap(scheduler).CreateObserver<T>()), "");
+        new(
+            this,
+            scheduler,
+            Realized.Of<TestableObserver<T>>(Unwrap(scheduler).CreateObserver<T>()),
+            "");
 
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestableObserver<T> observer) =>
         new(RxDisposable.For(
