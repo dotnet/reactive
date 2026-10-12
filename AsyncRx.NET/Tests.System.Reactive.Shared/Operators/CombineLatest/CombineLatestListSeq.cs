@@ -22,5 +22,8 @@ public sealed class CombineLatestListSeq<T>(IEnumerable<Seq<T>> sources) : Seq<I
         visitor.CombineLatestList(this);
 
     /// <inheritdoc/>
-    public override string ToString() => $"Seq.CombineLatest([{string.Join(", ", sources)}])";
+    public override string ToString() =>
+        sources is ICollection<Seq<T>>
+            ? $"Seq.CombineLatest([{string.Join(", ", sources)}])"
+            : $"Seq.CombineLatest({sources.GetType().Name})";
 }

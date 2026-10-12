@@ -21,5 +21,8 @@ public sealed class ZipListSeq<T>(IEnumerable<Seq<T>> sources) : Seq<IList<T>>
         visitor.ZipList(this);
 
     /// <inheritdoc/>
-    public override string ToString() => $"Seq.Zip([{string.Join(", ", sources)}])";
+    public override string ToString() =>
+        sources is ICollection<Seq<T>>
+            ? $"Seq.Zip([{string.Join(", ", sources)}])"
+            : $"Seq.Zip({sources.GetType().Name})";
 }

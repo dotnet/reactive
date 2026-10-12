@@ -6,8 +6,8 @@ namespace Tests.System.Reactive.Shared;
 
 /// <summary>Describes <c>sources.Concat()</c> over a nested sequence.</summary>
 /// <remarks>
-/// Built by <see cref="SeqExtensions.Concat{T}(Seq{Seq{T}})"/>; materialized by each target through
-/// <see cref="ISeqVisitor.ConcatNested{T}(ConcatNestedSeq{T})"/>.
+/// Built by <see cref="Seq.Concat{T}(Seq{Seq{T}})"/>; materialized by each target
+/// through <see cref="ISeqVisitor.ConcatNested{T}(ConcatNestedSeq{T})"/>.
 /// </remarks>
 public sealed class ConcatNestedSeq<T>(Seq<Seq<T>> sources) : Seq<T>
 {
@@ -15,7 +15,8 @@ public sealed class ConcatNestedSeq<T>(Seq<Seq<T>> sources) : Seq<T>
     public Seq<Seq<T>> Sources => sources;
 
     /// <inheritdoc/>
-    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.ConcatNested(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) =>
+        visitor.ConcatNested(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{sources}.Concat()";

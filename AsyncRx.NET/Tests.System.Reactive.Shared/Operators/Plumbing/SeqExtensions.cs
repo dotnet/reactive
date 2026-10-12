@@ -9,8 +9,8 @@ namespace Tests.System.Reactive.Shared;
 /// extension methods on <see cref="Seq{T}"/>.
 /// </summary>
 /// <remarks>
-/// <c>Concat</c> (binary and nested) and <c>Repeat</c>; <c>Select</c>, <c>Where</c>, <c>Zip</c>
-/// and <c>Merge</c> have left for their own folders as they came under test. These exist so that
+/// <c>Repeat</c>; <c>Select</c>, <c>Where</c>, <c>Concat</c>, <c>Zip</c> and <c>Merge</c> have
+/// left for their own folders as they came under test. These exist so that
 /// a scenario writes them
 /// exactly as the Rx.NET test it was migrated from does. Each method builds one node of the query
 /// description (one node type per overload, in this folder), and each target turns that node into
@@ -18,26 +18,6 @@ namespace Tests.System.Reactive.Shared;
 /// </remarks>
 public static class SeqExtensions
 {
-    /// <summary>Describes <c>first.Concat(second)</c>.</summary>
-    /// <typeparam name="T">The type of the elements in the source sequences.</typeparam>
-    /// <param name="first">First observable sequence.</param>
-    /// <param name="second">Second observable sequence.</param>
-    /// <remarks>
-    /// Builds a <see cref="ConcatSeq{T}"/>, which each target materializes through
-    /// <see cref="ISeqVisitor.Concat{T}(ConcatSeq{T})"/>.
-    /// </remarks>
-    public static Seq<T> Concat<T>(this Seq<T> first, Seq<T> second) =>
-        new ConcatSeq<T>(first, second);
-
-    /// <summary>Describes <c>sources.Concat()</c> over a nested sequence.</summary>
-    /// <typeparam name="T">The type of the elements in the source sequences.</typeparam>
-    /// <param name="sources">Observable sequence of inner observable sequences.</param>
-    /// <remarks>
-    /// Builds a <see cref="ConcatNestedSeq{T}"/>, which each target materializes through
-    /// <see cref="ISeqVisitor.ConcatNested{T}(ConcatNestedSeq{T})"/>.
-    /// </remarks>
-    public static Seq<T> Concat<T>(this Seq<Seq<T>> sources) => new ConcatNestedSeq<T>(sources);
-
     /// <summary>Describes <c>source.Repeat()</c>.</summary>
     /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
     /// <param name="source">Observable sequence to repeat.</param>

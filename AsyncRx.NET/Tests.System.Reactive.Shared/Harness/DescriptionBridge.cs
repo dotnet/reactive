@@ -450,12 +450,27 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
     /// <typeparam name="TReal">The target's element type.</typeparam>
     /// <param name="items">The descriptions.</param>
     /// <param name="convert">Converts one description to the target's value.</param>
+    /// <remarks>
+    /// Enumerates through the generic interface where the source offers it, as the operator
+    /// would: a double such as <c>RogueEnumerable</c> throws its scenario's exception from the
+    /// generic <c>GetEnumerator</c> and something else from the non-generic one.
+    /// </remarks>
     private sealed class LazyRealEnumerable<TReal>(
         global::System.Collections.IEnumerable items,
         Func<object?, object?> convert) : IEnumerable<TReal>
     {
         public IEnumerator<TReal> GetEnumerator()
         {
+            if (items is IEnumerable<object?> typed)
+            {
+                foreach (var item in typed)
+                {
+                    yield return (TReal)convert(item)!;
+                }
+
+                yield break;
+            }
+
             foreach (var item in items)
             {
                 yield return (TReal)convert(item)!;

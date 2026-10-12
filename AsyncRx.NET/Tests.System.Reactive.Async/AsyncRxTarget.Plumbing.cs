@@ -10,25 +10,11 @@ namespace Tests.System.Reactive.Async;
 
 public sealed partial class AsyncRxTarget
 {
-    Realized<Seq<T>> ISeqVisitor.Concat<T>(ConcatSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(ConcatImpl<T>, seq.First, seq.Second);
-
-    Realized<Seq<T>> ISeqVisitor.ConcatNested<T>(ConcatNestedSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(ConcatNestedImpl<T>, seq.Sources);
-
     Realized<Seq<T>> ISeqVisitor.Repeat<T>(RepeatSeq<T> seq) =>
         _bridge.Run<Seq<T>>(RepeatImpl<T>, seq.Source);
 
     Realized<Seq<T>> ISeqVisitor.RepeatCount<T>(RepeatCountSeq<T> seq) =>
         _bridge.Run<Seq<T>>(RepeatCountImpl<T>, seq.Source, seq.RepeatCount);
-
-    private static IAsyncObservable<T> ConcatImpl<T>(
-        IAsyncObservable<T> first,
-        IAsyncObservable<T> second) =>
-        first.Concat(second);
-
-    private static IAsyncObservable<T> ConcatNestedImpl<T>(IAsyncObservable<IAsyncObservable<T>> sources) =>
-        sources.Concat();
 
     private static IAsyncObservable<T> RepeatImpl<T>(IAsyncObservable<T> source) => source.Repeat();
 

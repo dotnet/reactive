@@ -6,7 +6,7 @@ namespace Tests.System.Reactive.Shared;
 
 /// <summary>Describes <c>first.Concat(second)</c>.</summary>
 /// <remarks>
-/// Built by <see cref="SeqExtensions.Concat{T}(Seq{T}, Seq{T})"/>;
+/// Built by <see cref="Seq.Concat{T}(Seq{T}, Seq{T})"/>;
 /// materialized by each target through <see cref="ISeqVisitor.Concat{T}(ConcatSeq{T})"/>.
 /// </remarks>
 public sealed class ConcatSeq<T>(Seq<T> first, Seq<T> second) : Seq<T>

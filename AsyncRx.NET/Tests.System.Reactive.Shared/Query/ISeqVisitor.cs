@@ -72,12 +72,6 @@ public partial interface ISeqVisitor
     Realized<Seq<T>> Throw<T>(ThrowSeq<T> seq);
 
     /// <summary>
-    /// Materializes a <see cref="ConcatSeq{T}"/> as the target's own <c>Concat(second)</c>.
-    /// </summary>
-    /// <remarks>Built by <see cref="SeqExtensions.Concat{T}(Seq{T}, Seq{T})"/>.</remarks>
-    Realized<Seq<T>> Concat<T>(ConcatSeq<T> seq);
-
-    /// <summary>
     /// Materializes a <see cref="DeferSeq{T}"/> as the target's own <c>Defer(factory)</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Defer{T}(Func{Seq{T}}, string)"/>.</remarks>
@@ -88,13 +82,6 @@ public partial interface ISeqVisitor
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Never{T}"/>.</remarks>
     Realized<Seq<T>> Never<T>(NeverSeq<T> seq);
-
-    /// <summary>
-    /// Materializes a <see cref="ConcatNestedSeq{T}"/> as the target's own <c>Concat()</c> over a
-    /// nested sequence.
-    /// </summary>
-    /// <remarks>Built by <see cref="SeqExtensions.Concat{T}(Seq{Seq{T}})"/>.</remarks>
-    Realized<Seq<T>> ConcatNested<T>(ConcatNestedSeq<T> seq);
 
     /// <summary>
     /// Materializes a <see cref="RepeatSeq{T}"/> as the target's own <c>Repeat()</c>.
