@@ -6,7 +6,7 @@ namespace Tests.System.Reactive.Shared;
 
 /// <summary>Describes <c>source.Repeat()</c>.</summary>
 /// <remarks>
-/// Built by <see cref="SeqExtensions.Repeat{T}(Seq{T})"/>;
+/// Built by <see cref="Seq.Repeat{T}(Seq{T})"/>;
 /// materialized by each target through <see cref="ISeqVisitor.Repeat{T}(RepeatSeq{T})"/>.
 /// </remarks>
 public sealed class RepeatSeq<T>(Seq<T> source) : Seq<T>

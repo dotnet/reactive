@@ -56,7 +56,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Catch(observer, Repeat(source).GetEnumerator());
+            return Catch(observer, AsyncObservable.RepeatInfinite(source).GetEnumerator());
         }
 
         public static (IAsyncObserver<TSource>, IAsyncDisposable) Retry<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source, int retryCount)

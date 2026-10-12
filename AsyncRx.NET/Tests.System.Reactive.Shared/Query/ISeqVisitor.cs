@@ -82,17 +82,4 @@ public partial interface ISeqVisitor
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Never{T}"/>.</remarks>
     Realized<Seq<T>> Never<T>(NeverSeq<T> seq);
-
-    /// <summary>
-    /// Materializes a <see cref="RepeatSeq{T}"/> as the target's own <c>Repeat()</c>.
-    /// </summary>
-    /// <remarks>Built by <see cref="SeqExtensions.Repeat{T}(Seq{T})"/>.</remarks>
-    Realized<Seq<T>> Repeat<T>(RepeatSeq<T> seq);
-
-    /// <summary>
-    /// Materializes a <see cref="RepeatCountSeq{T}"/> as the target's own
-    /// <c>Repeat(repeatCount)</c>.
-    /// </summary>
-    /// <remarks>Built by <see cref="SeqExtensions.Repeat{T}(Seq{T}, int)"/>.</remarks>
-    Realized<Seq<T>> RepeatCount<T>(RepeatCountSeq<T> seq);
 }

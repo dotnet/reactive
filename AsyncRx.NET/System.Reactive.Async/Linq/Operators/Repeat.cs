@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
@@ -48,7 +47,10 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(source, static (source, observer) => AsyncObserver.Repeat(observer, source));
+            // As in Rx.NET: a concatenation of the source without end, through Concat's
+            // tail-recursive sink, so that the chain stays one subscription deep however many
+            // times the source has been repeated.
+            return new ConcatAsyncObservable<TSource>(RepeatInfinite(source));
         }
 
         public static IAsyncObservable<TSource> Repeat<TSource>(this IAsyncObservable<TSource> source, int repeatCount)
@@ -58,10 +60,17 @@ namespace System.Reactive.Linq
             if (repeatCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(repeatCount));
 
-            return CreateAsyncObservable<TSource>.From(
-                source,
-                repeatCount,
-                static (source, repeatCount, observer) => AsyncObserver.Repeat(observer, source, repeatCount));
+            // As in Rx.NET: a concatenation of repeatCount copies of the source.
+            return new ConcatAsyncObservable<TSource>(Enumerable.Repeat(source, repeatCount));
+        }
+
+        // Shared with Retry, whose sink is the same shape over Catch.
+        internal static IEnumerable<T> RepeatInfinite<T>(T value)
+        {
+            while (true)
+            {
+                yield return value;
+            }
         }
     }
 
@@ -130,64 +139,6 @@ namespace System.Reactive.Linq
                     await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                 }
             });
-        }
-
-        public static ValueTask<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            async ValueTask<IAsyncDisposable> CoreAsync()
-            {
-                var (sink, inner) = Concat(observer, Repeat(source).GetEnumerator());
-
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
-
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            }
-
-            return CoreAsync();
-        }
-
-        public static ValueTask<IAsyncDisposable> Repeat<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source, int repeatCount)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (repeatCount < 0)
-                throw new ArgumentOutOfRangeException(nameof(repeatCount));
-
-            async ValueTask<IAsyncDisposable> CoreAsync()
-            {
-                if (repeatCount == 0)
-                {
-                    await observer.OnCompletedAsync().ConfigureAwait(false);
-                    return AsyncDisposable.Nop;
-                }
-
-                // The subscription made here is the first repetition; the sink's enumerator
-                // supplies the rest, so the sequence is repeated repeatCount times in all, as
-                // in Rx.NET. (With repeatCount copies in the enumerator, it ran once too often.)
-                var remaining = Enumerable.Repeat(source, repeatCount - 1).GetEnumerator();
-                var (sink, inner) = Concat(observer, remaining);
-
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
-
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            }
-
-            return CoreAsync();
-        }
-
-        private static IEnumerable<T> Repeat<T>(T value)
-        {
-            while (true)
-            {
-                yield return value;
-            }
         }
     }
 }
