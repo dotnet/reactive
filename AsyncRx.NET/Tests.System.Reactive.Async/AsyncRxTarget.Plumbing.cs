@@ -10,9 +10,6 @@ namespace Tests.System.Reactive.Async;
 
 public sealed partial class AsyncRxTarget
 {
-    Realized<Seq<T>> ISeqVisitor.Where<T>(WhereSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(WhereImpl<T>, seq.Source, seq.Predicate);
-
     Realized<Seq<T>> ISeqVisitor.Concat<T>(ConcatSeq<T> seq) =>
         _bridge.Run<Seq<T>>(ConcatImpl<T>, seq.First, seq.Second);
 
@@ -24,11 +21,6 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<T>> ISeqVisitor.RepeatCount<T>(RepeatCountSeq<T> seq) =>
         _bridge.Run<Seq<T>>(RepeatCountImpl<T>, seq.Source, seq.RepeatCount);
-
-    private static IAsyncObservable<T> WhereImpl<T>(
-        IAsyncObservable<T> source,
-        Func<T, bool> predicate) =>
-        source.Where(predicate);
 
     private static IAsyncObservable<T> ConcatImpl<T>(
         IAsyncObservable<T> first,

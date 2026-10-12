@@ -72,14 +72,6 @@ public partial interface ISeqVisitor
     Realized<Seq<T>> Throw<T>(ThrowSeq<T> seq);
 
     /// <summary>
-    /// Materializes a <see cref="WhereSeq{T}"/> as the target's own <c>Where(predicate)</c>.
-    /// </summary>
-    /// <remarks>
-    /// Built by <see cref="SeqExtensions.Where{T}(Seq{T}, Func{T, bool}, string)"/>.
-    /// </remarks>
-    Realized<Seq<T>> Where<T>(WhereSeq<T> seq);
-
-    /// <summary>
     /// Materializes a <see cref="ConcatSeq{T}"/> as the target's own <c>Concat(second)</c>.
     /// </summary>
     /// <remarks>Built by <see cref="SeqExtensions.Concat{T}(Seq{T}, Seq{T})"/>.</remarks>

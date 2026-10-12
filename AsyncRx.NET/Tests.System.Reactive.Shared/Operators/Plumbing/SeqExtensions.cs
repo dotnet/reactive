@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Runtime.CompilerServices;
-
 namespace Tests.System.Reactive.Shared;
 
 /// <summary>
@@ -11,7 +9,7 @@ namespace Tests.System.Reactive.Shared;
 /// extension methods on <see cref="Seq{T}"/>.
 /// </summary>
 /// <remarks>
-/// <c>Where</c>, <c>Concat</c> (binary and nested) and <c>Repeat</c>; <c>Select</c>, <c>Zip</c>
+/// <c>Concat</c> (binary and nested) and <c>Repeat</c>; <c>Select</c>, <c>Where</c>, <c>Zip</c>
 /// and <c>Merge</c> have left for their own folders as they came under test. These exist so that
 /// a scenario writes them
 /// exactly as the Rx.NET test it was migrated from does. Each method builds one node of the query
@@ -20,21 +18,6 @@ namespace Tests.System.Reactive.Shared;
 /// </remarks>
 public static class SeqExtensions
 {
-    /// <summary>Describes <c>source.Where(predicate)</c>.</summary>
-    /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
-    /// <param name="source">An observable sequence whose elements to filter.</param>
-    /// <param name="predicate">A function to test each source element for a condition.</param>
-    /// <param name="text">
-    /// Supplied by the compiler (the source text of the selector), for printing the query in
-    /// diagnostics; do not pass it.
-    /// </param>
-    /// <remarks>
-    /// Builds a <see cref="WhereSeq{T}"/>, which each target materializes through
-    /// <see cref="ISeqVisitor.Where{T}(WhereSeq{T})"/>.
-    /// </remarks>
-    public static Seq<T> Where<T>(this Seq<T> source, Func<T, bool> predicate, [CallerArgumentExpression(nameof(predicate))] string text = "") =>
-        new WhereSeq<T>(source, predicate, text);
-
     /// <summary>Describes <c>first.Concat(second)</c>.</summary>
     /// <typeparam name="T">The type of the elements in the source sequences.</typeparam>
     /// <param name="first">First observable sequence.</param>
