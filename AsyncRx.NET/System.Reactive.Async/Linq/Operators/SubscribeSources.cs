@@ -40,10 +40,10 @@ namespace System.Reactive.Linq
             }
         }
 
-        // Subscribes one of a combining operator's sources (Zip, CombineLatest) so that its
-        // subscription is released as soon as that source completes, while the others carry on,
-        // as Rx.NET's sinks do; the holder returned is what the operator's composite disposable
-        // keeps. A source that completes during the subscribe call disposes the holder before it
+        // Subscribes one of an operator's sources (Zip, CombineLatest, Concat, TakeUntil) so that
+        // its subscription is released as soon as that source completes, while the others carry
+        // on, as Rx.NET's sinks do; the holder returned is what the operator's composite
+        // disposable keeps. A source that completes during the subscribe call disposes the holder before it
         // is assigned, which disposes the subscription the moment it is.
         internal static async ValueTask<IAsyncDisposable> SubscribeReleasingOnCompletedAsync<TSource>(IAsyncObservable<TSource> source, IAsyncObserver<TSource> observer)
         {
