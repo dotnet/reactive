@@ -29,6 +29,12 @@
          neutral nodes (Seq<T>); each target project materializes it. -->
     <PackageReference Include="Microsoft.Reactive.Testing" Version="6.0.0" />
     <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
+
+    <!-- The C# compiler as a library, for ImplCalls (Harness/ImplCalls.cs), which
+         reads each *Impl's source to find the library method it calls; and the reader of the
+         compilation context a target project preserves in its deps.json. -->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="8.0.2" />
   </ItemGroup>
 
   <ItemGroup>

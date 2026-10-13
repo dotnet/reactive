@@ -15,8 +15,9 @@ namespace Tests.System.Reactive.Async.Tests;
 /// Pins that the real calls in <see cref="AsyncRxTarget"/> keep AsyncRx.NET's genericity.
 /// </summary>
 /// <remarks>
-/// An <c>*Impl</c> written over a closed observable type compiles and passes every flat scenario,
-/// and fails only when a nested one reaches it. This turns that into an immediate failure.
+/// An <c>*Impl</c> less generic than the library call it makes compiles and passes every flat
+/// scenario, and fails only when a nested one reaches it. This compares each with its call, and
+/// turns that into an immediate failure.
 /// </remarks>
 [TestClass]
 public sealed class ImplSignatureTests

@@ -35,4 +35,7 @@
     <ProjectReference Include="..\Tests.System.Reactive.Shared\Tests.System.Reactive.Shared.csproj" />
   </ItemGroup>
 
+  <!-- Captures the compiler's inputs for the kit's ImplCalls (Harness/ImplCalls.cs). -->
+  <Import Project="..\Tests.System.Reactive.Shared\CaptureCompilation.targets" />
+
 </Project>

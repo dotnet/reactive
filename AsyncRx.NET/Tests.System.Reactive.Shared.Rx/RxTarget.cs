@@ -273,9 +273,10 @@ public sealed partial class RxTarget : IRxTarget
     // ---- The real calls into Rx.NET, for the harness ----
     //
     // Every *Impl, here and in the operator files, is written over Rx.NET's own types with the
-    // same genericity as the library's signatures, so the bridge can instantiate it at nested
-    // element types (ImplSignatureTests checks this). A breakpoint in one is a breakpoint on the
-    // call under test.
+    // same genericity as the library call it makes, so the bridge can instantiate it at nested
+    // element types (ImplSignatureTests checks each against that call; the few that adapt a call
+    // rather than mirror it say so with [AdaptsLibraryCall]). A breakpoint in one is a breakpoint
+    // on the call under test.
 
     private static ITestableObservable<T> HotImpl<T>(
         RxTestScheduler scheduler,
@@ -290,10 +291,12 @@ public sealed partial class RxTarget : IRxTarget
     private static IDisposable ConnectImpl<T>(IConnectableObservable<T> connectable) =>
         connectable.Connect();
 
+    [AdaptsLibraryCall]
     private static IList<Subscription> SubscriptionsImpl<T>(ITestableObservable<T> source) =>
         source.Subscriptions;
 
     // The observer a Create callback drives: each call completes synchronously here.
+    [AdaptsLibraryCall]
     private static ObserverRef<T> WrapObserverImpl<T>(IObserver<T> observer) =>
         new(
             x =>
@@ -312,15 +315,18 @@ public sealed partial class RxTarget : IRxTarget
                 return default;
             });
 
+    [AdaptsLibraryCall]
     private static IDisposable SubscribeImpl<T>(IObservable<T> source, Func<T, ValueTask> onNext) =>
         source.Subscribe(x => Complete(onNext(x)));
 
+    [AdaptsLibraryCall]
     private static IDisposable SubscribeWithErrorImpl<T>(
         IObservable<T> source,
         Func<T, ValueTask> onNext,
         Func<Exception, ValueTask> onError) =>
         source.Subscribe(x => Complete(onNext(x)), ex => Complete(onError(ex)));
 
+    [AdaptsLibraryCall]
     private static IDisposable SubscribeWithHandlersImpl<T>(
         IObservable<T> source,
         Func<T, ValueTask> onNext,

@@ -274,14 +274,17 @@ public sealed partial class AsyncRxTarget : IRxTarget
     private static ValueTask<IAsyncDisposable> ConnectImpl<T>(IConnectableAsyncObservable<T> connectable) =>
         connectable.ConnectAsync();
 
+    [AdaptsLibraryCall]
     private static IReadOnlyList<AsyncSubscription> SubscriptionsImpl<T>(
         ITestableAsyncObservable<T> source) =>
         source.Subscriptions;
 
     // The observer a Create callback drives.
+    [AdaptsLibraryCall]
     private static ObserverRef<T> WrapObserverImpl<T>(IAsyncObserver<T> observer) =>
         new(observer.OnNextAsync, observer.OnErrorAsync, observer.OnCompletedAsync);
 
+    [AdaptsLibraryCall]
     private static ValueTask<IAsyncDisposable> SubscribeImpl<T>(
         IAsyncObservable<T> source,
         Func<T, ValueTask> onNext,
@@ -292,6 +295,7 @@ public sealed partial class AsyncRxTarget : IRxTarget
             return onNext(x);
         }));
 
+    [AdaptsLibraryCall]
     private static ValueTask<IAsyncDisposable> SubscribeWithHandlersImpl<T>(
         IAsyncObservable<T> source,
         Func<T, ValueTask> onNext,

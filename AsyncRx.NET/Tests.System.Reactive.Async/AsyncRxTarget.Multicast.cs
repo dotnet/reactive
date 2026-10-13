@@ -22,11 +22,16 @@ public sealed partial class AsyncRxTarget
             seq.SubjectSelector,
             seq.Selector);
 
+    // The library's subject is IAsyncSubject<TSource, TResult>; the model's subject handle has one
+    // element type, so these mirror the library at TSource = TResult (every Rx.NET Multicast
+    // test uses Subject<int>). A deferred item records the narrowing.
+    [AdaptsLibraryCall]
     private static IConnectableAsyncObservable<T> MulticastImpl<T>(
         IAsyncObservable<T> source,
         IAsyncSubject<T> subject) =>
         source.Multicast(subject);
 
+    [AdaptsLibraryCall]
     private static IAsyncObservable<TResult> MulticastSelectorImpl<T, TResult>(
         IAsyncObservable<T> source,
         Func<IAsyncSubject<T>> subjectSelector,

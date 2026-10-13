@@ -53,6 +53,8 @@ public sealed partial class AsyncRxTarget
             seq.Error,
             Unwrap(seq.Scheduler));
 
+    // Fixes the scheduler argument (see the visitor member above), so not the call's own shape.
+    [AdaptsLibraryCall]
     private static IAsyncObservable<T> EnumerableImpl<T>(IEnumerable<T> source) =>
         source.ToAsyncObservable(ImmediateAsyncScheduler.Instance);
 
