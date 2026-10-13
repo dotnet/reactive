@@ -216,6 +216,19 @@ namespace System.Reactive.Linq
                     return StableCompositeAsyncDisposable.Create(sourceSubscription, closingDisposable);
                 });
         }
+
+        public static IAsyncObservable<IList<TSource>> Buffer<TSource, TBufferOpening, TBufferClosing>(this IAsyncObservable<TSource> source, IAsyncObservable<TBufferOpening> bufferOpenings, Func<TBufferOpening, IAsyncObservable<TBufferClosing>> bufferClosingSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (bufferOpenings == null)
+                throw new ArgumentNullException(nameof(bufferOpenings));
+            if (bufferClosingSelector == null)
+                throw new ArgumentNullException(nameof(bufferClosingSelector));
+
+            // As in Rx.NET: the windows of the same openings and closings, each collected to a list.
+            return source.Window(bufferOpenings, bufferClosingSelector).SelectMany(static window => window.ToList());
+        }
     }
 
     public partial class AsyncObserver
@@ -329,10 +342,8 @@ namespace System.Reactive.Linq
                     {
                         using (await gate.LockAsync().ConfigureAwait(false))
                         {
-                            if (buffer.Count > 0)
-                            {
-                                await observer.OnNextAsync(buffer).ConfigureAwait(false);
-                            }
+                            // As in Rx.NET: an empty buffer is still a buffer, so it is delivered.
+                            await observer.OnNextAsync(buffer).ConfigureAwait(false);
 
                             await observer.OnCompletedAsync().ConfigureAwait(false);
                         }
@@ -345,12 +356,10 @@ namespace System.Reactive.Linq
                     {
                         using (await gate.LockAsync().ConfigureAwait(false))
                         {
-                            if (buffer.Count > 0)
-                            {
-                                await observer.OnNextAsync(buffer).ConfigureAwait(false);
+                            // As in Rx.NET: an empty buffer is still a buffer, so it is delivered.
+                            await observer.OnNextAsync(buffer).ConfigureAwait(false);
 
-                                buffer = new List<TSource>();
-                            }
+                            buffer = new List<TSource>();
                         }
 
                         await scheduler.Delay(timeSpan, ct).RendezVous(scheduler, ct);
@@ -410,10 +419,8 @@ namespace System.Reactive.Linq
                             {
                                 var buffer = queue.Dequeue();
 
-                                if (buffer.Count > 0)
-                                {
-                                    await observer.OnNextAsync(buffer).ConfigureAwait(false);
-                                }
+                                // As in Rx.NET: an empty buffer is still a buffer, so it is delivered.
+                                await observer.OnNextAsync(buffer).ConfigureAwait(false);
                             }
 
                             await observer.OnCompletedAsync().ConfigureAwait(false);
@@ -472,10 +479,8 @@ namespace System.Reactive.Linq
                             {
                                 var buffer = queue.Dequeue();
 
-                                if (buffer.Count > 0)
-                                {
-                                    await observer.OnNextAsync(buffer).RendezVous(scheduler, ct);
-                                }
+                                // As in Rx.NET: an empty buffer is still a buffer, so it is delivered.
+                                await observer.OnNextAsync(buffer).RendezVous(scheduler, ct);
                             }
 
                             if (isOpen)
@@ -540,7 +545,7 @@ namespace System.Reactive.Linq
 
                     var res = buffer;
                     buffer = new List<TSource>();
-                    await observer.OnNextAsync(buffer).ConfigureAwait(false);
+                    await observer.OnNextAsync(res).ConfigureAwait(false);
 
                     await CreateTimerAsync(id).ConfigureAwait(false);
                 }
