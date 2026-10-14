@@ -13,7 +13,13 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<T>> ISeqVisitor.Switch<T>(SwitchSeq<T> seq) =>
         _bridge.Run<Seq<T>>(SwitchImpl<T>, seq.Sources);
 
+    Realized<Seq<T>> ISeqVisitor.SwitchTasks<T>(SwitchTasksSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(SwitchTasksImpl<T>, seq.Sources);
+
     private static IAsyncObservable<T> SwitchImpl<T>(
         IAsyncObservable<IAsyncObservable<T>> sources) =>
+        sources.Switch();
+
+    private static IAsyncObservable<T> SwitchTasksImpl<T>(IAsyncObservable<Task<T>> sources) =>
         sources.Switch();
 }

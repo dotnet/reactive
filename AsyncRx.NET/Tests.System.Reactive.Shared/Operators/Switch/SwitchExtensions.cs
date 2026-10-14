@@ -11,4 +11,13 @@ public static class SwitchExtensions
     /// <typeparam name="T">The type of the elements in the source sequences.</typeparam>
     /// <param name="sources">Observable sequence of inner observable sequences.</param>
     public static Seq<T> Switch<T>(this Seq<Seq<T>> sources) => new SwitchSeq<T>(sources);
+
+    /// <summary>Describes <c>sources.Switch()</c> over a sequence of tasks.</summary>
+    /// <typeparam name="T">The type of the results produced by the tasks.</typeparam>
+    /// <param name="sources">Observable sequence of tasks.</param>
+    /// <remarks>
+    /// Builds a <see cref="SwitchTasksSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.SwitchTasks{T}(SwitchTasksSeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> Switch<T>(this Seq<Task<T>> sources) => new SwitchTasksSeq<T>(sources);
 }

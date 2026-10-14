@@ -11,6 +11,12 @@ public sealed partial class RxTarget
     Realized<Seq<T>> ISeqVisitor.Switch<T>(SwitchSeq<T> seq) =>
         _bridge.Run<Seq<T>>(SwitchImpl<T>, seq.Sources);
 
+    Realized<Seq<T>> ISeqVisitor.SwitchTasks<T>(SwitchTasksSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(SwitchTasksImpl<T>, seq.Sources);
+
     private static IObservable<T> SwitchImpl<T>(IObservable<IObservable<T>> sources) =>
+        sources.Switch();
+
+    private static IObservable<T> SwitchTasksImpl<T>(IObservable<Task<T>> sources) =>
         sources.Switch();
 }

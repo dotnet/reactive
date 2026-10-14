@@ -16,9 +16,12 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// <para>
 /// Transcribed mechanically from the sync file. Deliberately not here: the two
 /// <c>*_ArgumentChecking</c> tests (the code-generated stratum) and
-/// <c>Take_DecrementsCountFirst</c>, which belongs to the per-target native stratum (a reentrancy
-/// regression test with no assertion, driving a <c>BehaviorSubject</c> back into itself and
-/// relying on a stack overflow to signal failure). <c>Take_Default</c>, a real-time test, runs
+/// <c>Take_DecrementsCountFirst</c>, the original's reentrancy regression, which drives a
+/// <c>BehaviorSubject</c> back into itself from the handler of <c>Take(1)</c>: AsyncRx.NET's
+/// observers reject a re-entrant notification by design, so the claim (the count is decremented
+/// before the element is forwarded, so a re-entrant element is dropped) cannot be observed there;
+/// it runs against Rx.NET in its runner, counting the handler's calls where the original relies
+/// on a stack overflow to signal failure. <c>Take_Default</c>, a real-time test, runs
 /// on <see cref="SharedReactiveTest.DefaultScheduler"/> and awaits completion through
 /// <see cref="SharedReactiveTest.ToListAsync{T}"/> where the original blocks on a
 /// <c>ManualResetEvent</c>.
@@ -746,5 +749,4 @@ public abstract class TakeTests : SharedReactiveTest
 
         Assert.IsTrue(lst.SequenceEqual(Enumerable.Range(0, 10)));
     }
-
 }

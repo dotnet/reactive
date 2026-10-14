@@ -6,11 +6,11 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 
 /// <summary>Shared <c>Switch</c> scenarios, from Rx.NET's <c>SwitchTest.cs</c>.</summary>
 /// <remarks>
-/// Five of its seven tests. Deliberately not here: <c>Switch_ArgumentChecking</c> (the
-/// code-generated stratum) and <c>Switch_Task</c>, which exercises the
-/// <c>IObservable&lt;Task&lt;T&gt;&gt;</c> overload on real tasks and the default scheduler, and
-/// has no AsyncRx.NET counterpart. Where the original carries pre-v2 expectations under
-/// <c>NO_PERF</c>, the v2 ones are used.
+/// Six of its seven tests. Deliberately not here: <c>Switch_ArgumentChecking</c> (the
+/// code-generated stratum). <c>Switch_Task</c>, over real tasks on the default scheduler, joined
+/// once AsyncRx.NET gained the task form (2026-10-14); it collects with <c>ToListAsync</c> where
+/// the original uses <c>ToArray().Single()</c>, as <c>Concat_Task</c> does. Where the original
+/// carries pre-v2 expectations under <c>NO_PERF</c>, the v2 ones are used.
 /// </remarks>
 public abstract class SwitchTests : SharedReactiveTest
 {
@@ -268,5 +268,20 @@ public abstract class SwitchTests : SharedReactiveTest
         ys1.Subscriptions.AssertEqual(
             Subscribe(300, 530)
         );
+    }
+
+    [TestMethod]
+    public async Task Switch_Task()
+    {
+        var tss = new[]
+        {
+            Task.Factory.StartNew(() => 1),
+            Task.Factory.StartNew(() => 2),
+            Task.Factory.StartNew(() => 3),
+        }.ToSeq().Switch();
+
+        var res = await ToListAsync(tss);
+
+        Assert.IsTrue(res.Zip(res.Skip(1), (l, r) => r > l).All(b => b));
     }
 }

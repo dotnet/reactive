@@ -4,6 +4,7 @@
 
 using System.Reactive.Disposables;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
@@ -27,6 +28,15 @@ namespace System.Reactive.Linq
 
                     return StableCompositeAsyncDisposable.Create(subscription, cancel);
                 });
+        }
+
+        public static IAsyncObservable<TSource> Switch<TSource>(this IAsyncObservable<Task<TSource>> sources)
+        {
+            if (sources == null)
+                throw new ArgumentNullException(nameof(sources));
+
+            // As in Rx.NET: each task becomes a sequence of its result, and the latest wins.
+            return sources.Select(static task => task.ToAsyncObservable()).Switch();
         }
     }
 

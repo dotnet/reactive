@@ -12,7 +12,12 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// set the running count inside Rx.NET's sink to <c>long.MaxValue</c> by reflection on a private
 /// field, to show that the count is incremented in a checked context. AsyncRx.NET's sinks keep
 /// the count in a local of a closure, where nothing can reach it, so those ten are written
-/// against Rx.NET in its runner.
+/// against Rx.NET in its runner. The four <c>*_Overflow</c> tests at the end are not from the
+/// original file: they ask the same question of both targets through the running sum, which
+/// shares the checked block and the error path with the count and can be overflowed by two
+/// elements, where the count cannot be reached. Only the <c>long</c> and <c>decimal</c>
+/// accumulators can overflow that way (the <c>int</c> forms sum into a <c>long</c>, the
+/// floating-point forms do not overflow), so there are four.
 /// </remarks>
 public abstract class AverageTests : SharedReactiveTest
 {
@@ -1488,6 +1493,106 @@ public abstract class AverageTests : SharedReactiveTest
 
         xs.Subscriptions.AssertEqual(
             Subscribe(200, 240)
+        );
+    }
+
+    [TestMethod]
+    public void Average_Int64_Overflow()
+    {
+        var scheduler = Scheduler;
+
+        var xs = scheduler.CreateHotObservable(
+            OnNext(150, 1L),
+            OnNext(210, long.MaxValue),
+            OnNext(220, long.MaxValue),
+            OnCompleted<long>(250)
+        );
+
+        var res = scheduler.Start(() =>
+            xs.Average()
+        );
+
+        res.Messages.AssertEqual(
+            OnError<double>(220, e => e is OverflowException)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 220)
+        );
+    }
+
+    [TestMethod]
+    public void Average_Decimal_Overflow()
+    {
+        var scheduler = Scheduler;
+
+        var xs = scheduler.CreateHotObservable(
+            OnNext(150, 1m),
+            OnNext(210, decimal.MaxValue),
+            OnNext(220, decimal.MaxValue),
+            OnCompleted<decimal>(250)
+        );
+
+        var res = scheduler.Start(() =>
+            xs.Average()
+        );
+
+        res.Messages.AssertEqual(
+            OnError<decimal>(220, e => e is OverflowException)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 220)
+        );
+    }
+
+    [TestMethod]
+    public void Average_Nullable_Int64_Overflow()
+    {
+        var scheduler = Scheduler;
+
+        var xs = scheduler.CreateHotObservable(
+            OnNext(150, (long?)1),
+            OnNext(210, (long?)long.MaxValue),
+            OnNext(220, (long?)long.MaxValue),
+            OnCompleted<long?>(250)
+        );
+
+        var res = scheduler.Start(() =>
+            xs.Average()
+        );
+
+        res.Messages.AssertEqual(
+            OnError<double?>(220, e => e is OverflowException)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 220)
+        );
+    }
+
+    [TestMethod]
+    public void Average_Nullable_Decimal_Overflow()
+    {
+        var scheduler = Scheduler;
+
+        var xs = scheduler.CreateHotObservable(
+            OnNext(150, (decimal?)1),
+            OnNext(210, (decimal?)decimal.MaxValue),
+            OnNext(220, (decimal?)decimal.MaxValue),
+            OnCompleted<decimal?>(250)
+        );
+
+        var res = scheduler.Start(() =>
+            xs.Average()
+        );
+
+        res.Messages.AssertEqual(
+            OnError<decimal?>(220, e => e is OverflowException)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 220)
         );
     }
 }
