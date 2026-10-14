@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Reactive.Disposables;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
@@ -51,14 +49,9 @@ namespace System.Reactive.Linq
         }
     }
 
-    // A port of Rx.NET's Concat over its TailRecursiveSink. The sink keeps a stack of enumerators
-    // of sources and subscribes to each source with itself as the observer, so that a chain of
-    // concatenations, however it was built, is one subscription deep at any moment: a source
-    // that is itself a Concat is flattened into the stack rather than subscribed to, and a Defer
-    // is evaluated to see whether it yields one. A trampoline keeps a source that completes
-    // synchronously from re-entering the drain, so that neither the observer chain nor the call
-    // stack grows with the length of the chain, which is what lets a recursively defined
-    // sequence (Defer(() => xs.Concat(f())) ) run without exhausting the stack.
+    // Rx.NET's Concat over its TailRecursiveSink (TailRecursiveAsyncSink here): a source that
+    // completes is released and the next is subscribed, and a chain of concatenations, however
+    // built, is one subscription deep.
     internal sealed class ConcatAsyncObservable<TSource> : AsyncObservableBase<TSource>, IConcatenatableAsyncObservable<TSource>
     {
         private readonly IEnumerable<IAsyncObservable<TSource>> _sources;
@@ -80,155 +73,27 @@ namespace System.Reactive.Linq
         }
     }
 
-    internal sealed class ConcatSink<TSource> : IAsyncObserver<TSource>, IAsyncDisposable
+    internal sealed class ConcatSink<TSource> : TailRecursiveAsyncSink<TSource>
     {
-        private readonly IAsyncObserver<TSource> _observer;
-        private readonly Stack<IEnumerator<IAsyncObservable<TSource>>> _stack = new();
-        private readonly SerialAsyncDisposable _current = new();
-        private int _trampoline;
-        private bool _isDisposed;
-
         public ConcatSink(IAsyncObserver<TSource> observer)
+            : base(observer)
         {
-            _observer = observer;
         }
 
-        public async ValueTask RunAsync(IEnumerable<IAsyncObservable<TSource>> sources)
-        {
-            IEnumerator<IAsyncObservable<TSource>> enumerator;
-
-            try
-            {
-                enumerator = sources.GetEnumerator();
-            }
-            catch (Exception ex)
-            {
-                Volatile.Write(ref _isDisposed, true);
-                await _observer.OnErrorAsync(ex).ConfigureAwait(false);
-                return;
-            }
-
-            _stack.Push(enumerator);
-
-            await DrainAsync().ConfigureAwait(false);
-        }
-
-        public ValueTask OnNextAsync(TSource value) => _observer.OnNextAsync(value);
-
-        public ValueTask OnErrorAsync(Exception error)
-        {
-            Volatile.Write(ref _isDisposed, true);
-            return _observer.OnErrorAsync(error);
-        }
+        public override ValueTask OnErrorAsync(Exception error) => FailAsync(error);
 
         // The completed source's subscription has been released by the time this is called (see
-        // the subscribe in DrainAsync); the drain moves on to the next source.
-        public ValueTask OnCompletedAsync() => DrainAsync();
+        // SubscribeAsync below); the drain moves on to the next source.
+        public override ValueTask OnCompletedAsync() => RecurseAsync();
 
-        public async ValueTask DisposeAsync()
-        {
-            Volatile.Write(ref _isDisposed, true);
+        protected override IEnumerable<IAsyncObservable<TSource>> Extract(IAsyncObservable<TSource> source) =>
+            source is IConcatenatableAsyncObservable<TSource> concatenatable ? concatenatable.GetSources() : null;
 
-            if (Interlocked.Increment(ref _trampoline) == 1)
-            {
-                DisposeStack();
-            }
+        protected override ValueTask DoneAsync() => CompleteAsync();
 
-            Interlocked.Decrement(ref _trampoline);
-
-            await _current.DisposeAsync().ConfigureAwait(false);
-        }
-
-        private void DisposeStack()
-        {
-            while (_stack.Count != 0)
-            {
-                _stack.Pop().Dispose();
-            }
-        }
-
-        private async ValueTask DrainAsync()
-        {
-            if (Interlocked.Increment(ref _trampoline) != 1)
-            {
-                return;
-            }
-
-            for (; ; )
-            {
-                if (Volatile.Read(ref _isDisposed))
-                {
-                    DisposeStack();
-                }
-                else if (_stack.Count != 0)
-                {
-                    var currentEnumerator = _stack.Peek();
-                    var next = default(IAsyncObservable<TSource>);
-
-                    try
-                    {
-                        if (currentEnumerator.MoveNext())
-                        {
-                            next = currentEnumerator.Current;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        currentEnumerator.Dispose();
-                        Volatile.Write(ref _isDisposed, true);
-                        await _observer.OnErrorAsync(ex).ConfigureAwait(false);
-                        continue;
-                    }
-
-                    if (next == null)
-                    {
-                        _stack.Pop();
-                        currentEnumerator.Dispose();
-                        continue;
-                    }
-
-                    IEnumerator<IAsyncObservable<TSource>> inner;
-
-                    try
-                    {
-                        while (next is IEvaluatableAsyncObservable<TSource> evaluatable)
-                        {
-                            next = await evaluatable.EvalAsync().ConfigureAwait(false);
-                        }
-
-                        if (next is IConcatenatableAsyncObservable<TSource> concatenatable)
-                        {
-                            inner = concatenatable.GetSources().GetEnumerator();
-                            _stack.Push(inner);
-                            continue;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Volatile.Write(ref _isDisposed, true);
-                        await _observer.OnErrorAsync(ex).ConfigureAwait(false);
-                        continue;
-                    }
-
-                    // Subscribe with this sink as the observer, holding the subscription only
-                    // until the source completes. A source that completes within the subscribe
-                    // call re-enters OnCompletedAsync, which the trampoline turns into one more
-                    // turn of this loop rather than a nested drain.
-                    var subscription = await AsyncObservable.SubscribeReleasingOnCompletedAsync(next, this).ConfigureAwait(false);
-
-                    await _current.AssignAsync(subscription).ConfigureAwait(false);
-                }
-                else
-                {
-                    Volatile.Write(ref _isDisposed, true);
-                    await _observer.OnCompletedAsync().ConfigureAwait(false);
-                }
-
-                if (Interlocked.Decrement(ref _trampoline) == 0)
-                {
-                    break;
-                }
-            }
-        }
+        // Each source's subscription is released as soon as it completes, before the next is
+        // subscribed, as in Rx.NET.
+        protected override ValueTask<IAsyncDisposable> SubscribeAsync(IAsyncObservable<TSource> source) =>
+            AsyncObservable.SubscribeReleasingOnCompletedAsync(source, this);
     }
 }

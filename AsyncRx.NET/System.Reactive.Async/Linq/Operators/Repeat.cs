@@ -64,7 +64,7 @@ namespace System.Reactive.Linq
             return new ConcatAsyncObservable<TSource>(Enumerable.Repeat(source, repeatCount));
         }
 
-        // Shared with Retry, whose sink is the same shape over Catch.
+        // Shared with Retry, a Catch over the same enumerable.
         internal static IEnumerable<T> RepeatInfinite<T>(T value)
         {
             while (true)
