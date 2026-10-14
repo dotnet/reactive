@@ -86,8 +86,31 @@ public sealed partial class AsyncRxTarget : IRxTarget
             Realized.Of<SchedulerRef>(TaskPoolAsyncScheduler.Default),
             "ThreadPoolScheduler.Instance");
 
-    public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) =>
-        await Materialize(source).ToList();
+    // As on the Rx.NET target: awaiting the sequence directly would resume the scenario inline
+    // on whichever thread completed it, a task-pool thread or the pump's, and the test runner
+    // would go on from there; a completion source that runs its continuations asynchronously
+    // keeps the scenario off the producer's thread.
+    public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source)
+    {
+        var result = new TaskCompletionSource<IList<T>>(
+            TaskCreationOptions.RunContinuationsAsynchronously);
+
+        await using var subscription = await Materialize(source).ToList().SubscribeAsync(
+            AsyncObserver.Create<IList<T>>(
+                list =>
+                {
+                    result.TrySetResult(list);
+                    return default;
+                },
+                error =>
+                {
+                    result.TrySetException(error);
+                    return default;
+                },
+                () => default));
+
+        return await result.Task;
+    }
 
     public SubjectSeq<T> CreateReplaySubject<T>(int bufferSize) =>
         Wrap(new SequentialReplayAsyncSubject<T>(bufferSize));

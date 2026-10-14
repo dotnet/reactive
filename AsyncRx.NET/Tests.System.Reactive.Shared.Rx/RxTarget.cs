@@ -88,8 +88,25 @@ public sealed partial class RxTarget : IRxTarget
                 global::System.Reactive.Concurrency.ThreadPoolScheduler.Instance),
             "ThreadPoolScheduler.Instance");
 
-    public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) =>
-        await Materialize(source).ToList();
+    // Awaiting an IObservable (or its ToTask) resumes the awaiter inline on the thread that
+    // completed the sequence. For a real-time source that is a Rx.NET worker thread, possibly
+    // inside a current-thread trampoline (a tail-recursive Concat subscribing its next source,
+    // say); the scenario then finishes on that thread and the test runner starts the next
+    // scenario there, with the trampoline still on the stack, where a blocking operator over a
+    // current-thread source (Range(...).Single()) waits forever for a turn that cannot come. A
+    // completion source that runs its continuations asynchronously keeps the scenario off the
+    // producer's thread. Found by the blocking Single tests hanging once in ten parallel runs.
+    public async ValueTask<IList<T>> ToListAsync<T>(Seq<T> source)
+    {
+        var result = new TaskCompletionSource<IList<T>>(
+            TaskCreationOptions.RunContinuationsAsynchronously);
+
+        using var subscription = Materialize(source).ToList().Subscribe(
+            list => result.TrySetResult(list),
+            error => result.TrySetException(error));
+
+        return await result.Task;
+    }
 
     public SubjectSeq<T> CreateReplaySubject<T>(int bufferSize) => Wrap(new ReplaySubject<T>(bufferSize));
 
