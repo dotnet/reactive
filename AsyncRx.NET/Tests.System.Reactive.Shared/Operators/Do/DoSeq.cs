@@ -6,10 +6,14 @@ namespace Tests.System.Reactive.Shared;
 
 /// <summary>Describes <c>source.Do(onNext)</c>.</summary>
 /// <remarks>
-/// Built by <see cref="DoExtensions.Do{T}(Seq{T}, Action{T}, string)"/>; materialized by each
-/// target through <see cref="ISeqVisitor.Do{T}(DoSeq{T})"/>.
+/// Built by <see cref="DoExtensions.Do{T}(Seq{T}, Action{T}, string)"/>;
+/// materialized by each target through <see cref="ISeqVisitor.Do{T}(DoSeq{T})"/>.
 /// </remarks>
-public sealed class DoSeq<T>(Seq<T> source, Action<T> onNext, string text) : Seq<T>
+public sealed class DoSeq<T>(
+    Seq<T> source,
+    Action<T> onNext,
+    string text)
+    : Seq<T>
 {
     /// <summary>Source sequence.</summary>
     public Seq<T> Source => source;
@@ -18,7 +22,8 @@ public sealed class DoSeq<T>(Seq<T> source, Action<T> onNext, string text) : Seq
     public Action<T> OnNext => onNext;
 
     /// <inheritdoc/>
-    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.Do(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) =>
+        visitor.Do(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Do({text})";

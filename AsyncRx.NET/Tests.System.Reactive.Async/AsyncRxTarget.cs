@@ -47,6 +47,11 @@ public sealed partial class AsyncRxTarget : IRxTarget
                     .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAsyncObserver<>))
                     .GetGenericArguments()[0])
                 .Invoke(null, [observer])!,
+            UnwrapObserver: observer => typeof(AsyncRxTarget)
+                .GetMethod(
+                    nameof(UnwrapObserverImpl), BindingFlags.NonPublic | BindingFlags.Static)!
+                .MakeGenericMethod(observer.GetType().GetGenericArguments()[0])
+                .Invoke(null, [observer])!,
             ConnectableOf: element => typeof(IConnectableAsyncObservable<>).MakeGenericType(element),
             SubjectOf: element => typeof(IAsyncSubject<>).MakeGenericType(element)));
     }
@@ -283,6 +288,14 @@ public sealed partial class AsyncRxTarget : IRxTarget
     [AdaptsLibraryCall]
     private static ObserverRef<T> WrapObserverImpl<T>(IAsyncObserver<T> observer) =>
         new(observer.OnNextAsync, observer.OnErrorAsync, observer.OnCompletedAsync);
+
+    // A scenario's observer (ObserverRef.Create), as the library's own.
+    [AdaptsLibraryCall]
+    private static IAsyncObserver<T> UnwrapObserverImpl<T>(ObserverRef<T> observer) =>
+        AsyncObserver.Create<T>(
+            observer.OnNextAsync,
+            observer.OnErrorAsync,
+            observer.OnCompletedAsync);
 
     [AdaptsLibraryCall]
     private static ValueTask<IAsyncDisposable> SubscribeImpl<T>(

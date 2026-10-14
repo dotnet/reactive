@@ -11,8 +11,45 @@ public sealed partial class RxTarget
     Realized<Seq<T>> ISeqVisitor.Do<T>(DoSeq<T> seq) =>
         _bridge.Run<Seq<T>>(DoImpl<T>, seq.Source, seq.OnNext);
 
+    Realized<Seq<T>> ISeqVisitor.DoNextCompleted<T>(DoNextCompletedSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(DoNextCompletedImpl<T>, seq.Source, seq.OnNext, seq.OnCompleted);
+
+    Realized<Seq<T>> ISeqVisitor.DoNextError<T>(DoNextErrorSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(DoNextErrorImpl<T>, seq.Source, seq.OnNext, seq.OnError);
+
+    Realized<Seq<T>> ISeqVisitor.DoNextErrorCompleted<T>(DoNextErrorCompletedSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(
+            DoNextErrorCompletedImpl<T>, seq.Source, seq.OnNext, seq.OnError, seq.OnCompleted);
+
+    Realized<Seq<T>> ISeqVisitor.DoObserver<T>(DoObserverSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(DoObserverImpl<T>, seq.Source, seq.Observer);
+
     private static IObservable<T> DoImpl<T>(
         IObservable<T> source,
         Action<T> onNext) =>
         source.Do(onNext);
+
+    private static IObservable<T> DoNextCompletedImpl<T>(
+        IObservable<T> source,
+        Action<T> onNext,
+        Action onCompleted) =>
+        source.Do(onNext, onCompleted);
+
+    private static IObservable<T> DoNextErrorImpl<T>(
+        IObservable<T> source,
+        Action<T> onNext,
+        Action<Exception> onError) =>
+        source.Do(onNext, onError);
+
+    private static IObservable<T> DoNextErrorCompletedImpl<T>(
+        IObservable<T> source,
+        Action<T> onNext,
+        Action<Exception> onError,
+        Action onCompleted) =>
+        source.Do(onNext, onError, onCompleted);
+
+    private static IObservable<T> DoObserverImpl<T>(
+        IObservable<T> source,
+        IObserver<T> observer) =>
+        source.Do(observer);
 }

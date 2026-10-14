@@ -75,12 +75,18 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
     /// Wraps one of the target's observers as the <see cref="ObserverRef{T}"/> a scenario's
     /// callback drives, so the bridge can hand a real observer to the callback.
     /// </param>
+    /// <param name="UnwrapObserver">
+    /// The other direction: wraps an <see cref="ObserverRef{T}"/> a scenario built (with
+    /// <see cref="ObserverRef.Create{T}"/>, say, for <c>Do(observer)</c>) as one of the target's
+    /// observers, so the bridge can pass it to the library.
+    /// </param>
     public sealed record TargetTypes(
         Func<Type, Type> ObservableOf,
         Func<Type, Type, Type> GroupedOf,
         Func<object, object?> KeyOf,
         Func<Type, Type> ObserverOf,
         Func<object, object> WrapObserver,
+        Func<object, object> UnwrapObserver,
         Func<Type, Type> ConnectableOf,
         Func<Type, Type> SubjectOf);
 
@@ -293,6 +299,12 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
                         typeof(LazyRealEnumerable<>).MakeGenericType(elementType),
                         items,
                         new Func<object?, object?>(item => ToReal(item, elementType)))!;
+                }
+
+                if (describedType.IsGenericType
+                    && describedType.GetGenericTypeDefinition() == typeof(ObserverRef<>))
+                {
+                    return types.UnwrapObserver(value);
                 }
 
                 if (Instantiation(describedType, typeof(Recorded<>)) is { } recorded)

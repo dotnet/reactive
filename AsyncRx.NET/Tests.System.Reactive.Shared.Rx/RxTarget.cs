@@ -48,6 +48,11 @@ public sealed partial class RxTarget : IRxTarget
                     .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IObserver<>))
                     .GetGenericArguments()[0])
                 .Invoke(null, [observer])!,
+            UnwrapObserver: observer => typeof(RxTarget)
+                .GetMethod(
+                    nameof(UnwrapObserverImpl), BindingFlags.NonPublic | BindingFlags.Static)!
+                .MakeGenericMethod(observer.GetType().GetGenericArguments()[0])
+                .Invoke(null, [observer])!,
             ConnectableOf: element => typeof(IConnectableObservable<>).MakeGenericType(element),
             SubjectOf: element => typeof(ISubject<>).MakeGenericType(element)));
     }
@@ -314,6 +319,14 @@ public sealed partial class RxTarget : IRxTarget
                 observer.OnCompleted();
                 return default;
             });
+
+    // A scenario's observer (ObserverRef.Create), as the library's own.
+    [AdaptsLibraryCall]
+    private static IObserver<T> UnwrapObserverImpl<T>(ObserverRef<T> observer) =>
+        Observer.Create<T>(
+            x => Complete(observer.OnNextAsync(x)),
+            ex => Complete(observer.OnErrorAsync(ex)),
+            () => Complete(observer.OnCompletedAsync()));
 
     [AdaptsLibraryCall]
     private static IDisposable SubscribeImpl<T>(IObservable<T> source, Func<T, ValueTask> onNext) =>
