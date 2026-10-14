@@ -4,7 +4,6 @@
 
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
-using System.Reflection;
 
 using Tests.System.Reactive.Shared.Scenarios;
 
@@ -18,9 +17,11 @@ namespace Tests.System.Reactive.Shared.Rx.Tests;
 /// subscribe sets the running count inside Rx.NET's sink to <c>long.MaxValue</c>, by reflection
 /// on its private <c>_count</c> field, and then checks that the next element overflows it. That
 /// reaches into Rx.NET's sink structure, which AsyncRx.NET does not share (its count is a local
-/// of a closure), so they are written against Rx.NET directly, with the original's private
-/// <see cref="OverflowInjection{T}"/>. They await the result through <c>ToTask</c> where the
-/// original blocks on <c>ForEach</c>, which Rx.NET now marks obsolete.
+/// of a closure), so they are written against Rx.NET directly, with the original's
+/// <see cref="OverflowInjection{T}"/>, which <c>CountTest.cs</c> declares for the three files
+/// that use it and which is a top-level type here for the same reason. They await the result
+/// through <c>ToTask</c> where the original blocks on <c>ForEach</c>, which Rx.NET now marks
+/// obsolete.
 /// </remarks>
 [TestClass]
 public sealed class RxAverageTests : AverageTests
@@ -147,17 +148,4 @@ public sealed class RxAverageTests : AverageTests
         await Assert.ThrowsExactlyAsync<OverflowException>(() => res.ToTask());
     }
 
-    private sealed class OverflowInjection<T>(IObservable<T> source, object initialCount)
-        : IObservable<T>
-    {
-        public IDisposable Subscribe(IObserver<T> observer)
-        {
-            var f = observer.GetType().GetField(
-                "_count",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            f!.SetValue(observer, initialCount);
-
-            return source.Subscribe(observer);
-        }
-    }
 }
