@@ -157,8 +157,28 @@ public static partial class Seq
     /// </param>
     /// <remarks>
     /// The witness form of <see cref="Empty{T}(SchedulerRef)"/>, for anonymous element types.
+    /// Builds an <see cref="EmptyWitnessSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.EmptyWitness{T}(EmptyWitnessSeq{T})"/> as its own witness
+    /// overload.
     /// </remarks>
-    public static Seq<T> Empty<T>(SchedulerRef scheduler, T witness) => new EmptySeq<T>(scheduler);
+    public static Seq<T> Empty<T>(SchedulerRef scheduler, T witness) =>
+        new EmptyWitnessSeq<T>(scheduler, witness);
+
+    /// <summary>Describes <c>Seq.Empty(witness)</c>.</summary>
+    /// <typeparam name="T">
+    /// The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.
+    /// </typeparam>
+    /// <param name="witness">
+    /// Object solely used to infer the type of the <typeparamref name="T"/> type parameter. This
+    /// parameter is typically used when creating a sequence of anonymously typed elements.
+    /// </param>
+    /// <remarks>
+    /// The witness form of <see cref="Empty{T}()"/>, for anonymous element types. Builds an
+    /// <see cref="EmptyWitnessSeq{T}"/> with no scheduler, which each target materializes
+    /// through <see cref="ISeqVisitor.EmptyWitness{T}(EmptyWitnessSeq{T})"/> as its own witness
+    /// overload.
+    /// </remarks>
+    public static Seq<T> Empty<T>(T witness) => new EmptyWitnessSeq<T>(null, witness);
 
     /// <summary>Describes <c>Seq.Throw&lt;T&gt;(error)</c>.</summary>
     /// <typeparam name="T">
@@ -195,8 +215,44 @@ public static partial class Seq
     /// </param>
     /// <remarks>
     /// The witness form of <see cref="Throw{T}(Exception, SchedulerRef)"/>, for anonymous
-    /// element types.
+    /// element types. Builds a <see cref="ThrowWitnessSeq{T}"/>, which each target materializes
+    /// through <see cref="ISeqVisitor.ThrowWitness{T}(ThrowWitnessSeq{T})"/> as its own witness
+    /// overload.
     /// </remarks>
     public static Seq<T> Throw<T>(Exception error, SchedulerRef scheduler, T witness) =>
-        new ThrowSeq<T>(error, scheduler);
+        new ThrowWitnessSeq<T>(error, scheduler, witness);
+
+    /// <summary>Describes <c>Seq.Throw(error, witness)</c>.</summary>
+    /// <typeparam name="T">
+    /// The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.
+    /// </typeparam>
+    /// <param name="error">Exception object used for the sequence's termination.</param>
+    /// <param name="witness">
+    /// Object solely used to infer the type of the <typeparamref name="T"/> type parameter. This
+    /// parameter is typically used when creating a sequence of anonymously typed elements.
+    /// </param>
+    /// <remarks>
+    /// The witness form of <see cref="Throw{T}(Exception)"/>, for anonymous element types.
+    /// Builds a <see cref="ThrowWitnessSeq{T}"/> with no scheduler, which each target
+    /// materializes through <see cref="ISeqVisitor.ThrowWitness{T}(ThrowWitnessSeq{T})"/> as
+    /// its own witness overload.
+    /// </remarks>
+    public static Seq<T> Throw<T>(Exception error, T witness) =>
+        new ThrowWitnessSeq<T>(error, null, witness);
+
+    /// <summary>Describes <c>Seq.Never(witness)</c>.</summary>
+    /// <typeparam name="T">
+    /// The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.
+    /// </typeparam>
+    /// <param name="witness">
+    /// Object solely used to infer the type of the <typeparamref name="T"/> type parameter. This
+    /// parameter is typically used when creating a sequence of anonymously typed elements.
+    /// </param>
+    /// <remarks>
+    /// The witness form of <see cref="Never{T}()"/>, for anonymous element types. Builds a
+    /// <see cref="NeverWitnessSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.NeverWitness{T}(NeverWitnessSeq{T})"/> as its own witness
+    /// overload.
+    /// </remarks>
+    public static Seq<T> Never<T>(T witness) => new NeverWitnessSeq<T>(witness);
 }

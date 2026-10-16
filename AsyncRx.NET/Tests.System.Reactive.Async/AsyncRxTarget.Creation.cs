@@ -77,4 +77,38 @@ public sealed partial class AsyncRxTarget
 
     private static IAsyncObservable<T> ThrowOnImpl<T>(Exception error, IAsyncScheduler scheduler) =>
         AsyncObservable.Throw<T>(error, scheduler);
+
+    Realized<Seq<T>> ISeqVisitor.EmptyWitness<T>(EmptyWitnessSeq<T> seq) =>
+        seq.Scheduler is null
+            ? _bridge.Run<Seq<T>>(EmptyWitnessImpl<T>, seq.Witness)
+            : _bridge.Run<Seq<T>>(EmptyWitnessOnImpl<T>, Unwrap(seq.Scheduler), seq.Witness);
+
+    Realized<Seq<T>> ISeqVisitor.ThrowWitness<T>(ThrowWitnessSeq<T> seq) =>
+        seq.Scheduler is null
+            ? _bridge.Run<Seq<T>>(ThrowWitnessImpl<T>, seq.Error, seq.Witness)
+            : _bridge.Run<Seq<T>>(
+                ThrowWitnessOnImpl<T>, seq.Error, Unwrap(seq.Scheduler), seq.Witness);
+
+    Realized<Seq<T>> ISeqVisitor.NeverWitness<T>(NeverWitnessSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(NeverWitnessImpl<T>, seq.Witness);
+
+    private static IAsyncObservable<T> EmptyWitnessImpl<T>(T witness) =>
+        AsyncObservable.Empty(witness);
+
+    private static IAsyncObservable<T> EmptyWitnessOnImpl<T>(
+        IAsyncScheduler scheduler,
+        T witness) =>
+        AsyncObservable.Empty(scheduler, witness);
+
+    private static IAsyncObservable<T> ThrowWitnessImpl<T>(Exception error, T witness) =>
+        AsyncObservable.Throw(error, witness);
+
+    private static IAsyncObservable<T> ThrowWitnessOnImpl<T>(
+        Exception error,
+        IAsyncScheduler scheduler,
+        T witness) =>
+        AsyncObservable.Throw(error, scheduler, witness);
+
+    private static IAsyncObservable<T> NeverWitnessImpl<T>(T witness) =>
+        AsyncObservable.Never(witness);
 }

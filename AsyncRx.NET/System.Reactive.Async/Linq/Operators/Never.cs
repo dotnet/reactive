@@ -13,5 +13,8 @@ namespace System.Reactive.Linq
         {
             return Create<TSource>(observer => new ValueTask<IAsyncDisposable>(AsyncDisposable.Nop));
         }
+
+        // The witness form, as in Rx.NET: the witness only infers TSource, for anonymous types.
+        public static IAsyncObservable<TSource> Never<TSource>(TSource witness) => Never<TSource>();
     }
 }

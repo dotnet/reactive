@@ -26,6 +26,11 @@ namespace System.Reactive.Linq
 
             return Create<TSource>(observer => AsyncObserver.Throw(observer, error, scheduler));
         }
+
+        // The witness forms, as in Rx.NET: the witness only infers TSource, for anonymous types.
+        public static IAsyncObservable<TSource> Throw<TSource>(Exception error, TSource witness) => Throw<TSource>(error);
+
+        public static IAsyncObservable<TSource> Throw<TSource>(Exception error, IAsyncScheduler scheduler, TSource witness) => Throw<TSource>(error, scheduler);
     }
 
     public partial class AsyncObserver

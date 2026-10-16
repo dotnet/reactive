@@ -6,7 +6,7 @@ namespace Tests.System.Reactive.Shared;
 
 /// <summary>Describes <c>Seq.Never()</c>.</summary>
 /// <remarks>
-/// Built by <see cref="Seq.Never{T}"/>; materialized by each target through
+/// Built by <see cref="Seq.Never{T}()"/>; materialized by each target through
 /// <see cref="ISeqVisitor.Never{T}(NeverSeq{T})"/>.
 /// </remarks>
 public sealed class NeverSeq<T> : Seq<T>

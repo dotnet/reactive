@@ -80,6 +80,31 @@ public partial interface ISeqVisitor
     /// <summary>
     /// Materializes a <see cref="NeverSeq{T}"/> as the target's own <c>Never()</c>.
     /// </summary>
-    /// <remarks>Built by <see cref="Seq.Never{T}"/>.</remarks>
+    /// <remarks>Built by <see cref="Seq.Never{T}()"/>.</remarks>
     Realized<Seq<T>> Never<T>(NeverSeq<T> seq);
+
+    /// <summary>
+    /// Materializes an <see cref="EmptyWitnessSeq{T}"/> as the target's own
+    /// <c>Empty([scheduler, ]witness)</c>.
+    /// </summary>
+    /// <remarks>
+    /// Built by <see cref="Seq.Empty{T}(T)"/> or <see cref="Seq.Empty{T}(SchedulerRef, T)"/>.
+    /// </remarks>
+    Realized<Seq<T>> EmptyWitness<T>(EmptyWitnessSeq<T> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="ThrowWitnessSeq{T}"/> as the target's own
+    /// <c>Throw(error, [scheduler, ]witness)</c>.
+    /// </summary>
+    /// <remarks>
+    /// Built by <see cref="Seq.Throw{T}(Exception, T)"/> or
+    /// <see cref="Seq.Throw{T}(Exception, SchedulerRef, T)"/>.
+    /// </remarks>
+    Realized<Seq<T>> ThrowWitness<T>(ThrowWitnessSeq<T> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="NeverWitnessSeq{T}"/> as the target's own <c>Never(witness)</c>.
+    /// </summary>
+    /// <remarks>Built by <see cref="Seq.Never{T}(T)"/>.</remarks>
+    Realized<Seq<T>> NeverWitness<T>(NeverWitnessSeq<T> seq);
 }
