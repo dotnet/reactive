@@ -23,21 +23,23 @@ namespace System.Reactive.Linq
                 until,
                 static async (source, until, observer) =>
                 {
-                    var (sourceObserver, untilObserver) = AsyncObserver.SkipUntil<TSource, TUntil>(observer);
+                    var sourceSubscription = new SingleAssignmentAsyncDisposable();
+                    var untilSubscription = new SingleAssignmentAsyncDisposable();
 
-                    var sourceTask = source.SubscribeSafeAsync(sourceObserver);
-                    var untilTask = until.SubscribeSafeAsync(untilObserver);
+                    var (sourceObserver, untilObserver) = AsyncObserver.SkipUntil<TSource, TUntil>(observer, sourceSubscription, untilSubscription);
 
-                    // REVIEW: Consider concurrent subscriptions.
+                    // As in Rx.NET: the other sequence is subscribed first, so that one that fires
+                    // at once opens the gate before the source is subscribed. A sequence that
+                    // fires or completes during its own subscribe disposes its holder before it is
+                    // assigned, which disposes the subscription the moment it is.
+                    await untilSubscription.AssignAsync(await until.SubscribeSafeAsync(untilObserver).ConfigureAwait(false)).ConfigureAwait(false);
+                    await sourceSubscription.AssignAsync(await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false)).ConfigureAwait(false);
 
-                    var d1 = await sourceTask.ConfigureAwait(false);
-                    var d2 = await untilTask.ConfigureAwait(false);
-
-                    return StableCompositeAsyncDisposable.Create(d1, d2);
+                    return StableCompositeAsyncDisposable.Create(sourceSubscription, untilSubscription);
                 });
         }
 
-        public static IAsyncObservable<TSource> SkipUntil<TSource>(this IAsyncObservable<TSource> source, DateTimeOffset endTime)
+        public static IAsyncObservable<TSource> SkipUntil<TSource>(this IAsyncObservable<TSource> source, DateTimeOffset startTime)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -46,10 +48,10 @@ namespace System.Reactive.Linq
 
             return CreateAsyncObservable<TSource>.From(
                 source,
-                endTime,
-                static async (source, endTime, observer) =>
+                startTime,
+                static async (source, startTime, observer) =>
                 {
-                    var (sourceObserver, timer) = await AsyncObserver.SkipUntil(observer, endTime).ConfigureAwait(false);
+                    var (sourceObserver, timer) = await AsyncObserver.SkipUntil(observer, startTime).ConfigureAwait(false);
 
                     var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
@@ -57,7 +59,7 @@ namespace System.Reactive.Linq
                 });
         }
 
-        public static IAsyncObservable<TSource> SkipUntil<TSource>(this IAsyncObservable<TSource> source, DateTimeOffset endTime, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TSource> SkipUntil<TSource>(this IAsyncObservable<TSource> source, DateTimeOffset startTime, IAsyncScheduler scheduler)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -68,10 +70,10 @@ namespace System.Reactive.Linq
 
             return CreateAsyncObservable<TSource>.From(
                 source,
-                (scheduler, endTime),
+                (scheduler, startTime),
                 static async (source, state, observer) =>
                 {
-                    var (sourceObserver, timer) = await AsyncObserver.SkipUntil(observer, state.endTime).ConfigureAwait(false);
+                    var (sourceObserver, timer) = await AsyncObserver.SkipUntil(observer, state.startTime, state.scheduler).ConfigureAwait(false);
 
                     var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
@@ -82,11 +84,19 @@ namespace System.Reactive.Linq
 
     public partial class AsyncObserver
     {
-        public static (IAsyncObserver<TSource>, IAsyncObserver<TUntil>) SkipUntil<TSource, TUntil>(IAsyncObserver<TSource> observer)
+        public static (IAsyncObserver<TSource>, IAsyncObserver<TUntil>) SkipUntil<TSource, TUntil>(IAsyncObserver<TSource> observer, IAsyncDisposable sourceSubscription, IAsyncDisposable untilSubscription)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
+            if (sourceSubscription == null)
+                throw new ArgumentNullException(nameof(sourceSubscription));
+            if (untilSubscription == null)
+                throw new ArgumentNullException(nameof(untilSubscription));
 
+            // As in Rx.NET: the other sequence's first element opens the gate and ends its own
+            // subscription, as does its completion (which opens nothing); its error fails the
+            // result. Before the gate opens the source's elements are dropped and its completion
+            // only ends its subscription, so the result never completes; its error is forwarded.
             var gate = new AsyncGate();
             var open = false;
 
@@ -114,7 +124,14 @@ namespace System.Reactive.Linq
                         {
                             using (await gate.LockAsync().ConfigureAwait(false))
                             {
-                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                                if (open)
+                                {
+                                    await observer.OnCompletedAsync().ConfigureAwait(false);
+                                }
+                                else
+                                {
+                                    await sourceSubscription.DisposeAsync().ConfigureAwait(false);
+                                }
                             }
                         }
                     ),
@@ -125,6 +142,8 @@ namespace System.Reactive.Linq
                             {
                                 open = true;
                             }
+
+                            await untilSubscription.DisposeAsync().ConfigureAwait(false);
                         },
                         async ex =>
                         {
@@ -133,14 +152,14 @@ namespace System.Reactive.Linq
                                 await observer.OnErrorAsync(ex).ConfigureAwait(false);
                             }
                         },
-                        () => default
+                        () => untilSubscription.DisposeAsync()
                     )
                 );
         }
 
-        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> SkipUntil<TSource>(IAsyncObserver<TSource> observer, DateTimeOffset endTime) => SkipUntil(observer, endTime, TaskPoolAsyncScheduler.Default);
+        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> SkipUntil<TSource>(IAsyncObserver<TSource> observer, DateTimeOffset startTime) => SkipUntil(observer, startTime, TaskPoolAsyncScheduler.Default);
 
-        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> SkipUntil<TSource>(IAsyncObserver<TSource> observer, DateTimeOffset endTime, IAsyncScheduler scheduler)
+        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> SkipUntil<TSource>(IAsyncObserver<TSource> observer, DateTimeOffset startTime, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -193,7 +212,7 @@ namespace System.Reactive.Linq
                             {
                                 open = true;
                             }
-                        }, endTime).ConfigureAwait(false)
+                        }, startTime).ConfigureAwait(false)
                     );
             }
         }

@@ -1,0 +1,21 @@
+﻿<Project>
+
+  <!-- Captures what the compiler was given, for the kit's ImplCalls (Harness/ImplCalls.cs),
+       which rebuilds the compilation at run time to read which library method each *Impl calls.
+       The SDK records the references and the options in the deps.json; the one input it does
+       not record, the source list, the target below writes beside the assembly. A target project
+       imports this file after its own property groups, which is early enough: the SDK reads the
+       property only in its targets. -->
+
+  <PropertyGroup>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+  </PropertyGroup>
+
+  <Target Name="WriteCompilationSources" AfterTargets="CoreCompile">
+    <WriteLinesToFile
+      File="$(OutDir)$(TargetName).sources.txt"
+      Lines="@(Compile->'%(FullPath)')"
+      Overwrite="true" />
+  </Target>
+
+</Project>

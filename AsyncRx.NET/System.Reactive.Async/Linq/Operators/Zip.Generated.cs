@@ -24,10 +24,10 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
 
-                await Task.WhenAll(sub1, sub2).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2).ConfigureAwait(false);
 
                 return d;
             });
@@ -48,10 +48,10 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
 
-                await Task.WhenAll(sub1, sub2).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2).ConfigureAwait(false);
 
                 return d;
             });
@@ -72,10 +72,10 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
 
-                await Task.WhenAll(sub1, sub2).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2).ConfigureAwait(false);
 
                 return d;
             });
@@ -96,11 +96,11 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
 
-                await Task.WhenAll(sub1, sub2, sub3).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3).ConfigureAwait(false);
 
                 return d;
             });
@@ -123,11 +123,11 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
 
-                await Task.WhenAll(sub1, sub2, sub3).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3).ConfigureAwait(false);
 
                 return d;
             });
@@ -150,11 +150,11 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
 
-                await Task.WhenAll(sub1, sub2, sub3).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3).ConfigureAwait(false);
 
                 return d;
             });
@@ -177,12 +177,12 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4).ConfigureAwait(false);
 
                 return d;
             });
@@ -207,12 +207,12 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4).ConfigureAwait(false);
 
                 return d;
             });
@@ -237,12 +237,12 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4).ConfigureAwait(false);
 
                 return d;
             });
@@ -267,13 +267,13 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5).ConfigureAwait(false);
 
                 return d;
             });
@@ -300,13 +300,13 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5).ConfigureAwait(false);
 
                 return d;
             });
@@ -333,13 +333,13 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5).ConfigureAwait(false);
 
                 return d;
             });
@@ -366,14 +366,14 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6).ConfigureAwait(false);
 
                 return d;
             });
@@ -402,14 +402,14 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6).ConfigureAwait(false);
 
                 return d;
             });
@@ -438,14 +438,14 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6).ConfigureAwait(false);
 
                 return d;
             });
@@ -474,15 +474,15 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7).ConfigureAwait(false);
 
                 return d;
             });
@@ -513,15 +513,15 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7).ConfigureAwait(false);
 
                 return d;
             });
@@ -552,15 +552,15 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7).ConfigureAwait(false);
 
                 return d;
             });
@@ -591,16 +591,16 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8).ConfigureAwait(false);
 
                 return d;
             });
@@ -633,16 +633,16 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8).ConfigureAwait(false);
 
                 return d;
             });
@@ -675,16 +675,16 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8).ConfigureAwait(false);
 
                 return d;
             });
@@ -717,17 +717,17 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9).ConfigureAwait(false);
 
                 return d;
             });
@@ -762,17 +762,17 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9).ConfigureAwait(false);
 
                 return d;
             });
@@ -807,17 +807,17 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9).ConfigureAwait(false);
 
                 return d;
             });
@@ -852,18 +852,18 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10).ConfigureAwait(false);
 
                 return d;
             });
@@ -900,18 +900,18 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10).ConfigureAwait(false);
 
                 return d;
             });
@@ -948,18 +948,18 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10).ConfigureAwait(false);
 
                 return d;
             });
@@ -996,19 +996,19 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11).ConfigureAwait(false);
 
                 return d;
             });
@@ -1047,19 +1047,19 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11).ConfigureAwait(false);
 
                 return d;
             });
@@ -1098,19 +1098,19 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11).ConfigureAwait(false);
 
                 return d;
             });
@@ -1149,20 +1149,20 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12).ConfigureAwait(false);
 
                 return d;
             });
@@ -1203,20 +1203,20 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12).ConfigureAwait(false);
 
                 return d;
             });
@@ -1257,20 +1257,20 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12).ConfigureAwait(false);
 
                 return d;
             });
@@ -1311,21 +1311,21 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13).ConfigureAwait(false);
 
                 return d;
             });
@@ -1368,21 +1368,21 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13).ConfigureAwait(false);
 
                 return d;
             });
@@ -1425,21 +1425,21 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13).ConfigureAwait(false);
 
                 return d;
             });
@@ -1482,22 +1482,22 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub14 = source14.SubscribeSafeAsync(observer14).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14).ConfigureAwait(false);
 
                 return d;
             });
@@ -1542,22 +1542,22 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub14 = source14.SubscribeSafeAsync(observer14).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14).ConfigureAwait(false);
 
                 return d;
             });
@@ -1602,22 +1602,22 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub14 = source14.SubscribeSafeAsync(observer14).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14).ConfigureAwait(false);
 
                 return d;
             });
@@ -1662,23 +1662,23 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15) = AsyncObserver.Zip(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub14 = source14.SubscribeSafeAsync(observer14).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub15 = source15.SubscribeSafeAsync(observer15).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
+                var sub15 = SubscribeReleasingOnCompletedAsync(source15, observer15);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15).ConfigureAwait(false);
 
                 return d;
             });
@@ -1725,23 +1725,23 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub14 = source14.SubscribeSafeAsync(observer14).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub15 = source15.SubscribeSafeAsync(observer15).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
+                var sub15 = SubscribeReleasingOnCompletedAsync(source15, observer15);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15).ConfigureAwait(false);
 
                 return d;
             });
@@ -1788,23 +1788,219 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15) = AsyncObserver.Zip(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub14 = source14.SubscribeSafeAsync(observer14).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub15 = source15.SubscribeSafeAsync(observer15).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
+                var sub15 = SubscribeReleasingOnCompletedAsync(source15, observer15);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15).ConfigureAwait(false);
+
+                return d;
+            });
+        }
+
+        public static IAsyncObservable<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, IAsyncObservable<T13> source13, IAsyncObservable<T14> source14, IAsyncObservable<T15> source15, IAsyncObservable<T16> source16)
+        {
+            if (source1 == null)
+                throw new ArgumentNullException(nameof(source1));
+            if (source2 == null)
+                throw new ArgumentNullException(nameof(source2));
+            if (source3 == null)
+                throw new ArgumentNullException(nameof(source3));
+            if (source4 == null)
+                throw new ArgumentNullException(nameof(source4));
+            if (source5 == null)
+                throw new ArgumentNullException(nameof(source5));
+            if (source6 == null)
+                throw new ArgumentNullException(nameof(source6));
+            if (source7 == null)
+                throw new ArgumentNullException(nameof(source7));
+            if (source8 == null)
+                throw new ArgumentNullException(nameof(source8));
+            if (source9 == null)
+                throw new ArgumentNullException(nameof(source9));
+            if (source10 == null)
+                throw new ArgumentNullException(nameof(source10));
+            if (source11 == null)
+                throw new ArgumentNullException(nameof(source11));
+            if (source12 == null)
+                throw new ArgumentNullException(nameof(source12));
+            if (source13 == null)
+                throw new ArgumentNullException(nameof(source13));
+            if (source14 == null)
+                throw new ArgumentNullException(nameof(source14));
+            if (source15 == null)
+                throw new ArgumentNullException(nameof(source15));
+            if (source16 == null)
+                throw new ArgumentNullException(nameof(source16));
+
+            return Create<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)>(async observer =>
+            {
+                var d = new CompositeAsyncDisposable();
+
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15, observer16) = AsyncObserver.Zip(observer);
+
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
+                var sub15 = SubscribeReleasingOnCompletedAsync(source15, observer15);
+                var sub16 = SubscribeReleasingOnCompletedAsync(source16, observer16);
+
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15, sub16).ConfigureAwait(false);
+
+                return d;
+            });
+        }
+
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, IAsyncObservable<T13> source13, IAsyncObservable<T14> source14, IAsyncObservable<T15> source15, IAsyncObservable<T16> source16, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector)
+        {
+            if (source1 == null)
+                throw new ArgumentNullException(nameof(source1));
+            if (source2 == null)
+                throw new ArgumentNullException(nameof(source2));
+            if (source3 == null)
+                throw new ArgumentNullException(nameof(source3));
+            if (source4 == null)
+                throw new ArgumentNullException(nameof(source4));
+            if (source5 == null)
+                throw new ArgumentNullException(nameof(source5));
+            if (source6 == null)
+                throw new ArgumentNullException(nameof(source6));
+            if (source7 == null)
+                throw new ArgumentNullException(nameof(source7));
+            if (source8 == null)
+                throw new ArgumentNullException(nameof(source8));
+            if (source9 == null)
+                throw new ArgumentNullException(nameof(source9));
+            if (source10 == null)
+                throw new ArgumentNullException(nameof(source10));
+            if (source11 == null)
+                throw new ArgumentNullException(nameof(source11));
+            if (source12 == null)
+                throw new ArgumentNullException(nameof(source12));
+            if (source13 == null)
+                throw new ArgumentNullException(nameof(source13));
+            if (source14 == null)
+                throw new ArgumentNullException(nameof(source14));
+            if (source15 == null)
+                throw new ArgumentNullException(nameof(source15));
+            if (source16 == null)
+                throw new ArgumentNullException(nameof(source16));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return Create<TResult>(async observer =>
+            {
+                var d = new CompositeAsyncDisposable();
+
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15, observer16) = AsyncObserver.Zip(observer, selector);
+
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
+                var sub15 = SubscribeReleasingOnCompletedAsync(source15, observer15);
+                var sub16 = SubscribeReleasingOnCompletedAsync(source16, observer16);
+
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15, sub16).ConfigureAwait(false);
+
+                return d;
+            });
+        }
+
+        public static IAsyncObservable<TResult> Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, IAsyncObservable<T13> source13, IAsyncObservable<T14> source14, IAsyncObservable<T15> source15, IAsyncObservable<T16> source16, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, ValueTask<TResult>> selector)
+        {
+            if (source1 == null)
+                throw new ArgumentNullException(nameof(source1));
+            if (source2 == null)
+                throw new ArgumentNullException(nameof(source2));
+            if (source3 == null)
+                throw new ArgumentNullException(nameof(source3));
+            if (source4 == null)
+                throw new ArgumentNullException(nameof(source4));
+            if (source5 == null)
+                throw new ArgumentNullException(nameof(source5));
+            if (source6 == null)
+                throw new ArgumentNullException(nameof(source6));
+            if (source7 == null)
+                throw new ArgumentNullException(nameof(source7));
+            if (source8 == null)
+                throw new ArgumentNullException(nameof(source8));
+            if (source9 == null)
+                throw new ArgumentNullException(nameof(source9));
+            if (source10 == null)
+                throw new ArgumentNullException(nameof(source10));
+            if (source11 == null)
+                throw new ArgumentNullException(nameof(source11));
+            if (source12 == null)
+                throw new ArgumentNullException(nameof(source12));
+            if (source13 == null)
+                throw new ArgumentNullException(nameof(source13));
+            if (source14 == null)
+                throw new ArgumentNullException(nameof(source14));
+            if (source15 == null)
+                throw new ArgumentNullException(nameof(source15));
+            if (source16 == null)
+                throw new ArgumentNullException(nameof(source16));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return Create<TResult>(async observer =>
+            {
+                var d = new CompositeAsyncDisposable();
+
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15, observer16) = AsyncObserver.Zip(observer, selector);
+
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
+                var sub15 = SubscribeReleasingOnCompletedAsync(source15, observer15);
+                var sub16 = SubscribeReleasingOnCompletedAsync(source16, observer16);
+
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15, sub16).ConfigureAwait(false);
 
                 return d;
             });
@@ -1891,8 +2087,8 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2)
             );
         }
 
@@ -1997,8 +2193,8 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2)
             );
         }
 
@@ -2080,9 +2276,9 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3)
             );
         }
 
@@ -2188,9 +2384,9 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3)
             );
         }
 
@@ -2273,10 +2469,10 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4)
             );
         }
 
@@ -2383,10 +2579,10 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4)
             );
         }
 
@@ -2470,11 +2666,11 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5)
             );
         }
 
@@ -2582,11 +2778,11 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5)
             );
         }
 
@@ -2671,12 +2867,12 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6)
             );
         }
 
@@ -2785,12 +2981,12 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6)
             );
         }
 
@@ -2876,13 +3072,13 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7)
             );
         }
 
@@ -2992,13 +3188,13 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7)
             );
         }
 
@@ -3085,14 +3281,14 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8)
             );
         }
 
@@ -3203,14 +3399,14 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8)
             );
         }
 
@@ -3298,15 +3494,15 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9)
             );
         }
 
@@ -3418,15 +3614,15 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9)
             );
         }
 
@@ -3515,16 +3711,16 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9),
-                CreateObserver<T10>(10, values10)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10)
             );
         }
 
@@ -3637,16 +3833,16 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9),
-                CreateObserver<T10>(10, values10)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10)
             );
         }
 
@@ -3736,17 +3932,17 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9),
-                CreateObserver<T10>(10, values10),
-                CreateObserver<T11>(11, values11)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10),
+                CreateObserver<T11>(10, values11)
             );
         }
 
@@ -3860,17 +4056,17 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9),
-                CreateObserver<T10>(10, values10),
-                CreateObserver<T11>(11, values11)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10),
+                CreateObserver<T11>(10, values11)
             );
         }
 
@@ -3961,18 +4157,18 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9),
-                CreateObserver<T10>(10, values10),
-                CreateObserver<T11>(11, values11),
-                CreateObserver<T12>(12, values12)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10),
+                CreateObserver<T11>(10, values11),
+                CreateObserver<T12>(11, values12)
             );
         }
 
@@ -4087,18 +4283,18 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9),
-                CreateObserver<T10>(10, values10),
-                CreateObserver<T11>(11, values11),
-                CreateObserver<T12>(12, values12)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10),
+                CreateObserver<T11>(10, values11),
+                CreateObserver<T12>(11, values12)
             );
         }
 
@@ -4190,19 +4386,19 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9),
-                CreateObserver<T10>(10, values10),
-                CreateObserver<T11>(11, values11),
-                CreateObserver<T12>(12, values12),
-                CreateObserver<T13>(13, values13)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10),
+                CreateObserver<T11>(10, values11),
+                CreateObserver<T12>(11, values12),
+                CreateObserver<T13>(12, values13)
             );
         }
 
@@ -4318,19 +4514,19 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9),
-                CreateObserver<T10>(10, values10),
-                CreateObserver<T11>(11, values11),
-                CreateObserver<T12>(12, values12),
-                CreateObserver<T13>(13, values13)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10),
+                CreateObserver<T11>(10, values11),
+                CreateObserver<T12>(11, values12),
+                CreateObserver<T13>(12, values13)
             );
         }
 
@@ -4423,20 +4619,20 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9),
-                CreateObserver<T10>(10, values10),
-                CreateObserver<T11>(11, values11),
-                CreateObserver<T12>(12, values12),
-                CreateObserver<T13>(13, values13),
-                CreateObserver<T14>(14, values14)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10),
+                CreateObserver<T11>(10, values11),
+                CreateObserver<T12>(11, values12),
+                CreateObserver<T13>(12, values13),
+                CreateObserver<T14>(13, values14)
             );
         }
 
@@ -4553,20 +4749,20 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9),
-                CreateObserver<T10>(10, values10),
-                CreateObserver<T11>(11, values11),
-                CreateObserver<T12>(12, values12),
-                CreateObserver<T13>(13, values13),
-                CreateObserver<T14>(14, values14)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10),
+                CreateObserver<T11>(10, values11),
+                CreateObserver<T12>(11, values12),
+                CreateObserver<T13>(12, values13),
+                CreateObserver<T14>(13, values14)
             );
         }
 
@@ -4660,21 +4856,21 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9),
-                CreateObserver<T10>(10, values10),
-                CreateObserver<T11>(11, values11),
-                CreateObserver<T12>(12, values12),
-                CreateObserver<T13>(13, values13),
-                CreateObserver<T14>(14, values14),
-                CreateObserver<T15>(15, values15)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10),
+                CreateObserver<T11>(10, values11),
+                CreateObserver<T12>(11, values12),
+                CreateObserver<T13>(12, values13),
+                CreateObserver<T14>(13, values14),
+                CreateObserver<T15>(14, values15)
             );
         }
 
@@ -4792,21 +4988,265 @@ namespace System.Reactive.Linq
 
             return
             (
-                CreateObserver<T1>(1, values1),
-                CreateObserver<T2>(2, values2),
-                CreateObserver<T3>(3, values3),
-                CreateObserver<T4>(4, values4),
-                CreateObserver<T5>(5, values5),
-                CreateObserver<T6>(6, values6),
-                CreateObserver<T7>(7, values7),
-                CreateObserver<T8>(8, values8),
-                CreateObserver<T9>(9, values9),
-                CreateObserver<T10>(10, values10),
-                CreateObserver<T11>(11, values11),
-                CreateObserver<T12>(12, values12),
-                CreateObserver<T13>(13, values13),
-                CreateObserver<T14>(14, values14),
-                CreateObserver<T15>(15, values15)
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10),
+                CreateObserver<T11>(10, values11),
+                CreateObserver<T12>(11, values12),
+                CreateObserver<T13>(12, values13),
+                CreateObserver<T14>(13, values14),
+                CreateObserver<T15>(14, values15)
+            );
+        }
+
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>, IAsyncObserver<T13>, IAsyncObserver<T14>, IAsyncObserver<T15>, IAsyncObserver<T16>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(IAsyncObserver<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)> observer)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+
+            var gate = new AsyncGate();
+
+            var values1 = new Queue<T1>();
+            var values2 = new Queue<T2>();
+            var values3 = new Queue<T3>();
+            var values4 = new Queue<T4>();
+            var values5 = new Queue<T5>();
+            var values6 = new Queue<T6>();
+            var values7 = new Queue<T7>();
+            var values8 = new Queue<T8>();
+            var values9 = new Queue<T9>();
+            var values10 = new Queue<T10>();
+            var values11 = new Queue<T11>();
+            var values12 = new Queue<T12>();
+            var values13 = new Queue<T13>();
+            var values14 = new Queue<T14>();
+            var values15 = new Queue<T15>();
+            var values16 = new Queue<T16>();
+            var isDone = new bool[16];
+
+            IAsyncObserver<T> CreateObserver<T>(int index, Queue<T> queue) =>
+                Create<T>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            queue.Enqueue(x);
+
+                            if (values1.Count > 0 && values2.Count > 0 && values3.Count > 0 && values4.Count > 0 && values5.Count > 0 && values6.Count > 0 && values7.Count > 0 && values8.Count > 0 && values9.Count > 0 && values10.Count > 0 && values11.Count > 0 && values12.Count > 0 && values13.Count > 0 && values14.Count > 0 && values15.Count > 0 && values16.Count > 0)
+                            {
+                                await observer.OnNextAsync((values1.Dequeue(), values2.Dequeue(), values3.Dequeue(), values4.Dequeue(), values5.Dequeue(), values6.Dequeue(), values7.Dequeue(), values8.Dequeue(), values9.Dequeue(), values10.Dequeue(), values11.Dequeue(), values12.Dequeue(), values13.Dequeue(), values14.Dequeue(), values15.Dequeue(), values16.Dequeue())).ConfigureAwait(false);
+                            }
+                            else
+                            {
+                                var allDone = true;
+
+                                for (var i = 0; i < 16; i++)
+                                {
+                                    if (i != index && !isDone[i])
+                                    {
+                                        allDone = false;
+                                        break;
+                                    }
+                                }
+
+                                if (allDone)
+                                {
+                                    await observer.OnCompletedAsync().ConfigureAwait(false);
+                                }
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone[index] = true;
+
+                            var allDone = true;
+
+                            for (var i = 0; i < 16; i++)
+                            {
+                                if (!isDone[i])
+                                {
+                                    allDone = false;
+                                    break;
+                                }
+                            }
+
+                            if (allDone)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                );
+
+            return
+            (
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10),
+                CreateObserver<T11>(10, values11),
+                CreateObserver<T12>(11, values12),
+                CreateObserver<T13>(12, values13),
+                CreateObserver<T14>(13, values14),
+                CreateObserver<T15>(14, values15),
+                CreateObserver<T16>(15, values16)
+            );
+        }
+
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>, IAsyncObserver<T13>, IAsyncObserver<T14>, IAsyncObserver<T15>, IAsyncObserver<T16>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16)));
+        }
+
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>, IAsyncObserver<T13>, IAsyncObserver<T14>, IAsyncObserver<T15>, IAsyncObserver<T16>) Zip<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, ValueTask<TResult>> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            var gate = new AsyncGate();
+
+            var values1 = new Queue<T1>();
+            var values2 = new Queue<T2>();
+            var values3 = new Queue<T3>();
+            var values4 = new Queue<T4>();
+            var values5 = new Queue<T5>();
+            var values6 = new Queue<T6>();
+            var values7 = new Queue<T7>();
+            var values8 = new Queue<T8>();
+            var values9 = new Queue<T9>();
+            var values10 = new Queue<T10>();
+            var values11 = new Queue<T11>();
+            var values12 = new Queue<T12>();
+            var values13 = new Queue<T13>();
+            var values14 = new Queue<T14>();
+            var values15 = new Queue<T15>();
+            var values16 = new Queue<T16>();
+            var isDone = new bool[16];
+
+            IAsyncObserver<T> CreateObserver<T>(int index, Queue<T> queue) =>
+                Create<T>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            queue.Enqueue(x);
+
+                            if (values1.Count > 0 && values2.Count > 0 && values3.Count > 0 && values4.Count > 0 && values5.Count > 0 && values6.Count > 0 && values7.Count > 0 && values8.Count > 0 && values9.Count > 0 && values10.Count > 0 && values11.Count > 0 && values12.Count > 0 && values13.Count > 0 && values14.Count > 0 && values15.Count > 0 && values16.Count > 0)
+                            {
+                                TResult res;
+
+                                try
+                                {
+                                    res = await selector(values1.Dequeue(), values2.Dequeue(), values3.Dequeue(), values4.Dequeue(), values5.Dequeue(), values6.Dequeue(), values7.Dequeue(), values8.Dequeue(), values9.Dequeue(), values10.Dequeue(), values11.Dequeue(), values12.Dequeue(), values13.Dequeue(), values14.Dequeue(), values15.Dequeue(), values16.Dequeue()).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else
+                            {
+                                var allDone = true;
+
+                                for (var i = 0; i < 16; i++)
+                                {
+                                    if (i != index && !isDone[i])
+                                    {
+                                        allDone = false;
+                                        break;
+                                    }
+                                }
+
+                                if (allDone)
+                                {
+                                    await observer.OnCompletedAsync().ConfigureAwait(false);
+                                }
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone[index] = true;
+
+                            var allDone = true;
+
+                            for (var i = 0; i < 16; i++)
+                            {
+                                if (!isDone[i])
+                                {
+                                    allDone = false;
+                                    break;
+                                }
+                            }
+
+                            if (allDone)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                );
+
+            return
+            (
+                CreateObserver<T1>(0, values1),
+                CreateObserver<T2>(1, values2),
+                CreateObserver<T3>(2, values3),
+                CreateObserver<T4>(3, values4),
+                CreateObserver<T5>(4, values5),
+                CreateObserver<T6>(5, values6),
+                CreateObserver<T7>(6, values7),
+                CreateObserver<T8>(7, values8),
+                CreateObserver<T9>(8, values9),
+                CreateObserver<T10>(9, values10),
+                CreateObserver<T11>(10, values11),
+                CreateObserver<T12>(11, values12),
+                CreateObserver<T13>(12, values13),
+                CreateObserver<T14>(13, values14),
+                CreateObserver<T15>(14, values15),
+                CreateObserver<T16>(15, values16)
             );
         }
 

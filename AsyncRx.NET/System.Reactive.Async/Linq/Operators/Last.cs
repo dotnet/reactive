@@ -72,7 +72,14 @@ namespace System.Reactive.Linq
                 {
                     if (!hasValue)
                     {
-                        await observer.OnErrorAsync(new InvalidOperationException("The sequence is empty.")).ConfigureAwait(false);
+                        try
+                        {
+                            throw new InvalidOperationException("The sequence is empty.");
+                        }
+                        catch (Exception ex)
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
                     }
                     else
                     {

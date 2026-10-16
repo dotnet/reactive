@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    // TODO: Implement tail call behavior to flatten Catch chains.
-
     public partial class AsyncObservable
     {
         public static IAsyncObservable<TSource> Catch<TSource, TException>(this IAsyncObservable<TSource> source, Func<TException, IAsyncObservable<TSource>> handler)
@@ -25,11 +23,15 @@ namespace System.Reactive.Linq
                 handler,
                 static async (source, handler, observer) =>
                 {
-                    var (sink, inner) = AsyncObserver.Catch(observer, handler);
+                    var sourceSubscription = new SingleAssignmentAsyncDisposable();
 
-                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var (sink, handlerSubscription) = AsyncObserver.Catch(observer, sourceSubscription, handler);
 
-                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                    // A source that fails during its own subscribe disposes its holder before it
+                    // is assigned, which disposes the subscription the moment it is.
+                    await sourceSubscription.AssignAsync(await source.SubscribeSafeAsync(sink).ConfigureAwait(false)).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(sourceSubscription, handlerSubscription);
                 });
         }
 
@@ -46,11 +48,15 @@ namespace System.Reactive.Linq
                 handler,
                 static async (source, handler, observer) =>
                 {
-                    var (sink, inner) = AsyncObserver.Catch(observer, handler);
+                    var sourceSubscription = new SingleAssignmentAsyncDisposable();
 
-                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+                    var (sink, handlerSubscription) = AsyncObserver.Catch(observer, sourceSubscription, handler);
 
-                    return StableCompositeAsyncDisposable.Create(subscription, inner);
+                    // A source that fails during its own subscribe disposes its holder before it
+                    // is assigned, which disposes the subscription the moment it is.
+                    await sourceSubscription.AssignAsync(await source.SubscribeSafeAsync(sink).ConfigureAwait(false)).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(sourceSubscription, handlerSubscription);
                 });
         }
 
@@ -61,17 +67,7 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Create(
-                first,
-                second,
-                static async (first, second, observer) =>
-                {
-                    var (sink, inner) = AsyncObserver.Catch(observer, second);
-
-                    var subscription = await first.SubscribeSafeAsync(sink).ConfigureAwait(false);
-
-                    return StableCompositeAsyncDisposable.Create(subscription, inner);
-                });
+            return new CatchAsyncObservable<TSource>(new[] { first, second });
         }
 
         public static IAsyncObservable<TSource> Catch<TSource>(params IAsyncObservable<TSource>[] sources) => Catch((IEnumerable<IAsyncObservable<TSource>>)sources);
@@ -81,48 +77,99 @@ namespace System.Reactive.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return Create<TSource>(async observer =>
-            {
-                var enumerator = sources.GetEnumerator();
+            return new CatchAsyncObservable<TSource>(sources);
+        }
+    }
 
-                if (!enumerator.MoveNext())
-                {
-                    return AsyncDisposable.Nop; // REVIEW: Is Never behavior right here?
-                }
+    // Rx.NET's Catch over its TailRecursiveSink (TailRecursiveAsyncSink here): a source that
+    // fails is left and the next is subscribed, the last error is the result's if the sources
+    // run dry, and a chain of catches, however built, is one subscription deep. Retry is a
+    // Catch over the same source repeated.
+    internal sealed class CatchAsyncObservable<TSource> : AsyncObservableBase<TSource>
+    {
+        private readonly IEnumerable<IAsyncObservable<TSource>> _sources;
 
-                var source = enumerator.Current;
+        public CatchAsyncObservable(IEnumerable<IAsyncObservable<TSource>> sources)
+        {
+            _sources = sources;
+        }
 
-                var (sink, inner) = AsyncObserver.Catch(observer, enumerator);
+        public IEnumerable<IAsyncObservable<TSource>> GetSources() => _sources;
 
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+        protected override async ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<TSource> observer)
+        {
+            var sink = new CatchSink<TSource>(observer);
 
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+            await sink.RunAsync(_sources).ConfigureAwait(false);
+
+            return sink;
+        }
+    }
+
+    internal sealed class CatchSink<TSource> : TailRecursiveAsyncSink<TSource>
+    {
+        private Exception _lastError;
+
+        public CatchSink(IAsyncObserver<TSource> observer)
+            : base(observer)
+        {
+        }
+
+        // A failed source is left for the next; its error is the result's only if no source
+        // follows.
+        public override ValueTask OnErrorAsync(Exception error)
+        {
+            _lastError = error;
+            return RecurseAsync();
+        }
+
+        public override ValueTask OnCompletedAsync() => CompleteAsync();
+
+        // A type test, as in Rx.NET: nothing but a Catch is a catch chain, where Concat's
+        // marker interface has several implementers.
+        protected override IEnumerable<IAsyncObservable<TSource>> Extract(IAsyncObservable<TSource> source) =>
+            source is CatchAsyncObservable<TSource> @catch ? @catch.GetSources() : null;
+
+        protected override ValueTask DoneAsync() =>
+            _lastError == null ? Observer.OnCompletedAsync() : Observer.OnErrorAsync(_lastError);
+
+        // A Defer that throws is a source that failed, as in Rx.NET.
+        protected override ValueTask EvaluationFailedAsync(Exception error)
+        {
+            _lastError = error;
+            return default;
         }
     }
 
     public partial class AsyncObserver
     {
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) Catch<TSource, TException>(IAsyncObserver<TSource> observer, Func<TException, IAsyncObservable<TSource>> handler)
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) Catch<TSource, TException>(IAsyncObserver<TSource> observer, IAsyncDisposable sourceSubscription, Func<TException, IAsyncObservable<TSource>> handler)
             where TException : Exception
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
+            if (sourceSubscription == null)
+                throw new ArgumentNullException(nameof(sourceSubscription));
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            return Catch<TSource, TException>(observer, ex => new ValueTask<IAsyncObservable<TSource>>(handler(ex)));
+            return Catch<TSource, TException>(observer, sourceSubscription, ex => new ValueTask<IAsyncObservable<TSource>>(handler(ex)));
         }
 
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) Catch<TSource, TException>(IAsyncObserver<TSource> observer, Func<TException, ValueTask<IAsyncObservable<TSource>>> handler)
+        // The sink for the handler forms. It observes the source; sourceSubscription is the
+        // source's subscription (or a holder for it), released once the handler's sequence has
+        // been subscribed, as in Rx.NET; the returned disposable holds that subscription.
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) Catch<TSource, TException>(IAsyncObserver<TSource> observer, IAsyncDisposable sourceSubscription, Func<TException, ValueTask<IAsyncObservable<TSource>>> handler)
             where TException : Exception
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
+            if (sourceSubscription == null)
+                throw new ArgumentNullException(nameof(sourceSubscription));
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            var subscription = new SingleAssignmentAsyncDisposable();
+            var handlerSubscription = new SingleAssignmentAsyncDisposable();
 
             var sink = Create<TSource>(
                 observer.OnNextAsync,
@@ -142,9 +189,14 @@ namespace System.Reactive.Linq
                             return;
                         }
 
-                        var handlerSubscription = await handlerObservable.SubscribeSafeAsync(observer).ConfigureAwait(false);
+                        // The handler's sequence goes straight to the observer: in Rx.NET it is
+                        // subscribed with the sink, whose once-only flag then forwards whatever
+                        // comes, which is the same thing one subscription nearer.
+                        var subscription = await handlerObservable.SubscribeSafeAsync(observer).ConfigureAwait(false);
 
-                        await subscription.AssignAsync(handlerSubscription).ConfigureAwait(false);
+                        await sourceSubscription.DisposeAsync().ConfigureAwait(false);
+
+                        await handlerSubscription.AssignAsync(subscription).ConfigureAwait(false);
                     }
                     else
                     {
@@ -154,83 +206,7 @@ namespace System.Reactive.Linq
                 observer.OnCompletedAsync
             );
 
-            return (sink, subscription);
-        }
-
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) Catch<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> second)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (second == null)
-                throw new ArgumentNullException(nameof(second));
-
-            var subscription = new SingleAssignmentAsyncDisposable();
-
-            var sink = Create<TSource>(
-                observer.OnNextAsync,
-                async ex =>
-                {
-                    var secondSubscription = await second.SubscribeSafeAsync(observer).ConfigureAwait(false);
-
-                    await subscription.AssignAsync(secondSubscription).ConfigureAwait(false);
-                },
-                observer.OnCompletedAsync
-            );
-
-            return (sink, subscription);
-        }
-
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) Catch<TSource>(IAsyncObserver<TSource> observer, IEnumerator<IAsyncObservable<TSource>> handlers)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (handlers == null)
-                throw new ArgumentNullException(nameof(handlers));
-
-            var innerSubscription = new SerialAsyncDisposable();
-
-            IAsyncObserver<TSource> GetSink() =>
-                Create<TSource>(
-                    observer.OnNextAsync,
-                    async ex =>
-                    {
-                        var handler = default(IAsyncObservable<TSource>);
-
-                        try
-                        {
-                            if (handlers.MoveNext())
-                            {
-                                handler = handlers.Current;
-                            }
-                        }
-                        catch (Exception err)
-                        {
-                            await observer.OnErrorAsync(err).ConfigureAwait(false);
-                            return;
-                        }
-
-                        if (handler == null)
-                        {
-                            await observer.OnErrorAsync(ex).ConfigureAwait(false); // REVIEW: Is Throw behavior right here?
-                            return;
-                        }
-
-                        var handlerSubscription = await handler.SubscribeSafeAsync(GetSink()).ConfigureAwait(false);
-
-                        await innerSubscription.AssignAsync(handlerSubscription).ConfigureAwait(false);
-                    },
-                    observer.OnCompletedAsync
-                );
-
-            var disposeEnumerator = AsyncDisposable.Create(() =>
-            {
-                handlers.Dispose();
-                return default;
-            });
-
-            var subscription = StableCompositeAsyncDisposable.Create(innerSubscription, disposeEnumerator);
-
-            return (GetSink(), subscription);
+            return (sink, handlerSubscription);
         }
     }
 }

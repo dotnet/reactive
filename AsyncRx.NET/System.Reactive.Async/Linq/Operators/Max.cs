@@ -9,7 +9,7 @@ namespace System.Reactive.Linq
 {
     public partial class AsyncObservable
     {
-        public static IAsyncObservable<TSource> Max<TSource>(IAsyncObservable<TSource> source)
+        public static IAsyncObservable<TSource> Max<TSource>(this IAsyncObservable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
             return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.Max(observer)));
         }
 
-        public static IAsyncObservable<TSource> Max<TSource>(IAsyncObservable<TSource> source, IComparer<TSource> comparer)
+        public static IAsyncObservable<TSource> Max<TSource>(this IAsyncObservable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -28,6 +28,50 @@ namespace System.Reactive.Linq
                 source,
                 comparer,
                 static (source, comparer, observer) => source.SubscribeSafeAsync(AsyncObserver.Max(observer, comparer)));
+        }
+        // As in Rx.NET: the selector forms are the generic forms over a Select.
+        public static IAsyncObservable<TResult> Max<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, TResult> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max();
+        }
+
+        public static IAsyncObservable<TResult> Max<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, TResult> selector, IComparer<TResult> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
+
+            return source.Select(selector).Max(comparer);
+        }
+
+        public static IAsyncObservable<TResult> Max<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max();
+        }
+
+        public static IAsyncObservable<TResult> Max<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TResult>> selector, IComparer<TResult> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
+
+            return source.Select(selector).Max(comparer);
         }
     }
 
@@ -54,6 +98,13 @@ namespace System.Reactive.Linq
             return Create<TSource>(
                 async x =>
                 {
+                    if (x == null)
+                    {
+                        // As in Rx.NET: for a reference type (or a nullable one), null elements
+                        // take no part in the comparison.
+                        return;
+                    }
+
                     if (found)
                     {
                         bool isGreater;
@@ -82,7 +133,9 @@ namespace System.Reactive.Linq
                 observer.OnErrorAsync,
                 async () =>
                 {
-                    if (!found)
+                    // As in Rx.NET since v2: an empty source is an error for a value type, and
+                    // yields null for a reference type (or a nullable one).
+                    if (!found && default(TSource) != null)
                     {
                         await observer.OnErrorAsync(new InvalidOperationException("The sequence is empty.")).ConfigureAwait(false);
                     }

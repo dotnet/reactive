@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections.Generic;
 using System.Reactive.Concurrency;
+using System.Threading;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 
@@ -61,6 +63,62 @@ namespace System.Reactive.Linq
                 await d.AddAsync(subscribeTask).ConfigureAwait(false);
 
                 return d;
+            });
+        }
+
+        public static IAsyncObservable<TSource> ToAsyncObservable<TSource>(this IEnumerable<TSource> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return ToAsyncObservable(source, TaskPoolAsyncScheduler.Default);
+        }
+
+        public static IAsyncObservable<TSource> ToAsyncObservable<TSource>(this IEnumerable<TSource> source, IAsyncScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return Create<TSource>(observer => Enumerate(observer, source, scheduler));
+        }
+
+        private static ValueTask<IAsyncDisposable> Enumerate<TSource>(IAsyncObserver<TSource> observer, IEnumerable<TSource> source, IAsyncScheduler scheduler)
+        {
+            return scheduler.ScheduleAsync((observer, source, scheduler), static async (state, ct) =>
+            {
+                var (observer, source, scheduler) = state;
+
+                if (ct.IsCancellationRequested)
+                    return;
+
+                using var enumerator = source.GetEnumerator();
+
+                while (!ct.IsCancellationRequested)
+                {
+                    bool hasNext;
+                    TSource current;
+
+                    try
+                    {
+                        hasNext = enumerator.MoveNext();
+                        current = hasNext ? enumerator.Current : default;
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
+                        return;
+                    }
+
+                    if (!hasNext)
+                    {
+                        await observer.OnCompletedAsync().RendezVous(scheduler, ct);
+                        return;
+                    }
+
+                    await observer.OnNextAsync(current).RendezVous(scheduler, ct);
+                }
             });
         }
     }

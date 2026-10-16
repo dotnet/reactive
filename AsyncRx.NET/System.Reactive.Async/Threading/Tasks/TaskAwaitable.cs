@@ -41,9 +41,22 @@ namespace System.Threading.Tasks
 
             public void GetResult()
             {
-                _token.ThrowIfCancellationRequested();
+                // A fault in the awaited work wins over a cancellation: disposing the
+                // subscription in response to an observer's exception (as an auto-detaching
+                // observer does) cancels this token, and checking the token first would report
+                // that exception as a cancellation. A cancellation ends work that completed.
+                // The continuation also runs when the token is cancelled while the work is
+                // still pending (see ScheduledContinuation); then there is no result to read.
+                if (!_awaiter.IsCompleted)
+                {
+                    _token.ThrowIfCancellationRequested();
+
+                    throw new InvalidOperationException();
+                }
 
                 _awaiter.GetResult();
+
+                _token.ThrowIfCancellationRequested();
             }
 
             public void OnCompleted(Action continuation)
@@ -97,9 +110,24 @@ namespace System.Threading.Tasks
 
             public T GetResult()
             {
+                // A fault in the awaited work wins over a cancellation: disposing the
+                // subscription in response to an observer's exception (as an auto-detaching
+                // observer does) cancels this token, and checking the token first would report
+                // that exception as a cancellation. A cancellation ends work that completed.
+                // The continuation also runs when the token is cancelled while the work is
+                // still pending (see ScheduledContinuation); then there is no result to read.
+                if (!_awaiter.IsCompleted)
+                {
+                    _token.ThrowIfCancellationRequested();
+
+                    throw new InvalidOperationException();
+                }
+
+                var result = _awaiter.GetResult();
+
                 _token.ThrowIfCancellationRequested();
 
-                return _awaiter.GetResult();
+                return result;
             }
 
             public void OnCompleted(Action continuation)

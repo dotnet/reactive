@@ -48,9 +48,12 @@ namespace System.Reactive.Linq
                 if (ct.IsCancellationRequested)
                     return;
 
-                for (int i = start, end = start + count - 1; i <= end && !ct.IsCancellationRequested; i++)
+                // Counted, not bounded: a range ending at int.MaxValue has no int past its end
+                // for a bound to stop at, and a bound there never stopped (found by
+                // Range_Boundaries).
+                for (var i = 0; i < count && !ct.IsCancellationRequested; i++)
                 {
-                    await observer.OnNextAsync(i).RendezVous(scheduler, ct);
+                    await observer.OnNextAsync(start + i).RendezVous(scheduler, ct);
                 }
 
                 if (ct.IsCancellationRequested)

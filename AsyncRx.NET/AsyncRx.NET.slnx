@@ -9,5 +9,8 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="Tests.Microsoft.Reactive.Testing.Async/Tests.Microsoft.Reactive.Testing.Async.csproj" />
+    <Project Path="Tests.System.Reactive.Async/Tests.System.Reactive.Async.csproj" />
+    <Project Path="Tests.System.Reactive.Shared.Rx/Tests.System.Reactive.Shared.Rx.csproj" />
+    <Project Path="Tests.System.Reactive.Shared/Tests.System.Reactive.Shared.csproj" />
   </Folder>
 </Solution>

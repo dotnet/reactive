@@ -38,7 +38,13 @@ namespace System.Reactive.Linq
                 });
         }
 
-        public static IAsyncObservable<TSource> Amb<TSource>(this IEnumerable<IAsyncObservable<TSource>> sources) => Amb(sources.ToArray());
+        public static IAsyncObservable<TSource> Amb<TSource>(this IEnumerable<IAsyncObservable<TSource>> sources)
+        {
+            if (sources == null)
+                throw new ArgumentNullException(nameof(sources));
+
+            return Amb(sources.ToArray());
+        }
 
         public static IAsyncObservable<TSource> Amb<TSource>(params IAsyncObservable<TSource>[] sources)
         {

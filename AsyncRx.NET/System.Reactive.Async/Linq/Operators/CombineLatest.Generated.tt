@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
     public partial class AsyncObservable
     {
 <#
-for (var i = 2; i <= 15; i++)
+for (var i = 2; i <= 16; i++)
 {
     var genPars = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "TResult" }));
     var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j));
@@ -47,12 +47,12 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub<#=j#> = SubscribeReleasingOnCompletedAsync(source<#=j#>, observer<#=j#>);
 <#
 }
 #>
 
-                await Task.WhenAll(<#=string.Join(", ", Enumerable.Range(1, i).Select(j => "sub" + j))#>).ConfigureAwait(false);
+                await CollectAsync(d, <#=string.Join(", ", Enumerable.Range(1, i).Select(j => "sub" + j))#>).ConfigureAwait(false);
 
                 return d;
             });
@@ -82,12 +82,12 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub<#=j#> = SubscribeReleasingOnCompletedAsync(source<#=j#>, observer<#=j#>);
 <#
 }
 #>
 
-                await Task.WhenAll(<#=string.Join(", ", Enumerable.Range(1, i).Select(j => "sub" + j))#>).ConfigureAwait(false);
+                await CollectAsync(d, <#=string.Join(", ", Enumerable.Range(1, i).Select(j => "sub" + j))#>).ConfigureAwait(false);
 
                 return d;
             });
@@ -117,12 +117,12 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                var sub<#=j#> = source<#=j#>.SubscribeSafeAsync(observer<#=j#>).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub<#=j#> = SubscribeReleasingOnCompletedAsync(source<#=j#>, observer<#=j#>);
 <#
 }
 #>
 
-                await Task.WhenAll(<#=string.Join(", ", Enumerable.Range(1, i).Select(j => "sub" + j))#>).ConfigureAwait(false);
+                await CollectAsync(d, <#=string.Join(", ", Enumerable.Range(1, i).Select(j => "sub" + j))#>).ConfigureAwait(false);
 
                 return d;
             });
@@ -136,7 +136,7 @@ for (var j = 1; j <= i; j++)
     public partial class AsyncObserver
     {
 <#
-for (var i = 2; i <= 15; i++)
+for (var i = 2; i <= 16; i++)
 {
     var res = "(" + string.Join(", ", Enumerable.Range(1, i).Select(j => "IAsyncObserver<T" + j + ">")) + ")";
     var genPars = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "TResult" }));

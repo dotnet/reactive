@@ -23,10 +23,10 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
 
-                await Task.WhenAll(sub1, sub2).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2).ConfigureAwait(false);
 
                 return d;
             });
@@ -47,10 +47,10 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
 
-                await Task.WhenAll(sub1, sub2).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2).ConfigureAwait(false);
 
                 return d;
             });
@@ -71,10 +71,10 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
 
-                await Task.WhenAll(sub1, sub2).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2).ConfigureAwait(false);
 
                 return d;
             });
@@ -95,11 +95,11 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
 
-                await Task.WhenAll(sub1, sub2, sub3).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3).ConfigureAwait(false);
 
                 return d;
             });
@@ -122,11 +122,11 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
 
-                await Task.WhenAll(sub1, sub2, sub3).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3).ConfigureAwait(false);
 
                 return d;
             });
@@ -149,11 +149,11 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
 
-                await Task.WhenAll(sub1, sub2, sub3).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3).ConfigureAwait(false);
 
                 return d;
             });
@@ -176,12 +176,12 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4).ConfigureAwait(false);
 
                 return d;
             });
@@ -206,12 +206,12 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4).ConfigureAwait(false);
 
                 return d;
             });
@@ -236,12 +236,12 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4).ConfigureAwait(false);
 
                 return d;
             });
@@ -266,13 +266,13 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5).ConfigureAwait(false);
 
                 return d;
             });
@@ -299,13 +299,13 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5).ConfigureAwait(false);
 
                 return d;
             });
@@ -332,13 +332,13 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5).ConfigureAwait(false);
 
                 return d;
             });
@@ -365,14 +365,14 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6).ConfigureAwait(false);
 
                 return d;
             });
@@ -401,14 +401,14 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6).ConfigureAwait(false);
 
                 return d;
             });
@@ -437,14 +437,14 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6).ConfigureAwait(false);
 
                 return d;
             });
@@ -473,15 +473,15 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7).ConfigureAwait(false);
 
                 return d;
             });
@@ -512,15 +512,15 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7).ConfigureAwait(false);
 
                 return d;
             });
@@ -551,15 +551,15 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7).ConfigureAwait(false);
 
                 return d;
             });
@@ -590,16 +590,16 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8).ConfigureAwait(false);
 
                 return d;
             });
@@ -632,16 +632,16 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8).ConfigureAwait(false);
 
                 return d;
             });
@@ -674,16 +674,16 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8).ConfigureAwait(false);
 
                 return d;
             });
@@ -716,17 +716,17 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9).ConfigureAwait(false);
 
                 return d;
             });
@@ -761,17 +761,17 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9).ConfigureAwait(false);
 
                 return d;
             });
@@ -806,17 +806,17 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9).ConfigureAwait(false);
 
                 return d;
             });
@@ -851,18 +851,18 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10).ConfigureAwait(false);
 
                 return d;
             });
@@ -899,18 +899,18 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10).ConfigureAwait(false);
 
                 return d;
             });
@@ -947,18 +947,18 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10).ConfigureAwait(false);
 
                 return d;
             });
@@ -995,19 +995,19 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11).ConfigureAwait(false);
 
                 return d;
             });
@@ -1046,19 +1046,19 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11).ConfigureAwait(false);
 
                 return d;
             });
@@ -1097,19 +1097,19 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11).ConfigureAwait(false);
 
                 return d;
             });
@@ -1148,20 +1148,20 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12).ConfigureAwait(false);
 
                 return d;
             });
@@ -1202,20 +1202,20 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12).ConfigureAwait(false);
 
                 return d;
             });
@@ -1256,20 +1256,20 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12).ConfigureAwait(false);
 
                 return d;
             });
@@ -1310,21 +1310,21 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13).ConfigureAwait(false);
 
                 return d;
             });
@@ -1367,21 +1367,21 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13).ConfigureAwait(false);
 
                 return d;
             });
@@ -1424,21 +1424,21 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13).ConfigureAwait(false);
 
                 return d;
             });
@@ -1481,22 +1481,22 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub14 = source14.SubscribeSafeAsync(observer14).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14).ConfigureAwait(false);
 
                 return d;
             });
@@ -1541,22 +1541,22 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub14 = source14.SubscribeSafeAsync(observer14).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14).ConfigureAwait(false);
 
                 return d;
             });
@@ -1601,22 +1601,22 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub14 = source14.SubscribeSafeAsync(observer14).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14).ConfigureAwait(false);
 
                 return d;
             });
@@ -1661,23 +1661,23 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15) = AsyncObserver.CombineLatest(observer);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub14 = source14.SubscribeSafeAsync(observer14).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub15 = source15.SubscribeSafeAsync(observer15).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
+                var sub15 = SubscribeReleasingOnCompletedAsync(source15, observer15);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15).ConfigureAwait(false);
 
                 return d;
             });
@@ -1724,23 +1724,23 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub14 = source14.SubscribeSafeAsync(observer14).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub15 = source15.SubscribeSafeAsync(observer15).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
+                var sub15 = SubscribeReleasingOnCompletedAsync(source15, observer15);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15).ConfigureAwait(false);
 
                 return d;
             });
@@ -1787,23 +1787,219 @@ namespace System.Reactive.Linq
 
                 var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15) = AsyncObserver.CombineLatest(observer, selector);
 
-                var sub1 = source1.SubscribeSafeAsync(observer1).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub2 = source2.SubscribeSafeAsync(observer2).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub3 = source3.SubscribeSafeAsync(observer3).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub4 = source4.SubscribeSafeAsync(observer4).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub5 = source5.SubscribeSafeAsync(observer5).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub6 = source6.SubscribeSafeAsync(observer6).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub7 = source7.SubscribeSafeAsync(observer7).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub8 = source8.SubscribeSafeAsync(observer8).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub9 = source9.SubscribeSafeAsync(observer9).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub10 = source10.SubscribeSafeAsync(observer10).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub11 = source11.SubscribeSafeAsync(observer11).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub12 = source12.SubscribeSafeAsync(observer12).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub13 = source13.SubscribeSafeAsync(observer13).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub14 = source14.SubscribeSafeAsync(observer14).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
-                var sub15 = source15.SubscribeSafeAsync(observer15).AsTask().ContinueWith(disposable => d.AddAsync(disposable.Result).AsTask()).Unwrap();
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
+                var sub15 = SubscribeReleasingOnCompletedAsync(source15, observer15);
 
-                await Task.WhenAll(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15).ConfigureAwait(false);
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15).ConfigureAwait(false);
+
+                return d;
+            });
+        }
+
+        public static IAsyncObservable<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)> CombineLatest<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, IAsyncObservable<T13> source13, IAsyncObservable<T14> source14, IAsyncObservable<T15> source15, IAsyncObservable<T16> source16)
+        {
+            if (source1 == null)
+                throw new ArgumentNullException(nameof(source1));
+            if (source2 == null)
+                throw new ArgumentNullException(nameof(source2));
+            if (source3 == null)
+                throw new ArgumentNullException(nameof(source3));
+            if (source4 == null)
+                throw new ArgumentNullException(nameof(source4));
+            if (source5 == null)
+                throw new ArgumentNullException(nameof(source5));
+            if (source6 == null)
+                throw new ArgumentNullException(nameof(source6));
+            if (source7 == null)
+                throw new ArgumentNullException(nameof(source7));
+            if (source8 == null)
+                throw new ArgumentNullException(nameof(source8));
+            if (source9 == null)
+                throw new ArgumentNullException(nameof(source9));
+            if (source10 == null)
+                throw new ArgumentNullException(nameof(source10));
+            if (source11 == null)
+                throw new ArgumentNullException(nameof(source11));
+            if (source12 == null)
+                throw new ArgumentNullException(nameof(source12));
+            if (source13 == null)
+                throw new ArgumentNullException(nameof(source13));
+            if (source14 == null)
+                throw new ArgumentNullException(nameof(source14));
+            if (source15 == null)
+                throw new ArgumentNullException(nameof(source15));
+            if (source16 == null)
+                throw new ArgumentNullException(nameof(source16));
+
+            return Create<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)>(async observer =>
+            {
+                var d = new CompositeAsyncDisposable();
+
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15, observer16) = AsyncObserver.CombineLatest(observer);
+
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
+                var sub15 = SubscribeReleasingOnCompletedAsync(source15, observer15);
+                var sub16 = SubscribeReleasingOnCompletedAsync(source16, observer16);
+
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15, sub16).ConfigureAwait(false);
+
+                return d;
+            });
+        }
+
+        public static IAsyncObservable<TResult> CombineLatest<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, IAsyncObservable<T13> source13, IAsyncObservable<T14> source14, IAsyncObservable<T15> source15, IAsyncObservable<T16> source16, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector)
+        {
+            if (source1 == null)
+                throw new ArgumentNullException(nameof(source1));
+            if (source2 == null)
+                throw new ArgumentNullException(nameof(source2));
+            if (source3 == null)
+                throw new ArgumentNullException(nameof(source3));
+            if (source4 == null)
+                throw new ArgumentNullException(nameof(source4));
+            if (source5 == null)
+                throw new ArgumentNullException(nameof(source5));
+            if (source6 == null)
+                throw new ArgumentNullException(nameof(source6));
+            if (source7 == null)
+                throw new ArgumentNullException(nameof(source7));
+            if (source8 == null)
+                throw new ArgumentNullException(nameof(source8));
+            if (source9 == null)
+                throw new ArgumentNullException(nameof(source9));
+            if (source10 == null)
+                throw new ArgumentNullException(nameof(source10));
+            if (source11 == null)
+                throw new ArgumentNullException(nameof(source11));
+            if (source12 == null)
+                throw new ArgumentNullException(nameof(source12));
+            if (source13 == null)
+                throw new ArgumentNullException(nameof(source13));
+            if (source14 == null)
+                throw new ArgumentNullException(nameof(source14));
+            if (source15 == null)
+                throw new ArgumentNullException(nameof(source15));
+            if (source16 == null)
+                throw new ArgumentNullException(nameof(source16));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return Create<TResult>(async observer =>
+            {
+                var d = new CompositeAsyncDisposable();
+
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15, observer16) = AsyncObserver.CombineLatest(observer, selector);
+
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
+                var sub15 = SubscribeReleasingOnCompletedAsync(source15, observer15);
+                var sub16 = SubscribeReleasingOnCompletedAsync(source16, observer16);
+
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15, sub16).ConfigureAwait(false);
+
+                return d;
+            });
+        }
+
+        public static IAsyncObservable<TResult> CombineLatest<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2, IAsyncObservable<T3> source3, IAsyncObservable<T4> source4, IAsyncObservable<T5> source5, IAsyncObservable<T6> source6, IAsyncObservable<T7> source7, IAsyncObservable<T8> source8, IAsyncObservable<T9> source9, IAsyncObservable<T10> source10, IAsyncObservable<T11> source11, IAsyncObservable<T12> source12, IAsyncObservable<T13> source13, IAsyncObservable<T14> source14, IAsyncObservable<T15> source15, IAsyncObservable<T16> source16, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, ValueTask<TResult>> selector)
+        {
+            if (source1 == null)
+                throw new ArgumentNullException(nameof(source1));
+            if (source2 == null)
+                throw new ArgumentNullException(nameof(source2));
+            if (source3 == null)
+                throw new ArgumentNullException(nameof(source3));
+            if (source4 == null)
+                throw new ArgumentNullException(nameof(source4));
+            if (source5 == null)
+                throw new ArgumentNullException(nameof(source5));
+            if (source6 == null)
+                throw new ArgumentNullException(nameof(source6));
+            if (source7 == null)
+                throw new ArgumentNullException(nameof(source7));
+            if (source8 == null)
+                throw new ArgumentNullException(nameof(source8));
+            if (source9 == null)
+                throw new ArgumentNullException(nameof(source9));
+            if (source10 == null)
+                throw new ArgumentNullException(nameof(source10));
+            if (source11 == null)
+                throw new ArgumentNullException(nameof(source11));
+            if (source12 == null)
+                throw new ArgumentNullException(nameof(source12));
+            if (source13 == null)
+                throw new ArgumentNullException(nameof(source13));
+            if (source14 == null)
+                throw new ArgumentNullException(nameof(source14));
+            if (source15 == null)
+                throw new ArgumentNullException(nameof(source15));
+            if (source16 == null)
+                throw new ArgumentNullException(nameof(source16));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return Create<TResult>(async observer =>
+            {
+                var d = new CompositeAsyncDisposable();
+
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15, observer16) = AsyncObserver.CombineLatest(observer, selector);
+
+                var sub1 = SubscribeReleasingOnCompletedAsync(source1, observer1);
+                var sub2 = SubscribeReleasingOnCompletedAsync(source2, observer2);
+                var sub3 = SubscribeReleasingOnCompletedAsync(source3, observer3);
+                var sub4 = SubscribeReleasingOnCompletedAsync(source4, observer4);
+                var sub5 = SubscribeReleasingOnCompletedAsync(source5, observer5);
+                var sub6 = SubscribeReleasingOnCompletedAsync(source6, observer6);
+                var sub7 = SubscribeReleasingOnCompletedAsync(source7, observer7);
+                var sub8 = SubscribeReleasingOnCompletedAsync(source8, observer8);
+                var sub9 = SubscribeReleasingOnCompletedAsync(source9, observer9);
+                var sub10 = SubscribeReleasingOnCompletedAsync(source10, observer10);
+                var sub11 = SubscribeReleasingOnCompletedAsync(source11, observer11);
+                var sub12 = SubscribeReleasingOnCompletedAsync(source12, observer12);
+                var sub13 = SubscribeReleasingOnCompletedAsync(source13, observer13);
+                var sub14 = SubscribeReleasingOnCompletedAsync(source14, observer14);
+                var sub15 = SubscribeReleasingOnCompletedAsync(source15, observer15);
+                var sub16 = SubscribeReleasingOnCompletedAsync(source16, observer16);
+
+                await CollectAsync(d, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10, sub11, sub12, sub13, sub14, sub15, sub16).ConfigureAwait(false);
 
                 return d;
             });
@@ -14649,6 +14845,1696 @@ namespace System.Reactive.Linq
                             isDone15 = true;
 
                             if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                )
+            );
+        }
+
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>, IAsyncObserver<T13>, IAsyncObserver<T14>, IAsyncObserver<T15>, IAsyncObserver<T16>) CombineLatest<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(IAsyncObserver<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)> observer)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+
+            bool allHasValue = false;
+
+            bool hasValue1 = false;
+            bool isDone1 = false;
+            T1 latestValue1 = default(T1);
+            bool hasValue2 = false;
+            bool isDone2 = false;
+            T2 latestValue2 = default(T2);
+            bool hasValue3 = false;
+            bool isDone3 = false;
+            T3 latestValue3 = default(T3);
+            bool hasValue4 = false;
+            bool isDone4 = false;
+            T4 latestValue4 = default(T4);
+            bool hasValue5 = false;
+            bool isDone5 = false;
+            T5 latestValue5 = default(T5);
+            bool hasValue6 = false;
+            bool isDone6 = false;
+            T6 latestValue6 = default(T6);
+            bool hasValue7 = false;
+            bool isDone7 = false;
+            T7 latestValue7 = default(T7);
+            bool hasValue8 = false;
+            bool isDone8 = false;
+            T8 latestValue8 = default(T8);
+            bool hasValue9 = false;
+            bool isDone9 = false;
+            T9 latestValue9 = default(T9);
+            bool hasValue10 = false;
+            bool isDone10 = false;
+            T10 latestValue10 = default(T10);
+            bool hasValue11 = false;
+            bool isDone11 = false;
+            T11 latestValue11 = default(T11);
+            bool hasValue12 = false;
+            bool isDone12 = false;
+            T12 latestValue12 = default(T12);
+            bool hasValue13 = false;
+            bool isDone13 = false;
+            T13 latestValue13 = default(T13);
+            bool hasValue14 = false;
+            bool isDone14 = false;
+            T14 latestValue14 = default(T14);
+            bool hasValue15 = false;
+            bool isDone15 = false;
+            T15 latestValue15 = default(T15);
+            bool hasValue16 = false;
+            bool isDone16 = false;
+            T16 latestValue16 = default(T16);
+
+            var gate = new AsyncGate();
+
+            return
+            (
+                Create<T1>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue1)
+                            {
+                                hasValue1 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue1 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone1 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T2>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue2)
+                            {
+                                hasValue2 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue2 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone2 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T3>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue3)
+                            {
+                                hasValue3 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue3 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone3 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T4>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue4)
+                            {
+                                hasValue4 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue4 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone4 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T5>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue5)
+                            {
+                                hasValue5 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue5 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone5 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T6>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue6)
+                            {
+                                hasValue6 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue6 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone6 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T7>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue7)
+                            {
+                                hasValue7 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue7 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone7 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T8>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue8)
+                            {
+                                hasValue8 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue8 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone8 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T9>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue9)
+                            {
+                                hasValue9 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue9 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone9 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T10>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue10)
+                            {
+                                hasValue10 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue10 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone10 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T11>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue11)
+                            {
+                                hasValue11 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue11 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone11 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T12>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue12)
+                            {
+                                hasValue12 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue12 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone12 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T13>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue13)
+                            {
+                                hasValue13 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue13 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone13 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T14>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue14)
+                            {
+                                hasValue14 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue14 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone14 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T15>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue15)
+                            {
+                                hasValue15 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue15 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone15 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T16>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue16)
+                            {
+                                hasValue16 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue16 = x;
+
+                            if (allHasValue)
+                            {
+                                await observer.OnNextAsync((latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16)).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone16 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                )
+            );
+        }
+
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>, IAsyncObserver<T13>, IAsyncObserver<T14>, IAsyncObserver<T15>, IAsyncObserver<T16>) CombineLatest<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return CombineLatest<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(observer, (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) => new ValueTask<TResult>(selector(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16)));
+        }
+
+        public static (IAsyncObserver<T1>, IAsyncObserver<T2>, IAsyncObserver<T3>, IAsyncObserver<T4>, IAsyncObserver<T5>, IAsyncObserver<T6>, IAsyncObserver<T7>, IAsyncObserver<T8>, IAsyncObserver<T9>, IAsyncObserver<T10>, IAsyncObserver<T11>, IAsyncObserver<T12>, IAsyncObserver<T13>, IAsyncObserver<T14>, IAsyncObserver<T15>, IAsyncObserver<T16>) CombineLatest<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(IAsyncObserver<TResult> observer, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, ValueTask<TResult>> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            bool allHasValue = false;
+
+            bool hasValue1 = false;
+            bool isDone1 = false;
+            T1 latestValue1 = default(T1);
+            bool hasValue2 = false;
+            bool isDone2 = false;
+            T2 latestValue2 = default(T2);
+            bool hasValue3 = false;
+            bool isDone3 = false;
+            T3 latestValue3 = default(T3);
+            bool hasValue4 = false;
+            bool isDone4 = false;
+            T4 latestValue4 = default(T4);
+            bool hasValue5 = false;
+            bool isDone5 = false;
+            T5 latestValue5 = default(T5);
+            bool hasValue6 = false;
+            bool isDone6 = false;
+            T6 latestValue6 = default(T6);
+            bool hasValue7 = false;
+            bool isDone7 = false;
+            T7 latestValue7 = default(T7);
+            bool hasValue8 = false;
+            bool isDone8 = false;
+            T8 latestValue8 = default(T8);
+            bool hasValue9 = false;
+            bool isDone9 = false;
+            T9 latestValue9 = default(T9);
+            bool hasValue10 = false;
+            bool isDone10 = false;
+            T10 latestValue10 = default(T10);
+            bool hasValue11 = false;
+            bool isDone11 = false;
+            T11 latestValue11 = default(T11);
+            bool hasValue12 = false;
+            bool isDone12 = false;
+            T12 latestValue12 = default(T12);
+            bool hasValue13 = false;
+            bool isDone13 = false;
+            T13 latestValue13 = default(T13);
+            bool hasValue14 = false;
+            bool isDone14 = false;
+            T14 latestValue14 = default(T14);
+            bool hasValue15 = false;
+            bool isDone15 = false;
+            T15 latestValue15 = default(T15);
+            bool hasValue16 = false;
+            bool isDone16 = false;
+            T16 latestValue16 = default(T16);
+
+            var gate = new AsyncGate();
+
+            return
+            (
+                Create<T1>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue1)
+                            {
+                                hasValue1 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue1 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone1 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T2>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue2)
+                            {
+                                hasValue2 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue2 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone2 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T3>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue3)
+                            {
+                                hasValue3 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue3 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone3 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T4>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue4)
+                            {
+                                hasValue4 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue4 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone4 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T5>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue5)
+                            {
+                                hasValue5 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue5 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone5 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T6>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue6)
+                            {
+                                hasValue6 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue6 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone6 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T7>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue7)
+                            {
+                                hasValue7 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue7 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone7 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T8>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue8)
+                            {
+                                hasValue8 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue8 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone8 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T9>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue9)
+                            {
+                                hasValue9 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue9 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone9 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T10>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue10)
+                            {
+                                hasValue10 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue10 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone10 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T11>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue11)
+                            {
+                                hasValue11 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue11 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone11 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T12>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue12)
+                            {
+                                hasValue12 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue12 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone12 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T13>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue13)
+                            {
+                                hasValue13 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue13 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone13 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T14>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue14)
+                            {
+                                hasValue14 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue14 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone14 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T15>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue15)
+                            {
+                                hasValue15 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue15 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone15 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                ),
+                Create<T16>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!hasValue16)
+                            {
+                                hasValue16 = true;
+                                allHasValue = hasValue1 && hasValue2 && hasValue3 && hasValue4 && hasValue5 && hasValue6 && hasValue7 && hasValue8 && hasValue9 && hasValue10 && hasValue11 && hasValue12 && hasValue13 && hasValue14 && hasValue15 && hasValue16;
+                            }
+
+                            latestValue16 = x;
+
+                            if (allHasValue)
+                            {
+                                TResult res;
+                                try
+                                {
+                                    res = await selector(latestValue1, latestValue2, latestValue3, latestValue4, latestValue5, latestValue6, latestValue7, latestValue8, latestValue9, latestValue10, latestValue11, latestValue12, latestValue13, latestValue14, latestValue15, latestValue16).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                                    return;
+                                }
+
+                                await observer.OnNextAsync(res).ConfigureAwait(false);
+                            }
+                            else if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15)
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            isDone16 = true;
+
+                            if (isDone1 && isDone2 && isDone3 && isDone4 && isDone5 && isDone6 && isDone7 && isDone8 && isDone9 && isDone10 && isDone11 && isDone12 && isDone13 && isDone14 && isDone15 && isDone16)
                             {
                                 await observer.OnCompletedAsync().ConfigureAwait(false);
                             }

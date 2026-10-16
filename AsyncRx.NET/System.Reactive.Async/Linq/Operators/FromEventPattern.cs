@@ -324,7 +324,7 @@ namespace System.Reactive.Linq
             return (addMethod, removeMethod, delegateType, isWinRT);
         }
 
-        public static EventInfo GetEventEx(this Type type, string name, bool isStatic)
+        internal static EventInfo GetEventEx(this Type type, string name, bool isStatic)
         {
             return type.GetEvent(name, isStatic ? BindingFlags.Public | BindingFlags.Static : BindingFlags.Public | BindingFlags.Instance);
         }

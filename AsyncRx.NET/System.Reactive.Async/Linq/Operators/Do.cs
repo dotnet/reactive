@@ -60,6 +60,36 @@ namespace System.Reactive.Linq
                 static (source, onCompleted, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, onCompleted)));
         }
 
+        public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Action<TSource> onNext, Action onCompleted)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (onNext == null)
+                throw new ArgumentNullException(nameof(onNext));
+            if (onCompleted == null)
+                throw new ArgumentNullException(nameof(onCompleted));
+
+            return Create(
+                source,
+                (onNext, onCompleted),
+                static (source, state, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, state.onNext, state.onCompleted)));
+        }
+
+        public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (onNext == null)
+                throw new ArgumentNullException(nameof(onNext));
+            if (onError == null)
+                throw new ArgumentNullException(nameof(onError));
+
+            return Create(
+                source,
+                (onNext, onError),
+                static (source, state, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, state.onNext, state.onError)));
+        }
+
         public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
             if (source == null)
@@ -127,6 +157,36 @@ namespace System.Reactive.Linq
                 source,
                 onCompleted,
                 static (source, onCompleted, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, onCompleted)));
+        }
+
+        public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask> onNext, Func<ValueTask> onCompleted)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (onNext == null)
+                throw new ArgumentNullException(nameof(onNext));
+            if (onCompleted == null)
+                throw new ArgumentNullException(nameof(onCompleted));
+
+            return Create(
+                source,
+                (onNext, onCompleted),
+                static (source, state, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, state.onNext, state.onCompleted)));
+        }
+
+        public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask> onNext, Func<Exception, ValueTask> onError)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (onNext == null)
+                throw new ArgumentNullException(nameof(onNext));
+            if (onError == null)
+                throw new ArgumentNullException(nameof(onError));
+
+            return Create(
+                source,
+                (onNext, onError),
+                static (source, state, target) => source.SubscribeSafeAsync(AsyncObserver.Do(target, state.onNext, state.onError)));
         }
 
         public static IAsyncObservable<TSource> Do<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask> onNext, Func<Exception, ValueTask> onError, Func<ValueTask> onCompleted)
@@ -232,6 +292,31 @@ namespace System.Reactive.Linq
             return Do(observer, Create<TSource>(_ => default, _ => default, onCompleted));
         }
 
+        // The two-handler forms, as in Rx.NET: the handler not given is a no-op.
+        public static IAsyncObserver<TSource> Do<TSource>(IAsyncObserver<TSource> observer, Func<TSource, ValueTask> onNext, Func<ValueTask> onCompleted)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (onNext == null)
+                throw new ArgumentNullException(nameof(onNext));
+            if (onCompleted == null)
+                throw new ArgumentNullException(nameof(onCompleted));
+
+            return Do(observer, Create<TSource>(onNext, static _ => default, onCompleted));
+        }
+
+        public static IAsyncObserver<TSource> Do<TSource>(IAsyncObserver<TSource> observer, Func<TSource, ValueTask> onNext, Func<Exception, ValueTask> onError)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (onNext == null)
+                throw new ArgumentNullException(nameof(onNext));
+            if (onError == null)
+                throw new ArgumentNullException(nameof(onError));
+
+            return Do(observer, Create<TSource>(onNext, onError, static () => default));
+        }
+
         public static IAsyncObserver<TSource> Do<TSource>(IAsyncObserver<TSource> observer, Func<TSource, ValueTask> onNext, Func<Exception, ValueTask> onError, Func<ValueTask> onCompleted)
         {
             if (observer == null)
@@ -327,6 +412,30 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(onCompleted));
 
             return Do(observer, Create<TSource>(_ => default, _ => default, () => { onCompleted(); return default; }));
+        }
+
+        public static IAsyncObserver<TSource> Do<TSource>(IAsyncObserver<TSource> observer, Action<TSource> onNext, Action onCompleted)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (onNext == null)
+                throw new ArgumentNullException(nameof(onNext));
+            if (onCompleted == null)
+                throw new ArgumentNullException(nameof(onCompleted));
+
+            return Do(observer, x => { onNext(x); return default; }, static _ => default, () => { onCompleted(); return default; });
+        }
+
+        public static IAsyncObserver<TSource> Do<TSource>(IAsyncObserver<TSource> observer, Action<TSource> onNext, Action<Exception> onError)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (onNext == null)
+                throw new ArgumentNullException(nameof(onNext));
+            if (onError == null)
+                throw new ArgumentNullException(nameof(onError));
+
+            return Do(observer, x => { onNext(x); return default; }, ex => { onError(ex); return default; }, static () => default);
         }
 
         public static IAsyncObserver<TSource> Do<TSource>(IAsyncObserver<TSource> observer, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
