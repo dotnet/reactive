@@ -397,16 +397,24 @@ namespace System.Reactive.Linq
                         return;
                     }
 
+                    // As in Rx.NET: the time selector gives the time at which the element is
+                    // produced, so the delay precedes the element, and completion follows the last
+                    // element at once.
                     if (hasResult)
                     {
+                        await scheduler.Delay(nextDue).RendezVous(scheduler, ct);
+
+                        if (ct.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
                         await observer.OnNextAsync(result).RendezVous(scheduler, ct);
                     }
                     else
                     {
                         break;
                     }
-
-                    await scheduler.Delay(nextDue).RendezVous(scheduler, ct);
                 }
 
                 if (!ct.IsCancellationRequested)
@@ -521,14 +529,19 @@ namespace System.Reactive.Linq
 
                     if (hasResult)
                     {
+                        await scheduler.Delay(nextDue).RendezVous(scheduler, ct);
+
+                        if (ct.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
                         await observer.OnNextAsync(result).RendezVous(scheduler, ct);
                     }
                     else
                     {
                         break;
                     }
-
-                    await scheduler.Delay(nextDue).RendezVous(scheduler, ct);
                 }
 
                 if (!ct.IsCancellationRequested)

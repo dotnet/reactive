@@ -122,6 +122,13 @@ public sealed class TestSchedulerRef : SchedulerRef
     /// <summary>The current virtual time.</summary>
     public long Clock => Target.Clock(this);
 
+    /// <summary>The current virtual time as a date, from <see cref="Clock"/>.</summary>
+    /// <remarks>
+    /// The sync suite's <c>scheduler.Now</c>. Both targets' test schedulers define it as the
+    /// clock's ticks from the epoch, so it is derived here rather than asked of the target.
+    /// </remarks>
+    public DateTimeOffset Now => new(Clock, TimeSpan.Zero);
+
     /// <summary>
     /// Schedules <paramref name="action"/> to run at absolute virtual time <paramref name="tick"/>
     /// (the raw surface, for scenarios that drive subscriptions by hand).
