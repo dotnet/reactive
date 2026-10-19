@@ -218,4 +218,96 @@ public static class SubscribeExtensions
                 return default;
             });
     }
+
+    /// <summary>
+    /// Subscribes an element and a completion handler, the target's own
+    /// <c>Subscribe(onNext, onCompleted)</c>.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements.</typeparam>
+    /// <param name="source">The sequence to subscribe to.</param>
+    /// <param name="scheduler">The test's scheduler, which carries the target.</param>
+    /// <param name="onNext">Handler for each element, awaited before the next delivery.</param>
+    /// <param name="onCompleted">Handler for completion.</param>
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        this Seq<T> source,
+        TestSchedulerRef scheduler,
+        Func<T, ValueTask> onNext,
+        Func<ValueTask> onCompleted)
+    {
+        ArgumentNullException.ThrowIfNull(scheduler);
+
+        return scheduler.Target.SubscribeAsync(scheduler, source, onNext, onCompleted);
+    }
+
+    /// <summary>
+    /// As <see cref="SubscribeAsync{T}(Seq{T}, TestSchedulerRef, Func{T, ValueTask}, Func{ValueTask})"/>,
+    /// with synchronous handlers.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements.</typeparam>
+    /// <param name="source">The sequence to subscribe to.</param>
+    /// <param name="scheduler">The test's scheduler, which carries the target.</param>
+    /// <param name="onNext">Handler for each element.</param>
+    /// <param name="onCompleted">Handler for completion.</param>
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        this Seq<T> source,
+        TestSchedulerRef scheduler,
+        Action<T> onNext,
+        Action onCompleted)
+    {
+        ArgumentNullException.ThrowIfNull(onNext);
+        ArgumentNullException.ThrowIfNull(onCompleted);
+
+        return source.SubscribeAsync(
+            scheduler,
+            x =>
+            {
+                onNext(x);
+                return default;
+            },
+            () =>
+            {
+                onCompleted();
+                return default;
+            });
+    }
+
+    /// <summary>
+    /// Subscribes a testable observer to an enumerable, enumerated on
+    /// <paramref name="scheduler"/>: where the Rx.NET test writes
+    /// <c>xs.Subscribe(results, scheduler)</c> over an <c>IEnumerable</c>.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements.</typeparam>
+    /// <param name="source">The enumerable to subscribe to.</param>
+    /// <param name="observer">The testable observer, which carries the target.</param>
+    /// <param name="scheduler">The scheduler to enumerate on.</param>
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        this IEnumerable<T> source,
+        TestableObserver<T> observer,
+        SchedulerRef scheduler)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+
+        return observer.Target.SubscribeAsync(source, observer, scheduler);
+    }
+
+    /// <summary>
+    /// Subscribes an observer to an enumerable, enumerated on <paramref name="enumerateOn"/> or,
+    /// when that is null, on the library's default: Rx.NET's
+    /// <c>Subscribe(IEnumerable, IObserver[, IScheduler])</c>.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements.</typeparam>
+    /// <param name="source">The enumerable to subscribe to.</param>
+    /// <param name="scheduler">The test's scheduler, which carries the target.</param>
+    /// <param name="observer">The observer, whose handlers may dispose the subscription.</param>
+    /// <param name="enumerateOn">The scheduler to enumerate on, or null for the default.</param>
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        this IEnumerable<T> source,
+        TestSchedulerRef scheduler,
+        ObserverRef<T> observer,
+        SchedulerRef? enumerateOn)
+    {
+        ArgumentNullException.ThrowIfNull(scheduler);
+
+        return scheduler.Target.SubscribeAsync(scheduler, source, observer, enumerateOn);
+    }
 }

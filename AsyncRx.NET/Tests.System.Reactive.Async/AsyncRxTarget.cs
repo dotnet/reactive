@@ -259,6 +259,58 @@ public sealed partial class AsyncRxTarget : IRxTarget
             Unwrap(scheduler),
             _bridge.Call<ValueTask<IAsyncDisposable>>(ConnectImpl<T>, source));
 
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        TestSchedulerRef scheduler,
+        Seq<T> source,
+        Func<T, ValueTask> onNext,
+        Func<ValueTask> onCompleted)
+    {
+        ArgumentNullException.ThrowIfNull(onNext);
+        ArgumentNullException.ThrowIfNull(onCompleted);
+
+        return FromBody(
+            Unwrap(scheduler),
+            _bridge.Call<ValueTask<IAsyncDisposable>>(
+                SubscribeWithCompletionImpl<T>,
+                source,
+                onNext,
+                onCompleted,
+                Unwrap(scheduler)));
+    }
+
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        IEnumerable<T> source,
+        TestableObserver<T> observer,
+        SchedulerRef scheduler)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+
+        return FromBody(
+            Unwrap(observer.Scheduler),
+            _bridge.Call<ValueTask<IAsyncDisposable>>(
+                SubscribeEnumerableOnImpl<T>,
+                source,
+                observer.Native.Get<ITestableAsyncObserver<T>>(),
+                Unwrap(scheduler)));
+    }
+
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        TestSchedulerRef scheduler,
+        IEnumerable<T> source,
+        ObserverRef<T> observer,
+        SchedulerRef? enumerateOn)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+
+        return FromBody(
+            Unwrap(scheduler),
+            enumerateOn is null
+                ? _bridge.Call<ValueTask<IAsyncDisposable>>(
+                    SubscribeEnumerableImpl<T>, source, observer)
+                : _bridge.Call<ValueTask<IAsyncDisposable>>(
+                    SubscribeEnumerableOnImpl<T>, source, observer, Unwrap(enumerateOn)));
+    }
+
     // The raw surface a scenario can call from its test body: a subscription or connection
     // started there completes at the current virtual time (the sync tests' Subscribe or
     // Connect before Start), and what comes back disposes the same way. From scheduled work,
@@ -330,6 +382,39 @@ public sealed partial class AsyncRxTarget : IRxTarget
             pump.EnsurePumpThread("delivery to a scenario's handler");
             return onNext(x);
         }));
+
+    [AdaptsLibraryCall]
+    private static ValueTask<IAsyncDisposable> SubscribeWithCompletionImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask> onNext,
+        Func<ValueTask> onCompleted,
+        TestAsyncScheduler pump) =>
+        source.SubscribeAsync(
+            x =>
+            {
+                pump.EnsurePumpThread("delivery to a scenario's handler");
+                return onNext(x);
+            },
+            () =>
+            {
+                pump.EnsurePumpThread("delivery of completion to a scenario's handler");
+                return onCompleted();
+            });
+
+    // AsyncRx.NET has no Subscribe over an enumerable; Rx.NET's is its ToObservable followed by
+    // a subscription, and this is the same over AsyncRx.NET's ToAsyncObservable.
+    [AdaptsLibraryCall]
+    private static ValueTask<IAsyncDisposable> SubscribeEnumerableImpl<T>(
+        IEnumerable<T> source,
+        IAsyncObserver<T> observer) =>
+        source.ToAsyncObservable().SubscribeAsync(observer);
+
+    [AdaptsLibraryCall]
+    private static ValueTask<IAsyncDisposable> SubscribeEnumerableOnImpl<T>(
+        IEnumerable<T> source,
+        IAsyncObserver<T> observer,
+        IAsyncScheduler scheduler) =>
+        source.ToAsyncObservable(scheduler).SubscribeAsync(observer);
 
     [AdaptsLibraryCall]
     private static ValueTask<IAsyncDisposable> SubscribeWithHandlersImpl<T>(

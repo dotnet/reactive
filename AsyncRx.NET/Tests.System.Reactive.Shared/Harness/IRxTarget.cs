@@ -257,6 +257,44 @@ public interface IRxTarget : ISeqVisitor
         Func<Exception, ValueTask> onError,
         Func<ValueTask>? onCompleted);
 
+    /// <summary>
+    /// Subscribes an element and a completion handler to <paramref name="source"/>, the target's
+    /// own <c>Subscribe(onNext, onCompleted)</c>, whose error handling is the library's default.
+    /// </summary>
+    ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        TestSchedulerRef scheduler,
+        Seq<T> source,
+        Func<T, ValueTask> onNext,
+        Func<ValueTask> onCompleted);
+
+    /// <summary>
+    /// Subscribes a testable observer to an enumerable, enumerated on
+    /// <paramref name="scheduler"/>: Rx.NET's <c>Subscribe(IEnumerable, IObserver, IScheduler)</c>.
+    /// </summary>
+    /// <remarks>
+    /// AsyncRx.NET has no such operator; its target converts the enumerable with
+    /// <c>ToAsyncObservable(scheduler)</c> and subscribes, which is what Rx.NET's does inside.
+    /// </remarks>
+    ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        IEnumerable<T> source,
+        TestableObserver<T> observer,
+        SchedulerRef scheduler);
+
+    /// <summary>
+    /// Subscribes an observer to an enumerable, enumerated on <paramref name="enumerateOn"/>
+    /// or, when that is null, on the library's default: Rx.NET's
+    /// <c>Subscribe(IEnumerable, IObserver[, IScheduler])</c>.
+    /// </summary>
+    /// <param name="scheduler">The test's scheduler, which carries the target.</param>
+    /// <param name="source">The enumerable to subscribe to.</param>
+    /// <param name="observer">The observer, whose handlers may dispose the subscription.</param>
+    /// <param name="enumerateOn">The scheduler to enumerate on, or null for the default.</param>
+    ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        TestSchedulerRef scheduler,
+        IEnumerable<T> source,
+        ObserverRef<T> observer,
+        SchedulerRef? enumerateOn);
+
     /// <summary>Pushes a value into a testable observer, which records it.</summary>
     ValueTask OnNextAsync<T>(TestableObserver<T> observer, T value);
 

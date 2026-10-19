@@ -233,6 +233,51 @@ public sealed partial class RxTarget : IRxTarget
         return new(RxDisposable.For(subscription));
     }
 
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        TestSchedulerRef scheduler,
+        Seq<T> source,
+        Func<T, ValueTask> onNext,
+        Func<ValueTask> onCompleted)
+    {
+        ArgumentNullException.ThrowIfNull(onNext);
+        ArgumentNullException.ThrowIfNull(onCompleted);
+
+        return new(RxDisposable.For(
+            _bridge.Call<IDisposable>(
+                SubscribeWithCompletionImpl<T>, source, onNext, onCompleted)));
+    }
+
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        IEnumerable<T> source,
+        TestableObserver<T> observer,
+        SchedulerRef scheduler)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+
+        return new(RxDisposable.For(
+            _bridge.Call<IDisposable>(
+                SubscribeEnumerableOnImpl<T>,
+                source,
+                observer.Native.Get<ITestableObserver<T>>(),
+                Unwrap(scheduler))));
+    }
+
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        TestSchedulerRef scheduler,
+        IEnumerable<T> source,
+        ObserverRef<T> observer,
+        SchedulerRef? enumerateOn)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+
+        var subscription = enumerateOn is null
+            ? _bridge.Call<IDisposable>(SubscribeEnumerableImpl<T>, source, observer)
+            : _bridge.Call<IDisposable>(
+                SubscribeEnumerableOnImpl<T>, source, observer, Unwrap(enumerateOn));
+
+        return new(RxDisposable.For(subscription));
+    }
+
     public ValueTask OnNextAsync<T>(TestableObserver<T> observer, T value)
     {
         observer.Native.Get<ITestableObserver<T>>().OnNext(value);
@@ -355,6 +400,24 @@ public sealed partial class RxTarget : IRxTarget
         Func<T, ValueTask> onNext,
         Func<Exception, ValueTask> onError) =>
         source.Subscribe(x => Complete(onNext(x)), ex => Complete(onError(ex)));
+
+    [AdaptsLibraryCall]
+    private static IDisposable SubscribeWithCompletionImpl<T>(
+        IObservable<T> source,
+        Func<T, ValueTask> onNext,
+        Func<ValueTask> onCompleted) =>
+        source.Subscribe(x => Complete(onNext(x)), () => Complete(onCompleted()));
+
+    private static IDisposable SubscribeEnumerableImpl<T>(
+        IEnumerable<T> source,
+        IObserver<T> observer) =>
+        source.Subscribe(observer);
+
+    private static IDisposable SubscribeEnumerableOnImpl<T>(
+        IEnumerable<T> source,
+        IObserver<T> observer,
+        IScheduler scheduler) =>
+        source.Subscribe(observer, scheduler);
 
     [AdaptsLibraryCall]
     private static IDisposable SubscribeWithHandlersImpl<T>(
