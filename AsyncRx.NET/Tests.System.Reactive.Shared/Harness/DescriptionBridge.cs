@@ -286,6 +286,25 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
                     return value;
                 }
 
+                if (value is global::System.Collections.IDictionary table
+                    && Instantiation(realType, typeof(IDictionary<,>)) is { } dictionary)
+                {
+                    // A dictionary whose values are descriptions (Case's branches), converted
+                    // value by value into a dictionary of the target's own sequences. Eagerly: a
+                    // dictionary is a lookup table the operator reads at subscription, and
+                    // realizing a description does not subscribe to it.
+                    var keyType = dictionary.GetGenericArguments()[0];
+                    var valueType = dictionary.GetGenericArguments()[1];
+                    var result = (global::System.Collections.IDictionary)Activator.CreateInstance(
+                        typeof(Dictionary<,>).MakeGenericType(keyType, valueType))!;
+                    foreach (global::System.Collections.DictionaryEntry entry in table)
+                    {
+                        result.Add(ToReal(entry.Key, keyType)!, ToReal(entry.Value, valueType));
+                    }
+
+                    return result;
+                }
+
                 if (value is global::System.Collections.IEnumerable items
                     && Instantiation(realType, typeof(IEnumerable<>)) is { } enumerable)
                 {
