@@ -9,12 +9,6 @@ namespace Tests.System.Reactive.Shared.Rx;
 
 public sealed partial class RxTarget
 {
-    Realized<Seq<long>> ISeqVisitor.Timer(TimerSeq seq) =>
-        Realized.Of<Seq<long>>(Observable.Timer(seq.DueTime, Unwrap(seq.Scheduler)));
-
-    Realized<Seq<long>> ISeqVisitor.Interval(IntervalSeq seq) =>
-        Realized.Of<Seq<long>>(Observable.Interval(seq.Period, Unwrap(seq.Scheduler)));
-
     Realized<Seq<T>> ISeqVisitor.Return<T>(ReturnSeq<T> seq) =>
         seq.Scheduler is null
             ? _bridge.Run<Seq<T>>(ReturnImpl<T>, seq.Value)

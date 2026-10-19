@@ -4,12 +4,13 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>Describes <c>Seq.Interval(period, scheduler)</c>.</summary>
+/// <summary>Describes <c>Seq.Interval(period[, scheduler])</c>.</summary>
 /// <remarks>
-/// Built by <see cref="Seq.Interval(TimeSpan, SchedulerRef)"/>;
-/// materialized by each target through <see cref="ISeqVisitor.Interval(IntervalSeq)"/>.
+/// Built by <see cref="Seq.Interval(TimeSpan)"/> or
+/// <see cref="Seq.Interval(TimeSpan, SchedulerRef)"/>; materialized by each target through
+/// <see cref="ISeqVisitor.Interval(IntervalSeq)"/>.
 /// </remarks>
-public sealed class IntervalSeq(TimeSpan period, SchedulerRef scheduler) : Seq<long>
+public sealed class IntervalSeq(TimeSpan period, SchedulerRef? scheduler) : Seq<long>
 {
     /// <summary>Period for producing the values in the resulting sequence.</summary>
     /// <remarks>
@@ -17,13 +18,16 @@ public sealed class IntervalSeq(TimeSpan period, SchedulerRef scheduler) : Seq<l
     /// </remarks>
     public TimeSpan Period => period;
 
-    /// <summary>Scheduler to run the timer on.</summary>
-    public SchedulerRef Scheduler => scheduler;
+    /// <summary>Scheduler to run the timer on, or null for the target's default.</summary>
+    public SchedulerRef? Scheduler => scheduler;
 
     /// <inheritdoc/>
     protected override Realized<Seq<long>> AcceptCore(ISeqVisitor visitor) =>
         visitor.Interval(this);
 
     /// <inheritdoc/>
-    public override string ToString() => $"Seq.Interval({period.Ticks} ticks, {scheduler})";
+    public override string ToString() =>
+        scheduler is null
+            ? $"Seq.Interval({period.Ticks} ticks)"
+            : $"Seq.Interval({period.Ticks} ticks, {scheduler})";
 }

@@ -19,31 +19,6 @@ namespace Tests.System.Reactive.Shared;
 /// </remarks>
 public static partial class Seq
 {
-    /// <summary>Describes <c>Seq.Timer(dueTime, scheduler)</c>.</summary>
-    /// <param name="dueTime">
-    /// Relative time at which to produce the value. If this value is less than or equal to
-    /// TimeSpan.Zero, the timer will fire as soon as possible.
-    /// </param>
-    /// <param name="scheduler">Scheduler to run the timer on.</param>
-    /// <remarks>
-    /// Builds a <see cref="TimerSeq"/>, which each target materializes through
-    /// <see cref="ISeqVisitor.Timer(TimerSeq)"/>.
-    /// </remarks>
-    public static Seq<long> Timer(TimeSpan dueTime, SchedulerRef scheduler) => new TimerSeq(dueTime, scheduler);
-
-    /// <summary>Describes <c>Seq.Interval(period, scheduler)</c>.</summary>
-    /// <param name="period">
-    /// Period for producing the values in the resulting sequence. If this value is equal to
-    /// TimeSpan.Zero, the timer will recur as fast as possible.
-    /// </param>
-    /// <param name="scheduler">Scheduler to run the timer on.</param>
-    /// <remarks>
-    /// Builds an <see cref="IntervalSeq"/>, which each target materializes through
-    /// <see cref="ISeqVisitor.Interval(IntervalSeq)"/>.
-    /// </remarks>
-    public static Seq<long> Interval(TimeSpan period, SchedulerRef scheduler) =>
-        new IntervalSeq(period, scheduler);
-
     /// <summary>Describes <c>Seq.Return(value)</c>.</summary>
     /// <typeparam name="T">
     /// The type of the element that will be returned in the produced sequence.

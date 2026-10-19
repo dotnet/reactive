@@ -18,19 +18,6 @@ public partial interface ISeqVisitor
     Realized<Seq<T>> Native<T>(NativeSeq<T> seq);
 
     /// <summary>
-    /// Materializes a <see cref="TimerSeq"/> as the target's own <c>Timer(dueTime, scheduler)</c>.
-    /// </summary>
-    /// <remarks>Built by <see cref="Seq.Timer(TimeSpan, SchedulerRef)"/>.</remarks>
-    Realized<Seq<long>> Timer(TimerSeq seq);
-
-    /// <summary>
-    /// Materializes an <see cref="IntervalSeq"/> as the target's own
-    /// <c>Interval(period, scheduler)</c>.
-    /// </summary>
-    /// <remarks>Built by <see cref="Seq.Interval(TimeSpan, SchedulerRef)"/>.</remarks>
-    Realized<Seq<long>> Interval(IntervalSeq seq);
-
-    /// <summary>
     /// Materializes a <see cref="ReturnSeq{T}"/> as the target's own
     /// <c>Return(value[, scheduler])</c>.
     /// </summary>

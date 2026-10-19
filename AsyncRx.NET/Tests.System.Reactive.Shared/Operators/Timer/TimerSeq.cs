@@ -4,12 +4,12 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>Describes <c>Seq.Timer(dueTime, scheduler)</c>.</summary>
+/// <summary>Describes <c>Seq.Timer(dueTime[, scheduler])</c> with a relative due time.</summary>
 /// <remarks>
-/// Built by <see cref="Seq.Timer(TimeSpan, SchedulerRef)"/>;
+/// Built by <see cref="Seq.Timer(TimeSpan)"/> or <see cref="Seq.Timer(TimeSpan, SchedulerRef)"/>;
 /// materialized by each target through <see cref="ISeqVisitor.Timer(TimerSeq)"/>.
 /// </remarks>
-public sealed class TimerSeq(TimeSpan dueTime, SchedulerRef scheduler) : Seq<long>
+public sealed class TimerSeq(TimeSpan dueTime, SchedulerRef? scheduler) : Seq<long>
 {
     /// <summary>Relative time at which to produce the value.</summary>
     /// <remarks>
@@ -18,12 +18,15 @@ public sealed class TimerSeq(TimeSpan dueTime, SchedulerRef scheduler) : Seq<lon
     /// </remarks>
     public TimeSpan DueTime => dueTime;
 
-    /// <summary>Scheduler to run the timer on.</summary>
-    public SchedulerRef Scheduler => scheduler;
+    /// <summary>Scheduler to run the timer on, or null for the target's default.</summary>
+    public SchedulerRef? Scheduler => scheduler;
 
     /// <inheritdoc/>
     protected override Realized<Seq<long>> AcceptCore(ISeqVisitor visitor) => visitor.Timer(this);
 
     /// <inheritdoc/>
-    public override string ToString() => $"Seq.Timer({dueTime.Ticks} ticks, {scheduler})";
+    public override string ToString() =>
+        scheduler is null
+            ? $"Seq.Timer({dueTime.Ticks} ticks)"
+            : $"Seq.Timer({dueTime.Ticks} ticks, {scheduler})";
 }
