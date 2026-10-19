@@ -196,6 +196,38 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
     public Realized<TDescription> Run<TDescription>(Delegate impl, params object?[] args)
         => Realized.Of<TDescription>(Call<object>(impl, args));
 
+    /// <summary>Whether a type is, or contains, a description.</summary>
+    /// <param name="type">A type a scenario wrote, such as a sequence's element type.</param>
+    /// <remarks>
+    /// True for <c>Seq&lt;int&gt;</c> or <c>Group&lt;string, int&gt;</c>, false for
+    /// <c>int</c>: exactly when the target's real type for it differs. A target asks this of a
+    /// result's element type before recording the result, since the elements then need
+    /// <see cref="Present{TDescription}(object)"/>.
+    /// </remarks>
+    public bool Describes(Type type)
+    {
+        ArgumentNullException.ThrowIfNull(type);
+
+        return Real(type) != type;
+    }
+
+    /// <summary>
+    /// Presents one of the target's real values as the description a scenario expects.
+    /// </summary>
+    /// <typeparam name="TDescription">The description type the scenario wrote.</typeparam>
+    /// <param name="real">The target's own value, such as a grouped observable.</param>
+    /// <remarks>
+    /// What the bridge does for a callback's parameters, offered for a result's elements: a
+    /// target whose <c>Start</c> records a <c>Seq&lt;Group&lt;string, int&gt;&gt;</c> maps each
+    /// real group through this so that the recorded messages hold <c>Group</c> values.
+    /// </remarks>
+    public TDescription Present<TDescription>(object real)
+    {
+        ArgumentNullException.ThrowIfNull(real);
+
+        return (TDescription)ToDescription(real, typeof(TDescription))!;
+    }
+
     /// <summary>Runs one of the target's methods and returns its result.</summary>
     /// <typeparam name="TResult">The type of the result.</typeparam>
     /// <param name="impl">A generic method the target wrote over its real types.</param>

@@ -62,9 +62,17 @@ public sealed partial class RxTarget : IRxTarget
 
     private static IScheduler Unwrap(SchedulerRef scheduler) => scheduler.Native.Get<IScheduler>();
 
-    // For a result whose elements are values (what Start records); nested results go through
-    // the bridge.
-    private IObservable<T> Materialize<T>(Seq<T> seq) => seq.Accept(this).Get<IObservable<T>>();
+    // The result as this target's own observable. When the elements are themselves descriptions
+    // (a Seq<Group<string, int>> result, say) the real elements are grouped observables, and each
+    // is presented as the Group the scenario wrote; IObservable's covariance gives the untyped
+    // view, since every such element is a reference type.
+    private IObservable<T> Materialize<T>(Seq<T> seq)
+    {
+        var realized = seq.Accept(this);
+        return _bridge.Describes(typeof(T))
+            ? realized.Get<IObservable<object>>().Select(_bridge.Present<T>)
+            : realized.Get<IObservable<T>>();
+    }
 
     // ---- Harness ----
 

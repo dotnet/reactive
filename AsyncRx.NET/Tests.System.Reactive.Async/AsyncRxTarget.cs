@@ -62,8 +62,17 @@ public sealed partial class AsyncRxTarget : IRxTarget
     private static IAsyncScheduler Unwrap(SchedulerRef scheduler) =>
         scheduler.Native.Get<IAsyncScheduler>();
 
-    private IAsyncObservable<T> Materialize<T>(Seq<T> seq) =>
-        seq.Accept(this).Get<IAsyncObservable<T>>();
+    // The result as this target's own observable. When the elements are themselves descriptions
+    // (a Seq<Group<string, int>> result, say) the real elements are grouped observables, and each
+    // is presented as the Group the scenario wrote; IAsyncObservable's covariance gives the
+    // untyped view, since every such element is a reference type.
+    private IAsyncObservable<T> Materialize<T>(Seq<T> seq)
+    {
+        var realized = seq.Accept(this);
+        return _bridge.Describes(typeof(T))
+            ? realized.Get<IAsyncObservable<object>>().Select(_bridge.Present<T>)
+            : realized.Get<IAsyncObservable<T>>();
+    }
 
     // ---- Harness ----
 
