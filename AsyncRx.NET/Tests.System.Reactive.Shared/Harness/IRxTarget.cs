@@ -77,6 +77,25 @@ public interface IRxTarget : ISeqVisitor
     /// </remarks>
     ValueTask<IList<T>> ToListAsync<T>(Seq<T> source);
 
+    /// <summary>Materializes <paramref name="source"/> and exposes it as a .NET event.</summary>
+    /// <remarks>
+    /// The target's own <c>ToEvent</c>. The result is System.Reactive's
+    /// <see cref="IEventSource{T}"/>, which both libraries use, so a scenario attaches and
+    /// detaches handlers on it directly.
+    /// </remarks>
+    IEventSource<T> ToEvent<T>(Seq<T> source);
+
+    /// <summary>
+    /// Materializes <paramref name="source"/> and exposes it as a .NET event following the event
+    /// pattern.
+    /// </summary>
+    /// <remarks>
+    /// The target's own <c>ToEventPattern</c>. The result is System.Reactive's
+    /// <see cref="IEventPatternSource{TEventArgs}"/>, which both libraries use.
+    /// </remarks>
+    IEventPatternSource<TEventArgs> ToEventPattern<TEventArgs>(
+        Seq<EventPattern<TEventArgs>> source);
+
     /// <summary>Creates a subject the scenario drives by hand, as a leaf.</summary>
     /// <remarks>
     /// Rx.NET's <c>Subject&lt;T&gt;</c>; AsyncRx.NET's sequential simple subject. For the

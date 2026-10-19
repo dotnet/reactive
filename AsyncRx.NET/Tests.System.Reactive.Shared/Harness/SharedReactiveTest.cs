@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive;
+
 using Microsoft.Reactive.Testing;
 using Microsoft.Reactive.Testing.Async;
 
@@ -140,4 +142,40 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
     /// scenario is an <c>async Task</c> test method that awaits this instead.
     /// </remarks>
     protected ValueTask<IList<T>> ToListAsync<T>(Seq<T> source) => Target.ToListAsync(source);
+
+    /// <summary>Runs the target's operator calls for <paramref name="source"/> now.</summary>
+    /// <param name="source">The description to realize.</param>
+    /// <remarks>
+    /// A description is realized when it is first used, which is usually at <c>Start</c> or at a
+    /// subscription. A scenario whose claim is about the thread the operator is called on (an
+    /// event conversion captures the synchronization context of its caller) must make that call
+    /// where the original does; this realizes the description there, and the later use finds it
+    /// realized.
+    /// </remarks>
+    protected void Realize<T>(Seq<T> source)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        source.Accept(Target);
+    }
+
+    /// <summary>
+    /// Exposes <paramref name="source"/> as a .NET event on the target under test.
+    /// </summary>
+    /// <param name="source">The sequence to expose.</param>
+    /// <remarks>
+    /// Where the Rx.NET test writes <c>src.ToEvent()</c>, a scenario writes <c>ToEvent(src)</c>;
+    /// the result is the same System.Reactive type on both targets, so the handler attachment
+    /// that follows is the original's.
+    /// </remarks>
+    protected IEventSource<T> ToEvent<T>(Seq<T> source) => Target.ToEvent(source);
+
+    /// <summary>
+    /// Exposes <paramref name="source"/> as a .NET event following the event pattern, on the
+    /// target under test.
+    /// </summary>
+    /// <param name="source">The sequence of event patterns to expose.</param>
+    /// <remarks>As <see cref="ToEvent{T}"/>, for <c>src.ToEventPattern()</c>.</remarks>
+    protected IEventPatternSource<TEventArgs> ToEventPattern<TEventArgs>(
+        Seq<EventPattern<TEventArgs>> source) =>
+        Target.ToEventPattern(source);
 }
