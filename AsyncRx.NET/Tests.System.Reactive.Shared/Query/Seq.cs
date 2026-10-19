@@ -21,7 +21,8 @@ namespace Tests.System.Reactive.Shared;
 /// applications, one node type per overload (see the <c>Operators</c> folder).
 /// </para>
 /// <para>
-/// A target (<see cref="IRxTarget"/>) is a visitor that turns a tree into its own pipeline at the
+/// What it does as a description (materialize once, print as written) is
+/// <see cref="Description{TDescription}"/>. A target (<see cref="IRxTarget"/>) is a visitor that turns a tree into its own pipeline at the
 /// moment the test's <c>Start</c> callback is invoked, and the result is native from end to end:
 /// <c>xs.Window(...).Select((w, i) =&gt; ...).Merge()</c> materializes as the target's
 /// <c>Window</c>, <c>Select</c> and <c>Merge</c> with nothing in between — the inner window
@@ -33,53 +34,6 @@ namespace Tests.System.Reactive.Shared;
 /// assertions — is in the <c>Harness</c> folder.
 /// </para>
 /// </remarks>
-public abstract class Seq<T> : ISeq
+public abstract class Seq<T> : Description<Seq<T>>, ISeq
 {
-    private ISeqVisitor? _visitor;
-    private Realized<Seq<T>>? _realized;
-
-    /// <summary>Materializes this description on a target, once.</summary>
-    /// <param name="visitor">The target materializing the query.</param>
-    /// <remarks>
-    /// The first call dispatches to the visitor member for this node type; later calls return
-    /// the same realization, so a description names one real sequence however many times it is
-    /// used. Operators with construction-time state need that (<c>Publish</c> makes its subject
-    /// when it is built, and a scenario that connects a published sequence at one tick and
-    /// subscribes to it at another must reach the same subject); the rest do not notice. A
-    /// description belongs to one target: a second target asking is an error. The result is the
-    /// target's own observable, held under the description it realizes; only the target's own
-    /// code looks inside.
-    /// </remarks>
-    /// <exception cref="InvalidOperationException">
-    /// The description was first materialized by a different target.
-    /// </exception>
-    public Realized<Seq<T>> Accept(ISeqVisitor visitor)
-    {
-        ArgumentNullException.ThrowIfNull(visitor);
-
-        if (_realized is null)
-        {
-            _visitor = visitor;
-            _realized = AcceptCore(visitor);
-        }
-        else if (!ReferenceEquals(_visitor, visitor))
-        {
-            throw new InvalidOperationException(
-                $"{this} was materialized by {_visitor}; a description belongs to one target.");
-        }
-
-        return _realized;
-    }
-
-    /// <summary>Dispatches to the visitor member for this node type.</summary>
-    /// <param name="visitor">The target materializing the query.</param>
-    protected abstract Realized<Seq<T>> AcceptCore(ISeqVisitor visitor);
-
-    Realized ISeq.Accept(ISeqVisitor visitor) => Accept(visitor);
-
-    /// <summary>
-    /// The description as the query was written in the scenario (for example
-    /// <c>Hot(3 messages).Take(2)</c>), for diagnostics.
-    /// </summary>
-    public abstract override string ToString();
 }

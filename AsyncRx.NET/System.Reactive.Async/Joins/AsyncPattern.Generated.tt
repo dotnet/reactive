@@ -41,6 +41,22 @@ for (var j = 1; j <= i; j++)
 #>
         }
 
+<#
+if (i >= 2 && i < 16)
+{
+    var sources = string.Join(", ", Enumerable.Range(1, i).Select(j => "Source" + j));
+#>
+        public AsyncPattern<<#=genArgs#>, TSource<#=i + 1#>> And<TSource<#=i + 1#>>(IAsyncObservable<TSource<#=i + 1#>> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<<#=genArgs#>, TSource<#=i + 1#>>(<#=sources#>, other);
+        }
+
+<#
+}
+#>
         public AsyncPlan<TResult> Then<TResult>(Func<<#=genArgs#>, TResult> selector)
         {
             if (selector == null)

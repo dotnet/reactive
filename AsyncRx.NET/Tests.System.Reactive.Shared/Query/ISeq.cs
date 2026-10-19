@@ -4,15 +4,14 @@
 
 namespace Tests.System.Reactive.Shared;
 
-/// <summary>A description of any shape.</summary>
+/// <summary>A description of an observable sequence, seen without its element type.</summary>
 /// <remarks>
-/// What every <see cref="Seq{T}"/> is, seen without its element type: something a target can
-/// materialize. The <see cref="DescriptionBridge"/> works at this level, because it learns a
-/// description's shape at run time.
+/// What every <see cref="Seq{T}"/> is. Materializing a description needs only
+/// <see cref="IDescription"/>; the <see cref="DescriptionBridge"/> asks for this where it matters
+/// that the description stands for the target's observable: when it maps a description type to
+/// the real type an <c>*Impl</c> is instantiated at, and when it wraps a real sequence handed to a
+/// callback as a <see cref="NativeSeq{T}"/>. A pattern or a plan is neither.
 /// </remarks>
-public interface ISeq
+public interface ISeq : IDescription
 {
-    /// <summary>Materializes this description on <paramref name="visitor"/>, a target.</summary>
-    /// <param name="visitor">The target materializing the query.</param>
-    Realized Accept(ISeqVisitor visitor);
 }

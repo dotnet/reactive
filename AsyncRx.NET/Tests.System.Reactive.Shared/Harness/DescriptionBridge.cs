@@ -262,7 +262,7 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
             case Realized realized:
                 return realized.GetAs(realType);
 
-            case ISeq description:
+            case IDescription description:
                 return description.Accept(target).GetAs(realType);
 
             case Delegate callback:
