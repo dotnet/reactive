@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 TResource resource;
                 try
@@ -64,7 +64,7 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 TResource resource;
                 try
@@ -111,7 +111,7 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 TResource resource;
                 try
@@ -166,7 +166,7 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 TResource resource;
                 try

@@ -7,11 +7,16 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// <summary>Shared <c>Create</c> scenarios, from Rx.NET's <c>CreateTest.cs</c>.</summary>
 /// <remarks>
 /// <para>
-/// The 14 behavioural tests of the two <c>Create</c> overloads (the callback returns an action,
-/// or a disposable). Deliberately not here: the two <c>*_ArgumentChecking</c> tests (the
-/// code-generated stratum), and the 14 <c>Iterate*</c> and <c>IteratorScenario*</c> tests, which
-/// exercise <c>ObservableEx.Create</c>, the iterator-based form from
-/// <c>System.Reactive.Experimental</c>, a surface AsyncRx.NET does not have.
+/// 12 of the 14 behavioural tests of the two synchronous <c>Create</c> overloads (the callback
+/// returns an action, or a disposable). Deliberately not here: the two <c>*_ArgumentChecking</c>
+/// tests (the code-generated stratum), the 14 <c>Iterate*</c> and <c>IteratorScenario*</c>
+/// tests, which exercise <c>ObservableEx.Create</c>, the iterator-based form from
+/// <c>System.Reactive.Experimental</c>, a surface AsyncRx.NET does not have, and the two
+/// <c>*_ObserverThrows</c> tests, which are Rx.NET's own in its runner: they assert that a
+/// handler's exception thrown through the observer comes back out of <c>Subscribe</c>, which
+/// Rx.NET's synchronous <c>Create</c> does and its task-based <c>Create</c> does not (the
+/// callback's task faults, and the observer the fault would reach has already stopped). The
+/// shared callbacks are asynchronous, so both targets realize them as the task-based form.
 /// </para>
 /// <para>
 /// This is the one operator whose scenario text drives an observer itself. The callback is
@@ -164,31 +169,6 @@ public abstract class CreateTests : SharedReactiveTest
     }
 
     [TestMethod]
-    public async Task Create_ObserverThrows()
-    {
-        await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
-            await Seq.Create<int>(async o =>
-            {
-                await o.OnNextAsync(1);
-                return () => { };
-            }).SubscribeAsync(Scheduler, new Action<int>(x => throw new InvalidOperationException())));
-
-        await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
-            await Seq.Create<int>(async o =>
-            {
-                await o.OnErrorAsync(new Exception());
-                return () => { };
-            }).SubscribeAsync(Scheduler, x => { }, ex => throw new InvalidOperationException()));
-
-        await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
-            await Seq.Create<int>(async o =>
-            {
-                await o.OnCompletedAsync();
-                return () => { };
-            }).SubscribeAsync(Scheduler, x => { }, ex => { }, () => throw new InvalidOperationException()));
-    }
-
-    [TestMethod]
     public async Task CreateWithDisposable_NullCoalescingAction()
     {
         var xs = Seq.Create<int>(async o =>
@@ -320,30 +300,5 @@ public abstract class CreateTests : SharedReactiveTest
             OnNext(800, 3),
             OnNext(900, 4)
         );
-    }
-
-    [TestMethod]
-    public async Task CreateWithDisposable_ObserverThrows()
-    {
-        await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
-            await Seq.Create<int>(async o =>
-            {
-                await o.OnNextAsync(1);
-                return EmptyAsyncDisposable.Instance;
-            }).SubscribeAsync(Scheduler, new Action<int>(x => throw new InvalidOperationException())));
-
-        await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
-            await Seq.Create<int>(async o =>
-            {
-                await o.OnErrorAsync(new Exception());
-                return EmptyAsyncDisposable.Instance;
-            }).SubscribeAsync(Scheduler, x => { }, ex => throw new InvalidOperationException()));
-
-        await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
-            await Seq.Create<int>(async o =>
-            {
-                await o.OnCompletedAsync();
-                return EmptyAsyncDisposable.Instance;
-            }).SubscribeAsync(Scheduler, x => { }, ex => { }, () => throw new InvalidOperationException()));
     }
 }

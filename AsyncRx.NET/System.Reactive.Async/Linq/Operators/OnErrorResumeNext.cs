@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return Create<TSource>(async observer =>
+            return CreateAsyncObservable<TSource>.From(async observer =>
             {
                 var enumerator = sources.GetEnumerator();
 

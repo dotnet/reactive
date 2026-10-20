@@ -34,7 +34,7 @@ namespace System.Reactive.Linq
             var gate = new AsyncGate();
             var connection = default(RefConnection);
 
-            return Create<TSource>(async observer =>
+            return CreateAsyncObservable<TSource>.From(async observer =>
             {
                 RefConnection target;
                 bool connect;
@@ -188,7 +188,7 @@ namespace System.Reactive.Linq
             var pendingDisconnect = default(IAsyncDisposable);
             var pendingDisconnectId = 0L;
 
-            return Create<TSource>(async observer =>
+            return CreateAsyncObservable<TSource>.From(async observer =>
             {
                 var terminated = false;
                 var subscription = await source.SubscribeSafeAsync(AsyncObserver.Create<TSource>(

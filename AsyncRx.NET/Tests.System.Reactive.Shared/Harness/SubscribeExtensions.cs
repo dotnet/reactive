@@ -158,6 +158,27 @@ public static class SubscribeExtensions
         return scheduler.Target.SubscribeAsync(scheduler, source, onNext, onError, onCompleted);
     }
 
+    /// <summary>
+    /// Subscribes an observer written over descriptions to <paramref name="source"/>.
+    /// </summary>
+    /// <param name="source">The sequence to subscribe to.</param>
+    /// <param name="scheduler">The test's scheduler, which carries the target.</param>
+    /// <param name="observer">The observer, such as the one a <c>Create</c> body is handed.</param>
+    /// <remarks>
+    /// Rx.NET's <c>Subscribe(IObserver)</c>: the target unwraps the observer into its own, as
+    /// it does for an operator that takes one, so a scenario can forward another sequence into
+    /// the observer it was given.
+    /// </remarks>
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        this Seq<T> source,
+        TestSchedulerRef scheduler,
+        ObserverRef<T> observer)
+    {
+        ArgumentNullException.ThrowIfNull(scheduler);
+
+        return scheduler.Target.SubscribeAsync(scheduler, source, observer);
+    }
+
     /// <summary>Subscribes synchronous element and error handlers.</summary>
     /// <param name="source">The sequence to subscribe to.</param>
     /// <param name="scheduler">The test's scheduler, which carries the target.</param>

@@ -35,7 +35,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(async observer =>
+            return CreateAsyncObservable<TSource>.From(async observer =>
             {
                 var subscription = new SerialAsyncDisposable();
 

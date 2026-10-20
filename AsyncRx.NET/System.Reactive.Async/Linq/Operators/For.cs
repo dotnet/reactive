@@ -36,7 +36,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var subscription = new SerialAsyncDisposable();
 

@@ -38,7 +38,7 @@ for (var j = 1; j <= i; j++)
 }
 #>
 
-            return Create<<#=tuple#>>(async observer =>
+            return CreateAsyncObservable<<#=tuple#>>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -73,7 +73,7 @@ for (var j = 1; j <= i; j++)
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -108,7 +108,7 @@ for (var j = 1; j <= i; j++)
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 

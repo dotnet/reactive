@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             if (source2 == null)
                 throw new ArgumentNullException(nameof(source2));
 
-            return Create<(T1, T2)>(async observer =>
+            return CreateAsyncObservable<(T1, T2)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -66,7 +66,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -90,7 +90,7 @@ namespace System.Reactive.Linq
             if (source3 == null)
                 throw new ArgumentNullException(nameof(source3));
 
-            return Create<(T1, T2, T3)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -117,7 +117,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -144,7 +144,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -171,7 +171,7 @@ namespace System.Reactive.Linq
             if (source4 == null)
                 throw new ArgumentNullException(nameof(source4));
 
-            return Create<(T1, T2, T3, T4)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -201,7 +201,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -231,7 +231,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -261,7 +261,7 @@ namespace System.Reactive.Linq
             if (source5 == null)
                 throw new ArgumentNullException(nameof(source5));
 
-            return Create<(T1, T2, T3, T4, T5)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4, T5)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -294,7 +294,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -327,7 +327,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -360,7 +360,7 @@ namespace System.Reactive.Linq
             if (source6 == null)
                 throw new ArgumentNullException(nameof(source6));
 
-            return Create<(T1, T2, T3, T4, T5, T6)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4, T5, T6)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -396,7 +396,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -432,7 +432,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -468,7 +468,7 @@ namespace System.Reactive.Linq
             if (source7 == null)
                 throw new ArgumentNullException(nameof(source7));
 
-            return Create<(T1, T2, T3, T4, T5, T6, T7)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4, T5, T6, T7)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -507,7 +507,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -546,7 +546,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -585,7 +585,7 @@ namespace System.Reactive.Linq
             if (source8 == null)
                 throw new ArgumentNullException(nameof(source8));
 
-            return Create<(T1, T2, T3, T4, T5, T6, T7, T8)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4, T5, T6, T7, T8)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -627,7 +627,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -669,7 +669,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -711,7 +711,7 @@ namespace System.Reactive.Linq
             if (source9 == null)
                 throw new ArgumentNullException(nameof(source9));
 
-            return Create<(T1, T2, T3, T4, T5, T6, T7, T8, T9)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4, T5, T6, T7, T8, T9)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -756,7 +756,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -801,7 +801,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -846,7 +846,7 @@ namespace System.Reactive.Linq
             if (source10 == null)
                 throw new ArgumentNullException(nameof(source10));
 
-            return Create<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -894,7 +894,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -942,7 +942,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -990,7 +990,7 @@ namespace System.Reactive.Linq
             if (source11 == null)
                 throw new ArgumentNullException(nameof(source11));
 
-            return Create<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1041,7 +1041,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1092,7 +1092,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1143,7 +1143,7 @@ namespace System.Reactive.Linq
             if (source12 == null)
                 throw new ArgumentNullException(nameof(source12));
 
-            return Create<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1197,7 +1197,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1251,7 +1251,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1305,7 +1305,7 @@ namespace System.Reactive.Linq
             if (source13 == null)
                 throw new ArgumentNullException(nameof(source13));
 
-            return Create<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1362,7 +1362,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1419,7 +1419,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1476,7 +1476,7 @@ namespace System.Reactive.Linq
             if (source14 == null)
                 throw new ArgumentNullException(nameof(source14));
 
-            return Create<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1536,7 +1536,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1596,7 +1596,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1656,7 +1656,7 @@ namespace System.Reactive.Linq
             if (source15 == null)
                 throw new ArgumentNullException(nameof(source15));
 
-            return Create<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1719,7 +1719,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1782,7 +1782,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1845,7 +1845,7 @@ namespace System.Reactive.Linq
             if (source16 == null)
                 throw new ArgumentNullException(nameof(source16));
 
-            return Create<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)>(async observer =>
+            return CreateAsyncObservable<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1911,7 +1911,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -1977,7 +1977,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 

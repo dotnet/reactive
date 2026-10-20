@@ -25,7 +25,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 // Each side owns its own subscription so that it can be released as soon as that
                 // side completes (Rx.NET v2+ behaviour), independently of the join as a whole.

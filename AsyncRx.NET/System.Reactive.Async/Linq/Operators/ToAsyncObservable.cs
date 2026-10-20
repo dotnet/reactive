@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
             if (disposeScheduler == null)
                 throw new ArgumentNullException(nameof(disposeScheduler));
 
-            return Create<TSource>(async observer =>
+            return CreateAsyncObservable<TSource>.From(async observer =>
             {
                 var d = new CompositeAsyncDisposable();
 
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(observer => Enumerate(observer, source, scheduler));
+            return CreateAsyncObservable<TSource>.From(observer => Enumerate(observer, source, scheduler));
         }
 
         private static ValueTask<IAsyncDisposable> Enumerate<TSource>(IAsyncObserver<TSource> observer, IEnumerable<TSource> source, IAsyncScheduler scheduler)

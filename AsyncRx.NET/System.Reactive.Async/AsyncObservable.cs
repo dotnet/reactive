@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace System.Reactive
 {
-    public class AsyncObservable<T> : AsyncObservableBase<T>
+    // The operators' observable (CreateAsyncObservable<T>.From): its SubscribeAsync is the
+    // subscribe function, awaited.
+    internal class AsyncObservable<T> : AsyncObservableBase<T>
     {
         private readonly Func<IAsyncObserver<T>, ValueTask<IAsyncDisposable>> _subscribeAsync;
 

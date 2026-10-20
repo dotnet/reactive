@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return Create<TSource>(async observer =>
+            return CreateAsyncObservable<TSource>.From(async observer =>
             {
                 var subscription = new SingleAssignmentAsyncDisposable();
 
@@ -35,7 +35,7 @@ namespace System.Reactive.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return Create<TSource>(async observer =>
+            return CreateAsyncObservable<TSource>.From(async observer =>
             {
                 var (sink, cancel) = AsyncObserver.Merge(observer);
 
@@ -52,7 +52,7 @@ namespace System.Reactive.Linq
             if (maxConcurrent <= 0)
                 throw new ArgumentOutOfRangeException(nameof(maxConcurrent));
 
-            return Create<TSource>(async observer =>
+            return CreateAsyncObservable<TSource>.From(async observer =>
             {
                 var subscription = new SingleAssignmentAsyncDisposable();
 

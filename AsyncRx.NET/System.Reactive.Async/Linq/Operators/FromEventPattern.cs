@@ -181,7 +181,7 @@ namespace System.Reactive.Linq
 
             if (isWinRT)
             {
-                res = Create<TResult>(observer =>
+                res = CreateAsyncObservable<TResult>.From(observer =>
                 {
                     var onNext = new Action<TSender, TEventArgs>((o, e) =>
                     {
@@ -220,7 +220,7 @@ namespace System.Reactive.Linq
             }
             else
             {
-                res = Create<TResult>(observer =>
+                res = CreateAsyncObservable<TResult>.From(observer =>
                 {
                     var onNext = new Action<TSender, TEventArgs>((o, e) =>
                     {

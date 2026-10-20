@@ -62,7 +62,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2)>.From(observer =>
                     {
                         var handler = new Action<T1, T2>((arg1, arg2) =>
                         {
@@ -136,7 +136,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3>((arg1, arg2, arg3) =>
                         {
@@ -210,7 +210,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4>((arg1, arg2, arg3, arg4) =>
                         {
@@ -284,7 +284,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4, T5>((arg1, arg2, arg3, arg4, arg5) =>
                         {
@@ -358,7 +358,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6>((arg1, arg2, arg3, arg4, arg5, arg6) =>
                         {
@@ -432,7 +432,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7>((arg1, arg2, arg3, arg4, arg5, arg6, arg7) =>
                         {
@@ -506,7 +506,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) =>
                         {
@@ -580,7 +580,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) =>
                         {
@@ -654,7 +654,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) =>
                         {
@@ -728,7 +728,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11) =>
                         {
@@ -802,7 +802,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12) =>
                         {
@@ -876,7 +876,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13) =>
                         {
@@ -950,7 +950,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14) =>
                         {
@@ -1024,7 +1024,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15) =>
                         {
@@ -1098,7 +1098,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)>(observer =>
+                    CreateAsyncObservable<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)>.From(observer =>
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16) =>
                         {

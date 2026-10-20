@@ -53,23 +53,27 @@ namespace System.Reactive.Linq
                 }
             }
 
-            public static IAsyncObservable<TResult> From<TSource>(IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
+            internal static IAsyncObservable<TResult> From<TSource>(IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
             {
                 return new AsyncObservableImpl<TSource>(source, subscribeAsync);
             }
 
-            public static IAsyncObservable<TResult> From<TSource, TState>(IAsyncObservable<TSource> source, TState state, Func<IAsyncObservable<TSource>, TState, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
+            // The operators' own observables without a source: SubscribeAsync runs the subscribe
+            // function to completion and returns what it returns, so that when it completes the
+            // operator's subscriptions to its sources are in place. Distinct from the public
+            // Create (Create.cs), whose callback is started and left to run.
+            internal static IAsyncObservable<TResult> From(Func<IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
+            {
+                if (subscribeAsync == null)
+                    throw new ArgumentNullException(nameof(subscribeAsync));
+
+                return new AsyncObservable<TResult>(subscribeAsync);
+            }
+
+            internal static IAsyncObservable<TResult> From<TSource, TState>(IAsyncObservable<TSource> source, TState state, Func<IAsyncObservable<TSource>, TState, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)
             {
                 return new AsyncObservableImpl<TSource, TState>(source, state, subscribeAsync);
             }
-        }
-
-        public static IAsyncObservable<T> Create<T>(Func<IAsyncObserver<T>, ValueTask<IAsyncDisposable>> subscribeAsync)
-        {
-            if (subscribeAsync == null)
-                throw new ArgumentNullException(nameof(subscribeAsync));
-
-            return new AsyncObservable<T>(subscribeAsync);
         }
 
         internal static IAsyncObservable<TResult> Create<TSource, TResult>(IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, IAsyncObserver<TResult>, ValueTask<IAsyncDisposable>> subscribeAsync)

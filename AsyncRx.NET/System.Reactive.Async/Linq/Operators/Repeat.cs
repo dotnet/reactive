@@ -13,7 +13,7 @@ namespace System.Reactive.Linq
     {
         public static IAsyncObservable<TSource> Repeat<TSource>(TSource value)
         {
-            return Create<TSource>(observer => AsyncObserver.Repeat(observer, value));
+            return CreateAsyncObservable<TSource>.From(observer => AsyncObserver.Repeat(observer, value));
         }
 
         public static IAsyncObservable<TSource> Repeat<TSource>(TSource value, IAsyncScheduler scheduler)
@@ -21,7 +21,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(observer => AsyncObserver.Repeat(observer, value, scheduler));
+            return CreateAsyncObservable<TSource>.From(observer => AsyncObserver.Repeat(observer, value, scheduler));
         }
 
         public static IAsyncObservable<TSource> Repeat<TSource>(TSource value, int repeatCount)
@@ -29,7 +29,7 @@ namespace System.Reactive.Linq
             if (repeatCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(repeatCount));
 
-            return Create<TSource>(observer => AsyncObserver.Repeat(observer, value, repeatCount));
+            return CreateAsyncObservable<TSource>.From(observer => AsyncObserver.Repeat(observer, value, repeatCount));
         }
 
         public static IAsyncObservable<TSource> Repeat<TSource>(TSource value, int repeatCount, IAsyncScheduler scheduler)
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(observer => AsyncObserver.Repeat(observer, value, repeatCount, scheduler));
+            return CreateAsyncObservable<TSource>.From(observer => AsyncObserver.Repeat(observer, value, repeatCount, scheduler));
         }
 
         public static IAsyncObservable<TSource> Repeat<TSource>(this IAsyncObservable<TSource> source)

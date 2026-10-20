@@ -188,15 +188,10 @@ namespace System.Reactive.Subjects
 
         private void OnCompleted(Action continuation, bool originalContext)
         {
-            var subscribeTask = SubscribeAsync(new AwaitObserver(continuation, originalContext));
-
-            subscribeTask.AsTask().ContinueWith(t =>
-            {
-                if (t.Exception != null)
-                {
-                    // TODO: Trace?
-                }
-            });
+            // Not observed: the subscription to this subject completes synchronously unless the
+            // continuation itself is asynchronous, and a thread-pool continuation here would
+            // run the await's registration off the thread that registered it.
+            var ignored = SubscribeAsync(new AwaitObserver(continuation, originalContext));
         }
 
         private sealed class AwaitObserver : IAsyncObserver<T>

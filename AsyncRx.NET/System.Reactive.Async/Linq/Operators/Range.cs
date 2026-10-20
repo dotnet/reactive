@@ -14,7 +14,7 @@ namespace System.Reactive.Linq
             if (count < 0 || ((long)start) + count - 1 > int.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create<int>(observer => AsyncObserver.Range(observer, start, count));
+            return CreateAsyncObservable<int>.From(observer => AsyncObserver.Range(observer, start, count));
         }
 
         public static IAsyncObservable<int> Range(int start, int count, IAsyncScheduler scheduler)
@@ -24,7 +24,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<int>(observer => AsyncObserver.Range(observer, start, count, scheduler));
+            return CreateAsyncObservable<int>.From(observer => AsyncObserver.Range(observer, start, count, scheduler));
         }
     }
 

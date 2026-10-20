@@ -24,4 +24,44 @@ public partial interface ISeqVisitor
     /// <see cref="Seq.Create{T}(Func{ObserverRef{T}, ValueTask{IAsyncDisposable}}, string)"/>.
     /// </remarks>
     Realized<Seq<T>> CreateDisposable<T>(CreateDisposableSeq<T> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="CreateWithTokenSeq{T}"/> as the target's own <c>Create</c> over
+    /// a callback that takes a token and returns an action.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="Seq.Create{T}(Func{ObserverRef{T}, CancellationToken, ValueTask{Action}}, string)"/>.
+    /// </remarks>
+    Realized<Seq<T>> CreateWithToken<T>(CreateWithTokenSeq<T> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="CreateDisposableWithTokenSeq{T}"/> as the target's own
+    /// <c>Create</c> over a callback that takes a token and returns a disposable.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="Seq.Create{T}(Func{ObserverRef{T}, CancellationToken, ValueTask{IAsyncDisposable}}, string)"/>.
+    /// </remarks>
+    Realized<Seq<T>> CreateDisposableWithToken<T>(CreateDisposableWithTokenSeq<T> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="CreateAutoCompletingSeq{T}"/> as the target's own <c>Create</c>
+    /// over a callback whose completion completes the sequence.
+    /// </summary>
+    /// <remarks>
+    /// Built by <see cref="Seq.Create{T}(Func{ObserverRef{T}, ValueTask}, string)"/>.
+    /// </remarks>
+    Realized<Seq<T>> CreateAutoCompleting<T>(CreateAutoCompletingSeq<T> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="CreateAutoCompletingWithTokenSeq{T}"/> as the target's own
+    /// <c>Create</c> over a callback that takes a token and whose completion completes the
+    /// sequence.
+    /// </summary>
+    /// <remarks>
+    /// Built by
+    /// <see cref="Seq.Create{T}(Func{ObserverRef{T}, CancellationToken, ValueTask}, string)"/>.
+    /// </remarks>
+    Realized<Seq<T>> CreateAutoCompletingWithToken<T>(CreateAutoCompletingWithTokenSeq<T> seq);
 }
