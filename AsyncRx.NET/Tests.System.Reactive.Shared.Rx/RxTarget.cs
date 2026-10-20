@@ -154,7 +154,8 @@ public sealed partial class RxTarget : IRxTarget
             {
                 subject.OnCompleted();
                 return default;
-            });
+            },
+            subject is SubjectBase<T> reporting ? () => reporting.HasObservers : null);
     }
 
     public TestableSeq<T> CreateHotObservable<T>(TestSchedulerRef scheduler, Recorded<Notification<T>>[] messages) =>

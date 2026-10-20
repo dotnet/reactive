@@ -18,22 +18,29 @@ public class SubjectSeq<T> : NativeSeq<T>
     private readonly Func<T, ValueTask> _onNext;
     private readonly Func<Exception, ValueTask> _onError;
     private readonly Func<ValueTask> _onCompleted;
+    private readonly Func<bool>? _hasObservers;
 
     /// <summary>Wraps a target's subject.</summary>
     /// <param name="native">The target's own subject.</param>
     /// <param name="onNext">Pushes a value through the target's subject.</param>
     /// <param name="onError">Pushes an error through the target's subject.</param>
     /// <param name="onCompleted">Completes the target's subject.</param>
+    /// <param name="hasObservers">
+    /// Reads the target's subject's <c>HasObservers</c>, or null for a subject that does not
+    /// report it.
+    /// </param>
     public SubjectSeq(
         Realized<Seq<T>> native,
         Func<T, ValueTask> onNext,
         Func<Exception, ValueTask> onError,
-        Func<ValueTask> onCompleted)
+        Func<ValueTask> onCompleted,
+        Func<bool>? hasObservers = null)
         : base(native, "subject")
     {
         _onNext = onNext;
         _onError = onError;
         _onCompleted = onCompleted;
+        _hasObservers = hasObservers;
     }
 
     /// <summary>Stands for the same target subject as <paramref name="subject"/>.</summary>
@@ -44,9 +51,25 @@ public class SubjectSeq<T> : NativeSeq<T>
     /// built over that wrapper, so no target needs to know the double's constructor.
     /// </remarks>
     protected SubjectSeq(SubjectSeq<T> subject)
-        : this(subject.Native, subject._onNext, subject._onError, subject._onCompleted)
+        : this(
+            subject.Native,
+            subject._onNext,
+            subject._onError,
+            subject._onCompleted,
+            subject._hasObservers)
     {
     }
+
+    /// <summary>Whether any observer is subscribed to the subject.</summary>
+    /// <remarks>
+    /// The target's own <c>HasObservers</c>, for the scenarios that check what a subscription
+    /// to an operator over the subject has left subscribed. A subject the target wraps without
+    /// reporting it throws here.
+    /// </remarks>
+    public bool HasObservers =>
+        _hasObservers is { } hasObservers
+            ? hasObservers()
+            : throw new NotSupportedException("This subject does not report its observers.");
 
     /// <summary>Pushes <paramref name="value"/> to the subject's observers.</summary>
     /// <param name="value">The value to push.</param>

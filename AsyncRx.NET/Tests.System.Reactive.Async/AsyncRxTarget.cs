@@ -148,7 +148,8 @@ public sealed partial class AsyncRxTarget : IRxTarget
             Realized.Of<Seq<T>>(subject),
             subject.OnNextAsync,
             subject.OnErrorAsync,
-            subject.OnCompletedAsync);
+            subject.OnCompletedAsync,
+            subject is SimpleAsyncSubject<T> reporting ? () => reporting.HasObservers : null);
     }
 
     public TestableSeq<T> CreateHotObservable<T>(TestSchedulerRef scheduler, Recorded<Notification<T>>[] messages) =>
