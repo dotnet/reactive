@@ -191,11 +191,25 @@ public sealed partial class RxTarget : IRxTarget
 
     public long Clock(TestSchedulerRef scheduler) => Unwrap(scheduler).Clock;
 
-    public void ScheduleAbsolute(TestSchedulerRef scheduler, long tick, Func<ValueTask> action)
+    public IDisposable ScheduleAbsolute(
+        TestSchedulerRef scheduler,
+        long tick,
+        Func<ValueTask> action)
     {
         ArgumentNullException.ThrowIfNull(action);
 
-        Unwrap(scheduler).ScheduleAbsolute(tick, () => Complete(action()));
+        return Unwrap(scheduler).ScheduleAbsolute(tick, () => Complete(action()));
+    }
+
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        TestSchedulerRef scheduler,
+        Seq<T> source,
+        ObserverRef<T> observer)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+
+        return new(RxDisposable.For(
+            _bridge.Call<IDisposable>(SubscribeObserverImpl<T>, source, observer)));
     }
 
     public TestableObserver<T> CreateObserver<T>(TestSchedulerRef scheduler) =>
@@ -397,6 +411,11 @@ public sealed partial class RxTarget : IRxTarget
             x => Complete(observer.OnNextAsync(x)),
             ex => Complete(observer.OnErrorAsync(ex)),
             () => Complete(observer.OnCompletedAsync()));
+
+    private static IDisposable SubscribeObserverImpl<T>(
+        IObservable<T> source,
+        IObserver<T> observer) =>
+        source.Subscribe(observer);
 
     [AdaptsLibraryCall]
     private static IDisposable SubscribeImpl<T>(IObservable<T> source, Func<T, ValueTask> onNext) =>

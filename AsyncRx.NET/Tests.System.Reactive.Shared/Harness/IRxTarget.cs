@@ -96,6 +96,67 @@ public interface IRxTarget : ISeqVisitor
     IEventPatternSource<TEventArgs> ToEventPattern<TEventArgs>(
         Seq<EventPattern<TEventArgs>> source);
 
+    /// <summary>
+    /// Runs <paramref name="onNext"/> for each element of <paramref name="source"/>.
+    /// </summary>
+    /// <remarks>
+    /// The target's own <c>ForEachAsync(onNext, token)</c>, and the task is its own: complete
+    /// when the sequence completes, faulted with the sequence's error or the handler's, and
+    /// cancelled when <paramref name="token"/> is, which also unsubscribes.
+    /// </remarks>
+    Task ForEachAsync<T>(Seq<T> source, Action<T> onNext, CancellationToken token);
+
+    /// <summary>Runs <paramref name="onNext"/> for each element and its index.</summary>
+    /// <remarks>
+    /// As <see cref="ForEachAsync{T}(Seq{T}, Action{T}, CancellationToken)"/>, for the indexed
+    /// handler.
+    /// </remarks>
+    Task ForEachAsync<T>(Seq<T> source, Action<T, int> onNext, CancellationToken token);
+
+    /// <summary>Subscribes to <paramref name="source"/> and returns its awaiter.</summary>
+    /// <remarks>
+    /// The target's own <c>GetAwaiter()</c>, over its own subject, as a
+    /// <see cref="SeqAwaiter{T}"/>.
+    /// </remarks>
+    SeqAwaiter<T> GetAwaiter<T>(Seq<T> source);
+
+    /// <summary>
+    /// Runs a virtual-time scenario body so that the continuations the target hangs off a
+    /// <c>Create</c> callback's task run inline on the test scheduler's thread.
+    /// </summary>
+    /// <remarks>
+    /// Rx.NET's <c>CreateAsyncTest</c> runs its bodies as a task on a scheduler that executes
+    /// inline, since the continuations its task-based <c>Create</c> registers follow the current
+    /// task scheduler; its target does the same. AsyncRx.NET's continuations are awaits, which
+    /// a current task scheduler other than the default would push to the thread pool instead,
+    /// so its target runs the body as it is.
+    /// </remarks>
+    void RunSynchronously(Action body);
+
+    /// <summary>
+    /// Subscribes to and connects <paramref name="source"/>, and returns its awaiter.
+    /// </summary>
+    /// <remarks>The target's own <c>GetAwaiter()</c> for a connectable sequence.</remarks>
+    SeqAwaiter<T> GetAwaiter<T>(ConnectableSeq<T> source);
+
+    /// <summary>
+    /// Subscribes to <paramref name="source"/> and returns its awaiter, which
+    /// <paramref name="token"/> can cancel.
+    /// </summary>
+    /// <remarks>
+    /// The target's own <c>RunAsync(token)</c>: cancelling unsubscribes and fails the awaiter
+    /// with an <see cref="OperationCanceledException"/>, and a token already cancelled never
+    /// subscribes.
+    /// </remarks>
+    SeqAwaiter<T> RunAsync<T>(Seq<T> source, CancellationToken token);
+
+    /// <summary>
+    /// Subscribes to and connects <paramref name="source"/>, and returns its awaiter, which
+    /// <paramref name="token"/> can cancel.
+    /// </summary>
+    /// <remarks>The target's own <c>RunAsync(token)</c> for a connectable sequence.</remarks>
+    SeqAwaiter<T> RunAsync<T>(ConnectableSeq<T> source, CancellationToken token);
+
     /// <summary>Creates a subject the scenario drives by hand, as a leaf.</summary>
     /// <remarks>
     /// Rx.NET's <c>Subject&lt;T&gt;</c>; AsyncRx.NET's sequential simple subject. For the
@@ -204,8 +265,12 @@ public interface IRxTarget : ISeqVisitor
     /// <summary>
     /// Schedules <paramref name="action"/> to run at absolute virtual time <paramref name="tick"/>.
     /// </summary>
-    /// <remarks>On the sync target the returned task is expected to be complete.</remarks>
-    void ScheduleAbsolute(TestSchedulerRef scheduler, long tick, Func<ValueTask> action);
+    /// <remarks>
+    /// On the sync target the returned task is expected to be complete. Returns the target's
+    /// own cancellation of the work, as <c>TestScheduler.ScheduleAbsolute</c> does, for the
+    /// scenarios that hand it on as a subscription's resource.
+    /// </remarks>
+    IDisposable ScheduleAbsolute(TestSchedulerRef scheduler, long tick, Func<ValueTask> action);
 
     /// <summary>
     /// Creates the target's own recording observer, wrapped, for a scenario that subscribes by
@@ -218,6 +283,21 @@ public interface IRxTarget : ISeqVisitor
     /// <see cref="TestableObserver{T}.Native"/> to it.
     /// </summary>
     ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestableObserver<T> observer);
+
+    /// <summary>
+    /// Materializes <paramref name="source"/> and subscribes an observer written over
+    /// descriptions to it: Rx.NET's <c>Subscribe(IObserver)</c>.
+    /// </summary>
+    /// <param name="scheduler">The test's scheduler, which carries the target.</param>
+    /// <param name="source">The sequence to subscribe to.</param>
+    /// <param name="observer">
+    /// The observer, typically the one a <c>Create</c> body was handed; the target unwraps it
+    /// into its own observer, as it does for an operator that takes one.
+    /// </param>
+    ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        TestSchedulerRef scheduler,
+        Seq<T> source,
+        ObserverRef<T> observer);
 
     /// <summary>Materializes <paramref name="source"/> and subscribes a handler to it.</summary>
     /// <remarks>

@@ -137,7 +137,12 @@ public sealed class TestSchedulerRef : SchedulerRef
     /// <param name="action">
     /// The work; async-shaped so the same scenario text runs on both targets.
     /// </param>
-    public void ScheduleAbsolute(long tick, Func<ValueTask> action) => Target.ScheduleAbsolute(this, tick, action);
+    /// <returns>
+    /// The target's own cancellation of the work, as <c>TestScheduler.ScheduleAbsolute</c>
+    /// returns; a scenario that builds a subscription's resource from scheduled work hands it on.
+    /// </returns>
+    public IDisposable ScheduleAbsolute(long tick, Func<ValueTask> action) =>
+        Target.ScheduleAbsolute(this, tick, action);
 
     /// <summary>
     /// Schedules synchronous <paramref name="action"/> to run at absolute virtual time
@@ -145,11 +150,12 @@ public sealed class TestSchedulerRef : SchedulerRef
     /// </summary>
     /// <param name="tick">The absolute virtual time to run at.</param>
     /// <param name="action">The work.</param>
-    public void ScheduleAbsolute(long tick, Action action)
+    /// <returns>The target's own cancellation of the work.</returns>
+    public IDisposable ScheduleAbsolute(long tick, Action action)
     {
         ArgumentNullException.ThrowIfNull(action);
 
-        Target.ScheduleAbsolute(this, tick, () =>
+        return Target.ScheduleAbsolute(this, tick, () =>
         {
             action();
             return default;
@@ -170,7 +176,7 @@ public sealed class TestSchedulerRef : SchedulerRef
     /// The sync <c>ScheduleRelative</c>: an absolute scheduling at the current clock plus the
     /// due time, which is how the virtual-time schedulers define it.
     /// </remarks>
-    public void ScheduleRelative(long dueTime, Func<ValueTask> action) =>
+    public IDisposable ScheduleRelative(long dueTime, Func<ValueTask> action) =>
         ScheduleAbsolute(Clock + dueTime, action);
 
     /// <summary>
@@ -178,6 +184,6 @@ public sealed class TestSchedulerRef : SchedulerRef
     /// </summary>
     /// <param name="dueTime">The number of ticks after the current time to run the action.</param>
     /// <param name="action">The action to run.</param>
-    public void ScheduleRelative(long dueTime, Action action) =>
+    public IDisposable ScheduleRelative(long dueTime, Action action) =>
         ScheduleAbsolute(Clock + dueTime, action);
 }

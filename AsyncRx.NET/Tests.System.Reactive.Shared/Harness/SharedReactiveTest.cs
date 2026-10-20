@@ -178,4 +178,119 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
     protected IEventPatternSource<TEventArgs> ToEventPattern<TEventArgs>(
         Seq<EventPattern<TEventArgs>> source) =>
         Target.ToEventPattern(source);
+
+    /// <summary>
+    /// Runs <paramref name="onNext"/> for each element of <paramref name="source"/>.
+    /// </summary>
+    /// <param name="source">The sequence to run.</param>
+    /// <param name="onNext">The handler for each element.</param>
+    /// <remarks>
+    /// Where the Rx.NET test writes <c>xs.ForEachAsync(onNext)</c>, a scenario writes
+    /// <c>ForEachAsync(xs, onNext)</c>, and inspects the task as the original does: it has the
+    /// target's task's status, result, fault and cancellation. It is not that task itself: the
+    /// target's completes on whichever thread completed the sequence, often a producer's own,
+    /// and a scenario awaiting it there would resume on that thread and block it (a
+    /// <c>Create</c> callback waiting on a flag its own continuation sets), so, as
+    /// <see cref="ToListAsync{T}"/> does, the scenario resumes elsewhere.
+    /// </remarks>
+    protected Task ForEachAsync<T>(Seq<T> source, Action<T> onNext) =>
+        Detached(Target.ForEachAsync(source, onNext, CancellationToken.None));
+
+    /// <summary>
+    /// Runs <paramref name="onNext"/> for each element of <paramref name="source"/> until
+    /// <paramref name="token"/> is cancelled.
+    /// </summary>
+    /// <param name="source">The sequence to run.</param>
+    /// <param name="onNext">The handler for each element.</param>
+    /// <param name="token">The token whose cancellation unsubscribes and cancels the task.</param>
+    protected Task ForEachAsync<T>(Seq<T> source, Action<T> onNext, CancellationToken token) =>
+        Detached(Target.ForEachAsync(source, onNext, token));
+
+    /// <summary>Runs <paramref name="onNext"/> for each element and its index.</summary>
+    /// <param name="source">The sequence to run.</param>
+    /// <param name="onNext">The handler for each element and its index.</param>
+    protected Task ForEachAsync<T>(Seq<T> source, Action<T, int> onNext) =>
+        Detached(Target.ForEachAsync(source, onNext, CancellationToken.None));
+
+    /// <summary>
+    /// Runs <paramref name="onNext"/> for each element and its index until
+    /// <paramref name="token"/> is cancelled.
+    /// </summary>
+    /// <param name="source">The sequence to run.</param>
+    /// <param name="onNext">The handler for each element and its index.</param>
+    /// <param name="token">The token whose cancellation unsubscribes and cancels the task.</param>
+    protected Task ForEachAsync<T>(Seq<T> source, Action<T, int> onNext, CancellationToken token) =>
+        Detached(Target.ForEachAsync(source, onNext, token));
+
+    /// <summary>
+    /// Runs a virtual-time scenario body as the original does, so that the continuations the
+    /// target hangs off a <c>Create</c> callback's task run inline.
+    /// </summary>
+    /// <param name="body">The body.</param>
+    /// <remarks>
+    /// The <c>CreateAsync</c> scenarios keep the original's <c>RunSynchronously(() =&gt; …)</c>;
+    /// what it does is the target's, see <see cref="IRxTarget.RunSynchronously"/>.
+    /// </remarks>
+    protected void RunSynchronously(Action body) => Target.RunSynchronously(body);
+
+    // The target's task mirrored, completed inline when it completes (no thread-pool hop, which
+    // the virtual-time pump would report), into a task whose continuations run asynchronously.
+    private static Task Detached(Task task)
+    {
+        var mirror = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        task.ContinueWith(
+            t =>
+            {
+                if (t.IsCanceled)
+                {
+                    mirror.SetCanceled();
+                }
+                else if (t.IsFaulted)
+                {
+                    mirror.SetException(t.Exception!.InnerExceptions);
+                }
+                else
+                {
+                    mirror.SetResult();
+                }
+            },
+            CancellationToken.None,
+            TaskContinuationOptions.ExecuteSynchronously,
+            TaskScheduler.Default);
+        return mirror.Task;
+    }
+
+    /// <summary>Subscribes to <paramref name="source"/> and returns its awaiter.</summary>
+    /// <param name="source">The sequence to await.</param>
+    /// <remarks>
+    /// Where the Rx.NET test writes <c>xs.GetAwaiter()</c> and holds an <c>AsyncSubject</c>, a
+    /// scenario writes <c>GetAwaiter(xs)</c> and holds a <see cref="SeqAwaiter{T}"/>, on which
+    /// it registers its continuation and reads the result as the original does.
+    /// </remarks>
+    protected SeqAwaiter<T> GetAwaiter<T>(Seq<T> source) => Target.GetAwaiter(source);
+
+    /// <summary>
+    /// Subscribes to and connects <paramref name="source"/>, and returns its awaiter.
+    /// </summary>
+    /// <param name="source">The connectable sequence to await.</param>
+    protected SeqAwaiter<T> GetAwaiter<T>(ConnectableSeq<T> source) => Target.GetAwaiter(source);
+
+    /// <summary>
+    /// Subscribes to <paramref name="source"/> and returns its awaiter, which
+    /// <paramref name="token"/> can cancel.
+    /// </summary>
+    /// <param name="source">The sequence to run.</param>
+    /// <param name="token">The token whose cancellation unsubscribes and fails the awaiter.</param>
+    /// <remarks>As <see cref="GetAwaiter{T}(Seq{T})"/>, for <c>xs.RunAsync(token)</c>.</remarks>
+    protected SeqAwaiter<T> RunAsync<T>(Seq<T> source, CancellationToken token) =>
+        Target.RunAsync(source, token);
+
+    /// <summary>
+    /// Subscribes to and connects <paramref name="source"/>, and returns its awaiter, which
+    /// <paramref name="token"/> can cancel.
+    /// </summary>
+    /// <param name="source">The connectable sequence to run.</param>
+    /// <param name="token">The token whose cancellation unsubscribes and fails the awaiter.</param>
+    protected SeqAwaiter<T> RunAsync<T>(ConnectableSeq<T> source, CancellationToken token) =>
+        Target.RunAsync(source, token);
 }

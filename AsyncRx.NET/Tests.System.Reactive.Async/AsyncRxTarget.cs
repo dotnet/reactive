@@ -182,11 +182,27 @@ public sealed partial class AsyncRxTarget : IRxTarget
 
     public long Clock(TestSchedulerRef scheduler) => Unwrap(scheduler).Clock;
 
-    public void ScheduleAbsolute(TestSchedulerRef scheduler, long tick, Func<ValueTask> action)
+    public IDisposable ScheduleAbsolute(
+        TestSchedulerRef scheduler,
+        long tick,
+        Func<ValueTask> action)
     {
         ArgumentNullException.ThrowIfNull(action);
 
-        Unwrap(scheduler).ScheduleAbsolute(tick, _ => action(), $"scenario work scheduled at tick {tick}");
+        return Unwrap(scheduler).ScheduleAbsolute(
+            tick, _ => action(), $"scenario work scheduled at tick {tick}");
+    }
+
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(
+        TestSchedulerRef scheduler,
+        Seq<T> source,
+        ObserverRef<T> observer)
+    {
+        ArgumentNullException.ThrowIfNull(observer);
+
+        return FromBody(
+            Unwrap(scheduler),
+            _bridge.Call<ValueTask<IAsyncDisposable>>(SubscribeObserverImpl<T>, source, observer));
     }
 
     public TestableObserver<T> CreateObserver<T>(TestSchedulerRef scheduler) =>
@@ -380,6 +396,11 @@ public sealed partial class AsyncRxTarget : IRxTarget
             observer.OnNextAsync,
             observer.OnErrorAsync,
             observer.OnCompletedAsync);
+
+    private static ValueTask<IAsyncDisposable> SubscribeObserverImpl<T>(
+        IAsyncObservable<T> source,
+        IAsyncObserver<T> observer) =>
+        source.SubscribeAsync(observer);
 
     [AdaptsLibraryCall]
     private static ValueTask<IAsyncDisposable> SubscribeImpl<T>(
