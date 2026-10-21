@@ -155,4 +155,30 @@ public class AsyncReactiveAssertTest : AsyncReactiveTest
         Assert.AreEqual("Subscribe(200)", new AsyncSubscription(200, 200, OperationTime.Infinite, OperationTime.Infinite).ToString());
         Assert.Contains("completed: 201", new AsyncSubscription(200, 201, 590, 590).ToString());
     }
+
+    [TestMethod]
+    public void Element_assertion_passes_when_the_sequences_match()
+    {
+        new[] { 1, 2, 3 }.AssertEqual(1, 2, 3);
+        new[] { 1, 2, 3 }.AssertEqual(new List<int> { 1, 2, 3 });
+        Array.Empty<int>().AssertEqual();
+    }
+
+    [TestMethod]
+    public void Element_assertion_names_the_mismatched_element()
+    {
+        var thrown = Assert.ThrowsExactly<AsyncReactiveAssertException>(
+            () => new[] { 1, 2, 3 }.AssertEqual(1, 5, 3));
+
+        Assert.Contains("Element #1: expected 5, but got 2", thrown.Message);
+    }
+
+    [TestMethod]
+    public void Element_assertion_reports_a_count_mismatch()
+    {
+        var thrown = Assert.ThrowsExactly<AsyncReactiveAssertException>(
+            () => new[] { 1, 2 }.AssertEqual(1));
+
+        Assert.Contains("element", thrown.Message);
+    }
 }

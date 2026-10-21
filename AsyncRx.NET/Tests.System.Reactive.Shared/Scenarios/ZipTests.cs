@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Reactive;
 
-using Microsoft.Reactive.Testing;
 
 namespace Tests.System.Reactive.Shared.Scenarios;
 

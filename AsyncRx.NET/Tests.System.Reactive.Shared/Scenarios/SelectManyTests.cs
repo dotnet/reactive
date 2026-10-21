@@ -4,7 +4,6 @@
 
 using System.Collections;
 
-using Microsoft.Reactive.Testing;
 
 namespace Tests.System.Reactive.Shared.Scenarios;
 
