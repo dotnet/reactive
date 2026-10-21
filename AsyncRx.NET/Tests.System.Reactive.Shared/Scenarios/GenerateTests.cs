@@ -25,8 +25,9 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// run over the shared <see cref="TestLongRunningScheduler"/> in the <c>Range</c> shapes (Step
 /// 50). The two <c>*_DisposeLater</c> tests are Rx.NET's regression tests for a crash on
 /// disposing a long timed sequence; they take ten thousand elements of a zero-delay generator
-/// and let <c>Take</c> dispose it, where the originals count to ten thousand through a
-/// <c>WithLatestFrom</c>, which the model does not have yet, and dispose by hand.
+/// through the originals' <c>WithLatestFrom</c> and let <c>Take</c> dispose it, where the
+/// originals count to ten thousand in a handler and dispose by hand (Step 73 restored the
+/// <c>WithLatestFrom</c>, which the model lacked when the tests were migrated).
 /// </para>
 /// </remarks>
 public abstract class GenerateTests : SharedReactiveTest
@@ -539,7 +540,9 @@ public abstract class GenerateTests : SharedReactiveTest
     public async Task Generate_TimeSpan_DisposeLater()
     {
         var lst = await ToListAsync(
-            Seq.Generate(0, i => true, i => i + 1, i => i, _ => TimeSpan.Zero).Take(10000));
+            Seq.Generate(0, i => true, i => i + 1, i => i, _ => TimeSpan.Zero)
+                .WithLatestFrom(Seq.Return(1).Concat(Seq.Never<int>()), (a, b) => a)
+                .Take(10000));
 
         Assert.HasCount(10000, lst);
     }
@@ -548,7 +551,9 @@ public abstract class GenerateTests : SharedReactiveTest
     public async Task Generate_DateTimeOffset_DisposeLater()
     {
         var lst = await ToListAsync(
-            Seq.Generate(0, i => true, i => i + 1, i => i, _ => DateTimeOffset.Now).Take(10000));
+            Seq.Generate(0, i => true, i => i + 1, i => i, _ => DateTimeOffset.Now)
+                .WithLatestFrom(Seq.Return(1).Concat(Seq.Never<int>()), (a, b) => a)
+                .Take(10000));
 
         Assert.HasCount(10000, lst);
     }
