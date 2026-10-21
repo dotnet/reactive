@@ -46,4 +46,43 @@ public static partial class Seq
         where TResource : IDisposable =>
         new UsingSeq<T, TResource>(
             resourceFactory, observableFactory, resourceText, observableText);
+
+    /// <summary>
+    /// Describes <c>Seq.Using(resourceFactory, observableFactory)</c> with asynchronous
+    /// factories that take a token.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the produced sequence.</typeparam>
+    /// <typeparam name="TResource">
+    /// The type of the resource used during the generation of the resulting sequence. Needs to
+    /// implement <see cref="IDisposable"/>.
+    /// </typeparam>
+    /// <param name="resourceFactory">
+    /// Asynchronous factory function to obtain a resource object, handed a token that is
+    /// cancelled if the subscriber unsubscribes while it runs.
+    /// </param>
+    /// <param name="observableFactory">
+    /// Asynchronous factory function to obtain an observable sequence that depends on the
+    /// obtained resource, handed a token that is cancelled the same way.
+    /// </param>
+    /// <param name="resourceText">
+    /// Supplied by the compiler (the source text of <paramref name="resourceFactory"/>), for
+    /// printing the query in diagnostics; do not pass it.
+    /// </param>
+    /// <param name="observableText">
+    /// Supplied by the compiler (the source text of <paramref name="observableFactory"/>), for
+    /// printing the query in diagnostics; do not pass it.
+    /// </param>
+    /// <remarks>
+    /// Rx.NET's asynchronous <c>Using</c> overload, AsyncRx.NET's <c>UsingAsync</c>. Builds a
+    /// <see cref="UsingAsyncSeq{T, TResource}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.UsingAsync{T, TResource}(UsingAsyncSeq{T, TResource})"/>.
+    /// </remarks>
+    public static Seq<T> Using<T, TResource>(
+        Func<CancellationToken, ValueTask<TResource>> resourceFactory,
+        Func<TResource, CancellationToken, ValueTask<Seq<T>>> observableFactory,
+        [CallerArgumentExpression(nameof(resourceFactory))] string resourceText = "",
+        [CallerArgumentExpression(nameof(observableFactory))] string observableText = "")
+        where TResource : IDisposable =>
+        new UsingAsyncSeq<T, TResource>(
+            resourceFactory, observableFactory, resourceText, observableText);
 }

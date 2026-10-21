@@ -26,6 +26,12 @@ public sealed partial class RxTarget
     Realized<Seq<T>> ISeqVisitor.Defer<T>(DeferSeq<T> seq) =>
         _bridge.Run<Seq<T>>(DeferImpl<T>, seq.ObservableFactory);
 
+    Realized<Seq<T>> ISeqVisitor.DeferAsync<T>(DeferAsyncSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(DeferAsyncImpl<T>, seq.ObservableFactory);
+
+    Realized<Seq<T>> ISeqVisitor.DeferAsyncWithToken<T>(DeferAsyncWithTokenSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(DeferAsyncWithTokenImpl<T>, seq.ObservableFactory);
+
     Realized<Seq<T>> ISeqVisitor.Never<T>(NeverSeq<T> seq) => _bridge.Run<Seq<T>>(NeverImpl<T>);
 
     Realized<Seq<T>> ISeqVisitor.Empty<T>(EmptySeq<T> seq) =>
@@ -49,6 +55,17 @@ public sealed partial class RxTarget
 
     private static IObservable<T> DeferImpl<T>(Func<IObservable<T>> observableFactory) =>
         Observable.Defer(observableFactory);
+
+    // The asynchronous factories' ValueTasks handed over as Tasks, as Create's are.
+    [AdaptsLibraryCall]
+    private static IObservable<T> DeferAsyncImpl<T>(
+        Func<ValueTask<IObservable<T>>> observableFactory) =>
+        Observable.Defer(() => observableFactory().AsTask());
+
+    [AdaptsLibraryCall]
+    private static IObservable<T> DeferAsyncWithTokenImpl<T>(
+        Func<CancellationToken, ValueTask<IObservable<T>>> observableFactory) =>
+        Observable.DeferAsync(token => observableFactory(token).AsTask());
 
     private static IObservable<T> NeverImpl<T>() => Observable.Never<T>();
 

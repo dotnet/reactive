@@ -289,6 +289,22 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
         }
 
         var describedType = value.GetType();
+
+        // A task of a description, from an asynchronous factory: a task of the target's own
+        // value, converted when the result arrives.
+        if (describedType.IsGenericType
+            && describedType.GetGenericTypeDefinition() == typeof(ValueTask<>)
+            && realType.IsGenericType
+            && realType.GetGenericTypeDefinition() == typeof(ValueTask<>)
+            && describedType != realType)
+        {
+            return MapValueTaskMethod
+                .MakeGenericMethod(
+                    describedType.GetGenericArguments()[0],
+                    realType.GetGenericArguments()[0])
+                .Invoke(this, [value])!;
+        }
+
         switch (value)
         {
             case Realized realized:
@@ -431,6 +447,15 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
 
     private static readonly MethodInfo ToRealMethod = typeof(DescriptionBridge)
         .GetMethod(nameof(ToReal), BindingFlags.NonPublic | BindingFlags.Instance)!;
+
+    private static readonly MethodInfo MapValueTaskMethod = typeof(DescriptionBridge)
+        .GetMethod(nameof(MapValueTask), BindingFlags.NonPublic | BindingFlags.Instance)!;
+
+    // The result of an asynchronous factory converted as the factory's return value would be
+    // if it were synchronous, once the task produces it; a task already complete completes this
+    // one synchronously too.
+    private async ValueTask<TReal> MapValueTask<TDescribed, TReal>(ValueTask<TDescribed> task) =>
+        (TReal)ToReal(await task, typeof(TReal))!;
 
     private static readonly MethodInfo ToDescriptionMethod = typeof(DescriptionBridge)
         .GetMethod(nameof(ToDescription), BindingFlags.NonPublic | BindingFlags.Instance)!;

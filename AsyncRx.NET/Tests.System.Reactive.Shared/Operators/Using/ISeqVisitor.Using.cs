@@ -16,4 +16,12 @@ public partial interface ISeqVisitor
     /// </remarks>
     Realized<Seq<T>> Using<T, TResource>(UsingSeq<T, TResource> seq)
         where TResource : IDisposable;
+
+    /// <summary>
+    /// Materializes a <see cref="UsingAsyncSeq{T, TResource}"/> as the target's own asynchronous
+    /// <c>Using</c> (AsyncRx.NET's <c>UsingAsync</c>).
+    /// </summary>
+    /// <remarks>Built by the asynchronous <c>Using</c> overload of <see cref="Seq"/>.</remarks>
+    Realized<Seq<T>> UsingAsync<T, TResource>(UsingAsyncSeq<T, TResource> seq)
+        where TResource : IDisposable;
 }

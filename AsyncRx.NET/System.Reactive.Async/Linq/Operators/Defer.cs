@@ -35,7 +35,9 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return StartAsync(observableFactory).Merge();
+            // Deferred, as Rx.NET's DeferAsync is: StartAsync alone would run the factory when
+            // the sequence is built rather than on each subscription.
+            return Defer(() => StartAsync(observableFactory).Merge());
         }
     }
 

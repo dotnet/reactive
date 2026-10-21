@@ -81,6 +81,52 @@ public static partial class Seq
         [CallerArgumentExpression(nameof(observableFactory))] string text = "") =>
         new DeferSeq<T>(observableFactory, text);
 
+    /// <summary>
+    /// Describes <c>Seq.Defer(observableFactory)</c> with an asynchronous factory.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+    /// <param name="observableFactory">
+    /// Asynchronous factory to invoke for each observer that subscribes; the sequence its task
+    /// produces is subscribed to.
+    /// </param>
+    /// <param name="text">
+    /// Supplied by the compiler (the source text of the factory), for printing the query in
+    /// diagnostics; do not pass it.
+    /// </param>
+    /// <remarks>
+    /// Rx.NET's <c>Defer(Func&lt;Task&lt;IObservable&lt;T&gt;&gt;&gt;)</c>. Builds a
+    /// <see cref="DeferAsyncSeq{T}"/>, which each target materializes through
+    /// <see cref="ISeqVisitor.DeferAsync{T}(DeferAsyncSeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> Defer<T>(
+        Func<ValueTask<Seq<T>>> observableFactory,
+        [CallerArgumentExpression(nameof(observableFactory))] string text = "") =>
+        new DeferAsyncSeq<T>(observableFactory, text);
+
+    /// <summary>
+    /// Describes <c>Seq.DeferAsync(observableFactory)</c>: an asynchronous factory that takes a
+    /// token.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+    /// <param name="observableFactory">
+    /// Asynchronous factory to invoke for each observer that subscribes, handed a token that is
+    /// cancelled if the subscriber unsubscribes while it runs; the sequence its task produces is
+    /// subscribed to.
+    /// </param>
+    /// <param name="text">
+    /// Supplied by the compiler (the source text of the factory), for printing the query in
+    /// diagnostics; do not pass it.
+    /// </param>
+    /// <remarks>
+    /// Rx.NET's <c>DeferAsync</c>. Builds a <see cref="DeferAsyncWithTokenSeq{T}"/>, which each
+    /// target materializes through
+    /// <see cref="ISeqVisitor.DeferAsyncWithToken{T}(DeferAsyncWithTokenSeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> DeferAsync<T>(
+        Func<CancellationToken, ValueTask<Seq<T>>> observableFactory,
+        [CallerArgumentExpression(nameof(observableFactory))] string text = "") =>
+        new DeferAsyncWithTokenSeq<T>(observableFactory, text);
+
     /// <summary>Describes <c>Seq.Never()</c>, a sequence that never produces anything.</summary>
     /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
     /// <remarks>

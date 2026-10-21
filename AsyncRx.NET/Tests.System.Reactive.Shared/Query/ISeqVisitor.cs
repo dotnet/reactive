@@ -65,6 +65,22 @@ public partial interface ISeqVisitor
     Realized<Seq<T>> Defer<T>(DeferSeq<T> seq);
 
     /// <summary>
+    /// Materializes a <see cref="DeferAsyncSeq{T}"/> as the target's own <c>Defer</c> over an
+    /// asynchronous factory.
+    /// </summary>
+    /// <remarks>Built by <see cref="Seq.Defer{T}(Func{ValueTask{Seq{T}}}, string)"/>.</remarks>
+    Realized<Seq<T>> DeferAsync<T>(DeferAsyncSeq<T> seq);
+
+    /// <summary>
+    /// Materializes a <see cref="DeferAsyncWithTokenSeq{T}"/> as the target's own
+    /// <c>DeferAsync</c>, over an asynchronous factory that takes a token.
+    /// </summary>
+    /// <remarks>
+    /// Built by <see cref="Seq.DeferAsync{T}(Func{CancellationToken, ValueTask{Seq{T}}}, string)"/>.
+    /// </remarks>
+    Realized<Seq<T>> DeferAsyncWithToken<T>(DeferAsyncWithTokenSeq<T> seq);
+
+    /// <summary>
     /// Materializes a <see cref="NeverSeq{T}"/> as the target's own <c>Never()</c>.
     /// </summary>
     /// <remarks>Built by <see cref="Seq.Never{T}()"/>.</remarks>

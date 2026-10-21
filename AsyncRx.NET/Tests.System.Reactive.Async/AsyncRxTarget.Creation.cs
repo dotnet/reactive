@@ -33,6 +33,12 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<T>> ISeqVisitor.Defer<T>(DeferSeq<T> seq) =>
         _bridge.Run<Seq<T>>(DeferImpl<T>, seq.ObservableFactory);
 
+    Realized<Seq<T>> ISeqVisitor.DeferAsync<T>(DeferAsyncSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(DeferAsyncImpl<T>, seq.ObservableFactory);
+
+    Realized<Seq<T>> ISeqVisitor.DeferAsyncWithToken<T>(DeferAsyncWithTokenSeq<T> seq) =>
+        _bridge.Run<Seq<T>>(DeferAsyncWithTokenImpl<T>, seq.ObservableFactory);
+
     Realized<Seq<T>> ISeqVisitor.Never<T>(NeverSeq<T> seq) => _bridge.Run<Seq<T>>(NeverImpl<T>);
 
     Realized<Seq<T>> ISeqVisitor.Empty<T>(EmptySeq<T> seq) =>
@@ -59,6 +65,14 @@ public sealed partial class AsyncRxTarget
 
     private static IAsyncObservable<T> DeferImpl<T>(Func<IAsyncObservable<T>> observableFactory) =>
         AsyncObservable.Defer(observableFactory);
+
+    private static IAsyncObservable<T> DeferAsyncImpl<T>(
+        Func<ValueTask<IAsyncObservable<T>>> observableFactory) =>
+        AsyncObservable.Defer(observableFactory);
+
+    private static IAsyncObservable<T> DeferAsyncWithTokenImpl<T>(
+        Func<CancellationToken, ValueTask<IAsyncObservable<T>>> observableFactory) =>
+        AsyncObservable.DeferAsync(observableFactory);
 
     private static IAsyncObservable<T> NeverImpl<T>() => AsyncObservable.Never<T>();
 
