@@ -29,10 +29,11 @@ namespace System.Reactive.Linq
 
                     var (firstObserver, secondObserver) = AsyncObserver.Amb(observer, firstSubscription, secondSubscription);
 
-                    var firstTask = first.SubscribeSafeAsync(firstObserver).AsTask().ContinueWith(d => firstSubscription.AssignAsync(d.Result).AsTask()).Unwrap();
-                    var secondTask = second.SubscribeSafeAsync(secondObserver).AsTask().ContinueWith(d => secondSubscription.AssignAsync(d.Result).AsTask()).Unwrap();
-
-                    await Task.WhenAll(firstTask, secondTask).ConfigureAwait(false);
+                    // Subscribed one after the other, each subscription assigned as it is made,
+                    // as Rx.NET's Amb subscribes; a thread-pool continuation per subscription,
+                    // as before, ran the assignment off the subscribing thread.
+                    await firstSubscription.AssignAsync(await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false)).ConfigureAwait(false);
+                    await secondSubscription.AssignAsync(await second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false)).ConfigureAwait(false);
 
                     return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
                 });
@@ -51,6 +52,12 @@ namespace System.Reactive.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
+            // No sources: nothing can win, and the result is empty, as Rx.NET's is.
+            if (sources.Length == 0)
+            {
+                return Empty<TSource>();
+            }
+
             return CreateAsyncObservable<TSource>.From(async observer =>
             {
                 var count = sources.Length;
@@ -64,14 +71,10 @@ namespace System.Reactive.Linq
 
                 var observers = AsyncObserver.Amb(observer, subscriptions);
 
-                var tasks = new Task[count];
-
                 for (var i = 0; i < count; i++)
                 {
-                    tasks[i] = sources[i].SubscribeSafeAsync(observers[i]).AsTask().ContinueWith(d => subscriptions[i].AssignAsync(d.Result).AsTask()).Unwrap();
+                    await subscriptions[i].AssignAsync(await sources[i].SubscribeSafeAsync(observers[i]).ConfigureAwait(false)).ConfigureAwait(false);
                 }
-
-                await Task.WhenAll(tasks).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscriptions);
             });
@@ -215,17 +218,13 @@ namespace System.Reactive.Linq
             {
                 winner = index;
 
-                var dispose = new List<Task>(count - 1);
-
                 for (var i = 0; i < count; i++)
                 {
                     if (i != index)
                     {
-                        dispose.Add(subscriptions[i].DisposeAsync().AsTask());
+                        await subscriptions[i].DisposeAsync().ConfigureAwait(false);
                     }
                 }
-
-                await Task.WhenAll(dispose).ConfigureAwait(false);
             }
 
             IAsyncObserver<TSource> CreateObserver(int index) =>

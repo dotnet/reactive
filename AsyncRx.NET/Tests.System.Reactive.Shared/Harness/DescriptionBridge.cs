@@ -354,13 +354,17 @@ public sealed class DescriptionBridge(ISeqVisitor target, DescriptionBridge.Targ
                 }
 
                 if (value is global::System.Collections.IEnumerable items
-                    && Instantiation(realType, typeof(IEnumerable<>)) is { } enumerable)
+                    && Instantiation(realType, typeof(IEnumerable<>)) is { } enumerable
+                    && (Instantiation(describedType, typeof(IEnumerable<>)) is not { } described
+                        || typeof(IDescription).IsAssignableFrom(described.GetGenericArguments()[0])
+                        || Describes(described.GetGenericArguments()[0])))
                 {
-                    // An enumerable of descriptions (a LINQ query over Seq<T>s, say), converted
+                    // An enumerable of descriptions (a LINQ query over Seq<T>s, or of plans), converted
                     // element by element into the target's own sequences as it is enumerated, not
                     // before: an operator that takes a sequence of sources enumerates it when it
                     // subscribes, and a scenario may check exactly that (Zip_NAry_Enumerable_Simple
-                    // records the tick at which the enumeration began).
+                    // records the tick at which the enumeration began). An enumerable of values is
+                    // a value, left as it is.
                     var elementType = enumerable.GetGenericArguments()[0];
                     return Activator.CreateInstance(
                         typeof(LazyRealEnumerable<>).MakeGenericType(elementType),
