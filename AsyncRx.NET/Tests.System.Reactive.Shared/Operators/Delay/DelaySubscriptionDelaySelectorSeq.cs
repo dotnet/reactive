@@ -9,9 +9,14 @@ namespace Tests.System.Reactive.Shared;
 /// Built by
 /// <see cref="DelayExtensions.Delay{T, TDelay}(Seq{T}, Seq{TDelay}, Func{T, Seq{TDelay}}, string)"/>;
 /// materialized by each target through
-/// <see cref="ISeqVisitor.DelaySubscription{T, TDelay}(DelaySubscriptionSeq{T, TDelay})"/>.
+/// <see cref="ISeqVisitor.DelaySubscriptionDelaySelector{T, TDelay}(DelaySubscriptionDelaySelectorSeq{T, TDelay})"/>.
 /// </remarks>
-public sealed class DelaySubscriptionSeq<T, TDelay>(Seq<T> source, Seq<TDelay> subscriptionDelay, Func<T, Seq<TDelay>> delayDurationSelector, string text) : Seq<T>
+public sealed class DelaySubscriptionDelaySelectorSeq<T, TDelay>(
+    Seq<T> source,
+    Seq<TDelay> subscriptionDelay,
+    Func<T, Seq<TDelay>> delayDurationSelector,
+    string text)
+    : Seq<T>
 {
     /// <summary>Source sequence to delay values for.</summary>
     public Seq<T> Source => source;
@@ -25,7 +30,8 @@ public sealed class DelaySubscriptionSeq<T, TDelay>(Seq<T> source, Seq<TDelay> s
     public Func<T, Seq<TDelay>> DelayDurationSelector => delayDurationSelector;
 
     /// <inheritdoc/>
-    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) => visitor.DelaySubscription(this);
+    protected override Realized<Seq<T>> AcceptCore(ISeqVisitor visitor) =>
+        visitor.DelaySubscriptionDelaySelector(this);
 
     /// <inheritdoc/>
     public override string ToString() => $"{source}.Delay({subscriptionDelay}, {text})";

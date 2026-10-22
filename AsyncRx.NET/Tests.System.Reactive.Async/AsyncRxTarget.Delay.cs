@@ -28,9 +28,10 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<T>> ISeqVisitor.DelaySelector<T, TDelay>(DelaySelectorSeq<T, TDelay> seq) =>
         _bridge.Run<Seq<T>>(DelaySelectorImpl<T, TDelay>, seq.Source, seq.DelayDurationSelector);
 
-    Realized<Seq<T>> ISeqVisitor.DelaySubscription<T, TDelay>(DelaySubscriptionSeq<T, TDelay> seq) =>
+    Realized<Seq<T>> ISeqVisitor.DelaySubscriptionDelaySelector<T, TDelay>(
+        DelaySubscriptionDelaySelectorSeq<T, TDelay> seq) =>
         _bridge.Run<Seq<T>>(
-            DelaySubscriptionImpl<T, TDelay>,
+            DelaySubscriptionDelaySelectorImpl<T, TDelay>,
             seq.Source,
             seq.SubscriptionDelay,
             seq.DelayDurationSelector);
@@ -62,7 +63,7 @@ public sealed partial class AsyncRxTarget
         Func<T, IAsyncObservable<TDelay>> delayDurationSelector) =>
         source.Delay(delayDurationSelector);
 
-    private static IAsyncObservable<T> DelaySubscriptionImpl<T, TDelay>(
+    private static IAsyncObservable<T> DelaySubscriptionDelaySelectorImpl<T, TDelay>(
         IAsyncObservable<T> source,
         IAsyncObservable<TDelay> subscriptionDelay,
         Func<T, IAsyncObservable<TDelay>> delayDurationSelector) =>

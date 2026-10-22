@@ -126,10 +126,11 @@ public static class DelayExtensions
     /// diagnostics; do not pass it.
     /// </param>
     /// <remarks>
-    /// Builds a <see cref="DelaySubscriptionSeq{T, TDelay}"/>, which each target materializes
+    /// Builds a <see cref="DelaySubscriptionDelaySelectorSeq{T, TDelay}"/>, which each target materializes
     /// through
-    /// <see cref="ISeqVisitor.DelaySubscription{T, TDelay}(DelaySubscriptionSeq{T, TDelay})"/>.
+    /// <see cref="ISeqVisitor.DelaySubscriptionDelaySelector{T, TDelay}(DelaySubscriptionDelaySelectorSeq{T, TDelay})"/>.
     /// </remarks>
     public static Seq<T> Delay<T, TDelay>(this Seq<T> source, Seq<TDelay> subscriptionDelay, Func<T, Seq<TDelay>> delayDurationSelector, [CallerArgumentExpression(nameof(delayDurationSelector))] string text = "") =>
-        new DelaySubscriptionSeq<T, TDelay>(source, subscriptionDelay, delayDurationSelector, text);
+        new DelaySubscriptionDelaySelectorSeq<T, TDelay>(
+            source, subscriptionDelay, delayDurationSelector, text);
 }

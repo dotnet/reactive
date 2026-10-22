@@ -37,12 +37,13 @@ public partial interface ISeqVisitor
     Realized<Seq<T>> DelaySelector<T, TDelay>(DelaySelectorSeq<T, TDelay> seq);
 
     /// <summary>
-    /// Materializes a <see cref="DelaySubscriptionSeq{T, TDelay}"/> as the target's own
+    /// Materializes a <see cref="DelaySubscriptionDelaySelectorSeq{T, TDelay}"/> as the target's own
     /// <c>Delay(subscriptionDelay, delayDurationSelector)</c>.
     /// </summary>
     /// <remarks>
     /// Built by
     /// <see cref="DelayExtensions.Delay{T, TDelay}(Seq{T}, Seq{TDelay}, Func{T, Seq{TDelay}}, string)"/>.
     /// </remarks>
-    Realized<Seq<T>> DelaySubscription<T, TDelay>(DelaySubscriptionSeq<T, TDelay> seq);
+    Realized<Seq<T>> DelaySubscriptionDelaySelector<T, TDelay>(
+        DelaySubscriptionDelaySelectorSeq<T, TDelay> seq);
 }
