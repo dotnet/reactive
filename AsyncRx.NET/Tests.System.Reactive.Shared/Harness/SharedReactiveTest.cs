@@ -145,17 +145,20 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
 
     /// <summary>Runs the target's operator calls for <paramref name="source"/> now.</summary>
     /// <param name="source">The description to realize.</param>
+    /// <returns>The target's own object, for a claim about its identity.</returns>
     /// <remarks>
     /// A description is realized when it is first used, which is usually at <c>Start</c> or at a
     /// subscription. A scenario whose claim is about the thread the operator is called on (an
     /// event conversion captures the synchronization context of its caller) must make that call
     /// where the original does; this realizes the description there, and the later use finds it
-    /// realized.
+    /// realized. A scenario whose claim is about identity (<c>AsObservable</c> hides its
+    /// source's) compares what this returns for two descriptions, since the descriptions
+    /// themselves are always distinct objects.
     /// </remarks>
-    protected void Realize<T>(Seq<T> source)
+    protected object Realize<T>(Seq<T> source)
     {
         ArgumentNullException.ThrowIfNull(source);
-        source.Accept(Target);
+        return source.Accept(Target).Raw;
     }
 
     /// <summary>
