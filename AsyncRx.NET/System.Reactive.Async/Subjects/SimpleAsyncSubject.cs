@@ -15,6 +15,17 @@ namespace System.Reactive.Subjects
         private bool _done;
         private Exception _error;
 
+        public bool HasObservers
+        {
+            get
+            {
+                lock (_gate)
+                {
+                    return _observers.Count > 0;
+                }
+            }
+        }
+
         public ValueTask OnCompletedAsync()
         {
             IAsyncObserver<T>[] observers;

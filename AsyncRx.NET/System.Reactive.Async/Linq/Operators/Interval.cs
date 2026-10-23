@@ -14,7 +14,7 @@ namespace System.Reactive.Linq
             if (period < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(period));
 
-            return Create<long>(observer => AsyncObserver.Interval(observer, period));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Interval(observer, period));
         }
 
         public static IAsyncObservable<long> Interval(TimeSpan period, IAsyncScheduler scheduler)
@@ -24,7 +24,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<long>(observer => AsyncObserver.Interval(observer, period, scheduler));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Interval(observer, period, scheduler));
         }
     }
 

@@ -175,13 +175,13 @@ namespace System.Reactive.Linq
 
         private static IAsyncObservable<TResult> FromEventPatternCore<TSender, TEventArgs, TResult>(Type type, object target, string eventName, IAsyncScheduler scheduler, Func<TSender, TEventArgs, TResult> resultSelector)
         {
-            var (addMethod, removeMethod, delegateType, isWinRT) = GetEventMethods<object, object>(type, target, eventName);
+            var (addMethod, removeMethod, delegateType, isWinRT) = GetEventMethods<TSender, TEventArgs>(type, target, eventName);
 
             var res = default(IAsyncObservable<TResult>);
 
             if (isWinRT)
             {
-                res = Create<TResult>(observer =>
+                res = CreateAsyncObservable<TResult>.From(observer =>
                 {
                     var onNext = new Action<TSender, TEventArgs>((o, e) =>
                     {
@@ -220,7 +220,7 @@ namespace System.Reactive.Linq
             }
             else
             {
-                res = Create<TResult>(observer =>
+                res = CreateAsyncObservable<TResult>.From(observer =>
                 {
                     var onNext = new Action<TSender, TEventArgs>((o, e) =>
                     {
@@ -324,7 +324,7 @@ namespace System.Reactive.Linq
             return (addMethod, removeMethod, delegateType, isWinRT);
         }
 
-        public static EventInfo GetEventEx(this Type type, string name, bool isStatic)
+        internal static EventInfo GetEventEx(this Type type, string name, bool isStatic)
         {
             return type.GetEvent(name, isStatic ? BindingFlags.Public | BindingFlags.Static : BindingFlags.Public | BindingFlags.Instance);
         }

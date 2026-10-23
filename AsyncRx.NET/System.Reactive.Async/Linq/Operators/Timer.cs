@@ -11,7 +11,7 @@ namespace System.Reactive.Linq
     {
         public static IAsyncObservable<long> Timer(TimeSpan dueTime)
         {
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime));
         }
 
         public static IAsyncObservable<long> Timer(TimeSpan dueTime, IAsyncScheduler scheduler)
@@ -19,12 +19,12 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime, scheduler));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime, scheduler));
         }
 
         public static IAsyncObservable<long> Timer(DateTimeOffset dueTime)
         {
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime));
         }
 
         public static IAsyncObservable<long> Timer(DateTimeOffset dueTime, IAsyncScheduler scheduler)
@@ -32,7 +32,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime, scheduler));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime, scheduler));
         }
 
         public static IAsyncObservable<long> Timer(TimeSpan dueTime, TimeSpan period)
@@ -40,7 +40,7 @@ namespace System.Reactive.Linq
             if (period < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(period));
 
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime, period));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime, period));
         }
 
         public static IAsyncObservable<long> Timer(TimeSpan dueTime, TimeSpan period, IAsyncScheduler scheduler)
@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime, period, scheduler));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime, period, scheduler));
         }
 
         public static IAsyncObservable<long> Timer(DateTimeOffset dueTime, TimeSpan period)
@@ -58,7 +58,7 @@ namespace System.Reactive.Linq
             if (period < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(period));
 
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime, period));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime, period));
         }
 
         public static IAsyncObservable<long> Timer(DateTimeOffset dueTime, TimeSpan period, IAsyncScheduler scheduler)
@@ -68,7 +68,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime, period, scheduler));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime, period, scheduler));
         }
     }
 

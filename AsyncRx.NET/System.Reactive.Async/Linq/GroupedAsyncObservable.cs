@@ -20,6 +20,14 @@ namespace System.Reactive.Linq
             _disposable = disposable;
         }
 
+        // A view of the group that does not hold the source subscription open: the one the
+        // operator hands to its own duration selector, as Rx.NET's GroupedObservable does.
+        public GroupedAsyncObservable(TKey key, IAsyncSubject<TElement> subject)
+        {
+            Key = key;
+            _subject = subject;
+        }
+
         public TKey Key { get; }
 
         protected override async ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<TElement> observer)

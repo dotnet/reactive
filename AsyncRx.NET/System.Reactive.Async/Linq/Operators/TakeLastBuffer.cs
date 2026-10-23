@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
-using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
@@ -16,11 +15,6 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
-
-            if (count == 0)
-            {
-                return Empty<IList<TSource>>();
-            }
 
             return CreateAsyncObservable<IList<TSource>>.From(
                 source,
@@ -34,11 +28,6 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
-
-            if (duration == TimeSpan.Zero)
-            {
-                return Empty<IList<TSource>>();
-            }
 
             return CreateAsyncObservable<IList<TSource>>.From(
                 source,
@@ -55,11 +44,6 @@ namespace System.Reactive.Linq
             if (clock == null)
                 throw new ArgumentNullException(nameof(clock));
 
-            if (duration == TimeSpan.Zero)
-            {
-                return Empty<IList<TSource>>();
-            }
-
             return CreateAsyncObservable<IList<TSource>>.From(
                 source,
                 (duration, clock),
@@ -73,7 +57,9 @@ namespace System.Reactive.Linq
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
-            if (count <= 0)
+            // As in Rx.NET: a count of zero (and a duration of zero) still subscribes, and delivers
+            // an empty list when the source completes.
+            if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
             var queue = new Queue<TSource>();

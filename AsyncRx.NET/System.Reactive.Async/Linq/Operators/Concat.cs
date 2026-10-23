@@ -3,12 +3,10 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Reactive.Disposables;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    // TODO: Implement tail call behavior to flatten Concat chains.
 
     public partial class AsyncObservable
     {
@@ -19,122 +17,83 @@ namespace System.Reactive.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Create(
-                first,
-                second,
-                static async (first, second, observer) =>
-                {
-                    var (sink, inner) = AsyncObserver.Concat(observer, second);
-
-                    var subscription = await first.SubscribeSafeAsync(sink).ConfigureAwait(false);
-
-                    return StableCompositeAsyncDisposable.Create(subscription, inner);
-                });
+            return new ConcatAsyncObservable<TSource>(new[] { first, second });
         }
 
         public static IAsyncObservable<TSource> Concat<TSource>(params IAsyncObservable<TSource>[] sources) => Concat((IEnumerable<IAsyncObservable<TSource>>)sources);
+
+        public static IAsyncObservable<TSource> Concat<TSource>(this IAsyncObservable<IAsyncObservable<TSource>> sources)
+        {
+            if (sources == null)
+                throw new ArgumentNullException(nameof(sources));
+
+            // As in Rx.NET: a merge that subscribes to one inner sequence at a time.
+            return sources.Merge(1);
+        }
+
+        public static IAsyncObservable<TSource> Concat<TSource>(this IAsyncObservable<Task<TSource>> sources)
+        {
+            if (sources == null)
+                throw new ArgumentNullException(nameof(sources));
+
+            // As in Rx.NET: each task becomes a sequence of its result, concatenated in order.
+            return sources.Select(static task => task.ToAsyncObservable()).Concat();
+        }
 
         public static IAsyncObservable<TSource> Concat<TSource>(this IEnumerable<IAsyncObservable<TSource>> sources)
         {
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return Create<TSource>(async observer =>
-            {
-                var enumerator = sources.GetEnumerator();
-
-                if (!enumerator.MoveNext())
-                {
-                    return AsyncDisposable.Nop; // REVIEW: Is Never behavior right here?
-                }
-
-                var source = enumerator.Current;
-
-                var (sink, inner) = AsyncObserver.Concat(observer, enumerator);
-
-                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
-
-                return StableCompositeAsyncDisposable.Create(subscription, inner);
-            });
+            return new ConcatAsyncObservable<TSource>(sources);
         }
     }
 
-    public partial class AsyncObserver
+    // Rx.NET's Concat over its TailRecursiveSink (TailRecursiveAsyncSink here): a source that
+    // completes is released and the next is subscribed, and a chain of concatenations, however
+    // built, is one subscription deep.
+    internal sealed class ConcatAsyncObservable<TSource> : AsyncObservableBase<TSource>, IConcatenatableAsyncObservable<TSource>
     {
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) Concat<TSource>(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> second)
+        private readonly IEnumerable<IAsyncObservable<TSource>> _sources;
+
+        public ConcatAsyncObservable(IEnumerable<IAsyncObservable<TSource>> sources)
         {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (second == null)
-                throw new ArgumentNullException(nameof(second));
-
-            var subscription = new SingleAssignmentAsyncDisposable();
-
-            var sink = Create<TSource>(
-                observer.OnNextAsync,
-                observer.OnErrorAsync,
-                async () =>
-                {
-                    var secondSubscription = await second.SubscribeSafeAsync(observer).ConfigureAwait(false);
-
-                    await subscription.AssignAsync(secondSubscription).ConfigureAwait(false);
-                }
-            );
-
-            return (sink, subscription);
+            _sources = sources;
         }
 
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) Concat<TSource>(IAsyncObserver<TSource> observer, IEnumerator<IAsyncObservable<TSource>> handlers)
+        public IEnumerable<IAsyncObservable<TSource>> GetSources() => _sources;
+
+        protected override async ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<TSource> observer)
         {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (handlers == null)
-                throw new ArgumentNullException(nameof(handlers));
+            var sink = new ConcatSink<TSource>(observer);
 
-            var innerSubscription = new SerialAsyncDisposable();
+            await sink.RunAsync(_sources).ConfigureAwait(false);
 
-            IAsyncObserver<TSource> GetSink() =>
-                Create<TSource>(
-                    observer.OnNextAsync,
-                    observer.OnErrorAsync,
-                    async () =>
-                    {
-                        var next = default(IAsyncObservable<TSource>);
-
-                        try
-                        {
-                            if (handlers.MoveNext())
-                            {
-                                next = handlers.Current;
-                            }
-                        }
-                        catch (Exception err)
-                        {
-                            await observer.OnErrorAsync(err).ConfigureAwait(false);
-                            return;
-                        }
-
-                        if (next == null)
-                        {
-                            await observer.OnCompletedAsync().ConfigureAwait(false); // REVIEW: Is Empty behavior right here?
-                            return;
-                        }
-
-                        var nextSubscription = await next.SubscribeSafeAsync(GetSink()).ConfigureAwait(false);
-
-                        await innerSubscription.AssignAsync(nextSubscription).ConfigureAwait(false);
-                    }
-                );
-
-            var disposeEnumerator = AsyncDisposable.Create(() =>
-            {
-                handlers.Dispose();
-                return default;
-            });
-
-            var subscription = StableCompositeAsyncDisposable.Create(innerSubscription, disposeEnumerator);
-
-            return (GetSink(), subscription);
+            return sink;
         }
+    }
+
+    internal sealed class ConcatSink<TSource> : TailRecursiveAsyncSink<TSource>
+    {
+        public ConcatSink(IAsyncObserver<TSource> observer)
+            : base(observer)
+        {
+        }
+
+        public override ValueTask OnErrorAsync(Exception error) => FailAsync(error);
+
+        // The completed source's subscription has been released by the time this is called (see
+        // SubscribeAsync below); the drain moves on to the next source.
+        public override ValueTask OnCompletedAsync() => RecurseAsync();
+
+        protected override IEnumerable<IAsyncObservable<TSource>> Extract(IAsyncObservable<TSource> source) =>
+            source is IConcatenatableAsyncObservable<TSource> concatenatable ? concatenatable.GetSources() : null;
+
+        protected override ValueTask DoneAsync() => CompleteAsync();
+
+        // Each source's subscription is released as soon as it completes, before the next is
+        // subscribed, as in Rx.NET.
+        protected override ValueTask<IAsyncDisposable> SubscribeAsync(IAsyncObservable<TSource> source) =>
+            AsyncObservable.SubscribeReleasingOnCompletedAsync(source, this);
     }
 }

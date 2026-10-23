@@ -15,7 +15,13 @@ namespace System.Reactive.Joins
 
         protected void AddJoinObserver(IAsyncJoinObserver joinObserver)
         {
-            _joinObservers.Add(joinObserver, joinObserver);
+            // A plan may name the same source more than once (xs.And(xs)); the source has one
+            // join observer, which then holds more than one position in the plan, and a dequeue
+            // must take one element from it, not one per position.
+            if (!_joinObservers.ContainsKey(joinObserver))
+            {
+                _joinObservers.Add(joinObserver, joinObserver);
+            }
         }
 
         protected void Dequeue()

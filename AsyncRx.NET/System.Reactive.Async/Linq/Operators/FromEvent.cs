@@ -107,7 +107,7 @@ namespace System.Reactive.Linq
         {
             return
                 SynchronizeEvents(
-                    Create<TEventArgs>(observer =>
+                    CreateAsyncObservable<TEventArgs>.From(observer =>
                     {
                         var handler = new Action<TEventArgs>(async e =>
                         {

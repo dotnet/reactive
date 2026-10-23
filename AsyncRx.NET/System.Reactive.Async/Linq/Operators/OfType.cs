@@ -13,6 +13,16 @@ namespace System.Reactive.Linq
 
             return Create<TSource, TResult>(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.OfType<TSource, TResult>(observer)));
         }
+
+        // As in Rx.NET: over a sequence of objects, so that only the result type is named, which
+        // is how the operator is called (the two-type-parameter form cannot infer TResult alone).
+        public static IAsyncObservable<TResult> OfType<TResult>(this IAsyncObservable<object?> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return OfType<object, TResult>(source);
+        }
     }
 
     public partial class AsyncObserver

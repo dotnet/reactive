@@ -11,7 +11,7 @@ namespace System.Reactive.Linq
     {
         public static IAsyncObservable<TSource> Empty<TSource>()
         {
-            return Create<TSource>(observer => AsyncObserver.Empty(observer));
+            return CreateAsyncObservable<TSource>.From(observer => AsyncObserver.Empty(observer));
         }
 
         public static IAsyncObservable<TSource> Empty<TSource>(IAsyncScheduler scheduler)
@@ -19,8 +19,13 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(observer => AsyncObserver.Empty(observer, scheduler));
+            return CreateAsyncObservable<TSource>.From(observer => AsyncObserver.Empty(observer, scheduler));
         }
+
+        // The witness forms, as in Rx.NET: the witness only infers TSource, for anonymous types.
+        public static IAsyncObservable<TSource> Empty<TSource>(TSource witness) => Empty<TSource>();
+
+        public static IAsyncObservable<TSource> Empty<TSource>(IAsyncScheduler scheduler, TSource witness) => Empty<TSource>(scheduler);
     }
 
     public partial class AsyncObserver

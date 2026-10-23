@@ -17,11 +17,6 @@ namespace System.Reactive.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            if (count == 0)
-            {
-                return source;
-            }
-
             return CreateAsyncObservable<TSource>.From(
                 source,
                 count,
@@ -35,11 +30,6 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
-
-            if (duration == TimeSpan.Zero)
-            {
-                return source;
-            }
 
             return CreateAsyncObservable<TSource>.From(
                 source,
@@ -56,11 +46,6 @@ namespace System.Reactive.Linq
             if (clock == null)
                 throw new ArgumentNullException(nameof(clock));
 
-            if (duration == TimeSpan.Zero)
-            {
-                return source;
-            }
-
             return CreateAsyncObservable<TSource>.From(
                 source,
                 (duration, clock),
@@ -74,7 +59,10 @@ namespace System.Reactive.Linq
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
-            if (count <= 0)
+            // As in Rx.NET: a count of zero (and a duration of zero) is a sink that bypasses
+            // nothing, not the source itself, so the result ends with the source as any
+            // operator's does.
+            if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
             var queue = new Queue<TSource>();
