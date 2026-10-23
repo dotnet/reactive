@@ -144,7 +144,22 @@ public static partial class Seq
     /// which each target materializes through
     /// <see cref="ISeqVisitor.Enumerable{T}(EnumerableSeq{T})"/>.
     /// </remarks>
-    public static Seq<T> ToSeq<T>(this IEnumerable<T> source) => new EnumerableSeq<T>(source);
+    public static Seq<T> ToSeq<T>(this IEnumerable<T> source) => new EnumerableSeq<T>(source, null);
+
+    /// <summary>
+    /// Describes <c>source.ToSeq(scheduler)</c>, an enumerable as a sequence enumerated on a
+    /// scheduler.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+    /// <param name="source">Enumerable sequence to convert to an observable sequence.</param>
+    /// <param name="scheduler">Scheduler to run the enumeration of the input sequence on.</param>
+    /// <remarks>
+    /// A scenario calls this where the Rx.NET test calls <c>ToObservable(scheduler)</c>. Builds
+    /// an <see cref="EnumerableSeq{T}"/> carrying the scheduler, which each target materializes
+    /// through <see cref="ISeqVisitor.Enumerable{T}(EnumerableSeq{T})"/>.
+    /// </remarks>
+    public static Seq<T> ToSeq<T>(this IEnumerable<T> source, SchedulerRef scheduler) =>
+        new EnumerableSeq<T>(source, scheduler);
 
     /// <summary>Describes <c>Seq.Empty&lt;T&gt;()</c>.</summary>
     /// <typeparam name="T">

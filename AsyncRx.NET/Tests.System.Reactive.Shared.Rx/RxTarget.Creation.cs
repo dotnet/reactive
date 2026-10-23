@@ -21,7 +21,9 @@ public sealed partial class RxTarget
         Realized.Of<Seq<int>>(Observable.Range(seq.Start, seq.Count, Unwrap(seq.Scheduler)));
 
     Realized<Seq<T>> ISeqVisitor.Enumerable<T>(EnumerableSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(EnumerableImpl<T>, seq.Source);
+        seq.Scheduler is null
+            ? _bridge.Run<Seq<T>>(EnumerableImpl<T>, seq.Source)
+            : _bridge.Run<Seq<T>>(EnumerableScheduledImpl<T>, seq.Source, Unwrap(seq.Scheduler));
 
     Realized<Seq<T>> ISeqVisitor.Defer<T>(DeferSeq<T> seq) =>
         _bridge.Run<Seq<T>>(DeferImpl<T>, seq.ObservableFactory);
@@ -47,6 +49,11 @@ public sealed partial class RxTarget
             Unwrap(seq.Scheduler));
 
     private static IObservable<T> EnumerableImpl<T>(IEnumerable<T> source) => source.ToObservable();
+
+    private static IObservable<T> EnumerableScheduledImpl<T>(
+        IEnumerable<T> source,
+        IScheduler scheduler) =>
+        source.ToObservable(scheduler);
 
     private static IObservable<T> ReturnImpl<T>(T value) => Observable.Return(value);
 

@@ -93,7 +93,21 @@ namespace System.Reactive.Linq
                 if (ct.IsCancellationRequested)
                     return;
 
-                using var enumerator = source.GetEnumerator();
+                IEnumerator<TSource> enumerator;
+
+                try
+                {
+                    enumerator = source.GetEnumerator();
+                }
+                catch (Exception ex)
+                {
+                    // As Rx.NET's sink: an enumerable that fails to yield an enumerator fails the
+                    // sequence rather than the scheduled work.
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
+                    return;
+                }
+
+                using var _ = enumerator;
 
                 while (!ct.IsCancellationRequested)
                 {

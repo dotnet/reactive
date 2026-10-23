@@ -14,7 +14,7 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// target's surface and applies the rules.
 /// </para>
 /// <para>
-/// This class declares the 122 operator names both surfaces have, and the 17 that only one
+/// This class declares the 123 operator names both surfaces have, and the 16 that only one
 /// has. The latter are inconclusive on the target that lacks them, on purpose: each is an
 /// unresolved difference between the libraries, to be looked at one by one as the operators'
 /// behavioural tests are reached, and the skip is the reminder. The only one-sided names not
@@ -425,7 +425,7 @@ public abstract class ArgumentCheckingTests
     // ---- Operators only Rx.NET has: unresolved differences, inconclusive on AsyncRx.NET ----
 
     [TestMethod]
-    public void AutoConnect_ArgumentChecking() => CheckIfPresent("AutoConnect");
+    public void AutoConnect_ArgumentChecking() => Check("AutoConnect");
 
     [TestMethod]
     public void Chunkify_ArgumentChecking() => CheckIfPresent("Chunkify");

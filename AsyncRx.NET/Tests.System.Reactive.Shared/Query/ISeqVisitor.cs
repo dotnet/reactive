@@ -41,7 +41,11 @@ public partial interface ISeqVisitor
     /// Materializes an <see cref="EnumerableSeq{T}"/> as the target's own conversion of an
     /// enumerable to a sequence.
     /// </summary>
-    /// <remarks>Built by <see cref="Seq.ToSeq{T}(IEnumerable{T})"/>.</remarks>
+    /// <remarks>
+    /// Built by <see cref="Seq.ToSeq{T}(IEnumerable{T})"/> and
+    /// <see cref="Seq.ToSeq{T}(IEnumerable{T}, SchedulerRef)"/>; the node names a scheduler
+    /// (Rx.NET's <c>ToObservable(scheduler)</c>) or none (<c>ToObservable()</c>).
+    /// </remarks>
     Realized<Seq<T>> Enumerable<T>(EnumerableSeq<T> seq);
 
     /// <summary>
