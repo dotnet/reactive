@@ -8,7 +8,7 @@ namespace System.Reactive.Linq
 {
     public partial class AsyncObservable
     {
-        public static IAsyncObservable<TSource> Distinct<TSource>(IAsyncObservable<TSource> source)
+        public static IAsyncObservable<TSource> Distinct<TSource>(this IAsyncObservable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -16,7 +16,7 @@ namespace System.Reactive.Linq
             return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.Distinct(observer)));
         }
 
-        public static IAsyncObservable<TSource> Distinct<TSource>(IAsyncObservable<TSource> source, IEqualityComparer<TSource> comparer)
+        public static IAsyncObservable<TSource> Distinct<TSource>(this IAsyncObservable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
