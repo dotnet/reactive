@@ -43,8 +43,8 @@
     <File Path="../../azure-pipelines.rx.yml" />
     <File Path=".editorconfig" />
     <File Path="analyzers.globalconfig" />
-    <File Path="Directory.build.props" />
-    <File Path="Directory.build.targets" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
     <File Path="global.json" />
     <File Path="Rx.ruleset" />
     <File Path="Test.ruleset" />
@@ -52,8 +52,8 @@
   </Folder>
   <Folder Name="/Tests/">
     <File Path="tests/.editorconfig" />
-    <File Path="tests/Directory.build.props" />
-    <File Path="tests/Directory.build.targets" />
+    <File Path="tests/Directory.Build.props" />
+    <File Path="tests/Directory.Build.targets" />
     <Project Path="tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj">
       <BuildType Solution="Debug (with UWP)|*" Project="Debug" />
     </Project>
