@@ -18,9 +18,10 @@ namespace Tests.System.Reactive.Async.Tests;
 /// (Step 80) that every other observer in the library rejects a notification arriving while
 /// another is in progress: the same source, subscribed without <c>Synchronize</c>, has its second
 /// task's first push refused with <see cref="InvalidOperationException"/> while the first task's
-/// delivery is in progress. In progress means synchronously so: the guard covers the call into
-/// the handler and not a handler that has yielded, which Step 80 found and the maintainer is to
-/// rule on; the test holds its first delivery by blocking, as the guard requires.
+/// delivery is in progress. In progress means until the task the first delivery returned has
+/// completed, which since Step 81 includes a handler that has yielded; the test holds its first
+/// delivery by awaiting, which the guard before Step 81, covering only the call into the handler,
+/// let the second push through.
 /// </remarks>
 [TestClass]
 public sealed class AsyncRxSynchronizeTests
@@ -51,32 +52,36 @@ public sealed class AsyncRxSynchronizeTests
     {
         var firstDelivering =
             new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-        var proceed = new ManualResetEvent(false);
+        var proceed =
+            new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var o = new ConcurrentlyProducingSource(
             Enumerable.Range(0, 100),
             Enumerable.Range(100, 100),
             secondStartsAfter: firstDelivering.Task);
 
-        // The guard refuses a notification that arrives while another's delivery is in progress
-        // synchronously: it marks the observer busy around the call into the handler and idle
-        // again when that call returns, so a handler that has yielded is not covered (Step 80).
-        // This handler therefore holds its delivery by blocking the delivering task's thread,
-        // as a slow synchronous consumer would, until the second producer has been refused.
-        await o.SubscribeAsync(AsyncObserver.Create<int>(x =>
+        // The guard holds the observer busy until the task a delivery returned has completed,
+        // so this handler holds its first delivery by awaiting, as an asynchronous consumer
+        // does, until the second producer has been refused. It yields before releasing the
+        // second producer so that the push being refused arrives after the delivery's
+        // synchronous part has returned, which is the part a guard that covered only that
+        // part would let through (one that signalled from the synchronous part was refused by
+        // a race, since the pool thread could push before the handler had returned).
+        await o.SubscribeAsync(AsyncObserver.Create<int>(async x =>
         {
             if (x == 0)
             {
+                await Task.Yield();
                 firstDelivering.TrySetResult();
-                proceed.WaitOne();
+                await proceed.Task;
             }
-
-            return default;
         }));
 
-        var refused = await o.FirstFailure;
+        // Were the second push accepted, no failure would ever arrive and the test would hang
+        // instead of failing; the bound turns that into a failure.
+        var refused = await o.FirstFailure.WaitAsync(TimeSpan.FromSeconds(10));
 
-        proceed.Set();
+        proceed.TrySetResult();
         await o.Done;
 
         Assert.IsInstanceOfType<InvalidOperationException>(refused);
