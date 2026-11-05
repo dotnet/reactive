@@ -14,6 +14,7 @@ namespace Tests.System.Reactive.Shared.Rx.Tests;
 /// The shared <c>ForEachAsync</c> scenarios on Rx.NET, plus its three <c>DisposeThrows</c> tests.
 /// </summary>
 /// <remarks>
+/// <para>
 /// The originals say what they are: regression guards for an exception thrown by a
 /// subscription's <c>Dispose</c> while <c>ForEachAsync</c> completes, which may reach the task
 /// or evaporate depending on whether Rx.NET's current-thread trampoline is already installed
@@ -22,8 +23,17 @@ namespace Tests.System.Reactive.Shared.Rx.Tests;
 /// does not have, so they run here against Rx.NET only, as the originals but for MSTest's
 /// assertions and the schedulers named in full, since the shared base has a <c>Scheduler</c>
 /// property.
+/// </para>
+/// <para>
+/// <c>[DoNotParallelize]</c>: the first test's throwing <c>Dispose</c> escaped now and then
+/// while this runner's classes ran in parallel, the stack showing the throw on a thread-pool
+/// work item of another observable's <c>Return</c>, and took the host process down. These run
+/// after the parallel classes, alone, where the original's reasoning about the current-thread
+/// trampoline holds.
+/// </para>
 /// </remarks>
 [TestClass]
+[DoNotParallelize]
 public sealed class RxForEachAsyncTests : ForEachAsyncTests
 {
     protected override IRxTarget Target => RxTarget.Instance;
