@@ -179,8 +179,8 @@ namespace System.Reactive.Linq
 
             // A port of Rx.NET's delayed-disconnect RefCount, whose state machine is shared across
             // all subscriptions to one instance (see the State enum). Connecting may complete
-            // subscribers synchronously, which runs their disposal re-entrantly under the same
-            // gate; that is why the state is re-read after Connect rather than assumed.
+            // subscribers synchronously, and their disposal then takes the same gate; that is
+            // why the state is re-read after Connect rather than assumed.
             var gate = new AsyncGate();
             var state = LazyState.DisconnectedNoSubscribers;
             var count = 0;

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace System.Threading
@@ -17,24 +16,31 @@ namespace System.Threading
         // operators nondeterministic under a single-threaded virtual-time scheduler and cost a
         // pool hop per contention in production. (An earlier ContinueWith without
         // ExecuteSynchronously hopped even when uncontended.)
+        //
+        // The lock is not re-entrant. An earlier form admitted a flow that already held it, by an
+        // AsyncLocal count; but ExecutionContext flows into every scheduled or subscribed piece
+        // of work, so work started while a flow held the lock inherited the count. Since
+        // AsyncLocal values get copied into the ExecutionContext, the effect was that when the
+        // parent flow later released the lock, dropping the count to zero, any child flows
+        // would continue to have their non-zero copies of the count, meaning that they would
+        // mistakenly think they still held the lock, so attempts to acquire it would be
+        // misinterpreted as a re-entrant acquisition. That made it possible for one of these child
+        // flows to think they had acquired the lock while the gate was free or held by someone
+        // else. Across the test suite 86 of 90 cases where the gate believed it was seeing
+        // re-entrant acquisition occurred when the gate had in fact been freed. (The four genuine
+        // re-entries were one helper in Join. That was the one place where we truly relied on
+        // re-entrant locking, and that code has since been restructured.) The downside is that a 
+        // flow that holds the lock and acquires it again now waits for itself, causing deadlock.
+        // But this previous behaviour was worse: state could be corrupted silently because
+        // child flows (e.g. any scheduled work) could incorrectly think they held the lock.
         private readonly object _gate = new();
         private readonly Queue<TaskCompletionSource<Releaser>> _waiters = new();
-        private readonly AsyncLocal<int> _recursionCount = new();
         private bool _held;
 
         public ValueTask<Releaser> LockAsync()
         {
             lock (_gate)
             {
-                if (_recursionCount.Value > 0)
-                {
-                    // Re-entrant acquisition on the same logical flow.
-                    _recursionCount.Value++;
-                    return new ValueTask<Releaser>(new Releaser(this));
-                }
-
-                _recursionCount.Value = 1;
-
                 if (!_held)
                 {
                     _held = true;
@@ -53,19 +59,14 @@ namespace System.Threading
 
             lock (_gate)
             {
-                Debug.Assert(_recursionCount.Value > 0);
-
-                if (--_recursionCount.Value == 0)
+                if (_waiters.Count > 0)
                 {
-                    if (_waiters.Count > 0)
-                    {
-                        // Hand the lock straight to the next waiter; it stays held throughout.
-                        next = _waiters.Dequeue();
-                    }
-                    else
-                    {
-                        _held = false;
-                    }
+                    // Hand the lock straight to the next waiter; it stays held throughout.
+                    next = _waiters.Dequeue();
+                }
+                else
+                {
+                    _held = false;
                 }
             }
 

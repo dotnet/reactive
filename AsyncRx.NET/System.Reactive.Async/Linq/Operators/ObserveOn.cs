@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
@@ -57,13 +57,16 @@ namespace System.Reactive.Linq
         /// order, then the error or completion once the values are gone, and ends when the queue
         /// is empty. An exception thrown by the observer escapes from the scheduled drain to the
         /// scheduler, as in Rx.NET. Disposing the returned disposable stops the current drain and
-        /// discards anything queued. The producer's path takes no lock: it enqueues and counts,
-        /// and the drain trampolines on that count (Rx.NET's "missed" pattern), so a producer
-        /// never waits for the drain and never runs on its thread. An earlier form guarded both
-        /// paths with an <see cref="AsyncGate"/>, whose release hands the lock to the next waiter
-        /// and runs its continuation inline; a producer waiting on the gate then continued on
-        /// the drain's thread, before the drain delivered, and a producer that went on to block
-        /// until that delivery deadlocked with it.
+        /// discards anything queued. The queue and its flags are guarded by a monitor, never held
+        /// across an await: a producer enqueues and, if no drain is running, marks one as running
+        /// and schedules it outside the lock; the drain marks itself finished only under the lock
+        /// and only on finding the queue empty, so a producer that enqueues at that moment
+        /// starts the next drain. A monitor release runs nobody else's code, so a producer never
+        /// waits for the drain and never continues on its thread, and the drain never completes
+        /// a producer's task. An earlier form guarded both paths with an <see cref="AsyncGate"/>,
+        /// whose release hands the lock to the next waiter inline; a producer waiting on it then
+        /// continued on the drain's thread before the drain delivered, and one that went on to
+        /// block for that delivery deadlocked with it.
         /// </remarks>
         public static (IAsyncObserver<TSource>, IAsyncDisposable) ObserveOn<TSource>(this IAsyncObserver<TSource> observer, IAsyncScheduler scheduler)
         {
@@ -72,72 +75,70 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var queue = new ConcurrentQueue<TSource>();
+            var gate = new object();
+            var queue = new Queue<TSource>();
             var error = default(Exception);
             var isDone = false;
+            var isDraining = false;
             var isDisposed = false;
-            var pending = 0;
             var drain = new SerialAsyncDisposable();
 
             async ValueTask DrainAsync(CancellationToken ct)
             {
-                var missed = 1;
-
-                while (true)
+                while (!ct.IsCancellationRequested)
                 {
-                    while (true)
+                    var next = default(TSource);
+                    var hasNext = false;
+                    var terminal = default(Exception);
+                    var completed = false;
+
+                    lock (gate)
                     {
-                        if (ct.IsCancellationRequested)
+                        if (isDisposed)
                         {
+                            isDraining = false;
                             return;
                         }
 
-                        if (queue.TryDequeue(out var next))
+                        if (queue.Count > 0)
                         {
-                            await observer.OnNextAsync(next).RendezVous(scheduler, ct);
-                            continue;
+                            next = queue.Dequeue();
+                            hasNext = true;
                         }
-
-                        if (Volatile.Read(ref isDone))
+                        else if (error != null)
                         {
-                            var terminal = Volatile.Read(ref error);
-
-                            if (terminal != null)
-                            {
-                                await observer.OnErrorAsync(terminal).RendezVous(scheduler, ct);
-                            }
-                            else
-                            {
-                                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
-                            }
-
+                            terminal = error;
+                        }
+                        else if (isDone)
+                        {
+                            completed = true;
+                        }
+                        else
+                        {
+                            isDraining = false;
                             return;
                         }
-
-                        break;
                     }
 
-                    missed = Interlocked.Add(ref pending, -missed);
-
-                    if (missed == 0)
+                    if (hasNext)
                     {
+                        await observer.OnNextAsync(next).RendezVous(scheduler, ct);
+                    }
+                    else if (terminal != null)
+                    {
+                        await observer.OnErrorAsync(terminal).RendezVous(scheduler, ct);
+                        return;
+                    }
+                    else if (completed)
+                    {
+                        await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                         return;
                     }
                 }
             }
 
-            async ValueTask SignalAsync()
+            async ValueTask StartDrainAsync()
             {
-                if (Interlocked.Increment(ref pending) != 1)
-                {
-                    return;
-                }
-
-                if (Volatile.Read(ref isDisposed))
-                {
-                    return;
-                }
-
                 var scheduled = await scheduler.ScheduleAsync(DrainAsync).ConfigureAwait(false);
 
                 await drain.AssignAsync(scheduled).ConfigureAwait(false);
@@ -146,31 +147,66 @@ namespace System.Reactive.Linq
             var sink = Create<TSource>(
                 x =>
                 {
-                    queue.Enqueue(x);
+                    bool start;
 
-                    return SignalAsync();
+                    lock (gate)
+                    {
+                        queue.Enqueue(x);
+
+                        start = !isDraining && !isDisposed;
+
+                        if (start)
+                        {
+                            isDraining = true;
+                        }
+                    }
+
+                    return start ? StartDrainAsync() : default;
                 },
                 ex =>
                 {
-                    Volatile.Write(ref error, ex);
-                    Volatile.Write(ref isDone, true);
+                    bool start;
 
-                    return SignalAsync();
+                    lock (gate)
+                    {
+                        error = ex;
+
+                        start = !isDraining && !isDisposed;
+
+                        if (start)
+                        {
+                            isDraining = true;
+                        }
+                    }
+
+                    return start ? StartDrainAsync() : default;
                 },
                 () =>
                 {
-                    Volatile.Write(ref isDone, true);
+                    bool start;
 
-                    return SignalAsync();
+                    lock (gate)
+                    {
+                        isDone = true;
+
+                        start = !isDraining && !isDisposed;
+
+                        if (start)
+                        {
+                            isDraining = true;
+                        }
+                    }
+
+                    return start ? StartDrainAsync() : default;
                 }
             );
 
             var dispose = AsyncDisposable.Create(async () =>
             {
-                Volatile.Write(ref isDisposed, true);
-
-                while (queue.TryDequeue(out _))
+                lock (gate)
                 {
+                    isDisposed = true;
+                    queue.Clear();
                 }
 
                 await drain.DisposeAsync().ConfigureAwait(false);

@@ -147,7 +147,9 @@ namespace System.Reactive.Linq
                                     }
                                     catch (Exception ex)
                                     {
-                                        await OnErrorAsync(ex).ConfigureAwait(false);
+                                        // The gate is held here, so the error goes to the observer
+                                        // directly rather than through the helper that takes it.
+                                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
                                         return;
                                     }
 
@@ -239,7 +241,9 @@ namespace System.Reactive.Linq
                                     }
                                     catch (Exception ex)
                                     {
-                                        await OnErrorAsync(ex).ConfigureAwait(false);
+                                        // The gate is held here, so the error goes to the observer
+                                        // directly rather than through the helper that takes it.
+                                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
                                         return;
                                     }
 

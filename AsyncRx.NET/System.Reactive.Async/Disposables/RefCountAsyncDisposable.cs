@@ -9,7 +9,7 @@ namespace System.Reactive.Disposables
 {
     public sealed class RefCountAsyncDisposable : IAsyncDisposable
     {
-        private readonly AsyncGate _gate = new();
+        private readonly object _gate = new();
         private IAsyncDisposable _disposable;
         private bool _primaryDisposed;
         private int _count;
@@ -23,7 +23,7 @@ namespace System.Reactive.Disposables
 
         public async ValueTask<IAsyncDisposable> GetDisposableAsync()
         {
-            using (await _gate.LockAsync().ConfigureAwait(false))
+            lock (_gate)
             {
                 if (_disposable == null)
                 {
@@ -41,7 +41,7 @@ namespace System.Reactive.Disposables
         {
             var disposable = default(IAsyncDisposable);
 
-            using (await _gate.LockAsync().ConfigureAwait(false))
+            lock (_gate)
             {
                 if (_disposable != null && !_primaryDisposed)
                 {
@@ -65,7 +65,7 @@ namespace System.Reactive.Disposables
         {
             var disposable = default(IAsyncDisposable);
 
-            using (await _gate.LockAsync().ConfigureAwait(false))
+            lock (_gate)
             {
                 if (_disposable != null)
                 {

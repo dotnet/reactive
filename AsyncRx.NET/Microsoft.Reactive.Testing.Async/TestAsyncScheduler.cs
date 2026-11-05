@@ -769,10 +769,10 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     /// Runs <paramref name="action"/> under the <see cref="ExecutionContext"/> captured now, when
     /// it is queued. The thread pool does this for every work item, so an <c>AsyncLocal</c>
     /// written inside one item never leaks into the next; a single pump thread running items
-    /// synchronously would otherwise let such writes accumulate across items (which broke
-    /// <c>AsyncGate</c>'s AsyncLocal-based re-entrancy detection — a later work item wrongly
-    /// saw the lock as held by its own flow). This keeps "what operator code sees" faithful
-    /// to production for ambient state as well as for continuations.
+    /// synchronously would otherwise let such writes accumulate across items (which once broke
+    /// <c>AsyncGate</c>'s AsyncLocal-based re-entrancy detection, since removed: a later work
+    /// item wrongly saw the lock as held by its own flow). This keeps "what operator code sees"
+    /// faithful to production for ambient state as well as for continuations.
     /// </summary>
     /// <remarks>
     /// Inside the restored context the item is marked as running under this pump (see
