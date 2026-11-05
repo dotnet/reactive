@@ -28,6 +28,24 @@ public static class SubscribeExtensions
 
     /// <summary>
     /// Materializes <paramref name="source"/> on <paramref name="scheduler"/>'s target and
+    /// subscribes <paramref name="subject"/> to it as an observer.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements.</typeparam>
+    /// <param name="source">The description to subscribe to.</param>
+    /// <param name="scheduler">The test's scheduler, which identifies the target.</param>
+    /// <param name="subject">The subject that receives the source's notifications.</param>
+    /// <returns>The subscription; on the sync target the task is already complete.</returns>
+    /// <remarks>Where the Rx.NET test writes <c>xs.Subscribe(subject)</c>.</remarks>
+    public static ValueTask<IAsyncDisposable> SubscribeAsync<T>(this Seq<T> source, TestSchedulerRef scheduler, SubjectSeq<T> subject)
+    {
+        ArgumentNullException.ThrowIfNull(scheduler);
+        ArgumentNullException.ThrowIfNull(subject);
+
+        return scheduler.Target.SubscribeAsync(source, scheduler, subject);
+    }
+
+    /// <summary>
+    /// Materializes <paramref name="source"/> on <paramref name="scheduler"/>'s target and
     /// subscribes a handler for each element.
     /// </summary>
     /// <typeparam name="T">The type of the elements.</typeparam>

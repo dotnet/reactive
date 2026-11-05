@@ -40,6 +40,7 @@ namespace System.Reactive.Subjects
                 _done = true;
 
                 observers = _observers.ToArray();
+                _observers.Clear();
             }
 
             return OnCompletedAsyncCore(observers);
@@ -64,6 +65,7 @@ namespace System.Reactive.Subjects
                 _error = error;
 
                 observers = _observers.ToArray();
+                _observers.Clear();
             }
 
             return OnErrorAsyncCore(observers, error);

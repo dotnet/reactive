@@ -9,7 +9,7 @@ namespace Tests.System.Reactive.Shared;
 /// A leaf, so it composes like any other sequence, with the three observer methods a test calls
 /// where the Rx.NET test calls them on a <c>Subject&lt;T&gt;</c>. They are async-shaped so that
 /// the same scenario text drives AsyncRx.NET's subject, whose methods are awaited; on Rx.NET they
-/// complete synchronously. Created by <see cref="SharedReactiveTest.CreateSubject{T}"/>. A test
+/// complete synchronously. Created by <see cref="SharedReactiveTest.CreateSubject{T}()"/>. A test
 /// double that is a subject with more to it, such as <see cref="Scenarios.MySubject"/>, derives
 /// from this through the copying constructor, over the plain wrapper its target built.
 /// </remarks>

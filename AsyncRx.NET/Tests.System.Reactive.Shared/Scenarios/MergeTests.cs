@@ -26,7 +26,7 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// <c>MergeConcat_Default</c> and <c>Merge_Task*</c> families) are <c>async Task</c> methods
 /// that await <see cref="SharedReactiveTest.ToListAsync{T}"/> where the original blocks on a
 /// <c>ManualResetEvent</c> or an enumerating conversion, and drive a
-/// <see cref="SharedReactiveTest.CreateSubject{T}"/> where it has a <c>Subject&lt;T&gt;</c>. A
+/// <see cref="SharedReactiveTest.CreateSubject{T}()"/> where it has a <c>Subject&lt;T&gt;</c>. A
 /// faulted result surfaces as the awaited task's exception, so the two <c>Faulted</c> and two
 /// <c>Canceled</c> tests check the exception and not also that no value was produced.
 /// <c>Merge_LotsMore</c> asserts its computed expectations through <c>AssertEqual</c> rather

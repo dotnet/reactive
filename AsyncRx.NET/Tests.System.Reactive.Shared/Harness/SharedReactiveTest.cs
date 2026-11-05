@@ -131,7 +131,46 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
     /// <remarks>
     /// A scenario calls this where the Rx.NET test writes <c>new BehaviorSubject&lt;T&gt;(v)</c>.
     /// </remarks>
-    protected SubjectSeq<T> CreateBehaviorSubject<T>(T value) => Target.CreateBehaviorSubject(value);
+    protected BehaviorSubjectSeq<T> CreateBehaviorSubject<T>(T value) =>
+        Target.CreateBehaviorSubject(value);
+
+    /// <summary>Creates a replay subject that replays everything.</summary>
+    /// <remarks>Where the Rx.NET test writes <c>new ReplaySubject&lt;T&gt;()</c>.</remarks>
+    protected SubjectSeq<T> CreateReplaySubject<T>() => Target.CreateReplaySubject<T>();
+
+    /// <summary>Creates a replay subject that replays a time window.</summary>
+    /// <param name="window">How long an element is replayed for after it was pushed.</param>
+    /// <remarks>
+    /// Where the Rx.NET test writes <c>new ReplaySubject&lt;T&gt;(window)</c>.
+    /// </remarks>
+    protected SubjectSeq<T> CreateReplaySubject<T>(TimeSpan window) =>
+        Target.CreateReplaySubject<T>(window);
+
+    /// <summary>
+    /// Creates a replay subject bounded by count and time, delivering on a scheduler.
+    /// </summary>
+    /// <param name="bufferSize">The number of elements replayed to a new subscriber.</param>
+    /// <param name="window">How long an element is replayed for after it was pushed.</param>
+    /// <param name="scheduler">Keeps the time, and delivers every notification.</param>
+    /// <remarks>
+    /// Where the Rx.NET test writes
+    /// <c>new ReplaySubject&lt;T&gt;(bufferSize, window, scheduler)</c>.
+    /// </remarks>
+    protected SubjectSeq<T> CreateReplaySubject<T>(int bufferSize, TimeSpan window, SchedulerRef scheduler) =>
+        Target.CreateReplaySubject<T>(bufferSize, window, scheduler);
+
+    /// <summary>Creates an async subject the scenario drives by hand.</summary>
+    /// <remarks>Where the Rx.NET test writes <c>new AsyncSubject&lt;T&gt;()</c>.</remarks>
+    protected AsyncSubjectSeq<T> CreateAsyncSubject<T>() => Target.CreateAsyncSubject<T>();
+
+    /// <summary>Creates a subject from an observer and an observable.</summary>
+    /// <param name="observer">Receives what is pushed into the subject.</param>
+    /// <param name="observable">What the subject's subscribers subscribe to.</param>
+    /// <remarks>
+    /// Where the Rx.NET test writes <c>Subject.Create(observer, observable)</c>.
+    /// </remarks>
+    protected SubjectSeq<T> CreateSubject<T>(ObserverRef<T> observer, Seq<T> observable) =>
+        Target.CreateSubject(observer, observable);
 
     /// <summary>Runs a real-time query to completion and returns everything it produced.</summary>
     /// <param name="source">The query to run.</param>

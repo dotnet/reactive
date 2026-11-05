@@ -124,7 +124,35 @@ public sealed partial class AsyncRxTarget : IRxTarget
     public SubjectSeq<T> CreateReplaySubject<T>(int bufferSize) =>
         Wrap(new SequentialReplayAsyncSubject<T>(bufferSize));
 
-    public SubjectSeq<T> CreateBehaviorSubject<T>(T value) => Wrap(new SequentialBehaviorAsyncSubject<T>(value));
+    public SubjectSeq<T> CreateReplaySubject<T>() => Wrap(new SequentialReplayAsyncSubject<T>());
+
+    public SubjectSeq<T> CreateReplaySubject<T>(TimeSpan window) =>
+        Wrap(new SequentialReplayAsyncSubject<T>(window));
+
+    public SubjectSeq<T> CreateReplaySubject<T>(int bufferSize, TimeSpan window, SchedulerRef scheduler) =>
+        Wrap(new SequentialReplayAsyncSubject<T>(bufferSize, window, Unwrap(scheduler)));
+
+    public BehaviorSubjectSeq<T> CreateBehaviorSubject<T>(T value)
+    {
+        var subject = new SequentialBehaviorAsyncSubject<T>(value);
+
+        return new(Wrap(subject), () => subject.Value, (out T current) => subject.TryGetValue(out current));
+    }
+
+    public AsyncSubjectSeq<T> CreateAsyncSubject<T>()
+    {
+        var subject = new SequentialAsyncAsyncSubject<T>();
+
+        return new(Wrap(subject), new AsyncRxSeqAwaiter<T>(subject));
+    }
+
+    public SubjectSeq<T> CreateSubject<T>(ObserverRef<T> observer, Seq<T> observable) =>
+        Wrap(AsyncSubject.Create(UnwrapObserverImpl(observer), Materialize(observable)));
+
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestSchedulerRef scheduler, SubjectSeq<T> subject) =>
+        FromBody(
+            Unwrap(scheduler),
+            Materialize(source).SubscribeAsync(subject.Native.Get<IAsyncObserver<T>>()));
 
     public Realized<Seq<T>> CreateRefCountTestConnectable<T>(RefCountTests.SerialSingleNotificationConnectable<T>.State state) =>
         Realized.Of<Seq<T>>(new AsyncRxSerialSingleNotificationConnectable<T>(state, this));
@@ -149,7 +177,14 @@ public sealed partial class AsyncRxTarget : IRxTarget
             subject.OnNextAsync,
             subject.OnErrorAsync,
             subject.OnCompletedAsync,
-            subject is SimpleAsyncSubject<T> reporting ? () => reporting.HasObservers : null);
+            subject switch
+            {
+                SimpleAsyncSubject<T> s => () => s.HasObservers,
+                ReplayAsyncSubject<T> s => () => s.HasObservers,
+                BehaviorAsyncSubject<T> s => () => s.HasObservers,
+                AsyncAsyncSubject<T> s => () => s.HasObservers,
+                _ => null,
+            });
     }
 
     public TestableSeq<T> CreateHotObservable<T>(TestSchedulerRef scheduler, Recorded<Notification<T>>[] messages) =>

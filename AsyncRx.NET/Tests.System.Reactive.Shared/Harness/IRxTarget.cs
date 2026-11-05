@@ -164,6 +164,37 @@ public interface IRxTarget : ISeqVisitor
     /// </remarks>
     SubjectSeq<T> CreateSubject<T>();
 
+    /// <summary>
+    /// Creates a subject from an observer and an observable, as Rx.NET's <c>Subject.Create</c>.
+    /// </summary>
+    /// <param name="observer">Receives what is pushed into the subject.</param>
+    /// <param name="observable">What the subject's subscribers subscribe to.</param>
+    /// <remarks>
+    /// Rx.NET's <c>Subject.Create(observer, observable)</c>; AsyncRx.NET's
+    /// <c>AsyncSubject.Create</c>. The result does not report its observers.
+    /// </remarks>
+    SubjectSeq<T> CreateSubject<T>(ObserverRef<T> observer, Seq<T> observable);
+
+    /// <summary>Creates an async subject the scenario drives by hand, as a leaf.</summary>
+    /// <remarks>
+    /// Rx.NET's <c>AsyncSubject&lt;T&gt;</c>; AsyncRx.NET's sequential async subject. The
+    /// handle carries the subject's own awaiter.
+    /// </remarks>
+    AsyncSubjectSeq<T> CreateAsyncSubject<T>();
+
+    /// <summary>
+    /// Materializes <paramref name="source"/> and subscribes <paramref name="subject"/> to it
+    /// as an observer.
+    /// </summary>
+    /// <param name="source">The description to subscribe to.</param>
+    /// <param name="scheduler">The test's scheduler, which the async target runs the body on.</param>
+    /// <param name="subject">The subject that receives the source's notifications.</param>
+    /// <remarks>
+    /// Where the Rx.NET test writes <c>xs.Subscribe(subject)</c>, feeding a hot source into a
+    /// subject; the subject's own observers are subscribed to the subject as to any leaf.
+    /// </remarks>
+    ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestSchedulerRef scheduler, SubjectSeq<T> subject);
+
     /// <summary>Builds the connectable behind the <c>RefCount</c> tests' double.</summary>
     /// <param name="state">The double's state, which the object records into.</param>
     /// <remarks>
@@ -219,12 +250,40 @@ public interface IRxTarget : ISeqVisitor
     /// </remarks>
     SubjectSeq<T> CreateReplaySubject<T>(int bufferSize);
 
+    /// <summary>Creates a replay subject that replays everything, as a leaf.</summary>
+    /// <remarks>
+    /// As <see cref="CreateReplaySubject{T}(int)"/>, for the parameterless constructor.
+    /// </remarks>
+    SubjectSeq<T> CreateReplaySubject<T>();
+
+    /// <summary>Creates a replay subject that replays a time window, as a leaf.</summary>
+    /// <param name="window">How long an element is replayed for after it was pushed.</param>
+    /// <remarks>
+    /// As <see cref="CreateReplaySubject{T}(int)"/>, for the window-only constructor, which
+    /// takes the time from the target's default clock and delivers at once.
+    /// </remarks>
+    SubjectSeq<T> CreateReplaySubject<T>(TimeSpan window);
+
+    /// <summary>
+    /// Creates a replay subject bounded by count and time, delivering on a scheduler, as a leaf.
+    /// </summary>
+    /// <param name="bufferSize">The number of elements replayed to a new subscriber.</param>
+    /// <param name="window">How long an element is replayed for after it was pushed.</param>
+    /// <param name="scheduler">Keeps the time, and delivers every notification.</param>
+    /// <remarks>
+    /// As <see cref="CreateReplaySubject{T}(int)"/>, for the fully specified constructor. On
+    /// Rx.NET each delivery to a subscriber is a scheduled unit of work, one virtual tick later
+    /// on its test scheduler; scenarios spell those ticks with <c>ScheduledAt</c>.
+    /// </remarks>
+    SubjectSeq<T> CreateReplaySubject<T>(int bufferSize, TimeSpan window, SchedulerRef scheduler);
+
     /// <summary>Creates a behavior subject the scenario drives by hand, as a leaf.</summary>
     /// <param name="value">The subject's initial value.</param>
     /// <remarks>
     /// Rx.NET's <c>BehaviorSubject&lt;T&gt;</c>; AsyncRx.NET's sequential behavior subject.
+    /// The handle carries the subject's <c>Value</c> and <c>TryGetValue</c>.
     /// </remarks>
-    SubjectSeq<T> CreateBehaviorSubject<T>(T value);
+    BehaviorSubjectSeq<T> CreateBehaviorSubject<T>(T value);
 
     /// <summary>
     /// Creates the target's own hot testable observable, playing <paramref name="messages"/> at

@@ -118,7 +118,40 @@ public sealed partial class RxTarget : IRxTarget
 
     public SubjectSeq<T> CreateReplaySubject<T>(int bufferSize) => Wrap(new ReplaySubject<T>(bufferSize));
 
-    public SubjectSeq<T> CreateBehaviorSubject<T>(T value) => Wrap(new BehaviorSubject<T>(value));
+    public SubjectSeq<T> CreateReplaySubject<T>() => Wrap(new ReplaySubject<T>());
+
+    public SubjectSeq<T> CreateReplaySubject<T>(TimeSpan window) => Wrap(new ReplaySubject<T>(window));
+
+    public SubjectSeq<T> CreateReplaySubject<T>(int bufferSize, TimeSpan window, SchedulerRef scheduler) =>
+        Wrap(new ReplaySubject<T>(bufferSize, window, Unwrap(scheduler)));
+
+    public BehaviorSubjectSeq<T> CreateBehaviorSubject<T>(T value)
+    {
+        var subject = new BehaviorSubject<T>(value);
+
+        return new(
+            Wrap(subject),
+            () => subject.Value,
+            (out T current) =>
+            {
+                var found = subject.TryGetValue(out var value);
+                current = value!;
+                return found;
+            });
+    }
+
+    public AsyncSubjectSeq<T> CreateAsyncSubject<T>()
+    {
+        var subject = new AsyncSubject<T>();
+
+        return new(Wrap(subject), new RxSeqAwaiter<T>(subject));
+    }
+
+    public SubjectSeq<T> CreateSubject<T>(ObserverRef<T> observer, Seq<T> observable) =>
+        Wrap(Subject.Create<T>(UnwrapObserverImpl(observer), Materialize(observable)));
+
+    public ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestSchedulerRef scheduler, SubjectSeq<T> subject) =>
+        new(RxDisposable.For(Materialize(source).Subscribe(subject.Native.Get<IObserver<T>>())));
 
     public Realized<Seq<T>> CreateRefCountTestConnectable<T>(RefCountTests.SerialSingleNotificationConnectable<T>.State state) =>
         Realized.Of<Seq<T>>(new RxSerialSingleNotificationConnectable<T>(state, this));
