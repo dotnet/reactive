@@ -337,6 +337,33 @@ public interface IRxTarget : ISeqVisitor
     /// </summary>
     TestableObserver<T> CreateObserver<T>(TestSchedulerRef scheduler);
 
+    /// <summary>Creates the library's own observer from a single handler.</summary>
+    /// <typeparam name="T">The type of the elements received by the observer.</typeparam>
+    /// <param name="onNext">Observer's OnNext action implementation.</param>
+    /// <remarks>
+    /// Rx.NET's <c>Observer.Create(onNext)</c>; AsyncRx.NET's <c>AsyncObserver.Create</c> over
+    /// the same handler. The library supplies the other two handlers, and the result is for a
+    /// scenario that pushes into it directly and claims what those defaults do;
+    /// <see cref="ObserverRef.Create{T}(Action{T}, Action{Exception}, Action)"/> only describes
+    /// an observer for an operator to take.
+    /// </remarks>
+    ObserverRef<T> CreateObserver<T>(Action<T> onNext);
+
+    /// <summary>Creates the library's own observer from three handlers.</summary>
+    /// <typeparam name="T">The type of the elements received by the observer.</typeparam>
+    /// <param name="onNext">Observer's OnNext action implementation.</param>
+    /// <param name="onError">Observer's OnError action implementation.</param>
+    /// <param name="onCompleted">Observer's OnCompleted action implementation.</param>
+    /// <remarks>
+    /// Rx.NET's <c>Observer.Create(onNext, onError, onCompleted)</c>; AsyncRx.NET's
+    /// <c>AsyncObserver.Create</c> over the same handlers, as
+    /// <see cref="CreateObserver{T}(Action{T})"/>.
+    /// </remarks>
+    ObserverRef<T> CreateObserver<T>(
+        Action<T> onNext,
+        Action<Exception> onError,
+        Action onCompleted);
+
     /// <summary>
     /// Materializes <paramref name="source"/> and subscribes <paramref name="observer"/>'s
     /// <see cref="TestableObserver{T}.Native"/> to it.

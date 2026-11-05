@@ -149,6 +149,22 @@ public sealed partial class AsyncRxTarget : IRxTarget
     public SubjectSeq<T> CreateSubject<T>(ObserverRef<T> observer, Seq<T> observable) =>
         Wrap(AsyncSubject.Create(UnwrapObserverImpl(observer), Materialize(observable)));
 
+    // The scenario's handlers are synchronous; each completes its call at once, as
+    // ObserverRef.Create has it.
+    public ObserverRef<T> CreateObserver<T>(Action<T> onNext) =>
+        WrapObserverImpl(AsyncObserver.Create<T>(
+            x =>
+            {
+                onNext(x);
+                return default;
+            }));
+
+    public ObserverRef<T> CreateObserver<T>(
+        Action<T> onNext,
+        Action<Exception> onError,
+        Action onCompleted) =>
+        WrapObserverImpl(UnwrapObserverImpl(ObserverRef.Create(onNext, onError, onCompleted)));
+
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestSchedulerRef scheduler, SubjectSeq<T> subject) =>
         FromBody(
             Unwrap(scheduler),

@@ -172,6 +172,28 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
     protected SubjectSeq<T> CreateSubject<T>(ObserverRef<T> observer, Seq<T> observable) =>
         Target.CreateSubject(observer, observable);
 
+    /// <summary>Creates the library's own observer from a single handler.</summary>
+    /// <param name="onNext">Observer's OnNext action implementation.</param>
+    /// <remarks>
+    /// Where the Rx.NET test writes <c>Observer.Create(onNext)</c> and then pushes into the
+    /// result; the library's defaults for the other two handlers are the claim.
+    /// </remarks>
+    protected ObserverRef<T> CreateObserver<T>(Action<T> onNext) => Target.CreateObserver(onNext);
+
+    /// <summary>Creates the library's own observer from three handlers.</summary>
+    /// <param name="onNext">Observer's OnNext action implementation.</param>
+    /// <param name="onError">Observer's OnError action implementation.</param>
+    /// <param name="onCompleted">Observer's OnCompleted action implementation.</param>
+    /// <remarks>
+    /// Where the Rx.NET test writes <c>Observer.Create(onNext, onError, onCompleted)</c> and
+    /// then pushes into the result.
+    /// </remarks>
+    protected ObserverRef<T> CreateObserver<T>(
+        Action<T> onNext,
+        Action<Exception> onError,
+        Action onCompleted) =>
+        Target.CreateObserver(onNext, onError, onCompleted);
+
     /// <summary>Runs a real-time query to completion and returns everything it produced.</summary>
     /// <param name="source">The query to run.</param>
     /// <remarks>

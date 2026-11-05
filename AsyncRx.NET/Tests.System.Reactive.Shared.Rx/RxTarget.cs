@@ -150,6 +150,15 @@ public sealed partial class RxTarget : IRxTarget
     public SubjectSeq<T> CreateSubject<T>(ObserverRef<T> observer, Seq<T> observable) =>
         Wrap(Subject.Create<T>(UnwrapObserverImpl(observer), Materialize(observable)));
 
+    public ObserverRef<T> CreateObserver<T>(Action<T> onNext) =>
+        WrapObserverImpl(Observer.Create(onNext));
+
+    public ObserverRef<T> CreateObserver<T>(
+        Action<T> onNext,
+        Action<Exception> onError,
+        Action onCompleted) =>
+        WrapObserverImpl(Observer.Create(onNext, onError, onCompleted));
+
     public ValueTask<IAsyncDisposable> SubscribeAsync<T>(Seq<T> source, TestSchedulerRef scheduler, SubjectSeq<T> subject) =>
         new(RxDisposable.For(Materialize(source).Subscribe(subject.Native.Get<IObserver<T>>())));
 
