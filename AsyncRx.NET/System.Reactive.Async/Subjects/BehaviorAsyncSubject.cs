@@ -43,8 +43,6 @@ namespace System.Reactive.Subjects
 
         public bool TryGetValue(out T value)
         {
-            // TODO: support for disposal
-
             var error = _error;
 
             if (error != null)
