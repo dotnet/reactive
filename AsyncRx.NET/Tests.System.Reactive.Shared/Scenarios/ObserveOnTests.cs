@@ -7,24 +7,34 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// <summary>Shared <c>ObserveOn</c> scenarios, from Rx.NET's <c>ObserveOnTest.cs</c>.</summary>
 /// <remarks>
 /// <para>
-/// Twelve of the file's 23 tests. The virtual-time tests run over the test scheduler and over a
-/// synchronization context that posts to it (<see cref="MyCtx"/>, shared with the
-/// <c>SubscribeOn</c> scenarios); <c>ObserveOn</c> delivers every notification through
-/// its scheduler, so where the original expects each one tick after the source's
-/// (<c>OnNext(231, 3)</c>), and the source released when the completion is delivered
-/// (<c>Subscribe(200, 531)</c>), the shared text writes <c>ScheduledAt</c>. The real-time tests
-/// drive two scheduler doubles, both over <see cref="SchedulerDouble"/>: <c>MyScheduler</c>, which
-/// runs work inline and records what it throws, and the shared
-/// <see cref="TestLongRunningScheduler"/>, which runs each unit of work on its own thread; they are <c>async Task</c> methods that await the doubles' signals and a
-/// <c>TaskCompletionSource</c> where the original blocks on events, keeping the original's
-/// <c>ManualResetEvent</c> only where it stands between the test thread and the scheduler's.
+/// Twelve of the file's 23 tests, six of them under their own names. The virtual-time tests run
+/// over the test scheduler and over a synchronization context that posts to it
+/// (<see cref="MyCtx"/>, shared with the <c>SubscribeOn</c> scenarios); <c>ObserveOn</c>
+/// delivers every notification through its scheduler, so where the original expects each one
+/// tick after the source's (<c>OnNext(231, 3)</c>), and the source released when the completion
+/// is delivered (<c>Subscribe(200, 531)</c>), the shared text writes <c>ScheduledAt</c>. The
+/// real-time tests drive two scheduler doubles, both over <see cref="SchedulerDouble"/>:
+/// <c>MyScheduler</c>, which runs work inline and records what it throws, and the shared
+/// <see cref="TestLongRunningScheduler"/>, which runs each unit of work on a thread of its own.
+/// </para>
+/// <para>
+/// The six <c>ObserveOn_RealScheduler_*</c> tests are the originals' <c>*_LongRunning_*</c> six
+/// with the claim they make on both targets: that <c>ObserveOn</c> delivers, fails, keeps
+/// delivering after idling, queues behind a held-up observer, stops when disposed, and hands an
+/// observer's exception to the scheduler's work, on a scheduler that runs on its own threads.
+/// What the originals claim beyond that is about Rx.NET's long-running dispatch loop being one
+/// unit of work, and those run as they are in the Rx.NET runner, <c>RxObserveOnTests</c>. The
+/// shared six are <c>async Task</c> methods that await a <c>TaskCompletionSource</c> or the
+/// double's signals wherever the original's test thread blocks on an event; the one
+/// <c>ManualResetEvent</c> left stands inside an observer, holding up the scheduler's own thread
+/// to model a slow consumer, which is what that test is about.
 /// </para>
 /// <para>
 /// Not here: the six Windows Forms and WPF tests, which Rx.NET's own runner compiles only under
 /// <c>HAS_WINFORMS</c> and <c>HAS_WPF</c>; the two <c>*_ArgumentChecking</c> tests, the
-/// code-generated stratum; and three tests over Rx.NET's own schedulers (<c>EventLoopScheduler</c>
-/// and the long-running optimization of the task pool scheduler), which live in the Rx.NET
-/// runner, <c>RxObserveOnTests</c>.
+/// code-generated stratum; and nine tests that live in the Rx.NET runner, <c>RxObserveOnTests</c>:
+/// three over Rx.NET's own schedulers (<c>EventLoopScheduler</c> and the long-running
+/// optimization of the task pool scheduler) and the six <c>*_LongRunning_*</c> originals.
 /// </para>
 /// </remarks>
 public abstract class ObserveOnTests : SharedReactiveTest
@@ -229,7 +239,7 @@ public abstract class ObserveOnTests : SharedReactiveTest
     }
 
     [TestMethod]
-    public async Task ObserveOn_LongRunning_Simple()
+    public async Task ObserveOn_RealScheduler_Simple()
     {
         var scheduler = new TestLongRunningScheduler(Target);
 
@@ -254,7 +264,7 @@ public abstract class ObserveOnTests : SharedReactiveTest
     }
 
     [TestMethod]
-    public async Task ObserveOn_LongRunning_Error()
+    public async Task ObserveOn_RealScheduler_Error()
     {
         var scheduler = new TestLongRunningScheduler(Target);
 
@@ -279,7 +289,7 @@ public abstract class ObserveOnTests : SharedReactiveTest
     }
 
     [TestMethod]
-    public async Task ObserveOn_LongRunning_TimeVariance()
+    public async Task ObserveOn_RealScheduler_TimeVariance()
     {
         var scheduler = new TestLongRunningScheduler(Target);
 
@@ -295,7 +305,7 @@ public abstract class ObserveOnTests : SharedReactiveTest
         await s.OnNextAsync(1); // Ensure active
         await scheduler.Started;
 
-        Thread.Sleep(100); // Try to enter the dispatcher event wait state
+        Thread.Sleep(100); // Let the dispatcher go idle
 
         for (var i = 0; i < 1000; i++)
         {
@@ -313,24 +323,24 @@ public abstract class ObserveOnTests : SharedReactiveTest
     }
 
     [TestMethod]
-    public async Task ObserveOn_LongRunning_HoldUpDuringDispatchAndFail()
+    public async Task ObserveOn_RealScheduler_HoldUpDuringDispatchAndFail()
     {
         var scheduler = new TestLongRunningScheduler(Target);
 
         var s = CreateSubject<int>();
 
-        var onNext = new ManualResetEvent(false);
+        var onNext = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var resume = new ManualResetEvent(false);
         var lst = new List<int>();
         var err = default(Exception);
         var end = new TaskCompletionSource();
         await s.ObserveOn(scheduler).SubscribeAsync(
             Scheduler,
-            x => { lst.Add(x); onNext.Set(); resume.WaitOne(); },
+            x => { lst.Add(x); onNext.TrySetResult(); resume.WaitOne(); },
             ex_ => { err = ex_; end.TrySetResult(); });
 
         await s.OnNextAsync(1);
-        onNext.WaitOne();
+        await onNext.Task;
 
         await s.OnNextAsync(2);
         await s.OnNextAsync(3);
@@ -346,17 +356,17 @@ public abstract class ObserveOnTests : SharedReactiveTest
     }
 
     [TestMethod]
-    public async Task ObserveOn_LongRunning_Cancel()
+    public async Task ObserveOn_RealScheduler_Cancel()
     {
         var scheduler = new TestLongRunningScheduler(Target);
 
         var s = CreateSubject<int>();
 
         var lst = new List<int>();
-        var running = new ManualResetEvent(false);
+        var running = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var d = await s.ObserveOn(scheduler).SubscribeAsync(
             Scheduler,
-            x => { lst.Add(x); running.Set(); });
+            x => { lst.Add(x); running.TrySetResult(); });
 
         await s.OnNextAsync(0);
         await scheduler.Started;
@@ -365,7 +375,7 @@ public abstract class ObserveOnTests : SharedReactiveTest
         await s.OnNextAsync(2);
         await s.OnNextAsync(3);
 
-        running.WaitOne();
+        await running.Task;
         await d.DisposeAsync();
         await scheduler.Stopped;
 
@@ -375,17 +385,17 @@ public abstract class ObserveOnTests : SharedReactiveTest
     }
 
     [TestMethod]
-    public async Task ObserveOn_LongRunning_OnNextThrows()
+    public async Task ObserveOn_RealScheduler_OnNextThrows()
     {
         var scheduler = new TestLongRunningScheduler(Target);
 
         var s = CreateSubject<int>();
 
         var lst = new List<int>();
-        var running = new ManualResetEvent(false);
+        var running = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var d = await s.ObserveOn(scheduler).SubscribeAsync(
             Scheduler,
-            x => { lst.Add(x); running.Set(); if (x == 3) { throw new Exception(); } });
+            x => { lst.Add(x); running.TrySetResult(); if (x == 3) { throw new Exception(); } });
 
         await s.OnNextAsync(0);
         await scheduler.Started;
@@ -394,7 +404,7 @@ public abstract class ObserveOnTests : SharedReactiveTest
         await s.OnNextAsync(2);
         await s.OnNextAsync(3);
 
-        running.WaitOne();
+        await running.Task;
         await s.OnNextAsync(4);
 
         // The original waits for the scheduler's "stopped" event: its one unit of work is the
