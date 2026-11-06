@@ -9,7 +9,7 @@ namespace System.Reactive.Linq
 {
     public partial class AsyncObservable
     {
-        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource>(IAsyncObservable<TSource> source)
+        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource>(this IAsyncObservable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
             return Create(source, static (source, observer) => source.SubscribeSafeAsync(AsyncObserver.DistinctUntilChanged(observer)));
         }
 
-        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource>(IAsyncObservable<TSource> source, IEqualityComparer<TSource> comparer)
+        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource>(this IAsyncObservable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -30,7 +30,7 @@ namespace System.Reactive.Linq
                 static (source, comparer, observer) => source.SubscribeSafeAsync(AsyncObserver.DistinctUntilChanged(observer, comparer)));
         }
 
-        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector)
+        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -43,7 +43,7 @@ namespace System.Reactive.Linq
                 static (source, keySelector, observer) => source.SubscribeSafeAsync(AsyncObserver.DistinctUntilChanged(observer, keySelector)));
         }
 
-        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
+        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -56,7 +56,7 @@ namespace System.Reactive.Linq
                 static (source, keySelector, observer) => source.SubscribeSafeAsync(AsyncObserver.DistinctUntilChanged(observer, keySelector)));
         }
 
-        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -71,7 +71,7 @@ namespace System.Reactive.Linq
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.DistinctUntilChanged(observer, state.keySelector, state.comparer)));
         }
 
-        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncObservable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

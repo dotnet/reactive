@@ -30,5 +30,5 @@ public interface ITestableAsyncObserver<T> : IAsyncObserver<T>
     /// property uses <see cref="AsyncRecorded{T}"/>. This enables recording of different start and
     /// end times.
     /// </remarks>
-    public IReadOnlyList<AsyncRecorded<Notification<T>>> Messages { get; }
+    IReadOnlyList<AsyncRecorded<Notification<T>>> Messages { get; }
 }

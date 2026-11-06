@@ -25,22 +25,7 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return Create<TSource>(async observer =>
-            {
-                var source = default(IAsyncObservable<TSource>);
-
-                try
-                {
-                    source = await observableFactory().ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
-                    return AsyncDisposable.Nop;
-                }
-
-                return await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
-            });
+            return new DeferAsyncObservable<TSource>(observableFactory);
         }
 
         public static IAsyncObservable<TSource> DeferAsync<TSource>(Func<CancellationToken, ValueTask<IAsyncObservable<TSource>>> observableFactory) => Defer(observableFactory);
@@ -50,7 +35,40 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return StartAsync(observableFactory).Merge();
+            // Deferred, as Rx.NET's DeferAsync is: StartAsync alone would run the factory when
+            // the sequence is built rather than on each subscription.
+            return Defer(() => StartAsync(observableFactory).Merge());
+        }
+    }
+
+    // Defer as a class rather than a Create, so that a concatenating sink can evaluate the
+    // factory (IEvaluatableAsyncObservable) and flatten what it yields, as Rx.NET's does.
+    internal sealed class DeferAsyncObservable<TSource> : AsyncObservableBase<TSource>, IEvaluatableAsyncObservable<TSource>
+    {
+        private readonly Func<ValueTask<IAsyncObservable<TSource>>> _observableFactory;
+
+        public DeferAsyncObservable(Func<ValueTask<IAsyncObservable<TSource>>> observableFactory)
+        {
+            _observableFactory = observableFactory;
+        }
+
+        public ValueTask<IAsyncObservable<TSource>> EvalAsync() => _observableFactory();
+
+        protected override async ValueTask<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<TSource> observer)
+        {
+            var source = default(IAsyncObservable<TSource>);
+
+            try
+            {
+                source = await _observableFactory().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                return AsyncDisposable.Nop;
+            }
+
+            return await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
         }
     }
 }

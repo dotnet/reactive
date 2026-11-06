@@ -22,12 +22,15 @@ namespace System.Reactive.Linq
                 second,
                 static async (first, second, observer) =>
                 {
-                    var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer);
+                    var secondSubscription = new SingleAssignmentAsyncDisposable();
 
-                    // REVIEW: Consider concurrent subscriptions.
+                    var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, secondSubscription);
+
+                    // The second source is subscribed first, as Rx.NET's is since 4.0, so that its
+                    // latest value is there for a first source that emits on subscription.
+                    await secondSubscription.AssignAsync(await second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false)).ConfigureAwait(false);
 
                     var firstSubscription = await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false);
-                    var secondSubscription = await second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false);
 
                     return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
                 });
@@ -47,12 +50,15 @@ namespace System.Reactive.Linq
                 (second, resultSelector),
                 static async (first, state, observer) =>
                 {
-                    var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, state.resultSelector);
+                    var secondSubscription = new SingleAssignmentAsyncDisposable();
 
-                    // REVIEW: Consider concurrent subscriptions.
+                    var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, state.resultSelector, secondSubscription);
+
+                    // The second source is subscribed first, as Rx.NET's is since 4.0, so that its
+                    // latest value is there for a first source that emits on subscription.
+                    await secondSubscription.AssignAsync(await state.second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false)).ConfigureAwait(false);
 
                     var firstSubscription = await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false);
-                    var secondSubscription = await state.second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false);
 
                     return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
                 });
@@ -72,12 +78,15 @@ namespace System.Reactive.Linq
                 (second, resultSelector),
                 static async (first, state, observer) =>
                 {
-                    var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, state.resultSelector);
+                    var secondSubscription = new SingleAssignmentAsyncDisposable();
 
-                    // REVIEW: Consider concurrent subscriptions.
+                    var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, state.resultSelector, secondSubscription);
+
+                    // The second source is subscribed first, as Rx.NET's is since 4.0, so that its
+                    // latest value is there for a first source that emits on subscription.
+                    await secondSubscription.AssignAsync(await state.second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false)).ConfigureAwait(false);
 
                     var firstSubscription = await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false);
-                    var secondSubscription = await state.second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false);
 
                     return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
                 });
@@ -86,22 +95,26 @@ namespace System.Reactive.Linq
 
     public partial class AsyncObserver
     {
-        public static (IAsyncObserver<TFirst>, IAsyncObserver<TSecond>) WithLatestFrom<TFirst, TSecond, TResult>(IAsyncObserver<TResult> observer, Func<TFirst, TSecond, TResult> resultSelector)
+        public static (IAsyncObserver<TFirst>, IAsyncObserver<TSecond>) WithLatestFrom<TFirst, TSecond, TResult>(IAsyncObserver<TResult> observer, Func<TFirst, TSecond, TResult> resultSelector, IAsyncDisposable secondSubscription)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
+            if (secondSubscription == null)
+                throw new ArgumentNullException(nameof(secondSubscription));
 
-            return WithLatestFrom<TFirst, TSecond, TResult>(observer, (x, y) => new ValueTask<TResult>(resultSelector(x, y)));
+            return WithLatestFrom<TFirst, TSecond, TResult>(observer, (x, y) => new ValueTask<TResult>(resultSelector(x, y)), secondSubscription);
         }
 
-        public static (IAsyncObserver<TFirst>, IAsyncObserver<TSecond>) WithLatestFrom<TFirst, TSecond, TResult>(IAsyncObserver<TResult> observer, Func<TFirst, TSecond, ValueTask<TResult>> resultSelector)
+        public static (IAsyncObserver<TFirst>, IAsyncObserver<TSecond>) WithLatestFrom<TFirst, TSecond, TResult>(IAsyncObserver<TResult> observer, Func<TFirst, TSecond, ValueTask<TResult>> resultSelector, IAsyncDisposable secondSubscription)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
+            if (secondSubscription == null)
+                throw new ArgumentNullException(nameof(secondSubscription));
 
             var gate = new AsyncGate();
 
@@ -160,15 +173,17 @@ namespace System.Reactive.Linq
                             }
                         },
                         OnErrorAsync,
-                        () => default
+                        secondSubscription.DisposeAsync
                     )
                 );
         }
 
-        public static (IAsyncObserver<TFirst>, IAsyncObserver<TSecond>) WithLatestFrom<TFirst, TSecond>(IAsyncObserver<(TFirst first, TSecond second)> observer)
+        public static (IAsyncObserver<TFirst>, IAsyncObserver<TSecond>) WithLatestFrom<TFirst, TSecond>(IAsyncObserver<(TFirst first, TSecond second)> observer, IAsyncDisposable secondSubscription)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
+            if (secondSubscription == null)
+                throw new ArgumentNullException(nameof(secondSubscription));
 
             var gate = new AsyncGate();
 
@@ -215,7 +230,7 @@ namespace System.Reactive.Linq
                             }
                         },
                         OnErrorAsync,
-                        () => default
+                        secondSubscription.DisposeAsync
                     )
                 );
         }

@@ -56,7 +56,7 @@ namespace System.Reactive.Linq
                 return Throw<TSource>(ex);
             }
 
-            return Create<TSource>(async observer =>
+            return CreateAsyncObservable<TSource>.From(async observer =>
             {
                 var subscription = await task.ToAsyncObservable(scheduler).SubscribeAsync(observer).ConfigureAwait(false);
 
@@ -109,7 +109,7 @@ namespace System.Reactive.Linq
                 return Throw<Unit>(ex);
             }
 
-            return Create<Unit>(async observer =>
+            return CreateAsyncObservable<Unit>.From(async observer =>
             {
                 var subscription = await task.ToAsyncObservable(scheduler).SubscribeAsync(observer).ConfigureAwait(false);
 

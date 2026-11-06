@@ -275,6 +275,57 @@ public static class AsyncReactiveAssert
         }
     }
 
+    /// <summary>
+    /// Asserts that an enumerable sequence holds the expected elements, in order.
+    /// </summary>
+    /// <remarks>
+    /// Rx.NET's <c>ReactiveAssert</c> offers the same pair over plain enumerables, which its
+    /// tests use on the collections an operator yields (a lookup's groups, for instance); the
+    /// shared scenarios call them through this class. A failure names the first element that
+    /// differs, as the notification assertions do.
+    /// </remarks>
+    public static void AssertEqual<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
+    {
+        if (actual == null)
+        {
+            throw new ArgumentNullException(nameof(actual));
+        }
+        if (expected == null)
+        {
+            throw new ArgumentNullException(nameof(expected));
+        }
+
+        var expectedList = expected.ToList();
+        var actualList = actual.ToList();
+
+        AssertSameCount("element", actualList.Count, expectedList.Count, () => FormatSequences(expectedList, actualList));
+
+        for (var i = 0; i < expectedList.Count; i++)
+        {
+            if (!EqualityComparer<T>.Default.Equals(expectedList[i], actualList[i]))
+            {
+                Fail($"Element #{i}: expected {expectedList[i]}, but got {actualList[i]}.", FormatSequences(expectedList, actualList));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Asserts that an enumerable sequence holds the expected elements, in order.
+    /// </summary>
+    /// <remarks>
+    /// The <c>params</c> form of
+    /// <see cref="AssertEqual{T}(IEnumerable{T}, IEnumerable{T})"/>.
+    /// </remarks>
+    public static void AssertEqual<T>(this IEnumerable<T> actual, params T[] expected)
+    {
+        if (expected == null)
+        {
+            throw new ArgumentNullException(nameof(expected));
+        }
+
+        AssertEqual(actual, (IEnumerable<T>)expected);
+    }
+
     private static void AssertTimestamp<TExpected>(int index, string name, long actual, long expected, IEnumerable<TExpected> expectedSeq, IEnumerable<AsyncSubscription> actualSeq, bool compactNote = false)
     {
         if (actual != expected)

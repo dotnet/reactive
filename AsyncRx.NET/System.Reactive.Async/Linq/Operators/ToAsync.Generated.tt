@@ -55,7 +55,7 @@ for (var i = 0; i <= 16; i++)
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function<#=invokeArgs#>); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function<#=invokeArgs#>, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -107,7 +107,7 @@ for (var i = 0; i <= 16; i++)
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action<#=invokeArgs#>); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action<#=invokeArgs#>, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };

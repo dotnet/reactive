@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Disposables;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
@@ -17,7 +18,7 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 TResource resource;
                 try
@@ -56,7 +57,12 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> UsingAsync<TResult, TResource>(Func<ValueTask<TResource>> resourceFactory, Func<TResource, ValueTask<IAsyncObservable<TResult>>> observableFactory)
+        // The asynchronous form is Rx.NET's asynchronous Using, over FromAsync: both factories
+        // take the token, which is cancelled when the subscriber unsubscribes while either is
+        // still running, and SubscribeAsync returns while they run. Each takes the token as
+        // every asynchronous callback in the library does (see Create); a factory with no use
+        // for it ignores it.
+        public static IAsyncObservable<TResult> UsingAsync<TResult, TResource>(Func<CancellationToken, ValueTask<TResource>> resourceFactory, Func<TResource, CancellationToken, ValueTask<IAsyncObservable<TResult>>> observableFactory)
             where TResource : IDisposable
         {
             if (resourceFactory == null)
@@ -64,43 +70,13 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return Create<TResult>(async observer =>
-            {
-                TResource resource;
-                try
-                {
-                    resource = await resourceFactory().ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
-                    return AsyncDisposable.Nop;
-                }
-
-                IAsyncObservable<TResult> observable;
-                try
-                {
-                    observable = await observableFactory(resource).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    using (resource)
-                    {
-                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
-                        return AsyncDisposable.Nop;
-                    }
-                }
-
-                var subscription = await observable.SubscribeSafeAsync(observer).ConfigureAwait(false);
-
-                return AsyncDisposable.Create(async () =>
-                {
-                    using (resource)
-                    {
-                        await subscription.DisposeAsync().ConfigureAwait(false);
-                    }
-                });
-            });
+            return FromAsync(resourceFactory)
+                .SelectMany(resource =>
+                    Using(
+                        () => resource,
+                        resource_ => FromAsync(ct => observableFactory(resource_, ct)).Merge()
+                    )
+                );
         }
 
         public static IAsyncObservable<TResult> UsingAwait<TResult, TResource>(Func<TResource> resourceFactory, Func<TResource, IAsyncObservable<TResult>> observableFactory)
@@ -111,7 +87,7 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 TResource resource;
                 try
@@ -158,7 +134,8 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TResult> UsingAwaitAsync<TResult, TResource>(Func<ValueTask<TResource>> resourceFactory, Func<TResource, ValueTask<IAsyncObservable<TResult>>> observableFactory)
+        // As UsingAsync, for a resource disposed asynchronously.
+        public static IAsyncObservable<TResult> UsingAwaitAsync<TResult, TResource>(Func<CancellationToken, ValueTask<TResource>> resourceFactory, Func<TResource, CancellationToken, ValueTask<IAsyncObservable<TResult>>> observableFactory)
             where TResource : IAsyncDisposable
         {
             if (resourceFactory == null)
@@ -166,51 +143,13 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return Create<TResult>(async observer =>
-            {
-                TResource resource;
-                try
-                {
-                    resource = await resourceFactory().ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
-                    return AsyncDisposable.Nop;
-                }
-
-                IAsyncObservable<TResult> observable;
-                try
-                {
-                    observable = await observableFactory(resource).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    try
-                    {
-                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
-                        return AsyncDisposable.Nop;
-                    }
-                    finally
-                    {
-                        await resource.DisposeAsync().ConfigureAwait(false);
-                    }
-                }
-
-                var subscription = await observable.SubscribeSafeAsync(observer).ConfigureAwait(false);
-
-                return AsyncDisposable.Create(async () =>
-                {
-                    try
-                    {
-                        await subscription.DisposeAsync().ConfigureAwait(false);
-                    }
-                    finally
-                    {
-                        await resource.DisposeAsync().ConfigureAwait(false);
-                    }
-                });
-            });
+            return FromAsync(resourceFactory)
+                .SelectMany(resource =>
+                    UsingAwait(
+                        () => resource,
+                        resource_ => FromAsync(ct => observableFactory(resource_, ct)).Merge()
+                    )
+                );
         }
     }
 }

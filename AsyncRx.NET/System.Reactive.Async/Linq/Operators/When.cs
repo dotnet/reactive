@@ -16,7 +16,7 @@ namespace System.Reactive.Linq
             if (plans == null)
                 throw new ArgumentNullException(nameof(plans));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var externalSubscriptions = new Dictionary<object, IAsyncJoinObserver>();
                 var gate = new AsyncGate();

@@ -31,7 +31,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -56,7 +56,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -106,7 +106,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -131,7 +131,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -156,7 +156,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -181,7 +181,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -206,7 +206,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -231,7 +231,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -256,7 +256,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -281,7 +281,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -306,7 +306,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -331,7 +331,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -356,7 +356,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -381,7 +381,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -406,7 +406,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -431,7 +431,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, function, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -456,7 +456,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -481,7 +481,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -506,7 +506,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -531,7 +531,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -556,7 +556,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -581,7 +581,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -606,7 +606,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -631,7 +631,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -656,7 +656,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -681,7 +681,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -706,7 +706,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -731,7 +731,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -756,7 +756,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -781,7 +781,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -806,7 +806,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -831,7 +831,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -856,7 +856,7 @@ namespace System.Reactive.Linq
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
+                AsyncObserver.ToAsync(subject, action, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, scheduler); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };

@@ -730,6 +730,216 @@ namespace System.Reactive.Linq
             };
         }
 
+        public static Func<IAsyncObservable<Unit>> FromAsyncPattern(Func<AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, IAsyncObservable<Unit>> FromAsyncPattern<T1>(Func<T1, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2>(Func<T1, T2, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, T3, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2, T3>(Func<T1, T2, T3, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2, T3>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, T3, T4, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2, T3, T4>(Func<T1, T2, T3, T4, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2, T3, T4>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, T3, T4, T5, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2, T3, T4, T5>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, T3, T4, T5, T6, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2, T3, T4, T5, T6>(Func<T1, T2, T3, T4, T5, T6, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, T3, T4, T5, T6, T7, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7>(Func<T1, T2, T3, T4, T5, T6, T7, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8>(Func<T1, T2, T3, T4, T5, T6, T7, T8, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+        public static Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, IAsyncObservable<Unit>> FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
     }
 
     public partial class AsyncObserver
@@ -1163,7 +1373,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1179,7 +1389,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1195,7 +1405,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1211,7 +1421,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, T3, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1227,7 +1437,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, T3, T4, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1243,7 +1453,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, T3, T4, T5, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1259,7 +1469,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1275,7 +1485,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1291,7 +1501,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1307,7 +1517,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1323,7 +1533,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1339,7 +1549,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1355,7 +1565,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1371,7 +1581,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;
@@ -1387,7 +1597,7 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return FromAsyncPattern(observer, begin, iar =>
+            return FromAsyncPattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, Unit>(observer, begin, iar =>
             {
                 end(iar);
                 return Unit.Default;

@@ -700,11 +700,16 @@ namespace System.Reactive.Linq
                                 {
                                     var g = new GroupedAsyncObservable<TKey, TElement>(key, group, refCount);
 
+                                    // The duration selector sees the group without the ref count, so
+                                    // the operator's own duration subscription does not keep the
+                                    // source subscribed once every consumer has let go (as Rx.NET).
+                                    var durationGroup = new GroupedAsyncObservable<TKey, TElement>(key, group);
+
                                     var duration = default(IAsyncObservable<TDuration>);
 
                                     try
                                     {
-                                        duration = durationSelector(g);
+                                        duration = durationSelector(durationGroup);
                                     }
                                     catch (Exception ex)
                                     {

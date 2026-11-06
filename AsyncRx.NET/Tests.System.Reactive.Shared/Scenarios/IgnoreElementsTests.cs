@@ -1,0 +1,133 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT License.
+// See the LICENSE file in the project root for more information. 
+
+namespace Tests.System.Reactive.Shared.Scenarios;
+
+/// <summary>Shared <c>IgnoreElements</c> scenarios, from Rx.NET's <c>IgnoreElementsTest.cs</c>.</summary>
+/// <remarks>
+/// 4 of the file's 5 tests (<c>IgnoreElements_ArgumentChecking</c> is the code-generated
+/// stratum), all transcribed as they are. The operator came into the model for
+/// <c>GroupByUntil</c>'s null-key scenarios, which end a group's duration with an ignored timer.
+/// </remarks>
+public abstract class IgnoreElementsTests : SharedReactiveTest
+{
+    [TestMethod]
+    public void IgnoreElements_IgnoreElements()
+    {
+        var scheduler = Scheduler;
+
+        var xs = scheduler.CreateHotObservable(
+            OnNext(180, 1),
+            OnNext(210, 2),
+            OnNext(250, 3),
+            OnNext(270, 4),
+            OnCompleted<int>(300)
+        );
+
+        var res = scheduler.Start(() =>
+            xs.IgnoreElements().IgnoreElements()
+        );
+
+        res.Messages.AssertEqual(
+            OnCompleted<int>(300)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 300)
+        );
+    }
+
+    [TestMethod]
+    public void IgnoreElements_Basic()
+    {
+        var scheduler = Scheduler;
+
+        var xs = scheduler.CreateHotObservable(
+            OnNext(180, 1),
+            OnNext(210, 2),
+            OnNext(250, 3),
+            OnNext(270, 4),
+            OnNext(310, 5),
+            OnNext(360, 6),
+            OnNext(380, 7),
+            OnNext(410, 8),
+            OnNext(590, 9)
+        );
+
+        var res = scheduler.Start(() =>
+            xs.IgnoreElements()
+        );
+
+        res.Messages.AssertEqual(
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 1000)
+        );
+    }
+
+    [TestMethod]
+    public void IgnoreElements_Completed()
+    {
+        var scheduler = Scheduler;
+
+        var xs = scheduler.CreateHotObservable(
+            OnNext(180, 1),
+            OnNext(210, 2),
+            OnNext(250, 3),
+            OnNext(270, 4),
+            OnNext(310, 5),
+            OnNext(360, 6),
+            OnNext(380, 7),
+            OnNext(410, 8),
+            OnNext(590, 9),
+            OnCompleted<int>(610)
+        );
+
+        var res = scheduler.Start(() =>
+            xs.IgnoreElements()
+        );
+
+        res.Messages.AssertEqual(
+            OnCompleted<int>(610)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 610)
+        );
+    }
+
+    [TestMethod]
+    public void IgnoreElements_Error()
+    {
+        var scheduler = Scheduler;
+
+        var ex = new Exception();
+
+        var xs = scheduler.CreateHotObservable(
+            OnNext(180, 1),
+            OnNext(210, 2),
+            OnNext(250, 3),
+            OnNext(270, 4),
+            OnNext(310, 5),
+            OnNext(360, 6),
+            OnNext(380, 7),
+            OnNext(410, 8),
+            OnNext(590, 9),
+            OnError<int>(610, ex)
+        );
+
+        var res = scheduler.Start(() =>
+            xs.IgnoreElements()
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(610, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+            Subscribe(200, 610)
+        );
+    }
+}

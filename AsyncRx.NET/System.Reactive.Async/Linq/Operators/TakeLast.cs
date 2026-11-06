@@ -18,11 +18,6 @@ namespace System.Reactive.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            if (count == 0)
-            {
-                return Empty<TSource>();
-            }
-
             return CreateAsyncObservable<TSource>.From(
                 source,
                 count,
@@ -45,11 +40,6 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            if (count == 0)
-            {
-                return Empty<TSource>();
-            }
-
             return CreateAsyncObservable<TSource>.From(
                 source,
                 (count, scheduler),
@@ -69,11 +59,6 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
-
-            if (duration == TimeSpan.Zero)
-            {
-                return Empty<TSource>();
-            }
 
             return CreateAsyncObservable<TSource>.From(
                 source,
@@ -96,11 +81,6 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(duration));
             if (clock == null)
                 throw new ArgumentNullException(nameof(clock));
-
-            if (duration == TimeSpan.Zero)
-            {
-                return Empty<TSource>();
-            }
 
             return CreateAsyncObservable<TSource>.From(
                 source,
@@ -126,11 +106,6 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            if (duration == TimeSpan.Zero)
-            {
-                return Empty<TSource>();
-            }
-
             return CreateAsyncObservable<TSource>.From(
                 source,
                 (duration, clock, scheduler),
@@ -144,18 +119,29 @@ namespace System.Reactive.Linq
                 });
         }
 
-        public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler) => TakeLast(source, duration, scheduler, scheduler);
+        public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler)
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            // As in Rx.NET: the scheduler runs the timer, and the loop is the immediate one.
+            return TakeLast(source, duration, scheduler, ImmediateAsyncScheduler.Instance);
+        }
     }
 
     public partial class AsyncObserver
     {
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) TakeLast<TSource>(IAsyncObserver<TSource> observer, int count) => TakeLast(observer, count, TaskPoolAsyncScheduler.Default);
+        // As in Rx.NET, whose loop scheduler defaults to its immediate one: with no scheduler given,
+        // the queue drains where the source completed.
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) TakeLast<TSource>(IAsyncObserver<TSource> observer, int count) => TakeLast(observer, count, ImmediateAsyncScheduler.Instance);
 
         public static (IAsyncObserver<TSource>, IAsyncDisposable) TakeLast<TSource>(IAsyncObserver<TSource> observer, int count, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
-            if (count <= 0)
+            // As in Rx.NET: a count of zero (and a duration of zero, below) still subscribes, and
+            // completes or fails when the source does, with nothing drained.
+            if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
@@ -202,11 +188,12 @@ namespace System.Reactive.Linq
                 );
         }
 
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) TakeLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration) => TakeLast(observer, duration, Clock.Default, TaskPoolAsyncScheduler.Default);
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) TakeLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration) => TakeLast(observer, duration, Clock.Default, ImmediateAsyncScheduler.Instance);
 
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) TakeLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration, IAsyncScheduler scheduler) => TakeLast(observer, duration, scheduler, scheduler);
+        // As in Rx.NET: a single scheduler is the timer scheduler, and the loop is the immediate one.
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) TakeLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration, IAsyncScheduler scheduler) => TakeLast(observer, duration, scheduler, ImmediateAsyncScheduler.Instance);
 
-        public static (IAsyncObserver<TSource>, IAsyncDisposable) TakeLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration, IClock clock) => TakeLast(observer, duration, clock, TaskPoolAsyncScheduler.Default);
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) TakeLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration, IClock clock) => TakeLast(observer, duration, clock, ImmediateAsyncScheduler.Instance);
 
         public static (IAsyncObserver<TSource>, IAsyncDisposable) TakeLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration, IClock clock, IAsyncScheduler scheduler)
         {
