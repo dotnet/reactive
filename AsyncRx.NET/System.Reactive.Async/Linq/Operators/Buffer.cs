@@ -342,7 +342,6 @@ namespace System.Reactive.Linq
                     {
                         using (await gate.LockAsync().ConfigureAwait(false))
                         {
-                            // As in Rx.NET: an empty buffer is still a buffer, so it is delivered.
                             await observer.OnNextAsync(buffer).ConfigureAwait(false);
 
                             await observer.OnCompletedAsync().ConfigureAwait(false);
@@ -356,7 +355,6 @@ namespace System.Reactive.Linq
                     {
                         using (await gate.LockAsync().ConfigureAwait(false))
                         {
-                            // As in Rx.NET: an empty buffer is still a buffer, so it is delivered.
                             await observer.OnNextAsync(buffer).ConfigureAwait(false);
 
                             buffer = new List<TSource>();
@@ -419,7 +417,6 @@ namespace System.Reactive.Linq
                             {
                                 var buffer = queue.Dequeue();
 
-                                // As in Rx.NET: an empty buffer is still a buffer, so it is delivered.
                                 await observer.OnNextAsync(buffer).ConfigureAwait(false);
                             }
 
@@ -479,7 +476,6 @@ namespace System.Reactive.Linq
                             {
                                 var buffer = queue.Dequeue();
 
-                                // As in Rx.NET: an empty buffer is still a buffer, so it is delivered.
                                 await observer.OnNextAsync(buffer).RendezVous(scheduler, ct);
                             }
 

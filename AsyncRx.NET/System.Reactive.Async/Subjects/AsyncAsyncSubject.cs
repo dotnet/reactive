@@ -201,9 +201,10 @@ namespace System.Reactive.Subjects
 
         private void OnCompleted(Action continuation, bool originalContext)
         {
-            // Not observed: the subscription to this subject completes synchronously unless the
-            // continuation itself is asynchronous, and a thread-pool continuation here would
-            // run the await's registration off the thread that registered it.
+            // The subscription's task is not awaited: subscribing to this subject completes
+            // synchronously unless the continuation itself is asynchronous, and observing it
+            // through a thread-pool continuation would run the await's registration off the
+            // thread that registered it.
             var ignored = SubscribeAsync(new AwaitObserver(continuation, originalContext));
         }
 

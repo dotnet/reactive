@@ -58,8 +58,8 @@ namespace System.Reactive.Linq
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
 
-            // No special case for a zero duration: as in Rx.NET, the source is subscribed and the
-            // completion is delivered by the scheduler (observable via the source subscription).
+            // Even a zero duration subscribes the source, as in Rx.NET, with the completion
+            // delivered by the scheduler, so that the source sees the subscription.
 
             // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want Take on the observer?
 
@@ -152,16 +152,12 @@ namespace System.Reactive.Linq
                 // may be forwarded: a source notification that was already waiting for the gate
                 // when the timer fired must be dropped, as Rx.NET's disposed sink drops it.
                 //
-                // NOTE: nothing here is specific to Take. This is the async counterpart of the
-                // protection Rx.NET's sink base classes give every operator (a disposed sink
-                // forwards to a no-op observer, so an upstream notification that races a
-                // termination is swallowed rather than becoming a grammar violation).
-                // AsyncRx.NET's AsyncObserverBase takes the opposite stance and throws on
-                // "already terminated", so any operator that can terminate from a second
-                // source of events (a timer, another sequence) while a delivery is in flight
-                // needs this same "terminated under the gate => drop" logic. It should
-                // eventually move somewhere shared — a gated, terminate-once sink base — rather
-                // than be repeated per operator.
+                // Nothing here is specific to Take: every operator that can be terminated from a
+                // second source of events (a timer, another sequence) while a delivery from the
+                // first is in flight needs this terminate-once check under its gate, so that the
+                // late notification is dropped here rather than reaching the observer after its
+                // terminal one. A shared gated, terminate-once sink would spare each operator
+                // its own copy.
                 var sourceObserver = Create<TSource>(
                     async x =>
                     {

@@ -44,7 +44,8 @@ namespace System.Threading.Tasks
                 // A fault in the awaited work wins over a cancellation: disposing the
                 // subscription in response to an observer's exception (as an auto-detaching
                 // observer does) cancels this token, and checking the token first would report
-                // that exception as a cancellation. A cancellation ends work that completed.
+                // that exception as a cancellation. The token is checked after the result all
+                // the same, so a cancellation that arrived while the work ran is still reported.
                 // The continuation also runs when the token is cancelled while the work is
                 // still pending (see ScheduledContinuation); then there is no result to read.
                 if (!_awaiter.IsCompleted)
@@ -113,7 +114,8 @@ namespace System.Threading.Tasks
                 // A fault in the awaited work wins over a cancellation: disposing the
                 // subscription in response to an observer's exception (as an auto-detaching
                 // observer does) cancels this token, and checking the token first would report
-                // that exception as a cancellation. A cancellation ends work that completed.
+                // that exception as a cancellation. The token is checked after the result all
+                // the same, so a cancellation that arrived while the work ran is still reported.
                 // The continuation also runs when the token is cancelled while the work is
                 // still pending (see ScheduledContinuation); then there is no result to read.
                 if (!_awaiter.IsCompleted)

@@ -18,8 +18,8 @@ namespace System.Reactive.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            // No shortcut for a count of zero: as in Rx.NET, the operator always wraps the source,
-            // so that the subscription is torn down when the sequence completes.
+            // Even a count of zero wraps the source, as in Rx.NET, so that the subscription is
+            // released when the sequence completes.
             return CreateAsyncObservable<TSource>.From(
                 source,
                 count,
@@ -33,8 +33,8 @@ namespace System.Reactive.Linq
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
 
-            // No shortcut for a zero duration: as in Rx.NET, the operator always wraps the source,
-            // so that the subscription is torn down when the sequence completes.
+            // Even a zero duration wraps the source, as in Rx.NET, so that the subscription is
+            // released when the sequence completes.
 
             // REVIEW: May be easier to just use SkipUntil with a Timer parameter. Do we want Skip on the observer?
 
@@ -60,8 +60,8 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            // No shortcut for a zero duration: as in Rx.NET, the operator always wraps the source,
-            // so that the subscription is torn down when the sequence completes.
+            // Even a zero duration wraps the source, as in Rx.NET, so that the subscription is
+            // released when the sequence completes.
 
             // REVIEW: May be easier to just use SkipUntil with a Timer parameter. Do we want Skip on the observer?
 

@@ -178,7 +178,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
 
             // A port of Rx.NET's delayed-disconnect RefCount, whose state machine is shared across
-            // all subscriptions to one instance (see the State enum). Connecting may complete
+            // all subscriptions to one instance (see LazyState). Connecting may complete
             // subscribers synchronously, and their disposal then takes the same gate; that is
             // why the state is re-read after Connect rather than assumed.
             var gate = new AsyncGate();
@@ -255,13 +255,6 @@ namespace System.Reactive.Linq
                     }
                 });
 
-                if (terminated)
-                {
-                    // The source completed this subscriber inside SubscribeAsync, so the count
-                    // it will contribute has already come and gone; account for it before we
-                    // decide whether its arrival connects. The count is incremented below.
-                }
-
                 bool shouldConnect;
                 using (await gate.LockAsync().ConfigureAwait(false))
                 {
@@ -309,6 +302,8 @@ namespace System.Reactive.Linq
                     }
                 }
 
+                // The source completed this subscriber inside SubscribeAsync. It still counts as
+                // having arrived, which may have connected above, and now leaves at once.
                 if (terminated)
                 {
                     await disposal.DisposeAsync().ConfigureAwait(false);

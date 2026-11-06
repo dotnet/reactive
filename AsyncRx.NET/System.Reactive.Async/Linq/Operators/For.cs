@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
         }
 
         // The ValueTask-returning selector cannot be evaluated by a synchronous enumerator, so
-        // this form still resubscribes from the completion handler and grows the stack with each
+        // this form resubscribes from the completion handler and grows the stack with each
         // iteration of a synchronously completing source.
         public static IAsyncObservable<TResult> For<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncObservable<TResult>>> resultSelector)
         {

@@ -59,8 +59,9 @@ namespace System.Reactive.Linq
 
         // The asynchronous form is Rx.NET's asynchronous Using, over FromAsync: both factories
         // take the token, which is cancelled when the subscriber unsubscribes while either is
-        // still running, and SubscribeAsync returns while they run. Every asynchronous callback
-        // takes the token (the Create decision); a factory with no use for it ignores it.
+        // still running, and SubscribeAsync returns while they run. Each takes the token as
+        // every asynchronous callback in the library does (see Create); a factory with no use
+        // for it ignores it.
         public static IAsyncObservable<TResult> UsingAsync<TResult, TResource>(Func<CancellationToken, ValueTask<TResource>> resourceFactory, Func<TResource, CancellationToken, ValueTask<IAsyncObservable<TResult>>> observableFactory)
             where TResource : IDisposable
         {

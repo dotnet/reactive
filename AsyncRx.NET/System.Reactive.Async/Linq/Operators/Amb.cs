@@ -29,9 +29,15 @@ namespace System.Reactive.Linq
 
                     var (firstObserver, secondObserver) = AsyncObserver.Amb(observer, firstSubscription, secondSubscription);
 
-                    // Subscribed one after the other, each subscription assigned as it is made,
-                    // as Rx.NET's Amb subscribes; a thread-pool continuation per subscription,
-                    // as before, ran the assignment off the subscribing thread.
+                    // Subscribed one after the other, as Rx.NET's Amb subscribes them, each
+                    // subscription assigned to its holder as soon as it is made. Subscribing both
+                    // at once and awaiting them together (Task.WhenAll) would be a mistake: the
+                    // continuations that assign the holders would run on the thread pool, off the
+                    // subscribing thread, so the subscribe call could return before either holder
+                    // was assigned, and nothing downstream expects to be resumed from the pool.
+                    // Subscribing in turn loses nothing: a first source that wins during its own
+                    // subscribe disposes the second holder, and the second subscription is then
+                    // disposed the moment it is assigned.
                     await firstSubscription.AssignAsync(await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false)).ConfigureAwait(false);
                     await secondSubscription.AssignAsync(await second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false)).ConfigureAwait(false);
 

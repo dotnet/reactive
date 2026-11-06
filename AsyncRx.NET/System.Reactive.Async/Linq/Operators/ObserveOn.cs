@@ -63,10 +63,10 @@ namespace System.Reactive.Linq
         /// and only on finding the queue empty, so a producer that enqueues at that moment
         /// starts the next drain. A monitor release runs nobody else's code, so a producer never
         /// waits for the drain and never continues on its thread, and the drain never completes
-        /// a producer's task. An earlier form guarded both paths with an <see cref="AsyncGate"/>,
-        /// whose release hands the lock to the next waiter inline; a producer waiting on it then
-        /// continued on the drain's thread before the drain delivered, and one that went on to
-        /// block for that delivery deadlocked with it.
+        /// a producer's task. An <see cref="AsyncGate"/> would not do here: its release hands the
+        /// lock to the next waiter inline, so a producer waiting on it would continue on the
+        /// drain's thread before the drain delivered, and one that then blocked for that delivery
+        /// would deadlock with it.
         /// </remarks>
         public static (IAsyncObserver<TSource>, IAsyncDisposable) ObserveOn<TSource>(this IAsyncObserver<TSource> observer, IAsyncScheduler scheduler)
         {

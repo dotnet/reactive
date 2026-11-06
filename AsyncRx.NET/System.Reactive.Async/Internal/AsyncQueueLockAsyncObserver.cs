@@ -11,8 +11,9 @@ namespace System.Reactive
     // is being delivered (re-entrantly, as when a GroupByUntil group's duration is derived from
     // the group itself and expires it from inside its own OnNextAsync) is queued and delivered
     // after the current one, as Rx.NET's AsyncLockObserver does. So this does not derive from
-    // AsyncObserverBase, whose guard would reject that re-entrant call before the lock saw it;
-    // only its stopped check is kept, so a notification after a terminal one is dropped.
+    // AsyncObserverBase, whose guard would reject that re-entrant call before the lock saw it,
+    // and carries its own stopped flag, so that a notification after a terminal one is dropped
+    // as the base class would drop it.
     internal sealed class AsyncQueueLockAsyncObserver<T> : IAsyncObserver<T>
     {
         private readonly AsyncQueueLock _gate = new();
