@@ -19,14 +19,15 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<T>> ISeqVisitor.DistinctUntilChangedKey<T, TKey>(
         DistinctUntilChangedKeySeq<T, TKey> seq) =>
-        _bridge.Run<Seq<T>>(DistinctUntilChangedKeyImpl<T, TKey>, seq.Source, seq.KeySelector);
+        RunByForm<Seq<T>>(
+            DistinctUntilChangedKeyImpl<T, TKey>, DistinctUntilChangedKeyAsyncImpl<T, TKey>,
+            seq.Source, seq.KeySelector);
 
     Realized<Seq<T>> ISeqVisitor.DistinctUntilChangedKeyComparer<T, TKey>(
         DistinctUntilChangedKeyComparerSeq<T, TKey> seq) =>
-        _bridge.Run<Seq<T>>(
+        RunByForm<Seq<T>>(
             DistinctUntilChangedKeyComparerImpl<T, TKey>,
-            seq.Source,
-            seq.KeySelector,
+            DistinctUntilChangedKeyComparerAsyncImpl<T, TKey>, seq.Source, seq.KeySelector,
             seq.Comparer);
 
     private static IAsyncObservable<T> DistinctUntilChangedImpl<T>(IAsyncObservable<T> source) =>
@@ -42,9 +43,20 @@ public sealed partial class AsyncRxTarget
         Func<T, TKey> keySelector) =>
         source.DistinctUntilChanged(keySelector);
 
+    private static IAsyncObservable<T> DistinctUntilChangedKeyAsyncImpl<T, TKey>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask<TKey>> keySelector) =>
+        source.DistinctUntilChanged(keySelector);
+
     private static IAsyncObservable<T> DistinctUntilChangedKeyComparerImpl<T, TKey>(
         IAsyncObservable<T> source,
         Func<T, TKey> keySelector,
+        IEqualityComparer<TKey> comparer) =>
+        source.DistinctUntilChanged(keySelector, comparer);
+
+    private static IAsyncObservable<T> DistinctUntilChangedKeyComparerAsyncImpl<T, TKey>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask<TKey>> keySelector,
         IEqualityComparer<TKey> comparer) =>
         source.DistinctUntilChanged(keySelector, comparer);
 }

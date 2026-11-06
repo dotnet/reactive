@@ -18,12 +18,14 @@ public sealed partial class AsyncRxTarget
         _bridge.Run<Seq<T>>(PublishInitialImpl<T>, seq.Source, seq.InitialValue);
 
     Realized<Seq<TResult>> ISeqVisitor.PublishSelector<T, TResult>(PublishSelectorSeq<T, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(PublishSelectorImpl<T, TResult>, seq.Source, seq.Selector);
+        RunByForm<Seq<TResult>>(
+            PublishSelectorImpl<T, TResult>, PublishSelectorAsyncImpl<T, TResult>, seq.Source,
+            seq.Selector);
 
     Realized<Seq<TResult>> ISeqVisitor.PublishSelectorInitial<T, TResult>(
         PublishSelectorInitialSeq<T, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-            PublishSelectorInitialImpl<T, TResult>,
+        RunByForm<Seq<TResult>>(
+            PublishSelectorInitialImpl<T, TResult>, PublishSelectorInitialAsyncImpl<T, TResult>,
             seq.Source,
             seq.Selector,
             seq.InitialValue);
@@ -38,9 +40,20 @@ public sealed partial class AsyncRxTarget
         Func<IAsyncObservable<T>, IAsyncObservable<TResult>> selector) =>
         source.Publish(selector);
 
+    private static IAsyncObservable<TResult> PublishSelectorAsyncImpl<T, TResult>(
+        IAsyncObservable<T> source,
+        Func<IAsyncObservable<T>, ValueTask<IAsyncObservable<TResult>>> selector) =>
+        source.Publish(selector);
+
     private static IAsyncObservable<TResult> PublishSelectorInitialImpl<T, TResult>(
         IAsyncObservable<T> source,
         Func<IAsyncObservable<T>, IAsyncObservable<TResult>> selector,
+        T initialValue) =>
+        source.Publish(selector, initialValue);
+
+    private static IAsyncObservable<TResult> PublishSelectorInitialAsyncImpl<T, TResult>(
+        IAsyncObservable<T> source,
+        Func<IAsyncObservable<T>, ValueTask<IAsyncObservable<TResult>>> selector,
         T initialValue) =>
         source.Publish(selector, initialValue);
 }

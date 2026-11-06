@@ -14,14 +14,14 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.Generate<TState, TResult>(
         GenerateSeq<TState, TResult> seq) =>
         seq.Scheduler is null
-            ? _bridge.Run<Seq<TResult>>(
-                GenerateImpl<TState, TResult>,
+            ? RunByForm<Seq<TResult>>(
+                GenerateImpl<TState, TResult>, GenerateAsyncImpl<TState, TResult>,
                 seq.InitialState,
                 seq.Condition,
                 seq.Iterate,
                 seq.ResultSelector)
-            : _bridge.Run<Seq<TResult>>(
-                GenerateOnImpl<TState, TResult>,
+            : RunByForm<Seq<TResult>>(
+                GenerateOnImpl<TState, TResult>, GenerateOnAsyncImpl<TState, TResult>,
                 seq.InitialState,
                 seq.Condition,
                 seq.Iterate,
@@ -31,15 +31,15 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.GenerateTime<TState, TResult>(
         GenerateTimeSeq<TState, TResult> seq) =>
         seq.Scheduler is null
-            ? _bridge.Run<Seq<TResult>>(
-                GenerateTimeImpl<TState, TResult>,
+            ? RunByForm<Seq<TResult>>(
+                GenerateTimeImpl<TState, TResult>, GenerateTimeAsyncImpl<TState, TResult>,
                 seq.InitialState,
                 seq.Condition,
                 seq.Iterate,
                 seq.ResultSelector,
                 seq.TimeSelector)
-            : _bridge.Run<Seq<TResult>>(
-                GenerateTimeOnImpl<TState, TResult>,
+            : RunByForm<Seq<TResult>>(
+                GenerateTimeOnImpl<TState, TResult>, GenerateTimeOnAsyncImpl<TState, TResult>,
                 seq.InitialState,
                 seq.Condition,
                 seq.Iterate,
@@ -50,21 +50,17 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.GenerateAbsolute<TState, TResult>(
         GenerateAbsoluteSeq<TState, TResult> seq) =>
         seq.Scheduler is null
-            ? _bridge.Run<Seq<TResult>>(
-                GenerateAbsoluteImpl<TState, TResult>,
+            ? RunByForm<Seq<TResult>>(
+                GenerateAbsoluteImpl<TState, TResult>, GenerateAbsoluteAsyncImpl<TState, TResult>,
                 seq.InitialState,
                 seq.Condition,
                 seq.Iterate,
                 seq.ResultSelector,
                 seq.TimeSelector)
-            : _bridge.Run<Seq<TResult>>(
+            : RunByForm<Seq<TResult>>(
                 GenerateAbsoluteOnImpl<TState, TResult>,
-                seq.InitialState,
-                seq.Condition,
-                seq.Iterate,
-                seq.ResultSelector,
-                seq.TimeSelector,
-                Unwrap(seq.Scheduler));
+                GenerateAbsoluteOnAsyncImpl<TState, TResult>, seq.InitialState, seq.Condition,
+                seq.Iterate, seq.ResultSelector, seq.TimeSelector, Unwrap(seq.Scheduler));
 
     private static IAsyncObservable<TResult> GenerateImpl<TState, TResult>(
         TState initialState,
@@ -74,11 +70,28 @@ public sealed partial class AsyncRxTarget
         AsyncObservable.Generate(
             initialState, condition, iterate, resultSelector);
 
+    private static IAsyncObservable<TResult> GenerateAsyncImpl<TState, TResult>(
+        TState initialState,
+        Func<TState, ValueTask<bool>> condition,
+        Func<TState, ValueTask<TState>> iterate,
+        Func<TState, ValueTask<TResult>> resultSelector) =>
+        AsyncObservable.Generate(
+            initialState, condition, iterate, resultSelector);
+
     private static IAsyncObservable<TResult> GenerateOnImpl<TState, TResult>(
         TState initialState,
         Func<TState, bool> condition,
         Func<TState, TState> iterate,
         Func<TState, TResult> resultSelector,
+        IAsyncScheduler scheduler) =>
+        AsyncObservable.Generate(
+            initialState, condition, iterate, resultSelector, scheduler);
+
+    private static IAsyncObservable<TResult> GenerateOnAsyncImpl<TState, TResult>(
+        TState initialState,
+        Func<TState, ValueTask<bool>> condition,
+        Func<TState, ValueTask<TState>> iterate,
+        Func<TState, ValueTask<TResult>> resultSelector,
         IAsyncScheduler scheduler) =>
         AsyncObservable.Generate(
             initialState, condition, iterate, resultSelector, scheduler);
@@ -92,12 +105,31 @@ public sealed partial class AsyncRxTarget
         AsyncObservable.Generate(
             initialState, condition, iterate, resultSelector, timeSelector);
 
+    private static IAsyncObservable<TResult> GenerateTimeAsyncImpl<TState, TResult>(
+        TState initialState,
+        Func<TState, ValueTask<bool>> condition,
+        Func<TState, ValueTask<TState>> iterate,
+        Func<TState, ValueTask<TResult>> resultSelector,
+        Func<TState, ValueTask<TimeSpan>> timeSelector) =>
+        AsyncObservable.Generate(
+            initialState, condition, iterate, resultSelector, timeSelector);
+
     private static IAsyncObservable<TResult> GenerateTimeOnImpl<TState, TResult>(
         TState initialState,
         Func<TState, bool> condition,
         Func<TState, TState> iterate,
         Func<TState, TResult> resultSelector,
         Func<TState, TimeSpan> timeSelector,
+        IAsyncScheduler scheduler) =>
+        AsyncObservable.Generate(
+            initialState, condition, iterate, resultSelector, timeSelector, scheduler);
+
+    private static IAsyncObservable<TResult> GenerateTimeOnAsyncImpl<TState, TResult>(
+        TState initialState,
+        Func<TState, ValueTask<bool>> condition,
+        Func<TState, ValueTask<TState>> iterate,
+        Func<TState, ValueTask<TResult>> resultSelector,
+        Func<TState, ValueTask<TimeSpan>> timeSelector,
         IAsyncScheduler scheduler) =>
         AsyncObservable.Generate(
             initialState, condition, iterate, resultSelector, timeSelector, scheduler);
@@ -111,12 +143,31 @@ public sealed partial class AsyncRxTarget
         AsyncObservable.Generate(
             initialState, condition, iterate, resultSelector, timeSelector);
 
+    private static IAsyncObservable<TResult> GenerateAbsoluteAsyncImpl<TState, TResult>(
+        TState initialState,
+        Func<TState, ValueTask<bool>> condition,
+        Func<TState, ValueTask<TState>> iterate,
+        Func<TState, ValueTask<TResult>> resultSelector,
+        Func<TState, ValueTask<DateTimeOffset>> timeSelector) =>
+        AsyncObservable.Generate(
+            initialState, condition, iterate, resultSelector, timeSelector);
+
     private static IAsyncObservable<TResult> GenerateAbsoluteOnImpl<TState, TResult>(
         TState initialState,
         Func<TState, bool> condition,
         Func<TState, TState> iterate,
         Func<TState, TResult> resultSelector,
         Func<TState, DateTimeOffset> timeSelector,
+        IAsyncScheduler scheduler) =>
+        AsyncObservable.Generate(
+            initialState, condition, iterate, resultSelector, timeSelector, scheduler);
+
+    private static IAsyncObservable<TResult> GenerateAbsoluteOnAsyncImpl<TState, TResult>(
+        TState initialState,
+        Func<TState, ValueTask<bool>> condition,
+        Func<TState, ValueTask<TState>> iterate,
+        Func<TState, ValueTask<TResult>> resultSelector,
+        Func<TState, ValueTask<DateTimeOffset>> timeSelector,
         IAsyncScheduler scheduler) =>
         AsyncObservable.Generate(
             initialState, condition, iterate, resultSelector, timeSelector, scheduler);

@@ -18,16 +18,15 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<TResult>> ISeqVisitor.CombineLatestListSelector<T, TResult>(
         CombineLatestListSelectorSeq<T, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
+        RunByForm<Seq<TResult>>(
             CombineLatestListSelectorImpl<T, TResult>,
-            seq.Sources,
-            seq.ResultSelector);
+            CombineLatestListSelectorAsyncImpl<T, TResult>, seq.Sources, seq.ResultSelector);
 
     Realized<Seq<TResult>> ISeqVisitor.CombineLatest2<
     T1, T2, TResult
     >(CombineLatest2Seq<T1, T2, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest2Impl<T1, T2, TResult>,
+        RunByForm<Seq<TResult>>(
+    CombineLatest2Impl<T1, T2, TResult>, CombineLatest2AsyncImpl<T1, T2, TResult>,
     seq.Source1,
     seq.Source2,
     seq.ResultSelector);
@@ -43,8 +42,8 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.CombineLatest3<
     T1, T2, T3, TResult
     >(CombineLatest3Seq<T1, T2, T3, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest3Impl<T1, T2, T3, TResult>,
+        RunByForm<Seq<TResult>>(
+    CombineLatest3Impl<T1, T2, T3, TResult>, CombineLatest3AsyncImpl<T1, T2, T3, TResult>,
     seq.Source1,
     seq.Source2,
     seq.Source3,
@@ -65,8 +64,8 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.CombineLatest4<
     T1, T2, T3, T4, TResult
     >(CombineLatest4Seq<T1, T2, T3, T4, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest4Impl<T1, T2, T3, T4, TResult>,
+        RunByForm<Seq<TResult>>(
+    CombineLatest4Impl<T1, T2, T3, T4, TResult>, CombineLatest4AsyncImpl<T1, T2, T3, T4, TResult>,
     seq.Source1,
     seq.Source2,
     seq.Source3,
@@ -88,14 +87,10 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.CombineLatest5<
     T1, T2, T3, T4, T5, TResult
     >(CombineLatest5Seq<T1, T2, T3, T4, T5, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest5Impl<T1, T2, T3, T4, T5, TResult>,
-    seq.Source1,
-    seq.Source2,
-    seq.Source3,
-    seq.Source4,
-    seq.Source5,
-    seq.ResultSelector);
+        RunByForm<Seq<TResult>>(
+            CombineLatest5Impl<T1, T2, T3, T4, T5, TResult>,
+            CombineLatest5AsyncImpl<T1, T2, T3, T4, T5, TResult>, seq.Source1, seq.Source2,
+            seq.Source3, seq.Source4, seq.Source5, seq.ResultSelector);
 
     Realized<Seq<(
         T1, T2, T3, T4, T5
@@ -112,15 +107,10 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.CombineLatest6<
     T1, T2, T3, T4, T5, T6, TResult
     >(CombineLatest6Seq<T1, T2, T3, T4, T5, T6, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest6Impl<T1, T2, T3, T4, T5, T6, TResult>,
-    seq.Source1,
-    seq.Source2,
-    seq.Source3,
-    seq.Source4,
-    seq.Source5,
-    seq.Source6,
-    seq.ResultSelector);
+        RunByForm<Seq<TResult>>(
+            CombineLatest6Impl<T1, T2, T3, T4, T5, T6, TResult>,
+            CombineLatest6AsyncImpl<T1, T2, T3, T4, T5, T6, TResult>, seq.Source1, seq.Source2,
+            seq.Source3, seq.Source4, seq.Source5, seq.Source6, seq.ResultSelector);
 
     Realized<Seq<(
         T1, T2, T3, T4, T5, T6
@@ -137,16 +127,10 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.CombineLatest7<
     T1, T2, T3, T4, T5, T6, T7, TResult
     >(CombineLatest7Seq<T1, T2, T3, T4, T5, T6, T7, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest7Impl<T1, T2, T3, T4, T5, T6, T7, TResult>,
-    seq.Source1,
-    seq.Source2,
-    seq.Source3,
-    seq.Source4,
-    seq.Source5,
-    seq.Source6,
-    seq.Source7,
-    seq.ResultSelector);
+        RunByForm<Seq<TResult>>(
+            CombineLatest7Impl<T1, T2, T3, T4, T5, T6, T7, TResult>,
+            CombineLatest7AsyncImpl<T1, T2, T3, T4, T5, T6, T7, TResult>, seq.Source1, seq.Source2,
+            seq.Source3, seq.Source4, seq.Source5, seq.Source6, seq.Source7, seq.ResultSelector);
 
     Realized<Seq<(
         T1, T2, T3, T4, T5, T6, T7
@@ -164,17 +148,11 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.CombineLatest8<
     T1, T2, T3, T4, T5, T6, T7, T8, TResult
     >(CombineLatest8Seq<T1, T2, T3, T4, T5, T6, T7, T8, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest8Impl<T1, T2, T3, T4, T5, T6, T7, T8, TResult>,
-    seq.Source1,
-    seq.Source2,
-    seq.Source3,
-    seq.Source4,
-    seq.Source5,
-    seq.Source6,
-    seq.Source7,
-    seq.Source8,
-    seq.ResultSelector);
+        RunByForm<Seq<TResult>>(
+            CombineLatest8Impl<T1, T2, T3, T4, T5, T6, T7, T8, TResult>,
+            CombineLatest8AsyncImpl<T1, T2, T3, T4, T5, T6, T7, T8, TResult>, seq.Source1,
+            seq.Source2, seq.Source3, seq.Source4, seq.Source5, seq.Source6, seq.Source7,
+            seq.Source8, seq.ResultSelector);
 
     Realized<Seq<(
         T1, T2, T3, T4, T5, T6, T7, T8
@@ -192,18 +170,11 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.CombineLatest9<
     T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult
     >(CombineLatest9Seq<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest9Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>,
-    seq.Source1,
-    seq.Source2,
-    seq.Source3,
-    seq.Source4,
-    seq.Source5,
-    seq.Source6,
-    seq.Source7,
-    seq.Source8,
-    seq.Source9,
-    seq.ResultSelector);
+        RunByForm<Seq<TResult>>(
+            CombineLatest9Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>,
+            CombineLatest9AsyncImpl<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>, seq.Source1,
+            seq.Source2, seq.Source3, seq.Source4, seq.Source5, seq.Source6, seq.Source7,
+            seq.Source8, seq.Source9, seq.ResultSelector);
 
     Realized<Seq<(
         T1, T2, T3, T4, T5, T6, T7, T8, T9
@@ -221,19 +192,11 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.CombineLatest10<
     T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult
     >(CombineLatest10Seq<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest10Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>,
-    seq.Source1,
-    seq.Source2,
-    seq.Source3,
-    seq.Source4,
-    seq.Source5,
-    seq.Source6,
-    seq.Source7,
-    seq.Source8,
-    seq.Source9,
-    seq.Source10,
-    seq.ResultSelector);
+        RunByForm<Seq<TResult>>(
+            CombineLatest10Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>,
+            CombineLatest10AsyncImpl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>, seq.Source1,
+            seq.Source2, seq.Source3, seq.Source4, seq.Source5, seq.Source6, seq.Source7,
+            seq.Source8, seq.Source9, seq.Source10, seq.ResultSelector);
 
     Realized<Seq<(
         T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
@@ -251,20 +214,11 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.CombineLatest11<
     T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult
     >(CombineLatest11Seq<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest11Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>,
-    seq.Source1,
-    seq.Source2,
-    seq.Source3,
-    seq.Source4,
-    seq.Source5,
-    seq.Source6,
-    seq.Source7,
-    seq.Source8,
-    seq.Source9,
-    seq.Source10,
-    seq.Source11,
-    seq.ResultSelector);
+        RunByForm<Seq<TResult>>(
+            CombineLatest11Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>,
+            CombineLatest11AsyncImpl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>,
+            seq.Source1, seq.Source2, seq.Source3, seq.Source4, seq.Source5, seq.Source6,
+            seq.Source7, seq.Source8, seq.Source9, seq.Source10, seq.Source11, seq.ResultSelector);
 
     Realized<Seq<(
         T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
@@ -282,21 +236,12 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.CombineLatest12<
     T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult
     >(CombineLatest12Seq<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest12Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>,
-    seq.Source1,
-    seq.Source2,
-    seq.Source3,
-    seq.Source4,
-    seq.Source5,
-    seq.Source6,
-    seq.Source7,
-    seq.Source8,
-    seq.Source9,
-    seq.Source10,
-    seq.Source11,
-    seq.Source12,
-    seq.ResultSelector);
+        RunByForm<Seq<TResult>>(
+            CombineLatest12Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>,
+            CombineLatest12AsyncImpl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>,
+            seq.Source1, seq.Source2, seq.Source3, seq.Source4, seq.Source5, seq.Source6,
+            seq.Source7, seq.Source8, seq.Source9, seq.Source10, seq.Source11, seq.Source12,
+            seq.ResultSelector);
 
     Realized<Seq<(
         T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12
@@ -314,22 +259,12 @@ public sealed partial class AsyncRxTarget
     Realized<Seq<TResult>> ISeqVisitor.CombineLatest13<
     T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult
     >(CombineLatest13Seq<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest13Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>,
-    seq.Source1,
-    seq.Source2,
-    seq.Source3,
-    seq.Source4,
-    seq.Source5,
-    seq.Source6,
-    seq.Source7,
-    seq.Source8,
-    seq.Source9,
-    seq.Source10,
-    seq.Source11,
-    seq.Source12,
-    seq.Source13,
-    seq.ResultSelector);
+        RunByForm<Seq<TResult>>(
+            CombineLatest13Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>,
+            CombineLatest13AsyncImpl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>,
+            seq.Source1, seq.Source2, seq.Source3, seq.Source4, seq.Source5, seq.Source6,
+            seq.Source7, seq.Source8, seq.Source9, seq.Source10, seq.Source11, seq.Source12,
+            seq.Source13, seq.ResultSelector);
 
     Realized<Seq<(
         T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13
@@ -351,23 +286,12 @@ public sealed partial class AsyncRxTarget
         CombineLatest14Seq<
     T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult
     > seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest14Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>,
-    seq.Source1,
-    seq.Source2,
-    seq.Source3,
-    seq.Source4,
-    seq.Source5,
-    seq.Source6,
-    seq.Source7,
-    seq.Source8,
-    seq.Source9,
-    seq.Source10,
-    seq.Source11,
-    seq.Source12,
-    seq.Source13,
-    seq.Source14,
-    seq.ResultSelector);
+        RunByForm<Seq<TResult>>(
+            CombineLatest14Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>,
+            CombineLatest14AsyncImpl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>,
+            seq.Source1, seq.Source2, seq.Source3, seq.Source4, seq.Source5, seq.Source6,
+            seq.Source7, seq.Source8, seq.Source9, seq.Source10, seq.Source11, seq.Source12,
+            seq.Source13, seq.Source14, seq.ResultSelector);
 
     Realized<Seq<(
         T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14
@@ -389,24 +313,12 @@ public sealed partial class AsyncRxTarget
         CombineLatest15Seq<
     T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult
     > seq) =>
-        _bridge.Run<Seq<TResult>>(
-    CombineLatest15Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>,
-    seq.Source1,
-    seq.Source2,
-    seq.Source3,
-    seq.Source4,
-    seq.Source5,
-    seq.Source6,
-    seq.Source7,
-    seq.Source8,
-    seq.Source9,
-    seq.Source10,
-    seq.Source11,
-    seq.Source12,
-    seq.Source13,
-    seq.Source14,
-    seq.Source15,
-    seq.ResultSelector);
+        RunByForm<Seq<TResult>>(
+            CombineLatest15Impl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>,
+            CombineLatest15AsyncImpl<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>,
+            seq.Source1, seq.Source2, seq.Source3, seq.Source4, seq.Source5, seq.Source6,
+            seq.Source7, seq.Source8, seq.Source9, seq.Source10, seq.Source11, seq.Source12,
+            seq.Source13, seq.Source14, seq.Source15, seq.ResultSelector);
 
     Realized<Seq<(
         T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15
@@ -432,8 +344,10 @@ public sealed partial class AsyncRxTarget
         CombineLatest16Seq<
     T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult
     > seq) =>
-        _bridge.Run<Seq<TResult>>(
+        RunByForm<Seq<TResult>>(
             CombineLatest16Impl<
+    T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult
+    >, CombineLatest16AsyncImpl<
     T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult
     >,
             seq.Source1, seq.Source2, seq.Source3, seq.Source4, seq.Source5, seq.Source6,
@@ -471,10 +385,21 @@ public sealed partial class AsyncRxTarget
         Func<IList<T>, TResult> resultSelector) =>
         AsyncObservable.CombineLatest(sources, resultSelector);
 
+    private static IAsyncObservable<TResult> CombineLatestListSelectorAsyncImpl<T, TResult>(
+        IEnumerable<IAsyncObservable<T>> sources,
+        Func<IList<T>, ValueTask<TResult>> resultSelector) =>
+        AsyncObservable.CombineLatest(sources, resultSelector);
+
     private static IAsyncObservable<TResult> CombineLatest2Impl<T1, T2, TResult>(
         IAsyncObservable<T1> source1,
         IAsyncObservable<T2> source2,
         Func<T1, T2, TResult> resultSelector) =>
+        AsyncObservable.CombineLatest(source1, source2, resultSelector);
+
+    private static IAsyncObservable<TResult> CombineLatest2AsyncImpl<T1, T2, TResult>(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        Func<T1, T2, ValueTask<TResult>> resultSelector) =>
         AsyncObservable.CombineLatest(source1, source2, resultSelector);
 
     private static IAsyncObservable<(T1, T2)> CombineLatest2TupleImpl<T1, T2>(
@@ -487,6 +412,13 @@ public sealed partial class AsyncRxTarget
         IAsyncObservable<T2> source2,
         IAsyncObservable<T3> source3,
         Func<T1, T2, T3, TResult> resultSelector) =>
+        AsyncObservable.CombineLatest(source1, source2, source3, resultSelector);
+
+    private static IAsyncObservable<TResult> CombineLatest3AsyncImpl<T1, T2, T3, TResult>(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        Func<T1, T2, T3, ValueTask<TResult>> resultSelector) =>
         AsyncObservable.CombineLatest(source1, source2, source3, resultSelector);
 
     private static IAsyncObservable<(T1, T2, T3)> CombineLatest3TupleImpl<T1, T2, T3>(
@@ -503,6 +435,14 @@ public sealed partial class AsyncRxTarget
         Func<T1, T2, T3, T4, TResult> resultSelector) =>
         AsyncObservable.CombineLatest(source1, source2, source3, source4, resultSelector);
 
+    private static IAsyncObservable<TResult> CombineLatest4AsyncImpl<T1, T2, T3, T4, TResult>(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        Func<T1, T2, T3, T4, ValueTask<TResult>> resultSelector) =>
+        AsyncObservable.CombineLatest(source1, source2, source3, source4, resultSelector);
+
     private static IAsyncObservable<(T1, T2, T3, T4)> CombineLatest4TupleImpl<T1, T2, T3, T4>(
         IAsyncObservable<T1> source1,
         IAsyncObservable<T2> source2,
@@ -517,6 +457,15 @@ public sealed partial class AsyncRxTarget
         IAsyncObservable<T4> source4,
         IAsyncObservable<T5> source5,
         Func<T1, T2, T3, T4, T5, TResult> resultSelector) =>
+        AsyncObservable.CombineLatest(source1, source2, source3, source4, source5, resultSelector);
+
+    private static IAsyncObservable<TResult> CombineLatest5AsyncImpl<T1, T2, T3, T4, T5, TResult>(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        IAsyncObservable<T5> source5,
+        Func<T1, T2, T3, T4, T5, ValueTask<TResult>> resultSelector) =>
         AsyncObservable.CombineLatest(source1, source2, source3, source4, source5, resultSelector);
 
     private static IAsyncObservable<(
@@ -539,6 +488,17 @@ public sealed partial class AsyncRxTarget
         IAsyncObservable<T5> source5,
         IAsyncObservable<T6> source6,
         Func<T1, T2, T3, T4, T5, T6, TResult> resultSelector) =>
+        AsyncObservable.CombineLatest(
+            source1, source2, source3, source4, source5, source6, resultSelector);
+
+    private static IAsyncObservable<TResult> CombineLatest6AsyncImpl<T1, T2, T3, T4, T5, T6, TResult>(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        IAsyncObservable<T5> source5,
+        IAsyncObservable<T6> source6,
+        Func<T1, T2, T3, T4, T5, T6, ValueTask<TResult>> resultSelector) =>
         AsyncObservable.CombineLatest(
             source1, source2, source3, source4, source5, source6, resultSelector);
 
@@ -569,6 +529,20 @@ public sealed partial class AsyncRxTarget
         AsyncObservable.CombineLatest(
             source1, source2, source3, source4, source5, source6, source7, resultSelector);
 
+    private static IAsyncObservable<TResult> CombineLatest7AsyncImpl<
+    T1, T2, T3, T4, T5, T6, T7, TResult
+    >(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        IAsyncObservable<T5> source5,
+        IAsyncObservable<T6> source6,
+        IAsyncObservable<T7> source7,
+        Func<T1, T2, T3, T4, T5, T6, T7, ValueTask<TResult>> resultSelector) =>
+        AsyncObservable.CombineLatest(
+            source1, source2, source3, source4, source5, source6, source7, resultSelector);
+
     private static IAsyncObservable<(
         T1, T2, T3, T4, T5, T6, T7
         )> CombineLatest7TupleImpl<
@@ -596,6 +570,21 @@ public sealed partial class AsyncRxTarget
         IAsyncObservable<T7> source7,
         IAsyncObservable<T8> source8,
         Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> resultSelector) =>
+        AsyncObservable.CombineLatest(
+            source1, source2, source3, source4, source5, source6, source7, source8, resultSelector);
+
+    private static IAsyncObservable<TResult> CombineLatest8AsyncImpl<
+    T1, T2, T3, T4, T5, T6, T7, T8, TResult
+    >(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        IAsyncObservable<T5> source5,
+        IAsyncObservable<T6> source6,
+        IAsyncObservable<T7> source7,
+        IAsyncObservable<T8> source8,
+        Func<T1, T2, T3, T4, T5, T6, T7, T8, ValueTask<TResult>> resultSelector) =>
         AsyncObservable.CombineLatest(
             source1, source2, source3, source4, source5, source6, source7, source8, resultSelector);
 
@@ -632,6 +621,23 @@ public sealed partial class AsyncRxTarget
             source1, source2, source3, source4, source5, source6, source7, source8, source9,
             resultSelector);
 
+    private static IAsyncObservable<TResult> CombineLatest9AsyncImpl<
+    T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult
+    >(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        IAsyncObservable<T5> source5,
+        IAsyncObservable<T6> source6,
+        IAsyncObservable<T7> source7,
+        IAsyncObservable<T8> source8,
+        IAsyncObservable<T9> source9,
+        Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, ValueTask<TResult>> resultSelector) =>
+        AsyncObservable.CombineLatest(
+            source1, source2, source3, source4, source5, source6, source7, source8, source9,
+            resultSelector);
+
     private static IAsyncObservable<(
         T1, T2, T3, T4, T5, T6, T7, T8, T9
         )> CombineLatest9TupleImpl<
@@ -663,6 +669,24 @@ public sealed partial class AsyncRxTarget
         IAsyncObservable<T9> source9,
         IAsyncObservable<T10> source10,
         Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> resultSelector) =>
+        AsyncObservable.CombineLatest(
+            source1, source2, source3, source4, source5, source6, source7, source8, source9,
+            source10, resultSelector);
+
+    private static IAsyncObservable<TResult> CombineLatest10AsyncImpl<
+    T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult
+    >(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        IAsyncObservable<T5> source5,
+        IAsyncObservable<T6> source6,
+        IAsyncObservable<T7> source7,
+        IAsyncObservable<T8> source8,
+        IAsyncObservable<T9> source9,
+        IAsyncObservable<T10> source10,
+        Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, ValueTask<TResult>> resultSelector) =>
         AsyncObservable.CombineLatest(
             source1, source2, source3, source4, source5, source6, source7, source8, source9,
             source10, resultSelector);
@@ -705,6 +729,25 @@ public sealed partial class AsyncRxTarget
             source1, source2, source3, source4, source5, source6, source7, source8, source9,
             source10, source11, resultSelector);
 
+    private static IAsyncObservable<TResult> CombineLatest11AsyncImpl<
+    T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult
+    >(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        IAsyncObservable<T5> source5,
+        IAsyncObservable<T6> source6,
+        IAsyncObservable<T7> source7,
+        IAsyncObservable<T8> source8,
+        IAsyncObservable<T9> source9,
+        IAsyncObservable<T10> source10,
+        IAsyncObservable<T11> source11,
+        Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, ValueTask<TResult>> resultSelector) =>
+        AsyncObservable.CombineLatest(
+            source1, source2, source3, source4, source5, source6, source7, source8, source9,
+            source10, source11, resultSelector);
+
     private static IAsyncObservable<(
         T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
         )> CombineLatest11TupleImpl<
@@ -741,6 +784,26 @@ public sealed partial class AsyncRxTarget
         IAsyncObservable<T11> source11,
         IAsyncObservable<T12> source12,
         Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> resultSelector) =>
+        AsyncObservable.CombineLatest(
+            source1, source2, source3, source4, source5, source6, source7, source8, source9,
+            source10, source11, source12, resultSelector);
+
+    private static IAsyncObservable<TResult> CombineLatest12AsyncImpl<
+    T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult
+    >(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        IAsyncObservable<T5> source5,
+        IAsyncObservable<T6> source6,
+        IAsyncObservable<T7> source7,
+        IAsyncObservable<T8> source8,
+        IAsyncObservable<T9> source9,
+        IAsyncObservable<T10> source10,
+        IAsyncObservable<T11> source11,
+        IAsyncObservable<T12> source12,
+        Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, ValueTask<TResult>> resultSelector) =>
         AsyncObservable.CombineLatest(
             source1, source2, source3, source4, source5, source6, source7, source8, source9,
             source10, source11, source12, resultSelector);
@@ -787,6 +850,27 @@ public sealed partial class AsyncRxTarget
             source1, source2, source3, source4, source5, source6, source7, source8, source9,
             source10, source11, source12, source13, resultSelector);
 
+    private static IAsyncObservable<TResult> CombineLatest13AsyncImpl<
+    T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult
+    >(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        IAsyncObservable<T5> source5,
+        IAsyncObservable<T6> source6,
+        IAsyncObservable<T7> source7,
+        IAsyncObservable<T8> source8,
+        IAsyncObservable<T9> source9,
+        IAsyncObservable<T10> source10,
+        IAsyncObservable<T11> source11,
+        IAsyncObservable<T12> source12,
+        IAsyncObservable<T13> source13,
+        Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, ValueTask<TResult>> resultSelector) =>
+        AsyncObservable.CombineLatest(
+            source1, source2, source3, source4, source5, source6, source7, source8, source9,
+            source10, source11, source12, source13, resultSelector);
+
     private static IAsyncObservable<(
         T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13
         )> CombineLatest13TupleImpl<
@@ -829,6 +913,28 @@ public sealed partial class AsyncRxTarget
         Func<
             T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult
             > resultSelector) =>
+        AsyncObservable.CombineLatest(
+            source1, source2, source3, source4, source5, source6, source7, source8, source9,
+            source10, source11, source12, source13, source14, resultSelector);
+
+    private static IAsyncObservable<TResult> CombineLatest14AsyncImpl<
+    T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult
+    >(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        IAsyncObservable<T5> source5,
+        IAsyncObservable<T6> source6,
+        IAsyncObservable<T7> source7,
+        IAsyncObservable<T8> source8,
+        IAsyncObservable<T9> source9,
+        IAsyncObservable<T10> source10,
+        IAsyncObservable<T11> source11,
+        IAsyncObservable<T12> source12,
+        IAsyncObservable<T13> source13,
+        IAsyncObservable<T14> source14,
+        Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, ValueTask<TResult>> resultSelector) =>
         AsyncObservable.CombineLatest(
             source1, source2, source3, source4, source5, source6, source7, source8, source9,
             source10, source11, source12, source13, source14, resultSelector);
@@ -881,6 +987,29 @@ public sealed partial class AsyncRxTarget
             source1, source2, source3, source4, source5, source6, source7, source8, source9,
             source10, source11, source12, source13, source14, source15, resultSelector);
 
+    private static IAsyncObservable<TResult> CombineLatest15AsyncImpl<
+    T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult
+    >(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        IAsyncObservable<T5> source5,
+        IAsyncObservable<T6> source6,
+        IAsyncObservable<T7> source7,
+        IAsyncObservable<T8> source8,
+        IAsyncObservable<T9> source9,
+        IAsyncObservable<T10> source10,
+        IAsyncObservable<T11> source11,
+        IAsyncObservable<T12> source12,
+        IAsyncObservable<T13> source13,
+        IAsyncObservable<T14> source14,
+        IAsyncObservable<T15> source15,
+        Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, ValueTask<TResult>> resultSelector) =>
+        AsyncObservable.CombineLatest(
+            source1, source2, source3, source4, source5, source6, source7, source8, source9,
+            source10, source11, source12, source13, source14, source15, resultSelector);
+
     private static IAsyncObservable<(
         T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15
         )> CombineLatest15TupleImpl<
@@ -927,6 +1056,30 @@ public sealed partial class AsyncRxTarget
         Func<
             T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult
             > resultSelector) =>
+        AsyncObservable.CombineLatest(
+            source1, source2, source3, source4, source5, source6, source7, source8, source9,
+            source10, source11, source12, source13, source14, source15, source16, resultSelector);
+
+    private static IAsyncObservable<TResult> CombineLatest16AsyncImpl<
+    T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult
+    >(
+        IAsyncObservable<T1> source1,
+        IAsyncObservable<T2> source2,
+        IAsyncObservable<T3> source3,
+        IAsyncObservable<T4> source4,
+        IAsyncObservable<T5> source5,
+        IAsyncObservable<T6> source6,
+        IAsyncObservable<T7> source7,
+        IAsyncObservable<T8> source8,
+        IAsyncObservable<T9> source9,
+        IAsyncObservable<T10> source10,
+        IAsyncObservable<T11> source11,
+        IAsyncObservable<T12> source12,
+        IAsyncObservable<T13> source13,
+        IAsyncObservable<T14> source14,
+        IAsyncObservable<T15> source15,
+        IAsyncObservable<T16> source16,
+        Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, ValueTask<TResult>> resultSelector) =>
         AsyncObservable.CombineLatest(
             source1, source2, source3, source4, source5, source6, source7, source8, source9,
             source10, source11, source12, source13, source14, source15, source16, resultSelector);

@@ -24,7 +24,9 @@ public sealed partial class AsyncRxTarget
                 Unwrap(seq.Scheduler));
 
     Realized<Seq<T>> ISeqVisitor.TakeUntilPredicate<T>(TakeUntilPredicateSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(TakeUntilPredicateImpl<T>, seq.Source, seq.StopPredicate);
+        RunByForm<Seq<T>>(
+            TakeUntilPredicateImpl<T>, TakeUntilPredicateAsyncImpl<T>, seq.Source,
+            seq.StopPredicate);
 
     Realized<Seq<T>> ISeqVisitor.TakeUntilToken<T>(TakeUntilTokenSeq<T> seq) =>
         _bridge.Run<Seq<T>>(TakeUntilTokenImpl<T>, seq.Source, seq.CancellationToken);
@@ -48,6 +50,11 @@ public sealed partial class AsyncRxTarget
     private static IAsyncObservable<T> TakeUntilPredicateImpl<T>(
         IAsyncObservable<T> source,
         Func<T, bool> stopPredicate) =>
+        source.TakeUntil(stopPredicate);
+
+    private static IAsyncObservable<T> TakeUntilPredicateAsyncImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask<bool>> stopPredicate) =>
         source.TakeUntil(stopPredicate);
 
     private static IAsyncObservable<T> TakeUntilTokenImpl<T>(

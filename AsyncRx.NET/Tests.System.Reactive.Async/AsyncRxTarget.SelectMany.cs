@@ -15,27 +15,29 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<TOut>> ISeqVisitor.SelectManySelector<TIn, TOut>(
         SelectManySelectorSeq<TIn, TOut> seq) =>
-        _bridge.Run<Seq<TOut>>(SelectManySelectorImpl<TIn, TOut>, seq.Source, seq.Selector);
+        RunByForm<Seq<TOut>>(
+            SelectManySelectorImpl<TIn, TOut>, SelectManySelectorAsyncImpl<TIn, TOut>, seq.Source,
+            seq.Selector);
 
     Realized<Seq<TOut>> ISeqVisitor.SelectManyIndexed<TIn, TOut>(
         SelectManyIndexedSeq<TIn, TOut> seq) =>
-        _bridge.Run<Seq<TOut>>(SelectManyIndexedImpl<TIn, TOut>, seq.Source, seq.Selector);
+        RunByForm<Seq<TOut>>(
+            SelectManyIndexedImpl<TIn, TOut>, SelectManyIndexedAsyncImpl<TIn, TOut>, seq.Source,
+            seq.Selector);
 
     Realized<Seq<TOut>> ISeqVisitor.SelectManyCollectionIndexed<TIn, TCollection, TOut>(
         SelectManyCollectionIndexedSeq<TIn, TCollection, TOut> seq) =>
-        _bridge.Run<Seq<TOut>>(
+        RunByForm<Seq<TOut>>(
             SelectManyCollectionIndexedImpl<TIn, TCollection, TOut>,
-            seq.Source,
-            seq.CollectionSelector,
-            seq.ResultSelector);
+            SelectManyCollectionIndexedAsyncImpl<TIn, TCollection, TOut>, seq.Source,
+            seq.CollectionSelector, seq.ResultSelector);
 
     Realized<Seq<TOut>> ISeqVisitor.SelectManyCollection<TIn, TCollection, TOut>(
         SelectManyCollectionSeq<TIn, TCollection, TOut> seq) =>
-        _bridge.Run<Seq<TOut>>(
+        RunByForm<Seq<TOut>>(
             SelectManyCollectionImpl<TIn, TCollection, TOut>,
-            seq.Source,
-            seq.CollectionSelector,
-            seq.ResultSelector);
+            SelectManyCollectionAsyncImpl<TIn, TCollection, TOut>, seq.Source,
+            seq.CollectionSelector, seq.ResultSelector);
 
     // AsyncRx.NET has no SelectMany(other) overload; Rx.NET defines it as SelectMany(_ => other).
     private static IAsyncObservable<TOut> SelectManyImpl<TIn, TOut>(
@@ -48,9 +50,19 @@ public sealed partial class AsyncRxTarget
         Func<TIn, IAsyncObservable<TOut>> selector) =>
         source.SelectMany(selector);
 
+    private static IAsyncObservable<TOut> SelectManySelectorAsyncImpl<TIn, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, ValueTask<IAsyncObservable<TOut>>> selector) =>
+        source.SelectMany(selector);
+
     private static IAsyncObservable<TOut> SelectManyIndexedImpl<TIn, TOut>(
         IAsyncObservable<TIn> source,
         Func<TIn, int, IAsyncObservable<TOut>> selector) =>
+        source.SelectMany(selector);
+
+    private static IAsyncObservable<TOut> SelectManyIndexedAsyncImpl<TIn, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, int, ValueTask<IAsyncObservable<TOut>>> selector) =>
         source.SelectMany(selector);
 
     private static IAsyncObservable<TOut> SelectManyCollectionIndexedImpl<TIn, TCollection, TOut>(
@@ -59,10 +71,22 @@ public sealed partial class AsyncRxTarget
         Func<TIn, int, TCollection, int, TOut> resultSelector) =>
         source.SelectMany(collectionSelector, resultSelector);
 
+    private static IAsyncObservable<TOut> SelectManyCollectionIndexedAsyncImpl<TIn, TCollection, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, int, ValueTask<IAsyncObservable<TCollection>>> collectionSelector,
+        Func<TIn, int, TCollection, int, ValueTask<TOut>> resultSelector) =>
+        source.SelectMany(collectionSelector, resultSelector);
+
     private static IAsyncObservable<TOut> SelectManyCollectionImpl<TIn, TCollection, TOut>(
         IAsyncObservable<TIn> source,
         Func<TIn, IAsyncObservable<TCollection>> collectionSelector,
         Func<TIn, TCollection, TOut> resultSelector) =>
+        source.SelectMany(collectionSelector, resultSelector);
+
+    private static IAsyncObservable<TOut> SelectManyCollectionAsyncImpl<TIn, TCollection, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, ValueTask<IAsyncObservable<TCollection>>> collectionSelector,
+        Func<TIn, TCollection, ValueTask<TOut>> resultSelector) =>
         source.SelectMany(collectionSelector, resultSelector);
 
     Realized<Seq<TOut>> ISeqVisitor.SelectManySelectors<TIn, TOut>(

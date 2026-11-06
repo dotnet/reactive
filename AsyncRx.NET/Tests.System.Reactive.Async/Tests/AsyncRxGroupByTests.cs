@@ -9,13 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxGroupByTests(ExecutionShape shape) : GroupByTests
+public abstract class AsyncRxGroupByTests(ExecutionShape shape, DelegateForm delegates)
+    : GroupByTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxGroupByTests_SynchronousCompletion() : AsyncRxGroupByTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxGroupByTests_SynchronousCompletion()
+    : AsyncRxGroupByTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxGroupByTests_ForcedYield() : AsyncRxGroupByTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxGroupByTests_ForcedYield()
+    : AsyncRxGroupByTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxGroupByTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxGroupByTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxGroupByTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxGroupByTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

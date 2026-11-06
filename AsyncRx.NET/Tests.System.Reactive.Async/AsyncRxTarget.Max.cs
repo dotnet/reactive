@@ -17,8 +17,8 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<int>> ISeqVisitor.MaxInt32Selector<TSource>(
         MaxInt32SelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<int>>(
-            MaxInt32SelectorImpl<TSource>,
+        RunByForm<Seq<int>>(
+            MaxInt32SelectorImpl<TSource>, MaxInt32SelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -27,13 +27,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, int> selector) =>
         source.Max(selector);
 
+    private static IAsyncObservable<int> MaxInt32SelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<int>> selector) =>
+        source.Max(selector);
+
     Realized<Seq<long>> ISeqVisitor.MaxInt64(MaxInt64Seq seq) =>
         Realized.Of<Seq<long>>(Materialize(seq.Source).Max());
 
     Realized<Seq<long>> ISeqVisitor.MaxInt64Selector<TSource>(
         MaxInt64SelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<long>>(
-            MaxInt64SelectorImpl<TSource>,
+        RunByForm<Seq<long>>(
+            MaxInt64SelectorImpl<TSource>, MaxInt64SelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -42,13 +47,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, long> selector) =>
         source.Max(selector);
 
+    private static IAsyncObservable<long> MaxInt64SelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<long>> selector) =>
+        source.Max(selector);
+
     Realized<Seq<float>> ISeqVisitor.MaxSingle(MaxSingleSeq seq) =>
         Realized.Of<Seq<float>>(Materialize(seq.Source).Max());
 
     Realized<Seq<float>> ISeqVisitor.MaxSingleSelector<TSource>(
         MaxSingleSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<float>>(
-            MaxSingleSelectorImpl<TSource>,
+        RunByForm<Seq<float>>(
+            MaxSingleSelectorImpl<TSource>, MaxSingleSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -57,13 +67,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, float> selector) =>
         source.Max(selector);
 
+    private static IAsyncObservable<float> MaxSingleSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<float>> selector) =>
+        source.Max(selector);
+
     Realized<Seq<double>> ISeqVisitor.MaxDouble(MaxDoubleSeq seq) =>
         Realized.Of<Seq<double>>(Materialize(seq.Source).Max());
 
     Realized<Seq<double>> ISeqVisitor.MaxDoubleSelector<TSource>(
         MaxDoubleSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<double>>(
-            MaxDoubleSelectorImpl<TSource>,
+        RunByForm<Seq<double>>(
+            MaxDoubleSelectorImpl<TSource>, MaxDoubleSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -72,13 +87,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, double> selector) =>
         source.Max(selector);
 
+    private static IAsyncObservable<double> MaxDoubleSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<double>> selector) =>
+        source.Max(selector);
+
     Realized<Seq<decimal>> ISeqVisitor.MaxDecimal(MaxDecimalSeq seq) =>
         Realized.Of<Seq<decimal>>(Materialize(seq.Source).Max());
 
     Realized<Seq<decimal>> ISeqVisitor.MaxDecimalSelector<TSource>(
         MaxDecimalSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<decimal>>(
-            MaxDecimalSelectorImpl<TSource>,
+        RunByForm<Seq<decimal>>(
+            MaxDecimalSelectorImpl<TSource>, MaxDecimalSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -87,13 +107,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, decimal> selector) =>
         source.Max(selector);
 
+    private static IAsyncObservable<decimal> MaxDecimalSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<decimal>> selector) =>
+        source.Max(selector);
+
     Realized<Seq<int?>> ISeqVisitor.MaxNullableInt32(MaxNullableInt32Seq seq) =>
         Realized.Of<Seq<int?>>(Materialize(seq.Source).Max());
 
     Realized<Seq<int?>> ISeqVisitor.MaxNullableInt32Selector<TSource>(
         MaxNullableInt32SelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<int?>>(
-            MaxNullableInt32SelectorImpl<TSource>,
+        RunByForm<Seq<int?>>(
+            MaxNullableInt32SelectorImpl<TSource>, MaxNullableInt32SelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -102,13 +127,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, int?> selector) =>
         source.Max(selector);
 
+    private static IAsyncObservable<int?> MaxNullableInt32SelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<int?>> selector) =>
+        source.Max(selector);
+
     Realized<Seq<long?>> ISeqVisitor.MaxNullableInt64(MaxNullableInt64Seq seq) =>
         Realized.Of<Seq<long?>>(Materialize(seq.Source).Max());
 
     Realized<Seq<long?>> ISeqVisitor.MaxNullableInt64Selector<TSource>(
         MaxNullableInt64SelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<long?>>(
-            MaxNullableInt64SelectorImpl<TSource>,
+        RunByForm<Seq<long?>>(
+            MaxNullableInt64SelectorImpl<TSource>, MaxNullableInt64SelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -117,13 +147,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, long?> selector) =>
         source.Max(selector);
 
+    private static IAsyncObservable<long?> MaxNullableInt64SelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<long?>> selector) =>
+        source.Max(selector);
+
     Realized<Seq<float?>> ISeqVisitor.MaxNullableSingle(MaxNullableSingleSeq seq) =>
         Realized.Of<Seq<float?>>(Materialize(seq.Source).Max());
 
     Realized<Seq<float?>> ISeqVisitor.MaxNullableSingleSelector<TSource>(
         MaxNullableSingleSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<float?>>(
-            MaxNullableSingleSelectorImpl<TSource>,
+        RunByForm<Seq<float?>>(
+            MaxNullableSingleSelectorImpl<TSource>, MaxNullableSingleSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -132,13 +167,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, float?> selector) =>
         source.Max(selector);
 
+    private static IAsyncObservable<float?> MaxNullableSingleSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<float?>> selector) =>
+        source.Max(selector);
+
     Realized<Seq<double?>> ISeqVisitor.MaxNullableDouble(MaxNullableDoubleSeq seq) =>
         Realized.Of<Seq<double?>>(Materialize(seq.Source).Max());
 
     Realized<Seq<double?>> ISeqVisitor.MaxNullableDoubleSelector<TSource>(
         MaxNullableDoubleSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<double?>>(
-            MaxNullableDoubleSelectorImpl<TSource>,
+        RunByForm<Seq<double?>>(
+            MaxNullableDoubleSelectorImpl<TSource>, MaxNullableDoubleSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -147,19 +187,29 @@ public sealed partial class AsyncRxTarget
         Func<TSource, double?> selector) =>
         source.Max(selector);
 
+    private static IAsyncObservable<double?> MaxNullableDoubleSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<double?>> selector) =>
+        source.Max(selector);
+
     Realized<Seq<decimal?>> ISeqVisitor.MaxNullableDecimal(MaxNullableDecimalSeq seq) =>
         Realized.Of<Seq<decimal?>>(Materialize(seq.Source).Max());
 
     Realized<Seq<decimal?>> ISeqVisitor.MaxNullableDecimalSelector<TSource>(
         MaxNullableDecimalSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<decimal?>>(
-            MaxNullableDecimalSelectorImpl<TSource>,
+        RunByForm<Seq<decimal?>>(
+            MaxNullableDecimalSelectorImpl<TSource>, MaxNullableDecimalSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
     private static IAsyncObservable<decimal?> MaxNullableDecimalSelectorImpl<TSource>(
         IAsyncObservable<TSource> source,
         Func<TSource, decimal?> selector) =>
+        source.Max(selector);
+
+    private static IAsyncObservable<decimal?> MaxNullableDecimalSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<decimal?>> selector) =>
         source.Max(selector);
 
     Realized<Seq<T>> ISeqVisitor.Max<T>(MaxSeq<T> seq) =>
@@ -170,15 +220,15 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<TResult>> ISeqVisitor.MaxSelector<TSource, TResult>(
         MaxSelectorSeq<TSource, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(MaxSelectorImpl<TSource, TResult>, seq.Source, seq.Selector);
+        RunByForm<Seq<TResult>>(
+            MaxSelectorImpl<TSource, TResult>, MaxSelectorAsyncImpl<TSource, TResult>, seq.Source,
+            seq.Selector);
 
     Realized<Seq<TResult>> ISeqVisitor.MaxSelectorComparer<TSource, TResult>(
         MaxSelectorComparerSeq<TSource, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
+        RunByForm<Seq<TResult>>(
             MaxSelectorComparerImpl<TSource, TResult>,
-            seq.Source,
-            seq.Selector,
-            seq.Comparer);
+            MaxSelectorComparerAsyncImpl<TSource, TResult>, seq.Source, seq.Selector, seq.Comparer);
 
     private static IAsyncObservable<T> MaxImpl<T>(IAsyncObservable<T> source) => source.Max();
 
@@ -192,9 +242,20 @@ public sealed partial class AsyncRxTarget
         Func<TSource, TResult> selector) =>
         source.Max(selector);
 
+    private static IAsyncObservable<TResult> MaxSelectorAsyncImpl<TSource, TResult>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<TResult>> selector) =>
+        source.Max(selector);
+
     private static IAsyncObservable<TResult> MaxSelectorComparerImpl<TSource, TResult>(
         IAsyncObservable<TSource> source,
         Func<TSource, TResult> selector,
+        IComparer<TResult> comparer) =>
+        source.Max(selector, comparer);
+
+    private static IAsyncObservable<TResult> MaxSelectorComparerAsyncImpl<TSource, TResult>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<TResult>> selector,
         IComparer<TResult> comparer) =>
         source.Max(selector, comparer);
 }

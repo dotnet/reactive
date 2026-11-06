@@ -20,7 +20,9 @@ public sealed partial class AsyncRxTarget
         _bridge.Run<Seq<T>>(CatchEnumerableImpl<T>, seq.Sources);
 
     Realized<Seq<T>> ISeqVisitor.CatchHandler<T, TException>(CatchHandlerSeq<T, TException> seq) =>
-        _bridge.Run<Seq<T>>(CatchHandlerImpl<T, TException>, seq.Source, seq.Handler);
+        RunByForm<Seq<T>>(
+            CatchHandlerImpl<T, TException>, CatchHandlerAsyncImpl<T, TException>, seq.Source,
+            seq.Handler);
 
     private static IAsyncObservable<T> CatchImpl<T>(
         IAsyncObservable<T> first,
@@ -37,6 +39,12 @@ public sealed partial class AsyncRxTarget
     private static IAsyncObservable<T> CatchHandlerImpl<T, TException>(
         IAsyncObservable<T> source,
         Func<TException, IAsyncObservable<T>> handler)
+        where TException : Exception =>
+        source.Catch(handler);
+
+    private static IAsyncObservable<T> CatchHandlerAsyncImpl<T, TException>(
+        IAsyncObservable<T> source,
+        Func<TException, ValueTask<IAsyncObservable<T>>> handler)
         where TException : Exception =>
         source.Catch(handler);
 }

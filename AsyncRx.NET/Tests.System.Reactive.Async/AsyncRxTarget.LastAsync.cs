@@ -15,7 +15,8 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<T>> ISeqVisitor.LastAsyncPredicate<T>(
         LastAsyncPredicateSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(LastAsyncPredicateImpl<T>, seq.Source, seq.Predicate);
+        RunByForm<Seq<T>>(
+            LastAsyncPredicateImpl<T>, LastAsyncPredicateAsyncImpl<T>, seq.Source, seq.Predicate);
 
     private static IAsyncObservable<T> LastAsyncImpl<T>(IAsyncObservable<T> source) =>
         source.LastAsync();
@@ -23,5 +24,10 @@ public sealed partial class AsyncRxTarget
     private static IAsyncObservable<T> LastAsyncPredicateImpl<T>(
         IAsyncObservable<T> source,
         Func<T, bool> predicate) =>
+        source.LastAsync(predicate);
+
+    private static IAsyncObservable<T> LastAsyncPredicateAsyncImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask<bool>> predicate) =>
         source.LastAsync(predicate);
 }

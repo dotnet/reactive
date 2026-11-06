@@ -9,13 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxToLookupTests(ExecutionShape shape) : ToLookupTests
+public abstract class AsyncRxToLookupTests(ExecutionShape shape, DelegateForm delegates)
+    : ToLookupTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxToLookupTests_SynchronousCompletion() : AsyncRxToLookupTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxToLookupTests_SynchronousCompletion()
+    : AsyncRxToLookupTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxToLookupTests_ForcedYield() : AsyncRxToLookupTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxToLookupTests_ForcedYield()
+    : AsyncRxToLookupTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxToLookupTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxToLookupTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxToLookupTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxToLookupTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

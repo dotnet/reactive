@@ -9,13 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxToDictionaryTests(ExecutionShape shape) : ToDictionaryTests
+public abstract class AsyncRxToDictionaryTests(ExecutionShape shape, DelegateForm delegates)
+    : ToDictionaryTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxToDictionaryTests_SynchronousCompletion() : AsyncRxToDictionaryTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxToDictionaryTests_SynchronousCompletion()
+    : AsyncRxToDictionaryTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxToDictionaryTests_ForcedYield() : AsyncRxToDictionaryTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxToDictionaryTests_ForcedYield()
+    : AsyncRxToDictionaryTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxToDictionaryTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxToDictionaryTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxToDictionaryTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxToDictionaryTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

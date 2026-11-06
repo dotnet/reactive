@@ -9,13 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxMaxTests(ExecutionShape shape) : MaxTests
+public abstract class AsyncRxMaxTests(ExecutionShape shape, DelegateForm delegates)
+    : MaxTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxMaxTests_SynchronousCompletion() : AsyncRxMaxTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxMaxTests_SynchronousCompletion()
+    : AsyncRxMaxTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxMaxTests_ForcedYield() : AsyncRxMaxTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxMaxTests_ForcedYield()
+    : AsyncRxMaxTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxMaxTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxMaxTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxMaxTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxMaxTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

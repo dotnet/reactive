@@ -9,13 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxMinTests(ExecutionShape shape) : MinTests
+public abstract class AsyncRxMinTests(ExecutionShape shape, DelegateForm delegates)
+    : MinTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxMinTests_SynchronousCompletion() : AsyncRxMinTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxMinTests_SynchronousCompletion()
+    : AsyncRxMinTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxMinTests_ForcedYield() : AsyncRxMinTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxMinTests_ForcedYield()
+    : AsyncRxMinTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxMinTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxMinTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxMinTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxMinTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

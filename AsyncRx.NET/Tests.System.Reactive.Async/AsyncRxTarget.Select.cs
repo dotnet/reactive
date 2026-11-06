@@ -11,18 +11,31 @@ namespace Tests.System.Reactive.Async;
 public sealed partial class AsyncRxTarget
 {
     Realized<Seq<TOut>> ISeqVisitor.Select<TIn, TOut>(SelectSeq<TIn, TOut> seq) =>
-        _bridge.Run<Seq<TOut>>(SelectImpl<TIn, TOut>, seq.Source, seq.Selector);
+        RunByForm<Seq<TOut>>(
+            SelectImpl<TIn, TOut>, SelectAsyncImpl<TIn, TOut>, seq.Source, seq.Selector);
 
     Realized<Seq<TOut>> ISeqVisitor.SelectIndexed<TIn, TOut>(SelectIndexedSeq<TIn, TOut> seq) =>
-        _bridge.Run<Seq<TOut>>(SelectIndexedImpl<TIn, TOut>, seq.Source, seq.Selector);
+        RunByForm<Seq<TOut>>(
+            SelectIndexedImpl<TIn, TOut>, SelectIndexedAsyncImpl<TIn, TOut>, seq.Source,
+            seq.Selector);
 
     private static IAsyncObservable<TOut> SelectImpl<TIn, TOut>(
         IAsyncObservable<TIn> source,
         Func<TIn, TOut> selector) =>
         source.Select(selector);
 
+    private static IAsyncObservable<TOut> SelectAsyncImpl<TIn, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, ValueTask<TOut>> selector) =>
+        source.Select(selector);
+
     private static IAsyncObservable<TOut> SelectIndexedImpl<TIn, TOut>(
         IAsyncObservable<TIn> source,
         Func<TIn, int, TOut> selector) =>
+        source.Select(selector);
+
+    private static IAsyncObservable<TOut> SelectIndexedAsyncImpl<TIn, TOut>(
+        IAsyncObservable<TIn> source,
+        Func<TIn, int, ValueTask<TOut>> selector) =>
         source.Select(selector);
 }

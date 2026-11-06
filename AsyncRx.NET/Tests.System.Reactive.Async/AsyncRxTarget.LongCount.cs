@@ -14,7 +14,8 @@ public sealed partial class AsyncRxTarget
         _bridge.Run<Seq<long>>(LongCountImpl<T>, seq.Source);
 
     Realized<Seq<long>> ISeqVisitor.LongCountPredicate<T>(LongCountPredicateSeq<T> seq) =>
-        _bridge.Run<Seq<long>>(LongCountPredicateImpl<T>, seq.Source, seq.Predicate);
+        RunByForm<Seq<long>>(
+            LongCountPredicateImpl<T>, LongCountPredicateAsyncImpl<T>, seq.Source, seq.Predicate);
 
     private static IAsyncObservable<long> LongCountImpl<T>(IAsyncObservable<T> source) =>
         source.LongCount();
@@ -22,5 +23,10 @@ public sealed partial class AsyncRxTarget
     private static IAsyncObservable<long> LongCountPredicateImpl<T>(
         IAsyncObservable<T> source,
         Func<T, bool> predicate) =>
+        source.LongCount(predicate);
+
+    private static IAsyncObservable<long> LongCountPredicateAsyncImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask<bool>> predicate) =>
         source.LongCount(predicate);
 }

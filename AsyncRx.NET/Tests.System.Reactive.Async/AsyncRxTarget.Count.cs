@@ -14,7 +14,8 @@ public sealed partial class AsyncRxTarget
         _bridge.Run<Seq<int>>(CountImpl<T>, seq.Source);
 
     Realized<Seq<int>> ISeqVisitor.CountPredicate<T>(CountPredicateSeq<T> seq) =>
-        _bridge.Run<Seq<int>>(CountPredicateImpl<T>, seq.Source, seq.Predicate);
+        RunByForm<Seq<int>>(
+            CountPredicateImpl<T>, CountPredicateAsyncImpl<T>, seq.Source, seq.Predicate);
 
     private static IAsyncObservable<int> CountImpl<T>(IAsyncObservable<T> source) =>
         source.Count();
@@ -22,5 +23,10 @@ public sealed partial class AsyncRxTarget
     private static IAsyncObservable<int> CountPredicateImpl<T>(
         IAsyncObservable<T> source,
         Func<T, bool> predicate) =>
+        source.Count(predicate);
+
+    private static IAsyncObservable<int> CountPredicateAsyncImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask<bool>> predicate) =>
         source.Count(predicate);
 }

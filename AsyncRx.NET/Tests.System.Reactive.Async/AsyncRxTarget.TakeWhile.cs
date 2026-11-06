@@ -11,18 +11,29 @@ namespace Tests.System.Reactive.Async;
 public sealed partial class AsyncRxTarget
 {
     Realized<Seq<T>> ISeqVisitor.TakeWhile<T>(TakeWhileSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(TakeWhileImpl<T>, seq.Source, seq.Predicate);
+        RunByForm<Seq<T>>(TakeWhileImpl<T>, TakeWhileAsyncImpl<T>, seq.Source, seq.Predicate);
 
     Realized<Seq<T>> ISeqVisitor.TakeWhileIndexed<T>(TakeWhileIndexedSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(TakeWhileIndexedImpl<T>, seq.Source, seq.Predicate);
+        RunByForm<Seq<T>>(
+            TakeWhileIndexedImpl<T>, TakeWhileIndexedAsyncImpl<T>, seq.Source, seq.Predicate);
 
     private static IAsyncObservable<T> TakeWhileImpl<T>(
         IAsyncObservable<T> source,
         Func<T, bool> predicate) =>
         source.TakeWhile(predicate);
 
+    private static IAsyncObservable<T> TakeWhileAsyncImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask<bool>> predicate) =>
+        source.TakeWhile(predicate);
+
     private static IAsyncObservable<T> TakeWhileIndexedImpl<T>(
         IAsyncObservable<T> source,
         Func<T, int, bool> predicate) =>
+        source.TakeWhile(predicate);
+
+    private static IAsyncObservable<T> TakeWhileIndexedAsyncImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, int, ValueTask<bool>> predicate) =>
         source.TakeWhile(predicate);
 }

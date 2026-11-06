@@ -11,18 +11,28 @@ namespace Tests.System.Reactive.Async;
 public sealed partial class AsyncRxTarget
 {
     Realized<Seq<T>> ISeqVisitor.Where<T>(WhereSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(WhereImpl<T>, seq.Source, seq.Predicate);
+        RunByForm<Seq<T>>(WhereImpl<T>, WhereAsyncImpl<T>, seq.Source, seq.Predicate);
 
     Realized<Seq<T>> ISeqVisitor.WhereIndexed<T>(WhereIndexedSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(WhereIndexedImpl<T>, seq.Source, seq.Predicate);
+        RunByForm<Seq<T>>(WhereIndexedImpl<T>, WhereIndexedAsyncImpl<T>, seq.Source, seq.Predicate);
 
     private static IAsyncObservable<T> WhereImpl<T>(
         IAsyncObservable<T> source,
         Func<T, bool> predicate) =>
         source.Where(predicate);
 
+    private static IAsyncObservable<T> WhereAsyncImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask<bool>> predicate) =>
+        source.Where(predicate);
+
     private static IAsyncObservable<T> WhereIndexedImpl<T>(
         IAsyncObservable<T> source,
         Func<T, int, bool> predicate) =>
+        source.Where(predicate);
+
+    private static IAsyncObservable<T> WhereIndexedAsyncImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, int, ValueTask<bool>> predicate) =>
         source.Where(predicate);
 }

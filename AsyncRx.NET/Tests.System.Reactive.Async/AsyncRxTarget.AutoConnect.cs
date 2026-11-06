@@ -11,12 +11,27 @@ namespace Tests.System.Reactive.Async;
 
 public sealed partial class AsyncRxTarget
 {
+    // The asynchronous overload has no default for its handler, so a scenario without one has
+    // only the synchronous call.
     Realized<Seq<T>> ISeqVisitor.AutoConnect<T>(AutoConnectSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(AutoConnectImpl<T>, seq.Source, seq.MinObservers, seq.OnConnect);
+        seq.OnConnect is null
+            ? _bridge.Run<Seq<T>>(AutoConnectImpl<T>, seq.Source, seq.MinObservers, seq.OnConnect)
+            : RunByForm<Seq<T>>(
+                AutoConnectImpl<T>,
+                AutoConnectAsyncImpl<T>,
+                seq.Source,
+                seq.MinObservers,
+                seq.OnConnect);
 
     private static IAsyncObservable<T> AutoConnectImpl<T>(
         IConnectableAsyncObservable<T> source,
         int minObservers,
         Action<IAsyncDisposable>? onConnect) =>
+        source.AutoConnect(minObservers, onConnect);
+
+    private static IAsyncObservable<T> AutoConnectAsyncImpl<T>(
+        IConnectableAsyncObservable<T> source,
+        int minObservers,
+        Func<IAsyncDisposable, ValueTask> onConnect) =>
         source.AutoConnect(minObservers, onConnect);
 }

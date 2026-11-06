@@ -9,13 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxDoWhileTests(ExecutionShape shape) : DoWhileTests
+public abstract class AsyncRxDoWhileTests(ExecutionShape shape, DelegateForm delegates)
+    : DoWhileTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxDoWhileTests_SynchronousCompletion() : AsyncRxDoWhileTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxDoWhileTests_SynchronousCompletion()
+    : AsyncRxDoWhileTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxDoWhileTests_ForcedYield() : AsyncRxDoWhileTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxDoWhileTests_ForcedYield()
+    : AsyncRxDoWhileTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxDoWhileTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxDoWhileTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxDoWhileTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxDoWhileTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

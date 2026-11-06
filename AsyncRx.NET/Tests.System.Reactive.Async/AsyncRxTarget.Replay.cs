@@ -54,57 +54,53 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<TResult>> ISeqVisitor.ReplaySelector<T, TResult>(
         ReplaySelectorSeq<T, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-            ReplaySelectorImpl<T, TResult>,
+        RunByForm<Seq<TResult>>(
+            ReplaySelectorImpl<T, TResult>, ReplaySelectorAsyncImpl<T, TResult>,
             seq.Source,
             seq.Selector);
 
     Realized<Seq<TResult>> ISeqVisitor.ReplaySelectorScheduled<T, TResult>(
         ReplaySelectorScheduledSeq<T, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-            ReplaySelectorScheduledImpl<T, TResult>,
+        RunByForm<Seq<TResult>>(
+            ReplaySelectorScheduledImpl<T, TResult>, ReplaySelectorScheduledAsyncImpl<T, TResult>,
             seq.Source,
             seq.Selector,
             Unwrap(seq.Scheduler));
 
     Realized<Seq<TResult>> ISeqVisitor.ReplaySelectorCount<T, TResult>(
         ReplaySelectorCountSeq<T, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-            ReplaySelectorCountImpl<T, TResult>,
+        RunByForm<Seq<TResult>>(
+            ReplaySelectorCountImpl<T, TResult>, ReplaySelectorCountAsyncImpl<T, TResult>,
             seq.Source,
             seq.Selector,
             seq.BufferSize);
 
     Realized<Seq<TResult>> ISeqVisitor.ReplaySelectorCountScheduled<T, TResult>(
         ReplaySelectorCountScheduledSeq<T, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
+        RunByForm<Seq<TResult>>(
             ReplaySelectorCountScheduledImpl<T, TResult>,
-            seq.Source,
-            seq.Selector,
-            seq.BufferSize,
-            Unwrap(seq.Scheduler));
+            ReplaySelectorCountScheduledAsyncImpl<T, TResult>, seq.Source, seq.Selector,
+            seq.BufferSize, Unwrap(seq.Scheduler));
 
     Realized<Seq<TResult>> ISeqVisitor.ReplaySelectorTime<T, TResult>(
         ReplaySelectorTimeSeq<T, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-            ReplaySelectorTimeImpl<T, TResult>,
+        RunByForm<Seq<TResult>>(
+            ReplaySelectorTimeImpl<T, TResult>, ReplaySelectorTimeAsyncImpl<T, TResult>,
             seq.Source,
             seq.Selector,
             seq.Window);
 
     Realized<Seq<TResult>> ISeqVisitor.ReplaySelectorTimeScheduled<T, TResult>(
         ReplaySelectorTimeScheduledSeq<T, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
+        RunByForm<Seq<TResult>>(
             ReplaySelectorTimeScheduledImpl<T, TResult>,
-            seq.Source,
-            seq.Selector,
-            seq.Window,
+            ReplaySelectorTimeScheduledAsyncImpl<T, TResult>, seq.Source, seq.Selector, seq.Window,
             Unwrap(seq.Scheduler));
 
     Realized<Seq<TResult>> ISeqVisitor.ReplaySelectorCountTime<T, TResult>(
         ReplaySelectorCountTimeSeq<T, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
-            ReplaySelectorCountTimeImpl<T, TResult>,
+        RunByForm<Seq<TResult>>(
+            ReplaySelectorCountTimeImpl<T, TResult>, ReplaySelectorCountTimeAsyncImpl<T, TResult>,
             seq.Source,
             seq.Selector,
             seq.BufferSize,
@@ -112,13 +108,10 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<TResult>> ISeqVisitor.ReplaySelectorCountTimeScheduled<T, TResult>(
         ReplaySelectorCountTimeScheduledSeq<T, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
+        RunByForm<Seq<TResult>>(
             ReplaySelectorCountTimeScheduledImpl<T, TResult>,
-            seq.Source,
-            seq.Selector,
-            seq.BufferSize,
-            seq.Window,
-            Unwrap(seq.Scheduler));
+            ReplaySelectorCountTimeScheduledAsyncImpl<T, TResult>, seq.Source, seq.Selector,
+            seq.BufferSize, seq.Window, Unwrap(seq.Scheduler));
 
     private static IConnectableAsyncObservable<T> ReplayImpl<T>(IAsyncObservable<T> source) =>
         source.Replay();
@@ -168,15 +161,32 @@ public sealed partial class AsyncRxTarget
         Func<IAsyncObservable<T>, IAsyncObservable<TResult>> selector) =>
         source.Replay(selector);
 
+    private static IAsyncObservable<TResult> ReplaySelectorAsyncImpl<T, TResult>(
+        IAsyncObservable<T> source,
+        Func<IAsyncObservable<T>, ValueTask<IAsyncObservable<TResult>>> selector) =>
+        source.Replay(selector);
+
     private static IAsyncObservable<TResult> ReplaySelectorScheduledImpl<T, TResult>(
         IAsyncObservable<T> source,
         Func<IAsyncObservable<T>, IAsyncObservable<TResult>> selector,
         IAsyncScheduler scheduler) =>
         source.Replay(selector, scheduler);
 
+    private static IAsyncObservable<TResult> ReplaySelectorScheduledAsyncImpl<T, TResult>(
+        IAsyncObservable<T> source,
+        Func<IAsyncObservable<T>, ValueTask<IAsyncObservable<TResult>>> selector,
+        IAsyncScheduler scheduler) =>
+        source.Replay(selector, scheduler);
+
     private static IAsyncObservable<TResult> ReplaySelectorCountImpl<T, TResult>(
         IAsyncObservable<T> source,
         Func<IAsyncObservable<T>, IAsyncObservable<TResult>> selector,
+        int bufferSize) =>
+        source.Replay(selector, bufferSize);
+
+    private static IAsyncObservable<TResult> ReplaySelectorCountAsyncImpl<T, TResult>(
+        IAsyncObservable<T> source,
+        Func<IAsyncObservable<T>, ValueTask<IAsyncObservable<TResult>>> selector,
         int bufferSize) =>
         source.Replay(selector, bufferSize);
 
@@ -187,15 +197,35 @@ public sealed partial class AsyncRxTarget
         IAsyncScheduler scheduler) =>
         source.Replay(selector, bufferSize, scheduler);
 
+    private static IAsyncObservable<TResult> ReplaySelectorCountScheduledAsyncImpl<T, TResult>(
+        IAsyncObservable<T> source,
+        Func<IAsyncObservable<T>, ValueTask<IAsyncObservable<TResult>>> selector,
+        int bufferSize,
+        IAsyncScheduler scheduler) =>
+        source.Replay(selector, bufferSize, scheduler);
+
     private static IAsyncObservable<TResult> ReplaySelectorTimeImpl<T, TResult>(
         IAsyncObservable<T> source,
         Func<IAsyncObservable<T>, IAsyncObservable<TResult>> selector,
         TimeSpan window) =>
         source.Replay(selector, window);
 
+    private static IAsyncObservable<TResult> ReplaySelectorTimeAsyncImpl<T, TResult>(
+        IAsyncObservable<T> source,
+        Func<IAsyncObservable<T>, ValueTask<IAsyncObservable<TResult>>> selector,
+        TimeSpan window) =>
+        source.Replay(selector, window);
+
     private static IAsyncObservable<TResult> ReplaySelectorTimeScheduledImpl<T, TResult>(
         IAsyncObservable<T> source,
         Func<IAsyncObservable<T>, IAsyncObservable<TResult>> selector,
+        TimeSpan window,
+        IAsyncScheduler scheduler) =>
+        source.Replay(selector, window, scheduler);
+
+    private static IAsyncObservable<TResult> ReplaySelectorTimeScheduledAsyncImpl<T, TResult>(
+        IAsyncObservable<T> source,
+        Func<IAsyncObservable<T>, ValueTask<IAsyncObservable<TResult>>> selector,
         TimeSpan window,
         IAsyncScheduler scheduler) =>
         source.Replay(selector, window, scheduler);
@@ -207,9 +237,24 @@ public sealed partial class AsyncRxTarget
         TimeSpan window) =>
         source.Replay(selector, bufferSize, window);
 
+    private static IAsyncObservable<TResult> ReplaySelectorCountTimeAsyncImpl<T, TResult>(
+        IAsyncObservable<T> source,
+        Func<IAsyncObservable<T>, ValueTask<IAsyncObservable<TResult>>> selector,
+        int bufferSize,
+        TimeSpan window) =>
+        source.Replay(selector, bufferSize, window);
+
     private static IAsyncObservable<TResult> ReplaySelectorCountTimeScheduledImpl<T, TResult>(
         IAsyncObservable<T> source,
         Func<IAsyncObservable<T>, IAsyncObservable<TResult>> selector,
+        int bufferSize,
+        TimeSpan window,
+        IAsyncScheduler scheduler) =>
+        source.Replay(selector, bufferSize, window, scheduler);
+
+    private static IAsyncObservable<TResult> ReplaySelectorCountTimeScheduledAsyncImpl<T, TResult>(
+        IAsyncObservable<T> source,
+        Func<IAsyncObservable<T>, ValueTask<IAsyncObservable<TResult>>> selector,
         int bufferSize,
         TimeSpan window,
         IAsyncScheduler scheduler) =>

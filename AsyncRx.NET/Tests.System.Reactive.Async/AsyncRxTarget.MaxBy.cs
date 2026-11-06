@@ -11,12 +11,13 @@ namespace Tests.System.Reactive.Async;
 public sealed partial class AsyncRxTarget
 {
     Realized<Seq<IList<TSource>>> ISeqVisitor.MaxBy<TSource, TKey>(MaxBySeq<TSource, TKey> seq) =>
-        _bridge.Run<Seq<IList<TSource>>>(MaxByImpl<TSource, TKey>, seq.Source, seq.KeySelector);
+        RunByForm<Seq<IList<TSource>>>(
+            MaxByImpl<TSource, TKey>, MaxByAsyncImpl<TSource, TKey>, seq.Source, seq.KeySelector);
 
     Realized<Seq<IList<TSource>>> ISeqVisitor.MaxByComparer<TSource, TKey>(
         MaxByComparerSeq<TSource, TKey> seq) =>
-        _bridge.Run<Seq<IList<TSource>>>(
-            MaxByComparerImpl<TSource, TKey>,
+        RunByForm<Seq<IList<TSource>>>(
+            MaxByComparerImpl<TSource, TKey>, MaxByComparerAsyncImpl<TSource, TKey>,
             seq.Source,
             seq.KeySelector,
             seq.Comparer);
@@ -26,9 +27,20 @@ public sealed partial class AsyncRxTarget
         Func<TSource, TKey> keySelector) =>
         source.MaxBy(keySelector);
 
+    private static IAsyncObservable<IList<TSource>> MaxByAsyncImpl<TSource, TKey>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<TKey>> keySelector) =>
+        source.MaxBy(keySelector);
+
     private static IAsyncObservable<IList<TSource>> MaxByComparerImpl<TSource, TKey>(
         IAsyncObservable<TSource> source,
         Func<TSource, TKey> keySelector,
+        IComparer<TKey> comparer) =>
+        source.MaxBy(keySelector, comparer);
+
+    private static IAsyncObservable<IList<TSource>> MaxByComparerAsyncImpl<TSource, TKey>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<TKey>> keySelector,
         IComparer<TKey> comparer) =>
         source.MaxBy(keySelector, comparer);
 }

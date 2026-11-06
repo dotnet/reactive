@@ -9,13 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxZipTests(ExecutionShape shape) : ZipTests
+public abstract class AsyncRxZipTests(ExecutionShape shape, DelegateForm delegates)
+    : ZipTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxZipTests_SynchronousCompletion() : AsyncRxZipTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxZipTests_SynchronousCompletion()
+    : AsyncRxZipTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxZipTests_ForcedYield() : AsyncRxZipTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxZipTests_ForcedYield()
+    : AsyncRxZipTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxZipTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxZipTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxZipTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxZipTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

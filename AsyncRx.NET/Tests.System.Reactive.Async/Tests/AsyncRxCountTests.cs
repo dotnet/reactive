@@ -9,13 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxCountTests(ExecutionShape shape) : CountTests
+public abstract class AsyncRxCountTests(ExecutionShape shape, DelegateForm delegates)
+    : CountTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxCountTests_SynchronousCompletion() : AsyncRxCountTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxCountTests_SynchronousCompletion()
+    : AsyncRxCountTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxCountTests_ForcedYield() : AsyncRxCountTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxCountTests_ForcedYield()
+    : AsyncRxCountTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxCountTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxCountTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxCountTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxCountTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

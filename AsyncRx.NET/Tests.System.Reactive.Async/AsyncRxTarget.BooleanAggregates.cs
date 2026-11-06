@@ -14,10 +14,11 @@ public sealed partial class AsyncRxTarget
         _bridge.Run<Seq<bool>>(AnyImpl<T>, seq.Source);
 
     Realized<Seq<bool>> ISeqVisitor.AnyPredicate<T>(AnyPredicateSeq<T> seq) =>
-        _bridge.Run<Seq<bool>>(AnyPredicateImpl<T>, seq.Source, seq.Predicate);
+        RunByForm<Seq<bool>>(
+            AnyPredicateImpl<T>, AnyPredicateAsyncImpl<T>, seq.Source, seq.Predicate);
 
     Realized<Seq<bool>> ISeqVisitor.All<T>(AllSeq<T> seq) =>
-        _bridge.Run<Seq<bool>>(AllImpl<T>, seq.Source, seq.Predicate);
+        RunByForm<Seq<bool>>(AllImpl<T>, AllAsyncImpl<T>, seq.Source, seq.Predicate);
 
     Realized<Seq<bool>> ISeqVisitor.Contains<T>(ContainsSeq<T> seq) =>
         _bridge.Run<Seq<bool>>(ContainsImpl<T>, seq.Source, seq.Value);
@@ -35,9 +36,19 @@ public sealed partial class AsyncRxTarget
         Func<T, bool> predicate) =>
         source.Any(predicate);
 
+    private static IAsyncObservable<bool> AnyPredicateAsyncImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask<bool>> predicate) =>
+        source.Any(predicate);
+
     private static IAsyncObservable<bool> AllImpl<T>(
         IAsyncObservable<T> source,
         Func<T, bool> predicate) =>
+        source.All(predicate);
+
+    private static IAsyncObservable<bool> AllAsyncImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask<bool>> predicate) =>
         source.All(predicate);
 
     private static IAsyncObservable<bool> ContainsImpl<T>(IAsyncObservable<T> source, T value) =>

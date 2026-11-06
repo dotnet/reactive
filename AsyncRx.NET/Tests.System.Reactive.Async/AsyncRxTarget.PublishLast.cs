@@ -16,7 +16,9 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<TResult>> ISeqVisitor.PublishLastSelector<T, TResult>(
         PublishLastSelectorSeq<T, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(PublishLastSelectorImpl<T, TResult>, seq.Source, seq.Selector);
+        RunByForm<Seq<TResult>>(
+            PublishLastSelectorImpl<T, TResult>, PublishLastSelectorAsyncImpl<T, TResult>,
+            seq.Source, seq.Selector);
 
     private static IConnectableAsyncObservable<T> PublishLastImpl<T>(IAsyncObservable<T> source) =>
         source.PublishLast();
@@ -24,5 +26,10 @@ public sealed partial class AsyncRxTarget
     private static IAsyncObservable<TResult> PublishLastSelectorImpl<T, TResult>(
         IAsyncObservable<T> source,
         Func<IAsyncObservable<T>, IAsyncObservable<TResult>> selector) =>
+        source.PublishLast(selector);
+
+    private static IAsyncObservable<TResult> PublishLastSelectorAsyncImpl<T, TResult>(
+        IAsyncObservable<T> source,
+        Func<IAsyncObservable<T>, ValueTask<IAsyncObservable<TResult>>> selector) =>
         source.PublishLast(selector);
 }

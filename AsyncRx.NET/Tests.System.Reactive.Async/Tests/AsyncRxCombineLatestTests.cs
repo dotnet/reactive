@@ -9,13 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxCombineLatestTests(ExecutionShape shape) : CombineLatestTests
+public abstract class AsyncRxCombineLatestTests(ExecutionShape shape, DelegateForm delegates)
+    : CombineLatestTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxCombineLatestTests_SynchronousCompletion() : AsyncRxCombineLatestTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxCombineLatestTests_SynchronousCompletion()
+    : AsyncRxCombineLatestTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxCombineLatestTests_ForcedYield() : AsyncRxCombineLatestTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxCombineLatestTests_ForcedYield()
+    : AsyncRxCombineLatestTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxCombineLatestTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxCombineLatestTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxCombineLatestTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxCombineLatestTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

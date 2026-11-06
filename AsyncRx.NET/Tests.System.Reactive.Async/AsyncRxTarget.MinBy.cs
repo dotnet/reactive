@@ -11,12 +11,13 @@ namespace Tests.System.Reactive.Async;
 public sealed partial class AsyncRxTarget
 {
     Realized<Seq<IList<TSource>>> ISeqVisitor.MinBy<TSource, TKey>(MinBySeq<TSource, TKey> seq) =>
-        _bridge.Run<Seq<IList<TSource>>>(MinByImpl<TSource, TKey>, seq.Source, seq.KeySelector);
+        RunByForm<Seq<IList<TSource>>>(
+            MinByImpl<TSource, TKey>, MinByAsyncImpl<TSource, TKey>, seq.Source, seq.KeySelector);
 
     Realized<Seq<IList<TSource>>> ISeqVisitor.MinByComparer<TSource, TKey>(
         MinByComparerSeq<TSource, TKey> seq) =>
-        _bridge.Run<Seq<IList<TSource>>>(
-            MinByComparerImpl<TSource, TKey>,
+        RunByForm<Seq<IList<TSource>>>(
+            MinByComparerImpl<TSource, TKey>, MinByComparerAsyncImpl<TSource, TKey>,
             seq.Source,
             seq.KeySelector,
             seq.Comparer);
@@ -26,9 +27,20 @@ public sealed partial class AsyncRxTarget
         Func<TSource, TKey> keySelector) =>
         source.MinBy(keySelector);
 
+    private static IAsyncObservable<IList<TSource>> MinByAsyncImpl<TSource, TKey>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<TKey>> keySelector) =>
+        source.MinBy(keySelector);
+
     private static IAsyncObservable<IList<TSource>> MinByComparerImpl<TSource, TKey>(
         IAsyncObservable<TSource> source,
         Func<TSource, TKey> keySelector,
+        IComparer<TKey> comparer) =>
+        source.MinBy(keySelector, comparer);
+
+    private static IAsyncObservable<IList<TSource>> MinByComparerAsyncImpl<TSource, TKey>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<TKey>> keySelector,
         IComparer<TKey> comparer) =>
         source.MinBy(keySelector, comparer);
 }

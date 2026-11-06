@@ -12,7 +12,8 @@ namespace Tests.System.Reactive.Async;
 public sealed partial class AsyncRxTarget
 {
     Realized<SeqPlan<TResult>> ISeqVisitor.Then1<T1, TResult>(SeqPlan1<T1, TResult> plan) =>
-        _bridge.Run<SeqPlan<TResult>>(Then1Impl<T1, TResult>, plan.Source, plan.Selector);
+        RunByForm<SeqPlan<TResult>>(
+            Then1Impl<T1, TResult>, Then1AsyncImpl<T1, TResult>, plan.Source, plan.Selector);
 
     Realized<SeqPlan<TResult>> ISeqVisitor.Then2<T1, T2, TResult>(SeqPlan2<T1, T2, TResult> plan) =>
         _bridge.Run<SeqPlan<TResult>>(Then2Impl<T1, T2, TResult>, plan.Pattern, plan.Selector);
@@ -92,6 +93,9 @@ public sealed partial class AsyncRxTarget
 
     private static AsyncPlan<TResult> Then1Impl<T1, TResult>(IAsyncObservable<T1> source, Func<T1,
             TResult> selector) =>
+        source.Then(selector);
+
+    private static AsyncPlan<TResult> Then1AsyncImpl<T1, TResult>(IAsyncObservable<T1> source, Func<T1, ValueTask<TResult>> selector) =>
         source.Then(selector);
 
     private static AsyncPlan<TResult> Then2Impl<T1, T2, TResult>(AsyncPattern<T1, T2> pattern, Func<

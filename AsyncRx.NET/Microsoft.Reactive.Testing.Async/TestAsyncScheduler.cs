@@ -115,6 +115,18 @@ public sealed partial class TestAsyncScheduler : AsyncSchedulerBase
     public ExecutionShape ExecutionShape { get; }
 
     /// <summary>
+    /// Gets a value indicating whether the caller is the virtual-time pump itself.
+    /// </summary>
+    /// <remarks>
+    /// True only while <see cref="Start"/> or <see cref="AdvanceBy"/> is running work, and on
+    /// the thread running it. A test adapter that offers the code under test an await point of
+    /// its own (a delegate that suspends before returning, say) asks this first: a
+    /// <see cref="YieldPoint"/> awaited anywhere else, from a scenario running in real time on
+    /// another scheduler, would hand its continuation to a pump that is not draining.
+    /// </remarks>
+    public bool IsOnPumpThread => _pumping && Thread.CurrentThread == _pumpThread;
+
+    /// <summary>
     /// Gets the current virtual time, in ticks.
     /// </summary>
     public long Clock { get; private set; }

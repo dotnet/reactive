@@ -9,14 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxDistinctUntilChangedTests(ExecutionShape shape)
+public abstract class AsyncRxDistinctUntilChangedTests(ExecutionShape shape, DelegateForm delegates)
     : DistinctUntilChangedTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxDistinctUntilChangedTests_SynchronousCompletion() : AsyncRxDistinctUntilChangedTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxDistinctUntilChangedTests_SynchronousCompletion()
+    : AsyncRxDistinctUntilChangedTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxDistinctUntilChangedTests_ForcedYield() : AsyncRxDistinctUntilChangedTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxDistinctUntilChangedTests_ForcedYield()
+    : AsyncRxDistinctUntilChangedTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxDistinctUntilChangedTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxDistinctUntilChangedTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxDistinctUntilChangedTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxDistinctUntilChangedTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

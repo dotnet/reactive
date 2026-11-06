@@ -17,8 +17,8 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<int>> ISeqVisitor.SumInt32Selector<TSource>(
         SumInt32SelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<int>>(
-            SumInt32SelectorImpl<TSource>,
+        RunByForm<Seq<int>>(
+            SumInt32SelectorImpl<TSource>, SumInt32SelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -27,13 +27,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, int> selector) =>
         source.Sum(selector);
 
+    private static IAsyncObservable<int> SumInt32SelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<int>> selector) =>
+        source.Sum(selector);
+
     Realized<Seq<long>> ISeqVisitor.SumInt64(SumInt64Seq seq) =>
         Realized.Of<Seq<long>>(Materialize(seq.Source).Sum());
 
     Realized<Seq<long>> ISeqVisitor.SumInt64Selector<TSource>(
         SumInt64SelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<long>>(
-            SumInt64SelectorImpl<TSource>,
+        RunByForm<Seq<long>>(
+            SumInt64SelectorImpl<TSource>, SumInt64SelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -42,13 +47,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, long> selector) =>
         source.Sum(selector);
 
+    private static IAsyncObservable<long> SumInt64SelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<long>> selector) =>
+        source.Sum(selector);
+
     Realized<Seq<float>> ISeqVisitor.SumSingle(SumSingleSeq seq) =>
         Realized.Of<Seq<float>>(Materialize(seq.Source).Sum());
 
     Realized<Seq<float>> ISeqVisitor.SumSingleSelector<TSource>(
         SumSingleSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<float>>(
-            SumSingleSelectorImpl<TSource>,
+        RunByForm<Seq<float>>(
+            SumSingleSelectorImpl<TSource>, SumSingleSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -57,13 +67,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, float> selector) =>
         source.Sum(selector);
 
+    private static IAsyncObservable<float> SumSingleSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<float>> selector) =>
+        source.Sum(selector);
+
     Realized<Seq<double>> ISeqVisitor.SumDouble(SumDoubleSeq seq) =>
         Realized.Of<Seq<double>>(Materialize(seq.Source).Sum());
 
     Realized<Seq<double>> ISeqVisitor.SumDoubleSelector<TSource>(
         SumDoubleSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<double>>(
-            SumDoubleSelectorImpl<TSource>,
+        RunByForm<Seq<double>>(
+            SumDoubleSelectorImpl<TSource>, SumDoubleSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -72,13 +87,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, double> selector) =>
         source.Sum(selector);
 
+    private static IAsyncObservable<double> SumDoubleSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<double>> selector) =>
+        source.Sum(selector);
+
     Realized<Seq<decimal>> ISeqVisitor.SumDecimal(SumDecimalSeq seq) =>
         Realized.Of<Seq<decimal>>(Materialize(seq.Source).Sum());
 
     Realized<Seq<decimal>> ISeqVisitor.SumDecimalSelector<TSource>(
         SumDecimalSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<decimal>>(
-            SumDecimalSelectorImpl<TSource>,
+        RunByForm<Seq<decimal>>(
+            SumDecimalSelectorImpl<TSource>, SumDecimalSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -87,13 +107,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, decimal> selector) =>
         source.Sum(selector);
 
+    private static IAsyncObservable<decimal> SumDecimalSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<decimal>> selector) =>
+        source.Sum(selector);
+
     Realized<Seq<int?>> ISeqVisitor.SumNullableInt32(SumNullableInt32Seq seq) =>
         Realized.Of<Seq<int?>>(Materialize(seq.Source).Sum());
 
     Realized<Seq<int?>> ISeqVisitor.SumNullableInt32Selector<TSource>(
         SumNullableInt32SelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<int?>>(
-            SumNullableInt32SelectorImpl<TSource>,
+        RunByForm<Seq<int?>>(
+            SumNullableInt32SelectorImpl<TSource>, SumNullableInt32SelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -102,13 +127,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, int?> selector) =>
         source.Sum(selector);
 
+    private static IAsyncObservable<int?> SumNullableInt32SelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<int?>> selector) =>
+        source.Sum(selector);
+
     Realized<Seq<long?>> ISeqVisitor.SumNullableInt64(SumNullableInt64Seq seq) =>
         Realized.Of<Seq<long?>>(Materialize(seq.Source).Sum());
 
     Realized<Seq<long?>> ISeqVisitor.SumNullableInt64Selector<TSource>(
         SumNullableInt64SelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<long?>>(
-            SumNullableInt64SelectorImpl<TSource>,
+        RunByForm<Seq<long?>>(
+            SumNullableInt64SelectorImpl<TSource>, SumNullableInt64SelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -117,13 +147,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, long?> selector) =>
         source.Sum(selector);
 
+    private static IAsyncObservable<long?> SumNullableInt64SelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<long?>> selector) =>
+        source.Sum(selector);
+
     Realized<Seq<float?>> ISeqVisitor.SumNullableSingle(SumNullableSingleSeq seq) =>
         Realized.Of<Seq<float?>>(Materialize(seq.Source).Sum());
 
     Realized<Seq<float?>> ISeqVisitor.SumNullableSingleSelector<TSource>(
         SumNullableSingleSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<float?>>(
-            SumNullableSingleSelectorImpl<TSource>,
+        RunByForm<Seq<float?>>(
+            SumNullableSingleSelectorImpl<TSource>, SumNullableSingleSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -132,13 +167,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, float?> selector) =>
         source.Sum(selector);
 
+    private static IAsyncObservable<float?> SumNullableSingleSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<float?>> selector) =>
+        source.Sum(selector);
+
     Realized<Seq<double?>> ISeqVisitor.SumNullableDouble(SumNullableDoubleSeq seq) =>
         Realized.Of<Seq<double?>>(Materialize(seq.Source).Sum());
 
     Realized<Seq<double?>> ISeqVisitor.SumNullableDoubleSelector<TSource>(
         SumNullableDoubleSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<double?>>(
-            SumNullableDoubleSelectorImpl<TSource>,
+        RunByForm<Seq<double?>>(
+            SumNullableDoubleSelectorImpl<TSource>, SumNullableDoubleSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -147,18 +187,28 @@ public sealed partial class AsyncRxTarget
         Func<TSource, double?> selector) =>
         source.Sum(selector);
 
+    private static IAsyncObservable<double?> SumNullableDoubleSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<double?>> selector) =>
+        source.Sum(selector);
+
     Realized<Seq<decimal?>> ISeqVisitor.SumNullableDecimal(SumNullableDecimalSeq seq) =>
         Realized.Of<Seq<decimal?>>(Materialize(seq.Source).Sum());
 
     Realized<Seq<decimal?>> ISeqVisitor.SumNullableDecimalSelector<TSource>(
         SumNullableDecimalSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<decimal?>>(
-            SumNullableDecimalSelectorImpl<TSource>,
+        RunByForm<Seq<decimal?>>(
+            SumNullableDecimalSelectorImpl<TSource>, SumNullableDecimalSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
     private static IAsyncObservable<decimal?> SumNullableDecimalSelectorImpl<TSource>(
         IAsyncObservable<TSource> source,
         Func<TSource, decimal?> selector) =>
+        source.Sum(selector);
+
+    private static IAsyncObservable<decimal?> SumNullableDecimalSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<decimal?>> selector) =>
         source.Sum(selector);
 }

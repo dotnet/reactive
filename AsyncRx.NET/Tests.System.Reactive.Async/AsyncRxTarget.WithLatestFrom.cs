@@ -12,15 +12,20 @@ public sealed partial class AsyncRxTarget
 {
     Realized<Seq<TResult>> ISeqVisitor.WithLatestFrom<TFirst, TSecond, TResult>(
         WithLatestFromSeq<TFirst, TSecond, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
+        RunByForm<Seq<TResult>>(
             WithLatestFromImpl<TFirst, TSecond, TResult>,
-            seq.First,
-            seq.Second,
+            WithLatestFromAsyncImpl<TFirst, TSecond, TResult>, seq.First, seq.Second,
             seq.ResultSelector);
 
     private static IAsyncObservable<TResult> WithLatestFromImpl<TFirst, TSecond, TResult>(
         IAsyncObservable<TFirst> first,
         IAsyncObservable<TSecond> second,
         Func<TFirst, TSecond, TResult> resultSelector) =>
+        first.WithLatestFrom(second, resultSelector);
+
+    private static IAsyncObservable<TResult> WithLatestFromAsyncImpl<TFirst, TSecond, TResult>(
+        IAsyncObservable<TFirst> first,
+        IAsyncObservable<TSecond> second,
+        Func<TFirst, TSecond, ValueTask<TResult>> resultSelector) =>
         first.WithLatestFrom(second, resultSelector);
 }

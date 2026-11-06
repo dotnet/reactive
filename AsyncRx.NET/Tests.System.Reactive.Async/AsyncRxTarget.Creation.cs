@@ -33,7 +33,7 @@ public sealed partial class AsyncRxTarget
             : _bridge.Run<Seq<T>>(EnumerableScheduledImpl<T>, seq.Source, Unwrap(seq.Scheduler));
 
     Realized<Seq<T>> ISeqVisitor.Defer<T>(DeferSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(DeferImpl<T>, seq.ObservableFactory);
+        RunByForm<Seq<T>>(DeferImpl<T>, DeferAsyncImpl<T>, seq.ObservableFactory);
 
     Realized<Seq<T>> ISeqVisitor.DeferAsync<T>(DeferAsyncSeq<T> seq) =>
         _bridge.Run<Seq<T>>(DeferAsyncImpl<T>, seq.ObservableFactory);

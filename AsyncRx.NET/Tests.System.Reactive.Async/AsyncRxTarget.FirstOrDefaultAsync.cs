@@ -15,7 +15,9 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<T>> ISeqVisitor.FirstOrDefaultAsyncPredicate<T>(
         FirstOrDefaultAsyncPredicateSeq<T> seq) =>
-        _bridge.Run<Seq<T>>(FirstOrDefaultAsyncPredicateImpl<T>, seq.Source, seq.Predicate);
+        RunByForm<Seq<T>>(
+            FirstOrDefaultAsyncPredicateImpl<T>, FirstOrDefaultAsyncPredicateAsyncImpl<T>,
+            seq.Source, seq.Predicate);
 
     private static IAsyncObservable<T> FirstOrDefaultAsyncImpl<T>(IAsyncObservable<T> source) =>
         source.FirstOrDefaultAsync();
@@ -23,5 +25,10 @@ public sealed partial class AsyncRxTarget
     private static IAsyncObservable<T> FirstOrDefaultAsyncPredicateImpl<T>(
         IAsyncObservable<T> source,
         Func<T, bool> predicate) =>
+        source.FirstOrDefaultAsync(predicate);
+
+    private static IAsyncObservable<T> FirstOrDefaultAsyncPredicateAsyncImpl<T>(
+        IAsyncObservable<T> source,
+        Func<T, ValueTask<bool>> predicate) =>
         source.FirstOrDefaultAsync(predicate);
 }

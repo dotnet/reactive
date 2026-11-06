@@ -9,13 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxSumTests(ExecutionShape shape) : SumTests
+public abstract class AsyncRxSumTests(ExecutionShape shape, DelegateForm delegates)
+    : SumTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxSumTests_SynchronousCompletion() : AsyncRxSumTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxSumTests_SynchronousCompletion()
+    : AsyncRxSumTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxSumTests_ForcedYield() : AsyncRxSumTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxSumTests_ForcedYield()
+    : AsyncRxSumTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxSumTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxSumTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxSumTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxSumTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

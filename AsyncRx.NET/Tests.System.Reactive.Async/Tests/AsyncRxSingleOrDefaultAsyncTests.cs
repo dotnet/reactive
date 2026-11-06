@@ -9,14 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxSingleOrDefaultAsyncTests(ExecutionShape shape)
+public abstract class AsyncRxSingleOrDefaultAsyncTests(ExecutionShape shape, DelegateForm delegates)
     : SingleOrDefaultAsyncTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxSingleOrDefaultAsyncTests_SynchronousCompletion() : AsyncRxSingleOrDefaultAsyncTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxSingleOrDefaultAsyncTests_SynchronousCompletion()
+    : AsyncRxSingleOrDefaultAsyncTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxSingleOrDefaultAsyncTests_ForcedYield() : AsyncRxSingleOrDefaultAsyncTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxSingleOrDefaultAsyncTests_ForcedYield()
+    : AsyncRxSingleOrDefaultAsyncTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxSingleOrDefaultAsyncTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxSingleOrDefaultAsyncTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxSingleOrDefaultAsyncTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxSingleOrDefaultAsyncTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

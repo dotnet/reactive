@@ -9,13 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxAverageTests(ExecutionShape shape) : AverageTests
+public abstract class AsyncRxAverageTests(ExecutionShape shape, DelegateForm delegates)
+    : AverageTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxAverageTests_SynchronousCompletion() : AsyncRxAverageTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxAverageTests_SynchronousCompletion()
+    : AsyncRxAverageTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxAverageTests_ForcedYield() : AsyncRxAverageTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxAverageTests_ForcedYield()
+    : AsyncRxAverageTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxAverageTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxAverageTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxAverageTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxAverageTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

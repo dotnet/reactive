@@ -9,13 +9,24 @@ using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Async.Tests;
 
-public abstract class AsyncRxSkipWhileTests(ExecutionShape shape) : SkipWhileTests
+public abstract class AsyncRxSkipWhileTests(ExecutionShape shape, DelegateForm delegates)
+    : SkipWhileTests
 {
-    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape);
+    protected override IRxTarget Target { get; } = new AsyncRxTarget(shape, delegates);
 }
 
 [TestClass]
-public sealed class AsyncRxSkipWhileTests_SynchronousCompletion() : AsyncRxSkipWhileTests(ExecutionShape.SynchronousCompletion);
+public sealed class AsyncRxSkipWhileTests_SynchronousCompletion()
+    : AsyncRxSkipWhileTests(ExecutionShape.SynchronousCompletion, DelegateForm.Synchronous);
 
 [TestClass]
-public sealed class AsyncRxSkipWhileTests_ForcedYield() : AsyncRxSkipWhileTests(ExecutionShape.ForcedYield);
+public sealed class AsyncRxSkipWhileTests_ForcedYield()
+    : AsyncRxSkipWhileTests(ExecutionShape.ForcedYield, DelegateForm.Synchronous);
+
+[TestClass]
+public sealed class AsyncRxSkipWhileTests_SynchronousCompletion_AsynchronousDelegates()
+    : AsyncRxSkipWhileTests(ExecutionShape.SynchronousCompletion, DelegateForm.Asynchronous);
+
+[TestClass]
+public sealed class AsyncRxSkipWhileTests_ForcedYield_AsynchronousDelegates()
+    : AsyncRxSkipWhileTests(ExecutionShape.ForcedYield, DelegateForm.Asynchronous);

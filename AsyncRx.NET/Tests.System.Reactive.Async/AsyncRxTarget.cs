@@ -29,11 +29,14 @@ namespace Tests.System.Reactive.Async;
 public sealed partial class AsyncRxTarget : IRxTarget
 {
     private readonly ExecutionShape _shape;
+    private readonly DelegateForm _delegates;
     private readonly DescriptionBridge _bridge;
+    private TestAsyncScheduler? _scheduler;
 
-    public AsyncRxTarget(ExecutionShape shape)
+    public AsyncRxTarget(ExecutionShape shape, DelegateForm delegates = DelegateForm.Synchronous)
     {
         _shape = shape;
+        _delegates = delegates;
         _bridge = new DescriptionBridge(this, new(
             ObservableOf: element => typeof(IAsyncObservable<>).MakeGenericType(element),
             GroupedOf: (key, element) => typeof(IGroupedAsyncObservable<,>).MakeGenericType(key, element),
@@ -76,8 +79,11 @@ public sealed partial class AsyncRxTarget : IRxTarget
 
     // ---- Harness ----
 
-    public Realized<TestSchedulerRef> CreateTestScheduler() =>
-        Realized.Of<TestSchedulerRef>(new TestAsyncScheduler(_shape));
+    public Realized<TestSchedulerRef> CreateTestScheduler()
+    {
+        _scheduler = new TestAsyncScheduler(_shape);
+        return Realized.Of<TestSchedulerRef>(_scheduler);
+    }
 
     // No optimisation interfaces to hide on this target: the scheduler is its own unoptimized form.
     public SchedulerRef DisableOptimizations(SchedulerRef scheduler) => scheduler;

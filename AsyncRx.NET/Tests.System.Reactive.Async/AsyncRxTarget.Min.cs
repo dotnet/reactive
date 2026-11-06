@@ -17,8 +17,8 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<int>> ISeqVisitor.MinInt32Selector<TSource>(
         MinInt32SelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<int>>(
-            MinInt32SelectorImpl<TSource>,
+        RunByForm<Seq<int>>(
+            MinInt32SelectorImpl<TSource>, MinInt32SelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -27,13 +27,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, int> selector) =>
         source.Min(selector);
 
+    private static IAsyncObservable<int> MinInt32SelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<int>> selector) =>
+        source.Min(selector);
+
     Realized<Seq<long>> ISeqVisitor.MinInt64(MinInt64Seq seq) =>
         Realized.Of<Seq<long>>(Materialize(seq.Source).Min());
 
     Realized<Seq<long>> ISeqVisitor.MinInt64Selector<TSource>(
         MinInt64SelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<long>>(
-            MinInt64SelectorImpl<TSource>,
+        RunByForm<Seq<long>>(
+            MinInt64SelectorImpl<TSource>, MinInt64SelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -42,13 +47,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, long> selector) =>
         source.Min(selector);
 
+    private static IAsyncObservable<long> MinInt64SelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<long>> selector) =>
+        source.Min(selector);
+
     Realized<Seq<float>> ISeqVisitor.MinSingle(MinSingleSeq seq) =>
         Realized.Of<Seq<float>>(Materialize(seq.Source).Min());
 
     Realized<Seq<float>> ISeqVisitor.MinSingleSelector<TSource>(
         MinSingleSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<float>>(
-            MinSingleSelectorImpl<TSource>,
+        RunByForm<Seq<float>>(
+            MinSingleSelectorImpl<TSource>, MinSingleSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -57,13 +67,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, float> selector) =>
         source.Min(selector);
 
+    private static IAsyncObservable<float> MinSingleSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<float>> selector) =>
+        source.Min(selector);
+
     Realized<Seq<double>> ISeqVisitor.MinDouble(MinDoubleSeq seq) =>
         Realized.Of<Seq<double>>(Materialize(seq.Source).Min());
 
     Realized<Seq<double>> ISeqVisitor.MinDoubleSelector<TSource>(
         MinDoubleSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<double>>(
-            MinDoubleSelectorImpl<TSource>,
+        RunByForm<Seq<double>>(
+            MinDoubleSelectorImpl<TSource>, MinDoubleSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -72,13 +87,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, double> selector) =>
         source.Min(selector);
 
+    private static IAsyncObservable<double> MinDoubleSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<double>> selector) =>
+        source.Min(selector);
+
     Realized<Seq<decimal>> ISeqVisitor.MinDecimal(MinDecimalSeq seq) =>
         Realized.Of<Seq<decimal>>(Materialize(seq.Source).Min());
 
     Realized<Seq<decimal>> ISeqVisitor.MinDecimalSelector<TSource>(
         MinDecimalSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<decimal>>(
-            MinDecimalSelectorImpl<TSource>,
+        RunByForm<Seq<decimal>>(
+            MinDecimalSelectorImpl<TSource>, MinDecimalSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -87,13 +107,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, decimal> selector) =>
         source.Min(selector);
 
+    private static IAsyncObservable<decimal> MinDecimalSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<decimal>> selector) =>
+        source.Min(selector);
+
     Realized<Seq<int?>> ISeqVisitor.MinNullableInt32(MinNullableInt32Seq seq) =>
         Realized.Of<Seq<int?>>(Materialize(seq.Source).Min());
 
     Realized<Seq<int?>> ISeqVisitor.MinNullableInt32Selector<TSource>(
         MinNullableInt32SelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<int?>>(
-            MinNullableInt32SelectorImpl<TSource>,
+        RunByForm<Seq<int?>>(
+            MinNullableInt32SelectorImpl<TSource>, MinNullableInt32SelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -102,13 +127,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, int?> selector) =>
         source.Min(selector);
 
+    private static IAsyncObservable<int?> MinNullableInt32SelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<int?>> selector) =>
+        source.Min(selector);
+
     Realized<Seq<long?>> ISeqVisitor.MinNullableInt64(MinNullableInt64Seq seq) =>
         Realized.Of<Seq<long?>>(Materialize(seq.Source).Min());
 
     Realized<Seq<long?>> ISeqVisitor.MinNullableInt64Selector<TSource>(
         MinNullableInt64SelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<long?>>(
-            MinNullableInt64SelectorImpl<TSource>,
+        RunByForm<Seq<long?>>(
+            MinNullableInt64SelectorImpl<TSource>, MinNullableInt64SelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -117,13 +147,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, long?> selector) =>
         source.Min(selector);
 
+    private static IAsyncObservable<long?> MinNullableInt64SelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<long?>> selector) =>
+        source.Min(selector);
+
     Realized<Seq<float?>> ISeqVisitor.MinNullableSingle(MinNullableSingleSeq seq) =>
         Realized.Of<Seq<float?>>(Materialize(seq.Source).Min());
 
     Realized<Seq<float?>> ISeqVisitor.MinNullableSingleSelector<TSource>(
         MinNullableSingleSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<float?>>(
-            MinNullableSingleSelectorImpl<TSource>,
+        RunByForm<Seq<float?>>(
+            MinNullableSingleSelectorImpl<TSource>, MinNullableSingleSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -132,13 +167,18 @@ public sealed partial class AsyncRxTarget
         Func<TSource, float?> selector) =>
         source.Min(selector);
 
+    private static IAsyncObservable<float?> MinNullableSingleSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<float?>> selector) =>
+        source.Min(selector);
+
     Realized<Seq<double?>> ISeqVisitor.MinNullableDouble(MinNullableDoubleSeq seq) =>
         Realized.Of<Seq<double?>>(Materialize(seq.Source).Min());
 
     Realized<Seq<double?>> ISeqVisitor.MinNullableDoubleSelector<TSource>(
         MinNullableDoubleSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<double?>>(
-            MinNullableDoubleSelectorImpl<TSource>,
+        RunByForm<Seq<double?>>(
+            MinNullableDoubleSelectorImpl<TSource>, MinNullableDoubleSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
@@ -147,19 +187,29 @@ public sealed partial class AsyncRxTarget
         Func<TSource, double?> selector) =>
         source.Min(selector);
 
+    private static IAsyncObservable<double?> MinNullableDoubleSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<double?>> selector) =>
+        source.Min(selector);
+
     Realized<Seq<decimal?>> ISeqVisitor.MinNullableDecimal(MinNullableDecimalSeq seq) =>
         Realized.Of<Seq<decimal?>>(Materialize(seq.Source).Min());
 
     Realized<Seq<decimal?>> ISeqVisitor.MinNullableDecimalSelector<TSource>(
         MinNullableDecimalSelectorSeq<TSource> seq) =>
-        _bridge.Run<Seq<decimal?>>(
-            MinNullableDecimalSelectorImpl<TSource>,
+        RunByForm<Seq<decimal?>>(
+            MinNullableDecimalSelectorImpl<TSource>, MinNullableDecimalSelectorAsyncImpl<TSource>,
             seq.Source,
             seq.Selector);
 
     private static IAsyncObservable<decimal?> MinNullableDecimalSelectorImpl<TSource>(
         IAsyncObservable<TSource> source,
         Func<TSource, decimal?> selector) =>
+        source.Min(selector);
+
+    private static IAsyncObservable<decimal?> MinNullableDecimalSelectorAsyncImpl<TSource>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<decimal?>> selector) =>
         source.Min(selector);
 
     Realized<Seq<T>> ISeqVisitor.Min<T>(MinSeq<T> seq) =>
@@ -170,15 +220,15 @@ public sealed partial class AsyncRxTarget
 
     Realized<Seq<TResult>> ISeqVisitor.MinSelector<TSource, TResult>(
         MinSelectorSeq<TSource, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(MinSelectorImpl<TSource, TResult>, seq.Source, seq.Selector);
+        RunByForm<Seq<TResult>>(
+            MinSelectorImpl<TSource, TResult>, MinSelectorAsyncImpl<TSource, TResult>, seq.Source,
+            seq.Selector);
 
     Realized<Seq<TResult>> ISeqVisitor.MinSelectorComparer<TSource, TResult>(
         MinSelectorComparerSeq<TSource, TResult> seq) =>
-        _bridge.Run<Seq<TResult>>(
+        RunByForm<Seq<TResult>>(
             MinSelectorComparerImpl<TSource, TResult>,
-            seq.Source,
-            seq.Selector,
-            seq.Comparer);
+            MinSelectorComparerAsyncImpl<TSource, TResult>, seq.Source, seq.Selector, seq.Comparer);
 
     private static IAsyncObservable<T> MinImpl<T>(IAsyncObservable<T> source) => source.Min();
 
@@ -192,9 +242,20 @@ public sealed partial class AsyncRxTarget
         Func<TSource, TResult> selector) =>
         source.Min(selector);
 
+    private static IAsyncObservable<TResult> MinSelectorAsyncImpl<TSource, TResult>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<TResult>> selector) =>
+        source.Min(selector);
+
     private static IAsyncObservable<TResult> MinSelectorComparerImpl<TSource, TResult>(
         IAsyncObservable<TSource> source,
         Func<TSource, TResult> selector,
+        IComparer<TResult> comparer) =>
+        source.Min(selector, comparer);
+
+    private static IAsyncObservable<TResult> MinSelectorComparerAsyncImpl<TSource, TResult>(
+        IAsyncObservable<TSource> source,
+        Func<TSource, ValueTask<TResult>> selector,
         IComparer<TResult> comparer) =>
         source.Min(selector, comparer);
 }
