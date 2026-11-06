@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 namespace System.Reactive
 {
     // Synchronize's observer: every notification is delivered under one gate, so a source that
-    // pushes from several threads at once, or re-enters, reaches the downstream observer one
-    // notification at a time, as Rx.NET's SynchronizedObserver serializes under a monitor. It is
-    // one of the two observers in the library that accept a notification arriving while another
-    // is in progress, since correcting that is the operator's purpose: this one waits its turn
+    // pushes from several threads at once,reaches the downstream observer one notification at a
+    // time, as Rx.NET's SynchronizedObserver serializes under a monitor. (Note that re-entrant
+    // calls will deadlock.)
+    // This is one of the two observers in the library that accept a notification arriving while
+    // another is in progress, since correcting that is the operator's purpose: this one waits its turn
     // under the gate, where AsyncQueueLockAsyncObserver queues the notification for the delivery
     // in progress and returns. Both implement the interface themselves rather than deriving
     // from AsyncObserverBase, whose guard rejects such a call before either could see it. What
