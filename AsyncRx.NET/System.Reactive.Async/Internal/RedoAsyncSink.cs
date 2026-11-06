@@ -8,15 +8,36 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    // The sink RepeatWhen and RetryWhen share, a port of Rx.NET's MainObserver in RepeatWhen.cs
-    // and RetryWhen.cs: it subscribes to the source, and each element the handler's sequence
-    // produces subscribes to it again (once the previous subscription has been released by the
-    // completion or error that signalled the handler, which the subclass does); the handler's
-    // completion or error terminates the sequence. The resubscription runs on a trampoline, as
-    // Rx.NET's does: a signal arriving while a subscription is in progress is counted and taken
-    // up by the loop already running, so a source that completes synchronously does not recurse.
-    // Rx.NET's half-serializer, which orders a handler failure against the source's concurrent
-    // elements, is not ported: delivery here is sequential, as elsewhere in the library.
+    // The sink behind RepeatWhen and RetryWhen, a port of Rx.NET's MainObserver in RepeatWhen.cs
+    // and RetryWhen.cs. Three parties take part:
+    //
+    //  * the source, which the sink subscribes to with itself as the observer, forwarding its
+    //    elements to the downstream Observer;
+    //  * the signals, which the derived sink raises from the source's terminal notification:
+    //    RepeatWhen's when the source completes, RetryWhen's when it fails;
+    //  * the handler's sequence, which the operator builds from a subject of those signals and
+    //    subscribes with HandlerConsumer, keeping the subscription in HandlerUpstream.
+    //
+    // To raise a signal, the derived sink first calls ReleaseUpstreamAsync, which drops the
+    // current subscription to the source (and returns false if the sink was disposed meanwhile,
+    // in which case nothing further happens), and then pushes the signal into the subject. Each
+    // element the handler's sequence produces in reply reaches HandlerNextAsync, which subscribes
+    // to the source again. The operator makes the first subscription the same way, by calling
+    // HandlerNextAsync once after subscribing the handler's sequence. The handler's own
+    // completion or error ends the result, through ForwardCompletedAsync and ForwardErrorAsync;
+    // the derived sink uses the same two for the source's terminal notification that is not its
+    // signal (RepeatWhen's error, RetryWhen's completion).
+    //
+    // HandlerNextAsync runs on a trampoline, as Rx.NET's does. A source that completes or fails
+    // synchronously raises its signal from inside the subscribe call, and the handler may answer
+    // with another element at once; the counter turns that nested arrival into one more turn of
+    // the loop already running rather than a nested subscribe, so the stack does not grow with
+    // the number of repetitions. A signal that finds the sink disposed, or a subscription still
+    // in place, returns with the counter raised, so no later signal subscribes either.
+    //
+    // Rx.NET's MainObserver also carries a half-serializer, which orders a failure of the
+    // handler against elements the source is delivering concurrently. It is not needed here:
+    // delivery is sequential, as everywhere in this library, so the two cannot overlap.
     internal abstract class RedoAsyncSink<TSource, TSignal> : IAsyncObserver<TSource>, IAsyncDisposable
     {
         private static readonly IAsyncDisposable Disposed = AsyncDisposable.Create(() => default);
