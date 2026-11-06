@@ -120,6 +120,9 @@ public sealed partial class RxTarget : IRxTarget
 
     public SubjectSeq<T> CreateReplaySubject<T>() => Wrap(new ReplaySubject<T>());
 
+    public SubjectSeq<T> CreateReplaySubject<T>(SchedulerRef scheduler) =>
+        Wrap(new ReplaySubject<T>(Unwrap(scheduler)));
+
     public SubjectSeq<T> CreateReplaySubject<T>(TimeSpan window) => Wrap(new ReplaySubject<T>(window));
 
     public SubjectSeq<T> CreateReplaySubject<T>(int bufferSize, TimeSpan window, SchedulerRef scheduler) =>

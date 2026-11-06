@@ -126,4 +126,7 @@ public sealed partial class AsyncRxTarget
 
     private static IAsyncObservable<T> NeverWitnessImpl<T>(T witness) =>
         AsyncObservable.Never(witness);
+
+    Realized<Seq<T>> ISeqVisitor.ThrowOnSubscribe<T>(ThrowOnSubscribeSeq<T> seq) =>
+        Realized.Of<Seq<T>>(new AsyncRxThrowingSubscribeObservable<T>(seq.Error));
 }

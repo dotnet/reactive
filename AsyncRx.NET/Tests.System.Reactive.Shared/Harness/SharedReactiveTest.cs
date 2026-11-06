@@ -138,6 +138,16 @@ public abstract class SharedReactiveTest : AsyncReactiveTest
     /// <remarks>Where the Rx.NET test writes <c>new ReplaySubject&lt;T&gt;()</c>.</remarks>
     protected SubjectSeq<T> CreateReplaySubject<T>() => Target.CreateReplaySubject<T>();
 
+    /// <summary>
+    /// Creates a replay subject that replays everything, delivering on a scheduler.
+    /// </summary>
+    /// <param name="scheduler">Keeps the time, and delivers every notification.</param>
+    /// <remarks>
+    /// Where the Rx.NET test writes <c>new ReplaySubject&lt;T&gt;(scheduler)</c>.
+    /// </remarks>
+    protected SubjectSeq<T> CreateReplaySubject<T>(SchedulerRef scheduler) =>
+        Target.CreateReplaySubject<T>(scheduler);
+
     /// <summary>Creates a replay subject that replays a time window.</summary>
     /// <param name="window">How long an element is replayed for after it was pushed.</param>
     /// <remarks>

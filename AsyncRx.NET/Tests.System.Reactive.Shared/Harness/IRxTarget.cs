@@ -277,6 +277,17 @@ public interface IRxTarget : ISeqVisitor
     /// </remarks>
     SubjectSeq<T> CreateReplaySubject<T>(int bufferSize, TimeSpan window, SchedulerRef scheduler);
 
+    /// <summary>
+    /// Creates a replay subject that replays everything, delivering on a scheduler.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements the subject carries.</typeparam>
+    /// <param name="scheduler">Keeps the time, and delivers every notification.</param>
+    /// <remarks>
+    /// As <see cref="CreateReplaySubject{T}(int, TimeSpan, SchedulerRef)"/>, for the scheduler-only
+    /// constructor, with the same <c>ScheduledAt</c> ticks on Rx.NET.
+    /// </remarks>
+    SubjectSeq<T> CreateReplaySubject<T>(SchedulerRef scheduler);
+
     /// <summary>Creates a behavior subject the scenario drives by hand, as a leaf.</summary>
     /// <param name="value">The subject's initial value.</param>
     /// <remarks>

@@ -126,6 +126,9 @@ public sealed partial class AsyncRxTarget : IRxTarget
 
     public SubjectSeq<T> CreateReplaySubject<T>() => Wrap(new SequentialReplayAsyncSubject<T>());
 
+    public SubjectSeq<T> CreateReplaySubject<T>(SchedulerRef scheduler) =>
+        Wrap(new SequentialReplayAsyncSubject<T>(Unwrap(scheduler)));
+
     public SubjectSeq<T> CreateReplaySubject<T>(TimeSpan window) =>
         Wrap(new SequentialReplayAsyncSubject<T>(window));
 

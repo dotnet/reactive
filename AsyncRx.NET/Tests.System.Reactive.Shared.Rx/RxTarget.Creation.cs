@@ -119,4 +119,7 @@ public sealed partial class RxTarget
 
     private static IObservable<T> NeverWitnessImpl<T>(T witness) =>
         Observable.Never(witness);
+
+    Realized<Seq<T>> ISeqVisitor.ThrowOnSubscribe<T>(ThrowOnSubscribeSeq<T> seq) =>
+        Realized.Of<Seq<T>>(new RxThrowingSubscribeObservable<T>(seq.Error));
 }
