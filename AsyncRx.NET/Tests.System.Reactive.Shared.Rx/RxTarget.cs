@@ -10,9 +10,9 @@ using System.Reflection;
 
 using Microsoft.Reactive.Testing;
 
-using RxTestScheduler = Microsoft.Reactive.Testing.TestScheduler;
-
 using Tests.System.Reactive.Shared.Scenarios;
+
+using RxTestScheduler = Microsoft.Reactive.Testing.TestScheduler;
 
 namespace Tests.System.Reactive.Shared.Rx;
 

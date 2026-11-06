@@ -9,7 +9,10 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// 6 of the file's 7 tests (<c>RetryWhen_Observable_ArgumentChecking</c> is the code-generated
 /// stratum), all transcribed as they are: the handler receives the error signals as a
 /// <c>Seq&lt;Exception&gt;</c> and returns a description, which the bridge adapts to the
-/// target's own delegate.
+/// target's own delegate. Four scenarios are additions, from a review of the AsyncRx.NET
+/// port: a handler that terminates during the subscribe never subscribes the source, and one
+/// that terminates from inside the subscriber's own element handler terminates the result once
+/// that delivery has finished.
 /// </remarks>
 public abstract class RetryWhenTests : SharedReactiveTest
 {
@@ -204,5 +207,123 @@ public abstract class RetryWhenTests : SharedReactiveTest
             Subscribe(320, 340),
             Subscribe(540, 560)
         );
+    }
+
+    [TestMethod]
+    public void RetryWhen_Observable_Handler_Completes_Immediately()
+    {
+        var xs = Scheduler.CreateColdObservable(
+            OnNext(10, 1),
+            OnError<int>(20, new Exception())
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.RetryWhen(v => Seq.Empty<int>())
+        );
+
+        res.Messages.AssertEqual(
+            OnCompleted<int>(200)
+        );
+
+        xs.Subscriptions.AssertEqual(
+        );
+    }
+
+    [TestMethod]
+    public void RetryWhen_Observable_Handler_Errors_Immediately()
+    {
+        var xs = Scheduler.CreateColdObservable(
+            OnNext(10, 1),
+            OnError<int>(20, new Exception())
+        );
+
+        var ex = new InvalidOperationException();
+
+        var res = Scheduler.Start(() =>
+            xs.RetryWhen(v => Seq.Throw<int>(ex))
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(200, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+        );
+    }
+
+    [TestMethod]
+    public async Task RetryWhen_Observable_Handler_Completed_During_Delivery()
+    {
+        var main = CreateSubject<int>();
+        var inner = CreateSubject<int>();
+
+        var end = 0;
+        var items = 0;
+        var errors = 0;
+
+        await main.RetryWhen(v => inner).SubscribeAsync(
+            Scheduler,
+            async v =>
+            {
+                items++;
+                await inner.OnCompletedAsync();
+            },
+            e =>
+            {
+                errors++;
+                return default;
+            },
+            () =>
+            {
+                end++;
+                return default;
+            });
+
+        await main.OnNextAsync(1);
+
+        Assert.IsFalse(main.HasObservers);
+        Assert.IsFalse(inner.HasObservers);
+
+        Assert.AreEqual(1, items);
+        Assert.AreEqual(0, errors);
+        Assert.AreEqual(1, end);
+    }
+
+    [TestMethod]
+    public async Task RetryWhen_Observable_Handler_Error_During_Delivery()
+    {
+        var main = CreateSubject<int>();
+        var inner = CreateSubject<int>();
+
+        var end = 0;
+        var items = 0;
+        var errors = 0;
+
+        await main.RetryWhen(v => inner).SubscribeAsync(
+            Scheduler,
+            async v =>
+            {
+                items++;
+                await inner.OnErrorAsync(new InvalidOperationException());
+            },
+            e =>
+            {
+                errors++;
+                return default;
+            },
+            () =>
+            {
+                end++;
+                return default;
+            });
+
+        await main.OnNextAsync(1);
+
+        Assert.IsFalse(main.HasObservers);
+        Assert.IsFalse(inner.HasObservers);
+
+        Assert.AreEqual(1, items);
+        Assert.AreEqual(1, errors);
+        Assert.AreEqual(0, end);
     }
 }

@@ -21,6 +21,12 @@ namespace Tests.System.Reactive.Shared.Scenarios;
 /// <c>Return</c> runs again in the same tick, and the repeats never end or, counted, all
 /// happen before the disposal).
 /// </para>
+/// <para>
+/// Four scenarios are additions, from a review of the AsyncRx.NET port: a handler that
+/// terminates during the subscribe never subscribes the source, and one that terminates from
+/// inside the subscriber's own element handler terminates the result once that delivery has
+/// finished.
+/// </para>
 /// </remarks>
 public abstract class RepeatWhenTests : SharedReactiveTest
 {
@@ -538,5 +544,123 @@ public abstract class RepeatWhenTests : SharedReactiveTest
             Subscribe(320, 340),
             Subscribe(540, 560)
         );
+    }
+
+    [TestMethod]
+    public void RepeatWhen_Handler_Completes_Immediately()
+    {
+        var xs = Scheduler.CreateColdObservable(
+            OnNext(10, 1),
+            OnCompleted<int>(20)
+        );
+
+        var res = Scheduler.Start(() =>
+            xs.RepeatWhen(v => Seq.Empty<int>())
+        );
+
+        res.Messages.AssertEqual(
+            OnCompleted<int>(200)
+        );
+
+        xs.Subscriptions.AssertEqual(
+        );
+    }
+
+    [TestMethod]
+    public void RepeatWhen_Handler_Errors_Immediately()
+    {
+        var xs = Scheduler.CreateColdObservable(
+            OnNext(10, 1),
+            OnCompleted<int>(20)
+        );
+
+        var ex = new InvalidOperationException();
+
+        var res = Scheduler.Start(() =>
+            xs.RepeatWhen(v => Seq.Throw<int>(ex))
+        );
+
+        res.Messages.AssertEqual(
+            OnError<int>(200, ex)
+        );
+
+        xs.Subscriptions.AssertEqual(
+        );
+    }
+
+    [TestMethod]
+    public async Task RepeatWhen_Handler_Completed_During_Delivery()
+    {
+        var main = CreateSubject<int>();
+        var inner = CreateSubject<int>();
+
+        var end = 0;
+        var items = 0;
+        var errors = 0;
+
+        await main.RepeatWhen(v => inner).SubscribeAsync(
+            Scheduler,
+            async v =>
+            {
+                items++;
+                await inner.OnCompletedAsync();
+            },
+            e =>
+            {
+                errors++;
+                return default;
+            },
+            () =>
+            {
+                end++;
+                return default;
+            });
+
+        await main.OnNextAsync(1);
+
+        Assert.IsFalse(main.HasObservers);
+        Assert.IsFalse(inner.HasObservers);
+
+        Assert.AreEqual(1, items);
+        Assert.AreEqual(0, errors);
+        Assert.AreEqual(1, end);
+    }
+
+    [TestMethod]
+    public async Task RepeatWhen_Handler_Error_During_Delivery()
+    {
+        var main = CreateSubject<int>();
+        var inner = CreateSubject<int>();
+
+        var end = 0;
+        var items = 0;
+        var errors = 0;
+
+        await main.RepeatWhen(v => inner).SubscribeAsync(
+            Scheduler,
+            async v =>
+            {
+                items++;
+                await inner.OnErrorAsync(new InvalidOperationException());
+            },
+            e =>
+            {
+                errors++;
+                return default;
+            },
+            () =>
+            {
+                end++;
+                return default;
+            });
+
+        await main.OnNextAsync(1);
+
+        Assert.IsFalse(main.HasObservers);
+        Assert.IsFalse(inner.HasObservers);
+
+        Assert.AreEqual(1, items);
+        Assert.AreEqual(1, errors);
+        Assert.AreEqual(0, end);
     }
 }

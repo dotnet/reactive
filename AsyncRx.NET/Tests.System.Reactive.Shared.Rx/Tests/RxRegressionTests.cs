@@ -7,7 +7,9 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+
 using Microsoft.Reactive.Testing;
+
 using Tests.System.Reactive.Shared.Scenarios;
 
 // Rx.NET marks its blocking operators obsolete, pointing at the async forms; these tests use

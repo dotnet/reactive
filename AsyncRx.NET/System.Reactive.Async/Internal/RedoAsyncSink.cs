@@ -35,17 +35,29 @@ namespace System.Reactive.Linq
     // the number of repetitions. A signal that finds the sink disposed, or a subscription still
     // in place, returns with the counter raised, so no later signal subscribes either.
     //
-    // Rx.NET's MainObserver also carries a half-serializer, which orders a failure of the
-    // handler against elements the source is delivering concurrently. It is not needed here:
-    // delivery is sequential, as everywhere in this library, so the two cannot overlap.
+    // The source and the handler's sequence are independent, so the handler may terminate while
+    // an element of the source is still being delivered downstream, and the observer grammar
+    // forbids delivering the terminal notification until that delivery has finished. Rx.NET's
+    // MainObserver orders the two with a half-serializer, and so does this sink: _wip counts
+    // the delivery in flight, and a terminal notification that arrives during one is kept in
+    // _terminal and forwarded by that delivery once it has finished, while one that arrives
+    // between deliveries is forwarded at once. Forwarding a terminal notification then disposes
+    // the sink's subscriptions, as Rx.NET's does, so a handler that terminates during the
+    // subscribe call (an empty one, say) leaves the source unsubscribed, and an element arriving
+    // after a terminal notification is dropped.
     internal abstract class RedoAsyncSink<TSource, TSignal> : IAsyncObserver<TSource>, IAsyncDisposable
     {
         private static readonly IAsyncDisposable Disposed = AsyncDisposable.Create(() => default);
 
+        // Stands in _terminal for a completion, so that one field records whichever terminal
+        // notification was accepted.
+        private static readonly Exception Completed = new();
+
         private readonly IAsyncObservable<TSource> _source;
         private IAsyncDisposable _upstream;
         private int _trampoline;
-        private int _terminated;
+        private int _wip;
+        private Exception _terminal;
 
         protected RedoAsyncSink(IAsyncObserver<TSource> observer, IAsyncObservable<TSource> source)
         {
@@ -60,7 +72,17 @@ namespace System.Reactive.Linq
 
         internal SingleAssignmentAsyncDisposable HandlerUpstream { get; } = new();
 
-        public virtual ValueTask OnNextAsync(TSource value) => Observer.OnNextAsync(value);
+        public ValueTask OnNextAsync(TSource value)
+        {
+            if (Interlocked.CompareExchange(ref _wip, 1, 0) != 0)
+            {
+                // A terminal notification has been accepted (or a delivery is somehow still in
+                // flight, which the source's own grammar rules out); the element is dropped.
+                return default;
+            }
+
+            return DeliverAsync(value);
+        }
 
         public abstract ValueTask OnErrorAsync(Exception error);
 
@@ -107,11 +129,9 @@ namespace System.Reactive.Linq
             return true;
         }
 
-        protected ValueTask ForwardErrorAsync(Exception error) =>
-            Interlocked.Exchange(ref _terminated, 1) == 0 ? Observer.OnErrorAsync(error) : default;
+        protected ValueTask ForwardErrorAsync(Exception error) => ForwardTerminalAsync(error);
 
-        protected ValueTask ForwardCompletedAsync() =>
-            Interlocked.Exchange(ref _terminated, 1) == 0 ? Observer.OnCompletedAsync() : default;
+        protected ValueTask ForwardCompletedAsync() => ForwardTerminalAsync(Completed);
 
         // Subscribes to the source for each signal, on the trampoline described above. As in
         // Rx.NET, a signal that finds the sink disposed, or a subscription still in place,
@@ -133,6 +153,51 @@ namespace System.Reactive.Linq
                 }
                 while (Interlocked.Decrement(ref _trampoline) != 0);
             }
+        }
+
+        private async ValueTask DeliverAsync(TSource value)
+        {
+            await Observer.OnNextAsync(value).ConfigureAwait(false);
+
+            if (Interlocked.Decrement(ref _wip) != 0)
+            {
+                // A terminal notification arrived during the delivery; it goes next.
+                await DeliverTerminalAsync().ConfigureAwait(false);
+            }
+        }
+
+        // Accepts the first terminal notification and forwards it unless a delivery is in
+        // flight, in which case the delivery forwards it. _wip stays raised either way, so
+        // nothing further is delivered.
+        private ValueTask ForwardTerminalAsync(Exception terminal)
+        {
+            if (Interlocked.CompareExchange(ref _terminal, terminal, null) != null)
+            {
+                return default;
+            }
+
+            if (Interlocked.Increment(ref _wip) != 1)
+            {
+                return default;
+            }
+
+            return DeliverTerminalAsync();
+        }
+
+        private async ValueTask DeliverTerminalAsync()
+        {
+            var terminal = Volatile.Read(ref _terminal);
+
+            if (terminal == Completed)
+            {
+                await Observer.OnCompletedAsync().ConfigureAwait(false);
+            }
+            else
+            {
+                await Observer.OnErrorAsync(terminal).ConfigureAwait(false);
+            }
+
+            await DisposeAsync().ConfigureAwait(false);
         }
 
         private sealed class HandlerObserver : IAsyncObserver<TSignal>

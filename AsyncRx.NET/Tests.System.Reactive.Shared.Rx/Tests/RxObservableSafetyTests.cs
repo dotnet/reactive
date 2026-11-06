@@ -5,7 +5,9 @@
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+
 using Microsoft.Reactive.Testing;
+
 using Tests.System.Reactive.Shared.Scenarios;
 
 namespace Tests.System.Reactive.Shared.Rx.Tests;
