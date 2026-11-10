@@ -103,9 +103,9 @@ stages:
           steps:
 
           - task: UseDotNet@2
-            displayName: Use .NET 8.0.x SDK
+            displayName: Use .NET 11.0.x SDK
             inputs:
-              version: 8.0.x
+              version: 11.0.x
               performMultiLevelLookup: true
 
           - task: DotNetCoreCLI@2
