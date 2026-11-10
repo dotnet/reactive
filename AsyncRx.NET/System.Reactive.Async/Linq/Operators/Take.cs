@@ -29,6 +29,28 @@ namespace System.Reactive.Linq
                 static (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Take(observer, count)));
         }
 
+        public static IAsyncObservable<TSource> Take<TSource>(this IAsyncObservable<TSource> source, int count, IAsyncScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            // As in Rx.NET, the scheduler only matters for the degenerate count of zero, where
+            // the completion is scheduled rather than delivered immediately.
+            if (count == 0)
+            {
+                return Empty<TSource>(scheduler);
+            }
+
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                count,
+                static (source, count, observer) => source.SubscribeSafeAsync(AsyncObserver.Take(observer, count)));
+        }
+
         public static IAsyncObservable<TSource> Take<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration)
         {
             if (source == null)
@@ -36,10 +58,8 @@ namespace System.Reactive.Linq
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
 
-            if (duration == TimeSpan.Zero)
-            {
-                return Empty<TSource>();
-            }
+            // Even a zero duration subscribes the source, as in Rx.NET, with the completion
+            // delivered by the scheduler, so that the source sees the subscription.
 
             // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want Take on the observer?
 
@@ -62,13 +82,8 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
-            if (scheduler == null)  // REVIEW: scheduler not used.
+            if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
-
-            if (duration == TimeSpan.Zero)
-            {
-                return Empty<TSource>();
-            }
 
             // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want Take on the observer?
 
@@ -77,7 +92,7 @@ namespace System.Reactive.Linq
                 (duration, scheduler),
                 static async (source, state, observer) =>
                 {
-                    var (sourceObserver, timer) = await AsyncObserver.Take(observer, state.duration).ConfigureAwait(false);
+                    var (sourceObserver, timer) = await AsyncObserver.Take(observer, state.duration, state.scheduler).ConfigureAwait(false);
 
                     var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
@@ -131,22 +146,69 @@ namespace System.Reactive.Linq
                 // DESIGN: It seems that if an observer would be an IAsyncDisposable, this could get a bit easier ("inject" the inner disposable).
 
                 var gate = new AsyncGate();
+                var done = false;
+
+                // Once the sequence has completed (by the timer or by the source), nothing more
+                // may be forwarded: a source notification that was already waiting for the gate
+                // when the timer fired must be dropped, as Rx.NET's disposed sink drops it.
+                //
+                // Nothing here is specific to Take: every operator that can be terminated from a
+                // second source of events (a timer, another sequence) while a delivery from the
+                // first is in flight needs this terminate-once check under its gate, so that the
+                // late notification is dropped here rather than reaching the observer after its
+                // terminal one. A shared gated, terminate-once sink would spare each operator
+                // its own copy.
+                var sourceObserver = Create<TSource>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!done)
+                            {
+                                await observer.OnNextAsync(x).ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!done)
+                            {
+                                done = true;
+                                await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (!done)
+                            {
+                                done = true;
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    });
 
                 return
                     (
-                        Synchronize(observer, gate),
-                        await scheduler.ScheduleAsync((observer, scheduler, gate), duration, static async (state, ct) =>
+                        sourceObserver,
+                        await scheduler.ScheduleAsync(async ct =>
                         {
-                            var (observer, scheduler, gate) = state;
-
                             if (!ct.IsCancellationRequested)
                             {
                                 using (await gate.LockAsync().RendezVous(scheduler, ct))
                                 {
-                                    await observer.OnCompletedAsync().RendezVous(scheduler, ct);
+                                    if (!done)
+                                    {
+                                        done = true;
+                                        await observer.OnCompletedAsync().RendezVous(scheduler, ct);
+                                    }
                                 }
                             }
-                        }).ConfigureAwait(false)
+                        }, duration).ConfigureAwait(false)
                     );
             }
         }

@@ -47,29 +47,7 @@ namespace System.Reactive.Linq
             if (gate == null)
                 throw new ArgumentNullException(nameof(gate));
 
-            return Create<TSource>(
-                async x =>
-                {
-                    using (await gate.LockAsync().ConfigureAwait(false))
-                    {
-                        await observer.OnNextAsync(x).ConfigureAwait(false);
-                    }
-                },
-                async ex =>
-                {
-                    using (await gate.LockAsync().ConfigureAwait(false))
-                    {
-                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
-                    }
-                },
-                async () =>
-                {
-                    using (await gate.LockAsync().ConfigureAwait(false))
-                    {
-                        await observer.OnCompletedAsync().ConfigureAwait(false);
-                    }
-                }
-            );
+            return new SynchronizeAsyncObserver<TSource>(observer, gate);
         }
     }
 }

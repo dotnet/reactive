@@ -25,15 +25,13 @@ namespace System.Reactive.Linq
                 {
                     var (sourceObserver, untilObserver) = AsyncObserver.TakeUntil<TSource, TUntil>(observer);
 
-                    var sourceTask = source.SubscribeSafeAsync(sourceObserver);
-                    var untilTask = until.SubscribeSafeAsync(untilObserver);
+                    // As in Rx.NET: the other sequence is subscribed first, so that one that fires
+                    // at once preempts the source before it is subscribed, and its subscription is
+                    // released when it completes, since a completion without a value is no signal.
+                    var untilSubscription = await SubscribeReleasingOnCompletedAsync(until, untilObserver).ConfigureAwait(false);
+                    var sourceSubscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
-                    // REVIEW: Consider concurrent subscriptions.
-
-                    var d1 = await sourceTask.ConfigureAwait(false);
-                    var d2 = await untilTask.ConfigureAwait(false);
-
-                    return StableCompositeAsyncDisposable.Create(d1, d2);
+                    return StableCompositeAsyncDisposable.Create(sourceSubscription, untilSubscription);
                 });
         }
 
@@ -76,6 +74,57 @@ namespace System.Reactive.Linq
                     var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
                     return StableCompositeAsyncDisposable.Create(subscription, timer);
+                });
+        }
+        public static IAsyncObservable<TSource> TakeUntil<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> stopPredicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (stopPredicate == null)
+                throw new ArgumentNullException(nameof(stopPredicate));
+
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                stopPredicate,
+                static (source, stopPredicate, observer) => source.SubscribeSafeAsync(AsyncObserver.TakeUntil(observer, stopPredicate)));
+        }
+
+        public static IAsyncObservable<TSource> TakeUntil<TSource>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<bool>> stopPredicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (stopPredicate == null)
+                throw new ArgumentNullException(nameof(stopPredicate));
+
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                stopPredicate,
+                static (source, stopPredicate, observer) => source.SubscribeSafeAsync(AsyncObserver.TakeUntil(observer, stopPredicate)));
+        }
+
+        public static IAsyncObservable<TSource> TakeUntil<TSource>(this IAsyncObservable<TSource> source, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return CreateAsyncObservable<TSource>.From(
+                source,
+                cancellationToken,
+                static async (source, cancellationToken, observer) =>
+                {
+                    // As in Rx.NET: a token already cancelled completes the result at once, and
+                    // the source is never subscribed.
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        await observer.OnCompletedAsync().ConfigureAwait(false);
+                        return AsyncDisposable.Nop;
+                    }
+
+                    var (sink, registration) = AsyncObserver.TakeUntil(observer, cancellationToken);
+
+                    var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(subscription, registration);
                 });
         }
     }
@@ -169,6 +218,112 @@ namespace System.Reactive.Linq
                         }).ConfigureAwait(false)
                     );
             }
+        }
+
+        public static IAsyncObserver<TSource> TakeUntil<TSource>(IAsyncObserver<TSource> observer, Func<TSource, bool> stopPredicate)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (stopPredicate == null)
+                throw new ArgumentNullException(nameof(stopPredicate));
+
+            return TakeUntil(observer, x => new ValueTask<bool>(stopPredicate(x)));
+        }
+
+        public static IAsyncObserver<TSource> TakeUntil<TSource>(IAsyncObserver<TSource> observer, Func<TSource, ValueTask<bool>> stopPredicate)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (stopPredicate == null)
+                throw new ArgumentNullException(nameof(stopPredicate));
+
+            // As in Rx.NET: the element is delivered first, then the predicate decides whether it
+            // was the last.
+            return Create<TSource>(
+                async x =>
+                {
+                    await observer.OnNextAsync(x).ConfigureAwait(false);
+
+                    bool shouldStop;
+
+                    try
+                    {
+                        shouldStop = await stopPredicate(x).ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        return;
+                    }
+
+                    if (shouldStop)
+                    {
+                        await observer.OnCompletedAsync().ConfigureAwait(false);
+                    }
+                },
+                observer.OnErrorAsync,
+                observer.OnCompletedAsync
+            );
+        }
+
+        public static (IAsyncObserver<TSource>, IAsyncDisposable) TakeUntil<TSource>(IAsyncObserver<TSource> observer, CancellationToken cancellationToken)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+
+            var gate = new AsyncGate();
+            var done = false;
+
+            async ValueTask CompleteAsync()
+            {
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    if (!done)
+                    {
+                        done = true;
+                        await observer.OnCompletedAsync().ConfigureAwait(false);
+                    }
+                }
+            }
+
+            // The token's callback is synchronous, so the completion it starts runs on as detached
+            // work, as the library's other token callbacks do; the gate orders it against the
+            // source's notifications.
+            var registration = cancellationToken.Register(
+                static state => { _ = ((Func<ValueTask>)state!)(); },
+                (Func<ValueTask>)CompleteAsync,
+                useSynchronizationContext: false);
+
+            var sink = Create<TSource>(
+                async x =>
+                {
+                    using (await gate.LockAsync().ConfigureAwait(false))
+                    {
+                        if (!done)
+                        {
+                            await observer.OnNextAsync(x).ConfigureAwait(false);
+                        }
+                    }
+                },
+                async ex =>
+                {
+                    using (await gate.LockAsync().ConfigureAwait(false))
+                    {
+                        if (!done)
+                        {
+                            done = true;
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    }
+                },
+                CompleteAsync
+            );
+
+            return (sink, AsyncDisposable.Create(() =>
+            {
+                registration.Dispose();
+                return default;
+            }));
         }
     }
 }

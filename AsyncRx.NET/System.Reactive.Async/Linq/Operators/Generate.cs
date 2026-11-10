@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create<TResult>(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector));
+            return CreateAsyncObservable<TResult>.From(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector));
         }
 
         public static IAsyncObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, IAsyncScheduler scheduler)
@@ -32,7 +32,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TResult>(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, scheduler));
+            return CreateAsyncObservable<TResult>.From(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, scheduler));
         }
 
         public static IAsyncObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, ValueTask<bool>> condition, Func<TState, ValueTask<TState>> iterate, Func<TState, ValueTask<TResult>> resultSelector)
@@ -44,7 +44,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create<TResult>(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector));
+            return CreateAsyncObservable<TResult>.From(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector));
         }
 
         public static IAsyncObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, ValueTask<bool>> condition, Func<TState, ValueTask<TState>> iterate, Func<TState, ValueTask<TResult>> resultSelector, IAsyncScheduler scheduler)
@@ -58,7 +58,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TResult>(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, scheduler));
+            return CreateAsyncObservable<TResult>.From(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, scheduler));
         }
 
         public static IAsyncObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector)
@@ -72,7 +72,7 @@ namespace System.Reactive.Linq
             if (timeSelector == null)
                 throw new ArgumentNullException(nameof(timeSelector));
 
-            return Create<TResult>(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector));
+            return CreateAsyncObservable<TResult>.From(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector));
         }
 
         public static IAsyncObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector, IAsyncScheduler scheduler)
@@ -88,7 +88,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TResult>(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector, scheduler));
+            return CreateAsyncObservable<TResult>.From(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector, scheduler));
         }
 
         public static IAsyncObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, ValueTask<bool>> condition, Func<TState, ValueTask<TState>> iterate, Func<TState, ValueTask<TResult>> resultSelector, Func<TState, ValueTask<TimeSpan>> timeSelector)
@@ -102,7 +102,7 @@ namespace System.Reactive.Linq
             if (timeSelector == null)
                 throw new ArgumentNullException(nameof(timeSelector));
 
-            return Create<TResult>(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector));
+            return CreateAsyncObservable<TResult>.From(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector));
         }
 
         public static IAsyncObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, ValueTask<bool>> condition, Func<TState, ValueTask<TState>> iterate, Func<TState, ValueTask<TResult>> resultSelector, Func<TState, ValueTask<TimeSpan>> timeSelector, IAsyncScheduler scheduler)
@@ -118,7 +118,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TResult>(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector, scheduler));
+            return CreateAsyncObservable<TResult>.From(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector, scheduler));
         }
 
         public static IAsyncObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector)
@@ -132,7 +132,7 @@ namespace System.Reactive.Linq
             if (timeSelector == null)
                 throw new ArgumentNullException(nameof(timeSelector));
 
-            return Create<TResult>(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector));
+            return CreateAsyncObservable<TResult>.From(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector));
         }
 
         public static IAsyncObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector, IAsyncScheduler scheduler)
@@ -148,7 +148,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TResult>(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector, scheduler));
+            return CreateAsyncObservable<TResult>.From(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector, scheduler));
         }
 
         public static IAsyncObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, ValueTask<bool>> condition, Func<TState, ValueTask<TState>> iterate, Func<TState, ValueTask<TResult>> resultSelector, Func<TState, ValueTask<DateTimeOffset>> timeSelector)
@@ -162,7 +162,7 @@ namespace System.Reactive.Linq
             if (timeSelector == null)
                 throw new ArgumentNullException(nameof(timeSelector));
 
-            return Create<TResult>(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector));
+            return CreateAsyncObservable<TResult>.From(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector));
         }
 
         public static IAsyncObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, ValueTask<bool>> condition, Func<TState, ValueTask<TState>> iterate, Func<TState, ValueTask<TResult>> resultSelector, Func<TState, ValueTask<DateTimeOffset>> timeSelector, IAsyncScheduler scheduler)
@@ -178,7 +178,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TResult>(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector, scheduler));
+            return CreateAsyncObservable<TResult>.From(observer => AsyncObserver.Generate(observer, initialState, condition, iterate, resultSelector, timeSelector, scheduler));
         }
     }
 
@@ -397,16 +397,24 @@ namespace System.Reactive.Linq
                         return;
                     }
 
+                    // As in Rx.NET: the time selector gives the time at which the element is
+                    // produced, so the delay precedes the element, and completion follows the last
+                    // element at once.
                     if (hasResult)
                     {
+                        await scheduler.Delay(nextDue).RendezVous(scheduler, ct);
+
+                        if (ct.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
                         await observer.OnNextAsync(result).RendezVous(scheduler, ct);
                     }
                     else
                     {
                         break;
                     }
-
-                    await scheduler.Delay(nextDue).RendezVous(scheduler, ct);
                 }
 
                 if (!ct.IsCancellationRequested)
@@ -521,14 +529,19 @@ namespace System.Reactive.Linq
 
                     if (hasResult)
                     {
+                        await scheduler.Delay(nextDue).RendezVous(scheduler, ct);
+
+                        if (ct.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
                         await observer.OnNextAsync(result).RendezVous(scheduler, ct);
                     }
                     else
                     {
                         break;
                     }
-
-                    await scheduler.Delay(nextDue).RendezVous(scheduler, ct);
                 }
 
                 if (!ct.IsCancellationRequested)

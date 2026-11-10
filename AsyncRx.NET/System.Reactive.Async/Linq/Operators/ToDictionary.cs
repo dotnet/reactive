@@ -9,6 +9,62 @@ namespace System.Reactive.Linq
 {
     public partial class AsyncObservable
     {
+        public static IAsyncObservable<IDictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return CreateAsyncObservable<IDictionary<TKey, TSource>>.From(
+                source,
+                keySelector,
+                static (source, keySelector, observer) => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, keySelector)));
+        }
+
+        public static IAsyncObservable<IDictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
+
+            return CreateAsyncObservable<IDictionary<TKey, TSource>>.From(
+                source,
+                (keySelector, comparer),
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, state.keySelector, state.comparer)));
+        }
+
+        public static IAsyncObservable<IDictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return CreateAsyncObservable<IDictionary<TKey, TSource>>.From(
+                source,
+                keySelector,
+                static (source, keySelector, observer) => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, keySelector)));
+        }
+
+        public static IAsyncObservable<IDictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
+
+            return CreateAsyncObservable<IDictionary<TKey, TSource>>.From(
+                source,
+                (keySelector, comparer),
+                static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.ToDictionary(observer, state.keySelector, state.comparer)));
+        }
+
         public static IAsyncObservable<IDictionary<TKey, TValue>> ToDictionary<TSource, TKey, TValue>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TValue> valueSelector)
         {
             if (source == null)
@@ -76,6 +132,50 @@ namespace System.Reactive.Linq
 
     public partial class AsyncObserver
     {
+        public static IAsyncObserver<TSource> ToDictionary<TSource, TKey>(IAsyncObserver<IDictionary<TKey, TSource>> observer, Func<TSource, TKey> keySelector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return ToDictionary(observer, keySelector, x => x, EqualityComparer<TKey>.Default);
+        }
+
+        public static IAsyncObserver<TSource> ToDictionary<TSource, TKey>(IAsyncObserver<IDictionary<TKey, TSource>> observer, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
+
+            return ToDictionary(observer, keySelector, x => x, comparer);
+        }
+
+        public static IAsyncObserver<TSource> ToDictionary<TSource, TKey>(IAsyncObserver<IDictionary<TKey, TSource>> observer, Func<TSource, ValueTask<TKey>> keySelector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return ToDictionary(observer, keySelector, x => new ValueTask<TSource>(x), EqualityComparer<TKey>.Default);
+        }
+
+        public static IAsyncObserver<TSource> ToDictionary<TSource, TKey>(IAsyncObserver<IDictionary<TKey, TSource>> observer, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
+
+            return ToDictionary(observer, keySelector, x => new ValueTask<TSource>(x), comparer);
+        }
+
         public static IAsyncObserver<TSource> ToDictionary<TSource, TKey, TValue>(IAsyncObserver<IDictionary<TKey, TValue>> observer, Func<TSource, TKey> keySelector, Func<TSource, TValue> valueSelector)
         {
             if (observer == null)

@@ -13,7 +13,7 @@ namespace System.Reactive.Subjects
 {
     public abstract class ReplayAsyncSubject<T> : IAsyncSubject<T>
     {
-        private readonly IAsyncSubject<T> _impl;
+        private readonly ReplayBase _impl;
 
         public ReplayAsyncSubject(bool concurrent)
             : this(concurrent, int.MaxValue)
@@ -109,6 +109,8 @@ namespace System.Reactive.Subjects
 
         private static IScheduledAsyncObserver<T> CreateScheduledObserver(IAsyncObserver<T> observer, IAsyncScheduler scheduler) => new ScheduledAsyncObserver<T>(observer, scheduler);
 
+        public bool HasObservers => _impl.HasObservers;
+
         public ValueTask OnCompletedAsync() => _impl.OnCompletedAsync();
 
         public ValueTask OnErrorAsync(Exception error) => _impl.OnErrorAsync(error ?? throw new ArgumentNullException(nameof(error)));
@@ -130,6 +132,10 @@ namespace System.Reactive.Subjects
                 _concurrent = concurrent;
             }
 
+            // A snapshot, as Rx.NET's: the count is read without the gate, which is an async lock
+            // a synchronous property cannot take.
+            public bool HasObservers => _observers.Count > 0;
+
             public async ValueTask OnCompletedAsync()
             {
                 var observers = default(IScheduledAsyncObserver<T>[]);
@@ -142,6 +148,7 @@ namespace System.Reactive.Subjects
                         Trim();
 
                         observers = _observers.ToArray();
+                        _observers.Clear();
 
                         if (_concurrent)
                         {
@@ -176,6 +183,7 @@ namespace System.Reactive.Subjects
                         Trim();
 
                         observers = _observers.ToArray();
+                        _observers.Clear();
 
                         if (_concurrent)
                         {

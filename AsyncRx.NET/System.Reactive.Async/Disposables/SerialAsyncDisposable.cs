@@ -2,14 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Disposables
 {
     public sealed class SerialAsyncDisposable : IAsyncDisposable
     {
-        private readonly AsyncGate _gate = new();
+        private readonly object _gate = new();
 
         private IAsyncDisposable _disposable;
         private bool _disposed;
@@ -22,7 +21,7 @@ namespace System.Reactive.Disposables
             var shouldDispose = false;
             var old = default(IAsyncDisposable);
 
-            using (await _gate.LockAsync().ConfigureAwait(false))
+            lock (_gate)
             {
                 if (_disposed)
                 {
@@ -50,7 +49,7 @@ namespace System.Reactive.Disposables
         {
             var old = default(IAsyncDisposable);
 
-            using (await _gate.LockAsync().ConfigureAwait(false))
+            lock (_gate)
             {
                 if (!_disposed)
                 {

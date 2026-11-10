@@ -22,6 +22,19 @@ namespace System.Reactive.Concurrency
     /// The scheduled action receives a <see cref="CancellationToken"/> that is signalled if the
     /// <see cref="IAsyncDisposable"/> returned from the scheduling call is disposed.
     /// </para>
+    /// <para>
+    /// A scheduling call must not run any other caller's work, or the continuation of any other
+    /// caller's task, inline before it returns. A scheduler may run the action it has just been
+    /// given synchronously (as <see cref="ImmediateAsyncScheduler"/> does), but it must not use
+    /// the scheduling thread to run work that other callers have queued or are awaiting. The
+    /// library's operators schedule work from inside their critical sections and part way
+    /// through delivering notifications, and they rely on the principle that the consumer of a
+    /// notification never completes its producer's task: a scheduler that completed another
+    /// caller's task from within a scheduling call would make the scheduling caller that
+    /// consumer, and the other caller's continuation could then wait for something the
+    /// scheduling caller has yet to do, which is a deadlock. Implementers of custom schedulers
+    /// must keep to this, for example by resuming waiters on the thread pool rather than inline.
+    /// </para>
     /// </remarks>
     public interface IAsyncScheduler : IClock
     {
