@@ -34,9 +34,9 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: Use .NET Core 10.x SDK
+      displayName: Use .NET Core 11.x SDK
       inputs:
-        version: 10.x
+        version: 11.x
         includePreviewVersions: true
 
     - task: DotNetCoreCLI@2
