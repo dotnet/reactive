@@ -1,15 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net11.0;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Nullable>annotations</Nullable>
 
     <RootNamespace>System.Reactive</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(TargetFramework) == 'net11.0'">
+    <Features>runtime-async=on</Features>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" Condition="$(TargetFramework) == 'netstandard2.0'" />
-    <PackageReference Include="System.Reactive" Version="6.0.0" />
+    <PackageReference Include="System.Reactive" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -27,8 +27,8 @@
          shared testing vocabulary (Recorded, Notification, Subscription, ReactiveTest, TimeInterval)
          and the MSTest attributes and assertions. A query written in a scenario is a tree of
          neutral nodes (Seq<T>); each target project materializes it. -->
-    <PackageReference Include="Microsoft.Reactive.Testing" Version="6.0.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="7.0.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
 
     <!-- The C# compiler as a library, for ImplCalls (Harness/ImplCalls.cs), which
          reads each *Impl's source to find the library method it calls; and the reader of the
