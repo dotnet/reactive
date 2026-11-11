@@ -62,13 +62,7 @@ namespace System.Reactive.Linq
             {
                 tcs.TrySetCanceled(token);
 
-                subscription.DisposeAsync().AsTask().ContinueWith(t =>
-                {
-                    if (t.Exception != null)
-                    {
-                        // TODO: Trace?
-                    }
-                });
+                var ignored = DisposeOnCancelAsync(subscription);
             }))
             {
                 var i = 0;
@@ -126,6 +120,24 @@ namespace System.Reactive.Linq
                 await subscription.AssignAsync(d).ConfigureAwait(false);
 
                 await tcs.Task.ConfigureAwait(false);
+            }
+        }
+
+        // The cancellation callback cannot await the disposal, so it is left to run on its own.
+        // Calling an async method and discarding its task runs the disposal on the callback's
+        // thread until it suspends and resumes it wherever it completes; a continuation attached
+        // to the disposal's task would instead be queued to the thread pool, moving work off the
+        // scheduler the subscription was cancelled on. A failure of the disposal has nowhere to
+        // go, since the task returned to the caller has already been cancelled, so it is dropped.
+        private static async ValueTask DisposeOnCancelAsync(IAsyncDisposable subscription)
+        {
+            try
+            {
+                await subscription.DisposeAsync().ConfigureAwait(false);
+            }
+            catch
+            {
+                // Nothing can observe a failure of the disposal; see above.
             }
         }
     }
