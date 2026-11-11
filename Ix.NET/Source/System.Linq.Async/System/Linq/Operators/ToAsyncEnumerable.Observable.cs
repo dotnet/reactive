@@ -176,7 +176,7 @@ namespace System.Linq
             {
                 var cancelledTcs = default(TaskCompletionSource<bool>);
 
-                Dispose();
+                DisposeSubscription();
 
                 while (true)
                 {
