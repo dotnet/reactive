@@ -20,7 +20,7 @@
     <!-- Reuses the sync testing vocabulary (Recorded, Notification, Subscription, ReactiveTest)
          so scenarios stay portable between the sync and async platforms. Version matches the
          System.Reactive package that System.Reactive.Async references. -->
-    <PackageReference Include="Microsoft.Reactive.Testing" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="7.0.0" />
     <ProjectReference Include="..\System.Reactive.Async\System.Reactive.Async.csproj" />
   </ItemGroup>
 
