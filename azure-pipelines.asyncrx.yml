@@ -39,6 +39,12 @@ stages:
         version: 11.x
         includePreviewVersions: true
 
+    # We need .NET 10.0 as well to be able to run all tests.
+    - task: UseDotNet@2
+      displayName: Use .NET 10.0 SDK
+      inputs:
+        version: '10.0.x'
+
     - task: DotNetCoreCLI@2
       inputs:
         command: custom
