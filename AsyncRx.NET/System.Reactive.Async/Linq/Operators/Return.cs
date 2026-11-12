@@ -11,7 +11,7 @@ namespace System.Reactive.Linq
     {
         public static IAsyncObservable<TSource> Return<TSource>(TSource value)
         {
-            return Create<TSource>(observer => AsyncObserver.Return(observer, value));
+            return CreateAsyncObservable<TSource>.From(observer => AsyncObserver.Return(observer, value));
         }
 
         public static IAsyncObservable<TSource> Return<TSource>(TSource value, IAsyncScheduler scheduler)
@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(observer => AsyncObserver.Return(observer, value, scheduler));
+            return CreateAsyncObservable<TSource>.From(observer => AsyncObserver.Return(observer, value, scheduler));
         }
     }
 
@@ -34,8 +34,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return scheduler.ScheduleAsync(async ct =>
+            return scheduler.ScheduleAsync((observer, scheduler, value), static async (state, ct) =>
             {
+                var (observer, scheduler, value) = state;
+
                 if (ct.IsCancellationRequested)
                     return;
 

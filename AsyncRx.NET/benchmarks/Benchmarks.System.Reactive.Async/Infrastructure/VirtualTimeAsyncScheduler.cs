@@ -13,8 +13,8 @@ using System.Threading.Tasks;
 namespace Benchmarks.System.Reactive.Async.Infrastructure
 {
     /// <summary>
-    /// A virtual-time <see cref="IAsyncScheduler"/> for temporal (S3) benchmarks. AsyncRx has no test or
-    /// virtual-time scheduler, so the suite owns this one. Time only moves when <see cref="AdvanceByAsync"/> or
+    /// A virtual-time <see cref="IAsyncScheduler"/> for temporal (S3) benchmarks. It predates
+    /// <c>Microsoft.Reactive.Testing.Async</c>'s <c>TestAsyncScheduler</c> and is tuned for measurement. Time only moves when <see cref="AdvanceByAsync"/> or
     /// <see cref="RunUntilAsync"/> pumps it, so a 100,000-tick window costs no wall-clock waiting.
     /// </summary>
     /// <remarks>
@@ -80,14 +80,14 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         /// <summary>The current virtual time, in ticks since <see cref="Epoch"/>.</summary>
         public long NowTicks => Volatile.Read(ref _nowTicks);
 
-        public ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, ValueTask> action) =>
-            Enqueue(action, 0, timed: false);
+        public ValueTask<IAsyncDisposable> ScheduleAsync<TState>(TState state, Func<TState, CancellationToken, ValueTask> action) =>
+            Enqueue(state, action, 0, timed: false);
 
-        public ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, ValueTask> action, TimeSpan dueTime) =>
-            Enqueue(action, Math.Max(0, dueTime.Ticks), timed: true);
+        public ValueTask<IAsyncDisposable> ScheduleAsync<TState>(TState state, TimeSpan dueTime, Func<TState, CancellationToken, ValueTask> action) =>
+            Enqueue(state, action, Math.Max(0, dueTime.Ticks), timed: true);
 
-        public ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, ValueTask> action, DateTimeOffset dueTime) =>
-            Enqueue(action, Math.Max(0, (dueTime - Now).Ticks), timed: true);
+        public ValueTask<IAsyncDisposable> ScheduleAsync<TState>(TState state, DateTimeOffset dueTime, Func<TState, CancellationToken, ValueTask> action) =>
+            Enqueue(state, action, Math.Max(0, (dueTime - Now).Ticks), timed: true);
 
         /// <summary>Runs everything due up to and including now + <paramref name="by"/>, then sets the clock to that time.</summary>
         public ValueTask AdvanceByAsync(TimeSpan by) => PumpAsync(Volatile.Read(ref _nowTicks) + by.Ticks, null);
@@ -104,14 +104,14 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
             return PumpAsync(long.MaxValue, done);
         }
 
-        private ValueTask<IAsyncDisposable> Enqueue(Func<CancellationToken, ValueTask> action, long relativeTicks, bool timed)
+        private ValueTask<IAsyncDisposable> Enqueue<TState>(TState state, Func<TState, CancellationToken, ValueTask> action, long relativeTicks, bool timed)
         {
             if (action == null)
             {
                 throw new ArgumentNullException(nameof(action));
             }
 
-            var item = new Item(action, timed);
+            var item = new Item<TState>(state, action, timed);
             lock (_gate)
             {
                 var due = _nowTicks + relativeTicks;
@@ -219,7 +219,7 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
             ValueTask pending;
             try
             {
-                pending = item.Action(item.CreateToken());
+                pending = item.Invoke(item.CreateToken());
             }
             catch (OperationCanceledException)
             {
@@ -392,19 +392,16 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
 
         private readonly record struct Blocking(Task Task, long Version, long Due);
 
-        private sealed class Item : IAsyncDisposable
+        private abstract class Item : IAsyncDisposable
         {
-            public readonly Func<CancellationToken, ValueTask> Action;
             public readonly bool Timed;
             public long Due;
             private CancellationTokenSource? _cts;
             private int _cancelled;
 
-            public Item(Func<CancellationToken, ValueTask> action, bool timed)
-            {
-                Action = action;
-                Timed = timed;
-            }
+            protected Item(bool timed) => Timed = timed;
+
+            public abstract ValueTask Invoke(CancellationToken token);
 
             public bool IsCancelled => Volatile.Read(ref _cancelled) != 0;
 
@@ -431,6 +428,23 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
 
                 return default;
             }
+        }
+
+        // Carries the caller's state, so stateful scheduling (IAsyncScheduler's only shape since the state-argument
+        // change) needs no closure. The stateless AsyncScheduler extensions pass the action itself as the state.
+        private sealed class Item<TState> : Item
+        {
+            private readonly TState _state;
+            private readonly Func<TState, CancellationToken, ValueTask> _action;
+
+            public Item(TState state, Func<TState, CancellationToken, ValueTask> action, bool timed)
+                : base(timed)
+            {
+                _state = state;
+                _action = action;
+            }
+
+            public override ValueTask Invoke(CancellationToken token) => _action(_state, token);
         }
     }
 }

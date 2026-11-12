@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 namespace Benchmarks.System.Reactive.Async.Infrastructure
 {
     /// <summary>
-    /// Sanity checks for the benchmark infrastructure, run with <c>--verify</c>. AsyncRx has no test suite, so
-    /// this checks that the sources, sinks and <see cref="VirtualTimeAsyncScheduler"/> deliver what the
+    /// Sanity checks for the benchmark infrastructure, run with <c>--verify</c>. It checks that the sources, sinks and <see cref="VirtualTimeAsyncScheduler"/> deliver what the
     /// benchmarks assume before any time is spent measuring them.
     /// </summary>
     public static class SelfCheck

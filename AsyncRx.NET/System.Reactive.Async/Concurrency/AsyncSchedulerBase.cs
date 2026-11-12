@@ -11,54 +11,54 @@ namespace System.Reactive.Concurrency
     {
         public virtual DateTimeOffset Now => DateTimeOffset.Now;
 
-        public virtual ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, ValueTask> action)
+        public virtual ValueTask<IAsyncDisposable> ScheduleAsync<TState>(TState state, Func<TState, CancellationToken, ValueTask> action)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return ScheduleAsyncCore(action);
+            return ScheduleAsyncCore(state, action);
         }
 
-        public virtual ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, ValueTask> action, TimeSpan dueTime)
+        public virtual ValueTask<IAsyncDisposable> ScheduleAsync<TState>(TState state, TimeSpan dueTime, Func<TState, CancellationToken, ValueTask> action)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
             var dueTimeRelative = Normalize(dueTime);
 
-            return ScheduleAsyncCore(async ct =>
+            return ScheduleAsyncCore((scheduler: this, state, action, dueTimeRelative), static async (s, ct) =>
             {
-                await Delay(dueTimeRelative, ct); // NB: Honor SynchronizationContext to stay on scheduler.
+                await s.scheduler.Delay(s.dueTimeRelative, ct); // NB: Honor SynchronizationContext to stay on scheduler.
 
-                await action(ct);
+                await s.action(s.state, ct);
             });
         }
 
-        public virtual ValueTask<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, ValueTask> action, DateTimeOffset dueTime)
+        public virtual ValueTask<IAsyncDisposable> ScheduleAsync<TState>(TState state, DateTimeOffset dueTime, Func<TState, CancellationToken, ValueTask> action)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return ScheduleAsyncCore(async ct =>
+            return ScheduleAsyncCore((scheduler: this, state, action, dueTime), static async (s, ct) =>
             {
-                var dueTimeRelative = Normalize(dueTime - Now); // TODO: Support clock drift and clock changes.
+                var dueTimeRelative = Normalize(s.dueTime - s.scheduler.Now); // TODO: Support clock drift and clock changes.
 
-                await Delay(dueTimeRelative, ct); // NB: Honor SynchronizationContext to stay on scheduler.
+                await s.scheduler.Delay(dueTimeRelative, ct); // NB: Honor SynchronizationContext to stay on scheduler.
 
-                await action(ct);
+                await s.action(s.state, ct);
             });
         }
 
-        protected virtual async ValueTask<IAsyncDisposable> ScheduleAsyncCore(Func<CancellationToken, ValueTask> action)
+        protected virtual async ValueTask<IAsyncDisposable> ScheduleAsyncCore<TState>(TState state, Func<TState, CancellationToken, ValueTask> action)
         {
             var cad = new CancellationAsyncDisposable();
 
-            await ScheduleAsyncCore(action, cad.Token).ConfigureAwait(false);
+            await ScheduleAsyncCore(state, action, cad.Token).ConfigureAwait(false);
 
             return cad;
         }
 
-        protected abstract ValueTask ScheduleAsyncCore(Func<CancellationToken, ValueTask> action, CancellationToken token);
+        protected abstract ValueTask ScheduleAsyncCore<TState>(TState state, Func<TState, CancellationToken, ValueTask> action, CancellationToken token);
 
         protected abstract ValueTask Delay(TimeSpan dueTime, CancellationToken token);
 

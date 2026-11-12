@@ -18,7 +18,7 @@ namespace System.Threading.Tasks
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
 
-            return AsyncObservable.Create<Unit>(observer => task.AcceptAsync(observer));
+            return AsyncObservable.CreateAsyncObservable<Unit>.From(observer => task.AcceptAsync(observer));
         }
 
         public static IAsyncObservable<Unit> ToAsyncObservable(this Task task, IAsyncScheduler scheduler)
@@ -28,7 +28,7 @@ namespace System.Threading.Tasks
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return AsyncObservable.Create<Unit>(observer => task.AcceptAsync(observer, scheduler));
+            return AsyncObservable.CreateAsyncObservable<Unit>.From(observer => task.AcceptAsync(observer, scheduler));
         }
 
         public static IAsyncObservable<TResult> ToAsyncObservable<TResult>(this Task<TResult> task)
@@ -36,7 +36,7 @@ namespace System.Threading.Tasks
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
 
-            return AsyncObservable.Create<TResult>(observer => task.AcceptAsync(observer));
+            return AsyncObservable.CreateAsyncObservable<TResult>.From(observer => task.AcceptAsync(observer));
         }
 
         public static IAsyncObservable<TResult> ToAsyncObservable<TResult>(this Task<TResult> task, IAsyncScheduler scheduler)
@@ -46,7 +46,7 @@ namespace System.Threading.Tasks
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return AsyncObservable.Create<TResult>(observer => task.AcceptAsync(observer, scheduler));
+            return AsyncObservable.CreateAsyncObservable<TResult>.From(observer => task.AcceptAsync(observer, scheduler));
         }
 
         public static ValueTask<IAsyncDisposable> AcceptAsync(this Task task, IAsyncObserver<Unit> observer) => AcceptAsync(task, observer, ImmediateAsyncScheduler.Instance);
@@ -62,8 +62,10 @@ namespace System.Threading.Tasks
 
             ValueTask<IAsyncDisposable> CompleteAsync()
             {
-                return scheduler.ScheduleAsync(async ct =>
+                return scheduler.ScheduleAsync((task, observer, scheduler), static async (state, ct) =>
                 {
+                    var (task, observer, scheduler) = state;
+
                     if (ct.IsCancellationRequested)
                     {
                         return;
@@ -124,8 +126,10 @@ namespace System.Threading.Tasks
 
             ValueTask<IAsyncDisposable> CompleteAsync()
             {
-                return scheduler.ScheduleAsync(async ct =>
+                return scheduler.ScheduleAsync((task, observer, scheduler), static async (state, ct) =>
                 {
+                    var (task, observer, scheduler) = state;
+
                     if (ct.IsCancellationRequested)
                     {
                         return;

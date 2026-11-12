@@ -2,12 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <!--
-      CI (azure-pipelines.asyncrx.yml) builds AsyncRx.NET.sln with the .NET 9 SDK, which cannot target net10.0.
-      net10.0 is therefore added only when the SDK doing the build can target it.
-    -->
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(NETCoreSdkVersion)', '10.0'))">$(TargetFrameworks);net10.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <Optimize>true</Optimize>
     <IsPackable>false</IsPackable>
     <Nullable>enable</Nullable>

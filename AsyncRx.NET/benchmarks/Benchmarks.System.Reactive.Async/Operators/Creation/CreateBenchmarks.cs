@@ -37,7 +37,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Creation
             _raw = new ArrayAsyncSource<int>(items);
 
             var n = N;
-            _created = AsyncObservable.Create<int>(async observer =>
+            _created = AsyncObservable.Create<int>(async (observer, _) =>
             {
                 for (var i = 0; i < n; i++)
                 {

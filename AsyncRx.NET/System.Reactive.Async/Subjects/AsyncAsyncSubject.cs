@@ -20,6 +20,17 @@ namespace System.Reactive.Subjects
         private bool _done;
         private Exception _error;
 
+        public bool HasObservers
+        {
+            get
+            {
+                lock (_gate)
+                {
+                    return _observers.Count > 0;
+                }
+            }
+        }
+
         public async ValueTask OnCompletedAsync()
         {
             bool hasValue;
@@ -40,6 +51,7 @@ namespace System.Reactive.Subjects
                 value = _value;
 
                 observers = _observers.ToArray();
+                _observers.Clear();
             }
 
             if (hasValue)
@@ -69,6 +81,7 @@ namespace System.Reactive.Subjects
                 _error = error;
 
                 observers = _observers.ToArray();
+                _observers.Clear();
             }
 
             return OnErrorAsyncCore(observers, error);
@@ -188,15 +201,11 @@ namespace System.Reactive.Subjects
 
         private void OnCompleted(Action continuation, bool originalContext)
         {
-            var subscribeTask = SubscribeAsync(new AwaitObserver(continuation, originalContext));
-
-            subscribeTask.AsTask().ContinueWith(t =>
-            {
-                if (t.Exception != null)
-                {
-                    // TODO: Trace?
-                }
-            });
+            // The subscription's task is not awaited: subscribing to this subject completes
+            // synchronously unless the continuation itself is asynchronous, and observing it
+            // through a thread-pool continuation would run the await's registration off the
+            // thread that registered it.
+            var ignored = SubscribeAsync(new AwaitObserver(continuation, originalContext));
         }
 
         private sealed class AwaitObserver : IAsyncObserver<T>

@@ -30,8 +30,10 @@ Read this before reading any numbers.
   operator). The suite passes the immediate scheduler (or the virtual-time scheduler) explicitly, so the
   shared cold source `BenchmarkSources.Range(n)` pushes every element inline inside `SubscribeAsync`.
   Rows named `_DefaultScheduler` measure the default path on purpose.
-- **A benchmark-owned virtual-time scheduler.** AsyncRx has no test or virtual-time scheduler, so the
-  suite has `VirtualTimeAsyncScheduler` (see the S3 archetype below).
+- **A benchmark-owned virtual-time scheduler.** The suite has `VirtualTimeAsyncScheduler` (see the S3
+  archetype below). It predates `Microsoft.Reactive.Testing.Async`'s `TestAsyncScheduler`. The suite's
+  scheduler is kept because its pump rule and zero-allocation stateful scheduling are tuned for
+  measurement. Whether to move to `TestAsyncScheduler` is an open question.
 - **Hot sources are benchmark-owned.** `PushSource<T>` is a single-observer source the benchmark pushes
   into directly. The library subjects copy their observer list per call (simple subjects) or take a gate
   (Behavior/Replay), so they are measured on their own in `Hot/SubjectBenchmarks` and kept out of the
@@ -96,7 +98,7 @@ infinite), so a library hang does not block a run.
 ```powershell
 cd Benchmarks.System.Reactive.Async
 
-# Check the infrastructure first (AsyncRx has no test suite): sources, sinks and the virtual-time pump
+# Check the benchmark infrastructure first: sources, sinks and the virtual-time pump
 dotnet run -c Release -f net10.0 -- --verify
 
 # Everything (long!) on .NET 10
@@ -120,8 +122,8 @@ Opt-in profiling works as in the Rx suite (`--profiler ETW`, `--profiler EP`, `-
 
 Notes:
 
-- The project targets `net8.0;net9.0`, plus `net10.0` when the building SDK can target it (CI builds the
-  AsyncRx solution with the .NET 9 SDK). Running `-f net10.0` needs a .NET 10 SDK locally.
+- The project targets `net8.0;net9.0;net10.0`. Building it needs the .NET 10 SDK, as the AsyncRx CI
+  pipeline already uses.
 - `System.Reactive.Async` targets `netstandard2.0` and `netstandard2.1`; every runtime here executes
   the `netstandard2.1` build, so cross-runtime runs show JIT/runtime gains only.
 
@@ -161,7 +163,7 @@ free-running producer awaits each `OnNextAsync` into a subject (`--rate-ms 0`); 
 
 ## Known gaps
 
-AsyncRx is alpha and has no test suite. Where a library bug stops an operator from being measured the
+AsyncRx is alpha. Where a library bug stops an operator from being measured the
 way the Rx suite measures it, the benchmark works around it or comments the row out, marked
 `// KNOWN GAP:` in the source. `System.Reactive.Async` itself is not changed. Restore the original shape
 when the library is fixed.

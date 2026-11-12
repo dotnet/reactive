@@ -15,6 +15,6 @@ namespace System.Reactive.Concurrency
 
         protected override ValueTask Delay(TimeSpan dueTime, CancellationToken token) => new(Task.Delay(dueTime));
 
-        protected override ValueTask ScheduleAsyncCore(Func<CancellationToken, ValueTask> action, CancellationToken token) => action(token);
+        protected override ValueTask ScheduleAsyncCore<TState>(TState state, Func<TState, CancellationToken, ValueTask> action, CancellationToken token) => action(state, token);
     }
 }

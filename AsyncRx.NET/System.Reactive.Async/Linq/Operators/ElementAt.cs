@@ -43,7 +43,14 @@ namespace System.Reactive.Linq
                 observer.OnErrorAsync,
                 async () =>
                 {
-                    await observer.OnErrorAsync(new ArgumentOutOfRangeException("The element at the specified index was not found.")).ConfigureAwait(false);
+                    try
+                    {
+                        throw new ArgumentOutOfRangeException("The element at the specified index was not found.");
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                    }
                 }
             );
         }

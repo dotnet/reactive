@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyTitle>Microsoft.Reactive.Testing.Async - Testing Helper Library for AsyncRx.NET</AssemblyTitle>
+    <Description>Reactive Extensions (AsyncRx) for .NET - Testing Library</Description>
+    <PackageTags>Rx;AsyncRx;Reactive;Extensions;Observable;LINQ;Events;Async</PackageTags>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+
+    <!--
+    CA1510: Use ArgumentNullException.ThrowIfNull() - not available on netstandard2.0
+    CA1512: Use ArgumentOutOfRangeException throw helpers (ThrowIfNegative, ThrowIfGreaterThan, etc.) - not available on netstandard2.0
+    -->
+    <NoWarn>$(NoWarn);CA1510;CA1512</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Reuses the sync testing vocabulary (Recorded, Notification, Subscription, ReactiveTest)
+         so scenarios stay portable between the sync and async platforms. Version matches the
+         System.Reactive package that System.Reactive.Async references. -->
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="6.0.0" />
+    <ProjectReference Include="..\System.Reactive.Async\System.Reactive.Async.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
+  </ItemGroup>
+
+</Project>

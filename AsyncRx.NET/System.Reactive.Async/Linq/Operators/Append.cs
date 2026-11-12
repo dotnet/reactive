@@ -164,8 +164,10 @@ namespace System.Reactive.Linq
                         observer.OnErrorAsync,
                         async () =>
                         {
-                            var task = await scheduler.ScheduleAsync(async ct =>
+                            var task = await scheduler.ScheduleAsync((observer, scheduler, value), static async (state, ct) =>
                             {
+                                var (observer, scheduler, value) = state;
+
                                 if (!ct.IsCancellationRequested)
                                 {
                                     await observer.OnNextAsync(value).RendezVous(scheduler, ct);
@@ -220,8 +222,10 @@ namespace System.Reactive.Linq
                         observer.OnErrorAsync,
                         async () =>
                         {
-                            var task = await scheduler.ScheduleAsync(async ct =>
+                            var task = await scheduler.ScheduleAsync((observer, scheduler, values), static async (state, ct) =>
                             {
+                                var (observer, scheduler, values) = state;
+
                                 for (var i = 0; i < values.Length && !ct.IsCancellationRequested; i++)
                                 {
                                     await observer.OnNextAsync(values[i]).RendezVous(scheduler, ct);
@@ -277,8 +281,10 @@ namespace System.Reactive.Linq
                         observer.OnErrorAsync,
                         async () =>
                         {
-                            var task = await scheduler.ScheduleAsync(async ct =>
+                            var task = await scheduler.ScheduleAsync((observer, scheduler, values), static async (state, ct) =>
                             {
+                                var (observer, scheduler, values) = state;
+
                                 var e = default(IEnumerator<TSource>);
 
                                 try

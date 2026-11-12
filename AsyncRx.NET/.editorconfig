@@ -1,0 +1,6 @@
+[*.cs]
+# IDE0305
+# This wants to change things like expected.ToArray() to [.. expected], but I'm not a fan, because
+# it's not clear what will actually be allocated.
+dotnet_diagnostic.IDE0305.severity = none
+

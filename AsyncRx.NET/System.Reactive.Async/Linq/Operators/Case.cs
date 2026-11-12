@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
             if (defaultSource == null)
                 throw new ArgumentNullException(nameof(defaultSource));
 
-            return Create<TResult>(observer =>
+            return CreateAsyncObservable<TResult>.From(observer =>
             {
                 var source = default(IAsyncObservable<TResult>);
 
@@ -58,7 +58,7 @@ namespace System.Reactive.Linq
             if (defaultSource == null)
                 throw new ArgumentNullException(nameof(defaultSource));
 
-            return Create<TResult>(async observer =>
+            return CreateAsyncObservable<TResult>.From(async observer =>
             {
                 var source = default(IAsyncObservable<TResult>);
 

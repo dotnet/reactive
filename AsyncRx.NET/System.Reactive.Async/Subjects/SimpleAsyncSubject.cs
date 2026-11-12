@@ -15,6 +15,17 @@ namespace System.Reactive.Subjects
         private bool _done;
         private Exception _error;
 
+        public bool HasObservers
+        {
+            get
+            {
+                lock (_gate)
+                {
+                    return _observers.Count > 0;
+                }
+            }
+        }
+
         public ValueTask OnCompletedAsync()
         {
             IAsyncObserver<T>[] observers;
@@ -29,6 +40,7 @@ namespace System.Reactive.Subjects
                 _done = true;
 
                 observers = _observers.ToArray();
+                _observers.Clear();
             }
 
             return OnCompletedAsyncCore(observers);
@@ -53,6 +65,7 @@ namespace System.Reactive.Subjects
                 _error = error;
 
                 observers = _observers.ToArray();
+                _observers.Clear();
             }
 
             return OnErrorAsyncCore(observers, error);

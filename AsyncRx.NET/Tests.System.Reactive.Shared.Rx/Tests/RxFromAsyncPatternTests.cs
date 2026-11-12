@@ -1,0 +1,16 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT License.
+// See the LICENSE file in the project root for more information. 
+
+using Tests.System.Reactive.Shared.Scenarios;
+
+// Rx.NET marks FromAsyncPattern obsolete; the scenarios cover it all the same.
+#pragma warning disable CS0618
+
+namespace Tests.System.Reactive.Shared.Rx.Tests;
+
+[TestClass]
+public sealed class RxFromAsyncPatternTests : FromAsyncPatternTests
+{
+    protected override IRxTarget Target => RxTarget.Instance;
+}

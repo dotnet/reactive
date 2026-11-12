@@ -14,7 +14,7 @@ namespace System.Reactive.Linq
             if (error == null)
                 throw new ArgumentNullException(nameof(error));
 
-            return Create<TSource>(observer => AsyncObserver.Throw(observer, error));
+            return CreateAsyncObservable<TSource>.From(observer => AsyncObserver.Throw(observer, error));
         }
 
         public static IAsyncObservable<TSource> Throw<TSource>(Exception error, IAsyncScheduler scheduler)
@@ -24,8 +24,13 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(observer => AsyncObserver.Throw(observer, error, scheduler));
+            return CreateAsyncObservable<TSource>.From(observer => AsyncObserver.Throw(observer, error, scheduler));
         }
+
+        // The witness forms, as in Rx.NET: the witness only infers TSource, for anonymous types.
+        public static IAsyncObservable<TSource> Throw<TSource>(Exception error, TSource witness) => Throw<TSource>(error);
+
+        public static IAsyncObservable<TSource> Throw<TSource>(Exception error, IAsyncScheduler scheduler, TSource witness) => Throw<TSource>(error, scheduler);
     }
 
     public partial class AsyncObserver
@@ -39,8 +44,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return scheduler.ScheduleAsync(async ct =>
+            return scheduler.ScheduleAsync((observer, scheduler, error), static async (state, ct) =>
             {
+                var (observer, scheduler, error) = state;
+
                 if (!ct.IsCancellationRequested)
                 {
                     await observer.OnErrorAsync(error).RendezVous(scheduler, ct);

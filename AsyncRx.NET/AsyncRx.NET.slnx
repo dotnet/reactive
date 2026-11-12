@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/AsyncRx.WorkloadHarness/AsyncRx.WorkloadHarness.csproj" />
+    <Project Path="benchmarks/Benchmarks.System.Reactive.Async/Benchmarks.System.Reactive.Async.csproj" />
+  </Folder>
+  <Folder Name="/dev/">
+    <Project Path="ApiCompare/ApiCompare.csproj" />
+    <Project Path="Playground/Playground.csproj" />
+  </Folder>
+  <Folder Name="/lib/">
+    <Project Path="Microsoft.Reactive.Testing.Async/Microsoft.Reactive.Testing.Async.csproj" />
+    <Project Path="System.Reactive.Async/System.Reactive.Async.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="Tests.Microsoft.Reactive.Testing.Async/Tests.Microsoft.Reactive.Testing.Async.csproj" />
+    <Project Path="Tests.System.Reactive.Async/Tests.System.Reactive.Async.csproj" />
+    <Project Path="Tests.System.Reactive.Shared.Rx/Tests.System.Reactive.Shared.Rx.csproj" />
+    <Project Path="Tests.System.Reactive.Shared/Tests.System.Reactive.Shared.csproj" />
+  </Folder>
+</Solution>

@@ -65,10 +65,115 @@ namespace System.Reactive.Linq
                     return StableCompositeAsyncDisposable.Create(d1, d2);
                 });
         }
+
+        public static IAsyncObservable<bool> SequenceEqual<TSource>(this IAsyncObservable<TSource> first, IEnumerable<TSource> second)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+
+            return SequenceEqual(first, second, EqualityComparer<TSource>.Default);
+        }
+
+        public static IAsyncObservable<bool> SequenceEqual<TSource>(this IAsyncObservable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
+
+            return CreateAsyncObservable<bool>.From(
+                first,
+                (second, comparer),
+                static async (first, state, observer) =>
+                {
+                    // The enumerator is obtained at subscription, as Rx.NET's sink obtains it,
+                    // so an enumerable whose GetEnumerator throws fails the result there.
+                    IEnumerator<TSource> enumerator;
+
+                    try
+                    {
+                        enumerator = state.second.GetEnumerator();
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        return AsyncDisposable.Nop;
+                    }
+
+                    var sink = AsyncObserver.SequenceEqual(observer, enumerator, state.comparer);
+
+                    var subscription = await first.SubscribeSafeAsync(sink).ConfigureAwait(false);
+
+                    return StableCompositeAsyncDisposable.Create(
+                        subscription,
+                        AsyncDisposable.Create(() =>
+                        {
+                            enumerator.Dispose();
+                            return default;
+                        }));
+                });
+        }
     }
 
     public partial class AsyncObserver
     {
+        // Rx.NET's SequenceEqual sink over an enumerable: each element is compared with the
+        // enumerator's next, a mismatch or an exhausted enumerator ends the result with false,
+        // and the source's completion ends it with whether the enumerator is exhausted too.
+        public static IAsyncObserver<TSource> SequenceEqual<TSource>(IAsyncObserver<bool> observer, IEnumerator<TSource> second, IEqualityComparer<TSource> comparer)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
+
+            return Create<TSource>(
+                async x =>
+                {
+                    bool equal;
+
+                    try
+                    {
+                        equal = second.MoveNext() && comparer.Equals(x, second.Current);
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        return;
+                    }
+
+                    if (!equal)
+                    {
+                        await observer.OnNextAsync(false).ConfigureAwait(false);
+                        await observer.OnCompletedAsync().ConfigureAwait(false);
+                    }
+                },
+                observer.OnErrorAsync,
+                async () =>
+                {
+                    bool hasNext;
+
+                    try
+                    {
+                        hasNext = second.MoveNext();
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        return;
+                    }
+
+                    await observer.OnNextAsync(!hasNext).ConfigureAwait(false);
+                    await observer.OnCompletedAsync().ConfigureAwait(false);
+                });
+        }
+
         public static (IAsyncObserver<TSource>, IAsyncObserver<TSource>) SequenceEqual<TSource>(IAsyncObserver<bool> observer)
         {
             if (observer == null)

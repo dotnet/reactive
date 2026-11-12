@@ -4,6 +4,7 @@
 
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Linq
 {
@@ -17,6 +18,16 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
 
             return SubscribeOn(source, scheduler, scheduler);
+        }
+
+        public static IAsyncObservable<TSource> SubscribeOn<TSource>(this IAsyncObservable<TSource> source, SynchronizationContext context)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            return SubscribeOn(source, new SynchronizationContextAsyncScheduler(context));
         }
 
         public static IAsyncObservable<TSource> SubscribeOn<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler subscribeScheduler, IAsyncScheduler disposeScheduler)
@@ -38,19 +49,28 @@ namespace System.Reactive.Linq
 
                     await d.AssignAsync(m).ConfigureAwait(false);
 
-                    var scheduled = await state.subscribeScheduler.ScheduleAsync(async ct =>
+                    var scheduled = await state.subscribeScheduler.ScheduleAsync((source, observer, state, d), static async (s, ct) =>
                     {
+                        var (source, observer, state, d) = s;
+
                         var subscription = await source.SubscribeSafeAsync(observer).RendezVous(state.subscribeScheduler, ct);
 
                         var scheduledDispose = AsyncDisposable.Create(async () =>
                         {
-                            await state.disposeScheduler.ScheduleAsync(async _ =>
+                            await state.disposeScheduler.ScheduleAsync((subscription, state.disposeScheduler), static async (s, ct) =>
                             {
-                                await subscription.DisposeAsync().RendezVous(state.disposeScheduler, ct);
+                                var (subscription, disposeScheduler) = s;
+
+                                await subscription.DisposeAsync().RendezVous(disposeScheduler, ct);
                             }).ConfigureAwait(false);
                         });
 
-                        await d.AssignAsync(scheduledDispose).RendezVous(state.subscribeScheduler, ct);
+                        // Assigning replaces, and so disposes, the handle of this very unit of work,
+                        // which cancels the token it was given. Rx.NET has the same shape, where
+                        // disposing a running schedule's handle does nothing; here the cancellation
+                        // is observable, so nothing after this point may use the token, and the
+                        // scheduled disposal above uses its own.
+                        await d.AssignAsync(scheduledDispose).ConfigureAwait(false);
                     }).ConfigureAwait(false);
 
                     await m.AssignAsync(scheduled).ConfigureAwait(false);

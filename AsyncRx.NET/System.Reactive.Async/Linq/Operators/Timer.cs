@@ -11,7 +11,7 @@ namespace System.Reactive.Linq
     {
         public static IAsyncObservable<long> Timer(TimeSpan dueTime)
         {
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime));
         }
 
         public static IAsyncObservable<long> Timer(TimeSpan dueTime, IAsyncScheduler scheduler)
@@ -19,12 +19,12 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime, scheduler));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime, scheduler));
         }
 
         public static IAsyncObservable<long> Timer(DateTimeOffset dueTime)
         {
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime));
         }
 
         public static IAsyncObservable<long> Timer(DateTimeOffset dueTime, IAsyncScheduler scheduler)
@@ -32,7 +32,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime, scheduler));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime, scheduler));
         }
 
         public static IAsyncObservable<long> Timer(TimeSpan dueTime, TimeSpan period)
@@ -40,7 +40,7 @@ namespace System.Reactive.Linq
             if (period < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(period));
 
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime, period));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime, period));
         }
 
         public static IAsyncObservable<long> Timer(TimeSpan dueTime, TimeSpan period, IAsyncScheduler scheduler)
@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime, period, scheduler));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime, period, scheduler));
         }
 
         public static IAsyncObservable<long> Timer(DateTimeOffset dueTime, TimeSpan period)
@@ -58,7 +58,7 @@ namespace System.Reactive.Linq
             if (period < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(period));
 
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime, period));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime, period));
         }
 
         public static IAsyncObservable<long> Timer(DateTimeOffset dueTime, TimeSpan period, IAsyncScheduler scheduler)
@@ -68,7 +68,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<long>(observer => AsyncObserver.Timer(observer, dueTime, period, scheduler));
+            return CreateAsyncObservable<long>.From(observer => AsyncObserver.Timer(observer, dueTime, period, scheduler));
         }
     }
 
@@ -81,8 +81,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return scheduler.ScheduleAsync(async ct =>
+            return scheduler.ScheduleAsync((observer, scheduler), dueTime, static async (state, ct) =>
             {
+                var (observer, scheduler) = state;
+
                 if (ct.IsCancellationRequested)
                     return;
 
@@ -92,7 +94,7 @@ namespace System.Reactive.Linq
                     return;
 
                 await observer.OnCompletedAsync().RendezVous(scheduler, ct);
-            }, dueTime);
+            });
 
         }
 
@@ -103,8 +105,10 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return scheduler.ScheduleAsync(async ct =>
+            return scheduler.ScheduleAsync((observer, scheduler), dueTime, static async (state, ct) =>
             {
+                var (observer, scheduler) = state;
+
                 if (ct.IsCancellationRequested)
                     return;
 
@@ -114,7 +118,7 @@ namespace System.Reactive.Linq
                     return;
 
                 await observer.OnCompletedAsync().RendezVous(scheduler, ct);
-            }, dueTime);
+            });
         }
 
         public static ValueTask<IAsyncDisposable> Timer(IAsyncObserver<long> observer, TimeSpan dueTime, TimeSpan period) => Timer(observer, dueTime, period, TaskPoolAsyncScheduler.Default);
@@ -126,12 +130,14 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var tick = 0L;
-
-            return scheduler.ScheduleAsync(async ct =>
+            return scheduler.ScheduleAsync((observer, scheduler, period), dueTime, static async (state, ct) =>
             {
+                var (observer, scheduler, period) = state;
+
                 if (ct.IsCancellationRequested)
                     return;
+
+                var tick = 0L;
 
                 // TODO: Compensate for drift by adding stopwatch functionality.
 
@@ -141,7 +147,7 @@ namespace System.Reactive.Linq
 
                     await scheduler.Delay(period, ct).RendezVous(scheduler, ct);
                 } while (!ct.IsCancellationRequested);
-            }, dueTime);
+            });
         }
 
         public static ValueTask<IAsyncDisposable> Timer(IAsyncObserver<long> observer, DateTimeOffset dueTime, TimeSpan period) => Timer(observer, dueTime, period, TaskPoolAsyncScheduler.Default);
@@ -153,12 +159,14 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            var tick = 0L;
-
-            return scheduler.ScheduleAsync(async ct =>
+            return scheduler.ScheduleAsync((observer, scheduler, period), dueTime, static async (state, ct) =>
             {
+                var (observer, scheduler, period) = state;
+
                 if (ct.IsCancellationRequested)
                     return;
+
+                var tick = 0L;
 
                 // TODO: Compensate for drift by adding stopwatch functionality.
 
@@ -168,7 +176,7 @@ namespace System.Reactive.Linq
 
                     await scheduler.Delay(period, ct).RendezVous(scheduler, ct);
                 } while (!ct.IsCancellationRequested);
-            }, dueTime);
+            });
         }
     }
 }

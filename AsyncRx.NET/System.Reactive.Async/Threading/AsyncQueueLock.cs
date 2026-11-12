@@ -7,11 +7,17 @@ using System.Threading.Tasks;
 
 namespace System.Threading
 {
+    // A serializing work queue, as Rx.NET's AsyncLock: an action handed in while none is running
+    // runs at once, on the caller, which then drains whatever arrives meanwhile; an action
+    // handed in while one is running is queued for that drainer, and its caller returns at
+    // once. So a notification delivered re-entrantly, from inside the delivery of another, runs
+    // after it rather than inside it. An action that throws faults the queue: the exception
+    // reaches the drainer's caller, and everything queued or handed in afterwards is dropped.
+    // The guard is a monitor, since nothing is awaited while it is held.
     public sealed class AsyncQueueLock : IAsyncDisposable
     {
+        private readonly object _guard = new();
         private readonly Queue<Func<ValueTask>> _queue = new();
-        private readonly AsyncGate _gate = new();
-
         private bool _isAcquired;
         private bool _hasFaulted;
 
@@ -20,62 +26,61 @@ namespace System.Threading
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var shouldRun = false;
-
-            using (await _gate.LockAsync().ConfigureAwait(false))
+            lock (_guard)
             {
-                if (!_hasFaulted)
+                if (_hasFaulted)
+                {
+                    return;
+                }
+
+                if (_isAcquired)
                 {
                     _queue.Enqueue(action);
-                    shouldRun = !_isAcquired;
-                    _isAcquired = true;
+                    return;
                 }
+
+                _isAcquired = true;
             }
 
-            if (shouldRun)
+            while (true)
             {
-                while (true)
+                try
                 {
-                    var next = default(Func<ValueTask>);
-
-                    using (await _gate.LockAsync().ConfigureAwait(false))
+                    await action().ConfigureAwait(false);
+                }
+                catch
+                {
+                    lock (_guard)
                     {
-                        if (_queue.Count == 0)
-                        {
-                            _isAcquired = false;
-                            break;
-                        }
-
-                        next = _queue.Dequeue();
+                        _queue.Clear();
+                        _hasFaulted = true;
                     }
 
-                    try
-                    {
-                        await next().ConfigureAwait(false);
-                    }
-                    catch
-                    {
-                        using (await _gate.LockAsync().ConfigureAwait(false))
-                        {
-                            _queue.Clear();
-                            _hasFaulted = true;
-                        }
+                    throw;
+                }
 
-                        throw;
+                lock (_guard)
+                {
+                    if (_queue.Count == 0)
+                    {
+                        _isAcquired = false;
+                        return;
                     }
+
+                    action = _queue.Dequeue();
                 }
             }
         }
 
-        public async ValueTask DisposeAsync()
+        public ValueTask DisposeAsync()
         {
-            var queue = _queue;
-
-            using (await _gate.LockAsync().ConfigureAwait(false))
+            lock (_guard)
             {
-                queue.Clear();
+                _queue.Clear();
                 _hasFaulted = true;
             }
+
+            return default;
         }
     }
 }

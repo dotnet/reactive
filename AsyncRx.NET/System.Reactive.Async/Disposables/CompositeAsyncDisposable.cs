@@ -4,14 +4,13 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Disposables
 {
     public sealed class CompositeAsyncDisposable : IAsyncDisposable
     {
-        private readonly AsyncGate _gate = new();
+        private readonly object _gate = new();
         private readonly List<IAsyncDisposable> _disposables;
         private bool _disposed;
 
@@ -43,7 +42,7 @@ namespace System.Reactive.Disposables
 
             var shouldDispose = false;
 
-            using (await _gate.LockAsync().ConfigureAwait(false))
+            lock (_gate)
             {
                 if (_disposed)
                 {
@@ -68,7 +67,7 @@ namespace System.Reactive.Disposables
 
             var shouldDispose = false;
 
-            using (await _gate.LockAsync().ConfigureAwait(false))
+            lock (_gate)
             {
                 if (!_disposed && _disposables.Remove(disposable))
                 {
@@ -88,7 +87,7 @@ namespace System.Reactive.Disposables
         {
             var disposables = default(IAsyncDisposable[]);
 
-            using (await _gate.LockAsync().ConfigureAwait(false))
+            lock (_gate)
             {
                 if (!_disposed)
                 {

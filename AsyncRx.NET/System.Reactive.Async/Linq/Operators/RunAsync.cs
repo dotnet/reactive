@@ -5,11 +5,10 @@
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    // REVIEW: Consider using these for GetAwaiter.
-
     public partial class AsyncObservable
     {
         public static AsyncAsyncSubject<TSource> RunAsync<TSource>(this IAsyncObservable<TSource> source, CancellationToken token)
@@ -21,37 +20,15 @@ namespace System.Reactive.Linq
 
             if (token.IsCancellationRequested)
             {
-                var ignored = subject.OnErrorAsync(new OperationCanceledException(token));
-                return subject;
+                return Cancel(subject, token);
             }
 
-            var subscribeTask = source.SubscribeSafeAsync(subject);
+            var subscription = new SingleAssignmentAsyncDisposable();
 
-            subscribeTask.AsTask().ContinueWith(t =>
+            var ignored = RunAsyncCore(subject, subscription, token, async () =>
             {
-                if (t.Exception != null)
-                {
-                    subject.OnErrorAsync(t.Exception); // NB: Should not occur due to use of SubscribeSafeAsync.
-                }
+                await subscription.AssignAsync(await source.SubscribeSafeAsync(subject).ConfigureAwait(false)).ConfigureAwait(false);
             });
-
-            if (token.CanBeCanceled)
-            {
-                var d = new SingleAssignmentAsyncDisposable();
-
-                subscribeTask.AsTask().ContinueWith(t =>
-                {
-                    if (t.Exception == null)
-                    {
-                        var ignored = d.AssignAsync(t.Result);
-                    }
-                });
-
-                token.Register(() =>
-                {
-                    var ignored = d.DisposeAsync();
-                });
-            }
 
             return subject;
         }
@@ -65,43 +42,59 @@ namespace System.Reactive.Linq
 
             if (token.IsCancellationRequested)
             {
-                var ignored = subject.OnErrorAsync(new OperationCanceledException(token));
-                return subject;
+                return Cancel(subject, token);
             }
 
-            var d = new CompositeAsyncDisposable();
+            var subscription = new CompositeAsyncDisposable();
 
-            var subscribeTask = source.SubscribeSafeAsync(subject);
-
-            subscribeTask.AsTask().ContinueWith(t =>
+            var ignored = RunAsyncCore(subject, subscription, token, async () =>
             {
-                if (t.Exception != null)
-                {
-                    subject.OnErrorAsync(t.Exception); // NB: Should not occur due to use of SubscribeSafeAsync.
-                }
-                else
-                {
-                    var ignored = d.AddAsync(t.Result);
-
-                    source.ConnectAsync().AsTask().ContinueWith(t2 =>
-                    {
-                        if (t2.Exception == null)
-                        {
-                            var ignored2 = d.AddAsync(t2.Result);
-                        }
-                    });
-                }
+                await subscription.AddAsync(await source.SubscribeSafeAsync(subject).ConfigureAwait(false)).ConfigureAwait(false);
+                await subscription.AddAsync(await source.ConnectAsync().ConfigureAwait(false)).ConfigureAwait(false);
             });
 
+            return subject;
+        }
+
+        private static AsyncAsyncSubject<TSource> Cancel<TSource>(AsyncAsyncSubject<TSource> subject, CancellationToken token)
+        {
+            var ignored = subject.OnErrorAsync(new OperationCanceledException(token));
+            return subject;
+        }
+
+        // As GetAwaiter's core, with the token: cancelling disposes the subscription and fails
+        // the subject with an OperationCanceledException, and the subject's own termination
+        // releases the registration, as Rx.NET's RunAsync does.
+        private static async ValueTask RunAsyncCore<TSource>(AsyncAsyncSubject<TSource> subject, IAsyncDisposable subscription, CancellationToken token, Func<ValueTask> subscribeAsync)
+        {
             if (token.CanBeCanceled)
             {
-                token.Register(() =>
+                var registration = token.Register(() =>
                 {
-                    var ignored = d.DisposeAsync();
+                    var ignored = CancelAsync(subject, subscription, token);
                 });
+
+                await subject.SubscribeAsync(AsyncObserver.Create<TSource>(
+                    _ => default,
+                    _ =>
+                    {
+                        registration.Dispose();
+                        return default;
+                    },
+                    () =>
+                    {
+                        registration.Dispose();
+                        return default;
+                    })).ConfigureAwait(false);
             }
 
-            return subject;
+            await RunAsyncCore(subject, subscribeAsync).ConfigureAwait(false);
+        }
+
+        private static async ValueTask CancelAsync<TSource>(AsyncAsyncSubject<TSource> subject, IAsyncDisposable subscription, CancellationToken token)
+        {
+            await subscription.DisposeAsync().ConfigureAwait(false);
+            await subject.OnErrorAsync(new OperationCanceledException(token)).ConfigureAwait(false);
         }
     }
 }

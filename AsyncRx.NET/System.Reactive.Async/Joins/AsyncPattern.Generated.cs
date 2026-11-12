@@ -43,6 +43,14 @@ namespace System.Reactive.Joins
             Source2 = source2;
         }
 
+        public AsyncPattern<TSource1, TSource2, TSource3> And<TSource3>(IAsyncObservable<TSource3> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3>(Source1, Source2, other);
+        }
+
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TResult> selector)
         {
             if (selector == null)
@@ -71,6 +79,14 @@ namespace System.Reactive.Joins
             Source1 = source1;
             Source2 = source2;
             Source3 = source3;
+        }
+
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4> And<TSource4>(IAsyncObservable<TSource4> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4>(Source1, Source2, Source3, other);
         }
 
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TResult> selector)
@@ -105,6 +121,14 @@ namespace System.Reactive.Joins
             Source4 = source4;
         }
 
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5> And<TSource5>(IAsyncObservable<TSource5> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5>(Source1, Source2, Source3, Source4, other);
+        }
+
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TResult> selector)
         {
             if (selector == null)
@@ -137,6 +161,14 @@ namespace System.Reactive.Joins
             Source3 = source3;
             Source4 = source4;
             Source5 = source5;
+        }
+
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6> And<TSource6>(IAsyncObservable<TSource6> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6>(Source1, Source2, Source3, Source4, Source5, other);
         }
 
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> selector)
@@ -175,6 +207,14 @@ namespace System.Reactive.Joins
             Source6 = source6;
         }
 
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7> And<TSource7>(IAsyncObservable<TSource7> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7>(Source1, Source2, Source3, Source4, Source5, Source6, other);
+        }
+
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> selector)
         {
             if (selector == null)
@@ -211,6 +251,14 @@ namespace System.Reactive.Joins
             Source5 = source5;
             Source6 = source6;
             Source7 = source7;
+        }
+
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8> And<TSource8>(IAsyncObservable<TSource8> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8>(Source1, Source2, Source3, Source4, Source5, Source6, Source7, other);
         }
 
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> selector)
@@ -253,6 +301,14 @@ namespace System.Reactive.Joins
             Source8 = source8;
         }
 
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9> And<TSource9>(IAsyncObservable<TSource9> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9>(Source1, Source2, Source3, Source4, Source5, Source6, Source7, Source8, other);
+        }
+
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> selector)
         {
             if (selector == null)
@@ -293,6 +349,14 @@ namespace System.Reactive.Joins
             Source7 = source7;
             Source8 = source8;
             Source9 = source9;
+        }
+
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10> And<TSource10>(IAsyncObservable<TSource10> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10>(Source1, Source2, Source3, Source4, Source5, Source6, Source7, Source8, Source9, other);
         }
 
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> selector)
@@ -339,6 +403,14 @@ namespace System.Reactive.Joins
             Source10 = source10;
         }
 
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11> And<TSource11>(IAsyncObservable<TSource11> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11>(Source1, Source2, Source3, Source4, Source5, Source6, Source7, Source8, Source9, Source10, other);
+        }
+
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> selector)
         {
             if (selector == null)
@@ -383,6 +455,14 @@ namespace System.Reactive.Joins
             Source9 = source9;
             Source10 = source10;
             Source11 = source11;
+        }
+
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12> And<TSource12>(IAsyncObservable<TSource12> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12>(Source1, Source2, Source3, Source4, Source5, Source6, Source7, Source8, Source9, Source10, Source11, other);
         }
 
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> selector)
@@ -433,6 +513,14 @@ namespace System.Reactive.Joins
             Source12 = source12;
         }
 
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13> And<TSource13>(IAsyncObservable<TSource13> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13>(Source1, Source2, Source3, Source4, Source5, Source6, Source7, Source8, Source9, Source10, Source11, Source12, other);
+        }
+
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> selector)
         {
             if (selector == null)
@@ -481,6 +569,14 @@ namespace System.Reactive.Joins
             Source11 = source11;
             Source12 = source12;
             Source13 = source13;
+        }
+
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14> And<TSource14>(IAsyncObservable<TSource14> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14>(Source1, Source2, Source3, Source4, Source5, Source6, Source7, Source8, Source9, Source10, Source11, Source12, Source13, other);
         }
 
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> selector)
@@ -535,6 +631,14 @@ namespace System.Reactive.Joins
             Source14 = source14;
         }
 
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15> And<TSource15>(IAsyncObservable<TSource15> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15>(Source1, Source2, Source3, Source4, Source5, Source6, Source7, Source8, Source9, Source10, Source11, Source12, Source13, Source14, other);
+        }
+
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> selector)
         {
             if (selector == null)
@@ -587,6 +691,14 @@ namespace System.Reactive.Joins
             Source13 = source13;
             Source14 = source14;
             Source15 = source15;
+        }
+
+        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16> And<TSource16>(IAsyncObservable<TSource16> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            return new AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16>(Source1, Source2, Source3, Source4, Source5, Source6, Source7, Source8, Source9, Source10, Source11, Source12, Source13, Source14, Source15, other);
         }
 
         public AsyncPlan<TResult> Then<TResult>(Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> selector)

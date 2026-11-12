@@ -62,7 +62,14 @@ namespace System.Reactive.Linq
                 {
                     if (hasValue)
                     {
-                        await observer.OnErrorAsync(new InvalidOperationException("The sequence contains more than one element.")).ConfigureAwait(false);
+                        try
+                        {
+                            throw new InvalidOperationException("The sequence contains more than one element.");
+                        }
+                        catch (Exception ex)
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
                         return;
                     }
 

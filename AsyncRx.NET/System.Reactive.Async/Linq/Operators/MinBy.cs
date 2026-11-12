@@ -9,7 +9,7 @@ namespace System.Reactive.Linq
 {
     public partial class AsyncObservable
     {
-        public static IAsyncObservable<IList<TSource>> MinBy<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector)
+        public static IAsyncObservable<IList<TSource>> MinBy<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
                 static (source, keySelector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinBy(observer, keySelector)));
         }
 
-        public static IAsyncObservable<IList<TSource>> MinBy<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        public static IAsyncObservable<IList<TSource>> MinBy<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq
                 static (source, state, observer) => source.SubscribeSafeAsync(AsyncObserver.MinBy(observer, state.keySelector, state.comparer)));
         }
 
-        public static IAsyncObservable<IList<TSource>> MinBy<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
+        public static IAsyncObservable<IList<TSource>> MinBy<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
                 static (source, keySelector, observer) => source.SubscribeSafeAsync(AsyncObserver.MinBy(observer, keySelector)));
         }
 
-        public static IAsyncObservable<IList<TSource>> MinBy<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer)
+        public static IAsyncObservable<IList<TSource>> MinBy<TSource, TKey>(this IAsyncObservable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

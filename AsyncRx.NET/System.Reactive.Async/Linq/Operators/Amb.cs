@@ -29,23 +29,42 @@ namespace System.Reactive.Linq
 
                     var (firstObserver, secondObserver) = AsyncObserver.Amb(observer, firstSubscription, secondSubscription);
 
-                    var firstTask = first.SubscribeSafeAsync(firstObserver).AsTask().ContinueWith(d => firstSubscription.AssignAsync(d.Result).AsTask()).Unwrap();
-                    var secondTask = second.SubscribeSafeAsync(secondObserver).AsTask().ContinueWith(d => secondSubscription.AssignAsync(d.Result).AsTask()).Unwrap();
-
-                    await Task.WhenAll(firstTask, secondTask).ConfigureAwait(false);
+                    // Subscribed one after the other, as Rx.NET's Amb subscribes them, each
+                    // subscription assigned to its holder as soon as it is made. Subscribing both
+                    // at once and awaiting them together (Task.WhenAll) would be a mistake: the
+                    // continuations that assign the holders would run on the thread pool, off the
+                    // subscribing thread, so the subscribe call could return before either holder
+                    // was assigned, and nothing downstream expects to be resumed from the pool.
+                    // Subscribing in turn loses nothing: a first source that wins during its own
+                    // subscribe disposes the second holder, and the second subscription is then
+                    // disposed the moment it is assigned.
+                    await firstSubscription.AssignAsync(await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false)).ConfigureAwait(false);
+                    await secondSubscription.AssignAsync(await second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false)).ConfigureAwait(false);
 
                     return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
                 });
         }
 
-        public static IAsyncObservable<TSource> Amb<TSource>(this IEnumerable<IAsyncObservable<TSource>> sources) => Amb(sources.ToArray());
+        public static IAsyncObservable<TSource> Amb<TSource>(this IEnumerable<IAsyncObservable<TSource>> sources)
+        {
+            if (sources == null)
+                throw new ArgumentNullException(nameof(sources));
+
+            return Amb(sources.ToArray());
+        }
 
         public static IAsyncObservable<TSource> Amb<TSource>(params IAsyncObservable<TSource>[] sources)
         {
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return Create<TSource>(async observer =>
+            // No sources: nothing can win, and the result is empty, as Rx.NET's is.
+            if (sources.Length == 0)
+            {
+                return Empty<TSource>();
+            }
+
+            return CreateAsyncObservable<TSource>.From(async observer =>
             {
                 var count = sources.Length;
 
@@ -58,14 +77,10 @@ namespace System.Reactive.Linq
 
                 var observers = AsyncObserver.Amb(observer, subscriptions);
 
-                var tasks = new Task[count];
-
                 for (var i = 0; i < count; i++)
                 {
-                    tasks[i] = sources[i].SubscribeSafeAsync(observers[i]).AsTask().ContinueWith(d => subscriptions[i].AssignAsync(d.Result).AsTask()).Unwrap();
+                    await subscriptions[i].AssignAsync(await sources[i].SubscribeSafeAsync(observers[i]).ConfigureAwait(false)).ConfigureAwait(false);
                 }
-
-                await Task.WhenAll(tasks).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscriptions);
             });
@@ -209,17 +224,13 @@ namespace System.Reactive.Linq
             {
                 winner = index;
 
-                var dispose = new List<Task>(count - 1);
-
                 for (var i = 0; i < count; i++)
                 {
                     if (i != index)
                     {
-                        dispose.Add(subscriptions[i].DisposeAsync().AsTask());
+                        await subscriptions[i].DisposeAsync().ConfigureAwait(false);
                     }
                 }
-
-                await Task.WhenAll(dispose).ConfigureAwait(false);
             }
 
             IAsyncObserver<TSource> CreateObserver(int index) =>

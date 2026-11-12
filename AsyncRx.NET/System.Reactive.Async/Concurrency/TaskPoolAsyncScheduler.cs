@@ -29,11 +29,17 @@ namespace System.Reactive.Concurrency
 
         protected override ValueTask Delay(TimeSpan dueTime, CancellationToken token) => new(Task.Delay(dueTime, token));
 
-        protected override ValueTask ScheduleAsyncCore(Func<CancellationToken, ValueTask> action, CancellationToken token)
+        protected override ValueTask ScheduleAsyncCore<TState>(TState state, Func<TState, CancellationToken, ValueTask> action, CancellationToken token)
         {
-            var task = _factory.StartNew(() => action(token).AsTask(), token);
+            // The work item is boxed once as the StartNew state; a static callback avoids a closure and delegate per call.
+            var task = _factory.StartNew(static s =>
+            {
+                var (state, action, token) = ((TState, Func<TState, CancellationToken, ValueTask>, CancellationToken))s;
 
-            task.Unwrap().ContinueWith(t =>
+                return action(state, token).AsTask();
+            }, (state, action, token), token);
+
+            task.Unwrap().ContinueWith(static t =>
             {
                 if (!t.IsCanceled && t.Exception != null)
                 {

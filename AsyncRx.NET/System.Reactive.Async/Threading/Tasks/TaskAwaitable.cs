@@ -41,55 +41,36 @@ namespace System.Threading.Tasks
 
             public void GetResult()
             {
-                _token.ThrowIfCancellationRequested();
+                // A fault in the awaited work wins over a cancellation: disposing the
+                // subscription in response to an observer's exception (as an auto-detaching
+                // observer does) cancels this token, and checking the token first would report
+                // that exception as a cancellation. The token is checked after the result all
+                // the same, so a cancellation that arrived while the work ran is still reported.
+                // The continuation also runs when the token is cancelled while the work is
+                // still pending (see ScheduledContinuation); then there is no result to read.
+                if (!_awaiter.IsCompleted)
+                {
+                    _token.ThrowIfCancellationRequested();
+
+                    throw new InvalidOperationException();
+                }
 
                 _awaiter.GetResult();
+
+                _token.ThrowIfCancellationRequested();
             }
 
             public void OnCompleted(Action continuation)
             {
-                var cancel = default(IDisposable);
-
-                if (_token.CanBeCanceled)
-                {
-                    cancel = _token.Register(() =>
-                    {
-                        Interlocked.Exchange(ref continuation, null)?.Invoke();
-                    });
-                }
+                var c = ScheduledContinuation.Create(continuation, _scheduler, _token);
 
                 try
                 {
-                    var scheduler = _scheduler;
-                    var token = _token;
-
-                    _awaiter.OnCompleted(() =>
-                    {
-                        void Invoke()
-                        {
-                            cancel?.Dispose();
-
-                            Interlocked.Exchange(ref continuation, null)?.Invoke();
-                        }
-
-                        if (scheduler != null)
-                        {
-                            var t = scheduler.ExecuteAsync(ct =>
-                            {
-                                Invoke();
-
-                                return default;
-                            }, token);
-                        }
-                        else
-                        {
-                            Invoke();
-                        }
-                    });
+                    _awaiter.OnCompleted(c.Run);
                 }
                 catch
                 {
-                    cancel?.Dispose();
+                    c.DisposeCancellation();
                     throw;
                 }
             }
@@ -130,55 +111,38 @@ namespace System.Threading.Tasks
 
             public T GetResult()
             {
+                // A fault in the awaited work wins over a cancellation: disposing the
+                // subscription in response to an observer's exception (as an auto-detaching
+                // observer does) cancels this token, and checking the token first would report
+                // that exception as a cancellation. The token is checked after the result all
+                // the same, so a cancellation that arrived while the work ran is still reported.
+                // The continuation also runs when the token is cancelled while the work is
+                // still pending (see ScheduledContinuation); then there is no result to read.
+                if (!_awaiter.IsCompleted)
+                {
+                    _token.ThrowIfCancellationRequested();
+
+                    throw new InvalidOperationException();
+                }
+
+                var result = _awaiter.GetResult();
+
                 _token.ThrowIfCancellationRequested();
 
-                return _awaiter.GetResult();
+                return result;
             }
 
             public void OnCompleted(Action continuation)
             {
-                var cancel = default(IDisposable);
-
-                if (_token.CanBeCanceled)
-                {
-                    cancel = _token.Register(() =>
-                    {
-                        Interlocked.Exchange(ref continuation, null)?.Invoke();
-                    });
-                }
+                var c = ScheduledContinuation.Create(continuation, _scheduler, _token);
 
                 try
                 {
-                    var scheduler = _scheduler;
-                    var token = _token;
-
-                    _awaiter.OnCompleted(() =>
-                    {
-                        void Invoke()
-                        {
-                            cancel?.Dispose();
-
-                            Interlocked.Exchange(ref continuation, null)?.Invoke();
-                        }
-
-                        if (scheduler != null)
-                        {
-                            var t = scheduler.ExecuteAsync(ct =>
-                            {
-                                Invoke();
-
-                                return default;
-                            }, token);
-                        }
-                        else
-                        {
-                            Invoke();
-                        }
-                    });
+                    _awaiter.OnCompleted(c.Run);
                 }
                 catch
                 {
-                    cancel?.Dispose();
+                    c.DisposeCancellation();
                     throw;
                 }
             }

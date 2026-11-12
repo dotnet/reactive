@@ -37,7 +37,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Creation
         public ValueTask UsingAsync()
         {
             var inner = _inner;
-            return AsyncObservable.UsingAsync(static () => new ValueTask<Resource>(new Resource()), _ => new ValueTask<IAsyncObservable<int>>(inner)).SubscribeConsumeAsync(Consumer);
+            return AsyncObservable.UsingAsync(static _ => new ValueTask<Resource>(new Resource()), (_, _) => new ValueTask<IAsyncObservable<int>>(inner)).SubscribeConsumeAsync(Consumer);
         }
 
         [Benchmark]
@@ -51,7 +51,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Creation
         public ValueTask UsingAwaitAsync()
         {
             var inner = _inner;
-            return AsyncObservable.UsingAwaitAsync(static () => new ValueTask<Resource>(new Resource()), _ => new ValueTask<IAsyncObservable<int>>(inner)).SubscribeConsumeAsync(Consumer);
+            return AsyncObservable.UsingAwaitAsync(static _ => new ValueTask<Resource>(new Resource()), (_, _) => new ValueTask<IAsyncObservable<int>>(inner)).SubscribeConsumeAsync(Consumer);
         }
 
         private sealed class Resource : IDisposable, IAsyncDisposable

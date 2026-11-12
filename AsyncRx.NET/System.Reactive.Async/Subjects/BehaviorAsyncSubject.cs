@@ -22,6 +22,10 @@ namespace System.Reactive.Subjects
             _value = value;
         }
 
+        // A snapshot, as Rx.NET's: the count is read without the gate, which is an async lock a
+        // synchronous property cannot take.
+        public bool HasObservers => _observers.Count > 0;
+
         public T Value
         {
             get
@@ -39,8 +43,6 @@ namespace System.Reactive.Subjects
 
         public bool TryGetValue(out T value)
         {
-            // TODO: support for disposal
-
             var error = _error;
 
             if (error != null)
@@ -66,6 +68,7 @@ namespace System.Reactive.Subjects
                 _done = true;
 
                 observers = _observers.ToArray();
+                _observers.Clear();
             }
 
             await OnCompletedAsyncCore(observers).ConfigureAwait(false);
@@ -90,6 +93,7 @@ namespace System.Reactive.Subjects
                 _error = error;
 
                 observers = _observers.ToArray();
+                _observers.Clear();
             }
 
             await OnErrorAsyncCore(observers, error).ConfigureAwait(false);
