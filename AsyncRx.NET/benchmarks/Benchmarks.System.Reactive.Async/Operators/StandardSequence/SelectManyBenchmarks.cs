@@ -13,14 +13,18 @@ using Benchmarks.System.Reactive.Async.Infrastructure;
 namespace Benchmarks.System.Reactive.Async.Operators.StandardSequence
 {
     /// <summary>
-    /// S1 (gated sweep): <c>SelectMany</c> with total emitted work pinned at 100,000 elements. <c>N</c> is the
+    /// S1 (capped sweep): <c>SelectMany</c> with total emitted work pinned at 100,000 elements. <c>N</c> is the
     /// number of inner subscriptions, each emitting <c>100,000 / N</c> elements, so the sweep moves cost from
     /// per-element to per-inner-subscription. The inner source and selector are built in <c>[GlobalSetup]</c>.
     /// </summary>
     [BenchmarkCategory("StandardSequence")]
-    public class SelectManyBenchmarks : GatedOperatorBenchmarkBase
+    public class SelectManyBenchmarks : BenchmarkBase
     {
         private const int TotalWork = 100_000;
+
+        // Capped: each inner emits TotalWork / N elements, so N above TotalWork would give empty inners.
+        [Params(1, 100, 10_000)]
+        public int N;
 
         private Func<int, IAsyncObservable<int>> _selector = default!;
 

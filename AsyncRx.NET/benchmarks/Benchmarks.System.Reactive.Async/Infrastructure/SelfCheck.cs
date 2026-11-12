@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
@@ -101,7 +102,59 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
                 return synchronous ? null : "SubscribeConsumeAsync did not complete synchronously";
             });
 
-            await Check("Virtual time: source baseline delivers N", () => Timed(static (s, _) => s, N));
+            await Check("Cold Range(N).Zip(Range(N)) delivers N and completes", async () =>
+            {
+                var o = new CountingAsyncObserver<(int, int)>();
+                await BenchmarkSources.Range(N).Zip(BenchmarkSources.Range(N)).SubscribeAwaitAsync(o, o.Completion);
+                return Expect(o, N, completed: true);
+            });
+
+            await Check("Window(count) flattened delivers N", async () =>
+            {
+                var o = new CountingAsyncObserver<int>();
+                await BenchmarkSources.Range(N).Window(16).Merge().SubscribeAwaitAsync(o, o.Completion);
+                return Expect(o, N, completed: true);
+            });
+
+            await Check("Materialize().Dematerialize() delivers N", async () =>
+            {
+                var o = new CountingAsyncObserver<int>();
+                await BenchmarkSources.Range(N).Materialize().Dematerialize().SubscribeAwaitAsync(o, o.Completion);
+                return Expect(o, N, completed: true);
+            });
+
+            await Check("ObserveOn(ImmediateAsyncScheduler) delivers N", async () =>
+            {
+                var o = new CountingAsyncObserver<int>();
+                await BenchmarkSources.Range(N).ObserveOn(ImmediateAsyncScheduler.Instance).SubscribeAwaitAsync(o, o.Completion);
+                return Expect(o, N, completed: true);
+            });
+
+            await Check("Amb(params) delivers N", async () =>
+            {
+                var o = new CountingAsyncObserver<int>();
+                await AsyncObservable.Amb(BenchmarkSources.Range(N), AsyncObservable.Never<int>(), AsyncObservable.Never<int>())
+                    .SubscribeAwaitAsync(o, o.Completion);
+                return Expect(o, N, completed: true);
+            });
+
+            // The same shape as RepeatInfiniteBenchmarks.Repeat_Source_Infinite: one element and one completion per resubscription.
+            await Check("PushSource Repeat().Take(N) delivers N", async () =>
+            {
+                var source = new PushSource<int>();
+                var o = new CountingAsyncObserver<int>();
+                await source.Repeat().Take(N).SubscribeAsync(o);
+                for (var i = 0; i < N && !o.Completion.IsSet; i++)
+                {
+                    await source.OnNextAsync(i);
+                    await source.OnCompletedAsync();
+                }
+
+                await o.Completion.WaitAsync();
+                return Expect(o, N, completed: true);
+            });
+
+            await Check("Virtual time: source baseline delivers N",() => Timed(static (s, _) => s, N));
 
             await Check("Virtual time: Throttle (Sparse) delivers N", () =>
                 Timed(static (s, sch) => s.Throttle(TimeSpan.FromTicks(PeriodTicks / 2), sch), N));
@@ -144,14 +197,20 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
             await Check("Virtual time: Timeout (never fires) delivers N", () =>
                 Timed(static (s, sch) => s.Timeout(TimeSpan.FromTicks(PeriodTicks * 100), sch), N));
 
-            // KNOWN GAP: Skip(duration, scheduler) and Take(duration, scheduler) ignore the scheduler argument and run
-            // their timer on TaskPoolAsyncScheduler.Default, so they cannot fire in virtual time. The benchmarks only
-            // use them with a real-time duration that never fires during a run, which these checks confirm.
-            await Check("Skip(duration that never fires) delivers 0", () =>
-                Timed(static (s, sch) => s.Skip(TimeSpan.FromDays(1), sch), 0));
+            // The deadline falls half a period after element N/2 - 1: Skip drops elements 0..N/2-1, and Take keeps them.
+            await Check("Virtual time: Skip(duration) at mid-timeline delivers N/2", () =>
+                Timed(static (s, sch) => s.Skip(TimeSpan.FromTicks(PeriodTicks * (N / 2) + PeriodTicks / 2), sch), N - N / 2));
 
-            await Check("Take(duration that never fires) delivers N", () =>
-                Timed(static (s, sch) => s.Take(TimeSpan.FromDays(1), sch), N));
+            await Check("Virtual time: Take(duration) at mid-timeline delivers N/2", () =>
+                Timed(static (s, sch) => s.Take(TimeSpan.FromTicks(PeriodTicks * (N / 2) + PeriodTicks / 2), sch), N / 2));
+
+            await Check("Virtual time: SkipUntil(startTime) at mid-timeline delivers N/2", async () =>
+            {
+                var o = new CountingAsyncObserver<int>();
+                await VirtualTimeDriver.RunTimedAsync(N, PeriodTicks, o, o.Completion, 0,
+                    static (s, sch, _) => s.SkipUntil(sch.Now.AddTicks(PeriodTicks * (N / 2) + PeriodTicks / 2), sch));
+                return Expect(o, N - N / 2, completed: true);
+            });
 
             await Check("Virtual time: TakeUntil(endTime) stops at the end time", async () =>
             {

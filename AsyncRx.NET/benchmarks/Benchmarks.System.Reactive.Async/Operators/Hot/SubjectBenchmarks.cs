@@ -21,7 +21,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Hot
     /// </summary>
     /// <remarks>
     /// The simple subjects copy their observer list per <c>OnNextAsync</c>. The Behavior and Replay subjects take
-    /// an <c>AsyncGate</c> per call, so their rows include a thread-pool hop per element.
+    /// an <c>AsyncGate</c> per call, so their rows include an uncontended gate acquisition per element.
     /// </remarks>
     [BenchmarkCategory("Hot")]
     public class SubjectBenchmarks

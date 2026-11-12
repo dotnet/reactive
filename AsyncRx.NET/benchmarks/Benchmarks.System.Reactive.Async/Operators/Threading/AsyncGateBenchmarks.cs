@@ -11,12 +11,17 @@ using BenchmarkDotNet.Attributes;
 namespace Benchmarks.System.Reactive.Async.Operators.Threading
 {
     /// <summary>
-    /// Measures the AsyncRx locking primitives directly. <c>AsyncGate.LockAsync</c> acquires its semaphore
-    /// through <c>SemaphoreSlim.WaitAsync().ContinueWith(...)</c>, which queues to the thread pool even when the
-    /// gate is free; these rows quantify that cost, which every gated operator pays per element. A recursive
-    /// acquisition takes the fast path (no semaphore). <c>SemaphoreSlim_WaitAsync</c> is the reference: the
-    /// uncontended primitive without the continuation.
+    /// Measures the AsyncRx locking primitive directly. <c>AsyncGate</c> is a FIFO lock guarded by a monitor.
+    /// <c>AsyncGate_LockAsync</c> is the uncontended path that every gated operator pays per element: a free gate
+    /// returns an already-completed <c>ValueTask</c>. <c>AsyncGate_LockAsync_Handoff</c> is the contended path:
+    /// a second acquisition queues a <c>TaskCompletionSource</c> waiter, and the holder's release hands the gate
+    /// to it inline, with no thread-pool hop. <c>SemaphoreSlim_WaitAsync</c> is the reference: the uncontended
+    /// BCL primitive.
     /// </summary>
+    /// <remarks>
+    /// The gate is not re-entrant (a holder that acquires it again waits for itself), so there is no recursive
+    /// row.
+    /// </remarks>
     [BenchmarkCategory("Threading")]
     public class AsyncGateBenchmarks
     {
@@ -48,16 +53,14 @@ namespace Benchmarks.System.Reactive.Async.Operators.Threading
         }
 
         [Benchmark]
-        public async ValueTask AsyncGate_LockAsync_Recursive()
+        public async ValueTask AsyncGate_LockAsync_Handoff()
         {
-            using (await _gate.LockAsync().ConfigureAwait(false))
+            for (var i = 0; i < N; i++)
             {
-                for (var i = 0; i < N; i++)
-                {
-                    using (await _gate.LockAsync().ConfigureAwait(false))
-                    {
-                    }
-                }
+                var held = await _gate.LockAsync().ConfigureAwait(false);
+                var pending = _gate.LockAsync();
+                held.Dispose();
+                (await pending.ConfigureAwait(false)).Dispose();
             }
         }
     }

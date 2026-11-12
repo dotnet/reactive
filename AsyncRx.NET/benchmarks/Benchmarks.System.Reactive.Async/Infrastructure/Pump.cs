@@ -71,10 +71,10 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         /// termination would.
         /// </summary>
         /// <remarks>
-        /// These operators cannot run over a cold source that pushes inside <c>SubscribeAsync</c> (such as
-        /// <c>Range</c> on the immediate scheduler): the source has not yet returned its subscription when the
-        /// operator terminates, so it cannot be cancelled, keeps calling the terminated observer, and AsyncRx throws
-        /// <c>InvalidOperationException("The observer has already terminated.")</c>. See the README's known gaps.
+        /// This is a design choice, not a workaround. Over a cold source that pushes inside <c>SubscribeAsync</c>
+        /// (such as <c>Range</c> on the immediate scheduler), the source has not yet returned its subscription when
+        /// the operator terminates, so it cannot be cancelled. It pushes its remaining elements into the terminated
+        /// observer, which drops them, so the work would grow with N instead of with the operator's needs.
         /// </remarks>
         public static ValueTask RunUntilDoneAsync<TResult>(int n, Consumer consumer, Func<IAsyncObservable<int>, IAsyncObservable<TResult>> build) =>
             RunUntilDoneAsync(n, consumer, build, static (source, b) => b(source));
@@ -107,8 +107,8 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         /// value into every source in turn); otherwise each source receives all N before the next one starts.
         /// </summary>
         /// <remarks>
-        /// Used for <c>Zip</c>, whose per-element path works but whose completion path throws (see the README's
-        /// known gaps), so the sources are never completed.
+        /// Used by <c>InterleavedCombiningBenchmarks</c> for <c>Zip</c>, to measure the interleaved pairing path
+        /// alone. The sources are never completed.
         /// </remarks>
         public static async ValueTask PushAllAndDisposeAsync<TResult>(this IAsyncObservable<TResult> pipeline, PushSource<int>[] sources, int n, bool interleaved, Consumer consumer)
         {
@@ -133,22 +133,6 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
             }
 
             await subscription.DisposeAsync().ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Disposes <paramref name="subscription"/>, swallowing the <see cref="OperationCanceledException"/> that
-        /// AsyncRx throws when disposing a <c>FromEvent</c>/<c>FromEventPattern</c> subscription (KNOWN GAP: the
-        /// <c>SubscribeOn</c> dispose action awaits a <c>RendezVous</c> on the token it has just cancelled).
-        /// </summary>
-        public static async ValueTask DisposeIgnoringCancellationAsync(IAsyncDisposable subscription)
-        {
-            try
-            {
-                await subscription.DisposeAsync().ConfigureAwait(false);
-            }
-            catch (OperationCanceledException)
-            {
-            }
         }
 
         /// <summary>Creates <paramref name="count"/> fresh <see cref="PushSource{T}"/>s.</summary>

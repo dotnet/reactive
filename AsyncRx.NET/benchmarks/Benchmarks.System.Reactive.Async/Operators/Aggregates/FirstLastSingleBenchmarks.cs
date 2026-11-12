@@ -18,10 +18,11 @@ namespace Benchmarks.System.Reactive.Async.Operators.Aggregates
     /// these and are not measured separately.
     /// </summary>
     /// <remarks>
-    /// KNOWN GAP: operators that terminate before their source does throw over a cold source that pushes inside
-    /// <c>SubscribeAsync</c>, so First, FirstOrDefault, Single and SingleOrDefault are driven by
-    /// <see cref="Pump.RunUntilDoneAsync{TResult}"/>, which pushes into a hot source and stops once the sink has
-    /// terminated.
+    /// Design note: First, FirstOrDefault, Single and SingleOrDefault terminate before their source does, so they
+    /// are driven by <see cref="Pump.RunUntilDoneAsync{TResult}"/>, which pushes into a hot source and stops once
+    /// the sink has terminated, the way a producer that honours termination would. A cold source that pushes
+    /// inside <c>SubscribeAsync</c> cannot be cancelled before it has returned its subscription, so it would push
+    /// its remaining elements into an observer that drops them, and the rows would no longer do constant work.
     /// </remarks>
     [BenchmarkCategory("Aggregates")]
     public class FirstLastSingleBenchmarks : OperatorBenchmarkBase

@@ -13,39 +13,29 @@ using Benchmarks.System.Reactive.Async.Infrastructure;
 namespace Benchmarks.System.Reactive.Async.Operators.Multiple
 {
     /// <summary>
-    /// Hot (gated sweep): binary <c>Zip</c> (tuple result, synchronous selector and <c>ValueTask</c> selector). The
-    /// first <see cref="PushSource{T}"/> receives all N before the second starts, so the pairing queue grows to N
-    /// (the shape two cold sources would produce); the subscription is then disposed. Zip takes an
-    /// <c>AsyncGate</c> per element.
+    /// S1 (gated sweep): binary <c>Zip</c> (tuple result, synchronous selector and <c>ValueTask</c> selector) over
+    /// two cold sources of N. The first source pushes all N before the second is subscribed, so the pairing queue
+    /// grows to N; the second source then drains it and the sequence completes. Zip takes an <c>AsyncGate</c> per
+    /// element.
     /// </summary>
     /// <remarks>
-    /// KNOWN GAP: the generated <c>Zip</c> overloads create their observers with 1-based indices against a
-    /// 0-based <c>isDone</c> array, so completing the last source throws <c>IndexOutOfRangeException</c> (and over
-    /// cold sources the first failure surfaces as "The observer has already terminated."). The sources are
-    /// therefore never completed; these rows measure the per-element pairing path, not completion.
+    /// Zip completes when the first source has completed and its queue is empty, which happens on the second
+    /// source's last element. The second source's own completion then reaches a terminated observer and is
+    /// dropped.
     /// </remarks>
     [BenchmarkCategory("Multiple")]
     public class ZipBenchmarks : GatedOperatorBenchmarkBase
     {
         [Benchmark]
-        public ValueTask Zip_Tuple()
-        {
-            var s = Pump.Sources(2);
-            return s[0].Zip(s[1]).PushAllAndDisposeAsync(s, N, interleaved: false, Consumer);
-        }
+        public ValueTask Zip_Tuple() =>
+            BenchmarkSources.Range(N).Zip(BenchmarkSources.Range(N)).SubscribeConsumeAsync(Consumer);
 
         [Benchmark]
-        public ValueTask Zip_Selector()
-        {
-            var s = Pump.Sources(2);
-            return s[0].Zip(s[1], static (a, b) => a + b).PushAllAndDisposeAsync(s, N, interleaved: false, Consumer);
-        }
+        public ValueTask Zip_Selector() =>
+            BenchmarkSources.Range(N).Zip(BenchmarkSources.Range(N), static (a, b) => a + b).SubscribeConsumeAsync(Consumer);
 
         [Benchmark]
-        public ValueTask Zip_Selector_Async()
-        {
-            var s = Pump.Sources(2);
-            return s[0].Zip(s[1], static (a, b) => new ValueTask<int>(a + b)).PushAllAndDisposeAsync(s, N, interleaved: false, Consumer);
-        }
+        public ValueTask Zip_Selector_Async() =>
+            BenchmarkSources.Range(N).Zip(BenchmarkSources.Range(N), static (a, b) => new ValueTask<int>(a + b)).SubscribeConsumeAsync(Consumer);
     }
 }

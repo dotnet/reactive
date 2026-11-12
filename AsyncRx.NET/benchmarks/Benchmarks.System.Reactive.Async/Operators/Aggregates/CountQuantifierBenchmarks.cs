@@ -15,7 +15,9 @@ namespace Benchmarks.System.Reactive.Async.Operators.Aggregates
     /// S1: counting and quantifiers. The predicates are chosen so the operator scans the whole source
     /// (<c>Any</c> never matches, <c>All</c> always matches, <c>Contains</c> looks for a missing value).
     /// <c>Any()</c> without a predicate stops at the first element, so it is driven by
-    /// <see cref="Pump.RunUntilDoneAsync{TResult}"/> (KNOWN GAP: early termination over a cold source throws).
+    /// <see cref="Pump.RunUntilDoneAsync{TResult}"/>, a producer that stops once the sink has terminated. (A cold
+    /// source cannot be cancelled before it returns its subscription, so it would push N - 1 elements that the
+    /// terminated observer drops.)
     /// </summary>
     [BenchmarkCategory("Aggregates")]
     public class CountQuantifierBenchmarks : OperatorBenchmarkBase

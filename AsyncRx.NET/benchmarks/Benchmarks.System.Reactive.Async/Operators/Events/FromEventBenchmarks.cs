@@ -21,11 +21,8 @@ namespace Benchmarks.System.Reactive.Async.Operators.Events
     /// <c>Publish().RefCount()</c>, and raising an event starts each <c>OnNextAsync</c> without awaiting it.
     /// </summary>
     /// <remarks>
-    /// KNOWN GAP: disposing a <c>FromEvent</c>/<c>FromEventPattern</c> subscription throws
-    /// <c>OperationCanceledException</c> (the <c>SubscribeOn</c> dispose action awaits a <c>RendezVous</c> on the
-    /// token it has just cancelled). The benchmarks swallow it with
-    /// <see cref="Pump.DisposeIgnoringCancellationAsync"/>, and use a fresh event host per invocation so a missed
-    /// handler removal cannot accumulate handlers across invocations.
+    /// Each invocation uses a fresh event host, so handlers cannot accumulate across invocations even if a
+    /// removal were missed. The dispose (which removes the handler) is part of the measurement.
     /// </remarks>
     [BenchmarkCategory("Events")]
     public class FromEventBenchmarks
@@ -71,7 +68,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Events
                 host.RaiseSignal();
             }
 
-            await Pump.DisposeIgnoringCancellationAsync(subscription).ConfigureAwait(false);
+            await subscription.DisposeAsync().ConfigureAwait(false);
         }
 
         private async ValueTask RaiseAsync(EventHost host, IAsyncObservable<int> events)
@@ -82,7 +79,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Events
                 host.Raise(i);
             }
 
-            await Pump.DisposeIgnoringCancellationAsync(subscription).ConfigureAwait(false);
+            await subscription.DisposeAsync().ConfigureAwait(false);
         }
 
         private sealed class EventHost

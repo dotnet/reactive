@@ -68,9 +68,6 @@ namespace Benchmarks.System.Reactive.Async.Operators.Lifecycle
             return source.GroupBy(static v => v & 7).SelectMany(static g => g).RunAndDisposeAsync(source, N / 2, _consumer);
         }
 
-        // KNOWN GAP: Window(count) throws "Queue empty" once `count` elements have arrived (it opens its first window
-        // only after `skip` elements but tries to close one after `count`). The overlapping Window(count, skip) form
-        // with skip < count does not hit that path, so it is used here.
         [Benchmark]
         public ValueTask Window_Dispose()
         {

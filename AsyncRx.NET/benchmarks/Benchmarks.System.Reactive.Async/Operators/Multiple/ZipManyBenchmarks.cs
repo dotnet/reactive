@@ -13,13 +13,12 @@ using Benchmarks.System.Reactive.Async.Infrastructure;
 namespace Benchmarks.System.Reactive.Async.Operators.Multiple
 {
     /// <summary>
-    /// Hot (gated sweep): the n-ary <c>Zip(params sources)</c>, which emits an <c>IList&lt;T&gt;</c> per step, over
-    /// 2 and 8 <see cref="PushSource{T}"/>s pushed round-robin, N values each, then disposed.
+    /// S1 (gated sweep): the n-ary <c>Zip(params sources)</c>, which emits an <c>IList&lt;T&gt;</c> per step, over
+    /// 2 and 8 cold sources of N.
     /// </summary>
     /// <remarks>
-    /// KNOWN GAP: over cold sources <c>Zip(params)</c> completes as soon as one source has completed and drained,
-    /// then the remaining sources keep calling the terminated observer, which throws "The observer has already
-    /// terminated.". The sources are therefore never completed; these rows measure the per-element path.
+    /// <c>Zip(params)</c> completes as soon as one source has completed and drained, which happens on the last
+    /// source's last element. Later notifications reach a terminated observer and are dropped.
     /// </remarks>
     [BenchmarkCategory("Multiple")]
     public class ZipManyBenchmarks : GatedOperatorBenchmarkBase
@@ -27,15 +26,15 @@ namespace Benchmarks.System.Reactive.Async.Operators.Multiple
         [Benchmark]
         public ValueTask Zip_Params_2()
         {
-            var s = Pump.Sources(2);
-            return AsyncObservable.Zip<int>(s[0], s[1]).PushAllAndDisposeAsync(s, N, interleaved: true, Consumer);
+            var s = BenchmarkSources.Range(N);
+            return AsyncObservable.Zip<int>(s, s).SubscribeConsumeAsync(Consumer);
         }
 
         [Benchmark]
         public ValueTask Zip_Params_8()
         {
-            var s = Pump.Sources(8);
-            return AsyncObservable.Zip<int>(s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7]).PushAllAndDisposeAsync(s, N, interleaved: true, Consumer);
+            var s = BenchmarkSources.Range(N);
+            return AsyncObservable.Zip<int>(s, s, s, s, s, s, s, s).SubscribeConsumeAsync(Consumer);
         }
     }
 }

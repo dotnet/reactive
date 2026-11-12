@@ -16,24 +16,33 @@ namespace Benchmarks.System.Reactive.Async.Operators.Aggregates
     /// The predicates match only the last element (<c>v == N</c>), so every row scans the whole source.
     /// </summary>
     /// <remarks>
-    /// KNOWN GAP: the First rows terminate on the last element, before their source completes, which throws over a
-    /// cold source that pushes inside <c>SubscribeAsync</c>; they are driven by
-    /// <see cref="Pump.RunUntilDoneAsync{TState, TResult}"/> instead.
+    /// The First rows terminate on the last element, just before the cold source completes. The source's
+    /// completion then reaches an observer that has already terminated and is dropped, so every row uses the cold
+    /// <c>Range</c> shape.
     /// </remarks>
     [BenchmarkCategory("Aggregates")]
     public class FirstLastPredicateBenchmarks : OperatorVariantBenchmarkBase
     {
         [Benchmark]
-        public ValueTask First_Predicate() =>
-            Pump.RunUntilDoneAsync(N, Consumer, N, static (s, n) => s.First(v => v == n));
+        public ValueTask First_Predicate()
+        {
+            var n = N;
+            return BenchmarkSources.Range(n).First(v => v == n).SubscribeConsumeAsync(Consumer);
+        }
 
         [Benchmark]
-        public ValueTask First_Predicate_Async() =>
-            Pump.RunUntilDoneAsync(N, Consumer, N, static (s, n) => s.First(v => new ValueTask<bool>(v == n)));
+        public ValueTask First_Predicate_Async()
+        {
+            var n = N;
+            return BenchmarkSources.Range(n).First(v => new ValueTask<bool>(v == n)).SubscribeConsumeAsync(Consumer);
+        }
 
         [Benchmark]
-        public ValueTask FirstOrDefault_Predicate() =>
-            Pump.RunUntilDoneAsync(N, Consumer, N, static (s, n) => s.FirstOrDefault(v => v == n));
+        public ValueTask FirstOrDefault_Predicate()
+        {
+            var n = N;
+            return BenchmarkSources.Range(n).FirstOrDefault(v => v == n).SubscribeConsumeAsync(Consumer);
+        }
 
         [Benchmark]
         public ValueTask Last_Predicate()

@@ -20,11 +20,8 @@ namespace Benchmarks.System.Reactive.Async.Operators.Events
     /// the reflection lookup.
     /// </summary>
     /// <remarks>
-    /// KNOWN GAP: disposing a <c>FromEvent</c>/<c>FromEventPattern</c> subscription throws
-    /// <c>OperationCanceledException</c> (the <c>SubscribeOn</c> dispose action awaits a <c>RendezVous</c> on the
-    /// token it has just cancelled). The benchmarks swallow it with
-    /// <see cref="Pump.DisposeIgnoringCancellationAsync"/>, and use a fresh event host per invocation so a missed
-    /// handler removal cannot accumulate handlers across invocations.
+    /// The instance row uses a fresh event host per invocation. The static row shares one static event, so it
+    /// relies on the dispose (which is part of the measurement) removing its handler.
     /// </remarks>
     [BenchmarkCategory("Events")]
     public class FromEventPatternReflectionBenchmarks
@@ -45,7 +42,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Events
                 host.RaiseInstance();
             }
 
-            await Pump.DisposeIgnoringCancellationAsync(subscription).ConfigureAwait(false);
+            await subscription.DisposeAsync().ConfigureAwait(false);
         }
 
         [Benchmark]
@@ -58,7 +55,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Events
                 EventHost.RaiseStatic();
             }
 
-            await Pump.DisposeIgnoringCancellationAsync(subscription).ConfigureAwait(false);
+            await subscription.DisposeAsync().ConfigureAwait(false);
         }
 
         public sealed class EventHost

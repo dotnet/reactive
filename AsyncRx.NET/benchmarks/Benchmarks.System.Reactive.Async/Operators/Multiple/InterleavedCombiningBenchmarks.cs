@@ -17,8 +17,8 @@ namespace Benchmarks.System.Reactive.Async.Operators.Multiple
     /// Hot: the combining operators with two <see cref="PushSource{T}"/>s pushed alternately (left, right, left,
     /// ...), N/2 pushes each. Cold sources run one after the other, so they never exercise the interleaved path
     /// (Zip pairing immediately, CombineLatest emitting on both sides). Each push is awaited, so the interleaving
-    /// is deterministic without virtual time. <c>Zip</c> is disposed instead of completed (see the
-    /// <see cref="ZipBenchmarks"/> known gap).
+    /// is deterministic without virtual time. <c>Zip</c> is disposed instead of completed, so its row measures
+    /// the interleaved pairing path alone (<see cref="ZipBenchmarks"/> measures the cold, completing shape).
     /// </summary>
     [BenchmarkCategory("Multiple")]
     public class InterleavedCombiningBenchmarks

@@ -17,12 +17,12 @@ namespace Benchmarks.System.Reactive.Async.Operators.StandardSequence
     /// pass every element, so they measure the per-element predicate cost.
     /// </summary>
     /// <remarks>
-    /// KNOWN GAP: when <c>Take(count)</c> completes early over a cold source that pushes inside
+    /// Design note: when <c>Take(count)</c> completes early over a cold source that pushes inside
     /// <c>SubscribeAsync</c> (such as <c>Range</c> on the immediate scheduler), the source has not yet returned its
-    /// subscription, so it cannot be cancelled. It keeps calling the terminated observer, which throws
-    /// <c>InvalidOperationException("The observer has already terminated.")</c>. <c>Take</c> is therefore driven
-    /// by <see cref="Pump.RunUntilDoneAsync{TState, TResult}"/>, which pushes into a hot source and stops once the
-    /// sink has terminated.
+    /// subscription, so it cannot be cancelled. It pushes its remaining N/2 elements into an observer that drops
+    /// them. <c>Take</c> is therefore driven by <see cref="Pump.RunUntilDoneAsync{TState, TResult}"/>, which pushes
+    /// into a hot source and stops once the sink has terminated, so the row measures only the work <c>Take</c>
+    /// needs.
     /// </remarks>
     [BenchmarkCategory("StandardSequence")]
     public class TakeSkipBenchmarks : OperatorBenchmarkBase

@@ -14,13 +14,10 @@ namespace Benchmarks.System.Reactive.Async.Operators.Multiple
 {
     /// <summary>
     /// S1 (gated sweep): <c>Amb</c> where the first source wins (it emits N elements while the others never emit),
-    /// for the binary form. Amb takes an <c>AsyncGate</c> per element.
+    /// for the binary form and the n-ary <c>Amb(params)</c> form over three sources. Amb takes an
+    /// <c>AsyncGate</c> per element. <c>Amb(IEnumerable)</c> forwards to the n-ary form and is not measured
+    /// separately.
     /// </summary>
-    /// <remarks>
-    /// KNOWN GAP: <c>Amb(params)</c> and <c>Amb(IEnumerable)</c> throw <c>IndexOutOfRangeException</c>: the
-    /// <c>ContinueWith</c> that assigns each subscription captures the loop variable, which equals the source
-    /// count by the time the continuation runs. Restore the commented-out row when the library is fixed.
-    /// </remarks>
     [BenchmarkCategory("Multiple")]
     public class AmbBenchmarks : GatedOperatorBenchmarkBase
     {
@@ -28,9 +25,8 @@ namespace Benchmarks.System.Reactive.Async.Operators.Multiple
         public ValueTask Amb_Binary() =>
             BenchmarkSources.Range(N).Amb(AsyncObservable.Never<int>()).SubscribeConsumeAsync(Consumer);
 
-        // KNOWN GAP (see remarks):
-        // [Benchmark]
-        // public ValueTask Amb_Params() =>
-        //     AsyncObservable.Amb(BenchmarkSources.Range(N), AsyncObservable.Never<int>(), AsyncObservable.Never<int>()).SubscribeConsumeAsync(Consumer);
+        [Benchmark]
+        public ValueTask Amb_Params() =>
+            AsyncObservable.Amb(BenchmarkSources.Range(N), AsyncObservable.Never<int>(), AsyncObservable.Never<int>()).SubscribeConsumeAsync(Consumer);
     }
 }

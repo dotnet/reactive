@@ -13,13 +13,12 @@ using Benchmarks.System.Reactive.Async.Infrastructure;
 namespace Benchmarks.System.Reactive.Async.Operators.Single
 {
     /// <summary>
-    /// S1: <c>Materialize</c> (one <c>Notification</c> allocation per element).
+    /// S1: <c>Materialize</c> (one <c>Notification</c> allocation per element) and the
+    /// <c>Materialize().Dematerialize()</c> round trip.
     /// </summary>
     /// <remarks>
-    /// KNOWN GAP: the <c>Materialize().Dematerialize()</c> round trip throws
-    /// <c>InvalidOperationException("The observer has already terminated.")</c> for every N: Dematerialize
-    /// completes on the materialized OnCompleted notification, then Materialize forwards its own OnCompleted to the
-    /// terminated observer. Restore the commented-out row when the library is fixed.
+    /// In the round trip, Dematerialize completes on the materialized OnCompleted notification. Materialize then
+    /// forwards its own OnCompleted to the terminated observer, which drops it.
     /// </remarks>
     [BenchmarkCategory("Single")]
     public class MaterializeBenchmarks : OperatorBenchmarkBase
@@ -28,9 +27,8 @@ namespace Benchmarks.System.Reactive.Async.Operators.Single
         public ValueTask Materialize() =>
             BenchmarkSources.Range(N).Materialize().SubscribeConsumeAsync(Consumer);
 
-        // KNOWN GAP (see remarks):
-        // [Benchmark]
-        // public ValueTask Materialize_Dematerialize() =>
-        //     BenchmarkSources.Range(N).Materialize().Dematerialize().SubscribeConsumeAsync(Consumer);
+        [Benchmark]
+        public ValueTask Materialize_Dematerialize() =>
+            BenchmarkSources.Range(N).Materialize().Dematerialize().SubscribeConsumeAsync(Consumer);
     }
 }

@@ -13,25 +13,25 @@ using Benchmarks.System.Reactive.Async.Infrastructure;
 namespace Benchmarks.System.Reactive.Async.Operators.Time
 {
     /// <summary>
-    /// S3: the duration-based skip and take operators. <c>SkipLast</c>, <c>TakeLast</c> and <c>TakeLastBuffer</c>
-    /// use the virtual scheduler as their clock and keep the last quarter of the timeline.
+    /// S3: the duration-based skip and take operators. <c>Skip</c> and <c>Take</c> switch half a period after the
+    /// middle of the virtual timeline, so the timer fires mid-run and both halves of each row are exercised.
+    /// <c>SkipLast</c>, <c>TakeLast</c> and <c>TakeLastBuffer</c> use the virtual scheduler as their clock and keep
+    /// the last quarter of the timeline.
     /// </summary>
     /// <remarks>
-    /// KNOWN GAP: <c>Skip(duration, scheduler)</c> and <c>Take(duration, scheduler)</c> ignore the scheduler
-    /// argument and run their timer on <c>TaskPoolAsyncScheduler.Default</c> in real time, so they cannot fire in
-    /// virtual time. They are measured with a one-day real duration that never fires during a run (Skip drops
-    /// everything, Take passes everything): the per-element cost and the pending real timer, not the transition.
+    /// After <c>Take</c>'s timer completes the sequence, the source keeps pushing; the operator drops those
+    /// elements under its gate.
     /// </remarks>
     [BenchmarkCategory("Time")]
     public class SkipTakeTimeBenchmarks : TemporalBenchmarkBase
     {
         [Benchmark]
-        public ValueTask Skip_Duration_NeverFires() =>
-            RunTimedAsync(0, static (source, scheduler, _) => source.Skip(TimeSpan.FromDays(1), scheduler));
+        public ValueTask Skip_Duration() =>
+            RunTimedAsync(N, static (source, scheduler, n) => source.Skip(TimeSpan.FromTicks(PeriodTicks * n / 2 + PeriodTicks / 2), scheduler));
 
         [Benchmark]
-        public ValueTask Take_Duration_NeverFires() =>
-            RunTimedAsync(0, static (source, scheduler, _) => source.Take(TimeSpan.FromDays(1), scheduler));
+        public ValueTask Take_Duration() =>
+            RunTimedAsync(N, static (source, scheduler, n) => source.Take(TimeSpan.FromTicks(PeriodTicks * n / 2 + PeriodTicks / 2), scheduler));
 
         [Benchmark]
         public ValueTask SkipLast_Duration() =>

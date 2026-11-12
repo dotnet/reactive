@@ -13,14 +13,18 @@ using Benchmarks.System.Reactive.Async.Infrastructure;
 namespace Benchmarks.System.Reactive.Async.Operators.StandardSequence
 {
     /// <summary>
-    /// S1 (gated sweep): the other <c>SelectMany</c> overloads (result selector, <c>ValueTask</c> selectors,
+    /// S1 (capped sweep): the other <c>SelectMany</c> overloads (result selector, <c>ValueTask</c> selectors,
     /// indexed) with the same pinned total work as <see cref="SelectManyBenchmarks"/>: <c>N</c> inner
     /// subscriptions of <c>100,000 / N</c> elements each.
     /// </summary>
     [BenchmarkCategory("StandardSequence")]
-    public class SelectManyOverloadBenchmarks : GatedOperatorBenchmarkBase
+    public class SelectManyOverloadBenchmarks : BenchmarkBase
     {
         private const int TotalWork = 100_000;
+
+        // Capped: each inner emits TotalWork / N elements, so N above TotalWork would give empty inners.
+        [Params(1, 100, 10_000)]
+        public int N;
 
         private IAsyncObservable<int> _inner = default!;
         private Func<int, IAsyncObservable<int>> _selector = default!;

@@ -13,10 +13,8 @@ using Benchmarks.System.Reactive.Async.Infrastructure;
 namespace Benchmarks.System.Reactive.Async.Operators.Time
 {
     /// <summary>
-    /// S3: <c>Delay</c> and <c>DelaySubscription</c> in virtual time. The Delay drain loop waits on a semaphore
-    /// that the source releases, and that continuation runs on the thread pool, so the interleaving of drain and
-    /// push varies between runs and this class shows more variance than the rest of the Time category. The
-    /// amount of work (N elements, N wake-ups) is fixed.
+    /// S3: <c>Delay</c> and <c>DelaySubscription</c> in virtual time. The Delay drain is scheduled on the virtual
+    /// scheduler and guarded by an <c>AsyncGate</c>, so it runs inside the pump with the pushes.
     /// </summary>
     [BenchmarkCategory("Time")]
     public class DelayBenchmarks : TemporalBenchmarkBase

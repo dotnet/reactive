@@ -9,21 +9,19 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
     /// <summary>
     /// Base class for throughput (S1) benchmarks of operators whose <b>per-element path takes an
     /// <c>AsyncGate</c></b> (Merge, Zip, CombineLatest, SelectMany, Switch, GroupBy, Window, Synchronize,
-    /// ObserveOn, the Behavior/Replay subjects, ...). It uses a capped sweep (N = 1, 100, 10,000).
-    /// This type is <c>abstract</c> so auto-discovery skips it.
+    /// the Behavior/Replay subjects, ...). It uses the same sweep as <see cref="OperatorBenchmarkBase"/>
+    /// (N = 1 to 1,000,000). This type is <c>abstract</c> so auto-discovery skips it.
     /// </summary>
     /// <remarks>
-    /// <c>AsyncGate.LockAsync</c> acquires its semaphore through
-    /// <c>SemaphoreSlim.WaitAsync().ContinueWith(...)</c> without <c>ExecuteSynchronously</c>, so every
-    /// acquisition, even an uncontended one, queues a work item to the thread pool. Each element therefore costs
-    /// at least one thread-pool round trip, completion arrives on a pool thread, and the timings include
-    /// thread-pool scheduling variance. A 1,000,000-element sweep would take seconds per invocation, hence the
-    /// cap. The Allocated column stays close to deterministic and is the more reliable before/after signal for
-    /// these classes.
+    /// The type only marks a class as "takes a gate per element". <c>AsyncGate.LockAsync</c> on a free gate
+    /// returns an already-completed <c>ValueTask</c> under a monitor, and the releasing thread completes a
+    /// contended waiter inline, so there is no thread-pool hop per element and no reason to cap the sweep. A
+    /// gated class whose N = 1,000,000 case is too slow or too large for a run derives from
+    /// <see cref="BenchmarkBase"/> instead and declares its own capped <c>[Params]</c>, with a one-line reason.
     /// </remarks>
     public abstract class GatedOperatorBenchmarkBase : BenchmarkBase
     {
-        [Params(1, 100, 10_000)]
+        [Params(1, 10, 100, 1_000, 10_000, 100_000, 1_000_000)]
         public int N;
     }
 }

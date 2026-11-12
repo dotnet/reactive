@@ -13,19 +13,15 @@ using Benchmarks.System.Reactive.Async.Infrastructure;
 namespace Benchmarks.System.Reactive.Async.Operators.Time
 {
     /// <summary>
-    /// S3: the absolute-time gates. <c>TakeUntil(endTime)</c> stops at the middle of the virtual timeline.
+    /// S3: the absolute-time gates. <c>SkipUntil(endTime)</c> starts and <c>TakeUntil(endTime)</c> stops half a
+    /// period after the middle of the virtual timeline, so each timer fires mid-run.
     /// </summary>
-    /// <remarks>
-    /// KNOWN GAP: <c>SkipUntil(endTime, scheduler)</c> ignores the scheduler argument and runs its timer on
-    /// <c>TaskPoolAsyncScheduler.Default</c> against the real clock, so it cannot fire in virtual time. It is
-    /// measured with an end time one day in the real future (it drops everything).
-    /// </remarks>
     [BenchmarkCategory("Time")]
     public class SkipUntilTakeUntilTimeBenchmarks : TemporalBenchmarkBase
     {
         [Benchmark]
-        public ValueTask SkipUntil_Time_NeverFires() =>
-            RunTimedAsync(0, static (source, scheduler, _) => source.SkipUntil(DateTimeOffset.UtcNow.AddDays(1), scheduler));
+        public ValueTask SkipUntil_Time() =>
+            RunTimedAsync(N, static (source, scheduler, n) => source.SkipUntil(scheduler.Now.AddTicks(PeriodTicks * n / 2 + PeriodTicks / 2), scheduler));
 
         [Benchmark]
         public ValueTask TakeUntil_Time() =>

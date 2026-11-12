@@ -16,27 +16,48 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
     /// next invocation.
     /// </summary>
     /// <remarks>
-    /// Continuations run synchronously on the thread that calls <see cref="Set"/>, which may be a thread-pool
-    /// thread for pipelines that hop, or the pump thread under the virtual-time scheduler.
+    /// <para>
+    /// <see cref="IsSet"/> becomes true only after the core has completed, and <see cref="Reset"/> waits out a
+    /// <see cref="Set"/> that is still in progress. Without both, a waiter that saw the signal set could reset
+    /// it while a thread-pool thread was still completing the core, corrupting the next invocation. That is only
+    /// possible for pipelines that complete on another thread, such as <c>ObserveOn(TaskPool)</c>.
+    /// </para>
+    /// <para>
+    /// Continuations of a pending <see cref="WaitAsync"/> run asynchronously, so a <see cref="Reset"/> issued
+    /// from a resumed waiter can never run inside <see cref="Set"/> and spin on it. Synchronous pipelines are
+    /// unaffected: they set the signal before anyone waits, and <see cref="WaitAsync"/> returns a completed
+    /// <see cref="ValueTask"/>.
+    /// </para>
     /// </remarks>
     public sealed class CompletionSignal : IValueTaskSource
     {
-        private ManualResetValueTaskSourceCore<bool> _core;
-        private int _state; // 0 = armed, 1 = set
+        private const int Armed = 0;
+        private const int Setting = 1;
+        private const int Signalled = 2;
 
-        public bool IsSet => Volatile.Read(ref _state) == 1;
+        private ManualResetValueTaskSourceCore<bool> _core = new() { RunContinuationsAsynchronously = true };
+        private int _state;
+
+        public bool IsSet => Volatile.Read(ref _state) == Signalled;
 
         public void Reset()
         {
+            var spinner = new SpinWait();
+            while (Volatile.Read(ref _state) == Setting)
+            {
+                spinner.SpinOnce();
+            }
+
             _core.Reset();
-            Volatile.Write(ref _state, 0);
+            Volatile.Write(ref _state, Armed);
         }
 
         public void Set()
         {
-            if (Interlocked.Exchange(ref _state, 1) == 0)
+            if (Interlocked.CompareExchange(ref _state, Setting, Armed) == Armed)
             {
                 _core.SetResult(true);
+                Volatile.Write(ref _state, Signalled);
             }
         }
 

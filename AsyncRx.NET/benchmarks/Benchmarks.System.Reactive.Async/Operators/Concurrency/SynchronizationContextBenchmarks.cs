@@ -14,19 +14,18 @@ using Benchmarks.System.Reactive.Async.Infrastructure;
 namespace Benchmarks.System.Reactive.Async.Operators.Concurrency
 {
     /// <summary>
-    /// S1 (gated sweep): <c>ObserveOn</c> and <c>SubscribeOn</c> with a <see cref="SynchronizationContextAsyncScheduler"/>
+    /// S1 (capped sweep): <c>ObserveOn</c> and <c>SubscribeOn</c> with a <see cref="SynchronizationContextAsyncScheduler"/>
     /// over a context that runs posted work inline, so the rows measure the scheduler and context plumbing without
     /// a real UI thread.
     /// </summary>
     /// <remarks>
-    /// KNOWN GAP: <c>ObserveOn</c> hung at N = 10,000 here and onto the task pool (see
-    /// <see cref="ObserveOnBenchmarks"/>), and onto the task pool also at N = 1,000, so this class sweeps only
-    /// N = 1 and 100.
+    /// The sweep stops at N = 10,000, as in <see cref="ObserveOnBenchmarks"/>: the <c>ObserveOn</c> queue is
+    /// unbounded.
     /// </remarks>
     [BenchmarkCategory("Concurrency")]
     public class SynchronizationContextBenchmarks : BenchmarkBase
     {
-        [Params(1, 100)]
+        [Params(1, 100, 10_000)]
         public int N;
 
         private readonly SynchronizationContextAsyncScheduler _scheduler = new(new InlineSynchronizationContext());

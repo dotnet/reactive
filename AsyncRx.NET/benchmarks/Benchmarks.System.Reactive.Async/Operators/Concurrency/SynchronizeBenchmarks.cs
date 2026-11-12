@@ -14,7 +14,8 @@ namespace Benchmarks.System.Reactive.Async.Operators.Concurrency
 {
     /// <summary>
     /// S1 (gated sweep): <c>Synchronize</c> with its own gate and with a caller-supplied <see cref="AsyncGate"/>.
-    /// Uncontended, so these rows isolate the per-element gate cost (a thread-pool hop per acquisition).
+    /// Uncontended, so these rows isolate the per-element gate cost (a monitor-guarded acquisition that completes
+    /// synchronously).
     /// </summary>
     [BenchmarkCategory("Concurrency")]
     public class SynchronizeBenchmarks : GatedOperatorBenchmarkBase
