@@ -15,8 +15,9 @@ namespace Benchmarks.System.Reactive.Operators.Blocking
     /// <summary>
     /// The remaining blocking gate/pull operators: <c>Single</c> (predicate matching exactly one, so it scans the
     /// whole stream), <c>FirstOrDefault</c>/<c>LastOrDefault</c>, and the pull <c>GetEnumerator</c>. (<c>Latest</c>/
-    /// <c>MostRecent</c>/<c>Next</c>/<c>Chunkify</c> are designed for hot sources and are exercised via the workload
-    /// harness rather than here.)
+    /// <c>MostRecent</c>/<c>Chunkify</c> are designed for hot sources and are benchmarked in
+    /// <see cref="HotPullBenchmarks"/>; <c>Next</c>, which needs a concurrent producer, in
+    /// <see cref="HotPullNextBenchmarks"/>.)
     /// </summary>
     [BenchmarkCategory("Blocking")]
     public class BlockingPullBenchmarks : OperatorBenchmarkBase

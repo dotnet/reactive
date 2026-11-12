@@ -25,6 +25,9 @@ namespace Benchmarks.System.Reactive.Infrastructure
         public void OnError(Exception error) => _consumer.Consume(error);
 
         public void OnCompleted() { }
+
+        /// <summary>True when this observer feeds <paramref name="consumer"/> (reference identity).</summary>
+        internal bool Wraps(Consumer consumer) => ReferenceEquals(_consumer, consumer);
     }
 
     /// <summary>
@@ -56,8 +59,44 @@ namespace Benchmarks.System.Reactive.Infrastructure
     public static class SinkExtensions
     {
         /// <summary>Subscribes a <see cref="ConsumingObserver{T}"/> that feeds every value (and any error) to <paramref name="consumer"/>.</summary>
+        /// <remarks>
+        /// The observer is reused rather than allocated per call (see <see cref="ObserverCache{T}"/>), so the
+        /// benchmark's Allocated column reflects only the pipeline under test — otherwise a constant observer
+        /// allocation would pollute every N=1 row and the scalar-creation benchmarks.
+        /// </remarks>
         public static IDisposable SubscribeConsume<T>(this IObservable<T> source, Consumer consumer) =>
-            source.Subscribe(new ConsumingObserver<T>(consumer));
+            source.Subscribe(ObserverCache<T>.For(consumer));
+
+        /// <summary>
+        /// Remembers the most recently created <see cref="ConsumingObserver{T}"/> per element type. Sharing one
+        /// instance across subscriptions (even concurrent ones) is safe because the observer has no state beyond its
+        /// immutable <see cref="Consumer"/> reference. A benchmark class uses a single <see cref="Consumer"/>, so after
+        /// the first call the fast path is one static read plus a reference comparison, with no allocation.
+        /// </summary>
+        /// <remarks>
+        /// The unsynchronised read/write is a benign race: reference reads and writes are atomic, the field is read
+        /// once per call, and the returned observer is always checked to wrap the caller's consumer. If two consumers
+        /// alternate (e.g. concurrent benchmarks in one process) each call simply falls back to allocating a new
+        /// observer — still correct, just not allocation-free. <see cref="BlockingObserver{T}"/> is stateful (it owns
+        /// a wait handle) and is deliberately not cached.
+        /// </remarks>
+        private static class ObserverCache<T>
+        {
+            private static ConsumingObserver<T> _last;
+
+            public static ConsumingObserver<T> For(Consumer consumer)
+            {
+                var last = _last;
+                if (last != null && last.Wraps(consumer))
+                {
+                    return last;
+                }
+
+                var created = new ConsumingObserver<T>(consumer);
+                _last = created;
+                return created;
+            }
+        }
 
         /// <summary>Subscribes, consumes every value, and blocks until the sequence terminates. For async pipelines.</summary>
         public static void SubscribeBlocking<T>(this IObservable<T> source, Consumer consumer)

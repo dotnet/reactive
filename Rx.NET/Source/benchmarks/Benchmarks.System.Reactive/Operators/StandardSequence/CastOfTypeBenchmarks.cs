@@ -11,16 +11,29 @@ using Benchmarks.System.Reactive.Infrastructure;
 namespace Benchmarks.System.Reactive.Operators.StandardSequence
 {
     /// <summary>
-    /// S1: <c>Cast</c> and <c>OfType</c> over a boxed (<c>object</c>) source. The boxing in the source is
-    /// inherent to having an <c>IObservable&lt;object&gt;</c>; the benchmark measures the cast/type-test per element.
+    /// S1: <c>Cast</c> and <c>OfType</c> over a boxed (<c>object</c>) source. The N ints are boxed once in
+    /// <c>[GlobalSetup]</c> and replayed via <c>ToObservable()</c>, so the measured region contains the cast/type-test
+    /// per element (plus the array-to-observable source) but no per-element boxing.
     /// </summary>
     [BenchmarkCategory("StandardSequence")]
     public class CastOfTypeBenchmarks : OperatorBenchmarkBase
     {
-        [Benchmark]
-        public void Cast() => Observable.Range(1, N).Select(static v => (object)v).Cast<int>().SubscribeConsume(Consumer);
+        private object[] _boxed = default!;
+
+        [GlobalSetup]
+        public void Setup()
+        {
+            _boxed = new object[N];
+            for (var i = 0; i < _boxed.Length; i++)
+            {
+                _boxed[i] = i + 1;
+            }
+        }
 
         [Benchmark]
-        public void OfType() => Observable.Range(1, N).Select(static v => (object)v).OfType<int>().SubscribeConsume(Consumer);
+        public void Cast() => _boxed.ToObservable().Cast<int>().SubscribeConsume(Consumer);
+
+        [Benchmark]
+        public void OfType() => _boxed.ToObservable().OfType<int>().SubscribeConsume(Consumer);
     }
 }

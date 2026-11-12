@@ -44,6 +44,36 @@ $fullSha = (git -C $benchmarksRoot rev-parse HEAD).Trim()
 $branch = (git -C $benchmarksRoot rev-parse --abbrev-ref HEAD).Trim()
 $date = Get-Date -Format 'yyyy-MM-dd'
 
+# Active Windows power plan (a common source of run-to-run drift). Best effort: null on non-Windows or if
+# powercfg is unavailable/fails — a metadata probe must never abort the capture.
+$powerPlan = $null
+$isWindowsOs = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform(
+    [System.Runtime.InteropServices.OSPlatform]::Windows)
+if ($isWindowsOs) {
+    try {
+        $schemeOutput = (& powercfg /getactivescheme 2>$null | Out-String).Trim()
+        if ($LASTEXITCODE -eq 0 -and $schemeOutput) {
+            # e.g. "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+            if ($schemeOutput -match '([0-9a-fA-F-]{36})\s*\((.+)\)') {
+                $powerPlan = [ordered]@{ guid = $Matches[1]; name = $Matches[2] }
+            }
+            else {
+                $powerPlan = [ordered]@{ guid = $null; name = $schemeOutput }
+            }
+        }
+    }
+    catch {
+        $powerPlan = $null
+    }
+}
+
+# Runtime knobs that change JIT tiering/PGO behaviour and therefore the numbers. Empty object if none are set.
+$runtimeKnobs = [ordered]@{}
+Get-ChildItem env: |
+    Where-Object { $_.Name -match '^(DOTNET_Tiered|DOTNET_ReadyToRun$|COMPlus_Tiered)' } |
+    Sort-Object Name |
+    ForEach-Object { $runtimeKnobs[$_.Name] = $_.Value }
+
 $folderName = "$date-$sha"
 if ($Label) {
     # Sanitize to a safe filename segment so the label cannot contain path separators or '..'.
@@ -80,6 +110,8 @@ dotnet --info | Out-File -FilePath (Join-Path $dest 'dotnet-info.txt') -Encoding
     dirty     = [bool]$dirty
     machine   = $env:COMPUTERNAME
     os        = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
+    powerPlan = $powerPlan
+    runtimeEnvironment = $runtimeKnobs
 } | ConvertTo-Json | Out-File -FilePath (Join-Path $dest 'environment.json') -Encoding utf8
 
 Write-Host "Done. Results in $(Join-Path $dest 'results')"

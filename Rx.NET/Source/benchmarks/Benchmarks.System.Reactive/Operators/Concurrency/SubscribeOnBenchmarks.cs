@@ -14,9 +14,9 @@ namespace Benchmarks.System.Reactive.Operators.Concurrency
 {
     /// <summary>
     /// Concurrency (async S1): <c>SubscribeOn</c> moves the subscription (and thus the synchronous source's
-    /// execution) onto another scheduler. Blocks until completion via <c>SubscribeBlocking</c>.
+    /// execution) onto another scheduler. Blocks until completion via <c>SubscribeBlocking</c>, so every invocation
+    /// measures the whole hand-off and the default auto-tuned job applies.
     /// </summary>
-    [SimpleJob(RunStrategy.Monitoring, launchCount: 1, warmupCount: 3, iterationCount: 10)]   // thread-crossing → repeatable job, not the auto-tuned default
     [BenchmarkCategory("Concurrency")]
     public class SubscribeOnBenchmarks
     {

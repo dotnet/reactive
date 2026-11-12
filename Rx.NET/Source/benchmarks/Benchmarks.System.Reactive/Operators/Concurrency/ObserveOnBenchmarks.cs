@@ -14,10 +14,9 @@ namespace Benchmarks.System.Reactive.Operators.Concurrency
 {
     /// <summary>
     /// Concurrency-category exemplar (async S1): <c>ObserveOn</c> marshals every element onto another scheduler.
-    /// The benchmark blocks until completion via <c>SubscribeBlocking</c>. N is capped because each element
-    /// crosses a thread boundary.
+    /// The benchmark blocks until completion via <c>SubscribeBlocking</c>, so every invocation measures the whole
+    /// hand-off and the default auto-tuned job applies. N is capped because each element crosses a thread boundary.
     /// </summary>
-    [SimpleJob(RunStrategy.Monitoring, launchCount: 1, warmupCount: 3, iterationCount: 10)]   // thread-crossing → repeatable job, not the auto-tuned default
     [BenchmarkCategory("Concurrency")]
     public class ObserveOnBenchmarks
     {

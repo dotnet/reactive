@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Engines;
 
 using Benchmarks.System.Reactive.Infrastructure;
 
@@ -15,9 +14,8 @@ namespace Benchmarks.System.Reactive.Operators.Imperative
 {
     /// <summary>
     /// Imperative: <c>Case</c> selects a source from a key→source map at subscription time; <c>ForEachAsync</c> is
-    /// the Task-returning blocking iteration (which is why this class uses a repeatable Monitoring job).
+    /// the Task-returning iteration, waited on to completion inside each invocation (so the default job applies).
     /// </summary>
-    [SimpleJob(RunStrategy.Monitoring, launchCount: 1, warmupCount: 3, iterationCount: 10)]
     [BenchmarkCategory("Imperative")]
     public class CaseForEachAsyncBenchmarks : OperatorBenchmarkBase
     {

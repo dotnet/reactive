@@ -14,10 +14,10 @@ namespace Benchmarks.System.Reactive.Operators.Async
 {
     /// <summary>
     /// The async factory bridges (single-shot, so no N sweep — this measures the subscription + async-completion
-    /// cost): <c>FromAsync</c>, <c>Start</c>, <c>StartAsync</c>, <c>ToAsync</c>. (<c>FromAsyncPattern</c> relies on
-    /// delegate <c>BeginInvoke</c>, which is unsupported on modern .NET, so it is not benchmarked.)
+    /// cost): <c>FromAsync</c>, <c>Start</c>, <c>StartAsync</c>, <c>ToAsync</c>. Every invocation blocks until the
+    /// result is delivered (<c>SubscribeBlocking</c>), so the default auto-tuned job measures it correctly.
+    /// (<c>FromAsyncPattern</c> is benchmarked separately in <see cref="FromAsyncPatternBenchmarks"/>.)
     /// </summary>
-    [SimpleJob(RunStrategy.Monitoring, launchCount: 1, warmupCount: 3, iterationCount: 10)]   // async completion latency → repeatable job, not the auto-tuned default
     [BenchmarkCategory("Async")]
     public class AsyncFactoryBenchmarks
     {

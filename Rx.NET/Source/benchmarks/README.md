@@ -5,7 +5,7 @@ performance work (e.g. the .NET 10 modernization spike).
 
 | Folder | Purpose |
 |---|---|
-| `Benchmarks.System.Reactive/` | The BenchmarkDotNet microbenchmark suite (~100 operator classes under `Operators/<Category>/`, shared infrastructure under `Infrastructure/`). |
+| `Benchmarks.System.Reactive/` | The BenchmarkDotNet microbenchmark suite (135 operator classes under `Operators/<Category>/`, shared infrastructure under `Infrastructure/`). Each folder is also the `[BenchmarkCategory]`, mostly mirroring the `Observable.*.cs` source files, plus `Experimental` (`ObservableEx`) and `Queryable` (`Qbservable`). |
 | `Rx.WorkloadHarness/` | A long-running console host for system-level telemetry (`dotnet-counters` / `dotnet-trace` / `dotnet-monitor`) — the steady-state GC/thread-pool view microbenchmarks can't give. |
 | `tools/` | `capture-baseline.ps1` and `compare-results.ps1` — the A/B workflow (see below). |
 | `baselines/`, `traces/` | Local run outputs. **Gitignored** — keep them locally or publish as CI artifacts. |
@@ -15,18 +15,33 @@ performance work (e.g. the .NET 10 modernization spike).
 Every benchmark class follows one of four shapes:
 
 - **S1 throughput** — cold synchronous pipelines (`Observable.Range`), swept over `N` = 1…1,000,000 elements (`OperatorBenchmarkBase`).
+  Classes covering further overloads of an operator whose main overload is already swept in full use
+  `OperatorVariantBenchmarkBase`, a reduced sweep of `N` = 1, 1,000 and 1,000,000, to keep run time down.
+  Where an overload needs a pre-typed source (e.g. `IObservable<decimal>` for the typed aggregates),
+  `ArraySource<T>` pushes a pre-built array so no conversion runs in the measured region.
 - **S2 hot push** — a pumped `Subject<T>` exercising the per-element `OnNext` dispatch path.
 - **S3 temporal** — time-based operators driven in *virtual time* (`HistoricalScheduler` /
   `PeriodicVirtualScheduler`), so even dense timelines complete in microseconds of wall clock with
   zero timing noise. Operators with a periodic path (`Interval`, `Timer`, `Sample`, `Buffer(time)`,
   `Window(time)`) use `PeriodicVirtualScheduler`, which implements `ISchedulerPeriodic` so Rx's real
-  periodic fast path is measured rather than the stopwatch-emulated fallback.
+  periodic fast path is measured rather than the stopwatch-emulated fallback. Every temporal class
+  inherits a `Source_Baseline` benchmark (the shared virtual-time source on a fresh
+  `HistoricalScheduler`, no operator) as its baseline, so the Ratio column reads as operator cost over
+  source + scheduler cost at the same N — e.g. 1.3 means the operator adds ~30% on top of driving the
+  timeline. In the `Density`-swept classes the baseline repeats per density with the same result.
 - **S4 subscription/lifecycle** — construction, subscription, and disposal costs in isolation.
 
 Results are consumed through a shared `Consumer` sink (defeating dead-code elimination); async
 pipelines block on real completion (`SubscribeBlocking`). `MemoryDiagnoser` is applied globally, so
 allocation is a first-class column everywhere, alongside per-element `ns/N` (mean time / N) and
-`B/N` (allocated bytes / N) columns for classes with an `N` parameter.
+`B/N` (allocated bytes / N) columns for classes with an `N` parameter. `SubscribeConsume` reuses
+one observer per `Consumer`, so the sink adds no per-call allocation to the Allocated column.
+
+Classes use BenchmarkDotNet's default auto-tuned job, with one exception: `HotPullNextBenchmarks.Next`
+measures N blocking pulls against a free-running producer thread (the producer pushes until the N
+pulls are done). `Next` only sees values that arrive while a pull is blocked, so draining a finite
+producer would observe anywhere from 0 to N values. Each pull is a cross-thread wake-up, so this class
+uses a fixed Monitoring job (3 launches × 20 iterations); expect more variance than elsewhere.
 
 Reading the per-element columns:
 
@@ -87,7 +102,10 @@ tools\compare-results.ps1 -Baseline baselines\2026-07-01-abc1234 -Candidate base
 
 `capture-baseline.ps1` runs the suite, stamps results into `baselines/<date>-<shortsha>[-label]/results/`
 (full JSON + GitHub markdown + CSV per class), and records the environment (commit, branch,
-`dotnet --info`) alongside. It refuses to stamp a dirty working tree unless `-AllowDirty` is passed.
+`dotnet --info`) alongside. `environment.json` also records the active Windows power plan
+(`powerPlan`, null off Windows or if `powercfg` fails) and any `DOTNET_Tiered*` /
+`DOTNET_ReadyToRun` / `COMPlus_Tiered*` variables that were set (`runtimeEnvironment`). Check these
+match before trusting a comparison. It refuses to stamp a dirty working tree unless `-AllowDirty` is passed.
 
 `compare-results.ps1` matches benchmarks by full name (including parameter values) across the two
 result sets, classifies each as regression / improvement / unchanged using a ratio threshold

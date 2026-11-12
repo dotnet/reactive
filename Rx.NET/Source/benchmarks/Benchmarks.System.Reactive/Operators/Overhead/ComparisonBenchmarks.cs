@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -17,11 +16,17 @@ using Benchmarks.System.Reactive.Infrastructure;
 namespace Benchmarks.System.Reactive.Operators.Overhead
 {
     /// <summary>
-    /// The historic broad comparison grid (predates the per-operator suite), retained for baseline
-    /// continuity: a raw <c>for</c> loop and LINQ-to-Objects against a wide spread of Rx pipelines in
-    /// one table. For focused per-operator measurements prefer the dedicated classes; the cross-map
-    /// variants here (<c>ConcatCrossMap</c>/<c>SelectManyCrossMap</c>/<c>MergeCrossMap</c>) pin total
-    /// work at ~1M elements, so for those N reads as fan-out width, not element count.
+    /// What remains of the historic broad comparison grid (predates the per-operator suite): a raw <c>for</c> loop
+    /// (the class baseline) and LINQ-to-Objects alongside the Rx pipelines that have no identical counterpart in a
+    /// dedicated class — chained operators (<c>SelectSelect</c>, <c>WhereWhere</c>), the over-sized-source variants
+    /// (<c>Where</c> over 2N, <c>TakeLast</c> over 2N, <c>Concat</c> of N + N/2), the <c>SelectMany</c> cross-map,
+    /// subject push, <c>Amb</c> with the winner second, <c>Timeout</c>, <c>TakeUntil(Never)</c>,
+    /// <c>CurrentThreadScheduler</c> recursion and <c>Repeat().ToList()</c>. They are kept for baseline continuity and
+    /// so the Ratio column shows Rx overhead against the raw loop in one table. Nothing here is the sole coverage of
+    /// an operator: pipelines duplicated exactly by a dedicated class were removed, and the ones that were unique
+    /// were moved out (nested <c>Concat</c>/<c>Merge</c> to <c>NestedConcatMergeBenchmarks</c>, n-ary <c>Amb</c> to
+    /// <c>AmbBenchmarks</c>, <c>Collect</c> to <c>CollectBenchmarks</c>). <c>SelectManyCrossMap</c> pins total work at
+    /// ~1M elements, so for it N reads as fan-out width, not element count.
     /// </summary>
     [BenchmarkCategory("Overhead")]
     public class ComparisonBenchmarks : OperatorBenchmarkBase
@@ -46,18 +51,6 @@ namespace Benchmarks.System.Reactive.Operators.Overhead
         }
 
         [Benchmark]
-        public void Return() => Observable.Return(1).SubscribeConsume(Consumer);
-
-        [Benchmark]
-        public void Range() => Observable.Range(1, N).SubscribeConsume(Consumer);
-
-        [Benchmark]
-        public void Select() =>
-            Observable.Range(1, N)
-                .Select(static v => v + 1)
-                .SubscribeConsume(Consumer);
-
-        [Benchmark]
         public void SelectSelect() =>
             Observable.Range(1, N)
                 .Select(static v => v + 1)
@@ -78,27 +71,9 @@ namespace Benchmarks.System.Reactive.Operators.Overhead
                 .SubscribeConsume(Consumer);
 
         [Benchmark]
-        public void Take() =>
-            Observable.Range(1, 2 * N)
-                .Take(N)
-                .SubscribeConsume(Consumer);
-
-        [Benchmark]
-        public void Skip() =>
-            Observable.Range(1, 2 * N)
-                .Skip(N)
-                .SubscribeConsume(Consumer);
-
-        [Benchmark]
         public void TakeUntil() =>
             Observable.Range(1, N)
                 .TakeUntil(Observable.Never<int>())
-                .SubscribeConsume(Consumer);
-
-        [Benchmark]
-        public void ToObservable() =>
-            Enumerable.Range(1, N)
-                .ToObservable()
                 .SubscribeConsume(Consumer);
 
         [Benchmark]
@@ -113,29 +88,11 @@ namespace Benchmarks.System.Reactive.Operators.Overhead
         }
 
         [Benchmark]
-        public void ConcatCrossMap()
-        {
-            var m = 1000 * 1000 / N;
-
-            Observable.Concat(Observable.Range(1, N).Select(v => Observable.Range(v, m)))
-                .SubscribeConsume(Consumer);
-        }
-
-        [Benchmark]
         public void SelectManyCrossMap()
         {
             var m = 1000 * 1000 / N;
 
             Observable.Range(1, N).SelectMany(v => Observable.Range(v, m))
-                .SubscribeConsume(Consumer);
-        }
-
-        [Benchmark]
-        public void MergeCrossMap()
-        {
-            var m = 1000 * 1000 / N;
-
-            Observable.Merge(Observable.Range(1, N).Select(v => Observable.Range(v, m)))
                 .SubscribeConsume(Consumer);
         }
 
@@ -175,40 +132,9 @@ namespace Benchmarks.System.Reactive.Operators.Overhead
                 .SubscribeConsume(Consumer);
 
         [Benchmark]
-        public void AmbThree() =>
-            Observable.Amb(Observable.Never<int>(), Observable.Never<int>(), Observable.Range(1, N))
-                .SubscribeConsume(Consumer);
-
-        [Benchmark]
         public void Timeout() =>
             Observable.Range(1, N)
                 .Timeout(TimeSpan.FromHours(1))
-                .SubscribeConsume(Consumer);
-
-#pragma warning disable CS0618 // Type or member is obsolete
-        [Benchmark]
-        public void First() => Consumer.Consume(Observable.Range(1, N).First());
-
-        [Benchmark]
-        public void Last() => Consumer.Consume(Observable.Range(1, N).Last());
-#pragma warning restore CS0618 // Type or member is obsolete
-
-        [Benchmark]
-        public void Buffer_Exact() =>
-            Observable.Range(1, 1000)
-                .Buffer(1)
-                .SubscribeConsume(Consumer);
-
-        [Benchmark]
-        public void Buffer_Skip() =>
-            Observable.Range(1, 1000)
-                .Buffer(1, 2)
-                .SubscribeConsume(Consumer);
-
-        [Benchmark]
-        public void Buffer_Overlap() =>
-            Observable.Range(1, 1000)
-                .Buffer(2, 1)
                 .SubscribeConsume(Consumer);
 
         [Benchmark]
@@ -232,27 +158,8 @@ namespace Benchmarks.System.Reactive.Operators.Overhead
                 .SubscribeConsume(Consumer);
 
         [Benchmark]
-        public void Repeat() =>
-            Observable.Repeat(1, N)
-                .SubscribeConsume(Consumer);
-
-        [Benchmark]
         public void ToList() =>
             Observable.Repeat(1, N).ToList()
                 .SubscribeConsume(Consumer);
-
-        [Benchmark]
-        public void Generate() =>
-            Observable.Generate(0, s => s < N, static s => s + 1, static s => s)
-                .SubscribeConsume(Consumer);
-
-        [Benchmark]
-        public void Collect()
-        {
-            foreach (var v in Observable.Range(1, N).Collect(static () => new List<int>(), static (a, b) => { a.Add(b); return a; }))
-            {
-                Consumer.Consume(v);
-            }
-        }
     }
 }

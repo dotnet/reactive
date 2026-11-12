@@ -47,10 +47,4 @@
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
   </ItemGroup>
 
-  <!-- .NET Framework-only UI assemblies, retained for the legacy net472 benchmarks; the new suite avoids UI-thread schedulers. -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <Reference Include="System.Windows.Forms" />
-    <PackageReference Include="WindowsBase" Version="4.6.1055" />
-  </ItemGroup>
-
 </Project>

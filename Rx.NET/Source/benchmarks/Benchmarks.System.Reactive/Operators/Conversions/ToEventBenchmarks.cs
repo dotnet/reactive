@@ -16,11 +16,25 @@ namespace Benchmarks.System.Reactive.Operators.Conversions
     /// <summary>
     /// Conversions bridging to .NET events and pull sources: <c>ToEvent</c> / <c>ToEventPattern</c> expose an
     /// observable as an event (attaching the handler drives the synchronous source), and the
-    /// <c>IEnumerable.Subscribe</c> overload pushes a pull sequence to an observer.
+    /// <c>IEnumerable.Subscribe</c> overload pushes a pull sequence to an observer. The <c>ToEventPattern</c> input
+    /// (N <see cref="EventPattern{TEventArgs}"/> instances) is pre-built in <c>[GlobalSetup]</c>, so the measured
+    /// region excludes constructing them.
     /// </summary>
     [BenchmarkCategory("Conversions")]
     public class ToEventBenchmarks : OperatorBenchmarkBase
     {
+        private EventPattern<EventArgs>[] _patterns = default!;
+
+        [GlobalSetup]
+        public void Setup()
+        {
+            _patterns = new EventPattern<EventArgs>[N];
+            for (var i = 0; i < _patterns.Length; i++)
+            {
+                _patterns[i] = new EventPattern<EventArgs>(this, EventArgs.Empty);
+            }
+        }
+
         [Benchmark]
         public void ToEvent()
         {
@@ -33,9 +47,7 @@ namespace Benchmarks.System.Reactive.Operators.Conversions
         [Benchmark]
         public void ToEventPattern()
         {
-            var source = Observable.Range(1, N)
-                .Select(_ => new EventPattern<EventArgs>(this, EventArgs.Empty))
-                .ToEventPattern();
+            var source = _patterns.ToObservable().ToEventPattern();
             void Handler(object sender, EventArgs e) => Consumer.Consume(e);
             source.OnNext += Handler;
             source.OnNext -= Handler;
