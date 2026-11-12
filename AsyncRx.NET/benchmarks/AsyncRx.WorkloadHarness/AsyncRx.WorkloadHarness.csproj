@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- See Benchmarks.System.Reactive.Async.csproj: net10.0 only when the building SDK can target it. -->
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(NETCoreSdkVersion)', '10.0'))">$(TargetFrameworks);net10.0</TargetFrameworks>
+    <Optimize>true</Optimize>
+    <IsPackable>false</IsPackable>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Reactive.Async\System.Reactive.Async.csproj" />
+  </ItemGroup>
+
+</Project>

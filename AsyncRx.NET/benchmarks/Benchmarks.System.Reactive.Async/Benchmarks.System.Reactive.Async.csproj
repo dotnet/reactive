@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!--
+      CI (azure-pipelines.asyncrx.yml) builds AsyncRx.NET.sln with the .NET 9 SDK, which cannot target net10.0.
+      net10.0 is therefore added only when the SDK doing the build can target it.
+    -->
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(NETCoreSdkVersion)', '10.0'))">$(TargetFrameworks);net10.0</TargetFrameworks>
+    <Optimize>true</Optimize>
+    <IsPackable>false</IsPackable>
+    <Nullable>enable</Nullable>
+    <!-- Benchmarks are not public API; Directory.build.props turns documentation generation on for everything. -->
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);IDE1006;CS1998</NoWarn>
+
+    <!--
+      The suite always measures the current in-repo AsyncRx sources (the project reference below). Before/after
+      comparisons are cross-run: see tools/capture-baseline.ps1 and tools/compare-results.ps1.
+    -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
+    <!--
+      EtwProfiler + hardware counters (Windows). The EventPipe / Disassembly / Threading diagnosers ship in the
+      core BenchmarkDotNet package.
+    -->
+    <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.15.8" />
+  </ItemGroup>
+
+  <!--
+    System.Reactive.Async targets netstandard2.0 and netstandard2.1; every TFM here resolves to its
+    netstandard2.1 build.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Reactive.Async\System.Reactive.Async.csproj" />
+  </ItemGroup>
+
+</Project>

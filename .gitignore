@@ -182,3 +182,4 @@ _pkginfo.txt
 
 # BenchmarkDotNet artifacts (extensionless files included; benchmarks/baselines is covered by benchmarks/.gitignore)
 Rx.NET/Source/BenchmarkDotNet.Artifacts/
+AsyncRx.NET/BenchmarkDotNet.Artifacts/
