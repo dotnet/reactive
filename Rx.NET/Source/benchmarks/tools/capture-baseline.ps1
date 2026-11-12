@@ -7,6 +7,10 @@ Wraps `dotnet run` over Benchmarks.System.Reactive so every capture lands in a d
 commit-stamped folder together with the environment it was measured on (commit, branch,
 dotnet --info). The stamped folders are the inputs to compare-results.ps1.
 
+-ProjectDir points the script at a different benchmark project; the AsyncRx.NET suite uses it
+through its own tools\capture-baseline.ps1 wrapper. Baselines then land in a baselines/ folder
+next to that project.
+
 Refuses to run with uncommitted changes (the stamped commit SHA would lie about what was
 measured) unless -AllowDirty is passed.
 
@@ -22,15 +26,22 @@ param(
     [string] $Framework = 'net10.0',
     [string] $Label,
     [string[]] $ExtraArgs = @(),
-    [switch] $AllowDirty
+    [switch] $AllowDirty,
+    # Benchmark project folder. Defaults to the Benchmarks.System.Reactive project beside this tools folder.
+    [string] $ProjectDir
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$benchmarksRoot = Split-Path -Parent $PSScriptRoot
-$project = Join-Path $benchmarksRoot 'Benchmarks.System.Reactive'
-if (-not (Test-Path (Join-Path $project 'Benchmarks.System.Reactive.csproj'))) {
+if ($ProjectDir) {
+    $project = (Resolve-Path $ProjectDir).Path
+}
+else {
+    $project = Join-Path (Split-Path -Parent $PSScriptRoot) 'Benchmarks.System.Reactive'
+}
+$benchmarksRoot = Split-Path -Parent $project
+if (-not (Get-ChildItem -Path $project -Filter '*.csproj' -File -ErrorAction SilentlyContinue)) {
     throw "Benchmark project not found under $project"
 }
 
