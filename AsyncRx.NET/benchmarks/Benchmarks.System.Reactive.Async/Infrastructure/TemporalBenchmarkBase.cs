@@ -7,20 +7,22 @@ using System.Threading.Tasks;
 
 using BenchmarkDotNet.Attributes;
 
+using Microsoft.Reactive.Testing.Async;
+
 namespace Benchmarks.System.Reactive.Async.Infrastructure
 {
     /// <summary>
-    /// Base class for temporal (S3) operator benchmarks driven by <see cref="VirtualTimeAsyncScheduler"/>.
-    /// <see cref="N"/> is capped below the throughput sweep because every element is at least one scheduler
-    /// round and many timed operators take an <c>AsyncGate</c> per element. This type is <c>abstract</c> so
+    /// Base class for temporal (S3) operator benchmarks driven by <see cref="TestAsyncScheduler"/>, the virtual-time
+    /// scheduler from <c>Microsoft.Reactive.Testing.Async</c>. <see cref="N"/> is capped below the throughput sweep
+    /// because every element costs at least one timed work item on the scheduler. This type is <c>abstract</c> so
     /// auto-discovery skips it.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Every derived class inherits <see cref="Source_Baseline"/>: the benchmark-driven source alone (advance
-    /// <see cref="PeriodTicks"/>, push, repeat N times, complete) into the consumer. It is the class baseline, so
-    /// the Ratio column reads as "operator pipeline cost relative to driving the timeline". Derived classes must
-    /// not declare their own <c>Baseline = true</c> method.
+    /// Every derived class inherits <see cref="Source_Baseline"/>: the benchmark-driven source alone (N pushes
+    /// <see cref="PeriodTicks"/> apart, then completion) into the consumer. It is the class baseline, so the Ratio
+    /// column reads as "operator pipeline cost relative to driving the timeline", and the baseline includes the
+    /// scheduler's own cost. Derived classes must not declare their own <c>Baseline = true</c> method.
     /// </para>
     /// <para>
     /// The source is pushed by the benchmark (<see cref="VirtualTimeDriver.RunTimedAsync"/>) rather than built
@@ -44,12 +46,11 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
 
         /// <summary>
         /// Builds a pipeline over a pushed source, subscribes the consumer, pushes N elements
-        /// <see cref="PeriodTicks"/> apart in virtual time, completes the source, and drains until the sink
-        /// terminates.
+        /// <see cref="PeriodTicks"/> apart in virtual time, completes the source, and drains until no work remains.
         /// </summary>
         protected ValueTask RunTimedAsync<TState, TResult>(
             TState state,
-            Func<IAsyncObservable<int>, VirtualTimeAsyncScheduler, TState, IAsyncObservable<TResult>> build)
+            Func<IAsyncObservable<int>, TestAsyncScheduler, TState, IAsyncObservable<TResult>> build)
         {
             var sink = Sinks.For<TResult>(Consumer);
             return VirtualTimeDriver.RunTimedAsync(N, PeriodTicks, sink, sink.Completion, state, build);
@@ -58,91 +59,183 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         /// <summary>As <see cref="RunTimedAsync"/> with two pushed sources that receive each value in turn (left, then right).</summary>
         protected ValueTask RunTimedPairAsync<TState, TResult>(
             TState state,
-            Func<IAsyncObservable<int>, IAsyncObservable<int>, VirtualTimeAsyncScheduler, TState, IAsyncObservable<TResult>> build)
+            Func<IAsyncObservable<int>, IAsyncObservable<int>, TestAsyncScheduler, TState, IAsyncObservable<TResult>> build)
         {
             var sink = Sinks.For<TResult>(Consumer);
             return VirtualTimeDriver.RunTimedPairAsync(N, PeriodTicks, sink, sink.Completion, state, build);
         }
 
-        /// <summary>For time <i>sources</i> (Timer, Interval, timed Generate): subscribe, then drain until the sink terminates.</summary>
+        /// <summary>For time <i>sources</i> (Timer, Interval, timed Generate): subscribe, then drain until no work remains.</summary>
         protected ValueTask RunSourceAsync<TState, TResult>(
             TState state,
-            Func<VirtualTimeAsyncScheduler, TState, IAsyncObservable<TResult>> build)
+            Func<TestAsyncScheduler, TState, IAsyncObservable<TResult>> build)
         {
             var sink = Sinks.For<TResult>(Consumer);
             return VirtualTimeDriver.RunSourceAsync(sink, sink.Completion, state, build);
         }
     }
 
-    /// <summary>The virtual-time driving loops shared by <see cref="TemporalBenchmarkBase"/> and <see cref="SelfCheck"/>.</summary>
+    /// <summary>
+    /// The virtual-time driving loops shared by <see cref="TemporalBenchmarkBase"/> and <see cref="SelfCheck"/>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <see cref="TestAsyncScheduler"/> is a synchronous, single-threaded pump: <c>Start</c> runs every due item,
+    /// and every continuation those items ready, inline on the calling thread, advancing the clock between them.
+    /// So these loops complete synchronously; they return <see cref="ValueTask"/> only to keep the benchmark
+    /// method shape.
+    /// </para>
+    /// <para>
+    /// The pipeline is subscribed from the benchmark body, before any work has run. Everything after that runs
+    /// inside the pump: the pushes are a chain of timed work items (<see cref="PushChain"/>), each pushing one
+    /// value and scheduling the next <c>periodTicks</c> later, and the last one completes the sources. Pushing
+    /// from the body between <c>AdvanceBy</c> calls does not work: an operator that cancels or completes an
+    /// in-flight timer in response to a push would then do so off the pump, which the scheduler reports as an
+    /// escape.
+    /// </para>
+    /// <para>
+    /// <c>Start</c> throws if scheduled work fails, escapes to a real thread, or is left outstanding when the
+    /// timeline runs out, and <see cref="Drain"/> throws if the sink never terminated. A stuck pipeline therefore
+    /// fails the benchmark instead of hanging it.
+    /// </para>
+    /// </remarks>
     public static class VirtualTimeDriver
     {
-        public static async ValueTask RunTimedAsync<TState, TResult>(
+        public static ValueTask RunTimedAsync<TState, TResult>(
             int n,
             long periodTicks,
             IAsyncObserver<TResult> sink,
             CompletionSignal done,
             TState state,
-            Func<IAsyncObservable<int>, VirtualTimeAsyncScheduler, TState, IAsyncObservable<TResult>> build)
+            Func<IAsyncObservable<int>, TestAsyncScheduler, TState, IAsyncObservable<TResult>> build)
         {
-            var scheduler = new VirtualTimeAsyncScheduler();
+            var scheduler = new TestAsyncScheduler();
             var source = new PushSource<int>();
 
-            await build(source, scheduler, state).SubscribeAsync(sink).ConfigureAwait(false);
-            await scheduler.AdvanceByAsync(TimeSpan.Zero).ConfigureAwait(false); // work scheduled at subscription time
-
-            var period = TimeSpan.FromTicks(periodTicks);
-            for (var i = 0; i < n; i++)
-            {
-                await scheduler.AdvanceByAsync(period).ConfigureAwait(false);
-                await source.OnNextAsync(i).ConfigureAwait(false);
-            }
-
-            await source.OnCompletedAsync().ConfigureAwait(false);
-            await scheduler.RunUntilAsync(done).ConfigureAwait(false);
+            Complete(scheduler, build(source, scheduler, state).SubscribeAsync(sink));
+            PushChain.Start(scheduler, source, null, n, periodTicks);
+            Drain(scheduler, done);
+            return default;
         }
 
         /// <summary>
-        /// As <see cref="RunTimedAsync"/> with two pushed sources: at each step it advances time, then pushes the
-        /// same value into the left source and then the right source.
+        /// As <see cref="RunTimedAsync"/> with two pushed sources: at each step the same value goes into the left
+        /// source and then the right source.
         /// </summary>
-        public static async ValueTask RunTimedPairAsync<TState, TResult>(
+        public static ValueTask RunTimedPairAsync<TState, TResult>(
             int n,
             long periodTicks,
             IAsyncObserver<TResult> sink,
             CompletionSignal done,
             TState state,
-            Func<IAsyncObservable<int>, IAsyncObservable<int>, VirtualTimeAsyncScheduler, TState, IAsyncObservable<TResult>> build)
+            Func<IAsyncObservable<int>, IAsyncObservable<int>, TestAsyncScheduler, TState, IAsyncObservable<TResult>> build)
         {
-            var scheduler = new VirtualTimeAsyncScheduler();
+            var scheduler = new TestAsyncScheduler();
             var left = new PushSource<int>();
             var right = new PushSource<int>();
 
-            await build(left, right, scheduler, state).SubscribeAsync(sink).ConfigureAwait(false);
-            await scheduler.AdvanceByAsync(TimeSpan.Zero).ConfigureAwait(false);
-
-            var period = TimeSpan.FromTicks(periodTicks);
-            for (var i = 0; i < n; i++)
-            {
-                await scheduler.AdvanceByAsync(period).ConfigureAwait(false);
-                await left.OnNextAsync(i).ConfigureAwait(false);
-                await right.OnNextAsync(i).ConfigureAwait(false);
-            }
-
-            await left.OnCompletedAsync().ConfigureAwait(false);
-            await right.OnCompletedAsync().ConfigureAwait(false);
-            await scheduler.RunUntilAsync(done).ConfigureAwait(false);
+            Complete(scheduler, build(left, right, scheduler, state).SubscribeAsync(sink));
+            PushChain.Start(scheduler, left, right, n, periodTicks);
+            Drain(scheduler, done);
+            return default;
         }
 
-        public static async ValueTask RunSourceAsync<TState, TResult>(
+        public static ValueTask RunSourceAsync<TState, TResult>(
             IAsyncObserver<TResult> sink,
             CompletionSignal done,
             TState state,
-            Func<VirtualTimeAsyncScheduler, TState, IAsyncObservable<TResult>> build)
+            Func<TestAsyncScheduler, TState, IAsyncObservable<TResult>> build)
         {
-            var scheduler = new VirtualTimeAsyncScheduler();
-            await build(scheduler, state).SubscribeAsync(sink).ConfigureAwait(false);
-            await scheduler.RunUntilAsync(done).ConfigureAwait(false);
+            var scheduler = new TestAsyncScheduler();
+            Complete(scheduler, build(scheduler, state).SubscribeAsync(sink));
+            Drain(scheduler, done);
+            return default;
+        }
+
+        // Runs the timeline until no work remains, then requires the sink to have terminated: a pipeline that
+        // ends with nothing scheduled but never completed would otherwise pass silently.
+        private static void Drain(TestAsyncScheduler scheduler, CompletionSignal done)
+        {
+            scheduler.Start();
+            if (!done.IsSet)
+            {
+                throw new InvalidOperationException(
+                    $"The pipeline did not terminate: the virtual-time pump ran out of work at tick {scheduler.Clock} before the sink received OnCompleted or OnError.");
+            }
+        }
+
+        // Body-level operations run before the pump has run anything, so they normally complete synchronously;
+        // if one does not, RunToCompletion pumps the current tick until it does.
+        private static void Complete<T>(TestAsyncScheduler scheduler, ValueTask<T> operation)
+        {
+            if (!operation.IsCompletedSuccessfully)
+            {
+                scheduler.RunToCompletion(operation).AsTask().GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// Pushes 0..n-1 into one or two sources, one value every <c>period</c> ticks starting at tick
+        /// <c>period</c>, then completes them, all as scheduled work inside the pump. One instance per run; the
+        /// state-argument scheduling overloads mean no closure per step.
+        /// </summary>
+        private sealed class PushChain
+        {
+            private readonly TestAsyncScheduler _scheduler;
+            private readonly PushSource<int> _first;
+            private readonly PushSource<int>? _second;
+            private readonly int _n;
+            private readonly TimeSpan _period;
+            private int _next;
+
+            private PushChain(TestAsyncScheduler scheduler, PushSource<int> first, PushSource<int>? second, int n, long periodTicks)
+            {
+                _scheduler = scheduler;
+                _first = first;
+                _second = second;
+                _n = n;
+                _period = TimeSpan.FromTicks(periodTicks);
+            }
+
+            public static void Start(TestAsyncScheduler scheduler, PushSource<int> first, PushSource<int>? second, int n, long periodTicks)
+            {
+                var chain = new PushChain(scheduler, first, second, n, periodTicks);
+                Complete(scheduler, chain.ScheduleNext());
+            }
+
+            // A zero-length run completes at tick 0; otherwise the first value arrives at tick `period`.
+            private ValueTask<IAsyncDisposable> ScheduleNext() =>
+                _next < _n
+                    ? _scheduler.ScheduleAsync(this, _period, static (chain, _) => chain.StepAsync())
+                    : _scheduler.ScheduleAsync(this, static (chain, _) => chain.CompleteAsync());
+
+            private async ValueTask StepAsync()
+            {
+                var value = _next++;
+                await _first.OnNextAsync(value).ConfigureAwait(false);
+                if (_second != null)
+                {
+                    await _second.OnNextAsync(value).ConfigureAwait(false);
+                }
+
+                if (_next < _n)
+                {
+                    await ScheduleNext().ConfigureAwait(false);
+                }
+                else
+                {
+                    await CompleteAsync().ConfigureAwait(false);
+                }
+            }
+
+            private async ValueTask CompleteAsync()
+            {
+                await _first.OnCompletedAsync().ConfigureAwait(false);
+                if (_second != null)
+                {
+                    await _second.OnCompletedAsync().ConfigureAwait(false);
+                }
+            }
         }
     }
 }

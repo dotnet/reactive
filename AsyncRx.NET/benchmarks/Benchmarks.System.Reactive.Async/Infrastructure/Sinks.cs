@@ -17,23 +17,18 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
     /// </summary>
     /// <remarks>
     /// Continuations run synchronously on the thread that calls <see cref="Set"/>, which may be a thread-pool
-    /// thread for pipelines that hop. <see cref="OnSet"/> lets <see cref="VirtualTimeAsyncScheduler.RunUntilAsync"/>
-    /// wake its pump when the sink terminates.
+    /// thread for pipelines that hop, or the pump thread under the virtual-time scheduler.
     /// </remarks>
     public sealed class CompletionSignal : IValueTaskSource
     {
         private ManualResetValueTaskSourceCore<bool> _core;
         private int _state; // 0 = armed, 1 = set
 
-        /// <summary>Optional callback invoked once, after the signal is set.</summary>
-        public Action? OnSet;
-
         public bool IsSet => Volatile.Read(ref _state) == 1;
 
         public void Reset()
         {
             _core.Reset();
-            OnSet = null;
             Volatile.Write(ref _state, 0);
         }
 
@@ -41,9 +36,7 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         {
             if (Interlocked.Exchange(ref _state, 1) == 0)
             {
-                var onSet = OnSet;
                 _core.SetResult(true);
-                onSet?.Invoke();
             }
         }
 

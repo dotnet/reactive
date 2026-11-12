@@ -17,19 +17,13 @@ namespace Benchmarks.System.Reactive.Async.Operators.Time
     /// (<c>timeSpan</c> 4 periods, <c>timeShift</c> 2 periods) and windows closed by time or count (4 periods or 3
     /// elements).
     /// </summary>
-    /// <remarks>
-    /// KNOWN GAP: <c>Window(timeSpan, timeShift, scheduler)</c> hung at N = 100 under the virtual-time pump. It was
-    /// not isolated whether the library or the pump is responsible (its overlapping windows open and close from
-    /// timer callbacks that take an <c>AsyncGate</c>), so the row is commented out.
-    /// </remarks>
     [BenchmarkCategory("Time")]
     public class WindowTimeVariantBenchmarks : TemporalBenchmarkBase
     {
-        // KNOWN GAP (see remarks): hangs at N = 100.
-        // [Benchmark]
-        // public ValueTask Window_TimeShift() =>
-        //     RunTimedAsync(0, static (source, scheduler, _) =>
-        //         source.Window(TimeSpan.FromTicks(PeriodTicks * 4), TimeSpan.FromTicks(PeriodTicks * 2), scheduler).Merge());
+        [Benchmark]
+        public ValueTask Window_TimeShift() =>
+            RunTimedAsync(0, static (source, scheduler, _) =>
+                source.Window(TimeSpan.FromTicks(PeriodTicks * 4), TimeSpan.FromTicks(PeriodTicks * 2), scheduler).Merge());
 
         [Benchmark]
         public ValueTask Window_TimeOrCount() =>

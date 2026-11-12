@@ -13,7 +13,7 @@ using Benchmarks.System.Reactive.Async.Infrastructure;
 namespace Benchmarks.System.Reactive.Async.Operators.Time
 {
     /// <summary>
-    /// S3: periodic time <i>sources</i> on a <see cref="VirtualTimeAsyncScheduler"/>, each limited to <c>N</c>
+    /// S3: periodic time <i>sources</i> on a <see cref="Microsoft.Reactive.Testing.Async.TestAsyncScheduler"/>, each limited to <c>N</c>
     /// ticks. Every tick is a <c>scheduler.Delay(period)</c> wake-up followed by a <c>RendezVous</c> continuation,
     /// so these rows measure the AsyncRx periodic loop. AsyncRx has no <c>ISchedulerPeriodic</c> fast path, so
     /// there is no emulated-periodic comparison row as in the Rx suite.

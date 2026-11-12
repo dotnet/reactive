@@ -11,6 +11,8 @@ using BenchmarkDotNet.Engines;
 
 using Benchmarks.System.Reactive.Async.Infrastructure;
 
+using Microsoft.Reactive.Testing.Async;
+
 namespace Benchmarks.System.Reactive.Async.Operators.Lifecycle
 {
     /// <summary>
@@ -92,7 +94,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Lifecycle
         public async ValueTask Throttle_Dispose()
         {
             // The throttle window is far longer than the run, so the timer never fires; disposal cancels it.
-            var scheduler = new VirtualTimeAsyncScheduler();
+            var scheduler = new TestAsyncScheduler();
             var source = new PushSource<int>();
             var subscription = await source.Throttle(TimeSpan.FromTicks(long.MaxValue / 4), scheduler).SubscribeNoWaitAsync(_consumer).ConfigureAwait(false);
             await source.PushAsync(N / 2).ConfigureAwait(false);

@@ -30,10 +30,10 @@ Read this before reading any numbers.
   operator). The suite passes the immediate scheduler (or the virtual-time scheduler) explicitly, so the
   shared cold source `BenchmarkSources.Range(n)` pushes every element inline inside `SubscribeAsync`.
   Rows named `_DefaultScheduler` measure the default path on purpose.
-- **A benchmark-owned virtual-time scheduler.** The suite has `VirtualTimeAsyncScheduler` (see the S3
-  archetype below). It predates `Microsoft.Reactive.Testing.Async`'s `TestAsyncScheduler`. The suite's
-  scheduler is kept because its pump rule and zero-allocation stateful scheduling are tuned for
-  measurement. Whether to move to `TestAsyncScheduler` is an open question.
+- **Virtual time comes from `TestAsyncScheduler`.** The temporal benchmarks use the virtual-time
+  scheduler from `Microsoft.Reactive.Testing.Async` (see the S3 archetype and "Virtual time" below).
+  The benchmark project references that library; it brings the `Microsoft.Reactive.Testing` package
+  and no test framework.
 - **Hot sources are benchmark-owned.** `PushSource<T>` is a single-observer source the benchmark pushes
   into directly. The library subjects copy their observer list per call (simple subjects) or take a gate
   (Behavior/Replay), so they are measured on their own in `Hot/SubjectBenchmarks` and kept out of the
@@ -54,9 +54,9 @@ Read this before reading any numbers.
   completed result.
 - **S2 hot push**: the benchmark awaits `OnNextAsync` per element into a `PushSource<T>` (operators) or a
   library subject (`SubjectBenchmarks`), the AsyncRx backpressure contract.
-- **S3 temporal**: time-based operators driven by `VirtualTimeAsyncScheduler`. Each temporal class
-  inherits `Source_Baseline` (advance one period, push, repeat N times, complete; no operator) as its
-  baseline, so the Ratio column reads as operator cost over the cost of driving the timeline. `Density`
+- **S3 temporal**: time-based operators driven by `TestAsyncScheduler`. Each temporal class inherits
+  `Source_Baseline` (N pushes one period apart, then completion; no operator) as its baseline, so the
+  Ratio column reads as operator cost over the cost of driving the timeline, scheduler included. `Density`
   (Sparse / Boundary / Dense) varies the window against the arrival period for the rate/window operators.
 - **S4 subscription/lifecycle**: construction vs subscription (`ConstructionBenchmarks`), disposal of a
   still-live subscription (`DisposeBenchmarks`), and the async disposable building blocks
@@ -70,28 +70,38 @@ with per-element `ns/N` and `B/N` columns as in the Rx suite (read large-N rows 
 small-N rows for per-subscription cost; for the pinned-work fan-out classes N is the inner-subscription
 count).
 
-### The virtual-time pump
+### Virtual time
 
-`VirtualTimeAsyncScheduler` implements `IAsyncScheduler` with a priority queue of (due time, sequence)
-items. Time moves only when `AdvanceByAsync` or `RunUntilAsync` pumps it, and the rule is: **time never
-advances while a timed item is still running, unless that item has parked on a later virtual
-wake-up.**
+`TestAsyncScheduler` is a synchronous, single-threaded pump. `Start` runs the timeline to the end on the
+calling thread: it drains the work ready at the current tick (continuations first, then newly scheduled
+work), then moves the clock to the next due timer, and repeats until nothing is left. Every await
+continuation resumes inline on the pump thread, so a temporal benchmark is deterministic and completes
+synchronously, with no thread-pool work.
 
-- Items due now run inline on the pump, in order.
-- A timed item (scheduled with a due time) whose action does not complete synchronously is awaited
-  before time advances: many timer callbacks take an `AsyncGate` and hop to the pool.
-- A timed item counts as parked once a new future item is enqueued after it started; that is how the
-  periodic loops (`Timer(due, period)`, `Interval`, `Sample`, `Buffer/Window(time)`) await
-  `scheduler.Delay(period)`.
-- Immediate items (the `RendezVous` / `ExecuteAsync` continuations) are started but not awaited:
-  `Delay`'s drain loop waits on a semaphore only the source releases, so awaiting it would deadlock.
+`VirtualTimeDriver` (in `TemporalBenchmarkBase.cs`) drives each run:
 
-This is the variant that shipped (the "awaiting" pump, not the fire-and-forget fallback). Work that
-continues on a pool thread after an immediate item started is not awaited, so for gated operators the
-interleaving of a timer tick and the next push can vary between runs; the amount of work does not.
-`DelayBenchmarks` shows the most variance. The pump fails a benchmark with a `TimeoutException` if
-in-flight work makes no progress for `ASYNCRX_BENCH_STALL_TIMEOUT_MS` (default 30,000 ms; `-1` for
-infinite), so a library hang does not block a run.
+1. Subscribe the pipeline from the benchmark body, before the pump has run anything.
+2. Schedule the pushes as a chain of timed work items. Each one pushes a value and schedules the next
+   one period later. The last one completes the source.
+3. Call `Start`, then require the sink to have terminated.
+
+The pushes are scheduled work rather than calls made from the benchmark body between `AdvanceBy` calls.
+An operator that cancels or completes an in-flight timer in response to a push would otherwise do it
+off the pump, and the scheduler reports that as an escape.
+
+Failures fail the benchmark instead of hanging it:
+- `Start` throws if scheduled work faults, escapes to a real thread (`Task.Run`, `Task.Yield`, real
+  timers), or is still outstanding when the timeline runs out.
+- `Start` also throws if 100,000 items run at one tick without time advancing.
+- The driver throws if the sink never received `OnCompleted` or `OnError`.
+
+At the same tick, items run in the order they were scheduled. A push and an operator timer due at the
+same tick therefore run in scheduling order, not "timers first".
+
+Per scheduled item, `TestAsyncScheduler` allocates a cancellation source, its work record, an execution
+context capture, and (for timed work) a `TaskCompletionSource` and a timer entry. That cost is in every
+temporal row, `Source_Baseline` included, so compare operator rows against the baseline rather than
+reading their absolute allocations.
 
 ## Running
 
@@ -182,7 +192,6 @@ when the library is fixed.
 | `FromEvent`, `FromEventPattern` (all forms) | Disposing the subscription throws `OperationCanceledException`: the `SubscribeOn` dispose action awaits a `RendezVous` on the token it has just cancelled. | `Pump.DisposeIgnoringCancellationAsync` swallows it; a fresh event host per invocation. |
 | `ObserveOn(ImmediateAsyncScheduler.Instance)` | Never completes (hung at N = 1). Not isolated further; the immediate scheduler appears to run the drain loop inline inside `SubscribeAsync`. | Row commented out. |
 | `ObserveOn(TaskPoolAsyncScheduler)`, `ObserveOn(SynchronizationContextAsyncScheduler)` | Pass at N = 1 and 100 but hang at larger N (task pool: hung at 1,000 and 10,000; synchronization context: at 10,000), on two different schedulers, which points to a per-element race in the library's scheduled observer. Not isolated further. | `ObserveOnBenchmarks` and `SynchronizationContextBenchmarks` sweep only N = 1 and 100. |
-| `Window(timeSpan, timeShift, scheduler)` | Hung at N = 100 under the virtual-time pump. Not isolated whether the library or the pump is responsible. | Row commented out; `Window(timeSpan)` and `Window(timeSpan, count)` are measured. |
 
 API quirks that shape the benchmarks (not bugs):
 

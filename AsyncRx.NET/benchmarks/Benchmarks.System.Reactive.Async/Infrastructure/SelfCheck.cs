@@ -8,10 +8,12 @@ using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.Reactive.Testing.Async;
+
 namespace Benchmarks.System.Reactive.Async.Infrastructure
 {
     /// <summary>
-    /// Sanity checks for the benchmark infrastructure, run with <c>--verify</c>. It checks that the sources, sinks and <see cref="VirtualTimeAsyncScheduler"/> deliver what the
+    /// Sanity checks for the benchmark infrastructure, run with <c>--verify</c>. It checks that the sources, sinks and <see cref="Microsoft.Reactive.Testing.Async.TestAsyncScheduler"/> deliver what the
     /// benchmarks assume before any time is spent measuring them.
     /// </summary>
     public static class SelfCheck
@@ -119,6 +121,15 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
             await Check("Virtual time: Window(time) flattened delivers N", () =>
                 Timed(static (s, sch) => s.Window(TimeSpan.FromTicks(PeriodTicks * 4), sch).Merge(), N));
 
+            // Windows 4 periods long opened every 2 periods: each element lands in about two windows.
+            await Check("Virtual time: Window(timeSpan, timeShift) flattened delivers between N and 2N", async () =>
+            {
+                var o = new CountingAsyncObserver<int>();
+                await VirtualTimeDriver.RunTimedAsync(N, PeriodTicks, o, o.Completion, 0,
+                    static (s, sch, _) => s.Window(TimeSpan.FromTicks(PeriodTicks * 4), TimeSpan.FromTicks(PeriodTicks * 2), sch).Merge());
+                return o.Count >= N && o.Count <= 2 * N && o.Completed ? null : Describe(o);
+            });
+
             await Check("Virtual time: Sample (Sparse) delivers between 1 and N and terminates", async () =>
             {
                 var o = new CountingAsyncObserver<int>();
@@ -146,7 +157,7 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
             {
                 var o = new CountingAsyncObserver<int>();
                 await VirtualTimeDriver.RunTimedAsync(N, PeriodTicks, o, o.Completion, 0,
-                    static (s, sch, _) => s.TakeUntil(VirtualTimeAsyncScheduler.Epoch.AddTicks(PeriodTicks * (N / 2) + PeriodTicks / 2), sch));
+                    static (s, sch, _) => s.TakeUntil(sch.Now.AddTicks(PeriodTicks * (N / 2) + PeriodTicks / 2), sch));
                 return o.Count == N / 2 && o.Completed ? null : $"expected {N / 2}, {Describe(o)}";
             });
 
@@ -171,7 +182,7 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         }
 
         private static async Task<string?> Timed<TResult>(
-            Func<IAsyncObservable<int>, VirtualTimeAsyncScheduler, IAsyncObservable<TResult>> build,
+            Func<IAsyncObservable<int>, TestAsyncScheduler, IAsyncObservable<TResult>> build,
             long expected)
         {
             var o = new CountingAsyncObserver<TResult>();

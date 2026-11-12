@@ -15,7 +15,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Time
 {
     /// <summary>
     /// Per-subscription cost of the one-shot <c>Timer</c> (relative and absolute due time) on a fresh
-    /// <see cref="VirtualTimeAsyncScheduler"/>: schedule, advance, fire, complete. No N sweep.
+    /// <see cref="Microsoft.Reactive.Testing.Async.TestAsyncScheduler"/>: schedule, advance, fire, complete. No N sweep.
     /// </summary>
     [BenchmarkCategory("Time")]
     public class TimerOneShotBenchmarks

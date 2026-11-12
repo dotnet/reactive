@@ -31,6 +31,8 @@
   -->
   <ItemGroup>
     <ProjectReference Include="..\..\System.Reactive.Async\System.Reactive.Async.csproj" />
+    <!-- TestAsyncScheduler drives the temporal (S3) benchmarks in virtual time. -->
+    <ProjectReference Include="..\..\Microsoft.Reactive.Testing.Async\Microsoft.Reactive.Testing.Async.csproj" />
   </ItemGroup>
 
 </Project>

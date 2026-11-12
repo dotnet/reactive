@@ -13,7 +13,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Time
 {
     /// <summary>
     /// S3 (temporal) flagship benchmark. <c>N</c> elements are pushed <c>PeriodTicks</c> apart on a
-    /// <see cref="VirtualTimeAsyncScheduler"/>, so even a huge <c>Dense</c> window costs no wall-clock waiting.
+    /// <see cref="Microsoft.Reactive.Testing.Async.TestAsyncScheduler"/>, so even a huge <c>Dense</c> window costs no wall-clock waiting.
     /// The <c>Density</c> knob varies the window-vs-arrival relationship that drives the Throttle hot path (dense
     /// arrivals mean constant cancel-and-reschedule). Throttle takes an <c>AsyncGate</c> per element and per
     /// timer callback.
